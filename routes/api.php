@@ -36,3 +36,5 @@ Route::post("/image" , "Controller@uploadimage");
 Route::apiResource('emails' , 'Api\EmailsController' );
 Route::apiResource('acessos', 'Api\AcessosController');
 Route::apiResource('users'  , 'Api\UsersController'  );
+Route::apiResource('bancos', 'Api\BancosController');
+Route::apiResource('cargos', 'Api\CargosController');
