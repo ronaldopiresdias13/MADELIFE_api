@@ -38,3 +38,4 @@ Route::apiResource('acessos', 'Api\AcessosController');
 Route::apiResource('users'  , 'Api\UsersController'  );
 Route::apiResource('bancos' , 'Api\BancosController' );
 Route::apiResource('cargos' , 'Api\CargosController' );
+Route::apiResource('empresas' , 'Api\EmpresasController' );
