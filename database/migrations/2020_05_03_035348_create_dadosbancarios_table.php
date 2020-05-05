@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDadoBancariosTable extends Migration
+class CreateDadosBancariosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateDadoBancariosTable extends Migration
      */
     public function up()
     {
-        Schema::create('dado_bancarios', function (Blueprint $table) {
+        Schema::create('dadosbancarios', function (Blueprint $table) {
             $table->id();
             $table->foreignId('banco')->constrained()->onDelete('cascade');
             $table->foreignId('pessoa')->constrained()->onDelete('cascade');
@@ -32,6 +32,6 @@ class CreateDadoBancariosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dado_bancarios');
+        Schema::dropIfExists('dadosbancarios');
     }
 }
