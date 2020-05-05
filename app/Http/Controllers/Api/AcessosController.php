@@ -26,6 +26,10 @@ class AcessosController extends Controller
      */
     public function store(Request $request)
     {
+        // $acesso = Acesso::updateOrCreate(
+        //     ['nome' => $request->nome]
+        // );
+
         $acesso = new Acesso;
         $acesso->nome = $request->nome;
         $acesso->save();

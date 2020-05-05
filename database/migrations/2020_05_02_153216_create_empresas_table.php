@@ -16,10 +16,10 @@ class CreateEmpresasTable extends Migration
         Schema::create('empresas', function (Blueprint $table) {
             $table->id();
             $table->string('razao');
-            $table->string('cnpj');
+            $table->string('cnpj')->unique();
             $table->string('ie');
-            $table->string('logo');
-            $table->boolean('situacao');
+            $table->string('logo')->nullable();
+            $table->boolean('situacao')->default(true);
             $table->timestamps();
         });
     }

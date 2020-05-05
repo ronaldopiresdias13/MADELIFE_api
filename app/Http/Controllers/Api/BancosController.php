@@ -26,10 +26,10 @@ class BancosController extends Controller
      */
     public function store(Request $request)
     {
-        $banco = new Banco;
-        $banco->codigo = $request->codigo;
-        $banco->descricao = $request->descricao;
-        $banco->save();
+        $banco = Banco::updateOrCreate(
+            ['codigo'    => $request->codigo   ],
+            ['descricao' => $request->descricao]
+        );
     }
 
     /**
@@ -40,7 +40,7 @@ class BancosController extends Controller
      */
     public function show(Banco $banco)
     {
-        //
+        return $banco;
     }
 
     /**
