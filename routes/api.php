@@ -21,21 +21,28 @@ use Illuminate\Support\Facades\Route;
 Route::group([
     'prefix' => 'auth'
 ], function () {
-    Route::post('login', 'Auth\AuthController@login')->name('login');
-    Route::post('register', 'Auth\AuthController@register');
-    Route::group([
-        'middleware' => 'auth:api'
-    ], function() {
+    Route::post('login'   , 'Auth\AuthController@login'   )->name('login');
+    Route::post('register', 'Auth\AuthController@register')               ;
+    Route::group(['middleware' => 'auth:api'], function() {
         Route::get('logout', 'Auth\AuthController@logout');
-        Route::get('user', 'Auth\AuthController@user');
+        Route::get('user'  , 'Auth\AuthController@user'  );
     });
 });
 
-Route::post("/image" , "Controller@uploadimage");
+// Route::group(['middleware' => 'auth:api'], function() {
+    Route::apiResource('emails'  , 'Api\EmailsController'  );
+    Route::apiResource('acessos' , 'Api\AcessosController' );
+    Route::apiResource('users'   , 'Api\UsersController'   );
+    Route::apiResource('bancos'  , 'Api\BancosController'  );
+    Route::apiResource('cargos'  , 'Api\CargosController'  );
+    Route::apiResource('empresas', 'Api\EmpresasController');
 
-Route::apiResource('emails' , 'Api\EmailsController' );
-Route::apiResource('acessos', 'Api\AcessosController');
-Route::apiResource('users'  , 'Api\UsersController'  );
-Route::apiResource('bancos' , 'Api\BancosController' );
-Route::apiResource('cargos' , 'Api\CargosController' );
-Route::apiResource('empresas' , 'Api\EmpresasController' );
+
+
+
+
+
+
+// });
+
+Route::post("/image" , "Controller@uploadimage");
