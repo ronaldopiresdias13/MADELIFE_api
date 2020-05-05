@@ -17,7 +17,7 @@ class CreateTelefonesTable extends Migration
             $table->id();
             $table->string('telefone');
             $table->string('tipo');
-            $table->string('descricao');
+            $table->string('descricao')->nullable();
             $table->timestamps();
         });
     }
