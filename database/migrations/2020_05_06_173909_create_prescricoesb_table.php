@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDiagnosticosecundariosTable extends Migration
+class CreatePrescricoesbTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateDiagnosticosecundariosTable extends Migration
      */
     public function up()
     {
-        Schema::create('diagnosticosecundarios', function (Blueprint $table) {
+        Schema::create('prescricoesb', function (Blueprint $table) {
             $table->id();
-            $table->string('codigo')->nullable();
-            $table->string('descricao')->nullable();
-            $table->string('observacao')->nullable();
-            $table->string('referencia')->nullable();
+            $table->string('descricao');
+            $table->string('situacao');
+            $table->string('referencia');
             $table->foreignId('pil')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
@@ -31,6 +30,6 @@ class CreateDiagnosticosecundariosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('diagnosticosecundarios');
+        Schema::dropIfExists('prescricoesb');
     }
 }
