@@ -27,7 +27,7 @@ class TranscricoesController extends Controller
     public function store(Request $request)
     {
         $transcricao = new Transcricao;
-        $transcricao
+        $transcricao->medico = $request->medico;
     }
 
     /**
