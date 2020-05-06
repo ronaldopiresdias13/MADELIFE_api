@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Prestador;
+use App\Pessoa;
 use Illuminate\Http\Request;
 
 class PrestadoresController extends Controller
@@ -70,5 +71,47 @@ class PrestadoresController extends Controller
     public function destroy(Prestador $prestador)
     {
         $prestador->delete();
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function migracao(Request $request)
+    {
+        // dd('$request');
+        // dd($request);
+        foreach ($request->all() as $key => $prestador) {
+            // dd($prestador['prestador']['dadosPf']['nome']);
+            dd($prestador['prestador']);
+            // dd($prestador);
+            $pessoa = Pessoa::firstOrCreate(
+                ['cpfcnpj' => $prestador['prestador']['dadosPf']['cpf']['numero']],
+                [
+                    'nome'        => $prestador['prestador']['dadosPf'],
+                    'nascimento'  => $prestador['prestador']['dadosPf'],
+                    'tipo'        => $prestador['prestador']['dadosPf'],
+                    'rgie'        => $prestador['prestador']['dadosPf'],
+                    'observacoes' => $prestador['prestador']['dadosPf']]
+            )->id;
+
+            $teste = UserAcesso::updateOrCreate(
+                ['user'  => $user->id, 'acesso' => Acesso::FirstOrCreate(['nome' => $value['nome']])->id]
+            );
+        }
+
+        dd($request->all());
+        $prestador = new Prestador;
+        $prestador->pessoa      = $request->pessoa;
+        $prestador->fantasia    = $request->fantasia;
+        $prestador->sexo        = $request->sexo;
+        $prestador->pis         = $request->pis;
+        $prestador->formacao    = $request->formacao;
+        $prestador->cargo       = $request->cargo;
+        $prestador->curriculo   = $request->curriculo;
+        $prestador->certificado = $request->certificado;
+        $prestador->save();
     }
 }

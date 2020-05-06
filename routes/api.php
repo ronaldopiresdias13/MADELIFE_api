@@ -31,12 +31,15 @@ Route::group([
 });
 
 // Route::group(['middleware' => 'auth:api'], function() {
-    Route::apiResource('emails'  , 'Api\EmailsController'  );
-    Route::apiResource('acessos' , 'Api\AcessosController' );
-    Route::apiResource('users'   , 'Api\UsersController'   );
-    Route::apiResource('bancos'  , 'Api\BancosController'  );
-    Route::apiResource('cargos'  , 'Api\CargosController'  );
-    Route::apiResource('empresas', 'Api\EmpresasController');
+    Route::apiResource('emails'   , 'Api\EmailsController'   );
+    Route::apiResource('acessos'  , 'Api\AcessosController'  );
+    Route::apiResource('users'    , 'Api\UsersController'    );
+    Route::apiResource('bancos'   , 'Api\BancosController'   );
+    Route::apiResource('cargos'   , 'Api\CargosController'   );
+    Route::apiResource('empresas' , 'Api\EmpresasController' );
+    Route::apiResource('clientes' , 'Api\ClientesController' );
+    Route::apiResource('prestador', 'Api\PrestadorController');
+    Route::post('prestadores/migracao', 'Api\PrestadoresController@migracao');
 
 
 
