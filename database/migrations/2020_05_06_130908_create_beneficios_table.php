@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOutrosTable extends Migration
+class CreateBeneficiosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateOutrosTable extends Migration
      */
     public function up()
     {
-        Schema::create('outros', function (Blueprint $table) {
+        Schema::create('beneficios', function (Blueprint $table) {
             $table->id();
-            $table->string('nomecampo');
-            $table->string('valor');
+            $table->string('descricao');
+            $table->foreignId('empresa')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateOutrosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('outros');
+        Schema::dropIfExists('beneficios');
     }
 }
