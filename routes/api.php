@@ -37,7 +37,7 @@ Route::group([
     Route::apiResource('bancos'  , 'Api\BancosController'  );
     Route::apiResource('cargos'  , 'Api\CargosController'  );
     Route::apiResource('empresas', 'Api\EmpresasController');
-
+    Route::apiResource('cidades', 'Api\CidadesController');
 
 
 
