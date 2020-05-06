@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Transcricao;
+use App\Prescricaob;
 use Illuminate\Http\Request;
 
-class TranscricoesController extends Controller
+class PrescricoesbsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class TranscricoesController extends Controller
      */
     public function index()
     {
-        //
+        return Prescricaob::all();
     }
 
     /**
@@ -26,46 +26,45 @@ class TranscricoesController extends Controller
      */
     public function store(Request $request)
     {
-        $transcricao = new Transcricao;
-        $transcricao->medico = $request->medico;
-        $transcricao->crm = $request->crm;
-        $transcricao->profissional = $request->profissional;
-        $transcricao->pil = $request->pil;
-        $transcricao->save();
-        
+        $prescricaob = new Prescricaob;
+        $prescricaob->descricao = $request->descricao;
+        $prescricaob->descricao = $request->descricao;
+        $prescricaob->descricao = $request->descricao;
+        $prescricaob->descricao = $request->descricao;
+        $prescricaob->save();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Transcricao  $transcricao
+     * @param  \App\Prescricaob  $prescricaob
      * @return \Illuminate\Http\Response
      */
-    public function show(Transcricao $transcricao)
+    public function show(Prescricaob $prescricaob)
     {
-        return $transcricao;
+        return $prescricaob;
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Transcricao  $transcricao
+     * @param  \App\Prescricaob  $prescricaob
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Transcricao $transcricao)
+    public function update(Request $request, Prescricaob $prescricaob)
     {
-        $transcricao->update($request->all());
+        $prescricaob->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Transcricao  $transcricao
+     * @param  \App\Prescricaob  $prescricaob
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Transcricao $transcricao)
+    public function destroy(Prescricaob $prescricaob)
     {
-        $transcricao->delete();
+        $prescricaob->delete();
     }
 }
