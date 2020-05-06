@@ -37,6 +37,7 @@ Route::group([
     Route::apiResource('bancos'   , 'Api\BancosController'   );
     Route::apiResource('cargos'   , 'Api\CargosController'   );
     Route::apiResource('empresas' , 'Api\EmpresasController' );
+    Route::apiResource('cidades'  , 'Api\CidadesController'  );
     Route::apiResource('clientes' , 'Api\ClientesController' );
     Route::apiResource('prestador', 'Api\PrestadorController');
     Route::post('prestadores/migracao', 'Api\PrestadoresController@migracao');
