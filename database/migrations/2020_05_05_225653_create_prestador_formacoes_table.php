@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSetoresTable extends Migration
+class CreatePrestadorFormacoesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateSetoresTable extends Migration
      */
     public function up()
     {
-        Schema::create('setores', function (Blueprint $table) {
+        Schema::create('prestador_formacoes', function (Blueprint $table) {
             $table->id();
-            $table->string('descricao');
-            $table->foreignId('empresa')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('prestador');
+            $table->foreign('prestador')->references('id')->on('prestadores')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateSetoresTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('setores');
+        Schema::dropIfExists('prestador_formacoes');
     }
 }
