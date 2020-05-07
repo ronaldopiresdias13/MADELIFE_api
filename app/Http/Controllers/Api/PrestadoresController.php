@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Prestador;
 use App\Pessoa;
 use App\Formacao;
+use App\User;
 use App\Cargo;
 use Illuminate\Http\Request;
 
@@ -87,7 +88,7 @@ class PrestadoresController extends Controller
         // dd($request);
         foreach ($request->all() as $key => $value) {
             // dd($value['prestador']['dadosPf']['nome']);
-            dd($value['prestador']);
+            dd($value);
             // dd($prestador);
             $prestador = Prestador::create([
                 'pessoa' => Pessoa::FirstOrCreate(
@@ -116,10 +117,16 @@ class PrestadoresController extends Controller
                 'curriculo'   => $value['prestador']['dadosPf']['curriculo'],
                 'certificado' => $value['prestador']['dadosPf']['certificado'],
             ]);
-
+            //dd($prestador);
             $prestador_formacao = PrestadorFormacao::create([
                 'prestador' => $prestador->id,
                 'formacao'  => Formacao::FirstOrCreate(['descricao' => $value['prestador']['dadosProf']['formacao']])->id,
+            ]);
+            
+            $user = User::create([
+                'nome' => $prestador->nome,
+                'email' => $value['prestador']['contato']['email'],
+                'password' => $value['senha']
             ]);
         }
     }
