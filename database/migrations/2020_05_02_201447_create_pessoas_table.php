@@ -15,13 +15,13 @@ class CreatePessoasTable extends Migration
     {
         Schema::create('pessoas', function (Blueprint $table) {
             $table->id();
-            $table->string('nome');
-            $table->string('nascimento');
+            $table->string('nome')->nullable();
+            $table->string('nascimento')->nullable();
             $table->string('tipo');
             $table->string('cpfcnpj');
-            $table->string('rgie');
-            $table->string('observacoes');
-            $table->boolean('status');
+            $table->string('rgie')->nullable();
+            $table->string('observacoes')->nullable();
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

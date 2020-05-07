@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFormacaosTable extends Migration
+class CreatePrescricoesbTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class CreateFormacaosTable extends Migration
      */
     public function up()
     {
-        Schema::create('formacaos', function (Blueprint $table) {
+        Schema::create('prescricoesb', function (Blueprint $table) {
             $table->id();
             $table->string('descricao');
+            $table->string('situacao');
+            $table->string('referencia');
+            $table->foreignId('pil')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -27,6 +30,6 @@ class CreateFormacaosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('formacaos');
+        Schema::dropIfExists('prescricoesb');
     }
 }

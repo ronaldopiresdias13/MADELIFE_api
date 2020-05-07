@@ -17,7 +17,6 @@ class CreateOutrosTable extends Migration
             $table->id();
             $table->string('nomecampo');
             $table->string('valor');
-            $table->foreignId('pessoa')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
