@@ -17,10 +17,10 @@ class CreateDadosBancariosTable extends Migration
             $table->id();
             $table->foreignId('banco')->constrained()->onDelete('cascade');
             $table->foreignId('pessoa')->constrained()->onDelete('cascade');
-            $table->string('agencia');
-            $table->string('conta');
-            $table->string('digito');
-            $table->string('tipoconta');
+            $table->string('agencia')->nullable();
+            $table->string('conta')->nullable();
+            $table->string('digito')->nullable();
+            $table->string('tipoconta')->nullable();
             $table->timestamps();
         });
     }

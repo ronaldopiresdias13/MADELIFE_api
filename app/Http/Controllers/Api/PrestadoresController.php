@@ -7,6 +7,8 @@ use App\Prestador;
 use App\Pessoa;
 use App\Formacao;
 use App\User;
+use App\Dadosbancario;
+use App\Banco;
 use App\Cargo;
 use App\PrestadorFormacao;
 use Illuminate\Http\Request;
@@ -146,6 +148,26 @@ class PrestadoresController extends Controller
             //     'pessoa' => $prestador->pessoa,
             //     'outro'  => Outro::firstOrCreate(['nomecampo' => $value['prestador']['dadosProf']['formacao']])->id,
             // ]);
+
+            if($value['prestador']['dadosBancario']['banco']['codigo'] != null){
+                $dados_bancario = Dadosbancario::firstOrCreate([
+                    'banco' => Banco::firstOrCreate(
+                        [
+                            'codigo' => ($value['prestador']['dadosBancario']['banco']['codigo'] == null) ? '000' : $value['prestador']['dadosBancario']['banco']['codigo'],
+                        ],
+                        [
+                            'descricao' => ($value['prestador']['dadosBancario']['banco']['codigo'] == null) ? 'Outros' : $value['prestador']['dadosBancario']['banco']['descricao']
+                        ]
+                    )->id,
+                    'pessoa' => $prestador->pessoa,
+                    'agencia'  => $value['prestador']['dadosBancario']['agencia'],
+                    'conta'  => $value['prestador']['dadosBancario']['conta'],
+                    'digito'  => $value['prestador']['dadosBancario']['digito'],
+                    'tipoconta'  => $value['prestador']['dadosBancario']['tipoConta'],
+                ]);
+            }
+
+            
         }
     }
 }
