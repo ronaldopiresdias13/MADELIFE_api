@@ -90,8 +90,8 @@ class PrestadoresController extends Controller
             // dd($value['prestador']['dadosPf']['nome']);
             dd($value);
             // dd($prestador);
-            $prestador = Prestador::create([
-                'pessoa' => Pessoa::FirstOrCreate(
+            $prestador = Prestador::firstOrCreate([
+                'pessoa' => Pessoa::firstOrCreate(
                     [
                         'cpfcnpj' => $value['prestador']['dadosPf']['cpf']['numero']
                     ],
