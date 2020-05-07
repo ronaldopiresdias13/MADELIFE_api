@@ -17,6 +17,8 @@ class CreatePrestadorFormacoesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('prestador');
             $table->foreign('prestador')->references('id')->on('prestadores')->onDelete('cascade');
+            $table->unsignedBigInteger('formacao');
+            $table->foreign('formacao')->references('id')->on('formacoes')->onDelete('cascade');
             $table->timestamps();
         });
     }

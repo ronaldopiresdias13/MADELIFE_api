@@ -7,7 +7,10 @@ use App\Prestador;
 use App\Pessoa;
 use App\Formacao;
 use App\User;
+use App\Dadosbancario;
+use App\Banco;
 use App\Cargo;
+use App\PrestadorFormacao;
 use Illuminate\Http\Request;
 
 class PrestadoresController extends Controller
@@ -84,16 +87,20 @@ class PrestadoresController extends Controller
      */
     public function migracao(Request $request)
     {
-        // dd('$request');
+        // dd($request['prestador']);
+        $value = $request;
         // dd($request);
-        foreach ($request->all() as $key => $value) {
+        // foreach ($request->all() as $key => $value) {
             // dd($value['prestador']['dadosPf']['nome']);
-            dd($value);
+            // dd($value);
             // dd($prestador);
+
+            // alert($value['prestador']['dadosPf']['cpf']['numero']);
+
             $prestador = Prestador::firstOrCreate([
                 'pessoa' => Pessoa::firstOrCreate(
                     [
-                        'cpfcnpj' => $value['prestador']['dadosPf']['cpf']['numero']
+                        'cpfcnpj' => $value['prestador']['dadosPf']['cpf']['numero'],
                     ],
                     [
                         'nome'        => $value['prestador']['dadosPf']['nome'],
@@ -101,33 +108,69 @@ class PrestadoresController extends Controller
                         'tipo'        => 'Prestador',
                         'rgie'        => $value['prestador']['dadosPf']['rg']['numero'],
                         'observacoes' => $value['prestador']['observacoes'],
-                        'status'      => $value['prestador']['status']
+                        'status'      => $value['prestador']['status'],
                     ]
                 )->id,
-                'fantasia'    => $value['prestador']['nomeFantasia'],
-                'sexo'        => $value['prestador']['nomeFantasia'],
-                'pis'         => $value['prestador']['dadosProf']['pis'],
-                'cargo'       => Cargo::FirstOrCreate(
+                'fantasia' => $value['prestador']['nomeFantasia'],
+                'sexo'     => $value['prestador']['nomeFantasia'],
+                'pis'      => $value['prestador']['dadosProf']['pis'],
+                'cargo'    => Cargo::firstOrCreate(
                     [
-                        'cbo' => $value['prestador']['dadosProf']['cargo'], // Verificar código CBO Prestador de serviços
+                        'cbo' => '10115', // Verificar código CBO Prestador de serviços
                     ],
                     [
-                        'descricao' => $value['prestador']['dadosProf']['cargo']  // Verificar código CBO Prestador de serviços
-                    ]),
+                        'descricao' => 'Oficial general da marinha',  // Verificar código CBO Prestador de serviços
+                    ])->id,
                 'curriculo'   => $value['prestador']['dadosPf']['curriculo'],
                 'certificado' => $value['prestador']['dadosPf']['certificado'],
             ]);
-            //dd($prestador);
-            $prestador_formacao = PrestadorFormacao::create([
+            // dd($prestador->id);
+
+            // dd(
+            //     Formacao::firstOrCreate(
+            //         [
+            //             'descricao' => $value['prestador']['dadosProf']['formacao']['descricao'],
+            //         ]
+            //     )->id
+            // );
+            
+            $prestador_formacao = PrestadorFormacao::firstOrCreate([
                 'prestador' => $prestador->id,
-                'formacao'  => Formacao::FirstOrCreate(['descricao' => $value['prestador']['dadosProf']['formacao']])->id,
+                'formacao'  => Formacao::firstOrCreate(['descricao' => $value['prestador']['dadosProf']['formacao']['descricao']])->id,
             ]);
             
-            $user = User::create([
-                'nome' => $prestador->nome,
-                'email' => $value['prestador']['contato']['email'],
-                'password' => $value['senha']
+            $user = User::firstOrCreate([
+                'cpfcnpj' => $value['prestador']['dadosPf']['cpf']['numero'],
+                'email'   => $value['prestador']['contato']['email'],
+                'pessoa'  => $prestador->pessoa,
+            ],
+            [
+                'password' => bcrypt($value['senha']),
             ]);
-        }
+
+            // $pessoa_outros = PrestadorFormacao::firstOrCreate([
+            //     'pessoa' => $prestador->pessoa,
+            //     'outro'  => Outro::firstOrCreate(['nomecampo' => $value['prestador']['dadosProf']['formacao']])->id,
+            // ]);
+
+            if($value['prestador']['dadosBancario']['banco']['codigo'] != null){
+                $dados_bancario = Dadosbancario::firstOrCreate([
+                    'banco' => Banco::firstOrCreate(
+                        [
+                            'codigo' => ($value['prestador']['dadosBancario']['banco']['codigo'] == null) ? '000' : $value['prestador']['dadosBancario']['banco']['codigo'],
+                        ],
+                        [
+                            'descricao' => ($value['prestador']['dadosBancario']['banco']['codigo'] == null) ? 'Outros' : $value['prestador']['dadosBancario']['banco']['descricao']
+                        ]
+                    )->id,
+                    'pessoa' => $prestador->pessoa,
+                    'agencia'  => $value['prestador']['dadosBancario']['agencia'],
+                    'conta'  => $value['prestador']['dadosBancario']['conta'],
+                    'digito'  => $value['prestador']['dadosBancario']['digito'],
+                    'tipoconta'  => $value['prestador']['dadosBancario']['tipoConta'],
+                ]);
+            }
+        // }
+
     }
 }
