@@ -139,21 +139,50 @@ class PrestadoresController extends Controller
                 'formacao'  => Formacao::firstOrCreate(['descricao' => $value['prestador']['dadosProf']['formacao']['descricao']])->id,
             ]);
             
-            $user = User::firstOrCreate([
-                'cpfcnpj' => $value['prestador']['dadosPf']['cpf']['numero'],
-                'email'   => $value['prestador']['contato']['email'],
-                'pessoa'  => $prestador->pessoa,
-            ],
-            [
-                'password' => bcrypt($value['senha']),
-            ]);
+            $usercpf = User::firstWhere(
+                'cpfcnpj' , $value['prestador']['dadosPf']['cpf']['numero']
+            );
+            $useremail = User::firstWhere(
+                'email', $value['prestador']['contato']['email']
+            );
+
+            if ($usercpf || $useremail) {
+                
+            } else {
+                $user = User::create([
+                    'cpfcnpj' => $value['prestador']['dadosPf']['cpf']['numero'],
+                    'email'   => $value['prestador']['contato']['email'],
+                    'pessoa'  => $prestador->pessoa,
+                    'password' => bcrypt($value['senha']),
+                ]);
+            }
+
+            // if (!$usercpf && !$useremail) {
+            //     dd('Entrou');
+            //     $user = User::create([
+            //         'cpfcnpj' => $value['prestador']['dadosPf']['cpf']['numero'],
+            //         'email'   => $value['prestador']['contato']['email'],
+            //         'pessoa'  => $prestador->pessoa,
+            //         'password' => bcrypt($value['senha']),
+            //     ]);
+            // }
+            // dd('Não Entrou');
+
+            // $user = User::firstOrCreate([
+            //     'cpfcnpj' => $value['prestador']['dadosPf']['cpf']['numero'],
+            //     'email'   => $value['prestador']['contato']['email'],
+            // ],
+            // [
+            //     'pessoa'  => $prestador->pessoa,
+            //     'password' => bcrypt($value['senha']),
+            // ]);
 
             // $pessoa_outros = PrestadorFormacao::firstOrCreate([
             //     'pessoa' => $prestador->pessoa,
             //     'outro'  => Outro::firstOrCreate(['nomecampo' => $value['prestador']['dadosProf']['formacao']])->id,
             // ]);
 
-            if($value['prestador']['dadosBancario']['banco']['codigo'] != null){
+            if($value['prestador']['dadosBancario']['banco'] != null && $value['prestador']['dadosBancario']['banco']['codigo'] != null){
                 $dados_bancario = Dadosbancario::firstOrCreate([
                     'banco' => Banco::firstOrCreate(
                         [
