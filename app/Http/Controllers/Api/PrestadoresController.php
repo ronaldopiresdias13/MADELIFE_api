@@ -85,12 +85,16 @@ class PrestadoresController extends Controller
      */
     public function migracao(Request $request)
     {
-        // dd('$request');
+        // dd($request['prestador']);
+        $value = $request;
         // dd($request);
-        foreach ($request->all() as $key => $value) {
+        // foreach ($request->all() as $key => $value) {
             // dd($value['prestador']['dadosPf']['nome']);
             // dd($value);
             // dd($prestador);
+
+            // alert($value['prestador']['dadosPf']['cpf']['numero']);
+
             $prestador = Prestador::firstOrCreate([
                 'pessoa' => Pessoa::firstOrCreate(
                     [
@@ -146,6 +150,6 @@ class PrestadoresController extends Controller
             //     'pessoa' => $prestador->pessoa,
             //     'outro'  => Outro::firstOrCreate(['nomecampo' => $value['prestador']['dadosProf']['formacao']])->id,
             // ]);
-        }
+        // }
     }
 }
