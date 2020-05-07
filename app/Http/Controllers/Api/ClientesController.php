@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Cliente;
 use App\Http\Controllers\Controller;
-use App\Transcricao;
 use Illuminate\Http\Request;
 
-class TranscricoesController extends Controller
+class ClientesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class TranscricoesController extends Controller
      */
     public function index()
     {
-        //
+        return Cliente::all();
     }
 
     /**
@@ -26,46 +26,42 @@ class TranscricoesController extends Controller
      */
     public function store(Request $request)
     {
-        $transcricao = new Transcricao;
-        $transcricao->medico = $request->medico;
-        $transcricao->crm = $request->crm;
-        $transcricao->profissional = $request->profissional;
-        $transcricao->pil = $request->pil;
-        $transcricao->save();
-        
+        $cliente = new Cliente;
+        $cliente->pessoa = $request->pessoa;
+        $cliente->save();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Transcricao  $transcricao
+     * @param  \App\Cliente  $cliente
      * @return \Illuminate\Http\Response
      */
-    public function show(Transcricao $transcricao)
+    public function show(Cliente $cliente)
     {
-        return $transcricao;
+        return $cliente;
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Transcricao  $transcricao
+     * @param  \App\Cliente  $cliente
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Transcricao $transcricao)
+    public function update(Request $request, Cliente $cliente)
     {
-        $transcricao->update($request->all());
+        $cliente->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Transcricao  $transcricao
+     * @param  \App\Cliente  $cliente
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Transcricao $transcricao)
+    public function destroy(Cliente $cliente)
     {
-        $transcricao->delete();
+        $cliente->delete();
     }
 }

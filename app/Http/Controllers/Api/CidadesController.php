@@ -15,7 +15,7 @@ class CidadesController extends Controller
      */
     public function index()
     {
-        return Cidade::all()->sortBy('nome');
+        return Cidade::all();
     }
 
     /**
