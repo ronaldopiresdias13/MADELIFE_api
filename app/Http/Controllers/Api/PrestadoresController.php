@@ -157,10 +157,10 @@ class PrestadoresController extends Controller
                 $dados_bancario = Dadosbancario::firstOrCreate([
                     'banco' => Banco::firstOrCreate(
                         [
-                            'codigo' => ($value['prestador']['dadosBancario']['banco']['codigo'] == null) ? '000' : $value['prestador']['dadosBancario']['banco']['codigo'],
+                            'codigo' => ($value['prestador']['dadosBancario']['banco']['codigo'] == null || $value['prestador']['dadosBancario']['banco']['codigo'] == "") ? '000' : $value['prestador']['dadosBancario']['banco']['codigo'],
                         ],
                         [
-                            'descricao' => ($value['prestador']['dadosBancario']['banco']['codigo'] == null) ? 'Outros' : $value['prestador']['dadosBancario']['banco']['descricao']
+                            'descricao' => ($value['prestador']['dadosBancario']['banco']['codigo'] == null || $value['prestador']['dadosBancario']['banco']['codigo'] == "") ? 'Outros' : $value['prestador']['dadosBancario']['banco']['descricao']
                         ]
                     )->id,
                     'pessoa' => $prestador->pessoa,
