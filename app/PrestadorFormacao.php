@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class PrestadorFormacao extends Model
 {
-    //
+    protected $guarded = [];
 }
