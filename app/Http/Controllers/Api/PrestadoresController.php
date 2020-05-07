@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Prestador;
+use App\Pessoa;
+use App\Formacao;
+use App\User;
+use App\Cargo;
 use Illuminate\Http\Request;
 
 class PrestadoresController extends Controller
@@ -70,5 +74,60 @@ class PrestadoresController extends Controller
     public function destroy(Prestador $prestador)
     {
         $prestador->delete();
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function migracao(Request $request)
+    {
+        // dd('$request');
+        // dd($request);
+        foreach ($request->all() as $key => $value) {
+            // dd($value['prestador']['dadosPf']['nome']);
+            dd($value);
+            // dd($prestador);
+            $prestador = Prestador::firstOrCreate([
+                'pessoa' => Pessoa::firstOrCreate(
+                    [
+                        'cpfcnpj' => $value['prestador']['dadosPf']['cpf']['numero']
+                    ],
+                    [
+                        'nome'        => $value['prestador']['dadosPf']['nome'],
+                        'nascimento'  => $value['prestador']['dadosPf']['nascimento'],
+                        'tipo'        => 'Prestador',
+                        'rgie'        => $value['prestador']['dadosPf']['rg']['numero'],
+                        'observacoes' => $value['prestador']['observacoes'],
+                        'status'      => $value['prestador']['status']
+                    ]
+                )->id,
+                'fantasia'    => $value['prestador']['nomeFantasia'],
+                'sexo'        => $value['prestador']['nomeFantasia'],
+                'pis'         => $value['prestador']['dadosProf']['pis'],
+                'cargo'       => Cargo::FirstOrCreate(
+                    [
+                        'cbo' => $value['prestador']['dadosProf']['cargo'], // Verificar código CBO Prestador de serviços
+                    ],
+                    [
+                        'descricao' => $value['prestador']['dadosProf']['cargo']  // Verificar código CBO Prestador de serviços
+                    ]),
+                'curriculo'   => $value['prestador']['dadosPf']['curriculo'],
+                'certificado' => $value['prestador']['dadosPf']['certificado'],
+            ]);
+            //dd($prestador);
+            $prestador_formacao = PrestadorFormacao::create([
+                'prestador' => $prestador->id,
+                'formacao'  => Formacao::FirstOrCreate(['descricao' => $value['prestador']['dadosProf']['formacao']])->id,
+            ]);
+            
+            $user = User::create([
+                'nome' => $prestador->nome,
+                'email' => $value['prestador']['contato']['email'],
+                'password' => $value['senha']
+            ]);
+        }
     }
 }
