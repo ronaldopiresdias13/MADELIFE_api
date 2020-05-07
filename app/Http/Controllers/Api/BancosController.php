@@ -15,7 +15,7 @@ class BancosController extends Controller
      */
     public function index()
     {
-        return Banco::all()->sortBy('codigo');
+        return Banco::all();
     }
 
     /**
