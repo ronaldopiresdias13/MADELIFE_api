@@ -18,6 +18,7 @@ use App\Email;
 use App\PessoaEndereco;
 use App\Endereco;
 use App\Cidade;
+use App\Conselho;
 use Illuminate\Http\Request;
 
 class PrestadoresController extends Controller
@@ -207,6 +208,11 @@ class PrestadoresController extends Controller
             )->id,
         ]);
 
-        
+        $conselho = Conselho::firstOrCreate([
+            'instituicao' => $request['prestador']['conselho']['instituicao'],
+            'uf' => 'SP',
+            'numero' => $request['prestador']['conselho']['numero'],
+            'pessoa'   => $prestador->pessoa,
+        ]);
     }
 }
