@@ -114,7 +114,7 @@ class PrestadoresController extends Controller
                     ]
                 )->id,
                 'fantasia' => $value['prestador']['nomeFantasia'],
-                'sexo'     => $value['prestador']['nomeFantasia'],
+                'sexo'     => $value['prestador']['dadosPf']['sexo'],
                 'pis'      => $value['prestador']['dadosProf']['pis'],
                 'cargo'    => Cargo::firstOrCreate(
                     [
