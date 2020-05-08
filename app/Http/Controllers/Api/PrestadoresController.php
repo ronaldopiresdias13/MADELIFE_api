@@ -138,7 +138,7 @@ class PrestadoresController extends Controller
                 'password' => bcrypt($request['senha']),
             ]);
         }
-        
+
         if($request['prestador']['dadosBancario']['banco'] != null && $request['prestador']['dadosBancario']['banco']['codigo'] != null){
             $dados_bancario = Dadosbancario::firstOrCreate([
                 'banco' => Banco::firstOrCreate(
@@ -207,5 +207,6 @@ class PrestadoresController extends Controller
             )->id,
         ]);
 
+        
     }
 }
