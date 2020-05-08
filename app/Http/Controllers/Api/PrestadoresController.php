@@ -13,6 +13,11 @@ use App\Cargo;
 use App\PrestadorFormacao;
 use App\PessoaTelefone;
 use App\Telefone;
+use App\PessoaEmail;
+use App\Email;
+use App\PessoaEndereco;
+use App\Endereco;
+use App\Cidade;
 use Illuminate\Http\Request;
 
 class PrestadoresController extends Controller
@@ -89,124 +94,119 @@ class PrestadoresController extends Controller
      */
     public function migracao(Request $request)
     {
-        // dd($request['prestador']);
-        $value = $request;
-        // dd($request);
-        // foreach ($request->all() as $key => $value) {
-            // dd($value['prestador']['dadosPf']['nome']);
-            // dd($value);
-            // dd($prestador);
+        $prestador = Prestador::firstOrCreate([
+            'pessoa' => Pessoa::firstOrCreate(
+                [
+                    'cpfcnpj' => $request['prestador']['dadosPf']['cpf']['numero'],
+                ],
+                [
+                    'nome'        => $request['prestador']['dadosPf']['nome'],
+                    'nascimento'  => $request['prestador']['dadosPf']['nascimento'],
+                    'tipo'        => 'Prestador',
+                    'rgie'        => $request['prestador']['dadosPf']['rg']['numero'],
+                    'observacoes' => $request['prestador']['observacoes'],
+                    'status'      => $request['prestador']['status'],
+                ]
+            )->id,
+            'fantasia'    => $request['prestador']['nomeFantasia'],
+            'sexo'        => $request['prestador']['dadosPf']['sexo'],
+            'pis'         => $request['prestador']['dadosProf']['pis'],
+            'cargo'       => null,
+            'curriculo'   => $request['prestador']['dadosPf']['curriculo'],
+            'certificado' => $request['prestador']['dadosPf']['certificado'],
+        ]);
+        
+        $prestador_formacao = PrestadorFormacao::firstOrCreate([
+            'prestador' => $prestador->id,
+            'formacao'  => Formacao::firstOrCreate(['descricao' => $request['prestador']['dadosProf']['formacao']['descricao']])->id,
+        ]);
+        
+        $usercpf = User::firstWhere(
+            'cpfcnpj' , $request['prestador']['dadosPf']['cpf']['numero']
+        );
+        $useremail = User::firstWhere(
+            'email', $request['prestador']['contato']['email']
+        );
 
-            // alert($value['prestador']['dadosPf']['cpf']['numero']);
+        if ($usercpf || $useremail) {
+            
+        } else {
+            $user = User::create([
+                'cpfcnpj' => $request['prestador']['dadosPf']['cpf']['numero'],
+                'email'   => $request['prestador']['contato']['email'],
+                'pessoa'  => $prestador->pessoa,
+                'password' => bcrypt($request['senha']),
+            ]);
+        }
 
-            $prestador = Prestador::firstOrCreate([
-                'pessoa' => Pessoa::firstOrCreate(
+        if($request['prestador']['dadosBancario']['banco'] != null && $request['prestador']['dadosBancario']['banco']['codigo'] != null){
+            $dados_bancario = Dadosbancario::firstOrCreate([
+                'banco' => Banco::firstOrCreate(
                     [
-                        'cpfcnpj' => $value['prestador']['dadosPf']['cpf']['numero'],
+                        'codigo' => ($request['prestador']['dadosBancario']['banco']['codigo'] == null || $request['prestador']['dadosBancario']['banco']['codigo'] == "") ? '000' : $request['prestador']['dadosBancario']['banco']['codigo'],
                     ],
                     [
-                        'nome'        => $value['prestador']['dadosPf']['nome'],
-                        'nascimento'  => $value['prestador']['dadosPf']['nascimento'],
-                        'tipo'        => 'Prestador',
-                        'rgie'        => $value['prestador']['dadosPf']['rg']['numero'],
-                        'observacoes' => $value['prestador']['observacoes'],
-                        'status'      => $value['prestador']['status'],
+                        'descricao' => ($request['prestador']['dadosBancario']['banco']['codigo'] == null || $request['prestador']['dadosBancario']['banco']['codigo'] == "") ? 'Outros' : $request['prestador']['dadosBancario']['banco']['descricao']
                     ]
                 )->id,
-                'fantasia' => $value['prestador']['nomeFantasia'],
-                'sexo'     => $value['prestador']['dadosPf']['sexo'],
-                'pis'      => $value['prestador']['dadosProf']['pis'],
-                'cargo'    => Cargo::firstOrCreate(
-                    [
-                        'cbo' => '10115', // Verificar código CBO Prestador de serviços
-                    ],
-                    [
-                        'descricao' => 'Oficial general da marinha',  // Verificar código CBO Prestador de serviços
-                    ])->id,
-                'curriculo'   => $value['prestador']['dadosPf']['curriculo'],
-                'certificado' => $value['prestador']['dadosPf']['certificado'],
+                'pessoa'    => $prestador->pessoa,
+                'agencia'   => $request['prestador']['dadosBancario']['agencia'  ],
+                'conta'     => $request['prestador']['dadosBancario']['conta'    ],
+                'digito'    => $request['prestador']['dadosBancario']['digito'   ],
+                'tipoconta' => $request['prestador']['dadosBancario']['tipoConta'],
             ]);
-            // dd($prestador->id);
+        }
 
-            // dd(
-            //     Formacao::firstOrCreate(
-            //         [
-            //             'descricao' => $value['prestador']['dadosProf']['formacao']['descricao'],
-            //         ]
-            //     )->id
-            // );
-            
-            $prestador_formacao = PrestadorFormacao::firstOrCreate([
-                'prestador' => $prestador->id,
-                'formacao'  => Formacao::firstOrCreate(['descricao' => $value['prestador']['dadosProf']['formacao']['descricao']])->id,
+        if ($request['prestador']['contato']['telefone'] != null && $request['prestador']['contato']['telefone'] != "") {
+            $pessoa_telefones = PessoaTelefone::firstOrCreate([
+                'pessoa'   => $prestador->pessoa,
+                'telefone' => Telefone::firstOrCreate(
+                    [
+                        'telefone' => $request['prestador']['contato']['telefone'],
+                    ]
+                )->id,
             ]);
-            
-            $usercpf = User::firstWhere(
-                'cpfcnpj' , $value['prestador']['dadosPf']['cpf']['numero']
-            );
-            $useremail = User::firstWhere(
-                'email', $value['prestador']['contato']['email']
-            );
+        }
+        if ($request['prestador']['contato']['celular'] != null && $request['prestador']['contato']['celular'] != "") {
+            $pessoa_telefones = PessoaTelefone::firstOrCreate([
+                'pessoa'   => $prestador->pessoa,
+                'telefone' => Telefone::firstOrCreate(
+                    [
+                        'telefone' => $request['prestador']['contato']['celular'],
+                    ]
+                )->id,
+            ]);
+        }
 
-            if ($usercpf || $useremail) {
-                
-            } else {
-                $user = User::create([
-                    'cpfcnpj' => $value['prestador']['dadosPf']['cpf']['numero'],
-                    'email'   => $value['prestador']['contato']['email'],
-                    'pessoa'  => $prestador->pessoa,
-                    'password' => bcrypt($value['senha']),
-                ]);
-            }
+        $pessoa_emails = PessoaEmail::firstOrCreate([
+            'pessoa' => $prestador->pessoa,
+            'email'  => Email::firstOrCreate(
+                [
+                    'email' => $request['prestador']['contato']['email'],
+                ],
+                [
+                    'tipo' => 'pessoal',
+                ]
+            )->id,
+        ]);
 
-            // $pessoa_outros = PrestadorFormacao::firstOrCreate([
-            //     'pessoa' => $prestador->pessoa,
-            //     'outro'  => Outro::firstOrCreate(['nomecampo' => $value['prestador']['dadosProf']['formacao']])->id,
-            // ]);
+        $cidade = Cidade::where('nome', $request['prestador']['endereco']['cidade'])->where('uf', $request['prestador']['endereco']['uf'])->first();
 
-            if($value['prestador']['dadosBancario']['banco'] != null && $value['prestador']['dadosBancario']['banco']['codigo'] != null){
-                $dados_bancario = Dadosbancario::firstOrCreate([
-                    'banco' => Banco::firstOrCreate(
-                        [
-                            'codigo' => ($value['prestador']['dadosBancario']['banco']['codigo'] == null || $value['prestador']['dadosBancario']['banco']['codigo'] == "") ? '000' : $value['prestador']['dadosBancario']['banco']['codigo'],
-                        ],
-                        [
-                            'descricao' => ($value['prestador']['dadosBancario']['banco']['codigo'] == null || $value['prestador']['dadosBancario']['banco']['codigo'] == "") ? 'Outros' : $value['prestador']['dadosBancario']['banco']['descricao']
-                        ]
-                    )->id,
-                    'pessoa'    => $prestador->pessoa,
-                    'agencia'   => $value['prestador']['dadosBancario']['agencia'  ],
-                    'conta'     => $value['prestador']['dadosBancario']['conta'    ],
-                    'digito'    => $value['prestador']['dadosBancario']['digito'   ],
-                    'tipoconta' => $value['prestador']['dadosBancario']['tipoConta'],
-                ]);
-            }
+        $pessoa_endereco = PessoaEndereco::firstOrCreate([
+            'pessoa'   => $prestador->pessoa,
+            'endereco' => Endereco::firstOrCreate(
+                [
+                    'cep'         => $request['prestador']['endereco']['cep'],
+                    'cidade'      => ($cidade) ? $cidade->id : null,
+                    'rua'         => $request['prestador']['endereco']['rua'],
+                    'bairro'      => $request['prestador']['endereco']['bairro'],
+                    'numero'      => $request['prestador']['endereco']['numero'],
+                    'complemento' => $request['prestador']['endereco']['complemento'],
+                    'tipo'        => 'Residencial',
+                ]
+            )->id,
+        ]);
 
-            if ($value['prestador']['contato']['telefone'] != null && $value['prestador']['contato']['telefone'] != "") {
-                $pessoa_telefones = PessoaTelefone::firstOrCreate([
-                    'pessoa'   => $prestador->pessoa,
-                    'telefone' => Telefone::firstOrCreate(
-                        [
-                            'telefone' => $value['prestador']['contato']['telefone'],
-                        ]
-                    )->id,
-                ]);
-            }
-            if ($value['prestador']['contato']['celular'] != null && $value['prestador']['contato']['celular'] != "") {
-                $pessoa_telefones = PessoaTelefone::firstOrCreate([
-                    'pessoa'   => $prestador->pessoa,
-                    'telefone' => Telefone::firstOrCreate(
-                        [
-                            'telefone' => $value['prestador']['contato']['celular'],
-                        ]
-                    )->id,
-                ]);
-            }
-            // $pessoa_telefones = PessoaTelefone::firstOrCreate([
-            //     'pessoa'   => $prestador->pessoa,
-            //     'telefone' => Telefone::firstOrCreate(['telefone' => $value['prestador']['dadosProf']['formacao']['descricao']])->id,
-            // ]);
-        // }
-
+        
     }
 }

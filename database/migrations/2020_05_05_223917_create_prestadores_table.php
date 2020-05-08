@@ -19,7 +19,8 @@ class CreatePrestadoresTable extends Migration
             $table->string('fantasia')->nullable();
             $table->string('sexo')->nullable();
             $table->string('pis')->nullable();
-            $table->foreignId('cargo')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('cargo')->nullable();
+            $table->foreign('cargo')->references('id')->on('cargos')->onDelete('cascade');
             $table->string('curriculo')->nullable();
             $table->string('certificado')->nullable();
             $table->timestamps();
