@@ -15,9 +15,9 @@ class CreateCuidadosGrupocuidadosTable extends Migration
     {
         Schema::create('cuidados_grupocuidados', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('cuidado')->constrained()->onDelete('cascade');
-            $table->unsignedBigInteger('grupo');
-            $table->foreign('grupo')->references('id')->on('grupocuidados')->onDelete('cascade');
+            $table->foreignId('cuidado_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('grupo_id');
+            $table->foreign('grupo_id')->references('id')->on('grupocuidados')->onDelete('cascade');
             $table->timestamps();
         });
     }

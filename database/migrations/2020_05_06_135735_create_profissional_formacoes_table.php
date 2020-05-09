@@ -15,10 +15,10 @@ class CreateProfissionalFormacoesTable extends Migration
     {
         Schema::create('profissional_formacoes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('profissional');
-            $table->foreign('profissional')->references('id')->on('profissionais')->onDelete('cascade');
-            $table->unsignedBigInteger('formacao');
-            $table->foreign('formacao')->references('id')->on('formacoes')->onDelete('cascade');
+            $table->unsignedBigInteger('profissional_id')->nullable();
+            $table->foreign('profissional_id')->references('id')->on('profissionais')->onDelete('cascade');
+            $table->unsignedBigInteger('formacao_id')->nullable();
+            $table->foreign('formacao_id')->references('id')->on('formacoes')->onDelete('cascade');
             $table->timestamps();
         });
     }

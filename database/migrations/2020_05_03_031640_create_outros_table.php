@@ -15,8 +15,8 @@ class CreateOutrosTable extends Migration
     {
         Schema::create('outros', function (Blueprint $table) {
             $table->id();
-            $table->string('nomecampo');
-            $table->string('valor');
+            $table->string('nomecampo')->nullable();
+            $table->string('valor')->nullable();
             $table->timestamps();
         });
     }

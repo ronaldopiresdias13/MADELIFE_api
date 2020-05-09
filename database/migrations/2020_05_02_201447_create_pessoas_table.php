@@ -17,8 +17,8 @@ class CreatePessoasTable extends Migration
             $table->id();
             $table->string('nome')->nullable();
             $table->string('nascimento')->nullable();
-            $table->string('tipo');
-            $table->string('cpfcnpj');
+            $table->string('tipo')->nullable();
+            $table->string('cpfcnpj')->nullable();
             $table->string('rgie')->nullable();
             $table->string('observacoes')->nullable();
             $table->boolean('status')->default(true);

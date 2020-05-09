@@ -15,22 +15,22 @@ class CreateProfissionaisTable extends Migration
     {
         Schema::create('profissionais', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pessoa')->constrained()->onDelete('cascade');
+            $table->foreignId('pessoa_id')->constrained()->onDelete('cascade');
             $table->boolean('pessoafisica');
-            $table->string('sexo');
-            $table->unsignedBigInteger('setor');
-            $table->foreign('setor')->references('id')->on('setores')->onDelete('cascade');
-            $table->foreignId('cargo')->constrained()->onDelete('cascade');
-            $table->string('pis');
-            $table->string('numerocarteiratrabalho');
-            $table->string('numerocnh');
-            $table->string('categoriacnh');
-            $table->string('validadecnh');
-            $table->string('numerotituloeleitor');
-            $table->string('zonatituloeleitor');
-            $table->string('secaotituloeleitor');
-            $table->unsignedBigInteger('dadoscontratuais');
-            $table->foreign('dadoscontratuais')->references('id')->on('dadoscontratuais')->onDelete('cascade');
+            $table->string('sexo')->nullable();
+            $table->unsignedBigInteger('setor_id')->nullable();
+            $table->foreign('setor_id')->references('id')->on('setores')->onDelete('cascade');
+            $table->foreignId('cargo_id')->constrained()->onDelete('cascade');
+            $table->string('pis')->nullable();
+            $table->string('numerocarteiratrabalho')->nullable();
+            $table->string('numerocnh')->nullable();
+            $table->string('categoriacnh')->nullable();
+            $table->string('validadecnh')->nullable();
+            $table->string('numerotituloeleitor')->nullable();
+            $table->string('zonatituloeleitor')->nullable();
+            $table->string('secaotituloeleitor')->nullable();
+            $table->unsignedBigInteger('dadoscontratuais_id')->nullable();
+            $table->foreign('dadoscontratuais_id')->references('id')->on('dadoscontratuais')->onDelete('cascade');
             $table->timestamps();
         });
     }

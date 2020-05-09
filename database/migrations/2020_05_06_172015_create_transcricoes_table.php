@@ -15,12 +15,12 @@ class CreateTranscricoesTable extends Migration
     {
         Schema::create('transcricoes', function (Blueprint $table) {
             $table->id();
-            $table->string('medico');
-            $table->string('crm');
-            $table->string('receita');
-            $table->unsignedBigInteger('profissional');
-            $table->foreign('profissional')->references('id')->on('profissionais')->onDelete('cascade');
-            $table->foreignId('pil')->constrained()->onDelete('cascade');
+            $table->string('medico')->nullable();
+            $table->string('crm')->nullable();
+            $table->string('receita')->nullable();
+            $table->unsignedBigInteger('profissional_id')->nullable();
+            $table->foreign('profissional_id')->references('id')->on('profissionais')->onDelete('cascade');
+            $table->foreignId('pil_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

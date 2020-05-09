@@ -15,8 +15,8 @@ class CreateDadosBancariosTable extends Migration
     {
         Schema::create('dadosbancarios', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('banco')->constrained()->onDelete('cascade');
-            $table->foreignId('pessoa')->constrained()->onDelete('cascade');
+            $table->foreignId('banco_id')->constrained()->onDelete('cascade');
+            $table->foreignId('pessoa_id')->constrained()->onDelete('cascade');
             $table->string('agencia')->nullable();
             $table->string('conta')->nullable();
             $table->string('digito')->nullable();

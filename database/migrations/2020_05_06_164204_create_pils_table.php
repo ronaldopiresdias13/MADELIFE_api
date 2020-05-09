@@ -15,11 +15,11 @@ class CreatePilsTable extends Migration
     {
         Schema::create('pils', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('paciente')->constrained()->onDelete('cascade');
-            $table->unsignedBigInteger('profissional');
-            $table->foreign('profissional')->references('id')->on('profissionais')->onDelete('cascade');
-            $table->string('diagnosticoprincipal');
-            $table->string('data');
+            $table->foreignId('paciente_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('profissional_id')->nullable();
+            $table->foreign('profissional_id')->references('id')->on('profissionais')->onDelete('cascade');
+            $table->string('diagnosticoprincipal')->nullable();
+            $table->string('data')->nullable();
             $table->string('prognostico')->nullable();
             $table->string('avaliacao')->nullable();
             $table->string('revisao')->nullable();

@@ -16,8 +16,8 @@ class CreateConselhosTable extends Migration
         Schema::create('conselhos', function (Blueprint $table) {
             $table->id();
             $table->string('instituicao')->nullable();
-            $table->string('uf')->nullable();;
-            $table->string('numero')->nullable();;
+            $table->string('uf')->nullable();
+            $table->string('numero')->nullable();
             $table->foreignId('pessoa')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
