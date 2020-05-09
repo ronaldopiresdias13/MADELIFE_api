@@ -15,12 +15,12 @@ class CreateEmpresaPessoasTable extends Migration
     {
         Schema::create('empresa_pessoas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('empresa')->constrained()->onDelete('cascade');
-            $table->foreignId('pessoa')->constrained()->onDelete('cascade');
-            $table->string('contrato');
-            $table->string('inicio');
-            $table->string('fim');
-            $table->boolean('situacao');
+            $table->foreignId('empresa_id')->constrained()->onDelete('cascade');
+            $table->foreignId('pessoa_id')->constrained()->onDelete('cascade');
+            $table->string('contrato')->nullable();
+            $table->string('inicio')->nullable();
+            $table->string('fim')->nullable();
+            $table->boolean('situacao')->nullable();
             $table->timestamps();
         });
     }

@@ -15,8 +15,8 @@ class CreatePessoaEmailsTable extends Migration
     {
         Schema::create('pessoa_emails', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pessoa')->constrained()->onDelete('cascade');
-            $table->foreignId('email')->constrained()->onDelete('cascade');
+            $table->foreignId('pessoa_id')->constrained()->onDelete('cascade');
+            $table->foreignId('email_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

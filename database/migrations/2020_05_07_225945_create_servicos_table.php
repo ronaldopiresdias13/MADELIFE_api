@@ -18,7 +18,7 @@ class CreateServicosTable extends Migration
             $table->string('codigo')->nullable();
             $table->string('descricao');
             $table->float('valor')->nullable();
-            $table->foreignId('empresa')->constrained()->onDelete('cascade');
+            $table->foreignId('empresa_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

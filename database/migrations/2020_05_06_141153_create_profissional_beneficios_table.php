@@ -15,9 +15,9 @@ class CreateProfissionalBeneficiosTable extends Migration
     {
         Schema::create('profissional_beneficios', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('profissional');
-            $table->foreign('profissional')->references('id')->on('profissionais')->onDelete('cascade');
-            $table->foreignId('beneficio')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('profissional_id')->nullable();
+            $table->foreign('profissional_id')->references('id')->on('profissionais')->onDelete('cascade');
+            $table->foreignId('beneficio_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -15,8 +15,8 @@ class CreateEmpresaTelefonesTable extends Migration
     {
         Schema::create('empresa_telefones', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('empresa')->constrained()->onDelete('cascade');
-            $table->foreignId('telefone')->constrained()->onDelete('cascade');
+            $table->foreignId('empresa_id')->constrained()->onDelete('cascade');
+            $table->foreignId('telefone_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

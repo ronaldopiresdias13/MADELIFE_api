@@ -16,11 +16,11 @@ class CreateUnidademedidasTable extends Migration
         Schema::create('unidademedidas', function (Blueprint $table) {
             $table->id();
             $table->string('descricao');
-            $table->string('sigla');
-            $table->string('grupo');
-            $table->boolean('padrao');
+            $table->string('sigla')->nullable();
+            $table->string('grupo')->nullable();
+            $table->boolean('padrao')->nullable();
             $table->boolean('status')->default(true);
-            $table->foreignId('empresa')->constrained()->onDelete('cascade');
+            $table->foreignId('empresa_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

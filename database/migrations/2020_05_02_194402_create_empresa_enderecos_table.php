@@ -15,8 +15,8 @@ class CreateEmpresaEnderecosTable extends Migration
     {
         Schema::create('empresa_enderecos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('empresa')->constrained()->onDelete('cascade');
-            $table->foreignId('endereco')->constrained()->onDelete('cascade');
+            $table->foreignId('empresa_id')->constrained()->onDelete('cascade');
+            $table->foreignId('endereco_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

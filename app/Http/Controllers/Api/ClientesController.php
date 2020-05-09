@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Cliente;
+use App\Pessoa;
+use App\PessoaEndereco;
+use App\Endereco;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -72,70 +75,75 @@ class ClientesController extends Controller
      */
     public function migracao(Request $request)
     {
-        dd($request);
-        $value = $request;
-        
-        $prestador = Prestador::firstOrCreate([
-            'pessoa' => Pessoa::firstOrCreate(
+        // dd($request);
+        $cliente = Cliente::firstOrCreate([
+            'pessoa_id' => Pessoa::firstOrCreate(
                 [
-                    'cpfcnpj' => $value['prestador']['dadosPf']['cpf']['numero'],
+                    'cpfcnpj' => $request['pessoa']['cpfcnpj'],
                 ],
                 [
-                    'nome'        => $value['prestador']['dadosPf']['nome'],
-                    'nascimento'  => $value['prestador']['dadosPf']['nascimento'],
-                    'tipo'        => 'Prestador',
-                    'rgie'        => $value['prestador']['dadosPf']['rg']['numero'],
-                    'observacoes' => $value['prestador']['observacoes'],
-                    'status'      => $value['prestador']['status'],
+                    'nome'        => $request['pessoa']['nome'],
+                    'nascimento'  => $request['pessoa']['nascimento'],
+                    'tipo'        => $request['pessoa']['tipo'],
+                    'rgie'        => $request['pessoa']['nome'],
+                    'observacoes' => $request['pessoa']['observacoes'],
+                    'status'      => $request['pessoa']['status'],
                 ]
-                )->id,
-                'fantasia' => $value['prestador']['nomeFantasia'],
-                'sexo'     => $value['prestador']['dadosPf']['sexo'],
-                'pis'      => $value['prestador']['dadosProf']['pis'],
-                'cargo'    => Cargo::firstOrCreate(
-                    [
-                        'cbo' => '10115', // Verificar código CBO Prestador de serviços
-                    ],
-                    [
-                        'descricao' => 'Oficial general da marinha',  // Verificar código CBO Prestador de serviços
-                    ])->id,
-                'curriculo'   => $value['prestador']['dadosPf']['curriculo'],
-                'certificado' => $value['prestador']['dadosPf']['certificado'],
-            ]);
-            
-            
-            $prestador_formacao = PrestadorFormacao::firstOrCreate([
-                'prestador' => $prestador->id,
-                'formacao'  => Formacao::firstOrCreate(['descricao' => $value['prestador']['dadosProf']['formacao']['descricao']])->id,
-            ]);
-            
-            $usercpf = User::firstWhere(
-                'cpfcnpj' , $value['prestador']['dadosPf']['cpf']['numero']
-            );
-            $useremail = User::firstWhere(
-                'email', $value['prestador']['contato']['email']
-            );
+            )->id,
+            'empresa_id' => 1
+        ]);
+       
+        
+        // if ($request['prestador']['contato']['telefone'] != null && $request['prestador']['contato']['telefone'] != "") {
+        //     $pessoa_telefones = PessoaTelefone::firstOrCreate([
+        //         'pessoa'   => $prestador->pessoa,
+        //         'telefone' => Telefone::firstOrCreate(
+        //             [
+        //                 'telefone' => $request['prestador']['contato']['telefone'],
+        //             ]
+        //         )->id,
+        //     ]);
+        // }
+        // if ($request['prestador']['contato']['celular'] != null && $request['prestador']['contato']['celular'] != "") {
+        //     $pessoa_telefones = PessoaTelefone::firstOrCreate([
+        //         'pessoa'   => $prestador->pessoa,
+        //         'telefone' => Telefone::firstOrCreate(
+        //             [
+        //                 'telefone' => $request['prestador']['contato']['celular'],
+        //             ]
+        //         )->id,
+        //     ]);
+        // }
 
-            
-            if ($value['prestador']['contato']['telefone'] != null && $value['prestador']['contato']['telefone'] != "") {
-                $pessoa_telefones = PessoaTelefone::firstOrCreate([
-                    'pessoa'   => $prestador->pessoa,
-                    'telefone' => Telefone::firstOrCreate(
-                        [
-                            'telefone' => $value['prestador']['contato']['telefone'],
-                        ]
-                    )->id,
-                ]);
-            }
-            if ($value['prestador']['contato']['celular'] != null && $value['prestador']['contato']['celular'] != "") {
-                $pessoa_telefones = PessoaTelefone::firstOrCreate([
-                    'pessoa'   => $prestador->pessoa,
-                    'telefone' => Telefone::firstOrCreate(
-                        [
-                            'telefone' => $value['prestador']['contato']['celular'],
-                        ]
-                    )->id,
-                ]);
-            }
+        // $pessoa_emails = PessoaEmail::firstOrCreate([
+        //     'pessoa' => $prestador->pessoa,
+        //     'email'  => Email::firstOrCreate(
+        //         [
+        //             'email' => $request['prestador']['contato']['email'],
+        //         ],
+        //         [
+        //             'tipo' => 'pessoal',
+        //         ]
+        //     )->id,
+        // ]);
+
+        // $cidade = Cidade::where('nome', $request['prestador']['endereco']['cidade'])->where('uf', $request['prestador']['endereco']['uf'])->first();
+
+        $pessoa_endereco = PessoaEndereco::firstOrCreate([
+            'pessoa_id'   => $cliente->pessoa_id,
+            'endereco_id' => Endereco::firstOrCreate(
+                [
+                    'cep'         => $request['endereco']['cep'],
+                    'cidade_id'   => $request['endereco']['cidade_id'],
+                    'rua'         => $request['endereco']['rua'],
+                    'bairro'      => $request['endereco']['bairro'],
+                    'numero'      => $request['endereco']['numero'],
+                    'complemento' => $request['endereco']['complemento'],
+                    'tipo'        => $request['endereco']['tipo'],
+                ]
+            )->id,
+        ]);
+
+        
     }
 }
