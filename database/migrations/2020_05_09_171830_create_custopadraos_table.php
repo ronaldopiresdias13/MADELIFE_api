@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateConselhosTable extends Migration
+class CreateCustopadraosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateConselhosTable extends Migration
      */
     public function up()
     {
-        Schema::create('conselhos', function (Blueprint $table) {
+        Schema::create('custopadraos', function (Blueprint $table) {
             $table->id();
-            $table->string('instituicao')->nullable();
-            $table->string('uf')->nullable();;
-            $table->string('numero')->nullable();;
-            $table->foreignId('pessoa')->constrained()->onDelete('cascade');
+            $table->foreignId('empresa')->constrained()->onDelete('cascade');
+            $table->string('descricao');
+            $table->string('unidade');
+            $table->float('valor');
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ class CreateConselhosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('conselhos');
+        Schema::dropIfExists('custopadraos');
     }
 }
