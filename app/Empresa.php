@@ -10,6 +10,6 @@ class Empresa extends Model
 
     public function cliente()
     {
-        return $this->hasMany('App\Cliente');
+        return $this->hasMany('App\Cliente', 'empresa_id');
     }
 }

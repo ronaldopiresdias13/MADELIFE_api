@@ -14,7 +14,7 @@ class Cliente extends Model
     // }
     public function empresa()
     {
-        return $this->hasOne('App\Empresa', 'id', 'empresa_id');
+        return $this->belongsTo('App\Empresa', 'empresa_id');
     }
     
 }
