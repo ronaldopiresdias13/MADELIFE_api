@@ -16,17 +16,18 @@ class CreateOrcamentosTable extends Migration
         Schema::create('orcamentos', function (Blueprint $table) {
             $table->id();
             $table->string('numero');
-            $table->string('processo');
-            $table->string('cidade');
             $table->string('tipo');
-            $table->string('data');
-            $table->string('situacao');
-            $table->string('paciente');
-            $table->string('descricao');
-            $table->string('observacao');
-            $table->integer('ciclomeses');
-            $table->boolean('status')->default(true);
             $table->foreignId('cliente')->constrained()->onDelete('cascade');
+            $table->foreignId('empresa')->constrained()->onDelete('cascade');
+            $table->string('data');
+            $table->integer('quantidade');
+            $table->integer('unidade');
+            $table->string('cidade')->nullable();
+            $table->string('processo')->nullable();
+            $table->string('situacao');
+            $table->string('descricao')->nullable();
+            $table->string('observacao')->nullable();
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

@@ -16,9 +16,9 @@ class CreateCuidadosTable extends Migration
         Schema::create('cuidados', function (Blueprint $table) {
             $table->id();
             $table->string('descricao');
-            $table->string('codigo');
+            $table->string('codigo')->nullable();
             $table->boolean('status')->default(true);
-            $table->foreignId('empresa')->constrained()->onDelete('cascade');
+            $table->foreignId('empresa_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

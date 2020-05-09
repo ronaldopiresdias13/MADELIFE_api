@@ -15,10 +15,10 @@ class CreatePrestadorFormacoesTable extends Migration
     {
         Schema::create('prestador_formacoes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('prestador');
-            $table->foreign('prestador')->references('id')->on('prestadores')->onDelete('cascade');
-            $table->unsignedBigInteger('formacao');
-            $table->foreign('formacao')->references('id')->on('formacoes')->onDelete('cascade');
+            $table->unsignedBigInteger('prestador_id');
+            $table->foreign('prestador_id')->references('id')->on('prestadores')->onDelete('cascade');
+            $table->unsignedBigInteger('formacao_id');
+            $table->foreign('formacao_id')->references('id')->on('formacoes')->onDelete('cascade');
             $table->timestamps();
         });
     }

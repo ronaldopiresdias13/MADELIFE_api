@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSetoresTable extends Migration
+class CreateCustopadraosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateSetoresTable extends Migration
      */
     public function up()
     {
-        Schema::create('setores', function (Blueprint $table) {
+        Schema::create('custopadraos', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('empresa')->constrained()->onDelete('cascade');
             $table->string('descricao');
-            $table->foreignId('empresa_id')->constrained()->onDelete('cascade');
+            $table->string('unidade');
+            $table->float('valor');
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ class CreateSetoresTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('setores');
+        Schema::dropIfExists('custopadraos');
     }
 }

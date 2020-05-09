@@ -15,11 +15,11 @@ class CreateHorariostrabalhoTable extends Migration
     {
         Schema::create('horariostrabalho', function (Blueprint $table) {
             $table->id();
-            $table->string('diasemana');
-            $table->string('horarioentrada');
-            $table->string('horariosaida');
-            $table->unsignedBigInteger('profissional');
-            $table->foreign('profissional')->references('id')->on('profissionais')->onDelete('cascade');
+            $table->string('diasemana')->nullable();
+            $table->string('horarioentrada')->nullable();
+            $table->string('horariosaida')->nullable();
+            $table->unsignedBigInteger('profissional_id')->nullable();
+            $table->foreign('profissional_id')->references('id')->on('profissionais')->onDelete('cascade');
             $table->timestamps();
         });
     }

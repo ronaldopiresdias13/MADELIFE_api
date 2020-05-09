@@ -15,10 +15,10 @@ class CreatePrescricoesbTable extends Migration
     {
         Schema::create('prescricoesb', function (Blueprint $table) {
             $table->id();
-            $table->string('descricao');
-            $table->string('situacao');
-            $table->string('referencia');
-            $table->foreignId('pil')->constrained()->onDelete('cascade');
+            $table->string('descricao')->nullable();
+            $table->string('situacao')->nullable();
+            $table->string('referencia')->nullable();
+            $table->foreignId('pil_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

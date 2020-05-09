@@ -15,8 +15,8 @@ class CreatePessoaEnderecosTable extends Migration
     {
         Schema::create('pessoa_enderecos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pessoa')->constrained()->onDelete('cascade');
-            $table->foreignId('endereco')->constrained()->onDelete('cascade');
+            $table->foreignId('pessoa_id')->constrained()->onDelete('cascade');
+            $table->foreignId('endereco_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

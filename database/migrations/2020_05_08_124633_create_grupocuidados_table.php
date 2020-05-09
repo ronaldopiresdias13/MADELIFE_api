@@ -17,7 +17,7 @@ class CreateGrupocuidadosTable extends Migration
             $table->id();
             $table->string('descricao');
             $table->boolean('status')->default(true);
-            $table->foreignId('empresa')->constrained()->onDelete('cascade');
+            $table->foreignId('empresa_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

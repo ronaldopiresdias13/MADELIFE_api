@@ -4,8 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Cidade extends Model
+class Historicoorcamento extends Model
 {
-    protected $guarded = [];
-
+    //
 }
