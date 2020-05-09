@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrcamentoProdutosTable extends Migration
+class CreateOrcamentoprodutosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateOrcamentoProdutosTable extends Migration
      */
     public function up()
     {
-        Schema::create('orcamento_produtos', function (Blueprint $table) {
+        Schema::create('orcamentoprodutos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('produto')->constrained()->onDelete('cascade');
             $table->int('quantidade');
@@ -34,6 +34,6 @@ class CreateOrcamentoProdutosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orcamento_produtos');
+        Schema::dropIfExists('orcamentoprodutos');
     }
 }
