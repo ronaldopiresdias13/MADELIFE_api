@@ -16,7 +16,6 @@ class EmpresasController extends Controller
     public function index()
     {
         $empresas = Empresa::all();
-        // dd($empresas);
         foreach ($empresas as $e){
             $clientes = $e->clientes;
             foreach ($clientes as $c) {
@@ -24,8 +23,6 @@ class EmpresasController extends Controller
             }
         }
         return $empresas;
-        dd($empresas);
-        return Empresa::all()->sortBy('razao');
     }
 
     /**

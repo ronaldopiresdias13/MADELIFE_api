@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Pessoa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PessoasController extends Controller
 {
@@ -15,7 +16,7 @@ class PessoasController extends Controller
      */
     public function index()
     {
-        return Pessoa::all()->sortBy('nome');
+        return DB::table('pessoas')->where('status', true)->orderBy('nome')->get();
     }
 
     /**
