@@ -40,7 +40,10 @@ Route::group([
     Route::apiResource('cidades'    , 'Api\CidadesController'    );
     Route::apiResource('clientes'   , 'Api\ClientesController'   );
     Route::apiResource('prestadores', 'Api\PrestadoresController');
+    Route::apiResource('servicos'   , 'Api\ServicosController'   );
     Route::post('prestadores/migracao', 'Api\PrestadoresController@migracao');
+    Route::post('clientes/migracao', 'Api\ClientesController@migracao');
+    Route::post('orcamentos/migracao', 'Api\OrcamentoController@migracao');
 
 
 

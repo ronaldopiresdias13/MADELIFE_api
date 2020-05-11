@@ -14,8 +14,8 @@ class AddResponsavelToPacientesTable extends Migration
     public function up()
     {
         Schema::table('pacientes', function (Blueprint $table) {
-            $table->unsignedBigInteger('responsavel')->after('pessoa');
-            $table->foreign('responsavel')->references('id')->on('responsaveis')->onDelete('cascade');
+            $table->unsignedBigInteger('responsavel_id')->after('pessoa_id');
+            $table->foreign('responsavel_id')->references('id')->on('responsaveis')->onDelete('cascade');
         });
     }
 
@@ -27,8 +27,8 @@ class AddResponsavelToPacientesTable extends Migration
     public function down()
     {
         Schema::table('pacientes', function (Blueprint $table) {
-            $table->dropForeign('pacientes_responsavel_foreign');
-            $table->dropColumn('responsavel');
+            $table->dropForeign('pacientes_responsavel_id_foreign');
+            $table->dropColumn('responsavel_id');
         });
     }
 }

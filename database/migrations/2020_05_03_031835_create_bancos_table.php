@@ -15,8 +15,8 @@ class CreateBancosTable extends Migration
     {
         Schema::create('bancos', function (Blueprint $table) {
             $table->id();
-            $table->string('codigo');
-            $table->string('descricao');
+            $table->string('codigo')->nullable();
+            $table->string('descricao')->nullable();
             $table->timestamps();
         });
     }

@@ -15,8 +15,8 @@ class CreatePessoaTelefonesTable extends Migration
     {
         Schema::create('pessoa_telefones', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pessoa')->constrained()->onDelete('cascade');
-            $table->foreignId('telefone')->constrained()->onDelete('cascade');
+            $table->foreignId('pessoa_id')->constrained()->onDelete('cascade');
+            $table->foreignId('telefone_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

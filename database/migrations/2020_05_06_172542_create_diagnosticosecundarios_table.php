@@ -19,7 +19,7 @@ class CreateDiagnosticosecundariosTable extends Migration
             $table->string('descricao')->nullable();
             $table->string('observacao')->nullable();
             $table->string('referencia')->nullable();
-            $table->foreignId('pil')->constrained()->onDelete('cascade');
+            $table->foreignId('pil_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

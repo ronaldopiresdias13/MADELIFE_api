@@ -16,7 +16,8 @@ class CreateEnderecosTable extends Migration
         Schema::create('enderecos', function (Blueprint $table) {
             $table->id();
             $table->string('cep')->nullable();
-            $table->foreignId('cidade'  )->constrained()->onDelete('cascade')->nullable();
+            $table->unsignedBigInteger('cidade_id')->nullable();
+            $table->foreign('cidade_id')->references('id')->on('cidades')->onDelete('cascade');
             $table->string('rua')->nullable();
             $table->string('bairro')->nullable();
             $table->string('numero')->nullable();

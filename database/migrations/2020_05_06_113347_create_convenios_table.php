@@ -16,8 +16,8 @@ class CreateConveniosTable extends Migration
         Schema::create('convenios', function (Blueprint $table) {
             $table->id();
             $table->string('descricao');
-            $table->foreignId('empresa')->constrained()->onDelete('cascade');
-            $table->float('valor');
+            $table->foreignId('empresa_id')->constrained()->onDelete('cascade');
+            $table->float('valor')->nullable();
             $table->timestamps();
         });
     }

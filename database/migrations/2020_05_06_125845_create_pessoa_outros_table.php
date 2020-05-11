@@ -15,8 +15,8 @@ class CreatePessoaOutrosTable extends Migration
     {
         Schema::create('pessoa_outros', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pessoa')->constrained()->onDelete('cascade');
-            $table->foreignId('outro')->constrained()->onDelete('cascade');
+            $table->foreignId('pessoa_id')->constrained()->onDelete('cascade');
+            $table->foreignId('outro_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

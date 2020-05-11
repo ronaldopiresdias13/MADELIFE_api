@@ -15,11 +15,12 @@ class CreatePrestadoresTable extends Migration
     {
         Schema::create('prestadores', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pessoa')->constrained()->onDelete('cascade');
+            $table->foreignId('pessoa_id')->constrained()->onDelete('cascade');
             $table->string('fantasia')->nullable();
             $table->string('sexo')->nullable();
             $table->string('pis')->nullable();
-            $table->foreignId('cargo')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('cargo_id')->nullable();
+            $table->foreign('cargo_id')->references('id')->on('cargos')->onDelete('cascade');
             $table->string('curriculo')->nullable();
             $table->string('certificado')->nullable();
             $table->timestamps();

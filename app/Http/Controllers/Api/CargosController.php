@@ -15,7 +15,7 @@ class CargosController extends Controller
      */
     public function index()
     {
-        return Cargo::all()->sortBy('cbo');
+        return Cargo::all();
     }
 
     /**
@@ -26,10 +26,14 @@ class CargosController extends Controller
      */
     public function store(Request $request)
     {
-        $cargo = new Cargo;
-        $cargo->cbo = $request->cbo;
-        $cargo->descricao = $request->descricao;
-        $cargo->save();
+        // dd($request->descricao);
+        $cargo = Cargo::firstOrCreate(
+            ['cbo' => $request->cbo],
+            ['descricao' =>  $request->descricao]
+        );
+        // $cargo->cbo = $request->cbo;
+        // $cargo->descricao = $request->descricao;
+        // $cargo->save();
     }
 
     /**
@@ -52,7 +56,12 @@ class CargosController extends Controller
      */
     public function update(Request $request, Cargo $cargo)
     {
-        //
+        dd($request->cbo);
+        // foreach ($request->acessos as $key => $value) {
+        //     $teste = Cargo::updateOrCreate(
+        //         ['cbo'  => $user->id, 'acesso' => Acesso::FirstOrCreate(['nome' => $value['nome']])->id]
+        //     );
+        // }
     }
 
     /**
