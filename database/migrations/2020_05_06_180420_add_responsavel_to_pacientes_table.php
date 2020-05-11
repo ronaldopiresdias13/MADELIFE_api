@@ -27,8 +27,8 @@ class AddResponsavelToPacientesTable extends Migration
     public function down()
     {
         Schema::table('pacientes', function (Blueprint $table) {
-            $table->dropForeign('pacientes_responsavel_foreign');
-            $table->dropColumn('responsavel');
+            $table->dropForeign('pacientes_responsavel_id_foreign');
+            $table->dropColumn('responsavel_id');
         });
     }
 }
