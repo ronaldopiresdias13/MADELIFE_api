@@ -18,7 +18,7 @@ class CreateConselhosTable extends Migration
             $table->string('instituicao')->nullable();
             $table->string('uf')->nullable();
             $table->string('numero')->nullable();
-            $table->foreignId('pessoa')->constrained()->onDelete('cascade');
+            $table->foreignId('pessoa_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

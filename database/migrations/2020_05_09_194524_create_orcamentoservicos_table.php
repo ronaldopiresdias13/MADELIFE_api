@@ -15,8 +15,8 @@ class CreateOrcamentoservicosTable extends Migration
     {
         Schema::create('orcamentoservicos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('servico')->constrained()->onDelete('cascade');
-            $table->int('quantidade');
+            $table->foreignId('servico_id')->constrained()->onDelete('cascade');
+            $table->integer('quantidade');
             $table->string('basecobranca');
             $table->string('frequencia');
             $table->float('valorunitario');

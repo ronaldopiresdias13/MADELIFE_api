@@ -15,8 +15,8 @@ class CreateOrcamentoprodutosTable extends Migration
     {
         Schema::create('orcamentoprodutos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('produto')->constrained()->onDelete('cascade');
-            $table->int('quantidade');
+            $table->foreignId('produto_id')->constrained()->onDelete('cascade');
+            $table->integer('quantidade');
             $table->float('valorunitario');
             $table->float('subtotal');
             $table->float('custo');
