@@ -30,7 +30,7 @@ class ServicosController extends Controller
         $servico->descricao = $request->descricao;
         $servico->codigo = $request->codigo;
         $servico->valor = $request->valor;
-        $servico->empresa = $request->empresa;
+        $servico->empresa_id = 1;
         $servico->save();
     }
 
