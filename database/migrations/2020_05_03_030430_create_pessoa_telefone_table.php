@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePessoaEnderecosTable extends Migration
+class CreatePessoaTelefoneTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreatePessoaEnderecosTable extends Migration
      */
     public function up()
     {
-        Schema::create('pessoa_enderecos', function (Blueprint $table) {
+        Schema::create('pessoa_telefone', function (Blueprint $table) {
             $table->id();
             $table->foreignId('pessoa_id')->constrained()->onDelete('cascade');
-            $table->foreignId('endereco_id')->constrained()->onDelete('cascade');
+            $table->foreignId('telefone_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreatePessoaEnderecosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pessoa_enderecos');
+        Schema::dropIfExists('pessoa_telefone');
     }
 }

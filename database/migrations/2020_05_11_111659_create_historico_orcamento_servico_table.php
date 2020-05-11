@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEmpresaEnderecosTable extends Migration
+class CreateHistoricoOrcamentoServicoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateEmpresaEnderecosTable extends Migration
      */
     public function up()
     {
-        Schema::create('empresa_enderecos', function (Blueprint $table) {
+        Schema::create('historico_orcamento_servico', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('empresa_id')->constrained()->onDelete('cascade');
-            $table->foreignId('endereco_id')->constrained()->onDelete('cascade');
+            $table->foreignId('orcamentoservico_id')->constrained()->onDelete('cascade');
+            $table->foreignId('historicoorcamento_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateEmpresaEnderecosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('empresa_enderecos');
+        Schema::dropIfExists('historico_orcamento_servico');
     }
 }

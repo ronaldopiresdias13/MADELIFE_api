@@ -12,4 +12,9 @@ class Pessoa extends Model
     {
         return $this->hasOne('App\Cliente');
     }
+
+    public function enderecos()
+    {
+        return $this->hasMany('App\Enderecos');
+    }
 }
