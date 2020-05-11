@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Grupocuidado;
 use App\Cuidado;
+use App\CuidadoGrupocuidado;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -73,7 +74,7 @@ class GrupocuidadosController extends Controller
     {
         foreach ($request['cuidado'] as $cuidado) {
             $cuidados_grupocuidados = CuidadoGrupocuidado::firstOrCreate([
-                'cuidado' => Cuidado::firstOrCreate(
+                'cuidado_id' => Cuidado::firstOrCreate(
                     [
                         'codigo' => $cuidado['codigo'],
                     ],
@@ -82,7 +83,7 @@ class GrupocuidadosController extends Controller
                         'empresa_id' => 1,
                         'status' => true,
                     ])->id,
-                'grupo' => Grupocuidado::firstOrCreate(
+                'grupocuidado_id' => Grupocuidado::firstOrCreate(
                     [
                         'codigo' => $request['codigoGrupo'],
                     ],

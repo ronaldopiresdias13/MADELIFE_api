@@ -47,6 +47,7 @@ Route::group([
     Route::post('clientes/migracao', 'Api\ClientesController@migracao');
     Route::post('orcamentos/migracao', 'Api\OrcamentoController@migracao');
     Route::post('cuidados/migracao', 'Api\CuidadosController@migracao');
+    Route::post('grupocuidados/migracao', 'Api\GrupocuidadosController@migracao');
 
 
 
