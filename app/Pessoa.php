@@ -10,7 +10,6 @@ class Pessoa extends Model
 
     public function clientes()
     {
-        return $this->hasOne('App\Cliente', 'id', 'cliente');
+        return $this->belongsTo('App\Cliente');
     }
-
 }
