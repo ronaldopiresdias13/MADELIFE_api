@@ -212,7 +212,7 @@ class PrestadoresController extends Controller
             'instituicao' => $request['prestador']['conselho']['instituicao'],
             'uf' => 'SP',
             'numero' => $request['prestador']['conselho']['numero'],
-            'pessoa'   => $prestador->pessoa_id,
+            'pessoa_id'   => $prestador->pessoa_id,
         ]);
     }
 }
