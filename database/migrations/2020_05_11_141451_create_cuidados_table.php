@@ -15,7 +15,7 @@ class CreateCuidadosTable extends Migration
     {
         Schema::create('cuidados', function (Blueprint $table) {
             $table->id();
-            $table->string('descricao');
+            $table->string('descricao', 500);
             $table->string('codigo');
             $table->boolean('status');
             $table->unsignedBigInteger('empresa_id');
