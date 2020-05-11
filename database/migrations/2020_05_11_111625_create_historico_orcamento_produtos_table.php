@@ -15,8 +15,8 @@ class CreateHistoricoOrcamentoProdutosTable extends Migration
     {
         Schema::create('historico_orcamento_produtos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('orcamentoproduto')->constrained()->onDelete('cascade');
-            $table->foreignId('historicoorcamento')->constrained()->onDelete('cascade');
+            $table->foreignId('orcamentoproduto_id')->constrained()->onDelete('cascade');
+            $table->foreignId('historicoorcamento_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -15,7 +15,7 @@ class CreateCustopadraosTable extends Migration
     {
         Schema::create('custopadraos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('empresa')->constrained()->onDelete('cascade');
+            $table->foreignId('empresa_id')->constrained()->onDelete('cascade');
             $table->string('descricao');
             $table->string('unidade');
             $table->float('valor');
