@@ -15,7 +15,7 @@ class CuidadosController extends Controller
      */
     public function index()
     {
-        return Cuidado::all()->ordeBy('descricao');
+        return Cuidado::all();
     }
 
     /**
@@ -66,5 +66,25 @@ class CuidadosController extends Controller
     public function destroy(Cuidado $cuidado)
     {
         $cuidado->delete();
+    }
+
+    public function migracao(Request $request)
+    {
+        // $cuidado = new Cuidado;
+        // $cuidado->descricao = $request->descricao;
+        // $cuidado->codigo = $request->codigo;
+        // $cuidado->empresa_id = $request->empresa_id;
+        // $cuidado->status = $request->staus; 
+        // $cuidado->save(); 
+
+        $cuidado = Cuidado::firstOrCreate(
+            [
+                'codigo' => $request['codigo'],
+            ],
+            [
+                'descricao' => $request['descricao'],
+                'empresa_id' => 1,
+                'status' => true,
+            ]);
     }
 }

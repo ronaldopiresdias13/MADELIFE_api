@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateGrupocuidadosTable extends Migration
+class CreateCuidadosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreateGrupocuidadosTable extends Migration
      */
     public function up()
     {
-        Schema::create('grupocuidados', function (Blueprint $table) {
+        Schema::create('cuidados', function (Blueprint $table) {
             $table->id();
             $table->string('descricao');
-            $table->boolean('status')->default(true);
-            $table->foreignId('empresa_id')->constrained()->onDelete('cascade');
+            $table->string('codigo');
+            $table->boolean('status');
+            $table->unsignedBigInteger('empresa_id');
+            $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ class CreateGrupocuidadosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('grupocuidados');
+        Schema::dropIfExists('cuidados');
     }
 }
