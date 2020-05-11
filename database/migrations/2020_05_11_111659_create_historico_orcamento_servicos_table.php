@@ -15,8 +15,8 @@ class CreateHistoricoOrcamentoServicosTable extends Migration
     {
         Schema::create('historico_orcamento_servicos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('orcamentoservico')->constrained()->onDelete('cascade');
-            $table->foreignId('historicoorcamento')->constrained()->onDelete('cascade');
+            $table->foreignId('orcamentoservico_id')->constrained()->onDelete('cascade');
+            $table->foreignId('historicoorcamento_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

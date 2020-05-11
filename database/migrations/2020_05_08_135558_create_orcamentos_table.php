@@ -17,8 +17,8 @@ class CreateOrcamentosTable extends Migration
             $table->id();
             $table->string('numero');
             $table->string('tipo');
-            $table->foreignId('cliente')->constrained()->onDelete('cascade');
-            $table->foreignId('empresa')->constrained()->onDelete('cascade');
+            $table->foreignId('cliente_id')->constrained()->onDelete('cascade');
+            $table->foreignId('empresa_id')->constrained()->onDelete('cascade');
             $table->string('data');
             $table->integer('quantidade');
             $table->integer('unidade');
