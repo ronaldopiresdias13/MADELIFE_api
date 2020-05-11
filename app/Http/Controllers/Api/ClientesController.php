@@ -18,7 +18,11 @@ class ClientesController extends Controller
      */
     public function index()
     {
-        return Cliente::all();
+        $clientes = Cliente::all();
+        foreach ($clientes as $c) {
+            $c->pessoa;
+        }
+        return $clientes;
     }
 
     /**
