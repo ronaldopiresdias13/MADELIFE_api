@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Grupocuidado;
+use App\Cuidado;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class GrupocuidadosController extends Controller
      */
     public function index()
     {
-        return $grupocuidado::all()->orderBy('descricao');
+        return $grupocuidado::all();
     }
 
     /**
@@ -65,5 +66,32 @@ class GrupocuidadosController extends Controller
     public function destroy(Grupocuidado $grupocuidado)
     {
         $grupocuidado->delete();
+    }
+
+
+    public function migracao(Request $request)
+    {
+        foreach ($request['cuidado'] as $cuidado) {
+            $cuidados_grupocuidados = CuidadoGrupocuidado::firstOrCreate([
+                'cuidado' => Cuidado::firstOrCreate(
+                    [
+                        'codigo' => $cuidado['codigo'],
+                    ],
+                    [
+                        'descricao' => $request['descricao'],
+                        'empresa_id' => 1,
+                        'status' => true,
+                    ])->id,
+                'grupo' => Grupocuidado::firstOrCreate(
+                    [
+                        'codigo' => $request['codigoGrupo'],
+                    ],
+                    [
+                        'descricao' => $request['descricao'],
+                        'empresa_id' => 1,
+                        'status' => true,
+                    ])->id,
+                ]);
+        }
     }
 }
