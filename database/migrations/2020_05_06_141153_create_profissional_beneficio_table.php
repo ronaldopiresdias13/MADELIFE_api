@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProfissionalConveniosTable extends Migration
+class CreateProfissionalBeneficioTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateProfissionalConveniosTable extends Migration
      */
     public function up()
     {
-        Schema::create('profissional_convenios', function (Blueprint $table) {
+        Schema::create('profissional_beneficio', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('profissional_id')->nullable();
             $table->foreign('profissional_id')->references('id')->on('profissionais')->onDelete('cascade');
-            $table->foreignId('convenio_id')->constrained()->onDelete('cascade');
+            $table->foreignId('beneficio_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateProfissionalConveniosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('profissional_convenios');
+        Schema::dropIfExists('profissional_beneficio');
     }
 }

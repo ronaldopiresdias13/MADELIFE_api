@@ -7,6 +7,7 @@ use App\Cuidado;
 use App\CuidadoGrupocuidado;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class GrupocuidadosController extends Controller
 {
@@ -15,9 +16,16 @@ class GrupocuidadosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Grupocuidado::all();
+        // dd($request['empresa']);
+        // $grupocuidados = DB::table('grupocuidados')->where('empresa_id', $request['empresa'])->get();
+        $grupocuidados = Grupocuidado::all();
+        foreach ($grupocuidados as $gc) {
+            $gc->cuidados;
+        }
+        
+        return $grupocuidados;
     }
 
     /**

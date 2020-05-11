@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePessoaEmailsTable extends Migration
+class CreateUserAcessoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreatePessoaEmailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('pessoa_emails', function (Blueprint $table) {
+        Schema::create('user_acesso', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pessoa_id')->constrained()->onDelete('cascade');
-            $table->foreignId('email_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id'  )->constrained()->onDelete('cascade');
+            $table->foreignId('acesso_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreatePessoaEmailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pessoa_emails');
+        Schema::dropIfExists('user_acesso');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePrestadorFormacoesTable extends Migration
+class CreatePrestadorFormacaoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreatePrestadorFormacoesTable extends Migration
      */
     public function up()
     {
-        Schema::create('prestador_formacoes', function (Blueprint $table) {
+        Schema::create('prestador_formacao', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('prestador_id');
             $table->foreign('prestador_id')->references('id')->on('prestadores')->onDelete('cascade');
@@ -30,6 +30,6 @@ class CreatePrestadorFormacoesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('prestador_formacoes');
+        Schema::dropIfExists('prestador_formacao');
     }
 }
