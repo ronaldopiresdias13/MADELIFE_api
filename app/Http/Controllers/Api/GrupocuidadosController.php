@@ -17,7 +17,7 @@ class GrupocuidadosController extends Controller
      */
     public function index()
     {
-        return $grupocuidado::all();
+        return Grupocuidado::all();
     }
 
     /**
