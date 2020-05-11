@@ -8,8 +8,8 @@ class Empresa extends Model
 {
     protected $guarded = [];
 
-    public function cliente()
+    public function clientes()
     {
-        return $this->hasMany('App\Cliente', 'empresa_id');
+        return $this->hasMany('App\Cliente');
     }
 }
