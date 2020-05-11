@@ -23,7 +23,7 @@ class CreateOrcamentosTable extends Migration
             $table->integer('quantidade');
             $table->integer('unidade');
             $table->unsignedBigInteger('cidade_id')->nullable();
-            $table->foreignId('cidade_id')->constrained()->onDelete('cascade');
+            $table->foreign('cidade_id')->references('id')->on('cidades')->onDelete('cascade');
             $table->string('processo')->nullable();
             $table->string('situacao');
             $table->string('descricao')->nullable();
