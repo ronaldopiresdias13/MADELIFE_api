@@ -12,12 +12,12 @@ class Cliente extends Model
     // {
     //     return $this->belongsTo('App\Pessoa', 'id', 'cliente');
     // }
-    public function empresa()
-    {
-        return $this->belongsTo('App\Empresa', 'empresa_id');
-    }
+    // public function empresa()
+    // {
+    //     return $this->belongsTo('App\Empresa');
+    // }
     public function pessoa()
     {
-        return $this->belongsTo('App\Pessoa', 'pessoa_id');
+        return $this->belongsTo('App\Pessoa');
     }
 }
