@@ -27,8 +27,8 @@ class AddPessoaToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign('users_pessoa_foreign');
-            $table->dropColumn('pessoa');
+            $table->dropForeign('users_pessoa_id_foreign');
+            $table->dropColumn('pessoa_id');
         });
     }
 }
