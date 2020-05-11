@@ -171,7 +171,7 @@ class PrestadoresController extends Controller
         if ($request['prestador']['contato']['celular'] != null && $request['prestador']['contato']['celular'] != "") {
             $pessoa_telefones = PessoaTelefone::firstOrCreate([
                 'pessoa_id'   => $prestador->pessoa_id,
-                'telefone' => Telefone::firstOrCreate(
+                'telefone_id' => Telefone::firstOrCreate(
                     [
                         'telefone' => $request['prestador']['contato']['celular'],
                     ]
@@ -198,7 +198,7 @@ class PrestadoresController extends Controller
             'endereco_id' => Endereco::firstOrCreate(
                 [
                     'cep'         => $request['prestador']['endereco']['cep'],
-                    'cidade'      => ($cidade) ? $cidade->id : null,
+                    'cidade_id'      => ($cidade) ? $cidade->id : null,
                     'rua'         => $request['prestador']['endereco']['rua'],
                     'bairro'      => $request['prestador']['endereco']['bairro'],
                     'numero'      => $request['prestador']['endereco']['numero'],
@@ -212,7 +212,7 @@ class PrestadoresController extends Controller
             'instituicao' => $request['prestador']['conselho']['instituicao'],
             'uf' => 'SP',
             'numero' => $request['prestador']['conselho']['numero'],
-            'pessoa_id'   => $prestador->pessoa_id,
+            'pessoa'   => $prestador->pessoa_id,
         ]);
     }
 }
