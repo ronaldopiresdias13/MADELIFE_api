@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHistoricoorcamentoOrcamentocustosTable extends Migration
+class CreateHistoricoOrcamentoProdutosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateHistoricoorcamentoOrcamentocustosTable extends Migration
      */
     public function up()
     {
-        Schema::create('historicoorcamento_orcamentocustos', function (Blueprint $table) {
+        Schema::create('historico_orcamento_produtos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('orcamentocusto')->constrained()->onDelete('cascade');
+            $table->foreignId('orcamentoproduto')->constrained()->onDelete('cascade');
             $table->foreignId('historicoorcamento')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
@@ -28,6 +28,6 @@ class CreateHistoricoorcamentoOrcamentocustosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('historicoorcamento_orcamentocustos');
+        Schema::dropIfExists('historico_orcamento_produtos');
     }
 }
