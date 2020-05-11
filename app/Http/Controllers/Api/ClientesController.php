@@ -18,7 +18,11 @@ class ClientesController extends Controller
      */
     public function index()
     {
-        return Cliente::all();
+        $clientes = Cliente::all();
+        foreach ($clientes as $c) {
+            $c->pessoa;
+        }
+        return $clientes;
     }
 
     /**
@@ -85,7 +89,7 @@ class ClientesController extends Controller
                     'nome'        => $request['pessoa']['nome'],
                     'nascimento'  => $request['pessoa']['nascimento'],
                     'tipo'        => $request['pessoa']['tipo'],
-                    'rgie'        => $request['pessoa']['nome'],
+                    'rgie'        => $request['pessoa']['rgie'],
                     'observacoes' => $request['pessoa']['observacoes'],
                     'status'      => $request['pessoa']['status'],
                 ]
