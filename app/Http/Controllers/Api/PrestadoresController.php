@@ -96,7 +96,7 @@ class PrestadoresController extends Controller
     public function migracao(Request $request)
     {
         $prestador = Prestador::firstOrCreate([
-            'pessoa' => Pessoa::firstOrCreate(
+            'pessoa_id' => Pessoa::firstOrCreate(
                 [
                     'cpfcnpj' => $request['prestador']['dadosPf']['cpf']['numero'],
                 ],
@@ -112,14 +112,14 @@ class PrestadoresController extends Controller
             'fantasia'    => $request['prestador']['nomeFantasia'],
             'sexo'        => $request['prestador']['dadosPf']['sexo'],
             'pis'         => $request['prestador']['dadosProf']['pis'],
-            'cargo'       => null,
-            'curriculo'   => $request['prestador']['dadosPf']['curriculo'],
-            'certificado' => $request['prestador']['dadosPf']['certificado'],
+            'cargo_id'       => null,
+            'curriculo'   => null,
+            'certificado' => $request['prestador']['id'],
         ]);
         
         $prestador_formacao = PrestadorFormacao::firstOrCreate([
-            'prestador' => $prestador->id,
-            'formacao'  => Formacao::firstOrCreate(['descricao' => $request['prestador']['dadosProf']['formacao']['descricao']])->id,
+            'prestador_id' => $prestador->id,
+            'formacao_id'  => Formacao::firstOrCreate(['descricao' => $request['prestador']['dadosProf']['formacao']['descricao']])->id,
         ]);
         
         $usercpf = User::firstWhere(
@@ -135,14 +135,14 @@ class PrestadoresController extends Controller
             $user = User::create([
                 'cpfcnpj' => $request['prestador']['dadosPf']['cpf']['numero'],
                 'email'   => $request['prestador']['contato']['email'],
-                'pessoa'  => $prestador->pessoa,
+                'pessoa_id'  => $prestador->pessoa_id,
                 'password' => bcrypt($request['senha']),
             ]);
         }
 
         if($request['prestador']['dadosBancario']['banco'] != null && $request['prestador']['dadosBancario']['banco']['codigo'] != null){
             $dados_bancario = Dadosbancario::firstOrCreate([
-                'banco' => Banco::firstOrCreate(
+                'banco_id' => Banco::firstOrCreate(
                     [
                         'codigo' => ($request['prestador']['dadosBancario']['banco']['codigo'] == null || $request['prestador']['dadosBancario']['banco']['codigo'] == "") ? '000' : $request['prestador']['dadosBancario']['banco']['codigo'],
                     ],
@@ -150,7 +150,7 @@ class PrestadoresController extends Controller
                         'descricao' => ($request['prestador']['dadosBancario']['banco']['codigo'] == null || $request['prestador']['dadosBancario']['banco']['codigo'] == "") ? 'Outros' : $request['prestador']['dadosBancario']['banco']['descricao']
                     ]
                 )->id,
-                'pessoa'    => $prestador->pessoa,
+                'pessoa_id'    => $prestador->pessoa_id,
                 'agencia'   => $request['prestador']['dadosBancario']['agencia'  ],
                 'conta'     => $request['prestador']['dadosBancario']['conta'    ],
                 'digito'    => $request['prestador']['dadosBancario']['digito'   ],
@@ -160,8 +160,8 @@ class PrestadoresController extends Controller
 
         if ($request['prestador']['contato']['telefone'] != null && $request['prestador']['contato']['telefone'] != "") {
             $pessoa_telefones = PessoaTelefone::firstOrCreate([
-                'pessoa'   => $prestador->pessoa,
-                'telefone' => Telefone::firstOrCreate(
+                'pessoa_id'   => $prestador->pessoa_id,
+                'telefone_id' => Telefone::firstOrCreate(
                     [
                         'telefone' => $request['prestador']['contato']['telefone'],
                     ]
@@ -170,7 +170,7 @@ class PrestadoresController extends Controller
         }
         if ($request['prestador']['contato']['celular'] != null && $request['prestador']['contato']['celular'] != "") {
             $pessoa_telefones = PessoaTelefone::firstOrCreate([
-                'pessoa'   => $prestador->pessoa,
+                'pessoa_id'   => $prestador->pessoa_id,
                 'telefone' => Telefone::firstOrCreate(
                     [
                         'telefone' => $request['prestador']['contato']['celular'],
@@ -180,8 +180,8 @@ class PrestadoresController extends Controller
         }
 
         $pessoa_emails = PessoaEmail::firstOrCreate([
-            'pessoa' => $prestador->pessoa,
-            'email'  => Email::firstOrCreate(
+            'pessoa_id' => $prestador->pessoa_id,
+            'email_id'  => Email::firstOrCreate(
                 [
                     'email' => $request['prestador']['contato']['email'],
                 ],
@@ -194,8 +194,8 @@ class PrestadoresController extends Controller
         $cidade = Cidade::where('nome', $request['prestador']['endereco']['cidade'])->where('uf', $request['prestador']['endereco']['uf'])->first();
 
         $pessoa_endereco = PessoaEndereco::firstOrCreate([
-            'pessoa'   => $prestador->pessoa,
-            'endereco' => Endereco::firstOrCreate(
+            'pessoa_id'   => $prestador->pessoa_id,
+            'endereco_id' => Endereco::firstOrCreate(
                 [
                     'cep'         => $request['prestador']['endereco']['cep'],
                     'cidade'      => ($cidade) ? $cidade->id : null,
@@ -212,7 +212,7 @@ class PrestadoresController extends Controller
             'instituicao' => $request['prestador']['conselho']['instituicao'],
             'uf' => 'SP',
             'numero' => $request['prestador']['conselho']['numero'],
-            'pessoa'   => $prestador->pessoa,
+            'pessoa_id'   => $prestador->pessoa_id,
         ]);
     }
 }

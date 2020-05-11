@@ -28,7 +28,8 @@ class CuidadosController extends Controller
     {
         $cuidado = new Cuidado;
         $cuidado->descricao = $request->descricao;
-        $cuidado->empresa = $request->empresa;
+        $cuidado->codigo = $request->codigo;
+        $cuidado->empresa_id = $request->empresa_id;
         $cuidado->status = $request->staus; 
         $cuidado->save(); 
     }
