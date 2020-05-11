@@ -41,12 +41,14 @@ Route::group([
     Route::apiResource('clientes'   , 'Api\ClientesController'   );
     Route::apiResource('prestadores', 'Api\PrestadoresController');
     Route::apiResource('servicos'   , 'Api\ServicosController'   );
-    Route::apiResource('cuidados'   , 'Api\CuidadosController'   );
     Route::apiResource('pessoas'    , 'Api\PessoasController'    );
+    Route::apiResource('cuidados'   , 'Api\CuidadosController'   );
+    Route::apiResource('grupocuidados'   , 'Api\GrupocuidadosController'   );
     Route::post('prestadores/migracao', 'Api\PrestadoresController@migracao');
     Route::post('clientes/migracao', 'Api\ClientesController@migracao');
     Route::post('orcamentos/migracao', 'Api\OrcamentoController@migracao');
     Route::post('cuidados/migracao', 'Api\CuidadosController@migracao');
+    Route::post('grupocuidados/migracao', 'Api\GrupocuidadosController@migracao');
 
 
 

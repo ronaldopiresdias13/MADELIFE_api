@@ -70,13 +70,6 @@ class CuidadosController extends Controller
 
     public function migracao(Request $request)
     {
-        // $cuidado = new Cuidado;
-        // $cuidado->descricao = $request->descricao;
-        // $cuidado->codigo = $request->codigo;
-        // $cuidado->empresa_id = $request->empresa_id;
-        // $cuidado->status = $request->staus; 
-        // $cuidado->save(); 
-
         $cuidado = Cuidado::firstOrCreate(
             [
                 'codigo' => $request['codigo'],
