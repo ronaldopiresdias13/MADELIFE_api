@@ -80,8 +80,8 @@ class ClientesController extends Controller
             'pessoa_id' => Pessoa::firstOrCreate(
                 [
                     'cpfcnpj' => $request['pessoa']['cpfcnpj'],
-                ],
-                [
+                // ],
+                // [
                     'nome'        => $request['pessoa']['nome'],
                     'nascimento'  => $request['pessoa']['nascimento'],
                     'tipo'        => $request['pessoa']['tipo'],
