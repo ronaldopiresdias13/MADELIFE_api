@@ -20,7 +20,6 @@ class CreateProfissionaisTable extends Migration
             $table->string('sexo')->nullable();
             $table->unsignedBigInteger('setor_id')->nullable();
             $table->foreign('setor_id')->references('id')->on('setores')->onDelete('cascade');
-            $table->string('sexo')->nullable();
             $table->unsignedBigInteger('cargo_id')->nullable();
             $table->foreign('cargo_id')->references('id')->on('cargos')->onDelete('cascade');
             $table->string('pis')->nullable();
