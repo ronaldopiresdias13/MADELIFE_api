@@ -15,9 +15,9 @@ class CreateProfissionalFormacaoTable extends Migration
     {
         Schema::create('profissional_formacao', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('profissional_id')->nullable();
+            $table->unsignedBigInteger('profissional_id');
             $table->foreign('profissional_id')->references('id')->on('profissionais')->onDelete('cascade');
-            $table->unsignedBigInteger('formacao_id')->nullable();
+            $table->unsignedBigInteger('formacao_id');
             $table->foreign('formacao_id')->references('id')->on('formacoes')->onDelete('cascade');
             $table->timestamps();
         });

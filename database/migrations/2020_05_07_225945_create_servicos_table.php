@@ -16,7 +16,7 @@ class CreateServicosTable extends Migration
         Schema::create('servicos', function (Blueprint $table) {
             $table->id();
             $table->string('codigo')->nullable();
-            $table->string('descricao');
+            $table->string('descricao')->nullable();
             $table->float('valor')->nullable();
             $table->foreignId('empresa_id')->constrained()->onDelete('cascade');
             $table->timestamps();

@@ -27,7 +27,7 @@ class CreateOrcamentosTable extends Migration
             $table->string('processo')->nullable();
             $table->string('situacao')->nullable();
             $table->string('descricao')->nullable();
-            $table->string('observacao')->nullable();
+            $table->string('observacao', 1000)->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
         });

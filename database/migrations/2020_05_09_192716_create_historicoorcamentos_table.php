@@ -16,10 +16,10 @@ class CreateHistoricoorcamentosTable extends Migration
         Schema::create('historicoorcamentos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('orcamento_id')->constrained()->onDelete('cascade');
-            $table->string('data');
-            $table->float('valortotalservico');
-            $table->string('valortotalproduto');
-            $table->string('valortotalcusto');
+            $table->string('data')->nullable();
+            $table->float('valortotalservico')->nullable();
+            $table->float('valortotalproduto')->nullable();
+            $table->float('valortotalcusto')->nullable();
             $table->timestamps();
         });
     }

@@ -16,7 +16,7 @@ class CreatePilsTable extends Migration
         Schema::create('pils', function (Blueprint $table) {
             $table->id();
             $table->foreignId('paciente_id')->constrained()->onDelete('cascade');
-            $table->unsignedBigInteger('profissional_id')->nullable();
+            $table->unsignedBigInteger('profissional_id');
             $table->foreign('profissional_id')->references('id')->on('profissionais')->onDelete('cascade');
             $table->string('diagnosticoprincipal')->nullable();
             $table->string('data')->nullable();

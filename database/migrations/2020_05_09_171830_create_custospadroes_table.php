@@ -17,8 +17,8 @@ class CreateCustospadroesTable extends Migration
             $table->id();
             $table->foreignId('empresa_id')->constrained()->onDelete('cascade');
             $table->string('descricao');
-            $table->string('unidade');
-            $table->float('valor');
+            $table->string('unidade')->nullable();
+            $table->float('valor')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
         });
