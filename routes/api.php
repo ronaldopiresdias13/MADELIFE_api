@@ -31,23 +31,25 @@ Route::group([
 });
 
 // Route::group(['middleware' => 'auth:api'], function() {
-    Route::apiResource('emails'     , 'Api\EmailsController'     );
-    Route::apiResource('acessos'    , 'Api\AcessosController'    );
-    Route::apiResource('users'      , 'Api\UsersController'      );
-    Route::apiResource('bancos'     , 'Api\BancosController'     );
-    Route::apiResource('cargos'     , 'Api\CargosController'     );
-    Route::apiResource('empresas'   , 'Api\EmpresasController'   );
-    Route::apiResource('cidades'    , 'Api\CidadesController'    );
-    Route::apiResource('clientes'   , 'Api\ClientesController'   );
-    Route::apiResource('prestadores', 'Api\PrestadoresController');
-    Route::apiResource('servicos'   , 'Api\ServicosController'   );
-    Route::apiResource('pessoas'    , 'Api\PessoasController'    );
-    Route::apiResource('cuidados'   , 'Api\CuidadosController'   );
-    Route::apiResource('grupocuidados'   , 'Api\GrupocuidadosController'   );
-    Route::post('prestadores/migracao', 'Api\PrestadoresController@migracao');
-    Route::post('clientes/migracao', 'Api\ClientesController@migracao');
-    Route::post('orcamentos/migracao', 'Api\OrcamentosController@migracao');
-    Route::post('cuidados/migracao', 'Api\CuidadosController@migracao');
+    Route::apiResource('emails'       , 'Api\EmailsController'       );
+    Route::apiResource('acessos'      , 'Api\AcessosController'      );
+    Route::apiResource('users'        , 'Api\UsersController'        );
+    Route::apiResource('bancos'       , 'Api\BancosController'       );
+    Route::apiResource('cargos'       , 'Api\CargosController'       );
+    Route::apiResource('empresas'     , 'Api\EmpresasController'     );
+    Route::apiResource('cidades'      , 'Api\CidadesController'      );
+    Route::apiResource('clientes'     , 'Api\ClientesController'     );
+    Route::apiResource('prestadores'  , 'Api\PrestadoresController'  );
+    Route::apiResource('servicos'     , 'Api\ServicosController'     );
+    Route::apiResource('pessoas'      , 'Api\PessoasController'      );
+    Route::apiResource('cuidados'     , 'Api\CuidadosController'     );
+    Route::apiResource('grupocuidados', 'Api\GrupocuidadosController');
+    Route::apiResource('orcamentos'   , 'Api\OrcamentosController'   );
+
+    Route::post('prestadores/migracao'  , 'Api\PrestadoresController@migracao'  );
+    Route::post('clientes/migracao'     , 'Api\ClientesController@migracao'     );
+    Route::post('orcamentos/migracao'   , 'Api\OrcamentosController@migracao'   );
+    Route::post('cuidados/migracao'     , 'Api\CuidadosController@migracao'     );
     Route::post('grupocuidados/migracao', 'Api\GrupocuidadosController@migracao');
 
 
