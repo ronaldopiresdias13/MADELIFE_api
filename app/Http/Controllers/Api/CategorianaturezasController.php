@@ -52,7 +52,7 @@ class CategorianaturezasController extends Controller
      */
     public function update(Request $request, Categorianatureza $categorianatureza)
     {
-        //
+        $categorianatureza->update($request->all());
     }
 
     /**
@@ -63,6 +63,6 @@ class CategorianaturezasController extends Controller
      */
     public function destroy(Categorianatureza $categorianatureza)
     {
-        //
+        $categorianatureza->delete();
     }
 }
