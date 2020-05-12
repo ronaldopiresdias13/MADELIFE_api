@@ -4,13 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Orcamento;
-use App\ItensOrcamentoServico;
-use App\ItensOrcamentoProduto;
-use App\ItensOrcamentoCusto;
+use App\Pessoa;
+use App\Servico;
+use App\Orcamentoservico;
+use App\Orcamentoproduto;
+use App\Orcamentocusto;
 use App\Historicoorcamento;
-use App\HistoricoorcamentoOrcamentocusto;
-use App\HistoricoorcamentoOrcamentoproduto;
-use App\HistoricoorcamentoOrcamentoservico;
+use App\HistoricoOrcamentoCusto;
+use App\HistoricoOrcamentoProduto;
+use App\HistoricoOrcamentoServico;
 use Illuminate\Http\Request;
 
 class OrcamentosController extends Controller
@@ -77,26 +79,16 @@ class OrcamentosController extends Controller
      */
     public function migracao(Request $request)
     {
-        $table->id();
-            $table->foreignId('orcamento')->constrained()->onDelete('cascade');
-            $table->string('data');
-            $table->float('valortotalservico');
-            $table->string('valortotalproduto');
-            $table->string('valortotalcusto');
-            $table->timestamps();
-
-        
+        // dd($request);
         $orcamento = Orcamento::firstOrCreate([
             'numero' => $request['numeroOrcamento'],
             'tipo' => $request['tipoOrcamento'],
-            'cliente_id' => Cliente::firstWhere(
-                'pessoa_id', $request['pessoa_id']
-            )->id,
+            'cliente_id' => Pessoa::firstWhere('nome', $request['clienteId'])->clientes->id,
             'empresa_id' => 1,
             'data' => $request['data'],
             'quantidade' => $request['cicloMeses'],
-            'unidade' => 'Meses',
-            'cidade' => $request['cidade'],
+            'unidade' => 1,
+            'cidade_id' => $request['cidade'],
             'processo' => $request['numeroProcesso'],
             'situacao' => $request['situacao'],
             'descricao' => "",
@@ -104,131 +96,50 @@ class OrcamentosController extends Controller
         ]);
 
         foreach ($request->historicoOrcamento as $key => $value) {
-            $teste = UserAcesso::updateOrCreate(
-                ['user'  => $user->id, 'acesso' => Acesso::FirstOrCreate(['nome' => $value['nome']])->id]
-            );
-        }
-        $historico = Historicoorcamento::firstOrCreate([
-            'orcamento' => $orcamento->id
-        ]);
-        $prestador = Prestador::firstOrCreate([
-            'pessoa' => Pessoa::firstOrCreate(
-                [
-                    'cpfcnpj' => $request['prestador']['dadosPf']['cpf']['numero'],
-                ],
-                [
-                    'nome'        => $request['prestador']['dadosPf']['nome'],
-                    'nascimento'  => $request['prestador']['dadosPf']['nascimento'],
-                    'tipo'        => 'Prestador',
-                    'rgie'        => $request['prestador']['dadosPf']['rg']['numero'],
-                    'observacoes' => $request['prestador']['observacoes'],
-                    'status'      => $request['prestador']['status'],
-                ]
-            )->id,
-            'fantasia'    => $request['prestador']['nomeFantasia'],
-            'sexo'        => $request['prestador']['dadosPf']['sexo'],
-            'pis'         => $request['prestador']['dadosProf']['pis'],
-            'cargo'       => null,
-            'curriculo'   => $request['prestador']['dadosPf']['curriculo'],
-            'certificado' => $request['prestador']['dadosPf']['certificado'],
-        ]);
-        
-        $prestador_formacao = PrestadorFormacao::firstOrCreate([
-            'prestador' => $prestador->id,
-            'formacao'  => Formacao::firstOrCreate(['descricao' => $request['prestador']['dadosProf']['formacao']['descricao']])->id,
-        ]);
-        
-        $usercpf = User::firstWhere(
-            'cpfcnpj' , $request['prestador']['dadosPf']['cpf']['numero']
-        );
-        $useremail = User::firstWhere(
-            'email', $request['prestador']['contato']['email']
-        );
-
-        if ($usercpf || $useremail) {
-            
-        } else {
-            $user = User::create([
-                'cpfcnpj' => $request['prestador']['dadosPf']['cpf']['numero'],
-                'email'   => $request['prestador']['contato']['email'],
-                'pessoa'  => $prestador->pessoa,
-                'password' => bcrypt($request['senha']),
+            $historico = Historicoorcamento::firstOrCreate([
+                'orcamento_id'      => $orcamento->id,
+                'data'              => $value['data'],
+                'valortotalservico' => $value['valorTotalServico'],
+                'valortotalproduto' => $value['valorTotalItensProduto'],
+                'valortotalcusto'   => 0,
             ]);
+            foreach ($value['itensServicoOrcamento'] as $key => $itens_servico) {
+                $orcamentoServico = Orcamentoservico::firstOrCreate([
+                    'servico_id'           => Servico::firstWhere('descricao', $itens_servico['servico']['descricao'])->id,
+                    'quantidade'	       => $itens_servico['quantidade'],
+                    'basecobranca'	       => $itens_servico['baseCobranca'],
+                    'frequencia'	       => $itens_servico['frequencia'],
+                    'valorunitario'	       => $itens_servico['valorUnitario'],
+                    'subtotal'	           => $itens_servico['subtotal'],
+                    'custo'                => $itens_servico['valorCusto'],
+                    'subtotalcusto'    	   => $itens_servico['subtotalCusto'],
+                    'valorresultadomensal' => $itens_servico['valorResultadoMensal'],
+                    'valorcustomensal'     => $itens_servico['valorCustoMensal'],
+                    'icms'	               => $itens_servico['icms'],
+                    'iss'                  => $itens_servico['iss'],
+                    'inss'                 => $itens_servico['inss']
+                ]);
+                $historicoOrcamentoServico = HistoricoOrcamentoServico::firstOrCreate([
+                    'orcamentoservico_id'   => $orcamentoServico->id,
+                    'historicoorcamento_id' => $historico->id
+                ]);
+            }
+            foreach ($value['itensProdutoOrcamento'] as $key => $itens_produto) {
+                $orcamentoProduto = Orcamentoproduto::firstOrCreate([
+                    'produto_id'           => null,
+                    'quantidade'	       => $itens_produto['quantidade'],
+                    'valorunitario'	       => $itens_produto['valorUnitario'],
+                    'subtotal'	           => $itens_produto['subtotal'],
+                    'custo'                => $itens_produto['valorCusto'],
+                    'subtotalcusto'    	   => $itens_produto['subtotalCusto'],
+                    'valorresultadomensal' => $itens_produto['valorResultadoMensal'],
+                    'valorcustomensal'     => $itens_produto['valorCustoMensal']
+                ]);
+                $historicoOrcamentoProduto = HistoricoOrcamentoServico::firstOrCreate([
+                    'orcamentoproduto_id'   => $orcamentoProduto->id,
+                    'historicoorcamento_id' => $historico->id
+                ]);
+            }
         }
-
-        if($request['prestador']['dadosBancario']['banco'] != null && $request['prestador']['dadosBancario']['banco']['codigo'] != null){
-            $dados_bancario = Dadosbancario::firstOrCreate([
-                'banco' => Banco::firstOrCreate(
-                    [
-                        'codigo' => ($request['prestador']['dadosBancario']['banco']['codigo'] == null || $request['prestador']['dadosBancario']['banco']['codigo'] == "") ? '000' : $request['prestador']['dadosBancario']['banco']['codigo'],
-                    ],
-                    [
-                        'descricao' => ($request['prestador']['dadosBancario']['banco']['codigo'] == null || $request['prestador']['dadosBancario']['banco']['codigo'] == "") ? 'Outros' : $request['prestador']['dadosBancario']['banco']['descricao']
-                    ]
-                )->id,
-                'pessoa'    => $prestador->pessoa,
-                'agencia'   => $request['prestador']['dadosBancario']['agencia'  ],
-                'conta'     => $request['prestador']['dadosBancario']['conta'    ],
-                'digito'    => $request['prestador']['dadosBancario']['digito'   ],
-                'tipoconta' => $request['prestador']['dadosBancario']['tipoConta'],
-            ]);
-        }
-
-        if ($request['prestador']['contato']['telefone'] != null && $request['prestador']['contato']['telefone'] != "") {
-            $pessoa_telefones = PessoaTelefone::firstOrCreate([
-                'pessoa'   => $prestador->pessoa,
-                'telefone' => Telefone::firstOrCreate(
-                    [
-                        'telefone' => $request['prestador']['contato']['telefone'],
-                    ]
-                )->id,
-            ]);
-        }
-        if ($request['prestador']['contato']['celular'] != null && $request['prestador']['contato']['celular'] != "") {
-            $pessoa_telefones = PessoaTelefone::firstOrCreate([
-                'pessoa'   => $prestador->pessoa,
-                'telefone' => Telefone::firstOrCreate(
-                    [
-                        'telefone' => $request['prestador']['contato']['celular'],
-                    ]
-                )->id,
-            ]);
-        }
-
-        $pessoa_emails = PessoaEmail::firstOrCreate([
-            'pessoa' => $prestador->pessoa,
-            'email'  => Email::firstOrCreate(
-                [
-                    'email' => $request['prestador']['contato']['email'],
-                ],
-                [
-                    'tipo' => 'pessoal',
-                ]
-            )->id,
-        ]);
-
-        $cidade = Cidade::where('nome', $request['prestador']['endereco']['cidade'])->where('uf', $request['prestador']['endereco']['uf'])->first();
-
-        $pessoa_endereco = PessoaEndereco::firstOrCreate([
-            'pessoa'   => $prestador->pessoa,
-            'endereco' => Endereco::firstOrCreate(
-                [
-                    'cep'         => $request['prestador']['endereco']['cep'],
-                    'cidade'      => ($cidade) ? $cidade->id : null,
-                    'rua'         => $request['prestador']['endereco']['rua'],
-                    'bairro'      => $request['prestador']['endereco']['bairro'],
-                    'numero'      => $request['prestador']['endereco']['numero'],
-                    'complemento' => $request['prestador']['endereco']['complemento'],
-                    'tipo'        => 'Residencial',
-                ]
-            )->id,
-        ]);
-
-        $conselho = Conselho::firstOrCreate([
-            'instituicao' => $request['prestador']['conselho']['instituicao'],
-            'uf' => 'SP',
-            'numero' => $request['prestador']['conselho']['numero'],
-            'pessoa'   => $prestador->pessoa,
-        ]);
     }
 }
