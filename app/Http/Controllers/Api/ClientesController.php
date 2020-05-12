@@ -147,7 +147,5 @@ class ClientesController extends Controller
                 ]
             )->id,
         ]);
-
-        
     }
 }

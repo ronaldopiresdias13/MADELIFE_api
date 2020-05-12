@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCustopadraosTable extends Migration
+class CreateCustospadroesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateCustopadraosTable extends Migration
      */
     public function up()
     {
-        Schema::create('custopadraos', function (Blueprint $table) {
+        Schema::create('custospadroes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('empresa_id')->constrained()->onDelete('cascade');
             $table->string('descricao');
@@ -31,6 +31,6 @@ class CreateCustopadraosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('custopadraos');
+        Schema::dropIfExists('custospadroes');
     }
 }
