@@ -46,7 +46,7 @@ Route::group([
     Route::apiResource('grupocuidados'   , 'Api\GrupocuidadosController'   );
     Route::post('prestadores/migracao', 'Api\PrestadoresController@migracao');
     Route::post('clientes/migracao', 'Api\ClientesController@migracao');
-    Route::post('orcamentos/migracao', 'Api\OrcamentoController@migracao');
+    Route::post('orcamentos/migracao', 'Api\OrcamentosController@migracao');
     Route::post('cuidados/migracao', 'Api\CuidadosController@migracao');
     Route::post('grupocuidados/migracao', 'Api\GrupocuidadosController@migracao');
 

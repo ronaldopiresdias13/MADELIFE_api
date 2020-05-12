@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Historicoorcamento extends Model
 {
-    //
+    protected $guarded = [];
 }
