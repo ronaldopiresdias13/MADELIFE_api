@@ -20,6 +20,7 @@ use App\Endereco;
 use App\Cidade;
 use App\Conselho;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PrestadoresController extends Controller
 {
@@ -28,8 +29,12 @@ class PrestadoresController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $prestadores = DB::table('prestadores')->get();//->where('status', true)->orderBy('nome')
+        dd($prestadores);
+
+        return DB::table('pessoas')->where('status', true)->orderBy('nome')->get();
         return Prestador::all();
     }
 
