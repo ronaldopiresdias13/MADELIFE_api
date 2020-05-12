@@ -18,7 +18,7 @@ class CreateUnidademedidasTable extends Migration
             $table->string('descricao');
             $table->string('sigla')->nullable();
             $table->string('grupo')->nullable();
-            $table->boolean('padrao')->nullable();
+            $table->boolean('padrao')->default(false);
             $table->boolean('status')->default(true);
             $table->foreignId('empresa_id')->constrained()->onDelete('cascade');
             $table->timestamps();
