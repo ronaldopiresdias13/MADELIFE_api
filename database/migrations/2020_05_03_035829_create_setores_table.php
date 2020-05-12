@@ -15,7 +15,7 @@ class CreateSetoresTable extends Migration
     {
         Schema::create('setores', function (Blueprint $table) {
             $table->id();
-            $table->string('descricao');
+            $table->string('descricao')->nullable();
             $table->foreignId('empresa_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

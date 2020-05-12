@@ -18,7 +18,7 @@ class CreateTranscricoesTable extends Migration
             $table->string('medico')->nullable();
             $table->string('crm')->nullable();
             $table->string('receita')->nullable();
-            $table->unsignedBigInteger('profissional_id')->nullable();
+            $table->unsignedBigInteger('profissional_id');
             $table->foreign('profissional_id')->references('id')->on('profissionais')->onDelete('cascade');
             $table->foreignId('pil_id')->constrained()->onDelete('cascade');
             $table->timestamps();
