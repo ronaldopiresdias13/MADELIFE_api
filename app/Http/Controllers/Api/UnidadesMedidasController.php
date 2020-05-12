@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Categorianatureza;
 use App\Http\Controllers\Controller;
+use App\Unidademedida;
 use Illuminate\Http\Request;
 
-class CategorianaturezasController extends Controller
+class UnidadesMedidasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class CategorianaturezasController extends Controller
      */
     public function index()
     {
-        return Categorianatureza::all();
+        //
     }
 
     /**
@@ -26,43 +26,52 @@ class CategorianaturezasController extends Controller
      */
     public function store(Request $request)
     {
-        $categorianatureza = new Categorianatureza;
-        $categorianatureza->empresa_id = $request->empresa_id;
-        $categorianatureza->descriciao = $request->descricao;
-        $categorianatureza->status = $request->status;
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Categorianatureza  $categorianatureza
+     * @param  \App\Unidademedida  $unidademedida
      * @return \Illuminate\Http\Response
      */
-    public function show(Categorianatureza $categorianatureza)
+    public function show(Unidademedida $unidademedida)
     {
-        return $categorianatureza;
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Categorianatureza  $categorianatureza
+     * @param  \App\Unidademedida  $unidademedida
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Categorianatureza $categorianatureza)
+    public function update(Request $request, Unidademedida $unidademedida)
     {
-        $categorianatureza->update($request->all());
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Categorianatureza  $categorianatureza
+     * @param  \App\Unidademedida  $unidademedida
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Categorianatureza $categorianatureza)
+    public function destroy(Unidademedida $unidademedida)
     {
-        $categorianatureza->delete();
+        //
+    }
+    public function migracao(Request $request)
+    {
+        // dd($request);
+        $unidade = new Unidademedida;
+        $unidade->descricao = $request->descricao;
+        $unidade->sigla = $request->sigla;
+        $unidade->grupo = $request->grupo;
+        $unidade->padrao = true;
+        $unidade->status = true;
+        $unidade->empresa_id = 1;
+        $unidade->save();
     }
 }

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Categorianatureza;
 use App\Http\Controllers\Controller;
+use App\Tipoproduto;
 use Illuminate\Http\Request;
 
-class CategorianaturezasController extends Controller
+class TiposProdutosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class CategorianaturezasController extends Controller
      */
     public function index()
     {
-        return Categorianatureza::all();
+        //
     }
 
     /**
@@ -26,43 +26,49 @@ class CategorianaturezasController extends Controller
      */
     public function store(Request $request)
     {
-        $categorianatureza = new Categorianatureza;
-        $categorianatureza->empresa_id = $request->empresa_id;
-        $categorianatureza->descriciao = $request->descricao;
-        $categorianatureza->status = $request->status;
+        
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Categorianatureza  $categorianatureza
+     * @param  \App\Tipoproduto  $tipoproduto
      * @return \Illuminate\Http\Response
      */
-    public function show(Categorianatureza $categorianatureza)
+    public function show(Tipoproduto $tipoproduto)
     {
-        return $categorianatureza;
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Categorianatureza  $categorianatureza
+     * @param  \App\Tipoproduto  $tipoproduto
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Categorianatureza $categorianatureza)
+    public function update(Request $request, Tipoproduto $tipoproduto)
     {
-        $categorianatureza->update($request->all());
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Categorianatureza  $categorianatureza
+     * @param  \App\Tipoproduto  $tipoproduto
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Categorianatureza $categorianatureza)
+    public function destroy(Tipoproduto $tipoproduto)
     {
-        $categorianatureza->delete();
+        //
+    }
+    public function migracao(Request $request)
+    {
+        // dd($request);
+        $tipo = new Tipoproduto;
+        $tipo->descricao = $request->descricao;
+        $tipo->status = true;
+        $tipo->empresa_id = 1;
+        $tipo->save();
     }
 }
