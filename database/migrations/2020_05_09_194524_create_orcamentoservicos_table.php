@@ -17,8 +17,8 @@ class CreateOrcamentoservicosTable extends Migration
             $table->id();
             $table->foreignId('servico_id')->constrained()->onDelete('cascade');
             $table->integer('quantidade');
-            $table->string('basecobranca');
-            $table->string('frequencia');
+            $table->string('basecobranca')->nullable();
+            $table->string('frequencia')->nullable();
             $table->float('valorunitario');
             $table->float('subtotal');
             $table->float('custo');
