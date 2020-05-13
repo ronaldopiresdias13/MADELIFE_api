@@ -39,7 +39,8 @@ class UsersController extends Controller
      */
     public function show(user $user)
     {
-        //
+        $user->pessoa;
+        return $user;
     }
 
     /**

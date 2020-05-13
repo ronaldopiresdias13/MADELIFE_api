@@ -16,7 +16,14 @@ class PessoasController extends Controller
      */
     public function index()
     {
-        return DB::table('pessoas')->where('status', true)->orderBy('nome')->get();
+        // $pessoas = new Pessoa;
+        // $pessoas = DB::table('pessoas')->where('status', true)->orderBy('nome')->get();
+        $pessoas = Pessoa::all()->where('status', true);
+        foreach ($pessoas as $key => $p) {
+            $p->enderecos;
+        }
+        return $pessoas;
+        // return DB::table('pessoas')->where('status', true)->orderBy('nome')->get();
     }
 
     /**
