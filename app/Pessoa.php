@@ -15,7 +15,11 @@ class Pessoa extends Model
 
     public function enderecos()
     {
-        // return $this->belongsToMany('App\Endereco');
         return $this->belongsToMany('App\Endereco', 'pessoa_endereco');
+    }
+
+    public function prestador()
+    {
+        return $this->hasOne('App\Prestador');
     }
 }
