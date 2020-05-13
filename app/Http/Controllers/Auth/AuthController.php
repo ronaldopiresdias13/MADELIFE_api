@@ -70,9 +70,9 @@ class AuthController extends Controller
      */
     public function user(Request $request)
     {
-        // $user = $request->user();
-        // $user->pessoa;
+        $user = $request->user();
+        $user->pessoa;
+        return response()->json($user);
         // return response()->json($request->user());
-        return response()->json($request->user());
     }
 }
