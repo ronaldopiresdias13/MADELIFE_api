@@ -37,9 +37,29 @@ class PrestadoresController extends Controller
         //        ->take(10)
         //        ->get();
 
-        $prestadores = Pessoa::where('tipo', 'prestador')//(true)?->orderBy('name', 'desc'):->orderBy('name', 'desc')
-                ->orderBy('name', 'desc')
+        // $teste = '';
+        // dd({$teste->orderBy('name', 'desc')});
+
+        $pessoas = Pessoa::where('tipo', 'prestador')
+                ->where(
+                    ($request->where['coluna'   ])? $request->where['coluna'   ] : 'nome',
+                    ($request->where['expressao'])? $request->where['expressao'] : '=',
+                    ($request->where['valor'    ])? $request->where['valor'    ] : '%'
+                    )
+                ->orderBy(($request->order)? $request->order : 'id')
                 ->get();
+        
+        foreach ($pessoas as $key => $p) {
+            $p->prestador->formacoes;
+        }
+
+        // $prestadores->get();
+
+        // $prestadores->get();
+
+        // return response()->json($prestadores);
+
+        // dd($prestadores);
 
         // $prestadores->get();
 
@@ -78,7 +98,7 @@ class PrestadoresController extends Controller
         // where `endereco_pessoa`.`pessoa_id` = 569
         
         // return $teste;
-        return $prestadores;
+        return $pessoas;
     }
 
     /**
