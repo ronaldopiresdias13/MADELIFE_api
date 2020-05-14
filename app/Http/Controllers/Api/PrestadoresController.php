@@ -31,30 +31,37 @@ class PrestadoresController extends Controller
      */
     public function index(Request $request)
     {
-        $pessoas = Pessoa::where('tipo', 'prestador')
-                ->where(
-                    ($request->where['coluna'   ])? $request->where['coluna'   ] : 'nome',
-                    ($request->where['expressao'])? $request->where['expressao'] : '=',
-                    ($request->where['valor'    ])? $request->where['valor'    ] : '%'
-                    )
-                ->orderBy(($request->order)? $request->order : 'id')
-                ->get();
+        $pessoas = Pessoa::where('tipo', 'prestador');
         
-        foreach ($pessoas as $key => $p) {
-            // foreach ($variable as $key => $value) {
-            //     # code...
-            // }
-            // switch ($variable) {
-            //     case 'value':
-            //         # code...
-            //         break;
-                
-            //     default:
-            //         # code...
-            //         break;
-            // }
-            $p->prestador->formacoes;
+        if ($request->where) {
+            foreach ($request->where as $key => $where) {
+                $pessoas->where(
+                    ($where['coluna'   ])? $where['coluna'   ] : 'nome',
+                    ($where['expressao'])? $where['expressao'] : 'like',
+                    ($where['valor'    ])? $where['valor'    ] : '%'
+                );
+            }
         }
+
+        if ($request->order) {
+            foreach ($request->order as $key => $order) {
+                $pessoas->orderBy(
+                    ($order['coluna'])? $order['coluna'] : 'id',
+                    ($order['tipo'  ])? $order['tipo'  ] : 'asc'
+                );
+            }
+        }
+        
+        $pessoas = $pessoas->get();
+        
+        if ($request->adicionais) {
+            foreach ($pessoas as $key => $p) {
+                foreach ($request->adicionais as $key => $adic) {
+                    $p->prestador[$adic];
+                }
+            }
+        }
+
         return $pessoas;
     }
 
