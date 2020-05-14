@@ -13,9 +13,40 @@ class ServicosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Servico::all();
+        $itens = new Servico;
+        
+        if ($request->where) {
+            foreach ($request->where as $key => $where) {
+                $itens->where(
+                    ($where['coluna'   ])? $where['coluna'   ] : 'id',
+                    ($where['expressao'])? $where['expressao'] : 'like',
+                    ($where['valor'    ])? $where['valor'    ] : '%'
+                );
+            }
+        }
+
+        if ($request->order) {
+            foreach ($request->order as $key => $order) {
+                $itens->orderBy(
+                    ($order['coluna'])? $order['coluna'] : 'id',
+                    ($order['tipo'  ])? $order['tipo'  ] : 'asc'
+                );
+            }
+        }
+        
+        $itens = $itens->get();
+        
+        if ($request->adicionais) {
+            foreach ($itens as $key => $iten) {
+                foreach ($request->adicionais as $key => $adic) {
+                    $iten[$adic];
+                }
+            }
+        }
+
+        return $itens;
     }
 
     /**

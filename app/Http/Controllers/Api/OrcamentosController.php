@@ -24,12 +24,12 @@ class OrcamentosController extends Controller
      */
     public function index(Request $request)
     {
-        $orcamentos = new Orcamento;
-        
+        $itens = new Orcamento;
+
         if ($request->where) {
             foreach ($request->where as $key => $where) {
-                $orcamentos->where(
-                    ($where['coluna'   ])? $where['coluna'   ] : 'numero',
+                $itens->where(
+                    ($where['coluna'   ])? $where['coluna'   ] : 'id',
                     ($where['expressao'])? $where['expressao'] : 'like',
                     ($where['valor'    ])? $where['valor'    ] : '%'
                 );
@@ -38,24 +38,24 @@ class OrcamentosController extends Controller
 
         if ($request->order) {
             foreach ($request->order as $key => $order) {
-                $orcamentos->orderBy(
+                $itens->orderBy(
                     ($order['coluna'])? $order['coluna'] : 'id',
                     ($order['tipo'  ])? $order['tipo'  ] : 'asc'
                 );
             }
         }
         
-        $orcamentos = $orcamentos->get();
+        $itens = $itens->get();
         
         if ($request->adicionais) {
-            foreach ($orcamentos as $key => $orc) {
+            foreach ($itens as $key => $iten) {
                 foreach ($request->adicionais as $key => $adic) {
-                    $orc[$adic];
+                    $iten[$adic];
                 }
             }
         }
 
-        return $orcamentos;
+        return $itens;
     }
 
     /**

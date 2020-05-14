@@ -31,12 +31,12 @@ class PrestadoresController extends Controller
      */
     public function index(Request $request)
     {
-        $pessoas = Pessoa::where('tipo', 'prestador');
+        $itens = new Prestador;//::where('tipo', 'prestador');
         
         if ($request->where) {
             foreach ($request->where as $key => $where) {
-                $pessoas->where(
-                    ($where['coluna'   ])? $where['coluna'   ] : 'nome',
+                $itens->where(
+                    ($where['coluna'   ])? $where['coluna'   ] : 'id',
                     ($where['expressao'])? $where['expressao'] : 'like',
                     ($where['valor'    ])? $where['valor'    ] : '%'
                 );
@@ -45,24 +45,24 @@ class PrestadoresController extends Controller
 
         if ($request->order) {
             foreach ($request->order as $key => $order) {
-                $pessoas->orderBy(
+                $itens->orderBy(
                     ($order['coluna'])? $order['coluna'] : 'id',
                     ($order['tipo'  ])? $order['tipo'  ] : 'asc'
                 );
             }
         }
         
-        $pessoas = $pessoas->get();
+        $itens = $itens->get();
         
         if ($request->adicionais) {
-            foreach ($pessoas as $key => $p) {
+            foreach ($itens as $key => $iten) {
                 foreach ($request->adicionais as $key => $adic) {
-                    $p->prestador[$adic];
+                    $iten[$adic];
                 }
             }
         }
 
-        return $pessoas;
+        return $itens;
     }
 
     /**

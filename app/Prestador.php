@@ -13,4 +13,9 @@ class Prestador extends Model
     {
         return $this->belongsToMany('App\Formacao', 'prestador_formacao');
     }
+
+    public function pessoa()
+    {
+        return $this->belongsTo('App\Pessoa');
+    }
 }
