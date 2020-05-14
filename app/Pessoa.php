@@ -10,11 +10,16 @@ class Pessoa extends Model
 
     public function clientes()
     {
-        return $this->hasOne('App\Cliente');
+        return $this->hasMany('App\Cliente');
     }
 
     public function enderecos()
     {
-        return $this->hasMany('App\Enderecos');
+        return $this->belongsToMany('App\Endereco', 'pessoa_endereco');
+    }
+
+    public function prestador()
+    {
+        return $this->hasOne('App\Prestador');
     }
 }

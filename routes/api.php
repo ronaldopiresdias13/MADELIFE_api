@@ -51,6 +51,10 @@ Route::group([
     Route::post('orcamentos/migracao'   , 'Api\OrcamentosController@migracao'   );
     Route::post('cuidados/migracao'     , 'Api\CuidadosController@migracao'     );
     Route::post('grupocuidados/migracao', 'Api\GrupocuidadosController@migracao');
+    Route::post('fornecedores/migracao', 'Api\FornecedoresController@migracao');
+    Route::post('unidades-medidas/migracao', 'Api\UnidadesMedidasController@migracao');
+    Route::post('tipos-produtos/migracao', 'Api\TiposProdutosController@migracao');
+    Route::post('produtos/migracao', 'Api\ProdutosController@migracao');
 
 
 

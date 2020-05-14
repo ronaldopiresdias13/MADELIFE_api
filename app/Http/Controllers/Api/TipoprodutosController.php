@@ -29,7 +29,7 @@ class TipoprodutosController extends Controller
         $tipoproduto = new Tipoproduto;
         $tipoproduto->descricao = $request->descricao;
         $tipoproduto->empresa = $request->empresa;
-        $tipoproduto->status = $request->staus; 
+        $tipoproduto->status = $request->status; 
         $tipoproduto->save(); 
     }
 

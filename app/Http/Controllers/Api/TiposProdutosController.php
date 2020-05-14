@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\user;
-use App\Acesso;
-use App\UserAcesso;
+use App\Tipoproduto;
 use Illuminate\Http\Request;
 
-class UsersController extends Controller
+class TiposProdutosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -28,45 +26,49 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-       //
+        
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\user  $user
+     * @param  \App\Tipoproduto  $tipoproduto
      * @return \Illuminate\Http\Response
      */
-    public function show(user $user)
+    public function show(Tipoproduto $tipoproduto)
     {
-        $user->pessoa;
-        return $user;
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\user  $user
+     * @param  \App\Tipoproduto  $tipoproduto
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, user $user)
+    public function update(Request $request, Tipoproduto $tipoproduto)
     {
-        foreach ($request->acessos as $key => $value) {
-            $teste = UserAcesso::updateOrCreate(
-                ['user'  => $user->id, 'acesso' => Acesso::FirstOrCreate(['nome' => $value['nome']])->id]
-            );
-        }
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\user  $user
+     * @param  \App\Tipoproduto  $tipoproduto
      * @return \Illuminate\Http\Response
      */
-    public function destroy(user $user)
+    public function destroy(Tipoproduto $tipoproduto)
     {
         //
+    }
+    public function migracao(Request $request)
+    {
+        // dd($request);
+        $tipo = new Tipoproduto;
+        $tipo->descricao = $request->descricao;
+        $tipo->status = true;
+        $tipo->empresa_id = 1;
+        $tipo->save();
     }
 }

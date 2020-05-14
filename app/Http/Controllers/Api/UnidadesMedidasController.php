@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\user;
-use App\Acesso;
-use App\UserAcesso;
+use App\Unidademedida;
 use Illuminate\Http\Request;
 
-class UsersController extends Controller
+class UnidadesMedidasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -28,45 +26,52 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-       //
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\user  $user
+     * @param  \App\Unidademedida  $unidademedida
      * @return \Illuminate\Http\Response
      */
-    public function show(user $user)
+    public function show(Unidademedida $unidademedida)
     {
-        $user->pessoa;
-        return $user;
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\user  $user
+     * @param  \App\Unidademedida  $unidademedida
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, user $user)
+    public function update(Request $request, Unidademedida $unidademedida)
     {
-        foreach ($request->acessos as $key => $value) {
-            $teste = UserAcesso::updateOrCreate(
-                ['user'  => $user->id, 'acesso' => Acesso::FirstOrCreate(['nome' => $value['nome']])->id]
-            );
-        }
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\user  $user
+     * @param  \App\Unidademedida  $unidademedida
      * @return \Illuminate\Http\Response
      */
-    public function destroy(user $user)
+    public function destroy(Unidademedida $unidademedida)
     {
         //
+    }
+    public function migracao(Request $request)
+    {
+        // dd($request);
+        $unidade = new Unidademedida;
+        $unidade->descricao = $request->descricao;
+        $unidade->sigla = $request->sigla;
+        $unidade->grupo = $request->grupo;
+        $unidade->padrao = true;
+        $unidade->status = true;
+        $unidade->empresa_id = 1;
+        $unidade->save();
     }
 }
