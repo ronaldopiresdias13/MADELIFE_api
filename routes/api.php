@@ -55,6 +55,7 @@ Route::group([
     Route::post('unidades-medidas/migracao', 'Api\UnidadesMedidasController@migracao');
     Route::post('tipos-produtos/migracao', 'Api\TiposProdutosController@migracao');
     Route::post('produtos/migracao', 'Api\ProdutosController@migracao');
+    Route::post('ordemservicos/migracao', 'Api\OrdemservicosController@migracao');
 
 
 
