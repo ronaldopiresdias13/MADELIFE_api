@@ -87,7 +87,7 @@ class OrcamentosController extends Controller
             'empresa_id' => 1,
             'data' => $request['data'],
             'quantidade' => $request['cicloMeses'],
-            'unidade' => 1,
+            'unidade' => "Meses",
             'cidade_id' => $request['cidade'],
             'processo' => $request['numeroProcesso'],
             'situacao' => $request['situacao'],
