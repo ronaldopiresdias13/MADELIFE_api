@@ -31,73 +31,37 @@ class PrestadoresController extends Controller
      */
     public function index(Request $request)
     {
-
-        // $flights = App\Flight::where('active', 1)
-        //        ->orderBy('name', 'desc')
-        //        ->take(10)
-        //        ->get();
-
-        // $teste = '';
-        // dd({$teste->orderBy('name', 'desc')});
-
-        $pessoas = Pessoa::where('tipo', 'prestador')
-                ->where(
-                    ($request->where['coluna'   ])? $request->where['coluna'   ] : 'nome',
-                    ($request->where['expressao'])? $request->where['expressao'] : '=',
-                    ($request->where['valor'    ])? $request->where['valor'    ] : '%'
-                    )
-                ->orderBy(($request->order)? $request->order : 'id')
-                ->get();
+        $pessoas = Pessoa::where('tipo', 'prestador');
         
-        foreach ($pessoas as $key => $p) {
-            $p->prestador->formacoes;
+        if ($request->where) {
+            foreach ($request->where as $key => $where) {
+                $pessoas->where(
+                    ($where['coluna'   ])? $where['coluna'   ] : 'nome',
+                    ($where['expressao'])? $where['expressao'] : 'like',
+                    ($where['valor'    ])? $where['valor'    ] : '%'
+                );
+            }
         }
 
-        // $prestadores->get();
-
-        // $prestadores->get();
-
-        // return response()->json($prestadores);
-
-        // dd($prestadores);
-
-        // $prestadores->get();
-
-        // $prestadores = Pessoa::all();
-        // $prestadores = DB::table('pessoas');
-        // if ($request->where) {
-        //     foreach ($request->where as $key => $where) {
-        //         if ($key == 0) {
-        //             // dd($key);
-        //             // $prestadores->where($where['coluna'], $where['expressao'], $where['valor']);
-        //             $prestadores = Pessoa::where('tipo', 'prestador');
-        //         } else {
-        //         }
-        //     }
-        // } else {
-        //     return $prestadores = Pessoa::all();
-        // }
-        // if ($request->order) {
-        //     foreach ($request->order as $order) {
-        //         $prestadores->orderBy($order);
-        //     }
-        // }
-        // dd($request['adicionais'][0]);
-        // $prestadores->$request['adicionais'][0];
-
-        // $teste = $prestadores->get();
-
-        // foreach ($prestadores as $key => $p) {
-        //     $p->$request['adicionais'][0];
-        // }
-
-        // select `enderecos`.*, `endereco_pessoa`.`pessoa_id` as `pivot_pessoa_id`, `endereco_pessoa`.`endereco_id` as `pivot_endereco_id`
-        // from `enderecos`
-        // inner join `endereco_pessoa`
-        // on `enderecos`.`id` = `endereco_pessoa`.`endereco_id`
-        // where `endereco_pessoa`.`pessoa_id` = 569
+        if ($request->order) {
+            foreach ($request->order as $key => $order) {
+                $pessoas->orderBy(
+                    ($order['coluna'])? $order['coluna'] : 'id',
+                    ($order['tipo'  ])? $order['tipo'  ] : 'asc'
+                );
+            }
+        }
         
-        // return $teste;
+        $pessoas = $pessoas->get();
+        
+        if ($request->adicionais) {
+            foreach ($pessoas as $key => $p) {
+                foreach ($request->adicionais as $key => $adic) {
+                    $p->prestador[$adic];
+                }
+            }
+        }
+
         return $pessoas;
     }
 
@@ -110,14 +74,14 @@ class PrestadoresController extends Controller
     public function store(Request $request)
     {
         $prestador = new Prestador;
-        $prestador->pessoa       = $request->pessoa;
-        $prestador->fantasia     = $request->fantasia;
-        $prestador->sexo         = $request->sexo;
-        $prestador->pis          = $request->pis;
-        $prestador->formacao     = $request->formacao;
-        $prestador->cargo        = $request->cargo;
-        $prestador->curriculo    = $request->curriculo;
-        $prestador->certificado  = $request->certificado;
+        $prestador->pessoa      = $request->pessoa     ;
+        $prestador->fantasia    = $request->fantasia   ;
+        $prestador->sexo        = $request->sexo       ;
+        $prestador->pis         = $request->pis        ;
+        $prestador->formacao    = $request->formacao   ;
+        $prestador->cargo       = $request->cargo      ;
+        $prestador->curriculo   = $request->curriculo  ;
+        $prestador->certificado = $request->certificado;
         $prestador->save();
     }
 
