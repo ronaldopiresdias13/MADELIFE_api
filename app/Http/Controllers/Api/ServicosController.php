@@ -85,7 +85,7 @@ class ServicosController extends Controller
      */
     public function update(Request $request, Servico $servico)
     {
-        //
+        $servico->update($request->all());
     }
 
     /**

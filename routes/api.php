@@ -31,32 +31,43 @@ Route::group([
 });
 
 // Route::group(['middleware' => 'auth:api'], function() {
-    Route::apiResource('emails'       , 'Api\EmailsController'       );
-    Route::apiResource('acessos'      , 'Api\AcessosController'      );
+    Route::apiResource('acessos'                , 'Api\AcessosController'                );
+    Route::apiResource('bancos'                 , 'Api\BancosController'                 );
+    Route::apiResource('beneficios'             , 'Api\BeneficiosController'             );
+    Route::apiResource('cargos'                 , 'Api\CargosController'                 );
+    Route::apiResource('categorianaturezas'     , 'Api\CategorianaturezasController'     );
+    Route::apiResource('cidades'                , 'Api\CidadesController'                );
+    Route::apiResource('clientes'               , 'Api\ClientesController'               );
+    Route::apiResource('conselhos'              , 'Api\ConselhosController'              );
+    Route::apiResource('convenios'              , 'Api\ConveniosController'              );
+    Route::apiResource('cuidados'               , 'Api\CuidadosController'               );
+    Route::apiResource('dadosbancarios'         , 'Api\DadosbancariosController'         );
+    Route::apiResource('dadoscontratuais'       , 'Api\DadoscontratuaisController'       );
+    Route::apiResource('diagnosticossecundarios', 'Api\DiagnosticossecundariosController');
+    Route::apiResource('emails'                 , 'Api\EmailsController'                 );
+    Route::apiResource('empresas'               , 'Api\EmpresasController'               );
+    Route::apiResource('enderecos'              , 'Api\EnderecosController'              );
+    Route::apiResource('formacoes'              , 'Api\FormacoesController'              );
+    Route::apiResource('fornecedores'           , 'Api\FornecedoresController'           );
+
     Route::apiResource('users'        , 'Api\UsersController'        );
-    Route::apiResource('bancos'       , 'Api\BancosController'       );
-    Route::apiResource('cargos'       , 'Api\CargosController'       );
-    Route::apiResource('empresas'     , 'Api\EmpresasController'     );
-    Route::apiResource('cidades'      , 'Api\CidadesController'      );
-    Route::apiResource('clientes'     , 'Api\ClientesController'     );
     Route::apiResource('prestadores'  , 'Api\PrestadoresController'  );
     Route::apiResource('servicos'     , 'Api\ServicosController'     );
     Route::apiResource('pessoas'      , 'Api\PessoasController'      );
-    Route::apiResource('cuidados'     , 'Api\CuidadosController'     );
     Route::apiResource('grupocuidados', 'Api\GrupocuidadosController');
     Route::apiResource('orcamentos'   , 'Api\OrcamentosController'   );
 
-    Route::post('prestadores/migracao'  , 'Api\PrestadoresController@migracao'  );
-    Route::post('clientes/migracao'     , 'Api\ClientesController@migracao'     );
-    Route::post('orcamentos/migracao'   , 'Api\OrcamentosController@migracao'   );
-    Route::post('cuidados/migracao'     , 'Api\CuidadosController@migracao'     );
-    Route::post('grupocuidados/migracao', 'Api\GrupocuidadosController@migracao');
-    Route::post('fornecedores/migracao', 'Api\FornecedoresController@migracao');
+    Route::post('prestadores/migracao'     , 'Api\PrestadoresController@migracao'  );
+    Route::post('clientes/migracao'        , 'Api\ClientesController@migracao'     );
+    Route::post('orcamentos/migracao'      , 'Api\OrcamentosController@migracao'   );
+    Route::post('cuidados/migracao'        , 'Api\CuidadosController@migracao'     );
+    Route::post('grupocuidados/migracao'   , 'Api\GrupocuidadosController@migracao');
+    Route::post('fornecedores/migracao'    , 'Api\FornecedoresController@migracao');
     Route::post('unidades-medidas/migracao', 'Api\UnidadesMedidasController@migracao');
-    Route::post('tipos-produtos/migracao', 'Api\TiposProdutosController@migracao');
-    Route::post('produtos/migracao', 'Api\ProdutosController@migracao');
-    Route::post('ordemservicos/migracao', 'Api\OrdemservicosController@migracao');
-    Route::post('profissionais/migracao', 'Api\ProfissionaisController@migracao');
+    Route::post('tipos-produtos/migracao'  , 'Api\TiposProdutosController@migracao');
+    Route::post('produtos/migracao'        , 'Api\ProdutosController@migracao');
+    Route::post('ordemservicos/migracao'   , 'Api\OrdemservicosController@migracao');
+    Route::post('profissionais/migracao'   , 'Api\ProfissionaisController@migracao');
 
 
 
