@@ -73,7 +73,7 @@ class ServicosController extends Controller
      */
     public function show(Servico $servico)
     {
-        //
+        return $servico;
     }
 
     /**
