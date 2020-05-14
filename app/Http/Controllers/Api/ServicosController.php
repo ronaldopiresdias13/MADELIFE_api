@@ -58,10 +58,10 @@ class ServicosController extends Controller
     public function store(Request $request)
     {
         $servico = new Servico;
-        $servico->descricao = $request->descricao;
-        $servico->codigo = $request->codigo;
-        $servico->valor = $request->valor;
-        $servico->empresa_id = 1;
+        $servico->descricao  = $request->descricao ;
+        $servico->codigo     = $request->codigo    ;
+        $servico->valor      = $request->valor     ;
+        $servico->empresa_id = $request->empresa_id;
         $servico->save();
     }
 
@@ -96,6 +96,6 @@ class ServicosController extends Controller
      */
     public function destroy(Servico $servico)
     {
-        //
+        $servico->delete();
     }
 }
