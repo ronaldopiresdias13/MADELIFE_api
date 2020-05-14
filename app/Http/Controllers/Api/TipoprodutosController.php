@@ -66,4 +66,14 @@ class TipoprodutosController extends Controller
     {
         $tipoproduto->delete();
     }
+    
+    public function migracao(Request $request)
+    {
+        // dd($request);
+        $tipo = new Tipoproduto;
+        $tipo->descricao = $request->descricao;
+        $tipo->status = true;
+        $tipo->empresa_id = 1;
+        $tipo->save();
+    }
 }
