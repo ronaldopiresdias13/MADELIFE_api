@@ -24,12 +24,12 @@ class OrcamentosController extends Controller
      */
     public function index(Request $request)
     {
-        $orcamentos = Orcamento::where('numero', 'like', '%');
-
+        $orcamentos = new Orcamento;
+        
         if ($request->where) {
             foreach ($request->where as $key => $where) {
                 $orcamentos->where(
-                    ($where['coluna'   ])? $where['coluna'   ] : 'nome',
+                    ($where['coluna'   ])? $where['coluna'   ] : 'numero',
                     ($where['expressao'])? $where['expressao'] : 'like',
                     ($where['valor'    ])? $where['valor'    ] : '%'
                 );
