@@ -11,4 +11,14 @@ class Orcamento extends Model
     public function historicos(){
         return $this->hasMany('App\Historicoorcamento');
     }
+
+    public function cliente()
+    {
+        return $this->belongsTo('App\Cliente');
+    }
+
+    public function empresa()
+    {
+        return $this->belongsTo('App\Empresa');
+    }
 }

@@ -22,9 +22,45 @@ class OrcamentosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Orcamento::all();
+        $orcamentos = Orcamento::where('numero', 'like', '%');//->get()
+
+        if ($request->where) {
+            foreach ($request->where as $key => $where) {
+                $orcamentos->where(
+                    ($where['coluna'   ])? $where['coluna'   ] : 'nome',
+                    ($where['expressao'])? $where['expressao'] : 'like',
+                    ($where['valor'    ])? $where['valor'    ] : '%'
+                );
+            }
+        }
+
+        if ($request->order) {
+            foreach ($request->order as $key => $order) {
+                $orcamentos->orderBy(
+                    ($order['coluna'])? $order['coluna'] : 'id',
+                    ($order['tipo'  ])? $order['tipo'  ] : 'asc'
+                );
+            }
+        }
+        
+        $orcamentos = $orcamentos->get();
+        
+        if ($request->adicionais) {
+            foreach ($orcamentos as $key => $orc) {
+                foreach ($request->adicionais as $key => $adic) {
+                    switch ($adic) {
+                        case 'cliente':
+                            $orc->cliente;
+                        case 'empresa':
+                            $orc->empresa;
+                    }
+                }
+            }
+        }
+
+        return $orcamentos;
     }
 
     /**
