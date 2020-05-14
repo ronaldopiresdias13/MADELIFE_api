@@ -146,37 +146,40 @@ class ProfissionaisController extends Controller
                 'demissao'                => $request['profissional']['dadosContratuais']['dataDemissao']
             ])->id
         ]);
-        $profissional_formacao = ProfissionalFormacao::firstOrCreate([
-            'profissional_id' => $profissional->id,
-            'formacao_id'  => Formacao::firstOrCreate(['descricao' => $request['profissional']['dadosProf']['formacao']['descricao']])->id,
-        ]);
+        if($request['profissional']['dadosProf']['formacao'] != null){
+            $profissional_formacao = ProfissionalFormacao::firstOrCreate([
+                'profissional_id' => $profissional->id,
+                'formacao_id'  => Formacao::firstOrCreate(['descricao' => $request['profissional']['dadosProf']['formacao']['descricao']])->id,
+            ]);
+        }
         
-        $usercpf = User::firstWhere(
-            'cpfcnpj' , $request['profissional']['dadosPf']['cpf']['numero']
-        );
-        $useremail = User::firstWhere(
-            'email', $request['profissional']['contato']['email']
-        );
+        
+        // $usercpf = User::firstWhere(
+        //     'cpfcnpj' , $request['profissional']['dadosPf']['cpf']['numero']
+        // );
+        // $useremail = User::firstWhere(
+        //     'email', $request['profissional']['contato']['email']
+        // );
 
-        if ($usercpf || $useremail) {
+        // if ($usercpf || $useremail) {
             // foreach ($request['conta']['grupos'] as $key => $acesso) {
             //     $a = UserAcesso::updateOrCreate(
             //         ['user_id'  => $usercpf->id, 'acesso_id' => Acesso::firstOrCreate(['nome' => $acesso])->id]
             //     );
             // }
-        } else {
-            $user = User::create([
-                'cpfcnpj' => $request['profissional']['dadosPf']['cpf']['numero'],
-                'email'   => $request['profissional']['contato']['email'],
-                'pessoa_id'  => $profissional->pessoa_id,
-                'password' => bcrypt($request['conta']['senha']),
-            ]);
+        // } else {
             foreach ($request['conta']['grupos'] as $key => $value) {
-                $teste = UserAcesso::updateOrCreate(
-                    ['user_id'  => $user->id, 'acesso_id' => Acesso::firstOrCreate(['nome' => $value])->id]
+                $teste = UserAcesso::firstOrCreate([
+                    'user_id'  => $user = User::firstOrCreate([
+                        'cpfcnpj' => $request['profissional']['dadosPf']['cpf']['numero'],
+                        'email'   => $request['profissional']['contato']['email'],
+                        'pessoa_id'  => $profissional->pessoa_id,
+                        'password' => bcrypt($request['conta']['senha']),
+                    ])->id, 
+                    'acesso_id' => Acesso::firstOrCreate(['nome' => $value])->id]
                 );
             }
-        }
+        // }
         
         foreach ($request['profissional']['horarioTrabalho'] as $key => $hora) {
             $horario = Horariotrabalho::firstOrCreate([
