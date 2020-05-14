@@ -50,8 +50,7 @@ class OrcamentosController extends Controller
         if ($request->adicionais) {
             foreach ($orcamentos as $key => $orc) {
                 foreach ($request->adicionais as $key => $adic) {
-                        $orc[$adic];
-                    }
+                    $orc[$adic];
                 }
             }
         }
