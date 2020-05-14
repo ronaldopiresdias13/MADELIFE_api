@@ -26,8 +26,8 @@ class CreateOrdemservicosTable extends Migration
             $table->boolean('realizacaoprocedimento');
             $table->string('nome')->nullable();
             $table->string('sexo')->nullable();
-            $table->date('nascimento')->nullable();
-            $table->string('cpfcnpj');
+            $table->string('nascimento')->nullable();
+            $table->string('cpfcnpj')->nullable();
             $table->string('rgie')->nullable();
             $table->string('endereco1')->nullable();
             $table->string('cidade1')->nullable();
