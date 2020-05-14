@@ -24,7 +24,7 @@ class OrcamentosController extends Controller
      */
     public function index(Request $request)
     {
-        $orcamentos = Orcamento::where('numero', 'like', '%');//->get()
+        $orcamentos = Orcamento::where('numero', 'like', '%');
 
         if ($request->where) {
             foreach ($request->where as $key => $where) {
@@ -50,11 +50,14 @@ class OrcamentosController extends Controller
         if ($request->adicionais) {
             foreach ($orcamentos as $key => $orc) {
                 foreach ($request->adicionais as $key => $adic) {
+                    // dd($adic);
                     switch ($adic) {
                         case 'cliente':
                             $orc->cliente;
+                        break;
                         case 'empresa':
                             $orc->empresa;
+                        break;
                     }
                 }
             }
