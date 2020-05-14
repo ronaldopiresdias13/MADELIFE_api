@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Pessoa;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+// use Illuminate\Support\Facades\DB;
 
 class PessoasController extends Controller
 {
@@ -16,7 +16,14 @@ class PessoasController extends Controller
      */
     public function index()
     {
-        return DB::table('pessoas')->where('status', true)->orderBy('nome')->get();
+        // $pessoas = new Pessoa;
+        // $pessoas = DB::table('pessoas')->where('status', true)->orderBy('nome')->get();
+        $pessoas = Pessoa::where('status', true)->get();
+        foreach ($pessoas as $key => $p) {
+            $p->enderecos;
+        }
+        return $pessoas;
+        // return DB::table('pessoas')->where('status', true)->orderBy('nome')->get();
     }
 
     /**

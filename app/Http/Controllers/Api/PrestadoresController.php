@@ -20,7 +20,7 @@ use App\Endereco;
 use App\Cidade;
 use App\Conselho;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+// use Illuminate\Support\Facades\DB;
 
 class PrestadoresController extends Controller
 {
@@ -31,11 +31,74 @@ class PrestadoresController extends Controller
      */
     public function index(Request $request)
     {
-        $prestadores = DB::table('prestadores')->get();//->where('status', true)->orderBy('nome')
-        dd($prestadores);
 
-        return DB::table('pessoas')->where('status', true)->orderBy('nome')->get();
-        return Prestador::all();
+        // $flights = App\Flight::where('active', 1)
+        //        ->orderBy('name', 'desc')
+        //        ->take(10)
+        //        ->get();
+
+        // $teste = '';
+        // dd({$teste->orderBy('name', 'desc')});
+
+        $pessoas = Pessoa::where('tipo', 'prestador')
+                ->where(
+                    ($request->where['coluna'   ])? $request->where['coluna'   ] : 'nome',
+                    ($request->where['expressao'])? $request->where['expressao'] : '=',
+                    ($request->where['valor'    ])? $request->where['valor'    ] : '%'
+                    )
+                ->orderBy(($request->order)? $request->order : 'id')
+                ->get();
+        
+        foreach ($pessoas as $key => $p) {
+            $p->prestador->formacoes;
+        }
+
+        // $prestadores->get();
+
+        // $prestadores->get();
+
+        // return response()->json($prestadores);
+
+        // dd($prestadores);
+
+        // $prestadores->get();
+
+        // $prestadores = Pessoa::all();
+        // $prestadores = DB::table('pessoas');
+        // if ($request->where) {
+        //     foreach ($request->where as $key => $where) {
+        //         if ($key == 0) {
+        //             // dd($key);
+        //             // $prestadores->where($where['coluna'], $where['expressao'], $where['valor']);
+        //             $prestadores = Pessoa::where('tipo', 'prestador');
+        //         } else {
+        //         }
+        //     }
+        // } else {
+        //     return $prestadores = Pessoa::all();
+        // }
+        // if ($request->order) {
+        //     foreach ($request->order as $order) {
+        //         $prestadores->orderBy($order);
+        //     }
+        // }
+        // dd($request['adicionais'][0]);
+        // $prestadores->$request['adicionais'][0];
+
+        // $teste = $prestadores->get();
+
+        // foreach ($prestadores as $key => $p) {
+        //     $p->$request['adicionais'][0];
+        // }
+
+        // select `enderecos`.*, `endereco_pessoa`.`pessoa_id` as `pivot_pessoa_id`, `endereco_pessoa`.`endereco_id` as `pivot_endereco_id`
+        // from `enderecos`
+        // inner join `endereco_pessoa`
+        // on `enderecos`.`id` = `endereco_pessoa`.`endereco_id`
+        // where `endereco_pessoa`.`pessoa_id` = 569
+        
+        // return $teste;
+        return $pessoas;
     }
 
     /**
