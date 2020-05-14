@@ -114,7 +114,7 @@ class OrcamentosController extends Controller
         $orcamento = Orcamento::firstOrCreate([
             'numero' => $request['numeroOrcamento'],
             'tipo' => $request['tipoOrcamento'],
-            'cliente_id' => Pessoa::firstWhere('nome', $request['clienteId'])->clientes->id,
+            'cliente_id' => Pessoa::firstWhere('nome', $request['clienteId'])->clientes[0]->id,
             'empresa_id' => 1,
             'data' => $request['data'],
             'quantidade' => $request['cicloMeses'],
@@ -125,7 +125,7 @@ class OrcamentosController extends Controller
             'descricao' => "",
             'observacao' => $request['observacao'],
         ]);
-
+ 
         foreach ($request->historicoOrcamento as $key => $value) {
             $historico = Historicoorcamento::firstOrCreate([
                 'orcamento_id'      => $orcamento->id,
