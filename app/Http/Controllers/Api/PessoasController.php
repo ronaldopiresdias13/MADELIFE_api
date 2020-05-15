@@ -14,7 +14,7 @@ class PessoasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         // $pessoas = Pessoa::where('status', true)->get();
         // foreach ($pessoas as $key => $p) {
