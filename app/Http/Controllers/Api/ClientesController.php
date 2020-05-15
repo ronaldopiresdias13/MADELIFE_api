@@ -60,9 +60,26 @@ class ClientesController extends Controller
      */
     public function store(Request $request)
     {
-        $cliente = new Cliente;
-        $cliente->pessoa = $request->pessoa;
-        $cliente->save();
+        // $cliente = new Cliente;
+        // $cliente->pessoa = $request->pessoa;
+        // $cliente->save();
+
+        $cliente = Cliente::firstOrCreate([
+            'pessoa_id' => Pessoa::firstOrCreate(
+                [
+                    'cpfcnpj' => $request['pessoa']['cpfcnpj'],
+                // ],
+                // [
+                    'nome'        => $request['pessoa']['nome'],
+                    'nascimento'  => $request['pessoa']['nascimento'],
+                    'tipo'        => $request['pessoa']['tipo'],
+                    'rgie'        => $request['pessoa']['rgie'],
+                    'observacoes' => $request['pessoa']['observacoes'],
+                    'status'      => $request['pessoa']['status'],
+                ]
+            )->id,
+            'empresa_id' => 1
+        ]);
     }
    
     /**
