@@ -75,5 +75,6 @@ class TipoprodutosController extends Controller
         $tipo->status = true;
         $tipo->empresa_id = 1;
         $tipo->save();
+        // Tipoproduto::create($request->all());
     }
 }

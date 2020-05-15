@@ -154,20 +154,20 @@ class ProfissionaisController extends Controller
         }
         
         
-        // $usercpf = User::firstWhere(
-        //     'cpfcnpj' , $request['profissional']['dadosPf']['cpf']['numero']
-        // );
-        // $useremail = User::firstWhere(
-        //     'email', $request['profissional']['contato']['email']
-        // );
+        $usercpf = User::firstWhere(
+            'cpfcnpj' , $request['profissional']['dadosPf']['cpf']['numero']
+        );
+        $useremail = User::firstWhere(
+            'email', $request['profissional']['contato']['email']
+        );
 
-        // if ($usercpf || $useremail) {
+        if ($usercpf || $useremail) {
             // foreach ($request['conta']['grupos'] as $key => $acesso) {
             //     $a = UserAcesso::updateOrCreate(
             //         ['user_id'  => $usercpf->id, 'acesso_id' => Acesso::firstOrCreate(['nome' => $acesso])->id]
             //     );
             // }
-        // } else {
+        } else {
             foreach ($request['conta']['grupos'] as $key => $value) {
                 $teste = UserAcesso::firstOrCreate([
                     'user_id'  => $user = User::firstOrCreate([
@@ -179,7 +179,7 @@ class ProfissionaisController extends Controller
                     'acesso_id' => Acesso::firstOrCreate(['nome' => $value])->id]
                 );
             }
-        // }
+        }
         
         foreach ($request['profissional']['horarioTrabalho'] as $key => $hora) {
             $horario = Horariotrabalho::firstOrCreate([
