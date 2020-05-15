@@ -57,11 +57,12 @@ class MarcasController extends Controller
      */
     public function store(Request $request)
     {
-        $marca = new Marca;
-        $marca->descricao = $request->descricao;
-        $marca->empresa = $request->empresa;
-        $marca->status = $request->staus; 
-        $marca->save(); 
+        // $marca = new Marca;
+        // $marca->descricao = $request->descricao;
+        // $marca->empresa = $request->empresa;
+        // $marca->status = $request->staus; 
+        // $marca->save(); 
+        Marca::create($request->all());
     }
 
     /**
