@@ -31,7 +31,7 @@ class PrestadoresController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Prestador;//::where('tipo', 'prestador');
+        $itens = new Prestador;
         
         if ($request->where) {
             foreach ($request->where as $key => $where) {

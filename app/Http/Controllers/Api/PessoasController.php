@@ -16,14 +16,43 @@ class PessoasController extends Controller
      */
     public function index()
     {
-        // $pessoas = new Pessoa;
-        // $pessoas = DB::table('pessoas')->where('status', true)->orderBy('nome')->get();
-        $pessoas = Pessoa::where('status', true)->get();
-        foreach ($pessoas as $key => $p) {
-            $p->enderecos;
+        // $pessoas = Pessoa::where('status', true)->get();
+        // foreach ($pessoas as $key => $p) {
+        //     $p->enderecos;
+        // }
+        // return $pessoas;
+        $itens = new Pessoa;
+        
+        if ($request->where) {
+            foreach ($request->where as $key => $where) {
+                $itens->where(
+                    ($where['coluna'   ])? $where['coluna'   ] : 'id',
+                    ($where['expressao'])? $where['expressao'] : 'like',
+                    ($where['valor'    ])? $where['valor'    ] : '%'
+                );
+            }
         }
-        return $pessoas;
-        // return DB::table('pessoas')->where('status', true)->orderBy('nome')->get();
+
+        if ($request->order) {
+            foreach ($request->order as $key => $order) {
+                $itens->orderBy(
+                    ($order['coluna'])? $order['coluna'] : 'id',
+                    ($order['tipo'  ])? $order['tipo'  ] : 'asc'
+                );
+            }
+        }
+        
+        $itens = $itens->get();
+        
+        if ($request->adicionais) {
+            foreach ($itens as $key => $iten) {
+                foreach ($request->adicionais as $key => $adic) {
+                    $iten[$adic];
+                }
+            }
+        }
+
+        return $itens;
     }
 
     /**

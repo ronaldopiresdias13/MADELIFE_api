@@ -15,14 +15,46 @@ class EmpresasController extends Controller
      */
     public function index()
     {
-        $empresas = Empresa::all();
-        foreach ($empresas as $e){
-            $clientes = $e->clientes;
-            foreach ($clientes as $c) {
-                $c->pessoa;
+        // $empresas = Empresa::all();
+        // foreach ($empresas as $e){
+        //     $clientes = $e->clientes;
+        //     foreach ($clientes as $c) {
+        //         $c->pessoa;
+        //     }
+        // }
+        // return $empresas;
+        $itens = new Empresa;
+        
+        if ($request->where) {
+            foreach ($request->where as $key => $where) {
+                $itens->where(
+                    ($where['coluna'   ])? $where['coluna'   ] : 'id',
+                    ($where['expressao'])? $where['expressao'] : 'like',
+                    ($where['valor'    ])? $where['valor'    ] : '%'
+                );
             }
         }
-        return $empresas;
+
+        if ($request->order) {
+            foreach ($request->order as $key => $order) {
+                $itens->orderBy(
+                    ($order['coluna'])? $order['coluna'] : 'id',
+                    ($order['tipo'  ])? $order['tipo'  ] : 'asc'
+                );
+            }
+        }
+        
+        $itens = $itens->get();
+        
+        if ($request->adicionais) {
+            foreach ($itens as $key => $iten) {
+                foreach ($request->adicionais as $key => $adic) {
+                    $iten[$adic];
+                }
+            }
+        }
+
+        return $itens;
     }
 
     /**

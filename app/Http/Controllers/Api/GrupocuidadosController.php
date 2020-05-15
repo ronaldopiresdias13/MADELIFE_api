@@ -18,14 +18,38 @@ class GrupocuidadosController extends Controller
      */
     public function index(Request $request)
     {
-        // dd($request['empresa']);
-        // $grupocuidados = DB::table('grupocuidados')->where('empresa_id', $request['empresa'])->get();
-        $grupocuidados = Grupocuidado::all();
-        foreach ($grupocuidados as $gc) {
-            $gc->cuidados;
+        $itens = new Grupocuidado;
+        
+        if ($request->where) {
+            foreach ($request->where as $key => $where) {
+                $itens->where(
+                    ($where['coluna'   ])? $where['coluna'   ] : 'id',
+                    ($where['expressao'])? $where['expressao'] : 'like',
+                    ($where['valor'    ])? $where['valor'    ] : '%'
+                );
+            }
+        }
+
+        if ($request->order) {
+            foreach ($request->order as $key => $order) {
+                $itens->orderBy(
+                    ($order['coluna'])? $order['coluna'] : 'id',
+                    ($order['tipo'  ])? $order['tipo'  ] : 'asc'
+                );
+            }
         }
         
-        return $grupocuidados;
+        $itens = $itens->get();
+        
+        if ($request->adicionais) {
+            foreach ($itens as $key => $iten) {
+                foreach ($request->adicionais as $key => $adic) {
+                    $iten[$adic];
+                }
+            }
+        }
+
+        return $itens;
     }
 
     /**
