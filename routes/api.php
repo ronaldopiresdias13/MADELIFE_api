@@ -69,6 +69,7 @@ Route::group([
     Route::apiResource('tipoprodutos'           , 'Api\TipoprodutosController'           );
     Route::apiResource('transcricoes'           , 'Api\TranscricoesController'           );
     Route::apiResource('unidadesmedida'         , 'Api\UnidadesmedidaController'         );
+    Route::apiResource('unidademedidas'         , 'Api\UnidademedidasController'         );
     Route::apiResource('users'                  , 'Api\UsersController'                  );
 
     Route::post('prestadores/migracao'   , 'Api\PrestadoresController@migracao'   );
@@ -77,7 +78,7 @@ Route::group([
     Route::post('cuidados/migracao'      , 'Api\CuidadosController@migracao'      );
     Route::post('grupocuidados/migracao' , 'Api\GrupocuidadosController@migracao' );
     Route::post('fornecedores/migracao'  , 'Api\FornecedoresController@migracao'  );
-    Route::post('unidadesmedida/migracao', 'Api\UnidadesmedidaController@migracao');
+    Route::post('unidadesmedida/migracao', 'Api\UnidademedidasController@migracao');
     Route::post('tipoprodutos/migracao'  , 'Api\TipoprodutosController@migracao'  );
     Route::post('produtos/migracao'      , 'Api\ProdutosController@migracao'      );
     Route::post('ordemservicos/migracao' , 'Api\OrdemservicosController@migracao' );
