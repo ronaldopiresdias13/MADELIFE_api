@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Cliente;
 use App\Pessoa;
 use App\PessoaEndereco;
+use App\PessoaTelefone;
 use App\Endereco;
 use App\User;
 use App\Http\Controllers\Controller;
@@ -65,40 +66,71 @@ class ClientesController extends Controller
         // $cliente->pessoa = $request->pessoa;
         // $cliente->save();
 
-        $cliente = Cliente::firstOrCreate([
-            'tipo' => $request['tipo'],
-            'perfil' => $request['perfil'],
-            'pessoa_id' => Pessoa::firstOrCreate(
+        // $pessoa = Pessoa::firstWhere('cpfcnpj', '=', $request['cpfcnpj']);
+        // dd($pessoa);
+
+        $pessoa = Pessoa::where(
+            'cpfcnpj', $request['cpfcnpj']
+        )->where(
+            'empresa_id', $request['empresa_id']
+        )->first();
+
+        $cliente = false;
+
+        if ($pessoa) {
+            $cliente = Cliente::firstWhere(
+                'pessoa_id', $pessoa->id,
+            );
+        }
+
+        if ($cliente) {
+            return response()->json('Cliente já existe!', 400)->header('Content-Type', 'text/plain');
+        }
+
+        // $usercpf = User::firstWhere(
+        //     'cpfcnpj', $request['cpfcnpj'],
+        // );
+        // $useremail = User::firstWhere(
+        //     'email', $request['acesso']['email'],
+        // );
+
+        // dd($useremail);
+        dd('Parou!!!');
+
+        $cliente = Cliente::Create([
+            'tipo'      => $request['tipo'],
+            'perfil'    => $request['perfil'],
+            'pessoa_id' => ($pessoa) ? $pessoa->id : Pessoa::Create(
                 [
-                    'cpfcnpj' => $request['cpfcnpj'],
-                    'nome'        => $request['nome'],
-                    'nascimento'  => $request['nascimento'],
-                    'tipo'        => 'Cliente',
-                    'rgie'        => $request['rgie'],
+                    'empresa_id'  => $request['empresa_id' ],
+                    'nome'        => $request['nome'       ],
+                    'nascimento'  => $request['nascimento' ],
+                    'tipo'        =>          'Cliente'     ,
+                    'cpfcnpj'     => $request['cpfcnpj'    ],
+                    'rgie'        => $request['rgie'       ],
                     'observacoes' => $request['observacoes'],
-                    'status'      => $request['status'],
-                    'empresa_id'  => $request['status'],
+                    'status'      => $request['status'     ],
                 ]
             )->id,
             'empresa_id' => $request['empresa_id'],
         ]);
 
-        $pessoa_endereco = PessoaEndereco::firstOrCreate([
+        $pessoa_endereco = PessoaEndereco::create([
             'pessoa_id'   => $cliente->pessoa_id,
-            'endereco_id' => Endereco::firstOrCreate(
+            'endereco_id' => Endereco::create(
                 [
-                    'cep'         => $request['endereco']['cep'],
-                    'cidade_id'   => Endereco::firstOrCreate(
+                    'cep'       => $request['endereco']['cep'],
+                    'cidade_id' => Endereco::first(
                         [
                             'nome' => $request['endereco']['cidade'],
-                            'uf'   => $request['endereco']['uf'],
+                            'uf'   => $request['endereco']['uf'    ],
                         ]
                     )->id,
-                    'rua'         => $request['endereco']['rua'],
-                    'bairro'      => $request['endereco']['bairro'],
-                    'numero'      => $request['endereco']['numero'],
+                    'rua'         => $request['endereco']['rua'        ],
+                    'bairro'      => $request['endereco']['bairro'     ],
+                    'numero'      => $request['endereco']['numero'     ],
                     'complemento' => $request['endereco']['complemento'],
-                    'tipo'        => $request['endereco']['tipo'],
+                    'tipo'        => $request['endereco']['tipo'       ],
                 ]
             )->id,
         ]);
@@ -107,19 +139,26 @@ class ClientesController extends Controller
             'cpfcnpj', $request['cpfcnpj'],
         );
         $useremail = User::firstWhere(
-            'email', $request['acesso']['email']
+            'email', $request['acesso']['email'],
         );
 
-        if ($usercpf || $useremail) {
-            
-        } else {
+        $user = new User;
+
+        if (($pessoa == null) || (($usercpf == null && $useremail == null) && $pessoa != null)) {
             $user = User::create([
-                'cpfcnpj' => $request['prestador']['dadosPf']['cpf']['numero'],
-                'email'   => $request['prestador']['contato']['email'],
-                'pessoa_id'  => $prestador->pessoa_id,
-                'password' => bcrypt($request['senha']),
+                'cpfcnpj'   => $request['cpfcnpj'],
+                'email'     => $request['acesso']['email'],
+                'pessoa_id' => $cliente->pessoa_id,
+                'password'  => bcrypt($request['acesso']['password']),
             ]);
         }
+
+        // foreach ($request['telefones'] as $key => $telefone) {
+        //     PessoaTelefone::create(
+        //         ['pessoa' => 'Flight 10'],
+        //         ['delayed' => 1]
+        //     );
+        // }
     }
    
     /**

@@ -25,10 +25,6 @@ class AddEmpresaIdToAllTable extends Migration
             $table->unsignedBigInteger('empresa_id')->after('id')->default(1);
             $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
         });
-        Schema::table('enderecos', function (Blueprint $table) {
-            $table->unsignedBigInteger('empresa_id')->after('id')->default(1);
-            $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
-        });
         Schema::table('telefones', function (Blueprint $table) {
             $table->unsignedBigInteger('empresa_id')->after('id')->default(1);
             $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
@@ -96,10 +92,6 @@ class AddEmpresaIdToAllTable extends Migration
         });
         Schema::table('acessos', function (Blueprint $table) {
             $table->dropForeign('acessos_empresa_id_foreign');
-            $table->dropColumn('empresa_id');
-        });
-        Schema::table('enderecos', function (Blueprint $table) {
-            $table->dropForeign('enderecos_empresa_id_foreign');
             $table->dropColumn('empresa_id');
         });
         Schema::table('telefones', function (Blueprint $table) {
