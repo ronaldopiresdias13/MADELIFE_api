@@ -3,20 +3,19 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Tipoproduto;
+use App\Ponto;
 use Illuminate\Http\Request;
 
-class TipoprodutosController extends Controller
+class PontosController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $itens = new Tipoproduto;
-        
+        $itens = new Ponto;
         if ($request->where) {
             foreach ($request->where as $key => $where) {
                 $itens->where(
@@ -57,56 +56,50 @@ class TipoprodutosController extends Controller
      */
     public function store(Request $request)
     {
-        // $tipoproduto = new Tipoproduto;
-        // $tipoproduto->descricao = $request->descricao;
-        // $tipoproduto->empresa_id = $request->empresa_id;
-        // $tipoproduto->status = $request->status; 
-        // $tipoproduto->save();
-        Tipoproduto::create($request->all());
+        $ponto = new Ponto;
+        $ponto->empresa_id = $request->empresa_id;
+        $ponto->escala_id = $request->escala_id;
+        $ponto->latitude = $request->latitude;
+        $ponto->longitude = $request->longitude;
+        $ponto->data = $request->data;
+        $ponto->hora = $request->hora;
+        $ponto->tipo = $request->tipo;
+        $ponto->observacao = $request->observacao;
+        $ponto->status = $request->status;
+        $ponto->save();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Tipoproduto  $tipoproduto
+     * @param  \App\Ponto  $ponto
      * @return \Illuminate\Http\Response
      */
-    public function show(Tipoproduto $tipoproduto)
+    public function show(Ponto $ponto)
     {
-        return $tipoproduto;
+        return $ponto;
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Tipoproduto  $tipoproduto
+     * @param  \App\Ponto  $ponto
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Tipoproduto $tipoproduto)
+    public function update(Request $request, Ponto $ponto)
     {
-        $tipoproduto->update($request->all());
+        $ponto->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Tipoproduto  $tipoproduto
+     * @param  \App\Ponto  $ponto
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Tipoproduto $tipoproduto)
+    public function destroy(Ponto $ponto)
     {
-        $tipoproduto->delete();
-    }
-    
-    public function migracao(Request $request)
-    {
-        // dd($request);
-        $tipo = new Tipoproduto;
-        $tipo->descricao = $request->descricao;
-        $tipo->status = true;
-        $tipo->empresa_id = 1;
-        $tipo->save();
-        // Tipoproduto::create($request->all());
+        $ponto->delete();
     }
 }
