@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Unidademedida;
 use Illuminate\Http\Request;
 
-class UnidadesmedidaController extends Controller
+class UnidademedidasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -58,6 +58,7 @@ class UnidadesmedidaController extends Controller
     public function store(Request $request)
     {
         $unidademedida = new Unidademedida;
+        $unidademedida->empresa_id = $request->empresa_id;
         $unidademedida->descricao = $request->descricao;
         $unidademedida->sigla = $request->sigla;
         $unidademedida->grupo = $request->grupo;
@@ -100,7 +101,7 @@ class UnidadesmedidaController extends Controller
     {
         $unidademedida->delete();
     }
-
+    
     public function migracao(Request $request)
     {
         // dd($request);

@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Cliente;
-use App\Pessoa;
-use App\PessoaEndereco;
-use App\PessoaTelefone;
-use App\Endereco;
 use App\User;
+use App\Email;
+use App\Cidade;
+use App\Pessoa;
+use App\Cliente;
+use App\Endereco;
+use App\Telefone;
+use App\PessoaEmail;
+use App\PessoaTelefone;
+use App\PessoaEndereco;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -62,20 +66,13 @@ class ClientesController extends Controller
      */
     public function store(Request $request)
     {
-        // $cliente = new Cliente;
-        // $cliente->pessoa = $request->pessoa;
-        // $cliente->save();
-
-        // $pessoa = Pessoa::firstWhere('cpfcnpj', '=', $request['cpfcnpj']);
-        // dd($pessoa);
-
         $pessoa = Pessoa::where(
             'cpfcnpj', $request['cpfcnpj']
         )->where(
             'empresa_id', $request['empresa_id']
         )->first();
 
-        $cliente = false;
+        $cliente = null;
 
         if ($pessoa) {
             $cliente = Cliente::firstWhere(
@@ -87,40 +84,35 @@ class ClientesController extends Controller
             return response()->json('Cliente já existe!', 400)->header('Content-Type', 'text/plain');
         }
 
-        // $usercpf = User::firstWhere(
-        //     'cpfcnpj', $request['cpfcnpj'],
-        // );
-        // $useremail = User::firstWhere(
-        //     'email', $request['acesso']['email'],
-        // );
-
-        // dd($useremail);
-        dd('Parou!!!');
-
-        $cliente = Cliente::Create([
+        $cliente = Cliente::create([
             'tipo'      => $request['tipo'],
-            'perfil'    => $request['perfil'],
-            'pessoa_id' => ($pessoa) ? $pessoa->id : Pessoa::Create(
+            'pessoa_id' => Pessoa::updateOrCreate(
+                [
+                    'cpfcnpj'     => $request['cpfcnpj'    ],
+                ],
                 [
                     'empresa_id'  => $request['empresa_id' ],
                     'nome'        => $request['nome'       ],
                     'nascimento'  => $request['nascimento' ],
                     'tipo'        =>          'Cliente'     ,
-                    'cpfcnpj'     => $request['cpfcnpj'    ],
                     'rgie'        => $request['rgie'       ],
                     'observacoes' => $request['observacoes'],
+                    'perfil'      => $request['perfil'     ],
                     'status'      => $request['status'     ],
                 ]
             )->id,
             'empresa_id' => $request['empresa_id'],
         ]);
 
-        $pessoa_endereco = PessoaEndereco::create([
+        $pessoa_endereco = PessoaEndereco::firstOrCreate([
             'pessoa_id'   => $cliente->pessoa_id,
-            'endereco_id' => Endereco::create(
+            'endereco_id' => Endereco::updateOrCreate(
+                [
+                    'id' => $request['endereco']['id'],
+                ],
                 [
                     'cep'       => $request['endereco']['cep'],
-                    'cidade_id' => Endereco::first(
+                    'cidade_id' => Cidade::firstOrCreate(
                         [
                             'nome' => $request['endereco']['cidade'],
                             'uf'   => $request['endereco']['uf'    ],
@@ -131,6 +123,7 @@ class ClientesController extends Controller
                     'numero'      => $request['endereco']['numero'     ],
                     'complemento' => $request['endereco']['complemento'],
                     'tipo'        => $request['endereco']['tipo'       ],
+                    'descricao'   => $request['endereco']['descricao'  ],
                 ]
             )->id,
         ]);
@@ -142,23 +135,55 @@ class ClientesController extends Controller
             'email', $request['acesso']['email'],
         );
 
-        $user = new User;
+        $user = null;
 
-        if (($pessoa == null) || (($usercpf == null && $useremail == null) && $pessoa != null)) {
+        if ($usercpf) {
+            $user = $usercpf;
+        } elseif ($useremail) {
+            $user = $useremail;
+        }
+
+        if (($pessoa == null) || ($pessoa != null && ($user == null))) {
             $user = User::create([
-                'cpfcnpj'   => $request['cpfcnpj'],
-                'email'     => $request['acesso']['email'],
-                'pessoa_id' => $cliente->pessoa_id,
-                'password'  => bcrypt($request['acesso']['password']),
+                'empresa_id' => $request['empresa_id'],
+                'cpfcnpj'    => $request['cpfcnpj'],
+                'email'      => $request['acesso']['email'],
+                'password'   => bcrypt($request['acesso']['password']),
+                'pessoa_id'  => $cliente->pessoa_id,
             ]);
         }
 
-        // foreach ($request['telefones'] as $key => $telefone) {
-        //     PessoaTelefone::create(
-        //         ['pessoa' => 'Flight 10'],
-        //         ['delayed' => 1]
-        //     );
-        // }
+        foreach ($request['telefones'] as $key => $telefone) {
+            $pessoatelefone = PessoaTelefone::firstOrCreate([
+                'pessoa_id'   => $cliente->pessoa_id,
+                'telefone_id' => Telefone::updateOrCreate(
+                    [
+                        'id'  => $telefone['id'],
+                    ],
+                    [
+                        'telefone'  => $telefone['telefone' ],
+                        'tipo'      => $telefone['tipo'     ],
+                        'descricao' => $telefone['descricao'],
+                    ]
+                )->id,
+            ]);
+        }
+
+        foreach ($request['contato'] as $key => $email) {
+            $pessoaemail = PessoaEmail::firstOrCreate([
+                'pessoa_id' => $cliente->pessoa_id,
+                'email_id'  => Email::updateOrCreate(
+                    [
+                        'id'  => $email['id'],
+                    ],
+                    [
+                        'email'     => $email['email' ],
+                        'tipo'      => $email['tipo'     ],
+                        'descricao' => $email['descricao'],
+                    ]
+                )->id,
+            ]);
+        }
     }
    
     /**
