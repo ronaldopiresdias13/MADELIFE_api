@@ -22,4 +22,9 @@ class Pessoa extends Model
     {
         return $this->hasOne('App\Prestador');
     }
+
+    public function fornecedor()
+    {
+        return $this->hasMany('App\Fornecedor');
+    }
 }
