@@ -21,6 +21,8 @@ class CreateEscalasTable extends Migration
             $table->foreign('ordemservico_id')->references('id')->on('ordemservicos')->onDelete('cascade');
             $table->unsignedBigInteger('prestador_id');
             $table->foreign('prestador_id')->references('id')->on('prestadores')->onDelete('cascade');
+            $table->unsignedBigInteger('servico_id');
+            $table->foreign('servico_id')->references('id')->on('servicos')->onDelete('cascade');
             $table->string('horaentrada');
             $table->string('horasaida');
             $table->string('dataentrada');

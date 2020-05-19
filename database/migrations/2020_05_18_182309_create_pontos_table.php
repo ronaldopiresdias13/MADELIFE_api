@@ -19,12 +19,12 @@ class CreatePontosTable extends Migration
             $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
             $table->unsignedBigInteger('escala_id');
             $table->foreign('escala_id')->references('id')->on('escalas')->onDelete('cascade');
-            $table->string('latitude');
-            $table->string('longitude');
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
             $table->string('data');
             $table->string('hora');
             $table->string('tipo');
-            $table->string('observacao');
+            $table->string('observacao')->nullable();
             $table->boolean('status');
 
             $table->timestamps();

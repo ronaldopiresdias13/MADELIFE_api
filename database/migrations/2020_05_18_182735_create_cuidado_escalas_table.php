@@ -19,7 +19,8 @@ class CreateCuidadoEscalasTable extends Migration
             $table->foreign('escala_id')->references('id')->on('escalas')->onDelete('cascade');
             $table->unsignedBigInteger('cuidado_id');
             $table->foreign('cuidado_id')->references('id')->on('cuidados')->onDelete('cascade');
-            $table->string('datahora');
+            $table->string('data')->nullable();
+            $table->string('hora')->nullable();
             $table->boolean('status');
             $table->timestamps();
         });

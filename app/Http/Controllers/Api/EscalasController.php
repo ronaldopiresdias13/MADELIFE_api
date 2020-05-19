@@ -107,4 +107,104 @@ class EscalasController extends Controller
     {
         $escala->delete();
     }
+    public function migracao(Request $request){
+        $escala = Escala::create([
+            'empresa_id' => $request['empresa_id'],
+            'ordemservico_id' => $request['ordemservico_id'],
+            'prestador_id' => $request['prestador_id'],
+            'servico_id' => $request['servico_id'],
+            'horaentrada' => $request['horaentrada'],
+            'horasaida' => $request['horasaida'],
+            'dataentrada' => $request['dataentrada'],
+            'datasaida' => $request['datasaida'],
+            'periodo' => $request['periodo'],
+            'assinaturaprestador' => $request['assinaturaprestador'],
+            'assinaturaresonsavel' => $request['assinaturaresonsavel'],
+            'observacao' => $request['observacao'],
+            'status' => $request['status'],
+            'folga' => $request['folga'],
+            'substituto' => $request['substituto'],
+        ])->id;
+        if($request['checkin']!= null){
+            $pontoentrada = Ponto::create([
+                'empresa_id' => $request['empresa_id'],
+                'escala_id' => $escala,
+                'latitude' =>   $request['checkin']['latitude'],
+                'longitude' =>  $request['checkin']['longitude'],
+                'data' =>       $request['checkin']['data'],
+                'hora' =>       $request['checkin']['hora'],
+                'tipo' => 'Checkin',
+                'observacao' => '',
+                'status' => $request['ckeckin']['status'],
+            ]);
+        }
+        if($request['checkout']!= null){
+            $pontosaida = Ponto::create([
+                'empresa_id' => $request['empresa_id'],
+                'escala_id' => $escala,
+                'latitude' =>   $request['Checkout']['latitude'],
+                'longitude' =>  $request['Checkout']['longitude'],
+                'data' =>       $request['Checkout']['data'],
+                'hora' =>       $request['Checkout']['hora'],
+                'tipo' => 'Checkout',
+                'observacao' => '',
+                'status' => $request['Checkout']['status'],
+            ]);
+        }
+        if($request['cuidados']){
+            foreach ($request['cuidado'] as $cuidado) {
+                $cuidados_escalas = CuidadoEscala::firstOrCreate([
+                    'cuidado_id' => Cuidado::firstOrCreate([
+                            'codigo' => $cuidado['codigo'],
+                        ],
+                        [
+                            'descricao' => $request['descricao'],
+                            'empresa_id' => 1,
+                            'status' => true,
+                        ])->id,
+                    'escala_id' => $escala,
+                    'data' => null,
+                    'hora' => $cuidado['horario'],
+                    'status' => $cuidado['status'],
+                    ]);
+            }
+            
+        }
+        if($request['itemEscalaMonitoramentos']){
+            foreach ($request['cuidado'] as $monitor){
+                $monitoramento = Monitoramentoescala::create([
+                    'escala_id' =>  $escala,
+                    'datahora'  =>  $monitor['datahora'],
+                    'pa'  =>  $monitor['pa'],
+                    'p'  =>  $monitor['p'],
+                    't'  =>  $monitor['t'],
+                    'fr'  =>  $monitor['fr'],
+                    'sat'  =>  $monitor['sat'],
+                    'criev'  =>  $monitor['criev'],
+                    'ev'  =>  $monitor['ev'],
+                    'dieta'  =>  $monitor['dieta'],
+                    'cridieta'  =>  $monitor['cridieta'],
+                    'criliquido'  =>  $monitor['criliquido'],
+                    'liquido'  =>  $monitor['liquido'],
+                    'cridiurese'  =>  $monitor['cridiurese'],
+                    'diurese'  =>  $monitor['diurese'],
+                    'evac'  =>  $monitor['evac'],
+                    'crievac'  =>  $monitor['crievac'],
+                    'crivomito'  =>  $monitor['crivomito'],
+                    'vomito'  =>  $monitor['vomito'],
+                    'asp'  =>  $monitor['asp'],
+                    'decub'  =>  $monitor['decub'],
+                    'curativo'  =>  $monitor['curativo'],
+                    'fraldas'  =>  $monitor['fraldas'],
+                    'sondas'    =>  $monitor['sondas'],
+                    'dextro'    =>  $monitor['dextro'],
+                    'o2'        =>  $monitor['o2'],
+                    'observacao'=>  $monitor['observacao'],
+                ]);
+            }
+        }
+        foreach ($variable as $key => $value) {
+            # code...
+        }
+    }
 }
