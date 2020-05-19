@@ -91,7 +91,7 @@ class OrcamentosController extends Controller
      */
     public function show(Orcamento $orcamento)
     {
-        //
+        return $orcamento;
     }
 
     /**

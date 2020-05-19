@@ -15,52 +15,52 @@ class CidadesController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = null;
+        // $itens = null;
 
-        if ($request->commands) {
-            $request = json_decode($request->commands, true);
-        }
+        // if ($request->commands) {
+        //     $request = json_decode($request->commands, true);
+        // }
         
-        if ($request['where']) {
-            foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Cidade::where(
-                        ($where['coluna'   ])? $where['coluna'   ] : 'id'  ,
-                        ($where['expressao'])? $where['expressao'] : 'like',
-                        ($where['valor'    ])? $where['valor'    ] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna'   ])? $where['coluna'   ] : 'id',
-                        ($where['expressao'])? $where['expressao'] : 'like',
-                        ($where['valor'    ])? $where['valor'    ] : '%'
-                    );
-                }
-            }
-        } else {
-            $itens = Cidade::all();
-        }
+        // if ($request['where']) {
+        //     foreach ($request['where'] as $key => $where) {
+        //         if ($key == 0) {
+        //             $itens = Cidade::where(
+        //                 ($where['coluna'   ])? $where['coluna'   ] : 'id'  ,
+        //                 ($where['expressao'])? $where['expressao'] : 'like',
+        //                 ($where['valor'    ])? $where['valor'    ] : '%'
+        //             );
+        //         } else {
+        //             $itens->where(
+        //                 ($where['coluna'   ])? $where['coluna'   ] : 'id',
+        //                 ($where['expressao'])? $where['expressao'] : 'like',
+        //                 ($where['valor'    ])? $where['valor'    ] : '%'
+        //             );
+        //         }
+        //     }
+        // } else {
+            return Cidade::all();
+        // }
 
-        if ($request['order']) {
-            foreach ($request['order'] as $key => $order) {
-                $itens->orderBy(
-                    ($order['coluna'])? $order['coluna'] : 'id',
-                    ($order['tipo'  ])? $order['tipo'  ] : 'asc'
-                );
-            }
-        }
+        // if ($request['order']) {
+        //     foreach ($request['order'] as $key => $order) {
+        //         $itens->orderBy(
+        //             ($order['coluna'])? $order['coluna'] : 'id',
+        //             ($order['tipo'  ])? $order['tipo'  ] : 'asc'
+        //         );
+        //     }
+        // }
         
-        $itens = $itens->get();
+        // $itens = $itens->get();
         
-        if ($request['adicionais']) {
-            foreach ($itens as $key => $iten) {
-                foreach ($request['adicionais'] as $key => $adic) {
-                    $iten[$adic];
-                }
-            }
-        }
+        // if ($request['adicionais']) {
+        //     foreach ($itens as $key => $iten) {
+        //         foreach ($request['adicionais'] as $key => $adic) {
+        //             $iten[$adic];
+        //         }
+        //     }
+        // }
 
-        return $itens;
+        // return $itens;
     }
 
     /**
