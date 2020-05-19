@@ -27,8 +27,8 @@ class AddColumnsToProdutosTable extends Migration
     public function down()
     {
         Schema::table('produtos', function (Blueprint $table) {
-            $table->dropColumn('desvalorizacao');
-            $table->dropColumn('valorfinal');
+            $table->dropColumn('desvalorizacao')->nullable();
+            $table->dropColumn('valorfinal')->nullable();
         });
     }
 }
