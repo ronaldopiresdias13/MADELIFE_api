@@ -20,4 +20,9 @@ class Cliente extends Model
     {
         return $this->belongsTo('App\Pessoa');
     }
+
+    public function empresa()
+    {
+        return $this->belongsTo('App\Empresa');
+    }
 }
