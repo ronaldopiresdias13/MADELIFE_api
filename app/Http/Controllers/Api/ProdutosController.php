@@ -59,17 +59,6 @@ class ProdutosController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Produto  $produto
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Produto $produto)
-    {
         $produto = new Produto;
         $produto->descricao = $request->descricao;
         $produto->empresa_id = 1;
@@ -92,6 +81,17 @@ class ProdutosController extends Controller
         $produto->datacompra = $request->datacompra;
         $produto->marca_id = $request->marca_id; 
         $produto->save();
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Produto  $produto
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Produto $produto)
+    {
+        
     }
 
     /**
