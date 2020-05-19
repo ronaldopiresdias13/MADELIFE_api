@@ -82,6 +82,7 @@ Route::group([
     Route::post('produtos/migracao'      , 'Api\ProdutosController@migracao'      );
     Route::post('ordemservicos/migracao' , 'Api\OrdemservicosController@migracao' );
     Route::post('profissionais/migracao' , 'Api\ProfissionaisController@migracao' );
+    Route::post('escalas/migracao' , 'Api\EscalasController@migracao' );
 
 
 
