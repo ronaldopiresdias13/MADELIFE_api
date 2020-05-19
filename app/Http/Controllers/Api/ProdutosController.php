@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Produto;
+use App\Pessoa;
 use App\Tipoproduto;
 use Illuminate\Http\Request;
 
@@ -69,7 +70,28 @@ class ProdutosController extends Controller
      */
     public function show(Produto $produto)
     {
-        //
+        $produto = new Produto;
+        $produto->descricao = $request->descricao;
+        $produto->empresa_id = 1;
+        $produto->tipoproduto_id = $request->tipoproduto_id;
+        $produto->codigo = $request->codigo;
+        $produto->unidademedida_id = $request->unidademedida_id;
+        $produto->codigobarra = $request->codigobarra;
+        $produto->validade = $request->validade;
+        $produto->grupo = $request->grupo;
+        $produto->observacoes = $request->observacoes;
+        $produto->valorcusto = $request->valorcusto;
+        $produto->valorvenda = $request->valorvenda;
+        $produto->ultimopreco = $request->ultimopreco;
+        $produto->estoqueminimo = $request->estoqueminimo;
+        $produto->estoquemaximo = $request->estoquemaximo;
+        $produto->quantidadeestoque = $request->quantidadeestoque;
+        $produto->armazem = $request->armazem;
+        $produto->localizacaofisica = $request->localizacaofisica;
+        $produto->fornecedor_id = Pessoa::find($request->fornecedor_id)->fornecedor->id;
+        $produto->datacompra = $request->datacompra;
+        $produto->marca_id = $request->marca_id; 
+        $produto->save();
     }
 
     /**
