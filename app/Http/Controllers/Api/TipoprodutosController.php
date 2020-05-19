@@ -57,11 +57,12 @@ class TipoprodutosController extends Controller
      */
     public function store(Request $request)
     {
-        $tipoproduto = new Tipoproduto;
-        $tipoproduto->descricao = $request->descricao;
-        $tipoproduto->empresa = $request->empresa;
-        $tipoproduto->status = $request->status; 
-        $tipoproduto->save(); 
+        // $tipoproduto = new Tipoproduto;
+        // $tipoproduto->descricao = $request->descricao;
+        // $tipoproduto->empresa_id = $request->empresa_id;
+        // $tipoproduto->status = $request->status; 
+        // $tipoproduto->save();
+        Tipoproduto::create($request->all());
     }
 
     /**

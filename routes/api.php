@@ -68,7 +68,6 @@ Route::group([
     Route::apiResource('telefones'              , 'Api\TelefonesController'              );
     Route::apiResource('tipoprodutos'           , 'Api\TipoprodutosController'           );
     Route::apiResource('transcricoes'           , 'Api\TranscricoesController'           );
-    Route::apiResource('unidadesmedida'         , 'Api\UnidadesmedidaController'         );
     Route::apiResource('unidademedidas'         , 'Api\UnidademedidasController'         );
     Route::apiResource('users'                  , 'Api\UsersController'                  );
 
