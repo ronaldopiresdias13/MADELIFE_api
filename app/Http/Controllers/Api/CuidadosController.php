@@ -38,7 +38,7 @@ class CuidadosController extends Controller
                 }
             }
         } else {
-            $itens = Cuidado::all();
+            $itens = Cuidado::where('id', 'like', '%');
         }
 
         if ($request['order']) {

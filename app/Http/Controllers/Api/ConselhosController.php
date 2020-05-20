@@ -38,7 +38,7 @@ class ConselhosController extends Controller
                 }
             }
         } else {
-            $itens = Conselho::all();
+            $itens = Conselho::where('id', 'like', '%');
         }
 
         if ($request['order']) {

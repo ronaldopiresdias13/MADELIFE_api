@@ -38,7 +38,7 @@ class AcessosController extends Controller
                 }
             }
         } else {
-            $itens = Acesso::all();
+            $itens = Acesso::where('id', 'like', '%');
         }
 
         if ($request['order']) {

@@ -38,7 +38,7 @@ class BeneficiosController extends Controller
                 }
             }
         } else {
-            $itens = Beneficio::all();
+            $itens = Beneficio::where('id', 'like', '%');
         }
 
         if ($request['order']) {

@@ -38,7 +38,7 @@ class CargosController extends Controller
                 }
             }
         } else {
-            $itens = Cargo::all();
+            $itens = Cargo::where('id', 'like', '%');
         }
 
         if ($request['order']) {

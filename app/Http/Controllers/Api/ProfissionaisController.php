@@ -57,7 +57,7 @@ class ProfissionaisController extends Controller
                 }
             }
         } else {
-            $itens = Profissional::all();
+            $itens = Profissional::where('id', 'like', '%');
         }
 
         if ($request['order']) {

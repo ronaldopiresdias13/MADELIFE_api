@@ -38,7 +38,7 @@ class PilsController extends Controller
                 }
             }
         } else {
-            $itens = Pil::all();
+            $itens = Pil::where('id', 'like', '%');
         }
 
         if ($request['order']) {

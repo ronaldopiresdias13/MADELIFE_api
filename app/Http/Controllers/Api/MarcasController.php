@@ -38,7 +38,7 @@ class MarcasController extends Controller
                 }
             }
         } else {
-            $itens = Marca::all();
+            $itens = Marca::where('id', 'like', '%');
         }
 
         if ($request['order']) {

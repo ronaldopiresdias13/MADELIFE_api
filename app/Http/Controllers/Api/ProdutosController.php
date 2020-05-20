@@ -40,7 +40,7 @@ class ProdutosController extends Controller
                 }
             }
         } else {
-            $itens = Produto::all();
+            $itens = Produto::where('id', 'like', '%');
         }
 
         if ($request['order']) {

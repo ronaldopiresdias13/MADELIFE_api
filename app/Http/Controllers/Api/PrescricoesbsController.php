@@ -38,7 +38,7 @@ class PrescricoesbsController extends Controller
                 }
             }
         } else {
-            $itens = Prescricaob::all();
+            $itens = Prescricaob::where('id', 'like', '%');
         }
 
         if ($request['order']) {

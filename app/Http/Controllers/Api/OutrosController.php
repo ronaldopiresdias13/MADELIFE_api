@@ -38,7 +38,7 @@ class OutrosController extends Controller
                 }
             }
         } else {
-            $itens = Outro::all();
+            $itens = Outro::where('id', 'like', '%');
         }
 
         if ($request['order']) {

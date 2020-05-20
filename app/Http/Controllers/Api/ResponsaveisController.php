@@ -38,7 +38,7 @@ class ResponsaveisController extends Controller
                 }
             }
         } else {
-            $itens = Responsavel::all();
+            $itens = Responsavel::where('id', 'like', '%');
         }
 
         if ($request['order']) {

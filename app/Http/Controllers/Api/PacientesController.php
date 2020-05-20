@@ -38,7 +38,7 @@ class PacientesController extends Controller
                 }
             }
         } else {
-            $itens = Paciente::all();
+            $itens = Paciente::where('id', 'like', '%');
         }
 
         if ($request['order']) {

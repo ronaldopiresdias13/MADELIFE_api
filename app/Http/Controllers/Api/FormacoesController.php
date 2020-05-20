@@ -38,7 +38,7 @@ class FormacoesController extends Controller
                 }
             }
         } else {
-            $itens = Formacao::all();
+            $itens = Formacao::where('id', 'like', '%');
         }
 
         if ($request['order']) {

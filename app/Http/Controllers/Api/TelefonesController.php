@@ -38,7 +38,7 @@ class TelefonesController extends Controller
                 }
             }
         } else {
-            $itens = Telefone::all();
+            $itens = Telefone::where('id', 'like', '%');
         }
 
         if ($request['order']) {

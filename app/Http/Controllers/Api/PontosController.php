@@ -38,7 +38,7 @@ class PontosController extends Controller
                 }
             }
         } else {
-            $itens = Ponto::all();
+            $itens = Ponto::where('id', 'like', '%');
         }
 
         if ($request['order']) {

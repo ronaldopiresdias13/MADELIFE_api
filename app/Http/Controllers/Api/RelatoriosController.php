@@ -38,7 +38,7 @@ class RelatoriosController extends Controller
                 }
             }
         } else {
-            $itens = Relatorio::all();
+            $itens = Relatorio::where('id', 'like', '%');
         }
 
         if ($request['order']) {

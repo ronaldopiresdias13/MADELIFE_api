@@ -38,7 +38,7 @@ class CidadesController extends Controller
                 }
             }
         } else {
-            $itens = Cidade::all();
+            $itens = Cidade::where('id', 'like', '%');
         }
 
         if ($request['order']) {

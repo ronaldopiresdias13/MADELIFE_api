@@ -38,7 +38,7 @@ class EmailsController extends Controller
                 }
             }
         } else {
-            $itens = Email::all();
+            $itens = Email::where('id', 'like', '%');
         }
 
         if ($request['order']) {

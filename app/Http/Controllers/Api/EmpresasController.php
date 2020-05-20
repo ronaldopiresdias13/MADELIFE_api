@@ -46,7 +46,7 @@ class EmpresasController extends Controller
                 }
             }
         } else {
-            $itens = Empresa::all();
+            $itens = Empresa::where('id', 'like', '%');
         }
 
         if ($request['order']) {

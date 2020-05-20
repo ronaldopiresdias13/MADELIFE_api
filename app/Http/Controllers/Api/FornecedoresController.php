@@ -39,7 +39,7 @@ class FornecedoresController extends Controller
                 }
             }
         } else {
-            $itens = Fornecedor::all();
+            $itens = Fornecedor::where('id', 'like', '%');
         }
 
         if ($request['order']) {

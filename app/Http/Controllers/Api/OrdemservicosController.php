@@ -38,7 +38,7 @@ class OrdemservicosController extends Controller
                 }
             }
         } else {
-            $itens = Ordemservico::all();
+            $itens = Ordemservico::where('id', 'like', '%');
         }
 
         if ($request['order']) {

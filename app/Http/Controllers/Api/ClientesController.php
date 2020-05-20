@@ -24,6 +24,8 @@ class ClientesController extends Controller
      */
     public function index(Request $request)
     {
+        // dd($request->query('commands'));
+        // dd(Cliente::where('id', 2)->orderBy('id')->get());
         $itens = null;
 
         if ($request->commands) {
@@ -47,7 +49,7 @@ class ClientesController extends Controller
                 }
             }
         } else {
-            $itens = Cliente::all();
+            $itens = Cliente::where('id', 'like', '%');
         }
 
         if ($request['order']) {
