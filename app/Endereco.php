@@ -9,6 +9,6 @@ class Endereco extends Model
     protected $guarded = [];
 
     public function cidade(){
-        return $this->belongsTo('App\Cidade', 'cidade_id');
+        return $this->belongsTo('App\Cidade');
     }
 }
