@@ -146,7 +146,7 @@ class EscalasController extends Controller
             'empresa_id' => $request['empresa_id'],
             'ordemservico_id' => $request['ordemservico_id'],
             'prestador_id' => $request['prestadorId']['id'],
-            'servico_id' => $request['servico_id'],
+            'servico_id' => $request['servico_id']['id'],
             'horaentrada' =>    $request['escala']['horaentrada'],
             'horasaida' =>      $request['escala']['horasaida'],
             'dataentrada' =>    $request['escala']['dataentrada'],
