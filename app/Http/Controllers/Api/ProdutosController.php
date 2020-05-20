@@ -17,20 +17,34 @@ class ProdutosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Produto;
+        $itens = null;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
         
-        if ($request->where) {
-            foreach ($request->where as $key => $where) {
-                $itens->where(
-                    ($where['coluna'   ])? $where['coluna'   ] : 'id',
-                    ($where['expressao'])? $where['expressao'] : 'like',
-                    ($where['valor'    ])? $where['valor'    ] : '%'
-                );
+        if ($request['where']) {
+            foreach ($request['where'] as $key => $where) {
+                if ($key == 0) {
+                    $itens = Produto::where(
+                        ($where['coluna'   ])? $where['coluna'   ] : 'id'  ,
+                        ($where['expressao'])? $where['expressao'] : 'like',
+                        ($where['valor'    ])? $where['valor'    ] : '%'
+                    );
+                } else {
+                    $itens->where(
+                        ($where['coluna'   ])? $where['coluna'   ] : 'id',
+                        ($where['expressao'])? $where['expressao'] : 'like',
+                        ($where['valor'    ])? $where['valor'    ] : '%'
+                    );
+                }
             }
+        } else {
+            $itens = Produto::where('id', 'like', '%');
         }
 
-        if ($request->order) {
-            foreach ($request->order as $key => $order) {
+        if ($request['order']) {
+            foreach ($request['order'] as $key => $order) {
                 $itens->orderBy(
                     ($order['coluna'])? $order['coluna'] : 'id',
                     ($order['tipo'  ])? $order['tipo'  ] : 'asc'
@@ -40,9 +54,9 @@ class ProdutosController extends Controller
         
         $itens = $itens->get();
         
-        if ($request->adicionais) {
+        if ($request['adicionais']) {
             foreach ($itens as $key => $iten) {
-                foreach ($request->adicionais as $key => $adic) {
+                foreach ($request['adicionais'] as $key => $adic) {
                     $iten[$adic];
                 }
             }
@@ -77,7 +91,7 @@ class ProdutosController extends Controller
         $produto->quantidadeestoque = $request->quantidadeestoque;
         $produto->armazem = $request->armazem;
         $produto->localizacaofisica = $request->localizacaofisica;
-        $produto->fornecedor_id = $request->fornecedor_id ? Pessoa::find($request->fornecedor_id)->fornecedor->id : null;
+        $produto->fornecedor_id = $request->fornecedor_id;
         $produto->datacompra = $request->datacompra;
         $produto->marca_id = $request->marca_id; 
         $produto->desvalorizacao = $request->desvalorizacao; 
@@ -91,9 +105,21 @@ class ProdutosController extends Controller
      * @param  \App\Produto  $produto
      * @return \Illuminate\Http\Response
      */
-    public function show(Produto $produto)
+    public function show(Request $request, Produto $produto)
     {
-        return $produto;
+        $iten = $produto;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

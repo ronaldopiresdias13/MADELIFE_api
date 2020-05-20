@@ -15,20 +15,34 @@ class ConveniosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Convenio;
+        $itens = null;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
         
-        if ($request->where) {
-            foreach ($request->where as $key => $where) {
-                $itens->where(
-                    ($where['coluna'   ])? $where['coluna'   ] : 'id',
-                    ($where['expressao'])? $where['expressao'] : 'like',
-                    ($where['valor'    ])? $where['valor'    ] : '%'
-                );
+        if ($request['where']) {
+            foreach ($request['where'] as $key => $where) {
+                if ($key == 0) {
+                    $itens = Convenio::where(
+                        ($where['coluna'   ])? $where['coluna'   ] : 'id'  ,
+                        ($where['expressao'])? $where['expressao'] : 'like',
+                        ($where['valor'    ])? $where['valor'    ] : '%'
+                    );
+                } else {
+                    $itens->where(
+                        ($where['coluna'   ])? $where['coluna'   ] : 'id',
+                        ($where['expressao'])? $where['expressao'] : 'like',
+                        ($where['valor'    ])? $where['valor'    ] : '%'
+                    );
+                }
             }
+        } else {
+            $itens = Convenio::where('id', 'like', '%');
         }
 
-        if ($request->order) {
-            foreach ($request->order as $key => $order) {
+        if ($request['order']) {
+            foreach ($request['order'] as $key => $order) {
                 $itens->orderBy(
                     ($order['coluna'])? $order['coluna'] : 'id',
                     ($order['tipo'  ])? $order['tipo'  ] : 'asc'
@@ -38,9 +52,9 @@ class ConveniosController extends Controller
         
         $itens = $itens->get();
         
-        if ($request->adicionais) {
+        if ($request['adicionais']) {
             foreach ($itens as $key => $iten) {
-                foreach ($request->adicionais as $key => $adic) {
+                foreach ($request['adicionais'] as $key => $adic) {
                     $iten[$adic];
                 }
             }
@@ -70,9 +84,21 @@ class ConveniosController extends Controller
      * @param  \App\Convenio  $convenio
      * @return \Illuminate\Http\Response
      */
-    public function show(Convenio $convenio)
+    public function show(Request $request, Convenio $convenio)
     {
-        return $convenio;
+        $iten = $convenio;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

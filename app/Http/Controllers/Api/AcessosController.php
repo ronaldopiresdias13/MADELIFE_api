@@ -15,20 +15,34 @@ class AcessosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Acesso;
+        $itens = null;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
         
-        if ($request->where) {
-            foreach ($request->where as $key => $where) {
-                $itens->where(
-                    ($where['coluna'   ])? $where['coluna'   ] : 'id',
-                    ($where['expressao'])? $where['expressao'] : 'like',
-                    ($where['valor'    ])? $where['valor'    ] : '%'
-                );
+        if ($request['where']) {
+            foreach ($request['where'] as $key => $where) {
+                if ($key == 0) {
+                    $itens = Acesso::where(
+                        ($where['coluna'   ])? $where['coluna'   ] : 'id'  ,
+                        ($where['expressao'])? $where['expressao'] : 'like',
+                        ($where['valor'    ])? $where['valor'    ] : '%'
+                    );
+                } else {
+                    $itens->where(
+                        ($where['coluna'   ])? $where['coluna'   ] : 'id',
+                        ($where['expressao'])? $where['expressao'] : 'like',
+                        ($where['valor'    ])? $where['valor'    ] : '%'
+                    );
+                }
             }
+        } else {
+            $itens = Acesso::where('id', 'like', '%');
         }
 
-        if ($request->order) {
-            foreach ($request->order as $key => $order) {
+        if ($request['order']) {
+            foreach ($request['order'] as $key => $order) {
                 $itens->orderBy(
                     ($order['coluna'])? $order['coluna'] : 'id',
                     ($order['tipo'  ])? $order['tipo'  ] : 'asc'
@@ -38,9 +52,9 @@ class AcessosController extends Controller
         
         $itens = $itens->get();
         
-        if ($request->adicionais) {
+        if ($request['adicionais']) {
             foreach ($itens as $key => $iten) {
-                foreach ($request->adicionais as $key => $adic) {
+                foreach ($request['adicionais'] as $key => $adic) {
                     $iten[$adic];
                 }
             }
@@ -72,9 +86,21 @@ class AcessosController extends Controller
      * @param  \App\acesso  $acesso
      * @return \Illuminate\Http\Response
      */
-    public function show(acesso $acesso)
+    public function show(Request $request, acesso $acesso)
     {
-        return $acesso;
+        $iten = $acesso;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**
