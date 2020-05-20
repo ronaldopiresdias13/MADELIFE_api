@@ -136,7 +136,7 @@ class OrcamentosController extends Controller
             'cidade_id' => $request['cidade'],
             'processo' => $request['numeroProcesso'],
             'situacao' => $request['situacao'],
-            'descricao' => "",
+            'descricao' => $request['descricao'],
             'observacao' => $request['observacao'],
         ]);
  
