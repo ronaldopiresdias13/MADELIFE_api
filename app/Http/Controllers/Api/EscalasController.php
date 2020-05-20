@@ -3,6 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Escala;
+use App\Cuidado;
+use App\CuidadoEscala;
+use App\Prestador;
+use App\Relatorio;
+use App\Ponto;
+use App\Monitoramentoescala;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -150,54 +157,54 @@ class EscalasController extends Controller
         $escala = Escala::create([
             'empresa_id' => $request['empresa_id'],
             'ordemservico_id' => $request['ordemservico_id'],
-            'prestador_id' => $request['prestador_id'],
+            'prestador_id' => $request['prestadorId']['id'],
             'servico_id' => $request['servico_id'],
-            'horaentrada' => $request['horaentrada'],
-            'horasaida' => $request['horasaida'],
-            'dataentrada' => $request['dataentrada'],
-            'datasaida' => $request['datasaida'],
-            'periodo' => $request['periodo'],
-            'assinaturaprestador' => $request['assinaturaprestador'],
-            'assinaturaresonsavel' => $request['assinaturaresonsavel'],
-            'observacao' => $request['observacao'],
-            'status' => $request['status'],
-            'folga' => $request['folga'],
-            'substituto' => $request['substituto'],
+            'horaentrada' =>    $request['escala']['horaentrada'],
+            'horasaida' =>      $request['escala']['horasaida'],
+            'dataentrada' =>    $request['escala']['dataentrada'],
+            'datasaida' =>      $request['escala']['datasaida'],
+            'periodo' =>        $request['escala']['periodo'],
+            'assinaturaprestador' => '',
+            'assinaturaresonsavel' => '',
+            'observacao' =>     $request['escala']['observacoes'],
+            'status' =>         $request['escala']['status'],
+            'folga' =>          $request['escala']['folga'],
+            'substituto' =>     $request['escala']['substituto'],
         ])->id;
-        if($request['checkin']!= null){
+        if($request['escala']['checkin']!= null){
             $pontoentrada = Ponto::create([
                 'empresa_id' => $request['empresa_id'],
                 'escala_id' => $escala,
-                'latitude' =>   $request['checkin']['latitude'],
-                'longitude' =>  $request['checkin']['longitude'],
-                'data' =>       $request['checkin']['data'],
-                'hora' =>       $request['checkin']['hora'],
+                'latitude' =>   $request['escala']['checkin']['latitude'],
+                'longitude' =>  $request['escala']['checkin']['longitude'],
+                'data' =>       $request['escala']['checkin']['data'],
+                'hora' =>       $request['escala']['checkin']['hora'],
                 'tipo' => 'Checkin',
                 'observacao' => '',
-                'status' => $request['ckeckin']['status'],
+                'status' => $request['escala']['checkin']['status'],
             ]);
-        }
-        if($request['checkout']!= null){
+        };
+        if($request['escala']['checkout']!= null){
             $pontosaida = Ponto::create([
                 'empresa_id' => $request['empresa_id'],
                 'escala_id' => $escala,
-                'latitude' =>   $request['Checkout']['latitude'],
-                'longitude' =>  $request['Checkout']['longitude'],
-                'data' =>       $request['Checkout']['data'],
-                'hora' =>       $request['Checkout']['hora'],
+                'latitude' =>   $request['escala']['checkout']['latitude'],
+                'longitude' =>  $request['escala']['checkout']['longitude'],
+                'data' =>       $request['escala']['checkout']['data'],
+                'hora' =>       $request['escala']['checkout']['hora'],
                 'tipo' => 'Checkout',
                 'observacao' => '',
-                'status' => $request['Checkout']['status'],
+                'status' => $request['escala']['checkout']['status'],
             ]);
-        }
-        if($request['cuidados']){
-            foreach ($request['cuidado'] as $cuidado) {
-                $cuidados_escalas = CuidadoEscala::firstOrCreate([
+        };
+        if($request['escala']['cuidados']){
+            foreach ($request['escala']['cuidados'] as $cuidado) {
+                $cuidados_escalas = CuidadoEscala::create([
                     'cuidado_id' => Cuidado::firstOrCreate([
-                            'codigo' => $cuidado['codigo'],
+                            'codigo' => $cuidado['cuidado']['codigo'],
                         ],
                         [
-                            'descricao' => $request['descricao'],
+                            'descricao' => $request['cuidado']['descricao'],
                             'empresa_id' => 1,
                             'status' => true,
                         ])->id,
@@ -208,28 +215,28 @@ class EscalasController extends Controller
                     ]);
             }
             
-        }
-        if($request['itemEscalaMonitoramentos']){
-            foreach ($request['cuidado'] as $monitor){
+        };
+        if($request['escala']['itemEscalaMonitoramentos']){
+            foreach ($request['escala']['itemEscalaMonitoramentos'] as $monitor){
                 $monitoramento = Monitoramentoescala::create([
                     'escala_id' =>  $escala,
-                    'datahora'  =>  $monitor['datahora'],
+                    'datahora'  =>  $monitor['horario'],
                     'pa'  =>  $monitor['pa'],
                     'p'  =>  $monitor['p'],
                     't'  =>  $monitor['t'],
                     'fr'  =>  $monitor['fr'],
                     'sat'  =>  $monitor['sat'],
-                    'criev'  =>  $monitor['criev'],
+                    'criev'  =>  $monitor['criEv'],
                     'ev'  =>  $monitor['ev'],
                     'dieta'  =>  $monitor['dieta'],
-                    'cridieta'  =>  $monitor['cridieta'],
-                    'criliquido'  =>  $monitor['criliquido'],
-                    'liquido'  =>  $monitor['liquido'],
-                    'cridiurese'  =>  $monitor['cridiurese'],
+                    'cridieta'  =>  $monitor['criDieta'],
+                    'criliquido'  =>  $monitor['criLiq'],
+                    'liquido'  =>  $monitor['liq'],
+                    'cridiurese'  =>  $monitor['criDiurese'],
                     'diurese'  =>  $monitor['diurese'],
                     'evac'  =>  $monitor['evac'],
-                    'crievac'  =>  $monitor['crievac'],
-                    'crivomito'  =>  $monitor['crivomito'],
+                    'crievac'  =>  $monitor['criEvac'],
+                    'crivomito'  =>  $monitor['criVomito'],
                     'vomito'  =>  $monitor['vomito'],
                     'asp'  =>  $monitor['asp'],
                     'decub'  =>  $monitor['decub'],
@@ -238,12 +245,19 @@ class EscalasController extends Controller
                     'sondas'    =>  $monitor['sondas'],
                     'dextro'    =>  $monitor['dextro'],
                     'o2'        =>  $monitor['o2'],
-                    'observacao'=>  $monitor['observacao'],
+                    'observacao'=>  $monitor['observacoes'],
                 ]);
             }
         }
-        foreach ($variable as $key => $value) {
-            # code...
+        foreach ($request['relatorio'] as $relatorio) {
+            $relatorio_escala = Relatorio::create([
+                'escala_id' => $escala,
+                'hora' => $relatorio['hora'],
+                'data' => $relatorio['data'],
+                'quadro' => $relatorio['quadro'],
+                'tipo' => $relatorio['tipo'],
+                'texto' => $relatorio['texto']
+            ]);
         }
     }
 }
