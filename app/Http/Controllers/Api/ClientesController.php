@@ -24,8 +24,6 @@ class ClientesController extends Controller
      */
     public function index(Request $request)
     {
-        // dd($request->query('commands'));
-        // dd(Cliente::where('id', 2)->orderBy('id')->get());
         $itens = null;
 
         if ($request->commands) {
@@ -82,8 +80,6 @@ class ClientesController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request;
-
         $pessoa = Pessoa::where(
             'cpfcnpj', $request['cpfcnpj']
         )->where(
@@ -210,9 +206,33 @@ class ClientesController extends Controller
      * @param  \App\Cliente  $cliente
      * @return \Illuminate\Http\Response
      */
-    public function show(Cliente $cliente)
+    public function show(Request $request, Cliente $cliente)
     {
-        return $cliente;
+        $iten = $cliente;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                if (is_string($adic)) {
+                    $iten[$adic];
+                } else {
+                    switch (count($adic)) {
+                        case 1:
+                            $iten[$adic[0]];
+                            break;
+                        
+                        case 2:
+                            $iten[$adic[0]][$adic[1]];
+                            break;
+                    }
+                }
+            }
+        }
+        
+        return $iten;
     }
 
     /**
@@ -224,7 +244,6 @@ class ClientesController extends Controller
      */
     public function update(Request $request, Cliente $cliente)
     {
-        dd($request);
         $cliente->update($request->all());
     }
 

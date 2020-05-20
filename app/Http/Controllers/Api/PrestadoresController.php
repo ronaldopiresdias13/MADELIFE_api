@@ -105,9 +105,33 @@ class PrestadoresController extends Controller
      * @param  \App\Prestador  $prestador
      * @return \Illuminate\Http\Response
      */
-    public function show(Prestador $prestador)
+    public function show(Request $request, Prestador $prestador)
     {
-        return $prestador;
+        $iten = $prestador;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                if (is_string($adic)) {
+                    $iten[$adic];
+                } else {
+                    switch (count($adic)) {
+                        case 1:
+                            $iten[$adic[0]];
+                            break;
+                        
+                        case 2:
+                            $iten[$adic[0]][$adic[1]];
+                            break;
+                    }
+                }
+            }
+        }
+        
+        return $iten;
     }
 
     /**

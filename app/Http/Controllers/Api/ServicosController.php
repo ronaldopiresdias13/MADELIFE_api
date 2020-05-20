@@ -85,9 +85,33 @@ class ServicosController extends Controller
      * @param  \App\Servico  $servico
      * @return \Illuminate\Http\Response
      */
-    public function show(Servico $servico)
+    public function show(Request $request, Servico $servico)
     {
-        return $servico;
+        $iten = $servico;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                if (is_string($adic)) {
+                    $iten[$adic];
+                } else {
+                    switch (count($adic)) {
+                        case 1:
+                            $iten[$adic[0]];
+                            break;
+                        
+                        case 2:
+                            $iten[$adic[0]][$adic[1]];
+                            break;
+                    }
+                }
+            }
+        }
+        
+        return $iten;
     }
 
     /**

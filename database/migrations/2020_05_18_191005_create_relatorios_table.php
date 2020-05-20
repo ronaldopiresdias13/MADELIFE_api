@@ -17,10 +17,11 @@ class CreateRelatoriosTable extends Migration
             $table->id();
             $table->unsignedBigInteger('escala_id');
             $table->foreign('escala_id')->references('id')->on('escalas')->onDelete('cascade');
-            $table->string('datahora');
+            $table->string('data')->nullable();
+            $table->string('hora')->nullable();
             $table->string('quadro')->nullable();
             $table->string('tipo');
-            $table->string('texto', 1000);
+            $table->string('texto', 1000)->nullable();
             $table->timestamps();
         });
     }
