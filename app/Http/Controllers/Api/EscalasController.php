@@ -211,20 +211,23 @@ class EscalasController extends Controller
         };
         if($request['escala']['cuidados']){
             foreach ($request['escala']['cuidados'] as $cuidado) {
-                $cuidados_escalas = CuidadoEscala::create([
-                    'cuidado_id' => Cuidado::firstOrCreate([
-                            'codigo' => $cuidado['cuidado']['codigo'],
-                        ],
-                        [
-                            'descricao' => $request['cuidado']['descricao'],
-                            'empresa_id' => 1,
-                            'status' => true,
-                        ])->id,
-                    'escala_id' => $escala,
-                    'data' => null,
-                    'hora' => $cuidado['horario'],
-                    'status' => $cuidado['status'],
-                    ]);
+                if($request['cuidado']!= null){
+                    $cuidados_escalas = CuidadoEscala::create([
+                        'cuidado_id' => Cuidado::firstOrCreate([
+                                'codigo' => $cuidado['cuidado']['codigo'],
+                            ],
+                            [
+                                'descricao' => $request['cuidado']['descricao'],
+                                'empresa_id' => 1,
+                                'status' => true,
+                            ])->id,
+                        'escala_id' => $escala,
+                        'data' => null,
+                        'hora' => $cuidado['horario'],
+                        'status' => $cuidado['status'],
+                        ]);
+                }
+                
             }
             
         };
