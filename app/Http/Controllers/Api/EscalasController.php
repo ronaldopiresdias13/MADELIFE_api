@@ -170,7 +170,7 @@ class EscalasController extends Controller
             'empresa_id' => $request['empresa_id'],
             'ordemservico_id' => $request['ordemservico_id'],
             'prestador_id' => $request['prestadorId']['id'],
-            'servico_id' => $request['servico_id'],
+            'servico_id' => ($request['servico_id']) ? $request['servico_id']['id'] : null,
             'horaentrada' =>    $request['escala']['horaentrada'],
             'horasaida' =>      $request['escala']['horasaida'],
             'dataentrada' =>    $request['escala']['dataentrada'],
@@ -211,20 +211,21 @@ class EscalasController extends Controller
         };
         if($request['escala']['cuidados']){
             foreach ($request['escala']['cuidados'] as $cuidado) {
-                $cuidados_escalas = CuidadoEscala::create([
-                    'cuidado_id' => Cuidado::firstOrCreate([
-                            'codigo' => $cuidado['cuidado']['codigo'],
-                        ],
-                        [
-                            'descricao' => $request['cuidado']['descricao'],
-                            'empresa_id' => 1,
-                            'status' => true,
-                        ])->id,
-                    'escala_id' => $escala,
-                    'data' => null,
-                    'hora' => $cuidado['horario'],
-                    'status' => $cuidado['status'],
-                    ]);
+                    $cuidados_escalas = CuidadoEscala::create([
+                        'cuidado_id' => Cuidado::firstOrCreate([
+                                'codigo' => $cuidado['cuidado']['codigo'],
+                            ],
+                            [
+                                'descricao' => $cuidado['cuidado']['descricao'],
+                                'empresa_id' => 1,
+                                'status' => true,
+                            ])->id,
+                        'escala_id' => $escala,
+                        'data' => null,
+                        'hora' => $cuidado['horario'],
+                        'status' => $cuidado['status'],
+                        ]);
+                
             }
             
         };
