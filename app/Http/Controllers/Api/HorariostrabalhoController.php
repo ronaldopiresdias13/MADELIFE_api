@@ -38,7 +38,7 @@ class HorariostrabalhoController extends Controller
                 }
             }
         } else {
-            $itens = Horariotrabalho::all();
+            $itens = Horariotrabalho::where('id', 'like', '%');
         }
 
         if ($request['order']) {

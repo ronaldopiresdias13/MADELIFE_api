@@ -38,7 +38,7 @@ class ServicosController extends Controller
                 }
             }
         } else {
-            $itens = ClieServiconte::all();
+            $itens = ClieServiconte::where('id', 'like', '%');
         }
 
         if ($request['order']) {

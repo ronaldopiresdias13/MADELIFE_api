@@ -40,7 +40,7 @@ class DadosbancariosController extends Controller
                 }
             }
         } else {
-            $itens = Dadosbancario::all();
+            $itens = Dadosbancario::where('id', 'like', '%');
         }
 
         if ($request['order']) {

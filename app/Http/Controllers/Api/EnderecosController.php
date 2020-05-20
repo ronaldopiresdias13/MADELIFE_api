@@ -38,7 +38,7 @@ class EnderecosController extends Controller
                 }
             }
         } else {
-            $itens = Endereco::all();
+            $itens = Endereco::where('id', 'like', '%');
         }
 
         if ($request['order']) {

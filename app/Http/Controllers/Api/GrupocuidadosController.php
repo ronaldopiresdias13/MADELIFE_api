@@ -41,7 +41,7 @@ class GrupocuidadosController extends Controller
                 }
             }
         } else {
-            $itens = Grupocuidado::all();
+            $itens = Grupocuidado::where('id', 'like', '%');
         }
 
         if ($request['order']) {

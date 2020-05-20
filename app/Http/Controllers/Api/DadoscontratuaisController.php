@@ -38,7 +38,7 @@ class DadoscontratuaisController extends Controller
                 }
             }
         } else {
-            $itens = Dadoscontratuais::all();
+            $itens = Dadoscontratuais::where('id', 'like', '%');
         }
 
         if ($request['order']) {

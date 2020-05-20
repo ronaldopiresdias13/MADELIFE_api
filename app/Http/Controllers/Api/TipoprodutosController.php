@@ -38,7 +38,7 @@ class TipoprodutosController extends Controller
                 }
             }
         } else {
-            $itens = Tipoproduto::all();
+            $itens = Tipoproduto::where('id', 'like', '%');
         }
 
         if ($request['order']) {

@@ -44,7 +44,7 @@ class PessoasController extends Controller
                 }
             }
         } else {
-            $itens = Pessoa::all();
+            $itens = Pessoa::where('id', 'like', '%');
         }
 
         if ($request['order']) {

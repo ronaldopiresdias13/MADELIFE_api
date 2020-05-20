@@ -38,7 +38,7 @@ class ConveniosController extends Controller
                 }
             }
         } else {
-            $itens = Convenio::all();
+            $itens = Convenio::where('id', 'like', '%');
         }
 
         if ($request['order']) {

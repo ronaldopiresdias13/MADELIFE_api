@@ -38,7 +38,7 @@ class EscalasController extends Controller
                 }
             }
         } else {
-            $itens = Escala::all();
+            $itens = Escala::where('id', 'like', '%');
         }
 
         if ($request['order']) {

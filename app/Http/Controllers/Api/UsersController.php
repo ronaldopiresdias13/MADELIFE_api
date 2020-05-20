@@ -40,7 +40,7 @@ class UsersController extends Controller
                 }
             }
         } else {
-            $itens = User::all();
+            $itens = User::where('id', 'like', '%');
         }
 
         if ($request['order']) {

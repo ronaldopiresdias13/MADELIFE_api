@@ -38,7 +38,7 @@ class UnidademedidasController extends Controller
                 }
             }
         } else {
-            $itens = Unidademedida::all();
+            $itens = Unidademedida::where('id', 'like', '%');
         }
 
         if ($request['order']) {

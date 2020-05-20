@@ -38,7 +38,7 @@ class SetoresController extends Controller
                 }
             }
         } else {
-            $itens = Setor::all();
+            $itens = Setor::where('id', 'like', '%');
         }
 
         if ($request['order']) {

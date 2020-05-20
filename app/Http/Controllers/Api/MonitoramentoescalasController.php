@@ -38,7 +38,7 @@ class MonitoramentoescalasController extends Controller
                 }
             }
         } else {
-            $itens = Monitoramentoescala::all();
+            $itens = Monitoramentoescala::where('id', 'like', '%');
         }
 
         if ($request['order']) {

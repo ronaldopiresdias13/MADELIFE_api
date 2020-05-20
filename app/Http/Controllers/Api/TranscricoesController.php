@@ -38,7 +38,7 @@ class TranscricoesController extends Controller
                 }
             }
         } else {
-            $itens = Transcricao::all();
+            $itens = Transcricao::where('id', 'like', '%');
         }
 
         if ($request['order']) {

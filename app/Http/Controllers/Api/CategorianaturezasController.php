@@ -38,7 +38,7 @@ class CategorianaturezasController extends Controller
                 }
             }
         } else {
-            $itens = Categorianatureza::all();
+            $itens = Categorianatureza::where('id', 'like', '%');
         }
 
         if ($request['order']) {

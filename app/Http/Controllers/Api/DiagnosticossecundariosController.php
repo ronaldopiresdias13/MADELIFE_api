@@ -38,7 +38,7 @@ class DiagnosticossecundariosController extends Controller
                 }
             }
         } else {
-            $itens = Diagnosticosecundario::all();
+            $itens = Diagnosticosecundario::where('id', 'like', '%');
         }
 
         if ($request['order']) {

@@ -38,7 +38,7 @@ class BancosController extends Controller
                 }
             }
         } else {
-            $itens = Banco::all();
+            $itens = Banco::where('id', 'like', '%');
         }
 
         if ($request['order']) {

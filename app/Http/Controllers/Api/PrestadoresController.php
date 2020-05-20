@@ -54,7 +54,7 @@ class PrestadoresController extends Controller
                 }
             }
         } else {
-            $itens = Prestador::all();
+            $itens = Prestador::where('id', 'like', '%');
         }
 
         if ($request['order']) {

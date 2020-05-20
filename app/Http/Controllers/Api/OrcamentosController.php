@@ -47,7 +47,7 @@ class OrcamentosController extends Controller
                 }
             }
         } else {
-            $itens = Orcamento::all();
+            $itens = Orcamento::where('id', 'like', '%');
         }
 
         if ($request['order']) {
