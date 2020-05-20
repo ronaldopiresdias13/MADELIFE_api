@@ -83,9 +83,21 @@ class FormacoesController extends Controller
      * @param  \App\Formacao  $formacao
      * @return \Illuminate\Http\Response
      */
-    public function show(Formacao $formacao)
+    public function show(Request $request, Formacao $formacao)
     {
-        return $formacao;
+        $iten = $formacao;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

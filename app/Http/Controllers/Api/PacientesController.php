@@ -83,9 +83,21 @@ class PacientesController extends Controller
      * @param  \App\Paciente  $paciente
      * @return \Illuminate\Http\Response
      */
-    public function show(Paciente $paciente)
+    public function show(Request $request, Paciente $paciente)
     {
-        return $paciente;
+        $iten = $paciente;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

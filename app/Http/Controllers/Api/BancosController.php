@@ -83,9 +83,21 @@ class BancosController extends Controller
      * @param  \App\Banco  $banco
      * @return \Illuminate\Http\Response
      */
-    public function show(Banco $banco)
+    public function show(Request $request, Banco $banco)
     {
-        return $banco;
+        $iten = $banco;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

@@ -80,9 +80,21 @@ class OutrosController extends Controller
      * @param  \App\Outro  $outro
      * @return \Illuminate\Http\Response
      */
-    public function show(Outro $outro)
+    public function show(Request $request, Outro $outro)
     {
-        //
+        $iten = $outro;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

@@ -87,9 +87,21 @@ class GrupocuidadosController extends Controller
      * @param  \App\Grupocuidado  $grupocuidado
      * @return \Illuminate\Http\Response
      */
-    public function show(Grupocuidado $grupocuidado)
+    public function show(Request $request, Grupocuidado $grupocuidado)
     {
-        return $grupocuidado;
+        $iten = $grupocuidado;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

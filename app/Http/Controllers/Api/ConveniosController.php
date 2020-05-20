@@ -84,9 +84,21 @@ class ConveniosController extends Controller
      * @param  \App\Convenio  $convenio
      * @return \Illuminate\Http\Response
      */
-    public function show(Convenio $convenio)
+    public function show(Request $request, Convenio $convenio)
     {
-        return $convenio;
+        $iten = $convenio;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

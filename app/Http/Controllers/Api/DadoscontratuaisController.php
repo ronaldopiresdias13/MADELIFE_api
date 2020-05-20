@@ -88,9 +88,21 @@ class DadoscontratuaisController extends Controller
      * @param  \App\Dadoscontratuais  $dadoscontratuais
      * @return \Illuminate\Http\Response
      */
-    public function show(Dadoscontratuais $dadoscontratuais)
+    public function show(Request $request, Dadoscontratuais $dadoscontratuais)
     {
-        return $dadoscontratuais;
+        $iten = $dadoscontratuais;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

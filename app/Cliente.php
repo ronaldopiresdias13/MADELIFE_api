@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Pessoa;
 
 class Cliente extends Model
 {
@@ -25,4 +26,9 @@ class Cliente extends Model
     {
         return $this->belongsTo('App\Empresa');
     }
+
+    // public function enderecos()
+    // {
+    //     return $this->morphToMany('App\Endereco', 'pessoas');
+    // }
 }

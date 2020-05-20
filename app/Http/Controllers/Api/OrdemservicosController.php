@@ -103,9 +103,21 @@ class OrdemservicosController extends Controller
      * @param  \App\Ordemservico  $ordemservico
      * @return \Illuminate\Http\Response
      */
-    public function show(Ordemservico $ordemservico)
+    public function show(Request $request, Ordemservico $ordemservico)
     {
-        return $ordemservico;
+        $iten = $ordemservico;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

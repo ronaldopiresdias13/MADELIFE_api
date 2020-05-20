@@ -83,9 +83,21 @@ class CidadesController extends Controller
      * @param  \App\Cidade  $cidade
      * @return \Illuminate\Http\Response
      */
-    public function show(Cidade $cidade)
+    public function show(Request $request, Cidade $cidade)
     {
-        return $cidade;
+        $iten = $cidade;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

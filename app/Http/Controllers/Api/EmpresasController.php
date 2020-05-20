@@ -103,9 +103,21 @@ class EmpresasController extends Controller
      * @param  \App\empresa  $empresa
      * @return \Illuminate\Http\Response
      */
-    public function show(empresa $empresa)
+    public function show(Request $request, empresa $empresa)
     {
-        return $empresa;
+        $iten = $empresa;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

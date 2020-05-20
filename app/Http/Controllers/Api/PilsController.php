@@ -89,9 +89,21 @@ class PilsController extends Controller
      * @param  \App\Pil  $pil
      * @return \Illuminate\Http\Response
      */
-    public function show(Pil $pil)
+    public function show(Request $request, Pil $pil)
     {
-        return $pil;
+        $iten = $pil;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

@@ -81,9 +81,21 @@ class FornecedoresController extends Controller
      * @param  \App\Fornecedor  $fornecedor
      * @return \Illuminate\Http\Response
      */
-    public function show(Fornecedor $fornecedor)
+    public function show(Request $request, Fornecedor $fornecedor)
     {
-        //
+        $iten = $fornecedor;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

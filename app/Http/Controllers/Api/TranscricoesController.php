@@ -86,9 +86,21 @@ class TranscricoesController extends Controller
      * @param  \App\Transcricao  $transcricao
      * @return \Illuminate\Http\Response
      */
-    public function show(Transcricao $transcricao)
+    public function show(Request $request, Transcricao $transcricao)
     {
-        return $transcricao;
+        $iten = $transcricao;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

@@ -83,9 +83,21 @@ class CategorianaturezasController extends Controller
      * @param  \App\Categorianatureza  $categorianatureza
      * @return \Illuminate\Http\Response
      */
-    public function show(Categorianatureza $categorianatureza)
+    public function show(Request $request, Categorianatureza $categorianatureza)
     {
-        return $categorianatureza;
+        $iten = $categorianatureza;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

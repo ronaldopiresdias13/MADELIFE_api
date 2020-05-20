@@ -88,9 +88,21 @@ class UnidademedidasController extends Controller
      * @param  \App\Unidademedida  $unidademedida
      * @return \Illuminate\Http\Response
      */
-    public function show(Unidademedida $unidademedida)
+    public function show(Request $request, Unidademedida $unidademedida)
     {
-        return $unidademedida;
+        $iten = $unidademedida;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

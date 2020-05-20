@@ -85,9 +85,21 @@ class CuidadosController extends Controller
      * @param  \App\Cuidado  $cuidado
      * @return \Illuminate\Http\Response
      */
-    public function show(Cuidado $cuidado)
+    public function show(Request $request, Cuidado $cuidado)
     {
-        return $cuidado;
+        $iten = $cuidado;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

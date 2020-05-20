@@ -85,9 +85,21 @@ class HorariostrabalhoController extends Controller
      * @param  \App\Horariotrabalho  $horariotrabalho
      * @return \Illuminate\Http\Response
      */
-    public function show(Horariotrabalho $horariotrabalho)
+    public function show(Request $request, Horariotrabalho $horariotrabalho)
     {
-        return $horariotrabalho;
+        $iten = $horariotrabalho;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

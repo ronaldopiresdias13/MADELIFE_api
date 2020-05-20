@@ -83,9 +83,21 @@ class EmailsController extends Controller
      * @param  \App\email  $email
      * @return \Illuminate\Http\Response
      */
-    public function show(email $email)
+    public function show(Request $request, email $email)
     {
-        return $email;
+        $iten = $email;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

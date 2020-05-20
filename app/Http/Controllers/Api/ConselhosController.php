@@ -85,9 +85,21 @@ class ConselhosController extends Controller
      * @param  \App\Conselho  $conselho
      * @return \Illuminate\Http\Response
      */
-    public function show(Conselho $conselho)
+    public function show(Request $request, Conselho $conselho)
     {
-        return $conselho;
+        $iten = $conselho;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

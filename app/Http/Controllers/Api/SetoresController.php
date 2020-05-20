@@ -82,9 +82,21 @@ class SetoresController extends Controller
      * @param  \App\Setor  $setor
      * @return \Illuminate\Http\Response
      */
-    public function show(Setor $setor)
+    public function show(Request $request, Setor $setor)
     {
-        return $setor;
+        $iten = $setor;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

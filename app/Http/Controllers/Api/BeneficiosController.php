@@ -84,9 +84,21 @@ class BeneficiosController extends Controller
      * @param  \App\Beneficio  $beneficio
      * @return \Illuminate\Http\Response
      */
-    public function show(Beneficio $beneficio)
+    public function show(Request $request, Beneficio $beneficio)
     {
-        return $beneficio;
+        $iten = $beneficio;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

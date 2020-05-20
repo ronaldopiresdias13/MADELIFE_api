@@ -85,9 +85,21 @@ class PrescricoesbsController extends Controller
      * @param  \App\Prescricaob  $prescricaob
      * @return \Illuminate\Http\Response
      */
-    public function show(Prescricaob $prescricaob)
+    public function show(Request $request, Prescricaob $prescricaob)
     {
-        return $prescricaob;
+        $iten = $prescricaob;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

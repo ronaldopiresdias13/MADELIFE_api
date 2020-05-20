@@ -85,9 +85,21 @@ class TipoprodutosController extends Controller
      * @param  \App\Tipoproduto  $tipoproduto
      * @return \Illuminate\Http\Response
      */
-    public function show(Tipoproduto $tipoproduto)
+    public function show(Request $request, Tipoproduto $tipoproduto)
     {
-        return $tipoproduto;
+        $iten = $tipoproduto;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

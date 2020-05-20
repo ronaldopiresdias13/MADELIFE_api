@@ -89,9 +89,21 @@ class OrcamentosController extends Controller
      * @param  \App\Orcamento  $orcamento
      * @return \Illuminate\Http\Response
      */
-    public function show(Orcamento $orcamento)
+    public function show(Request $request, Orcamento $orcamento)
     {
-        return $orcamento;
+        $iten = $orcamento;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

@@ -88,9 +88,21 @@ class RelatoriosController extends Controller
      * @param  \App\Relatorio  $relatorio
      * @return \Illuminate\Http\Response
      */
-    public function show(Relatorio $relatorio)
+    public function show(Request $request, Relatorio $relatorio)
     {
-        return $relatorio;
+        $iten = $relatorio;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

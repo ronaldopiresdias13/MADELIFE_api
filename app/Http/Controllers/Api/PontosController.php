@@ -90,9 +90,21 @@ class PontosController extends Controller
      * @param  \App\Ponto  $ponto
      * @return \Illuminate\Http\Response
      */
-    public function show(Ponto $ponto)
+    public function show(Request $request, Ponto $ponto)
     {
-        return $ponto;
+        $iten = $ponto;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

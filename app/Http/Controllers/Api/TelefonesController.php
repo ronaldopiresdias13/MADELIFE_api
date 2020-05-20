@@ -84,9 +84,21 @@ class TelefonesController extends Controller
      * @param  \App\Telefone  $telefone
      * @return \Illuminate\Http\Response
      */
-    public function show(Telefone $telefone)
+    public function show(Request $request, Telefone $telefone)
     {
-        return $telefone;
+        $iten = $telefone;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

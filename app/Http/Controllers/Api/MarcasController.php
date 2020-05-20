@@ -85,9 +85,21 @@ class MarcasController extends Controller
      * @param  \App\Marca  $marca
      * @return \Illuminate\Http\Response
      */
-    public function show(Marca $marca)
+    public function show(Request $request, Marca $marca)
     {
-        return $marca;
+        $iten = $marca;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

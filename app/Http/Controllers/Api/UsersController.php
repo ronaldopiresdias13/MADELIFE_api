@@ -82,10 +82,21 @@ class UsersController extends Controller
      * @param  \App\user  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(user $user)
+    public function show(Request $request, user $user)
     {
-        $user->pessoa;
-        return $user;
+        $iten = $user;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

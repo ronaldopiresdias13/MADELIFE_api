@@ -83,9 +83,21 @@ class ResponsaveisController extends Controller
      * @param  \App\Responsavel  $responsavel
      * @return \Illuminate\Http\Response
      */
-    public function show(Responsavel $responsavel)
+    public function show(Request $request, Responsavel $responsavel)
     {
-        return $responsavel;
+        $iten = $responsavel;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

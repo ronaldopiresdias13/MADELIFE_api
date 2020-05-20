@@ -95,9 +95,21 @@ class EscalasController extends Controller
      * @param  \App\Escala  $escala
      * @return \Illuminate\Http\Response
      */
-    public function show(Escala $escala)
+    public function show(Request $request, Escala $escala)
     {
-        return $escala;
+        $iten = $escala;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

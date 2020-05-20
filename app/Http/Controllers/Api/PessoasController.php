@@ -95,9 +95,21 @@ class PessoasController extends Controller
      * @param  \App\Pessoa  $pessoa
      * @return \Illuminate\Http\Response
      */
-    public function show(Pessoa $pessoa)
+    public function show(Request $request, Pessoa $pessoa)
     {
-        return $pessoa;
+        $iten = $pessoa;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

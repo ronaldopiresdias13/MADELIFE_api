@@ -115,9 +115,21 @@ class ProfissionaisController extends Controller
      * @param  \App\Profissional  $profissional
      * @return \Illuminate\Http\Response
      */
-    public function show(Profissional $profissional)
+    public function show(Request $request, Profissional $profissional)
     {
-        return $profissional;
+        $iten = $profissional;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

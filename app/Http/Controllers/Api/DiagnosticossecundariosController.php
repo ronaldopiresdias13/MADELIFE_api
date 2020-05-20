@@ -86,9 +86,21 @@ class DiagnosticossecundariosController extends Controller
      * @param  \App\Diagnosticosecundario  $diagnosticosecundario
      * @return \Illuminate\Http\Response
      */
-    public function show(Diagnosticosecundario $diagnosticosecundario)
+    public function show(Request $request, Diagnosticosecundario $diagnosticosecundario)
     {
-        return $diagnosticosecundario;
+        $iten = $diagnosticosecundario;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

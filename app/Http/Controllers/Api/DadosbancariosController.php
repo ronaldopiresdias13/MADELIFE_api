@@ -91,9 +91,21 @@ class DadosbancariosController extends Controller
      * @param  \App\Dadosbancario  $dadosbancario
      * @return \Illuminate\Http\Response
      */
-    public function show(Dadosbancario $dadosbancario)
+    public function show(Request $request, Dadosbancario $dadosbancario)
     {
-        return $dadosbancario;
+        $iten = $dadosbancario;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**

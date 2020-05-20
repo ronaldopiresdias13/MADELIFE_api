@@ -88,9 +88,21 @@ class EnderecosController extends Controller
      * @param  \App\Endereco  $endereco
      * @return \Illuminate\Http\Response
      */
-    public function show(Endereco $endereco)
+    public function show(Request $request, Endereco $endereco)
     {
-        return $endereco;
+        $iten = $endereco;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adic) {
+                $iten[$adic];
+            }
+        }
+        
+        return $iten;
     }
 
     /**
