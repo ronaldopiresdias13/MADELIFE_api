@@ -143,10 +143,10 @@ class EscalasController extends Controller
     }
     public function migracao(Request $request){
         $escala = Escala::create([
-            'empresa_id' => 1,
-            'ordemservico_id' => 1,
-            'prestador_id' => 1,
-            'servico_id' => 3,
+            'empresa_id' => $request['empresa_id'],
+            'ordemservico_id' => $request['ordemservico_id'],
+            'prestador_id' => $request['prestadorId']['id'],
+            'servico_id' => $request['servico_id'],
             'horaentrada' =>    $request['escala']['horaentrada'],
             'horasaida' =>      $request['escala']['horasaida'],
             'dataentrada' =>    $request['escala']['dataentrada'],
@@ -161,7 +161,7 @@ class EscalasController extends Controller
         ])->id;
         if($request['escala']['checkin']!= null){
             $pontoentrada = Ponto::create([
-                'empresa_id' => 1,
+                'empresa_id' => $request['empresa_id'],
                 'escala_id' => $escala,
                 'latitude' =>   $request['escala']['checkin']['latitude'],
                 'longitude' =>  $request['escala']['checkin']['longitude'],
@@ -174,7 +174,7 @@ class EscalasController extends Controller
         };
         if($request['escala']['checkout']!= null){
             $pontosaida = Ponto::create([
-                'empresa_id' => 1,
+                'empresa_id' => $request['empresa_id'],
                 'escala_id' => $escala,
                 'latitude' =>   $request['escala']['checkout']['latitude'],
                 'longitude' =>  $request['escala']['checkout']['longitude'],
