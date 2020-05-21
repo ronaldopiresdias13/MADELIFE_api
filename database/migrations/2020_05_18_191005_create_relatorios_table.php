@@ -21,7 +21,7 @@ class CreateRelatoriosTable extends Migration
             $table->string('hora')->nullable();
             $table->string('quadro')->nullable();
             $table->string('tipo');
-            $table->string('texto', 1000)->nullable();
+            $table->longText('texto')->nullable();
             $table->timestamps();
         });
     }
