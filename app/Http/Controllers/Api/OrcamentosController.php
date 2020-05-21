@@ -93,18 +93,19 @@ class OrcamentosController extends Controller
     public function store(Request $request)
     {
         $orcamento = Orcamento::firstOrCreate([
-            'numero' => $request['numero'],
-            'tipo' => $request['tipo'],
+            'numero'     => $request['numero'],
+            'tipo'       => $request['tipo'],
             'cliente_id' => $request['cliente_id'],
             'empresa_id' => $request['empresa_id'],
-            'data' => $request['data'],
-            'quantidade' => $request['cicloMeses'],
-            'unidade' => "Meses",
-            'cidade_id' => $request['cidade_id'],
-            'processo' => $request['processo'],
-            'situacao' => $request['situacao'],
-            'descricao' => $request['descricao'],
+            'data'       => $request['data'],
+            'quantidade' => $request['quantidade'],
+            'unidade'    => "Meses",
+            'cidade_id'  => $request['cidade_id'],
+            'processo'   => $request['processo'],
+            'situacao'   => $request['situacao'],
+            'descricao'  => $request['descricao'],
             'observacao' => $request['observacao'],
+            'status'     => 1
         ]);
  
         foreach ($request->historicoOrcamento as $key => $value) {
@@ -117,7 +118,7 @@ class OrcamentosController extends Controller
             ]);
             foreach ($value['itensServicoOrcamento'] as $key => $itens_servico) {
                 $orcamentoServico = Orcamentoservico::firstOrCreate([
-                    'servico_id'           => $itens_servico['servico'],
+                    'servico_id'           => $itens_servico['servico_id'],
                     'quantidade'	       => $itens_servico['quantidade'],
                     'basecobranca'	       => $itens_servico['basecobranca'],
                     'frequencia'	       => $itens_servico['frequencia'],
@@ -138,7 +139,7 @@ class OrcamentosController extends Controller
             }
             foreach ($value['itensProdutoOrcamento'] as $key => $itens_produto) {
                 $orcamentoProduto = Orcamentoproduto::firstOrCreate([
-                    'produto_id'           => null,
+                    'produto_id'           => $itens_produto['produto_id'],
                     'quantidade'	       => $itens_produto['quantidade'],
                     'valorunitario'	       => $itens_produto['valorunitario'],
                     'subtotal'	           => $itens_produto['subtotal'],
@@ -147,7 +148,7 @@ class OrcamentosController extends Controller
                     'valorresultadomensal' => $itens_produto['valorresultadomensal'],
                     'valorcustomensal'     => $itens_produto['valorcustomensal']
                 ]);
-                $historicoOrcamentoProduto = HistoricoOrcamentoServico::firstOrCreate([
+                $historicoOrcamentoProduto = HistoricoOrcamentoProduto::firstOrCreate([
                     'orcamentoproduto_id'   => $orcamentoProduto->id,
                     'historicoorcamento_id' => $historico->id
                 ]);
