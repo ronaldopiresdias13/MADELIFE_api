@@ -233,7 +233,8 @@ class EscalasController extends Controller
             foreach ($request['escala']['itemEscalaMonitoramentos'] as $monitor){
                 $monitoramento = Monitoramentoescala::create([
                     'escala_id' =>  $escala,
-                    'datahora'  =>  $monitor['horario'],
+                    'data'  =>  '',
+                    'hora'  =>  $monitor['horario'],
                     'pa'  =>  $monitor['pa'],
                     'p'  =>  $monitor['p'],
                     't'  =>  $monitor['t'],
