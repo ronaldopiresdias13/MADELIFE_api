@@ -12,4 +12,7 @@ class Servico extends Model
     {
         return $this->belongsTo('App\Empresa');
     }
+    public function orcamentoservicos(){
+        return $this->hasMany('App\Orcamentoservico');
+    }
 }

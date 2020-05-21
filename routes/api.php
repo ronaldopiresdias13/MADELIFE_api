@@ -70,6 +70,7 @@ Route::group([
     Route::apiResource('transcricoes'           , 'Api\TranscricoesController'           );
     Route::apiResource('unidademedidas'         , 'Api\UnidademedidasController'         );
     Route::apiResource('users'                  , 'Api\UsersController'                  );
+    Route::apiResource('impostos'               , 'Api\ImpostosController'               );
 
     Route::post('prestadores/migracao'   , 'Api\PrestadoresController@migracao'   );
     Route::post('clientes/migracao'      , 'Api\ClientesController@migracao'      );
