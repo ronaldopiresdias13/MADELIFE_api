@@ -17,7 +17,8 @@ class CreateMonitoramentoescalasTable extends Migration
             $table->id();
             $table->unsignedBigInteger('escala_id');
             $table->foreign('escala_id')->references('id')->on('escalas')->onDelete('cascade');
-            $table->string('datahora');
+            $table->string('data');
+            $table->string('hora');
             $table->string('pa')->nullable();
             $table->string('p')->nullable();
             $table->string('t')->nullable();

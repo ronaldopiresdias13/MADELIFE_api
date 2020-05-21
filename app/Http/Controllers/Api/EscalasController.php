@@ -258,7 +258,7 @@ class EscalasController extends Controller
                     'sondas'    =>  $monitor['sondas'],
                     'dextro'    =>  $monitor['dextro'],
                     'o2'        =>  $monitor['o2'],
-                    'observacao'=>  $monitor['observacoes'],
+                    'observacao'=>  '',
                 ]);
             }
         }
