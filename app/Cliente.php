@@ -27,6 +27,11 @@ class Cliente extends Model
         return $this->belongsTo('App\Empresa');
     }
 
+    // public function telefones()
+    // {
+    //     return $this->belongsToMany('App\Telefone', 'pessoa_telefone');
+    // }
+
     // public function enderecos()
     // {
     //     return $this->morphToMany('App\Endereco', 'pessoas');

@@ -18,6 +18,11 @@ class Pessoa extends Model
         return $this->belongsToMany('App\Endereco', 'pessoa_endereco');
     }
 
+    public function telefones()
+    {
+        return $this->belongsToMany('App\Telefone', 'pessoa_telefone');
+    }
+
     public function prestador()
     {
         return $this->hasOne('App\Prestador');
@@ -26,5 +31,15 @@ class Pessoa extends Model
     public function fornecedor()
     {
         return $this->hasOne('App\Fornecedor');
+    }
+
+    public function emails()
+    {
+        return $this->belongsToMany('App\Email', 'pessoa_email');
+    }
+
+    public function users()
+    {
+        return $this->hasMany('App\User');
     }
 }

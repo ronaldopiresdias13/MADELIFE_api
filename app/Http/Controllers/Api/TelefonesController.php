@@ -54,18 +54,30 @@ class TelefonesController extends Controller
         
         if ($request['adicionais']) {
             foreach ($itens as $key => $iten) {
-                foreach ($request['adicionais'] as $key => $adic) {
-                    if (is_string($adic)) {
-                        $iten[$adic];
+                foreach ($request['adicionais'] as $key => $adicional) {
+                    if (is_string($adicional)) {
+                        $iten[$adicional];
                     } else {
-                        switch (count($adic)) {
-                            case 1:
-                                $iten[$adic[0]];
-                                break;
-                            
-                            case 2:
-                                $iten[$adic[0]][$adic[1]];
-                                break;
+                        $iten2 = $iten;
+                        foreach ($adicional as $key => $a) {
+                            if ($key == 0) {
+                                if ($iten[0] == null) {
+                                    $iten2 = $iten[$a];
+                                }
+                                else {
+                                    foreach ($iten as $key => $i) {
+                                        $i[$a];
+                                    }
+                                }
+                            } else {
+                                if ($iten2[0] == null) {
+                                    $iten2 = $iten2[$a];
+                                } else {
+                                    foreach ($iten2 as $key => $i) {
+                                        $i[$a];
+                                    }
+                                }
+                            }
                         }
                     }
                 }
