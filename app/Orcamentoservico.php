@@ -8,4 +8,5 @@ class Orcamentoservico extends Model
 {
     protected $table = 'orcamentoservicos';
     protected $guarded = [];
+
 }
