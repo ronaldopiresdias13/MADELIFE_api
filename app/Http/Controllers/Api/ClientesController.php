@@ -172,7 +172,7 @@ class ClientesController extends Controller
                     // $endereco,
                     [
                         'cep'         => $endereco['cep'        ],
-                        'cidade_id'   => $endereco['cidade'     ],
+                        'cidade_id'   => $endereco['cidade_id'     ],
                         'rua'         => $endereco['rua'        ],
                         'bairro'      => $endereco['bairro'     ],
                         'numero'      => $endereco['numero'     ],
