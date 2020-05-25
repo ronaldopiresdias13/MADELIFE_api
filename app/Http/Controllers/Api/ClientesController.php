@@ -152,7 +152,12 @@ class ClientesController extends Controller
                     [
                         'id' => $telefone['id'],
                     ],
-                    $telefone,
+                    // $telefone,
+                    [
+                        'telefone'  => $telefone['telefone' ],
+                        'tipo'      => $telefone['tipo'     ],
+                        'descricao' => $telefone['descricao'],
+                    ]
                 )->id,
             ]);
         }
@@ -164,7 +169,17 @@ class ClientesController extends Controller
                     [
                         'id' => $endereco['id'],
                     ],
-                    $endereco,
+                    // $endereco,
+                    [
+                        'cep'         => $endereco['cep'        ],
+                        'cidade_id'   => $endereco['cidade'     ],
+                        'rua'         => $endereco['rua'        ],
+                        'bairro'      => $endereco['bairro'     ],
+                        'numero'      => $endereco['numero'     ],
+                        'complemento' => $endereco['complemento'],
+                        'tipo'        => $endereco['tipo'       ],
+                        'descricao'   => $endereco['descricao'  ],
+                    ]
                 )->id,
             ]);
         }
@@ -176,7 +191,12 @@ class ClientesController extends Controller
                     [
                         'id'  => $email['id'],
                     ],
-                    $email,
+                    // $email,
+                    [
+                        'email'     => $email['email'    ],
+                        'tipo'      => $email['tipo'     ],
+                        'descricao' => $email['descricao'],
+                    ]
                 )->id,
             ]);
         }
