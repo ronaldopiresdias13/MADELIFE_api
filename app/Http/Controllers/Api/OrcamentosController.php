@@ -131,124 +131,51 @@ class OrcamentosController extends Controller
             'status'     => 1
         ]);
 
-        foreach ($request['servicos'] as $key => $servico) {
-            $orcamento_servico = OrcamentoServico::create([
-                'orcamento_id'         => $orcamento->id                  ,
-                'servico_id'           => $servico['servico_id'          ],
-                'quantidade'	       => $servico['quantidade'          ],
-                'frequencia'	       => $servico['frequencia'          ],
-                'basecobranca'	       => $servico['basecobranca'        ],
-                'valorunitario'	       => $servico['valorunitario'       ],
-                'custo'                => $servico['custo'               ],
-                'subtotal'	           => $servico['subtotal'            ],
-                'subtotalcusto'    	   => $servico['subtotalcusto'       ],
-                'icms'	               => $servico['icms'                ],
-                'inss'                 => $servico['inss'                ],
-                'iss'                  => $servico['iss'                 ],
-                'valorcustomensal'     => $servico['valorcustomensal'    ],
-                'valorresultadomensal' => $servico['valorresultadomensal'],
-            ]);
-        }
-
-        foreach ($request['produtos'] as $key => $produto) {
-            $orcamento_produto = OrcamentoProduto::create([
-                'produto_id'           => $itens_produto['produto_id'],
-                'quantidade'	       => $itens_produto['quantidade'],
-                'valorunitario'	       => $itens_produto['valorunitario'],
-                'subtotal'	           => $itens_produto['subtotal'],
-                'custo'                => $itens_produto['custo'],
-                'subtotalcusto'    	   => $itens_produto['subtotalcusto'],
-                'valorresultadomensal' => $itens_produto['valorresultadomensal'],
-                'valorcustomensal'     => $itens_produto['valorcustomensal']
-            ]);
-        }
-
-
-
-
-        foreach ($value['itensCustoOrcamento'] as $key => $itens_custo) {
-            $orcamentoCusto = Orcamentocusto::firstOrCreate([
-                'descricao'      => $itens_custo['descricao'],
-                'quantidade'	 => $itens_custo['quantidade'],
-                'unidade'	 => $itens_custo['unidade'],
-                'valorunitario'	 => $itens_custo['valorunitario'],
-                'valortotal'	     => $itens_custo['valortotal'],
-            ]);
-            $historicoOrcamentoProduto = HistoricoOrcamentoCusto::firstOrCreate([
-                'orcamentocusto_id'   => $orcamentoCusto->id,
-                'historicoorcamento_id' => $historico->id
-            ]);
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-        foreach ($request->historicoOrcamento as $key => $value) {
-            $historico = Historicoorcamento::firstOrCreate([
-                'orcamento_id'      => $orcamento->id,
-                'data'              => $value['data'],
-                'valortotalservico' => $value['valortotalservico'],
-                'valortotalproduto' => $value['valortotalproduto'],
-                'valortotalcusto'   => $value['valortotalcusto']
-            ]);
-            foreach ($value['itensServicoOrcamento'] as $key => $itens_servico) {
-                $orcamentoServico = Orcamentoservico::firstOrCreate([
-                    'servico_id'           => $itens_servico['servico_id']['id'],
-                    'quantidade'	       => $itens_servico['quantidade'],
-                    'basecobranca'	       => $itens_servico['basecobranca'],
-                    'frequencia'	       => $itens_servico['frequencia'],
-                    'valorunitario'	       => $itens_servico['valorunitario'],
-                    'subtotal'	           => $itens_servico['subtotal'],
-                    'custo'                => $itens_servico['custo'],
-                    'subtotalcusto'    	   => $itens_servico['subtotalcusto'],
-                    'valorresultadomensal' => $itens_servico['valorresultadomensal'],
-                    'valorcustomensal'     => $itens_servico['valorcustomensal'],
-                    'icms'	               => $itens_servico['icms'],
-                    'iss'                  => $itens_servico['iss'],
-                    'inss'                 => $itens_servico['inss']
-                ]);
-                $historicoOrcamentoServico = HistoricoOrcamentoServico::firstOrCreate([
-                    'orcamentoservico_id'   => $orcamentoServico->id,
-                    'historicoorcamento_id' => $historico->id
+        if ($request['servicos']) {
+            foreach ($request['servicos'] as $key => $servico) {
+                $orcamento_servico = OrcamentoServico::create([
+                    'orcamento_id'         => $orcamento->id                  ,
+                    'servico_id'           => $servico['servico_id'          ],
+                    'quantidade'	       => $servico['quantidade'          ],
+                    'frequencia'	       => $servico['frequencia'          ],
+                    'basecobranca'	       => $servico['basecobranca'        ],
+                    'valorunitario'	       => $servico['valorunitario'       ],
+                    'custo'                => $servico['custo'               ],
+                    'subtotal'	           => $servico['subtotal'            ],
+                    'subtotalcusto'    	   => $servico['subtotalcusto'       ],
+                    'icms'	               => $servico['icms'                ],
+                    'inss'                 => $servico['inss'                ],
+                    'iss'                  => $servico['iss'                 ],
+                    'valorcustomensal'     => $servico['valorcustomensal'    ],
+                    'valorresultadomensal' => $servico['valorresultadomensal'],
                 ]);
             }
-            foreach ($value['itensProdutoOrcamento'] as $key => $itens_produto) {
-                $orcamentoProduto = Orcamentoproduto::firstOrCreate([
-                    'produto_id'           => $itens_produto['produto_id'],
-                    'quantidade'	       => $itens_produto['quantidade'],
-                    'valorunitario'	       => $itens_produto['valorunitario'],
-                    'subtotal'	           => $itens_produto['subtotal'],
-                    'custo'                => $itens_produto['custo'],
-                    'subtotalcusto'    	   => $itens_produto['subtotalcusto'],
-                    'valorresultadomensal' => $itens_produto['valorresultadomensal'],
-                    'valorcustomensal'     => $itens_produto['valorcustomensal']
-                ]);
-                $historicoOrcamentoProduto = HistoricoOrcamentoProduto::firstOrCreate([
-                    'orcamentoproduto_id'   => $orcamentoProduto->id,
-                    'historicoorcamento_id' => $historico->id
+        }
+
+        if ($request['produtos']) {
+            foreach ($request['produtos'] as $key => $produto) {
+                $orcamento_produto = OrcamentoProduto::create([
+                    'orcamento_id'         => $orcamento->id                  ,
+                    'produto_id'           => $produto['produto_id'          ],
+                    'quantidade'	       => $produto['quantidade'          ],
+                    'valorunitario'	       => $produto['valorunitario'       ],
+                    'custo'                => $produto['custo'               ],
+                    'subtotal'	           => $produto['subtotal'            ],
+                    'subtotalcusto'    	   => $produto['subtotalcusto'       ],
+                    'valorresultadomensal' => $produto['valorresultadomensal'],
+                    'valorcustomensal'     => $produto['valorcustomensal'    ]
                 ]);
             }
-            foreach ($value['itensCustoOrcamento'] as $key => $itens_custo) {
-                $orcamentoCusto = Orcamentocusto::firstOrCreate([
-                    'descricao'      => $itens_custo['descricao'],
-                    'quantidade'	 => $itens_custo['quantidade'],
-                    'unidade'	 => $itens_custo['unidade'],
-                    'valorunitario'	 => $itens_custo['valorunitario'],
-                    'valortotal'	     => $itens_custo['valortotal'],
-                ]);
-                $historicoOrcamentoProduto = HistoricoOrcamentoCusto::firstOrCreate([
-                    'orcamentocusto_id'   => $orcamentoCusto->id,
-                    'historicoorcamento_id' => $historico->id
+        }
+
+        if ($request['custos']) {
+            foreach ($request['custos'] as $key => $custo) {
+                $orcamentocusto = Orcamentocusto::create([
+                    'descricao'     => $custo['descricao'    ],
+                    'quantidade'    => $custo['quantidade'   ],
+                    'unidade'       => $custo['unidade'      ],
+                    'valorunitario'	=> $custo['valorunitario'],
+                    'valortotal'    => $custo['valortotal'   ],
                 ]);
             }
         }
