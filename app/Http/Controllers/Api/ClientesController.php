@@ -107,9 +107,9 @@ class ClientesController extends Controller
     public function store(Request $request)
     {
         $pessoa = Pessoa::where(
-            'cpfcnpj', $request['cpfcnpj']
+            'cpfcnpj', $request['pessoa']['cpfcnpj']
         )->where(
-            'empresa_id', $request['empresa_id']
+            'empresa_id', $request['pessoa']['empresa_id']
         )->first();
 
         $cliente = null;
@@ -129,7 +129,7 @@ class ClientesController extends Controller
             'empresa_id' => $request['empresa_id'],
             'pessoa_id'  => Pessoa::updateOrCreate(
                 [
-                    'id' => $request['pessoa']['id'],
+                    'id' => ($request['pessoa']['id'] != '')? $request['id'] : null,
                 ],
                 [
                     'empresa_id'  => $request['pessoa']['empresa_id' ],
