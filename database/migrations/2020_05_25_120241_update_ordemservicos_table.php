@@ -14,12 +14,20 @@ class UpdateOrdemservicosTable extends Migration
     public function up()
     {
         Schema::table('ordemservicos', function (Blueprint $table) {
-            $table->unsignedBigInteger('cliente_id')->after('tipo')->nullable();
-            $table->foreign('cliente_id')->references('id')->on('clientes')->onDelete('cascade');
-
-            // $table->dropColumn('orcamento_id');
-            // $table->unsignedBigInteger('orcamento_id')->after('id');
-            // $table->foreign('orcamento_id')->references('id')->on('orcamentos')->onDelete('cascade');
+            $table->dropColumn('tipo');
+            $table->dropColumn('nome');
+            $table->dropColumn('sexo');
+            $table->dropColumn('nascimento');
+            $table->dropColumn('cpfcnpj');
+            $table->dropColumn('rgie');
+            $table->dropColumn('endereco1');
+            $table->dropColumn('cidade1');
+            $table->dropColumn('cep1');
+            $table->dropColumn('endereco2');
+            $table->dropColumn('cidade2');
+            $table->dropColumn('cep2');
+            $table->dropColumn('contato');
+            $table->dropColumn('email');
         });
     }
 
@@ -31,11 +39,20 @@ class UpdateOrdemservicosTable extends Migration
     public function down()
     {
         Schema::table('ordemservicos', function (Blueprint $table) {
-            $table->dropForeign('ordemservicos_cliente_id_foreign');
-            $table->dropColumn('cliente_id');
-
-            // $table->dropForeign('ordemservicos_orcamento_id_foreign');
-            // $table->dropColumn('orcamento_id');
+            $table->string('email')->after('orcamento_id')->nullable();
+            $table->string('contato')->after('orcamento_id')->nullable();
+            $table->string('cep2')->after('orcamento_id')->nullable();
+            $table->string('cidade2')->after('orcamento_id')->nullable();
+            $table->string('endereco2')->after('orcamento_id')->nullable();
+            $table->string('cep1')->after('orcamento_id')->nullable();
+            $table->string('cidade1')->after('orcamento_id')->nullable();
+            $table->string('endereco1')->after('orcamento_id')->nullable();
+            $table->string('rgie')->after('orcamento_id')->nullable();
+            $table->string('cpfcnpj')->after('orcamento_id')->nullable();
+            $table->string('nascimento')->after('orcamento_id')->nullable();
+            $table->string('sexo')->after('orcamento_id')->nullable();
+            $table->string('nome')->after('orcamento_id')->nullable();
+            $table->string('tipo')->after('orcamento_id');
         });
     }
 }
