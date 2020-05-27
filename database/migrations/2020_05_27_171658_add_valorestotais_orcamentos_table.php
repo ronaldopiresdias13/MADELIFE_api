@@ -13,7 +13,11 @@ class AddValorestotaisOrcamentosTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::table('orcamentos', function (Blueprint $table) {
+            $table->float('valortotalservico')->nullable()->after('descricao');
+            $table->float('valortotalcusto')->nullable()->after('descricao');
+            $table->float('valortotalproduto')->nullable()->after('descricao');
+        });
     }
 
     /**
@@ -23,6 +27,10 @@ class AddValorestotaisOrcamentosTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('orcamentos', function (Blueprint $table) {
+            $table->dropColumn('valortotalservico');
+            $table->dropColumn('valortotalcusto');
+            $table->dropColumn('valortotalproduto');
+        });
     }
 }

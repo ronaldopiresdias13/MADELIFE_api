@@ -127,26 +127,32 @@ class OrcamentosController extends Controller
             'id' => ($request['id'] != '')? $request['id'] : null,
         ],
         [
-            'empresa_id' => $request['empresa_id'],
-            'cliente_id' => $request['cliente_id'],
-            'numero'     => $request['numero'    ],
-            'processo'   => $request['processo'  ],
-            'cidade_id'  => $request['cidade_id' ],
-            'tipo'       => $request['tipo'      ],
-            'data'       => $request['data'      ],
-            'unidade'    => $request['unidade'   ],
-            'quantidade' => $request['quantidade'],
-            'situacao'   => $request['situacao'  ],
-            'descricao'  => $request['descricao' ],
-            'observacao' => $request['observacao'],
-            'status'     => 1
+            'empresa_id'        => $request['empresa_id'       ],
+            'cliente_id'        => $request['cliente_id'       ],
+            'numero'            => $request['numero'           ],
+            'processo'          => $request['processo'         ],
+            'cidade_id'         => $request['cidade_id'        ],
+            'tipo'              => $request['tipo'             ],
+            'data'              => $request['data'             ],
+            'unidade'           => $request['unidade'          ],
+            'quantidade'        => $request['quantidade'       ],
+            'situacao'          => $request['situacao'         ],
+            'descricao'         => $request['descricao'        ],
+            'valortotalservico' => $request['valortotalservico'],
+            'valortotalcusto'   => $request['valortotalcusto'  ],
+            'valortotalproduto' => $request['valortotalproduto'],
+            'observacao'        => $request['observacao'       ],
+            'status'            => 1
         ]);
 
         if ($request['servicos']) {
             foreach ($request['servicos'] as $key => $servico) {
-                $orcamento_servico = OrcamentoServico::create([
+                $orcamento_servico = OrcamentoServico::updateOrCreate(
+                [
                     'orcamento_id'         => $orcamento->id                  ,
                     'servico_id'           => $servico['servico_id'          ],
+                ],
+                [
                     'quantidade'	       => $servico['quantidade'          ],
                     'frequencia'	       => $servico['frequencia'          ],
                     'basecobranca'	       => $servico['basecobranca'        ],
@@ -165,7 +171,7 @@ class OrcamentosController extends Controller
 
         if ($request['produtos']) {
             foreach ($request['produtos'] as $key => $produto) {
-                $orcamento_produto = OrcamentoProduto::create([
+                $orcamento_produto = OrcamentoProduto::updateOrCreate([
                     'orcamento_id'         => $orcamento->id                  ,
                     'produto_id'           => $produto['produto_id'          ],
                     'quantidade'	       => $produto['quantidade'          ],
