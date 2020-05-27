@@ -96,7 +96,6 @@ class FormacoesController extends Controller
     public function store(Request $request)
     {
         $formacao = new Formacao;
-        $formacao->cbo       = $request->cbo;
         $formacao->descricao = $request->descricao;
         $formacao->save();
     }

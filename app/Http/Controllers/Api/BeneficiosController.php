@@ -95,11 +95,11 @@ class BeneficiosController extends Controller
      */
     public function store(Request $request)
     {
-        $beneficio = new Beneficio;
-        $beneficio->descricao = $request->descricao;
-        $beneficio->empresa = $request->empresa;
-        $beneficio->valor = $request->valor;
-        $beneficio->save();
+        Beneficio::create($request->all());
+        // $beneficio->descricao = $request->beneficios;
+        // $beneficio->empresa_id = 1;
+        // $beneficio->valor = $request->valor;
+        // $beneficio->save();
     }
 
     /**

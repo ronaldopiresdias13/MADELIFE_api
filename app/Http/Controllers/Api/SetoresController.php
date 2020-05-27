@@ -103,7 +103,7 @@ class SetoresController extends Controller
      * @param  \App\Setor  $setor
      * @return \Illuminate\Http\Response
      */
-    public function show(Setor $setor)
+    public function show(Request $request, Setor $setor)
     {
         {
             $iten = $setor;
@@ -155,7 +155,7 @@ class SetoresController extends Controller
      */
     public function update(Request $request, Setor $setor)
     {
-        // dd($request->all());
+        dd($setor);
         $setor->update($request->all());
     }
 

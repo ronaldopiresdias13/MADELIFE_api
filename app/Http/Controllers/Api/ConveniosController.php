@@ -95,11 +95,7 @@ class ConveniosController extends Controller
      */
     public function store(Request $request)
     {
-        $convenio = new Convenio;
-        $convenio->descricao = $request->descricao;
-        $convenio->empresa = $request->empresa;
-        $convenio->valor = $request->valor;
-        $convenio->save();
+        Convenio::create($request->all());
     }
 
     /**
