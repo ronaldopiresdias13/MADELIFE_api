@@ -171,6 +171,7 @@ class OrcamentosController extends Controller
         if ($request['custos']) {
             foreach ($request['custos'] as $key => $custo) {
                 $orcamentocusto = Orcamentocusto::create([
+                    'orcamento_id'  => $orcamento->id,
                     'descricao'     => $custo['descricao'    ],
                     'quantidade'    => $custo['quantidade'   ],
                     'unidade'       => $custo['unidade'      ],
