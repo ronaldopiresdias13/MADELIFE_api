@@ -203,18 +203,24 @@ class OrcamentosController extends Controller
                 'observacao'   => $request['homecare']['observacao'],
             ]);
 
-            $homecare_telefone = HomecareTelefone::create([
-                'homecare_id' => $homecare->id,
-                'telefone_id'  => $request['homecare']['telefone'],
-            ]);
-            $homecare_telefone = homecareTelefone::create([
-                'homecare_id' => $homecare->id,
-                'telefone_id'  => $request['homecare']['celular'],
-            ]);
-            $homecare_email = HomecareEmail::create([
-                'homecare_id' => $homecare->id,
-                'email_id'     => $request['homecare']['email'],
-            ]);
+            if ($request['homecare']['telefone']) {
+                $homecare_telefone = HomecareTelefone::create([
+                    'homecare_id' => $homecare->id,
+                    'telefone_id' => Telefone::create(['telefone' => $request['homecare']['telefone']])->id,
+                ]);
+            }
+            if ($request['homecare']['celular']) {
+                $homecare_telefone = homecareTelefone::create([
+                    'homecare_id' => $homecare->id,
+                    'telefone_id' => Telefone::create(['telefone' => $request['homecare']['celular']])->id,
+                ]);
+            }
+            if ($request['homecare']['email']) {
+                $homecare_email = HomecareEmail::create([
+                    'homecare_id' => $homecare->id,
+                    'email_id'    => Email::create(['email' => $request['homecare']['email']])->id,
+                ]);
+            }
         }
 
         if ($request['remocao']) {
@@ -232,18 +238,24 @@ class OrcamentosController extends Controller
                 'observacao'      => $request['remocao']['observacao'     ],
             ]);
 
-            $remocao_telefone = RemocaoTelefone::create([
-                'remocao_id'  => $remocao->id,
-                'telefone_id' => $request['remocao']['telefone'],
-            ]);
-            $remocao_telefone = RemocaoTelefone::create([
-                'remocao_id'  => $remocao->id,
-                'telefone_id' => $request['remocao']['celular'],
-            ]);
-            $remocao_email = RemocaoEmail::create([
-                'remocao_id' => $remocao->id,
-                'email_id'   => $request['remocao']['email'],
-            ]);
+            if ($request['remocao']['telefone']) {
+                $remocao_telefone = RemocaoTelefone::create([
+                    'remocao_id'  => $remocao->id,
+                    'telefone_id' => Telefone::create(['telefone' => $request['remocao']['telefone']])->id,
+                ]);
+            }
+            if ($request['remocao']['celular']) {
+                $remocao_telefone = RemocaoTelefone::create([
+                    'remocao_id'  => $remocao->id,
+                    'telefone_id' => Telefone::create(['telefone' => $request['remocao']['celular']])->id,
+                ]);
+            }
+            if ($request['remocao']['email']) {
+                $remocao_email = RemocaoEmail::create([
+                    'remocao_id' => $remocao->id,
+                    'email_id'   => Email::create(['email' => $request['remocao']['email']])->id,
+                ]);
+            }
         }
 
         $historicoorcamento = Historicoorcamento::create([
