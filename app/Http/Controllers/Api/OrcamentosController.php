@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Orcamento;
 use App\Pessoa;
 use App\Servico;
+use App\Homecare;
+use App\OrcamentoEmail;
+use App\Orcamentocusto;
 use App\OrcamentoServico;
 use App\OrcamentoProduto;
-use App\Orcamentocusto;
+use App\OrcamentoTelefone;
 use App\Historicoorcamento;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class OrcamentosController extends Controller
 {
@@ -22,15 +25,15 @@ class OrcamentosController extends Controller
     public function index(Request $request)
     {
         // dd('teste');
-        $orcamentos = Orcamento::all();
-        foreach ($orcamentos as $key => $orcamento) {
-            // $orcamento->historicos;
-            foreach ($orcamento->historicos as $key => $historico) {
-                $historico->orcamentoservicos;
-                $historico->orcamentoprodutos;
-            }
-        }
-        return $orcamentos;
+        // $orcamentos = Orcamento::all();
+        // foreach ($orcamentos as $key => $orcamento) {
+        //     // $orcamento->historicos;
+        //     foreach ($orcamento->historicos as $key => $historico) {
+        //         $historico->orcamentoservicos;
+        //         $historico->orcamentoprodutos;
+        //     }
+        // }
+        // return $orcamentos;
         $itens = null;
 
         if ($request->commands) {
@@ -111,6 +114,9 @@ class OrcamentosController extends Controller
      */
     public function store(Request $request)
     {
+        $teste = (String)$request;
+        return gettype($teste);
+
         $orcamento = Orcamento::updateOrCreate(
         [
             'id' => ($request['id'] != '')? $request['id'] : null,
@@ -180,6 +186,38 @@ class OrcamentosController extends Controller
                 ]);
             }
         }
+
+        if ($request['homecare']) {
+            $orcamentocusto = Homecare::create([
+                'orcamento_id' => $orcamento->id,
+                'nome'         => $homecare['nome'      ],
+                'sexo'         => $homecare['sexo'      ],
+                'nascimento'   => $homecare['nascimento'],
+                'cpfcnpj'	   => $homecare['cpf'       ],
+                'rgie'         => $homecare['rg'        ],
+                'endereco'     => $homecare['endereco'  ],
+                'cidade_id'    => $homecare['cidade'    ],
+                'observacao'   => $homecare['observacao'],
+            ]);
+
+            $orcamento_telefone = OrcamentoTelefone::create([
+                'orcamento_id' => $orcamento->id,
+                'telefone_id'  => $homecare['telefone'],
+            ]);
+            $orcamento_telefone = OrcamentoTelefone::create([
+                'orcamento_id' => $orcamento->id,
+                'telefone_id'  => $homecare['celular'],
+            ]);
+            $orcamento_email = OrcamentoEmail::create([
+                'orcamento_id' => $orcamento->id,
+                'email_id'     => $homecare['email'],
+            ]);
+        }
+
+        $historicoorcamento = Historicoorcamento::create([
+            'orcamento_id'  => $orcamento->id,
+            'descricao'     => (String)$request,
+        ]);
     }
 
     /**
