@@ -95,9 +95,10 @@ class SetoresController extends Controller
      */
     public function store(Request $request)
     {
-        $setor = new Setor;
-        $setor->descricao = $request->descricao;
-        $setor->empresa = $request->empresa;
+        // $setor = new Setor;
+        // $setor->descricao = $request->descricao;
+        // $setor->empresa = $request->empresa;
+        // Setor::create($request->all());
     }
 
     /**
