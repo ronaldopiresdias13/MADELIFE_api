@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Orcamento;
 use App\Pessoa;
+use App\Remocao;
 use App\Servico;
 use App\Homecare;
 use App\OrcamentoEmail;
@@ -188,29 +189,58 @@ class OrcamentosController extends Controller
         }
 
         if ($request['homecare']) {
-            $orcamentocusto = Homecare::create([
+            $homecare = Homecare::create([
                 'orcamento_id' => $orcamento->id,
-                'nome'         => $homecare['nome'      ],
-                'sexo'         => $homecare['sexo'      ],
-                'nascimento'   => $homecare['nascimento'],
-                'cpfcnpj'	   => $homecare['cpf'       ],
-                'rgie'         => $homecare['rg'        ],
-                'endereco'     => $homecare['endereco'  ],
-                'cidade_id'    => $homecare['cidade'    ],
-                'observacao'   => $homecare['observacao'],
+                'nome'         => $request['homecare']['nome'      ],
+                'sexo'         => $request['homecare']['sexo'      ],
+                'nascimento'   => $request['homecare']['nascimento'],
+                'cpfcnpj'	   => $request['homecare']['cpf'       ],
+                'rgie'         => $request['homecare']['rg'        ],
+                'endereco'     => $request['homecare']['endereco'  ],
+                'cidade_id'    => $request['homecare']['cidade'    ],
+                'observacao'   => $request['homecare']['observacao'],
             ]);
 
-            $orcamento_telefone = OrcamentoTelefone::create([
-                'orcamento_id' => $orcamento->id,
-                'telefone_id'  => $homecare['telefone'],
+            $homecare_telefone = HomecareTelefone::create([
+                'homecare_id' => $homecare->id,
+                'telefone_id'  => $request['homecare']['telefone'],
             ]);
-            $orcamento_telefone = OrcamentoTelefone::create([
-                'orcamento_id' => $orcamento->id,
-                'telefone_id'  => $homecare['celular'],
+            $homecare_telefone = homecareTelefone::create([
+                'homecare_id' => $homecare->id,
+                'telefone_id'  => $request['homecare']['celular'],
             ]);
-            $orcamento_email = OrcamentoEmail::create([
-                'orcamento_id' => $orcamento->id,
-                'email_id'     => $homecare['email'],
+            $homecare_email = HomecareEmail::create([
+                'homecare_id' => $homecare->id,
+                'email_id'     => $request['homecare']['email'],
+            ]);
+        }
+
+        if ($request['remocao']) {
+            $remocao = Remocao::create([
+                'orcamento_id'    => $orcamento->id,
+                'nome'            => $request['remocao']['nome'           ],
+                'sexo'            => $request['remocao']['sexo'           ],
+                'nascimento'      => $request['remocao']['nascimento'     ],
+                'cpfcnpj'	      => $request['remocao']['cpf'            ],
+                'rgie'            => $request['remocao']['rg'             ],
+                'enderecoorigem'  => $request['remocao']['enderecoorigem' ],
+                'cidadeorigem'    => $request['remocao']['cidadeorigem'   ],
+                'enderecodestino' => $request['remocao']['enderecodestino'],
+                'cidadedestino'   => $request['remocao']['cidadedestino'  ],
+                'observacao'      => $request['remocao']['observacao'     ],
+            ]);
+
+            $remocao_telefone = RemocaoTelefone::create([
+                'remocao_id'  => $remocao->id,
+                'telefone_id' => $request['remocao']['telefone'],
+            ]);
+            $remocao_telefone = RemocaoTelefone::create([
+                'remocao_id'  => $remocao->id,
+                'telefone_id' => $request['remocao']['celular'],
+            ]);
+            $remocao_email = RemocaoEmail::create([
+                'remocao_id' => $remocao->id,
+                'email_id'   => $request['remocao']['email'],
             ]);
         }
 

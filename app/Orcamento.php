@@ -21,4 +21,19 @@ class Orcamento extends Model
     {
         return $this->belongsTo('App\Empresa');
     }
+
+    public function servicos()
+    {
+        return $this->belongsToMany('App\Servico', 'orcamento_servico');
+    }
+
+    public function produtos()
+    {
+        return $this->belongsToMany('App\Produto', 'orcamento_produto');
+    }
+
+    public function custos()
+    {
+        return $this->hasMany('App\Custo');
+    }
 }
