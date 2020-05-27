@@ -239,9 +239,9 @@ class OrcamentosController extends Controller
             
             if ($request['homecare']['emails']) {
                 foreach ($request['homecare']['emails'] as $key => $email) {
-                    $homecare_email = HomecareEmail::create([
+                    $homecare_email = HomecareEmail::updateOrCreate([
                         'homecare_id' => $homecare->id,
-                        'email_id'    => Email::create(
+                        'email_id'    => Email::updateOrCreate(
                             [
                                 'id' => $email['id'],
                             ],
@@ -291,9 +291,9 @@ class OrcamentosController extends Controller
             }
             if ($request['remocao']['emails']) {
                 foreach ($request['remocao']['emails'] as $key => $email) {
-                    $remocao_email = RemocaoEmail::create([
+                    $remocao_email = RemocaoEmail::updateOrCreate([
                         'remocao_id' => $remocao->id,
-                        'email_id'   => Email::create(
+                        'email_id'   => Email::updateOrCreate(
                             [
                                 'id' => $email['id'],
                             ],
@@ -321,9 +321,9 @@ class OrcamentosController extends Controller
 
             if ($request['evento']['telefones']) {
                 foreach ($request['evento']['telefones'] as $key => $telefone) {
-                    $evento_telefone = EventoTelefone::create([
+                    $evento_telefone = EventoTelefone::updateOrCreate([
                         'evento_id'   => $evento->id,
-                        'telefone_id' => Telefone::create(
+                        'telefone_id' => Telefone::updateOrCreate(
                             [
                                 'id' => $telefone['id'],
                             ],
@@ -337,9 +337,9 @@ class OrcamentosController extends Controller
             }
             if ($request['evento']['emails']) {
                 foreach ($request['evento']['emails'] as $key => $email) {
-                    $evento_email = EventoEmail::create([
+                    $evento_email = EventoEmail::updateOrCreate([
                         'evento_id' => $evento->id,
-                        'email_id'  => Email::create(
+                        'email_id'  => Email::updateOrCreate(
                             [
                                 'id' => $email['id'],
                             ],
@@ -367,9 +367,9 @@ class OrcamentosController extends Controller
 
             if ($request['aph']['telefones']) {
                 foreach ($request['aph']['telefones'] as $key => $telefone) {
-                    $aph_telefone = AphTelefone::create([
+                    $aph_telefone = AphTelefone::updateOrCreate([
                         'aph_id'      => $aph->id,
-                        'telefone_id' => Telefone::create(
+                        'telefone_id' => Telefone::updateOrCreate(
                             [
                                 'id' => $telefone['id'],
                             ],
@@ -383,9 +383,9 @@ class OrcamentosController extends Controller
             }
             if ($request['aph']['emails']) {
                 foreach ($request['aph']['emails'] as $key => $email) {
-                    $aph_email = AphEmail::create([
+                    $aph_email = AphEmail::updateOrCreate([
                         'aph_id'   => $aph->id,
-                        'email_id' => Email::create(
+                        'email_id' => Email::updateOrCreate(
                             [
                                 'id' => $email['id'],
                             ],
@@ -399,7 +399,7 @@ class OrcamentosController extends Controller
             }
         }
 
-        $historicoorcamento = Historicoorcamento::create([
+        $historicoorcamento = Historicoorcamento::updateOrCreate([
             'orcamento_id' => $orcamento->id,
             'historico'    => json_encode($request->all()),
         ]);
