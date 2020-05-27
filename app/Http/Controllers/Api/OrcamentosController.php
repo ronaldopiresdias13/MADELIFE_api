@@ -119,8 +119,8 @@ class OrcamentosController extends Controller
      */
     public function store(Request $request)
     {
-        // $teste = (String)$request;
-        // return gettype($teste);
+        // $teste = (String)$request->all();
+        // return (String)json_encode($request->all());
 
         $orcamento = Orcamento::updateOrCreate(
         [
@@ -260,9 +260,68 @@ class OrcamentosController extends Controller
             }
         }
 
+        if ($request['evento']) {
+            $evento = Evento::create([
+                'orcamento_id' => $orcamento->id,
+                'nome'         => $request['evento']['nome'    ],
+                'endereco'     => $request['evento']['endereco'],
+                'cep'          => $request['evento']['cep'     ],
+                'cidade'       => $request['evento']['cidade'  ],
+            ]);
+
+            if ($request['evento']['telefone']) {
+                $evento_telefone = EventoTelefone::create([
+                    'evento_id'  => $evento->id,
+                    'telefone_id' => Telefone::create(['telefone' => $request['evento']['telefone']])->id,
+                ]);
+            }
+            if ($request['evento']['celular']) {
+                $evento_telefone = EventoTelefone::create([
+                    'evento_id'  => $evento->id,
+                    'telefone_id' => Telefone::create(['telefone' => $request['evento']['celular']])->id,
+                ]);
+            }
+            if ($request['evento']['email']) {
+                $evento_email = EventoEmail::create([
+                    'evento_id' => $evento->id,
+                    'email_id'   => Email::create(['email' => $request['evento']['email']])->id,
+                ]);
+            }
+        }
+
+        if ($request['aph']) {
+            $aph = Aph::create([
+                'orcamento_id' => $orcamento->id,
+                'nome'         => $request['aph']['nome'    ],
+                'endereco'     => $request['aph']['endereco'],
+                'cep'          => $request['aph']['cep'     ],
+                'cidade'       => $request['aph']['cidade'  ],
+            ]);
+
+            if ($request['aph']['telefone']) {
+                $aph_telefone = AphTelefone::create([
+                    'aph_id'  => $aph->id,
+                    'telefone_id' => Telefone::create(['telefone' => $request['aph']['telefone']])->id,
+                ]);
+            }
+            if ($request['aph']['celular']) {
+                $aph_telefone = AphTelefone::create([
+                    'aph_id'  => $aph->id,
+                    'telefone_id' => Telefone::create(['telefone' => $request['aph']['celular']])->id,
+                ]);
+            }
+            if ($request['aph']['email']) {
+                $aph_email = AphEmail::create([
+                    'aph_id' => $aph->id,
+                    'email_id'   => Email::create(['email' => $request['aph']['email']])->id,
+                ]);
+            }
+        }
+
         $historicoorcamento = Historicoorcamento::create([
             'orcamento_id'  => $orcamento->id,
-            'historico'     => (String)$request,
+            'historico'     => $request->all(),
+            // 'historico'     => (String)$request,
         ]);
     }
 
