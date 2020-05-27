@@ -154,6 +154,7 @@ class SetoresController extends Controller
      */
     public function update(Request $request, Setor $setor)
     {
+        // dd($request->all());
         $setor->update($request->all());
     }
 
