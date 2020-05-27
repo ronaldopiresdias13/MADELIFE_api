@@ -262,7 +262,7 @@ class OrcamentosController extends Controller
 
         $historicoorcamento = Historicoorcamento::create([
             'orcamento_id'  => $orcamento->id,
-            'descricao'     => (String)$request,
+            'historico'     => (String)$request,
         ]);
     }
 
