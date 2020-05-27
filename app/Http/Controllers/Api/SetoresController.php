@@ -83,7 +83,6 @@ class SetoresController extends Controller
                 }
             }
         }
-
         return $itens;
     }
 
@@ -104,45 +103,47 @@ class SetoresController extends Controller
      * @param  \App\Setor  $setor
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Setor $setor)
+    public function show(Setor $setor)
     {
-        $iten = $setor;
-
-        if ($request->commands) {
-            $request = json_decode($request->commands, true);
-        }
-
-        if ($request['adicionais']) {
-            foreach ($request['adicionais'] as $key => $adicional) {
-                if (is_string($adicional)) {
-                    $iten[$adicional];
-                } else {
-                    $iten2 = $iten;
-                    foreach ($adicional as $key => $a) {
-                        if ($key == 0) {
-                            if ($iten[0] == null) {
-                                $iten2 = $iten[$a];
-                            }
-                            else {
-                                foreach ($iten as $key => $i) {
-                                    $i[$a];
+        {
+            $iten = $setor;
+    
+            if ($request->commands) {
+                $request = json_decode($request->commands, true);
+            }
+    
+            if ($request['adicionais']) {
+                foreach ($request['adicionais'] as $key => $adicional) {
+                    if (is_string($adicional)) {
+                        $iten[$adicional];
+                    } else {
+                        $iten2 = $iten;
+                        foreach ($adicional as $key => $a) {
+                            if ($key == 0) {
+                                if ($iten[0] == null) {
+                                    $iten2 = $iten[$a];
                                 }
-                            }
-                        } else {
-                            if ($iten2[0] == null) {
-                                $iten2 = $iten2[$a];
+                                else {
+                                    foreach ($iten as $key => $i) {
+                                        $i[$a];
+                                    }
+                                }
                             } else {
-                                foreach ($iten2 as $key => $i) {
-                                    $i[$a];
+                                if ($iten2[0] == null) {
+                                    $iten2 = $iten2[$a];
+                                } else {
+                                    foreach ($iten2 as $key => $i) {
+                                        $i[$a];
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+            
+            return $iten;
         }
-        
-        return $iten;
     }
 
     /**
@@ -155,15 +156,7 @@ class SetoresController extends Controller
     public function update(Request $request, Setor $setor)
     {
         // dd($request->all());
-        // $setor->update($request->all());
-        Setor::updateOrCreate(
-            [
-                'id' => $request['id'],
-            ],
-            [
-                'descricao' => $request['descricao'],
-            ],
-        );
+        $setor->update($request->all());
     }
 
     /**
