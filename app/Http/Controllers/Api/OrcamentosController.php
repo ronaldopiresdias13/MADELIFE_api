@@ -744,6 +744,7 @@ class OrcamentosController extends Controller
     {
         $orcamento->delete();
     }
+    
     /**
      * Store a newly created resource in storage.
      *

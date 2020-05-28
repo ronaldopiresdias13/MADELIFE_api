@@ -15,6 +15,6 @@ class Homecare extends Model
 
     public function emails()
     {
-        return $this->belongsToMany('App\Emails', 'homecare_emails');
+        return $this->belongsToMany('App\Email', 'homecare_email');
     }
 }
