@@ -24,7 +24,7 @@ class HistoricoorcamentosController extends Controller
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
-                    $itens = Historicoorcamentos::where(
+                    $itens = Historicoorcamento::where(
                         ($where['coluna'   ])? $where['coluna'   ] : 'id'  ,
                         ($where['expressao'])? $where['expressao'] : 'like',
                         ($where['valor'    ])? $where['valor'    ] : '%'
@@ -38,7 +38,7 @@ class HistoricoorcamentosController extends Controller
                 }
             }
         } else {
-            $itens = Historicoorcamentos::where('id', 'like', '%');
+            $itens = Historicoorcamento::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -129,6 +129,6 @@ class HistoricoorcamentosController extends Controller
      */
     public function destroy(Historicoorcamento $historicoorcamento)
     {
-        $historicoorcamento->delete();
+        // $historicoorcamento->delete();
     }
 }

@@ -96,36 +96,36 @@ class OrdemservicosController extends Controller
      */
     public function store(Request $request)
     {
-        $ordemservico = Ordemsevico::updateOrCreate(
-            [
-                'orcamento_id' => $request['orcamento_id'],
-            ],
-            [
-                'responsavel_id' => Responsavel::updateOrCreate(
-                    [
-                        'id' => $request['responsavel'],
-                    ],
-                    [
-                        'pessoa_id' => Responsavel::updateOrCreate(
-                            ['cpfcnpj' => 'Oakland'],
-                            [
-                                'price' => 99
-                            ],
-                        )->id,
-                        'parentesco' => $request['responsavel'],
-                    ])->id,
+        // $ordemservico = Ordemservico::updateOrCreate(
+        //     [
+        //         'orcamento_id' => $request['orcamento_id'],
+        //     ],
+        //     [
+        //         'responsavel_id' => Responsavel::updateOrCreate(
+        //             [
+        //                 'id' => $request['responsavel'],
+        //             ],
+        //             [
+        //                 'pessoa_id' => Responsavel::updateOrCreate(
+        //                     ['cpfcnpj' => 'Oakland'],
+        //                     [
+        //                         'price' => 99
+        //                     ],
+        //                 )->id,
+        //                 'parentesco' => $request['responsavel'],
+        //             ])->id,
 
 
-                'profissional_id'        => $request['profissional_id'       ],
-                'codigo'                 => $request['codigo'                ],
-                'inicio'                 => $request['inicio'                ],
-                'fim'                    => $request['fim'                   ],
-                'status'                 => $request['status'                ],
-                'montagemequipe'         => $request['montagemequipe'        ],
-                'realizacaoprocedimento' => $request['realizacaoprocedimento'],
-                'profissional_id'        => $request['profissional_id'       ],
-            ]
-        );
+        //         'profissional_id'        => $request['profissional_id'       ],
+        //         'codigo'                 => $request['codigo'                ],
+        //         'inicio'                 => $request['inicio'                ],
+        //         'fim'                    => $request['fim'                   ],
+        //         'status'                 => $request['status'                ],
+        //         'montagemequipe'         => $request['montagemequipe'        ],
+        //         'realizacaoprocedimento' => $request['realizacaoprocedimento'],
+        //         'profissional_id'        => $request['profissional_id'       ],
+        //     ]
+        // );
 
         // $ordemservico = new Ordemservico;
         // $ordemservico->codigo = new $request->codigo;
