@@ -12,4 +12,9 @@ class Ordemservico extends Model
     {
         return $this->belongsTo('App\Orcamento');
     }
+
+    public function responsavel()
+    {
+        return $this->belongsTo('App\Responsavel');
+    }
 }
