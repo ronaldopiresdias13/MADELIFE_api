@@ -22,6 +22,11 @@ class Orcamento extends Model
         return $this->belongsTo('App\Empresa');
     }
 
+    public function orcamento_servicos()
+    {
+        return $this->hasMany('App\OrcamentoServico', 'orcamento_id', 'id');
+    }
+
     public function servicos()
     {
         return $this->belongsToMany('App\Servico', 'orcamento_servico')
