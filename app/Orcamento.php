@@ -24,7 +24,7 @@ class Orcamento extends Model
 
     public function orcamento_servicos()
     {
-        return $this->hasMany('App\OrcamentoServico', 'orcamento_id', 'id');
+        return $this->hasMany('App\OrcamentoServico');
     }
 
     public function servicos()
@@ -44,6 +44,11 @@ class Orcamento extends Model
 			'valorcustomensal',
 			'valorresultadomensal'
         );
+    }
+
+    public function orcamento_produtos()
+    {
+        return $this->hasMany('App\OrcamentoProdutos');
     }
 
     public function produtos()
