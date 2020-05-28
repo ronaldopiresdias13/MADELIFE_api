@@ -53,6 +53,9 @@ Route::group([
     Route::apiResource('horariostrabalho'       , 'Api\HorariostrabalhoController'       );
     Route::apiResource('marcas'                 , 'Api\MarcasController'                 );
     Route::apiResource('orcamentos'             , 'Api\OrcamentosController'             );
+    Route::apiResource('orcamentoprodutos'      , 'Api\OrcamentoProdutosController'      );
+    Route::apiResource('orcamentoservicos'      , 'Api\OrcamentoServicosController'      );
+    Route::apiResource('orcamentocustos'        , 'Api\OrcamentoCustosController'        );
     Route::apiResource('ordemservicos'          , 'Api\OrdemservicosController'          );
     Route::apiResource('outros'                 , 'Api\OutrosController'                 );
     Route::apiResource('pacientes'              , 'Api\PacientesController'              );
