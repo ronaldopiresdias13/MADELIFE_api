@@ -96,12 +96,14 @@ class UnidademedidasController extends Controller
     public function store(Request $request)
     {
         $unidademedida = new Unidademedida;
-        $unidademedida->empresa_id = $request->empresa_id;
+        // $unidademedida->empresa_id = $request->empresa_id;
+        $unidademedida->empresa_id = 1;
         $unidademedida->descricao = $request->descricao;
         $unidademedida->sigla = $request->sigla;
         $unidademedida->grupo = $request->grupo;
         $unidademedida->padrao = $request->padrao;
-        $unidademedida->status = $request->status;
+        // $unidademedida->status = $request->status;
+        $unidademedida->status = 1;
         $unidademedida->sigla = $request->sigla;
         $unidademedida->save();
     }
@@ -162,6 +164,7 @@ class UnidademedidasController extends Controller
      */
     public function update(Request $request, Unidademedida $unidademedida)
     {
+        dd($unidademedida);
         $unidademedida->update($request->all());
     }
 

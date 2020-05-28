@@ -65,6 +65,7 @@ Route::group([
     Route::apiResource('responsaveis'           , 'Api\ResponsaveisController'           );
     Route::apiResource('servicos'               , 'Api\ServicosController'               );
     Route::apiResource('setores'                , 'Api\SetoresController'                );
+    // Route::apiResource('setores'                , 'Api\SetoresController'                );
     Route::apiResource('telefones'              , 'Api\TelefonesController'              );
     Route::apiResource('tipoprodutos'           , 'Api\TipoprodutosController'           );
     Route::apiResource('transcricoes'           , 'Api\TranscricoesController'           );
