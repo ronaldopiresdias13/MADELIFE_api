@@ -17,6 +17,11 @@ class Orcamento extends Model
         return $this->belongsTo('App\Cliente');
     }
 
+    public function cidade()
+    {
+        return $this->belongsTo('App\Cidade');
+    }
+
     public function empresa()
     {
         return $this->belongsTo('App\Empresa');

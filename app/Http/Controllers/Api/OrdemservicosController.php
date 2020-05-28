@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Ordemservico;
+use App\Pessoa;
 use App\Responsavel;
+use App\Ordemservico;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class OrdemservicosController extends Controller
 {
@@ -96,36 +97,37 @@ class OrdemservicosController extends Controller
      */
     public function store(Request $request)
     {
-        // $ordemservico = Ordemservico::updateOrCreate(
-        //     [
-        //         'orcamento_id' => $request['orcamento_id'],
-        //     ],
-        //     [
-        //         'responsavel_id' => Responsavel::updateOrCreate(
-        //             [
-        //                 'id' => $request['responsavel'],
-        //             ],
-        //             [
-        //                 'pessoa_id' => Responsavel::updateOrCreate(
-        //                     ['cpfcnpj' => 'Oakland'],
-        //                     [
-        //                         'price' => 99
-        //                     ],
-        //                 )->id,
-        //                 'parentesco' => $request['responsavel'],
-        //             ])->id,
-
-
-        //         'profissional_id'        => $request['profissional_id'       ],
-        //         'codigo'                 => $request['codigo'                ],
-        //         'inicio'                 => $request['inicio'                ],
-        //         'fim'                    => $request['fim'                   ],
-        //         'status'                 => $request['status'                ],
-        //         'montagemequipe'         => $request['montagemequipe'        ],
-        //         'realizacaoprocedimento' => $request['realizacaoprocedimento'],
-        //         'profissional_id'        => $request['profissional_id'       ],
-        //     ]
-        // );
+        $ordemservico = Ordemservico::updateOrCreate(
+            [
+                'orcamento_id' => $request['orcamento_id'],
+            ],
+            [
+                'responsavel_id' => Responsavel::updateOrCreate(
+                    [
+                        'id' => $request['responsavel'],
+                    ],
+                    [
+                        'pessoa_id' => Pessoa::updateOrCreate(
+                            ['cpfcnpj' => $request['responsavel']['pessoa']['cpfcnpj']],
+                            [
+                                'nome'        => $request['responsavel']['pessoa']['nome'       ],
+                                'nascimento'  => $request['responsavel']['pessoa']['nascimento' ],
+                                'tipo'        => $request['responsavel']['pessoa']['tipo'       ],
+                                'rgie'        => $request['responsavel']['pessoa']['rgie'       ],
+                                'observacoes' => $request['responsavel']['pessoa']['observacoes'],
+                            ])->id,
+                        'parentesco' => $request['responsavel'],
+                    ])->id,
+                'profissional_id'        => $request['profissional_id'       ],
+                'codigo'                 => $request['codigo'                ],
+                'inicio'                 => $request['inicio'                ],
+                'fim'                    => $request['fim'                   ],
+                'status'                 => $request['status'                ],
+                'montagemequipe'         => $request['montagemequipe'        ],
+                'realizacaoprocedimento' => $request['realizacaoprocedimento'],
+                'profissional_id'        => $request['profissional_id'       ],
+            ]
+        );
 
         // $ordemservico = new Ordemservico;
         // $ordemservico->codigo = new $request->codigo;
