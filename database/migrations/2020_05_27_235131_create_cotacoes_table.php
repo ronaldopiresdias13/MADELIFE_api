@@ -17,7 +17,7 @@ class CreateCotacoesTable extends Migration
             $table->id();
             $table->string('codigo');
             $table->unsignedBigInteger('profissional_id');
-            $table->foreign('profissional_id')->references('id')->on('proficionais')->onDelete('cascade');
+            $table->foreign('profissional_id')->references('id')->on('profissionais')->onDelete('cascade');
             $table->unsignedBigInteger('empresa_id');
             $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
             $table->string('observacao')->nullable();

@@ -8,8 +8,8 @@ class Ordemservico extends Model
 {
     protected $guarded = [];
 
-    public function orcamentos()
+    public function orcamento()
     {
-        return $this->belongsTo('App\Orcamento', 'orcamento_id');
+        return $this->belongsTo('App\Orcamento');
     }
 }

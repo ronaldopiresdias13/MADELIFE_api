@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Ordemservico;
+use App\Responsavel;
 use Illuminate\Http\Request;
 
 class OrdemservicosController extends Controller
@@ -95,30 +96,61 @@ class OrdemservicosController extends Controller
      */
     public function store(Request $request)
     {
-        $ordemservico = new Ordemservico;
-        $ordemservico->codigo = new $request->codigo;
-        $ordemservico->tipo = new $request->tipo;
-        $ordemservico->orcamento_id = new $request->orcamento_id;
-        $ordemservico->inicio = new $request->inicio;
-        $ordemservico->fim = new $request->fim;
-        $ordemservico->status = new $request->status;
-        $ordemservico->montagemequipe = new $request->montagemequipe;
-        $ordemservico->realizacaoprocedimento = new $request->realizacaoprocedimento;
-        $ordemservico->nome = new $request->nome;
-        $ordemservico->sexo = new $request->sexo;
-        $ordemservico->nascimento = new $request->nascimento;
-        $ordemservico->cpfcnpj = new $request->cpfcnpj;
-        $ordemservico->rgie = new $request->rgie;
-        $ordemservico->endereco1 = new $request->endereco1;
-        $ordemservico->cidade1 = new $request->cidade1;
-        $ordemservico->cep1 = new $request->cep1;
-        $ordemservico->endereco2 = new $request->endereco2;
-        $ordemservico->cidade2 = new $request->cidade2;
-        $ordemservico->cep2 = new $request->cep2;
-        $ordemservico->contato = new $request->contato;
-        $ordemservico->email = new $request->email;
-        $ordemservico->profissional_id = new $request->profissional_id;
-        $ordemservico->save();
+        $ordemservico = Ordemsevico::updateOrCreate(
+            [
+                'orcamento_id' => $request['orcamento_id'],
+            ],
+            [
+                'responsavel_id' => Responsavel::updateOrCreate(
+                    [
+                        'id' => $request['responsavel'],
+                    ],
+                    [
+                        'pessoa_id' => Responsavel::updateOrCreate(
+                            ['cpfcnpj' => 'Oakland'],
+                            [
+                                'price' => 99
+                            ],
+                        )->id,
+                        'parentesco' => $request['responsavel'],
+                    ])->id,
+
+
+                'profissional_id'        => $request['profissional_id'       ],
+                'codigo'                 => $request['codigo'                ],
+                'inicio'                 => $request['inicio'                ],
+                'fim'                    => $request['fim'                   ],
+                'status'                 => $request['status'                ],
+                'montagemequipe'         => $request['montagemequipe'        ],
+                'realizacaoprocedimento' => $request['realizacaoprocedimento'],
+                'profissional_id'        => $request['profissional_id'       ],
+            ]
+        );
+
+        // $ordemservico = new Ordemservico;
+        // $ordemservico->codigo = new $request->codigo;
+        // $ordemservico->tipo = new $request->tipo;
+        // $ordemservico->orcamento_id = new $request->orcamento_id;
+        // $ordemservico->inicio = new $request->inicio;
+        // $ordemservico->fim = new $request->fim;
+        // $ordemservico->status = new $request->status;
+        // $ordemservico->montagemequipe = new $request->montagemequipe;
+        // $ordemservico->realizacaoprocedimento = new $request->realizacaoprocedimento;
+        // $ordemservico->nome = new $request->nome;
+        // $ordemservico->sexo = new $request->sexo;
+        // $ordemservico->nascimento = new $request->nascimento;
+        // $ordemservico->cpfcnpj = new $request->cpfcnpj;
+        // $ordemservico->rgie = new $request->rgie;
+        // $ordemservico->endereco1 = new $request->endereco1;
+        // $ordemservico->cidade1 = new $request->cidade1;
+        // $ordemservico->cep1 = new $request->cep1;
+        // $ordemservico->endereco2 = new $request->endereco2;
+        // $ordemservico->cidade2 = new $request->cidade2;
+        // $ordemservico->cep2 = new $request->cep2;
+        // $ordemservico->contato = new $request->contato;
+        // $ordemservico->email = new $request->email;
+        // $ordemservico->profissional_id = new $request->profissional_id;
+        // $ordemservico->save();
     }
 
     /**

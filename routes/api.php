@@ -51,6 +51,7 @@ Route::group([
     Route::apiResource('fornecedores'           , 'Api\FornecedoresController'           );
     Route::apiResource('grupocuidados'          , 'Api\GrupocuidadosController'          );
     Route::apiResource('horariostrabalho'       , 'Api\HorariostrabalhoController'       );
+    Route::apiResource('historicoorcamentos'    , 'Api\HistoricoorcamentosController'    );
     Route::apiResource('marcas'                 , 'Api\MarcasController'                 );
     Route::apiResource('orcamentos'             , 'Api\OrcamentosController'             );
     Route::apiResource('orcamentoprodutos'      , 'Api\OrcamentoProdutosController'      );
