@@ -48,7 +48,7 @@ class Orcamento extends Model
 
     public function orcamento_produtos()
     {
-        return $this->hasMany('App\OrcamentoProdutos');
+        return $this->hasMany('App\OrcamentoProduto');
     }
 
     public function produtos()
