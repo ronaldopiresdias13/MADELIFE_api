@@ -24,12 +24,38 @@ class Orcamento extends Model
 
     public function servicos()
     {
-        return $this->belongsToMany('App\Servico', 'orcamento_servico');//->withPivot('orcamento_id', 'servico_id');
+        return $this->belongsToMany('App\Servico', 'orcamento_servico')
+        ->withPivot(
+            'quantidade'      ,
+            'frequencia'      ,
+            'basecobranca'    ,
+			'valorunitario'   ,
+			'custo'           ,
+			'subtotal'        ,
+			'subtotalcusto'   ,
+			'icms'            ,
+			'inss'            ,
+			'iss'             ,
+			'valorcustomensal',
+			'valorresultadomensal'
+        );
     }
 
     public function produtos()
     {
-        return $this->belongsToMany('App\Produto', 'orcamento_produto');
+        return $this->belongsToMany('App\Produto', 'orcamento_produto')
+        ->withpivot(
+            "quantidade"      ,
+			"valorunitario"   ,
+			"custo"           ,
+			"subtotal"        ,
+			"subtotalcusto"   ,
+			"icms"            ,
+			"inss"            ,
+			"iss"             ,
+			"valorcustomensal",
+			"valorresultadomensal"
+        );
     }
 
     public function custos()
@@ -37,8 +63,4 @@ class Orcamento extends Model
         return $this->hasMany('App\Custo');
     }
 
-    public function orcamento_servico()
-    {
-        return $this->hasMany('App\OrcamentoProduto');
-    }
 }

@@ -29,12 +29,6 @@ class OrcamentosController extends Controller
      */
     public function index(Request $request)
     {
-        // $orcamentos = Orcamento::all();
-        // foreach ($orcamentos as $key => $orcamento) {
-        //     $orcamento->orcamento_servico;
-        // }
-        // return $orcamentos;
-        // dd('Fim');
         $itens = null;
 
         if ($request->commands) {
