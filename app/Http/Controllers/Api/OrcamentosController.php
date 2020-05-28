@@ -29,16 +29,12 @@ class OrcamentosController extends Controller
      */
     public function index(Request $request)
     {
-        // dd('teste');
         // $orcamentos = Orcamento::all();
         // foreach ($orcamentos as $key => $orcamento) {
-        //     // $orcamento->historicos;
-        //     foreach ($orcamento->historicos as $key => $historico) {
-        //         $historico->orcamentoservicos;
-        //         $historico->orcamentoprodutos;
-        //     }
+        //     $orcamento->orcamento_servico;
         // }
         // return $orcamentos;
+        // dd('Fim');
         $itens = null;
 
         if ($request->commands) {
@@ -461,7 +457,287 @@ class OrcamentosController extends Controller
      */
     public function update(Request $request, Orcamento $orcamento)
     {
-        //
+        $orcamento = Orcamento::updateOrCreate(
+            [
+                'id' => ($request['id'] != '')? $request['id'] : null,
+            ],
+            [
+                'empresa_id'        => $request['empresa_id'       ],
+                'cliente_id'        => $request['cliente_id'       ],
+                'numero'            => $request['numero'           ],
+                'processo'          => $request['processo'         ],
+                'cidade_id'         => $request['cidade_id'        ],
+                'tipo'              => $request['tipo'             ],
+                'data'              => $request['data'             ],
+                'unidade'           => $request['unidade'          ],
+                'quantidade'        => $request['quantidade'       ],
+                'situacao'          => $request['situacao'         ],
+                'descricao'         => $request['descricao'        ],
+                'valortotalservico' => $request['valortotalservico'],
+                'valortotalcusto'   => $request['valortotalcusto'  ],
+                'valortotalproduto' => $request['valortotalproduto'],
+                'observacao'        => $request['observacao'       ],
+                'status'            => 1
+            ]);
+    
+            if ($request['servicos']) {
+                foreach ($request['servicos'] as $key => $servico) {
+                    $orcamento_servico = OrcamentoServico::updateOrCreate(
+                    [
+                        'orcamento_id' => $orcamento->id        ,
+                        'servico_id'   => $servico['servico_id'],
+                    ],
+                    [
+                        'quantidade'	       => $servico['quantidade'          ],
+                        'frequencia'	       => $servico['frequencia'          ],
+                        'basecobranca'	       => $servico['basecobranca'        ],
+                        'valorunitario'	       => $servico['valorunitario'       ],
+                        'custo'                => $servico['custo'               ],
+                        'subtotal'	           => $servico['subtotal'            ],
+                        'subtotalcusto'    	   => $servico['subtotalcusto'       ],
+                        'icms'	               => $servico['icms'                ],
+                        'inss'                 => $servico['inss'                ],
+                        'iss'                  => $servico['iss'                 ],
+                        'valorcustomensal'     => $servico['valorcustomensal'    ],
+                        'valorresultadomensal' => $servico['valorresultadomensal'],
+                    ]);
+                }
+            }
+    
+            if ($request['produtos']) {
+                foreach ($request['produtos'] as $key => $produto) {
+                    $orcamento_produto = OrcamentoProduto::updateOrCreate(
+                    [
+                        'orcamento_id' => $orcamento->id        ,
+                        'produto_id'   => $produto['produto_id'],
+                    ],
+                    [
+                        'quantidade'	       => $produto['quantidade'          ],
+                        'valorunitario'	       => $produto['valorunitario'       ],
+                        'custo'                => $produto['custo'               ],
+                        'subtotal'	           => $produto['subtotal'            ],
+                        'subtotalcusto'    	   => $produto['subtotalcusto'       ],
+                        'valorresultadomensal' => $produto['valorresultadomensal'],
+                        'valorcustomensal'     => $produto['valorcustomensal'    ]
+                    ]);
+                }
+            }
+    
+            if ($request['custos']) {
+                foreach ($request['custos'] as $key => $custo) {
+                    $orcamentocusto = Orcamentocusto::updateOrCreate(
+                    [
+                        'orcamento_id' => $orcamento->id,
+                        'descricao'    => $custo['descricao'    ],
+                    ],
+                    [
+                        'quantidade'    => $custo['quantidade'   ],
+                        'unidade'       => $custo['unidade'      ],
+                        'valorunitario'	=> $custo['valorunitario'],
+                        'valortotal'    => $custo['valortotal'   ],
+                    ]);
+                }
+            }
+    
+            if ($request['homecare']) {
+                $homecare = Homecare::updateOrCreate(
+                [
+                    'orcamento_id' => $orcamento->id,
+                ],
+                [
+                    'nome'         => $request['homecare']['nome'      ],
+                    'sexo'         => $request['homecare']['sexo'      ],
+                    'nascimento'   => $request['homecare']['nascimento'],
+                    'cpfcnpj'	   => $request['homecare']['cpf'       ],
+                    'rgie'         => $request['homecare']['rg'        ],
+                    'endereco'     => $request['homecare']['endereco'  ],
+                    'cidade_id'    => $request['homecare']['cidade'    ],
+                    'observacao'   => $request['homecare']['observacao'],
+                ]);
+    
+                if ($request['homecare']['telefones']) {
+                    foreach ($request['homecare']['telefones'] as $key => $telefone) {
+                        $homecare_telefone = HomecareTelefone::updateOrCreate([
+                            'homecare_id' => $homecare->id,
+                            'telefone_id' => Telefone::updateOrCreate(
+                                [
+                                    'id' => $telefone['id'],
+                                ],
+                                [
+                                    'telefone'  => $telefone['telefone' ],
+                                    'tipo'      => $telefone['tipo'     ],
+                                    'descricao' => $telefone['descricao'],
+                                ])->id,
+                        ]);
+                    }
+                }
+                
+                if ($request['homecare']['emails']) {
+                    foreach ($request['homecare']['emails'] as $key => $email) {
+                        $homecare_email = HomecareEmail::updateOrCreate([
+                            'homecare_id' => $homecare->id,
+                            'email_id'    => Email::updateOrCreate(
+                                [
+                                    'id' => $email['id'],
+                                ],
+                                [
+                                    'email'     => $email['email'    ],
+                                    'tipo'      => $email['tipo'     ],
+                                    'descricao' => $email['descricao'],
+                                ])->id,
+                        ]);
+                    }
+                }
+            }
+    
+            if ($request['remocao']) {
+                $remocao = Remocao::updateOrCreate(
+                [
+                    'orcamento_id'    => $orcamento->id,
+                ],
+                [
+                    'nome'            => $request['remocao']['nome'           ],
+                    'sexo'            => $request['remocao']['sexo'           ],
+                    'nascimento'      => $request['remocao']['nascimento'     ],
+                    'cpfcnpj'	      => $request['remocao']['cpf'            ],
+                    'rgie'            => $request['remocao']['rg'             ],
+                    'enderecoorigem'  => $request['remocao']['enderecoorigem' ],
+                    'cidadeorigem'    => $request['remocao']['cidadeorigem'   ],
+                    'enderecodestino' => $request['remocao']['enderecodestino'],
+                    'cidadedestino'   => $request['remocao']['cidadedestino'  ],
+                    'observacao'      => $request['remocao']['observacao'     ],
+                ]);
+    
+                if ($request['remocao']['telefones']) {
+                    foreach ($request['remocao']['telefones'] as $key => $telefone) {
+                        $remocao_telefone = RemocaoTelefone::updateOrCreate([
+                            'remocao_id'  => $remocao->id,
+                            'telefone_id' => Telefone::updateOrCreate(
+                                [
+                                    'id' => $telefone['id'],
+                                ],
+                                [
+                                    'telefone'  => $telefone['telefone' ],
+                                    'tipo'      => $telefone['tipo'     ],
+                                    'descricao' => $telefone['descricao'],
+                                ])->id,
+                        ]);
+                    }
+                }
+                if ($request['remocao']['emails']) {
+                    foreach ($request['remocao']['emails'] as $key => $email) {
+                        $remocao_email = RemocaoEmail::updateOrCreate([
+                            'remocao_id' => $remocao->id,
+                            'email_id'   => Email::updateOrCreate(
+                                [
+                                    'id' => $email['id'],
+                                ],
+                                [
+                                    'email'     => $email['email'    ],
+                                    'tipo'      => $email['tipo'     ],
+                                    'descricao' => $email['descricao'],
+                                ])->id,
+                        ]);
+                    }
+                }
+            }
+    
+            if ($request['evento']) {
+                $evento = Evento::updateOrCreate(
+                [
+                    'orcamento_id' => $orcamento->id,
+                ],
+                [
+                    'nome'         => $request['evento']['nome'    ],
+                    'endereco'     => $request['evento']['endereco'],
+                    'cep'          => $request['evento']['cep'     ],
+                    'cidade'       => $request['evento']['cidade'  ],
+                ]);
+    
+                if ($request['evento']['telefones']) {
+                    foreach ($request['evento']['telefones'] as $key => $telefone) {
+                        $evento_telefone = EventoTelefone::updateOrCreate([
+                            'evento_id'   => $evento->id,
+                            'telefone_id' => Telefone::updateOrCreate(
+                                [
+                                    'id' => $telefone['id'],
+                                ],
+                                [
+                                    'telefone'  => $telefone['telefone' ],
+                                    'tipo'      => $telefone['tipo'     ],
+                                    'descricao' => $telefone['descricao'],
+                                ])->id,
+                        ]);
+                    }
+                }
+                if ($request['evento']['emails']) {
+                    foreach ($request['evento']['emails'] as $key => $email) {
+                        $evento_email = EventoEmail::updateOrCreate([
+                            'evento_id' => $evento->id,
+                            'email_id'  => Email::updateOrCreate(
+                                [
+                                    'id' => $email['id'],
+                                ],
+                                [
+                                    'email'     => $email['email'    ],
+                                    'tipo'      => $email['tipo'     ],
+                                    'descricao' => $email['descricao'],
+                                ])->id,
+                        ]);
+                    }
+                }
+            }
+    
+            if ($request['aph']) {
+                $aph = Aph::updateOrCreate(
+                [
+                    'orcamento_id' => $orcamento->id,
+                ],
+                [
+                    'nome'         => $request['aph']['nome'    ],
+                    'endereco'     => $request['aph']['endereco'],
+                    'cep'          => $request['aph']['cep'     ],
+                    'cidade'       => $request['aph']['cidade'  ],
+                ]);
+    
+                if ($request['aph']['telefones']) {
+                    foreach ($request['aph']['telefones'] as $key => $telefone) {
+                        $aph_telefone = AphTelefone::updateOrCreate([
+                            'aph_id'      => $aph->id,
+                            'telefone_id' => Telefone::updateOrCreate(
+                                [
+                                    'id' => $telefone['id'],
+                                ],
+                                [
+                                    'telefone'  => $telefone['telefone' ],
+                                    'tipo'      => $telefone['tipo'     ],
+                                    'descricao' => $telefone['descricao'],
+                                ])->id,
+                        ]);
+                    }
+                }
+                if ($request['aph']['emails']) {
+                    foreach ($request['aph']['emails'] as $key => $email) {
+                        $aph_email = AphEmail::updateOrCreate([
+                            'aph_id'   => $aph->id,
+                            'email_id' => Email::updateOrCreate(
+                                [
+                                    'id' => $email['id'],
+                                ],
+                                [
+                                    'email'     => $email['email'    ],
+                                    'tipo'      => $email['tipo'     ],
+                                    'descricao' => $email['descricao'],
+                                ])->id,
+                        ]);
+                    }
+                }
+            }
+    
+            $historicoorcamento = Historicoorcamento::updateOrCreate([
+                'orcamento_id' => $orcamento->id,
+                'historico'    => json_encode($request->all()),
+            ]);
     }
 
     /**

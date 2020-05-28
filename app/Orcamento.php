@@ -24,7 +24,7 @@ class Orcamento extends Model
 
     public function servicos()
     {
-        return $this->belongsToMany('App\Servico', 'orcamento_servico');
+        return $this->belongsToMany('App\Servico', 'orcamento_servico');//->withPivot('orcamento_id', 'servico_id');
     }
 
     public function produtos()
@@ -37,8 +37,8 @@ class Orcamento extends Model
         return $this->hasMany('App\Custo');
     }
 
-    // public function orcamento_produto()
-    // {
-    //     return $this->hasMany('App\OrcamentoProduto');
-    // }
+    public function orcamento_servico()
+    {
+        return $this->hasMany('App\OrcamentoProduto');
+    }
 }
