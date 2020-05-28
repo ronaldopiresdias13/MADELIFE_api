@@ -97,6 +97,20 @@ class OrdemservicosController extends Controller
      */
     public function store(Request $request)
     {
+
+        // $teste = Pessoa::updateOrCreate(
+        //     ['cpfcnpj' => $request['responsavel']['pessoa']['cpfcnpj']],
+        //     [
+        //         'nome'        => $request['responsavel']['pessoa']['nome'       ],
+        //         'nascimento'  => $request['responsavel']['pessoa']['nascimento' ],
+        //         'tipo'        => $request['responsavel']['pessoa']['tipo'       ],
+        //         'rgie'        => $request['responsavel']['pessoa']['rgie'       ],
+        //         'observacoes' => $request['responsavel']['pessoa']['observacoes'],
+        //     ])->id;
+
+        //     return $teste;
+        // return $request['responsavel']['parentesco'];
+
         $ordemservico = Ordemservico::updateOrCreate(
             [
                 'orcamento_id' => $request['orcamento_id'],
@@ -104,7 +118,7 @@ class OrdemservicosController extends Controller
             [
                 'responsavel_id' => Responsavel::updateOrCreate(
                     [
-                        'id' => $request['responsavel'],
+                        'id' => $request['responsavel']['id'],
                     ],
                     [
                         'pessoa_id' => Pessoa::updateOrCreate(
@@ -116,7 +130,7 @@ class OrdemservicosController extends Controller
                                 'rgie'        => $request['responsavel']['pessoa']['rgie'       ],
                                 'observacoes' => $request['responsavel']['pessoa']['observacoes'],
                             ])->id,
-                        'parentesco' => $request['responsavel'],
+                        'parentesco' => $request['responsavel']['parentesco'],
                     ])->id,
                 'profissional_id'        => $request['profissional_id'       ],
                 'codigo'                 => $request['codigo'                ],
@@ -125,7 +139,6 @@ class OrdemservicosController extends Controller
                 'status'                 => $request['status'                ],
                 'montagemequipe'         => $request['montagemequipe'        ],
                 'realizacaoprocedimento' => $request['realizacaoprocedimento'],
-                'profissional_id'        => $request['profissional_id'       ],
             ]
         );
 
