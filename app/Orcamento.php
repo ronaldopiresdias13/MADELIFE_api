@@ -68,7 +68,7 @@ class Orcamento extends Model
         );
     }
 
-    public function custos()
+    public function orcamentocustos()
     {
         return $this->hasMany('App\Orcamentocusto');
     }
