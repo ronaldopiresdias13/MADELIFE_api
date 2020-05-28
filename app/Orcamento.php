@@ -78,4 +78,19 @@ class Orcamento extends Model
         return $this->hasOne('App\Homecare');
     }
 
+    public function remocao()
+    {
+        return $this->hasOne('App\Remocao');
+    }
+
+    public function aph()
+    {
+        return $this->hasOne('App\Aph');
+    }
+
+    public function evento()
+    {
+        return $this->hasOne('App\Evento');
+    }
+
 }
