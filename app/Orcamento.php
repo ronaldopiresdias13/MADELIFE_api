@@ -73,4 +73,9 @@ class Orcamento extends Model
         return $this->hasMany('App\Custo');
     }
 
+    public function homecare()
+    {
+        return $this->hasOne('App\Homecare');
+    }
+
 }
