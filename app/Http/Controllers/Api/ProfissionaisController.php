@@ -23,6 +23,7 @@ use App\Horariotrabalho;
 use App\Dadoscontratual;
 use App\Beneficio;
 use App\ProfissionalBeneficio;
+use App\ProfissionalConvenio;
 use Illuminate\Http\Request;
 
 class ProfissionaisController extends Controller
@@ -120,22 +121,22 @@ class ProfissionaisController extends Controller
             'empresa_id', $request['pessoa']['empresa_id']
         )->first();
 
-        $cliente = null;
+        $profissional = null;
 
         if ($pessoa) {
-            $cliente = Cliente::firstWhere(
+            $profissional = Profissional::firstWhere(
                 'pessoa_id', $pessoa->id,
             );
         }
 
-        if ($cliente) {
-            return response()->json('Cliente já existe!', 400)->header('Content-Type', 'text/plain');
+        if ($profissional) {
+            return response()->json('profissional já existe!', 400)->header('Content-Type', 'text/plain');
         }
 
-        $cliente = Cliente::create([
-            'tipo'       => $request['tipo'      ],
-            'empresa_id' => $request['empresa_id'],
-            'pessoa_id'  => Pessoa::updateOrCreate(
+        $profissional = Profissional::create([
+            'pessoafisica' => 1,
+            'empresa_id'   => 1,
+            'pessoa_id'    => Pessoa::updateOrCreate(
                 [
                     'id' => ($request['pessoa']['id'] != '')? $request['id'] : null,
                 ],
@@ -143,7 +144,7 @@ class ProfissionaisController extends Controller
                     'empresa_id'  => $request['pessoa']['empresa_id' ],
                     'nome'        => $request['pessoa']['nome'       ],
                     'nascimento'  => $request['pessoa']['nascimento' ],
-                    'tipo'        =>                    'Cliente'     ,
+                    'tipo'        =>                    'profissional'     ,
                     'cpfcnpj'     => $request['pessoa']['cpfcnpj'    ],
                     'rgie'        => $request['pessoa']['rgie'       ],
                     'observacoes' => $request['pessoa']['observacoes'],
@@ -151,12 +152,68 @@ class ProfissionaisController extends Controller
                     'status'      => $request['pessoa']['status'     ],
                 ]
             )->id,
-        ]);
+            'sexo'                   => $request['sexo'],
+            'setor_id'               => $request['setor_id'],
+            'cargo_id'               => $request['cargo_id'],
+            'pis'                    => $request['pis'],
+            'numerocarteiratrabalho' => $request['numerocarteiratrabalho'],
+            'numerocnh'              => $request['numerocnh'],
+            'categoriacnh'           => $request['categoriacnh'],
+            'validadecnh'            => $request['validadecnh'],
+            'numerotituloeleitor'    => $request['numerotituloeleitor'],
+            'zonatituloeleitor'      => $request['zonatituloeleitor'],
+            'dadoscontratuais_id'    => Dadoscontratual::create([
+                'tiposalario'             => $request['dadoscontratuais']['tiposalario'],
+                'salario'                 => $request['dadoscontratuais']['salario'],
+                // 'cargahoraria'            => $request['dadoscontratuais']['cargahoraria'],
+                // 'insalublidade'           => $request['dadoscontratuais']['insalublidade'],
+                // 'percentualinsalublidade' => $request['dadoscontratuais']['percentualinsalublidade'],
+                'cargahoraria'            => null,
+                'insalubridade'           => 0,
+                'percentualinsalubridade' => null,
+                'admissao'                => $request['dadoscontratuais']['admissao'],
+                'demissao'                => $request['dadoscontratuais']['demissao'],
+            ])->id,
 
+        ]);
+        if($request['formacoes']['formacao']){
+            $profissional_formacao = ProfissionalFormacao::create([
+                'profissional_id' => $profissional->id,
+                'formacao_id'    => $request['formacoes']['formacao']
+            ]);
+        }
+        if($request['beneficios']){
+            foreach ($request['beneficios'] as $key => $beneficio) {
+                $profissional_beneficio = ProfissionalBeneficio::create([
+                    'profissional_id' => $profissional->id,
+                    'beneficio_id'    => $beneficio['beneficio_id']
+                ]);
+            }
+        }
+        if($request['convenios']){
+            foreach ($request['convenios'] as $key => $convenio) {
+                $profissional_convenio = ProfissionalConvenio::create([
+                    'profissional_id' => $profissional->id,
+                    'convenio_id'    => $convenio['convenio_id']
+                ]);
+            }
+        }
+        if($request['dadosBancario']){
+            $dados_bancario = Dadosbancario::create([
+                'empresa_id'  => 1,
+                'banco_id'    => $request['dadosBancario']['banco'],
+                'agencia'     => $request['dadosBancario']['agencia'],
+                'conta'       => $request['dadosBancario']['conta'],
+                'digito'      => $request['dadosBancario']['digito'],
+                'tipoconta'   => null,
+                // 'tipoconta'   => $request['dadosBancario']['tipoconta'],
+                'pessoa_id'   => $profissional->pessoa_id,
+            ]);
+        }
         if ($request['pessoa']['telefones']) {
             foreach ($request['pessoa']['telefones'] as $key => $telefone) {
                 $pessoa_telefone = PessoaTelefone::firstOrCreate([
-                    'pessoa_id'   => $cliente->pessoa_id,
+                    'pessoa_id'   => $profissional->pessoa_id,
                     'telefone_id' => Telefone::updateOrCreate(
                         [
                             'id' => $telefone['id'],
@@ -175,7 +232,7 @@ class ProfissionaisController extends Controller
         if ($request['pessoa']['enderecos']) {
             foreach ($request['pessoa']['enderecos'] as $key => $endereco) {
                 $pessoa_endereco = PessoaEndereco::firstOrCreate([
-                    'pessoa_id'   => $cliente->pessoa_id,
+                    'pessoa_id'   => $profissional->pessoa_id,
                     'endereco_id' => Endereco::updateOrCreate(
                         [
                             'id' => $endereco['id'],
@@ -199,10 +256,10 @@ class ProfissionaisController extends Controller
         if ($request['pessoa']['emails']) {
             foreach ($request['pessoa']['emails'] as $key => $email) {
                 $pessoa_email = PessoaEmail::firstOrCreate([
-                    'pessoa_id' => $cliente->pessoa_id,
+                    'pessoa_id' => $profissional->pessoa_id,
                     'email_id'  => Email::updateOrCreate(
                         [
-                            'id'  => $email['id'],
+                            'email'  => $email['email'],
                         ],
                         // $email,
                         [
@@ -216,42 +273,23 @@ class ProfissionaisController extends Controller
         }
 
         if ($request['pessoa']['users']) {
-            foreach ($request['pessoa']['users'] as $key => $user) {
-                $usercpf = User::firstWhere(
-                    'cpfcnpj', $user['cpfcnpj'],
-                );
-                $useremail = User::firstWhere(
-                    'email', $user['email'],
-                );
-        
-                $userexist = null;
-        
-                if ($usercpf) {
-                    $userexist = $usercpf;
-                } elseif ($useremail) {
-                    $userexist = $useremail;
-                }
-        
-                if (($pessoa == null) || ($pessoa != null && ($userexist == null))) {
-                    $userexist = User::create([
-                        'empresa_id' =>        $user['empresa_id'] ,
-                        'cpfcnpj'    =>        $user['cpfcnpj'   ] ,
-                        'email'      =>        $user['email'     ] ,
-                        'password'   => bcrypt($user['password'  ]),
-                        'pessoa_id'  =>        $cliente->pessoa_id ,
-                    ]);
-                }
-    
-                foreach ($user['acessos'] as $key => $acesso) {
-                    $user_acesso = UserAcesso::firstOrCreate([
-                        'user_id'   => $userexist->id,
-                        'acesso_id' => Acesso::firstWhere('id', $acesso)->id,
-                    ]);
-                }
+            
+            $user = User::create([
+                'empresa_id' =>        $request['empresa_id'] ,
+                'cpfcnpj'    =>        $request['pessoa']['users']['cpfcnpj'   ] ,
+                'email'      =>        $request['pessoa']['users']['email'     ] ,
+                'password'   => bcrypt($request['pessoa']['users']['password'  ]),
+                'pessoa_id'  =>        $profissional->pessoa_id ,
+            ]);
+            foreach ($user['acessos'] as $key => $acesso) {
+                $user_acesso = UserAcesso::firstOrCreate([
+                    'user_id'   => $user->id,
+                    'acesso_id' => Acesso::firstWhere('id', $acesso)->id,
+                ]);
             }
         }
 
-        return $cliente;
+        return $profissional;
 
 
 
