@@ -165,12 +165,12 @@ class ProfissionaisController extends Controller
             'dadoscontratuais_id'    => Dadoscontratual::create([
                 'tiposalario'             => $request['dadoscontratuais']['tiposalario'],
                 'salario'                 => $request['dadoscontratuais']['salario'    ],
-                // 'cargahoraria'            => $request['dadoscontratuais']['cargahoraria'],
-                // 'insalublidade'           => $request['dadoscontratuais']['insalublidade'],
-                // 'percentualinsalublidade' => $request['dadoscontratuais']['percentualinsalublidade'],
-                'cargahoraria'            => null,
-                'insalubridade'           => 0,
-                'percentualinsalubridade' => null,
+                'cargahoraria'            => $request['dadoscontratuais']['cargahoraria'],
+                'insalubridade'           => $request['dadoscontratuais']['insalubridade'],
+                'percentualinsalubridade' => $request['dadoscontratuais']['percentualinsalubridade'],
+                // 'cargahoraria'            => null,
+                // 'insalubridade'           => 0,
+                // 'percentualinsalubridade' => null,
                 'admissao'                => $request['dadoscontratuais']['admissao'],
                 'demissao'                => $request['dadoscontratuais']['demissao'],
             ])->id,
@@ -198,9 +198,9 @@ class ProfissionaisController extends Controller
                 ]);
             }
         }
-        if($request['dadosBancario']){
+        if($request['dadosBancario']['banco'] && $request['dadosBancario']['agencia'] && $request['dadosBancario']['conta'] && $request['dadosBancario']['digito']){
             $dados_bancario = Dadosbancario::create([
-                'empresa_id'  => 1,
+                'empresa_id'  => $request['dadosBancario']['banco'],
                 'banco_id'    => $request['dadosBancario']['banco'],
                 'agencia'     => $request['dadosBancario']['agencia'],
                 'conta'       => $request['dadosBancario']['conta'],
