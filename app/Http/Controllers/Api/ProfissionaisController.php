@@ -144,7 +144,7 @@ class ProfissionaisController extends Controller
                     'empresa_id'  => $request['pessoa']['empresa_id' ],
                     'nome'        => $request['pessoa']['nome'       ],
                     'nascimento'  => $request['pessoa']['nascimento' ],
-                    'tipo'        =>                    'profissional'     ,
+                    'tipo'        =>                    'profissional',
                     'cpfcnpj'     => $request['pessoa']['cpfcnpj'    ],
                     'rgie'        => $request['pessoa']['rgie'       ],
                     'observacoes' => $request['pessoa']['observacoes'],
@@ -152,19 +152,19 @@ class ProfissionaisController extends Controller
                     'status'      => $request['pessoa']['status'     ],
                 ]
             )->id,
-            'sexo'                   => $request['sexo'],
-            'setor_id'               => $request['setor_id'],
-            'cargo_id'               => $request['cargo_id'],
-            'pis'                    => $request['pis'],
+            'sexo'                   => $request['sexo'                  ],
+            'setor_id'               => $request['setor_id'              ],
+            'cargo_id'               => $request['cargo_id'              ],
+            'pis'                    => $request['pis'                   ],
             'numerocarteiratrabalho' => $request['numerocarteiratrabalho'],
-            'numerocnh'              => $request['numerocnh'],
-            'categoriacnh'           => $request['categoriacnh'],
-            'validadecnh'            => $request['validadecnh'],
-            'numerotituloeleitor'    => $request['numerotituloeleitor'],
-            'zonatituloeleitor'      => $request['zonatituloeleitor'],
+            'numerocnh'              => $request['numerocnh'             ],
+            'categoriacnh'           => $request['categoriacnh'          ],
+            'validadecnh'            => $request['validadecnh'           ],
+            'numerotituloeleitor'    => $request['numerotituloeleitor'   ],
+            'zonatituloeleitor'      => $request['zonatituloeleitor'     ],
             'dadoscontratuais_id'    => Dadoscontratual::create([
                 'tiposalario'             => $request['dadoscontratuais']['tiposalario'],
-                'salario'                 => $request['dadoscontratuais']['salario'],
+                'salario'                 => $request['dadoscontratuais']['salario'    ],
                 // 'cargahoraria'            => $request['dadoscontratuais']['cargahoraria'],
                 // 'insalublidade'           => $request['dadoscontratuais']['insalublidade'],
                 // 'percentualinsalublidade' => $request['dadoscontratuais']['percentualinsalublidade'],
@@ -177,7 +177,8 @@ class ProfissionaisController extends Controller
 
         ]);
         if($request['formacoes']['formacao']){
-            $profissional_formacao = ProfissionalFormacao::create([
+            $profissional->formacoes()->create([
+            // $profissional_formacao = ProfissionalFormacao::create([
                 'profissional_id' => $profissional->id,
                 'formacao_id'    => $request['formacoes']['formacao']
             ]);
