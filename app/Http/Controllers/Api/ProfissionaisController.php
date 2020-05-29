@@ -177,8 +177,7 @@ class ProfissionaisController extends Controller
 
         ]);
         if($request['formacoes']['formacao']){
-            $profissional->formacoes()->create([
-            // $profissional_formacao = ProfissionalFormacao::create([
+            $profissional_formacao = ProfissionalFormacao::create([
                 'profissional_id' => $profissional->id,
                 'formacao_id'    => $request['formacoes']['formacao']
             ]);
