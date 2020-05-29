@@ -115,7 +115,6 @@ class ProdutosController extends Controller
         $produto->quantidadeestoque = $request->quantidadeestoque;
         $produto->armazem = $request->armazem;
         $produto->localizacaofisica = $request->localizacaofisica;
-        $produto->fornecedor_id = $request->fornecedor_id;
         $produto->datacompra = $request->datacompra;
         $produto->marca_id = $request->marca_id; 
         $produto->desvalorizacao = $request->desvalorizacao; 
