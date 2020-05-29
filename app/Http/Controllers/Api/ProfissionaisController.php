@@ -152,17 +152,17 @@ class ProfissionaisController extends Controller
                     'status'      => $request['pessoa']['status'     ],
                 ]
             )->id,
-            'sexo'                   => $request['sexo'                  ],
-            'setor_id'               => $request['setor_id'              ],
-            'cargo_id'               => $request['cargo_id'              ],
-            'pis'                    => $request['pis'                   ],
-            'numerocarteiratrabalho' => $request['numerocarteiratrabalho'],
-            'numerocnh'              => $request['numerocnh'             ],
-            'categoriacnh'           => $request['categoriacnh'          ],
-            'validadecnh'            => $request['validadecnh'           ],
-            'numerotituloeleitor'    => $request['numerotituloeleitor'   ],
-            'zonatituloeleitor'      => $request['zonatituloeleitor'     ],
-            'dadoscontratuais_id'    => Dadoscontratual::create([
+            'sexo'                        => $request['sexo'                  ],
+            'setor_id'                    => $request['setor_id'              ],
+            'cargo_id'                    => $request['cargo_id'              ],
+            'pis'                         => $request['pis'                   ],
+            'numerocarteiratrabalho'      => $request['numerocarteiratrabalho'],
+            'numerocnh'                   => $request['numerocnh'             ],
+            'categoriacnh'                => $request['categoriacnh'          ],
+            'validadecnh'                 => $request['validadecnh'           ],
+            'numerotituloeleitor'         => $request['numerotituloeleitor'   ],
+            'zonatituloeleitor'           => $request['zonatituloeleitor'     ],
+            'dadoscontratuais_id'         => Dadoscontratual::create([
                 'tiposalario'             => $request['dadoscontratuais']['tiposalario'],
                 'salario'                 => $request['dadoscontratuais']['salario'    ],
                 'cargahoraria'            => $request['dadoscontratuais']['cargahoraria'],
@@ -333,8 +333,9 @@ class ProfissionaisController extends Controller
      * @param  \App\Profissional  $profissional
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Profissional $profissional)
+    public function show(Profissional $profissional)
     {
+        dd($request);
         $iten = $profissional;
 
         if ($request->commands) {
