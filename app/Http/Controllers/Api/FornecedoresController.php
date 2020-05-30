@@ -52,26 +52,6 @@ class FornecedoresController extends Controller
         }
         
         $itens = $itens->get();
-        
-        // if ($request['adicionais']) {
-        //     foreach ($itens as $key => $iten) {
-        //         foreach ($request['adicionais'] as $key => $adic) {
-        //             if (is_string($adic)) {
-        //                 $iten[$adic];
-        //             } else {
-        //                 switch (count($adic)) {
-        //                     case 1:
-        //                         $iten[$adic[0]];
-        //                         break;
-                            
-        //                     case 2:
-        //                         $iten[$adic[0]][$adic[1]];
-        //                         break;
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
 
         if ($request['adicionais']) {
             foreach ($itens as $key => $iten) {

@@ -149,15 +149,9 @@ class ClientesController extends Controller
             foreach ($request['pessoa']['telefones'] as $key => $telefone) {
                 $pessoa_telefone = PessoaTelefone::firstOrCreate([
                     'pessoa_id'   => $cliente->pessoa_id,
-                    'telefone_id' => Telefone::updateOrCreate(
-                        [
-                            'id' => $telefone['id'],
-                        ],
-                        // $telefone,
+                    'telefone_id' => Telefone::firstOrCreate(
                         [
                             'telefone'  => $telefone['telefone' ],
-                            'tipo'      => $telefone['tipo'     ],
-                            'descricao' => $telefone['descricao'],
                         ]
                     )->id,
                 ]);
@@ -168,14 +162,10 @@ class ClientesController extends Controller
             foreach ($request['pessoa']['enderecos'] as $key => $endereco) {
                 $pessoa_endereco = PessoaEndereco::firstOrCreate([
                     'pessoa_id'   => $cliente->pessoa_id,
-                    'endereco_id' => Endereco::updateOrCreate(
-                        [
-                            'id' => $endereco['id'],
-                        ],
-                        // $endereco,
+                    'endereco_id' => Endereco::firstOrCreate(
                         [
                             'cep'         => $endereco['cep'        ],
-                            'cidade_id'   => $endereco['cidade_id'     ],
+                            'cidade_id'   => $endereco['cidade_id'  ],
                             'rua'         => $endereco['rua'        ],
                             'bairro'      => $endereco['bairro'     ],
                             'numero'      => $endereco['numero'     ],
@@ -192,15 +182,9 @@ class ClientesController extends Controller
             foreach ($request['pessoa']['emails'] as $key => $email) {
                 $pessoa_email = PessoaEmail::firstOrCreate([
                     'pessoa_id' => $cliente->pessoa_id,
-                    'email_id'  => Email::updateOrCreate(
-                        [
-                            'id'  => $email['id'],
-                        ],
-                        // $email,
+                    'email_id'  => Email::firstOrCreate(
                         [
                             'email'     => $email['email'    ],
-                            'tipo'      => $email['tipo'     ],
-                            'descricao' => $email['descricao'],
                         ]
                     )->id,
                 ]);
@@ -244,127 +228,6 @@ class ClientesController extends Controller
         }
 
         return $cliente;
-
-        //-------------------------------------------------------------------------------------------------
-
-        $pessoa = Pessoa::where(
-            'cpfcnpj', $request['cpfcnpj']
-        )->where(
-            'empresa_id', $request['empresa_id']
-        )->first();
-
-        $cliente = null;
-
-        if ($pessoa) {
-            $cliente = Cliente::firstWhere(
-                'pessoa_id', $pessoa->id,
-            );
-        }
-
-        if ($cliente) {
-            return response()->json('Cliente já existe!', 400)->header('Content-Type', 'text/plain');
-        }
-
-        $cliente = Cliente::create([
-            'tipo'      => $request['tipo'],
-            'pessoa_id' => Pessoa::updateOrCreate(
-                [
-                    'cpfcnpj'     => $request['cpfcnpj'    ],
-                ],
-                [
-                    'empresa_id'  => $request['empresa_id' ],
-                    'nome'        => $request['nome'       ],
-                    'nascimento'  => $request['nascimento' ],
-                    'tipo'        =>          'Cliente'     ,
-                    'rgie'        => $request['rgie'       ],
-                    'observacoes' => $request['observacoes'],
-                    'perfil'      => $request['perfil'     ],
-                    'status'      => $request['status'     ],
-                ]
-            )->id,
-            'empresa_id' => $request['empresa_id'],
-        ]);
-
-        $pessoa_endereco = PessoaEndereco::firstOrCreate([
-            'pessoa_id'   => $cliente->pessoa_id,
-            'endereco_id' => Endereco::updateOrCreate(
-                [
-                    'id' => $request['endereco']['id'],
-                ],
-                [
-                    'cep'       => $request['endereco']['cep'],
-                    'cidade_id' => Cidade::firstOrCreate(
-                        [
-                            'nome' => $request['endereco']['cidade'],
-                            'uf'   => $request['endereco']['uf'    ],
-                        ]
-                    )->id,
-                    'rua'         => $request['endereco']['rua'        ],
-                    'bairro'      => $request['endereco']['bairro'     ],
-                    'numero'      => $request['endereco']['numero'     ],
-                    'complemento' => $request['endereco']['complemento'],
-                    'tipo'        => $request['endereco']['tipo'       ],
-                    'descricao'   => $request['endereco']['descricao'  ],
-                ]
-            )->id,
-        ]);
-
-        $usercpf = User::firstWhere(
-            'cpfcnpj', $request['cpfcnpj'],
-        );
-        $useremail = User::firstWhere(
-            'email', $request['acesso']['email'],
-        );
-
-        $user = null;
-
-        if ($usercpf) {
-            $user = $usercpf;
-        } elseif ($useremail) {
-            $user = $useremail;
-        }
-
-        if (($pessoa == null) || ($pessoa != null && ($user == null))) {
-            $user = User::create([
-                'empresa_id' => $request['empresa_id'],
-                'cpfcnpj'    => $request['cpfcnpj'],
-                'email'      => $request['acesso']['email'],
-                'password'   => bcrypt($request['acesso']['password']),
-                'pessoa_id'  => $cliente->pessoa_id,
-            ]);
-        }
-
-        foreach ($request['telefones'] as $key => $telefone) {
-            $pessoatelefone = PessoaTelefone::firstOrCreate([
-                'pessoa_id'   => $cliente->pessoa_id,
-                'telefone_id' => Telefone::updateOrCreate(
-                    [
-                        'id'  => $telefone['id'],
-                    ],
-                    [
-                        'telefone'  => $telefone['telefone' ],
-                        'tipo'      => $telefone['tipo'     ],
-                        'descricao' => $telefone['descricao'],
-                    ]
-                )->id,
-            ]);
-        }
-
-        foreach ($request['contato'] as $key => $email) {
-            $pessoaemail = PessoaEmail::firstOrCreate([
-                'pessoa_id' => $cliente->pessoa_id,
-                'email_id'  => Email::updateOrCreate(
-                    [
-                        'id'  => $email['id'],
-                    ],
-                    [
-                        'email'     => $email['email' ],
-                        'tipo'      => $email['tipo'     ],
-                        'descricao' => $email['descricao'],
-                    ]
-                )->id,
-            ]);
-        }
     }
    
     /**

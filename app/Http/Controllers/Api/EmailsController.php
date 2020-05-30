@@ -97,7 +97,6 @@ class EmailsController extends Controller
     {
         $email = new Email;
         $email->email = $request->email;
-        $email->tipo  = $request->tipo ;
         $email->save();
     }
 

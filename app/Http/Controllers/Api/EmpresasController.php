@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\empresa;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class EmpresasController extends Controller
 {
@@ -15,14 +15,6 @@ class EmpresasController extends Controller
      */
     public function index(Request $request)
     {
-        // $empresas = Empresa::all();
-        // foreach ($empresas as $e){
-        //     $clientes = $e->clientes;
-        //     foreach ($clientes as $c) {
-        //         $c->pessoa;
-        //     }
-        // }
-        // return $empresas;
         $itens = null;
 
         if ($request->commands) {
@@ -103,16 +95,6 @@ class EmpresasController extends Controller
      */
     public function store(Request $request)
     {
-        // $empresa = Empresa::updateOrCreate(
-        //     ['cnpj'  => $request->cnpj ],
-        //     ['razao' => $request->razao, 'ie' => ]
-        // );
-
-        // $flight = App\Flight::firstOrCreate(
-        //     ['name' => 'Flight 10'],
-        //     ['delayed' => 1, 'arrival_time' => '11:30']
-        // );
-
         $empresa = new Empresa;
         $empresa->razao = $request->razao;
         $empresa->cnpj  = $request->cnpj ;

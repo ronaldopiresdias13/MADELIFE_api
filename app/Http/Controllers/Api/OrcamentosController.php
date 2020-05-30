@@ -114,9 +114,6 @@ class OrcamentosController extends Controller
 
         $orcamento = Orcamento::updateOrCreate(
         [
-            'id' => ($request['id'] != '')? $request['id'] : null,
-        ],
-        [
             'empresa_id'        => $request['empresa_id'       ],
             'cliente_id'        => $request['cliente_id'       ],
             'numero'            => $request['numero'           ],
@@ -212,34 +209,28 @@ class OrcamentosController extends Controller
 
             if ($request['homecare']['telefones']) {
                 foreach ($request['homecare']['telefones'] as $key => $telefone) {
-                    $homecare_telefone = HomecareTelefone::updateOrCreate([
+                    $homecare_telefone = HomecareTelefone::firstOrCreate([
                         'homecare_id' => $homecare->id,
-                        'telefone_id' => Telefone::updateOrCreate(
-                            [
-                                'id' => $telefone['id'],
-                            ],
+                        'telefone_id' => Telefone::firstOrCreate(
                             [
                                 'telefone'  => $telefone['telefone' ],
-                                'tipo'      => $telefone['tipo'     ],
-                                'descricao' => $telefone['descricao'],
                             ])->id,
+                        'tipo'      => $telefone['tipo'     ],
+                        'descricao' => $telefone['descricao'],
                     ]);
                 }
             }
             
             if ($request['homecare']['emails']) {
                 foreach ($request['homecare']['emails'] as $key => $email) {
-                    $homecare_email = HomecareEmail::updateOrCreate([
+                    $homecare_email = HomecareEmail::firstOrCreate([
                         'homecare_id' => $homecare->id,
-                        'email_id'    => Email::updateOrCreate(
-                            [
-                                'id' => $email['id'],
-                            ],
+                        'email_id'    => Email::firstOrCreate(
                             [
                                 'email'     => $email['email'    ],
-                                'tipo'      => $email['tipo'     ],
-                                'descricao' => $email['descricao'],
                             ])->id,
+                        'tipo'      => $email['tipo'     ],
+                        'descricao' => $email['descricao'],
                     ]);
                 }
             }
@@ -265,33 +256,27 @@ class OrcamentosController extends Controller
 
             if ($request['remocao']['telefones']) {
                 foreach ($request['remocao']['telefones'] as $key => $telefone) {
-                    $remocao_telefone = RemocaoTelefone::updateOrCreate([
+                    $remocao_telefone = RemocaoTelefone::firstOrCreate([
                         'remocao_id'  => $remocao->id,
-                        'telefone_id' => Telefone::updateOrCreate(
-                            [
-                                'id' => $telefone['id'],
-                            ],
+                        'telefone_id' => Telefone::firstOrCreate(
                             [
                                 'telefone'  => $telefone['telefone' ],
-                                'tipo'      => $telefone['tipo'     ],
-                                'descricao' => $telefone['descricao'],
                             ])->id,
+                        'tipo'      => $telefone['tipo'     ],
+                        'descricao' => $telefone['descricao'],
                     ]);
                 }
             }
             if ($request['remocao']['emails']) {
                 foreach ($request['remocao']['emails'] as $key => $email) {
-                    $remocao_email = RemocaoEmail::updateOrCreate([
+                    $remocao_email = RemocaoEmail::firstOrCreate([
                         'remocao_id' => $remocao->id,
-                        'email_id'   => Email::updateOrCreate(
-                            [
-                                'id' => $email['id'],
-                            ],
+                        'email_id'   => Email::firstOrCreate(
                             [
                                 'email'     => $email['email'    ],
-                                'tipo'      => $email['tipo'     ],
-                                'descricao' => $email['descricao'],
                             ])->id,
+                        'tipo'      => $email['tipo'     ],
+                        'descricao' => $email['descricao'],
                     ]);
                 }
             }
@@ -311,33 +296,27 @@ class OrcamentosController extends Controller
 
             if ($request['evento']['telefones']) {
                 foreach ($request['evento']['telefones'] as $key => $telefone) {
-                    $evento_telefone = EventoTelefone::updateOrCreate([
+                    $evento_telefone = EventoTelefone::firstOrCreate([
                         'evento_id'   => $evento->id,
-                        'telefone_id' => Telefone::updateOrCreate(
-                            [
-                                'id' => $telefone['id'],
-                            ],
+                        'telefone_id' => Telefone::firstOrCreate(
                             [
                                 'telefone'  => $telefone['telefone' ],
-                                'tipo'      => $telefone['tipo'     ],
-                                'descricao' => $telefone['descricao'],
                             ])->id,
+                        'tipo'      => $telefone['tipo'     ],
+                        'descricao' => $telefone['descricao'],
                     ]);
                 }
             }
             if ($request['evento']['emails']) {
                 foreach ($request['evento']['emails'] as $key => $email) {
-                    $evento_email = EventoEmail::updateOrCreate([
+                    $evento_email = EventoEmail::firstOrCreate([
                         'evento_id' => $evento->id,
-                        'email_id'  => Email::updateOrCreate(
-                            [
-                                'id' => $email['id'],
-                            ],
+                        'email_id'  => Email::firstOrCreate(
                             [
                                 'email'     => $email['email'    ],
-                                'tipo'      => $email['tipo'     ],
-                                'descricao' => $email['descricao'],
                             ])->id,
+                        'tipo'      => $email['tipo'     ],
+                        'descricao' => $email['descricao'],
                     ]);
                 }
             }
@@ -357,33 +336,27 @@ class OrcamentosController extends Controller
 
             if ($request['aph']['telefones']) {
                 foreach ($request['aph']['telefones'] as $key => $telefone) {
-                    $aph_telefone = AphTelefone::updateOrCreate([
+                    $aph_telefone = AphTelefone::firstOrCreate([
                         'aph_id'      => $aph->id,
-                        'telefone_id' => Telefone::updateOrCreate(
-                            [
-                                'id' => $telefone['id'],
-                            ],
+                        'telefone_id' => Telefone::firstOrCreate(
                             [
                                 'telefone'  => $telefone['telefone' ],
-                                'tipo'      => $telefone['tipo'     ],
-                                'descricao' => $telefone['descricao'],
                             ])->id,
+                        'tipo'      => $telefone['tipo'     ],
+                        'descricao' => $telefone['descricao'],
                     ]);
                 }
             }
             if ($request['aph']['emails']) {
                 foreach ($request['aph']['emails'] as $key => $email) {
-                    $aph_email = AphEmail::updateOrCreate([
+                    $aph_email = AphEmail::firstOrCreate([
                         'aph_id'   => $aph->id,
-                        'email_id' => Email::updateOrCreate(
-                            [
-                                'id' => $email['id'],
-                            ],
+                        'email_id' => Email::firstOrCreate(
                             [
                                 'email'     => $email['email'    ],
-                                'tipo'      => $email['tipo'     ],
-                                'descricao' => $email['descricao'],
                             ])->id,
+                        'tipo'      => $email['tipo'     ],
+                        'descricao' => $email['descricao'],
                     ]);
                 }
             }

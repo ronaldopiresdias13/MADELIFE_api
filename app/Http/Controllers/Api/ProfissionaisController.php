@@ -177,14 +177,14 @@ class ProfissionaisController extends Controller
 
         ]);
         if($request['formacoes']['formacao']){
-            $profissional_formacao = ProfissionalFormacao::create([
+            $profissional_formacao = ProfissionalFormacao::firstOrCreate([
                 'profissional_id' => $profissional->id,
                 'formacao_id'    => $request['formacoes']['formacao']
             ]);
         }
         if($request['beneficios']){
             foreach ($request['beneficios'] as $key => $beneficio) {
-                $profissional_beneficio = ProfissionalBeneficio::create([
+                $profissional_beneficio = ProfissionalBeneficio::firstOrCreate([
                     'profissional_id' => $profissional->id,
                     'beneficio_id'    => $beneficio['beneficio_id']
                 ]);
@@ -192,14 +192,14 @@ class ProfissionaisController extends Controller
         }
         if($request['convenios']){
             foreach ($request['convenios'] as $key => $convenio) {
-                $profissional_convenio = ProfissionalConvenio::create([
+                $profissional_convenio = ProfissionalConvenio::firstOrCreate([
                     'profissional_id' => $profissional->id,
                     'convenio_id'    => $convenio['convenio_id']
                 ]);
             }
         }
         if($request['dadosBancario']['banco'] && $request['dadosBancario']['agencia'] && $request['dadosBancario']['conta'] && $request['dadosBancario']['digito']){
-            $dados_bancario = Dadosbancario::create([
+            $dados_bancario = Dadosbancario::firstOrCreate([
                 'empresa_id'  => $request['dadosBancario']['banco'],
                 'banco_id'    => $request['dadosBancario']['banco'],
                 'agencia'     => $request['dadosBancario']['agencia'],
@@ -214,17 +214,12 @@ class ProfissionaisController extends Controller
             foreach ($request['pessoa']['telefones'] as $key => $telefone) {
                 $pessoa_telefone = PessoaTelefone::firstOrCreate([
                     'pessoa_id'   => $profissional->pessoa_id,
-                    'telefone_id' => Telefone::updateOrCreate(
-                        [
-                            'id' => $telefone['id'],
-                        ],
-                        // $telefone,
+                    'telefone_id' => Telefone::firstOrCreate(
                         [
                             'telefone'  => $telefone['telefone' ],
-                            'tipo'      => $telefone['tipo'     ],
-                            'descricao' => $telefone['descricao'],
-                        ]
-                    )->id,
+                        ])->id,
+                    'tipo'      => $telefone['tipo'     ],
+                    'descricao' => $telefone['descricao'],
                 ]);
             }
         }
@@ -233,11 +228,7 @@ class ProfissionaisController extends Controller
             foreach ($request['pessoa']['enderecos'] as $key => $endereco) {
                 $pessoa_endereco = PessoaEndereco::firstOrCreate([
                     'pessoa_id'   => $profissional->pessoa_id,
-                    'endereco_id' => Endereco::updateOrCreate(
-                        [
-                            'id' => $endereco['id'],
-                        ],
-                        // $endereco,
+                    'endereco_id' => Endereco::firstOrCreate(
                         [
                             'cep'         => $endereco['cep'        ],
                             'cidade_id'   => $endereco['cidade_id'     ],
@@ -257,17 +248,12 @@ class ProfissionaisController extends Controller
             foreach ($request['pessoa']['emails'] as $key => $email) {
                 $pessoa_email = PessoaEmail::firstOrCreate([
                     'pessoa_id' => $profissional->pessoa_id,
-                    'email_id'  => Email::updateOrCreate(
+                    'email_id'  => Email::firstOrCreate(
                         [
                             'email'  => $email['email'],
-                        ],
-                        // $email,
-                        [
-                            'email'     => $email['email'    ],
-                            'tipo'      => $email['tipo'     ],
-                            'descricao' => $email['descricao'],
-                        ]
-                    )->id,
+                        ])->id,
+                    'tipo'      => $email['tipo'     ],
+                    'descricao' => $email['descricao'],
                 ]);
             }
         }
@@ -289,42 +275,7 @@ class ProfissionaisController extends Controller
             }
         }
 
-        return $profissional;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        $profissional = new Profissional;
-        $profissional->pessoa = $request->pessoa;
-        $profissional->pessoafisica = $request->pessoafisica;
-        $profissional->sexo = $request->sexo;
-        $profissional->setor = $request->setor;
-        $profissional->cargo = $request->cargo;
-        $profissional->pis = $request->pis;
-        $profissional->numerocarteiratrabalho = $request->numerocarteiratrabalho;
-        $profissional->numerocnh = $request->numerocnh;
-        $profissional->categoriacnh = $request->categoriacnh;
-        $profissional->validadecnh = $request->validadecnh;
-        $profissional->numerotituloeleitor = $request->numerotituloeleitor;
-        $profissional->zonatituloeleitor = $request->zonatituloeleitor;
-        $profissional->secaotituloeleitor = $request->secaotituloeleitor;
-        $profissional->dadoscontratuais = $request->dadoscontratuais;
-        $profissional->save();
-        
+        return $profissional; 
     }
 
     /**
