@@ -29,9 +29,9 @@ class Profissional extends Model
         return $this->belongsTo('App\Cargo');
     }
     
-    public function dadocontratual()
+    public function dadoscontratual()
     {
-        return $this->belongsTo('App\Dadoscontratual');
+        return $this->belongsTo('App\Dadoscontratual', 'dadoscontratuais_id');
     }
     
     public function formacoes()
