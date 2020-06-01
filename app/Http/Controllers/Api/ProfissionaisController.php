@@ -2,29 +2,30 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Profissional;
-use App\Pessoa;
-use App\Formacao;
-use App\ProfissionalFormacao;
+use Illuminate\Http\Request;
+
 use App\User;
-use App\UserAcesso;
-use App\Acesso;
-use App\Dadosbancario;
 use App\Banco;
-use App\Telefone;
-use App\PessoaTelefone;
 use App\Email;
-use App\PessoaEmail;
-use App\Endereco;
-use App\PessoaEndereco;
+use App\Pessoa;
+use App\Acesso;
 use App\Cidade;
+use App\Formacao;
+use App\Telefone;
+use App\Endereco;
+use App\Beneficio;
+use App\UserAcesso;
+use App\PessoaEmail;
+use App\Profissional;
+use App\Dadosbancario;
+use App\PessoaTelefone;
+use App\PessoaEndereco;
 use App\Horariotrabalho;
 use App\Dadoscontratual;
-use App\Beneficio;
-use App\ProfissionalBeneficio;
+use App\ProfissionalFormacao;
 use App\ProfissionalConvenio;
-use Illuminate\Http\Request;
+use App\ProfissionalBeneficio;
+use App\Http\Controllers\Controller;
 
 class ProfissionaisController extends Controller
 {
@@ -33,7 +34,7 @@ class ProfissionaisController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $itens = null;
 
