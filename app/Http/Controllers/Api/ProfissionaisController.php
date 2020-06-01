@@ -290,7 +290,7 @@ class ProfissionaisController extends Controller
      * @param  \App\Profissional  $profissional
      * @return \Illuminate\Http\Response
      */
-    public function show(Profissional $profissionai)
+    public function show(Request $request, Profissional $profissionai)
     {
         $iten = $profissionai;
 
