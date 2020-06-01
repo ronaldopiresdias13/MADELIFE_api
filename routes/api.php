@@ -47,6 +47,7 @@ Route::group([
     Route::apiResource('emails'                 , 'Api\EmailsController'                 );
     Route::apiResource('empresas'               , 'Api\EmpresasController'               );
     Route::apiResource('enderecos'              , 'Api\EnderecosController'              );
+    Route::apiResource('escalas'               , 'Api\EscalasController'               );
     Route::apiResource('formacoes'              , 'Api\FormacoesController'              );
     Route::apiResource('fornecedores'           , 'Api\FornecedoresController'           );
     Route::apiResource('grupocuidados'          , 'Api\GrupocuidadosController'          );
