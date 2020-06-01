@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Email;
 use App\Pessoa;
 use App\Remocao;
+use App\Evento;
 use App\Servico;
 use App\Telefone;
 use App\Homecare;
