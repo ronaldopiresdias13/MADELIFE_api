@@ -204,17 +204,18 @@ class ProfissionaisController extends Controller
                 ]);
             }
         }
-        if($request['dadosBancario']['banco'] && $request['dadosBancario']['agencia'] && $request['dadosBancario']['conta'] && $request['dadosBancario']['digito']){
-            $dados_bancario = Dadosbancario::firstOrCreate([
-                'empresa_id'  => $request['dadosBancario']['banco'  ],
-                'banco_id'    => $request['dadosBancario']['banco'  ],
-                'agencia'     => $request['dadosBancario']['agencia'],
-                'conta'       => $request['dadosBancario']['conta'  ],
-                'digito'      => $request['dadosBancario']['digito' ],
-                'tipoconta'   => null                                ,
-                // 'tipoconta'   => $request['dadosBancario']['tipoconta'],
-                'pessoa_id'   => $profissional->pessoa_id,
-            ]);
+        if($request['dadosBancario']){
+            foreach ($request['dadosBancario'] as $key => $dadosbancario) {
+                $dados_bancario = Dadosbancario::firstOrCreate([
+                    'empresa_id'  => $request["pessoa"]['empresa_id'  ],
+                    'banco_id'    => $dadosbancario['banco_id'  ],
+                    'agencia'     => $dadosbancario['agencia'],
+                    'conta'       => $dadosbancario['conta'  ],
+                    'digito'      => $dadosbancario['digito' ],
+                    'tipoconta'   => $dadosbancario['tipoconta' ],
+                    'pessoa_id'   => $profissional->pessoa_id,
+                ]);
+            }
         }
 
         if ($request['pessoa']['enderecos']) {

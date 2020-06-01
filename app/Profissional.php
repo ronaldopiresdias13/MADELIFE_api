@@ -38,4 +38,16 @@ class Profissional extends Model
     {
         return $this->belongsToMany('App\Formacao', 'profissional_formacao');
     }
+
+    public function beneficios()
+    {
+        return $this->belongsToMany('App\Beneficio', 'profissional_beneficio');
+    }
+
+    public function convenios()
+    {
+        return $this->belongsToMany('App\Convenio', 'profissional_convenio');
+    }
+
+    
 }
