@@ -100,13 +100,13 @@ class SetoresController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Setor  $setor
+     * @param  \App\Setor  $setore
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Setor $setor)
+    public function show(Request $request, Setor $setore)
     {
         {
-            $iten = $setor;
+            $iten = $setore;
     
             if ($request->commands) {
                 $request = json_decode($request->commands, true);
@@ -150,23 +150,22 @@ class SetoresController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Setor  $setor
+     * @param  \App\Setor  $setore
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Setor $setor)
+    public function update(Request $request, Setor $setore)
     {
-        dd($setor);
-        $setor->update($request->all());
+        $setore->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Setor  $setor
+     * @param  \App\Setor  $setore
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Setor $setor)
+    public function destroy(Setor $setore)
     {
-        $setor->delete();
+        $setore->delete();
     }
 }

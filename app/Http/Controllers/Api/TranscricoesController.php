@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Transcricao;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class TranscricoesController extends Controller
 {
@@ -101,18 +101,17 @@ class TranscricoesController extends Controller
         $transcricao->profissional = $request->profissional;
         $transcricao->pil = $request->pil;
         $transcricao->save();
-        
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Transcricao  $transcricao
+     * @param  \App\Transcricao  $transcrico
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Transcricao $transcricao)
+    public function show(Request $request, Transcricao $transcrico)
     {
-        $iten = $transcricao;
+        $iten = $transcrico;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -155,22 +154,22 @@ class TranscricoesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Transcricao  $transcricao
+     * @param  \App\Transcricao  $transcrico
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Transcricao $transcricao)
+    public function update(Request $request, Transcricao $transcrico)
     {
-        $transcricao->update($request->all());
+        $transcrico->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Transcricao  $transcricao
+     * @param  \App\Transcricao  $transcrico
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Transcricao $transcricao)
+    public function destroy(Transcricao $transcrico)
     {
-        $transcricao->delete();
+        $transcrico->delete();
     }
 }
