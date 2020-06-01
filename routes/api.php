@@ -47,7 +47,7 @@ Route::group([
     Route::apiResource('emails'                 , 'Api\EmailsController'                 );
     Route::apiResource('empresas'               , 'Api\EmpresasController'               );
     Route::apiResource('enderecos'              , 'Api\EnderecosController'              );
-    Route::apiResource('escalas'               , 'Api\EscalasController'               );
+    Route::apiResource('escalas'                , 'Api\EscalasController'                );
     Route::apiResource('formacoes'              , 'Api\FormacoesController'              );
     Route::apiResource('fornecedores'           , 'Api\FornecedoresController'           );
     Route::apiResource('grupocuidados'          , 'Api\GrupocuidadosController'          );
@@ -89,7 +89,7 @@ Route::group([
     Route::post('produtos/migracao'      , 'Api\ProdutosController@migracao'      );
     Route::post('ordemservicos/migracao' , 'Api\OrdemservicosController@migracao' );
     Route::post('profissionais/migracao' , 'Api\ProfissionaisController@migracao' );
-    Route::post('escalas/migracao' , 'Api\EscalasController@migracao' );
+    Route::post('escalas/migracao'       , 'Api\EscalasController@migracao'       );
 
 
 

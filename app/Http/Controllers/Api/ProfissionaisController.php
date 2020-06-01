@@ -33,7 +33,7 @@ class ProfissionaisController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         $itens = null;
 
@@ -115,11 +115,15 @@ class ProfissionaisController extends Controller
      */
     public function store(Request $request)
     {
-        $pessoa = Pessoa::where(
-            'cpfcnpj', $request['pessoa']['cpfcnpj']
-        )->where(
-            'empresa_id', $request['pessoa']['empresa_id']
-        )->first();
+        if ($request['pessoa']) {
+            $pessoa = Pessoa::where(
+                'cpfcnpj', $request['pessoa']['cpfcnpj']
+            )->where(
+                'empresa_id', $request['pessoa']['empresa_id']
+            )->first();
+        } else if ($request['pessoa_id']) {
+            $pessoa = Pessoa::find($request['pessoa_id']);
+        }
 
         $profissional = null;
 
@@ -138,7 +142,7 @@ class ProfissionaisController extends Controller
             'empresa_id'   => 1,
             'pessoa_id'    => Pessoa::updateOrCreate(
                 [
-                    'id' => ($request['pessoa']['id'] != '')? $request['id'] : null,
+                    'id' => ($request['pessoa']['id'] != '')? $request['pessoa']['id'] : null,
                 ],
                 [
                     'empresa_id'  => $request['pessoa']['empresa_id' ],
@@ -174,13 +178,14 @@ class ProfissionaisController extends Controller
                 'admissao'                => $request['dadoscontratuais']['admissao'],
                 'demissao'                => $request['dadoscontratuais']['demissao'],
             ])->id,
-
         ]);
-        if($request['formacoes']['formacao']){
-            $profissional_formacao = ProfissionalFormacao::firstOrCreate([
-                'profissional_id' => $profissional->id,
-                'formacao_id'    => $request['formacoes']['formacao']
-            ]);
+        if($request['formacoes']){
+            foreach ($request['formacoes'] as $key => $formacao) {
+                $profissional_formacao = ProfissionalFormacao::firstOrCreate([
+                    'profissional_id' => $profissional->id       ,
+                    'formacao_id'     => $formacao['formacao_id'],
+                ]);
+            }
         }
         if($request['beneficios']){
             foreach ($request['beneficios'] as $key => $beneficio) {
@@ -200,16 +205,37 @@ class ProfissionaisController extends Controller
         }
         if($request['dadosBancario']['banco'] && $request['dadosBancario']['agencia'] && $request['dadosBancario']['conta'] && $request['dadosBancario']['digito']){
             $dados_bancario = Dadosbancario::firstOrCreate([
-                'empresa_id'  => $request['dadosBancario']['banco'],
-                'banco_id'    => $request['dadosBancario']['banco'],
+                'empresa_id'  => $request['dadosBancario']['banco'  ],
+                'banco_id'    => $request['dadosBancario']['banco'  ],
                 'agencia'     => $request['dadosBancario']['agencia'],
-                'conta'       => $request['dadosBancario']['conta'],
-                'digito'      => $request['dadosBancario']['digito'],
-                'tipoconta'   => null,
+                'conta'       => $request['dadosBancario']['conta'  ],
+                'digito'      => $request['dadosBancario']['digito' ],
+                'tipoconta'   => null                                ,
                 // 'tipoconta'   => $request['dadosBancario']['tipoconta'],
                 'pessoa_id'   => $profissional->pessoa_id,
             ]);
         }
+
+        if ($request['pessoa']['enderecos']) {
+            foreach ($request['pessoa']['enderecos'] as $key => $endereco) {
+                $pessoa_endereco = PessoaEndereco::firstOrCreate([
+                    'pessoa_id'   => $profissional->pessoa_id,
+                    'endereco_id' => Endereco::firstOrCreate(
+                        [
+                            'cep'         => $endereco['cep'        ],
+                            'cidade_id'   => $endereco['cidade_id'  ],
+                            'rua'         => $endereco['rua'        ],
+                            'bairro'      => $endereco['bairro'     ],
+                            'numero'      => $endereco['numero'     ],
+                            'complemento' => $endereco['complemento'],
+                            'tipo'        => $endereco['tipo'       ],
+                            'descricao'   => $endereco['descricao'  ],
+                        ]
+                    )->id,
+                ]);
+            }
+        }
+
         if ($request['pessoa']['telefones']) {
             foreach ($request['pessoa']['telefones'] as $key => $telefone) {
                 $pessoa_telefone = PessoaTelefone::firstOrCreate([
@@ -220,26 +246,6 @@ class ProfissionaisController extends Controller
                         ])->id,
                     'tipo'      => $telefone['tipo'     ],
                     'descricao' => $telefone['descricao'],
-                ]);
-            }
-        }
-
-        if ($request['pessoa']['enderecos']) {
-            foreach ($request['pessoa']['enderecos'] as $key => $endereco) {
-                $pessoa_endereco = PessoaEndereco::firstOrCreate([
-                    'pessoa_id'   => $profissional->pessoa_id,
-                    'endereco_id' => Endereco::firstOrCreate(
-                        [
-                            'cep'         => $endereco['cep'        ],
-                            'cidade_id'   => $endereco['cidade_id'     ],
-                            'rua'         => $endereco['rua'        ],
-                            'bairro'      => $endereco['bairro'     ],
-                            'numero'      => $endereco['numero'     ],
-                            'complemento' => $endereco['complemento'],
-                            'tipo'        => $endereco['tipo'       ],
-                            'descricao'   => $endereco['descricao'  ],
-                        ]
-                    )->id,
                 ]);
             }
         }
@@ -259,12 +265,11 @@ class ProfissionaisController extends Controller
         }
 
         if ($request['pessoa']['users']) {
-            
             $user = User::create([
-                'empresa_id' =>        $request['empresa_id'] ,
-                'cpfcnpj'    =>        $request['pessoa']['users']['cpfcnpj'   ] ,
-                'email'      =>        $request['pessoa']['users']['email'     ] ,
-                'password'   => bcrypt($request['pessoa']['users']['password'  ]),
+                'empresa_id' =>        $request['empresa_id']                  ,
+                'cpfcnpj'    =>        $request['pessoa']['users']['cpfcnpj' ] ,
+                'email'      =>        $request['pessoa']['users']['email'   ] ,
+                'password'   => bcrypt($request['pessoa']['users']['password']),
                 'pessoa_id'  =>        $profissional->pessoa_id ,
             ]);
             foreach ($user['acessos'] as $key => $acesso) {
@@ -275,7 +280,7 @@ class ProfissionaisController extends Controller
             }
         }
 
-        return $profissional; 
+        return $profissional;
     }
 
     /**
@@ -284,10 +289,9 @@ class ProfissionaisController extends Controller
      * @param  \App\Profissional  $profissional
      * @return \Illuminate\Http\Response
      */
-    public function show(Profissional $profissional)
+    public function show(Profissional $profissionai)
     {
-        dd($request);
-        $iten = $profissional;
+        $iten = $profissionai;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -330,194 +334,194 @@ class ProfissionaisController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Profissional  $profissional
+     * @param  \App\Profissional  $profissionai
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Profissional $profissional)
+    public function update(Request $request, Profissional $profissionai)
     {
-        $profissional->update($request->all());
+        $profissionai->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Profissional  $profissional
+     * @param  \App\Profissional  $profissionai
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Profissional $profissional)
+    public function destroy(Profissional $profissionai)
     {
-        $profissional->delete();
+        $profissionai->delete();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function migracao(Request $request)
-    {
+    // /**
+    //  * Store a newly created resource in storage.
+    //  *
+    //  * @param  \Illuminate\Http\Request  $request
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function migracao(Request $request)
+    // {
 
-            // $table->string('secaotituloeleitor')->nullable();
-            // $table->unsignedBigInteger('dadoscontratuais_id')->nullable();
-            // $table->foreign('dadoscontratuais_id')->references('id')->on('dadoscontratuais')->onDelete('cascade');
-        $profissional = Profissional::firstOrCreate([
-            'pessoa_id' => Pessoa::firstOrCreate(
-                [
-                    'cpfcnpj' => $request['profissional']['dadosPf']['cpf']['numero'],
-                ],
-                [
-                    'nome'        => $request['profissional']['dadosPf']['nome'],
-                    'nascimento'  => $request['profissional']['dadosPf']['nascimento'],
-                    'tipo'        => 'Profissional',
-                    'rgie'        => $request['profissional']['dadosPf']['rg']['numero'],
-                    'observacoes' => $request['profissional']['observacoes'],
-                    'status'      => $request['profissional']['status'],
-                ]
-            )->id,
-            'pessoafisica'           => true,
-            'sexo'                   => $request['profissional']['dadosPf']['sexo'],
-            'pis'                    => $request['profissional']['dadosProf']['pis'],
-            'setor_id'               => null,
-            'cargo_id'               => null,
-            'numerocarteiratrabalho' => $request['profissional']['dadosProf']['numeroCarteiraTrabalho'],
-            'numerocnh'              => $request['profissional']['dadosProf']['numeroCnh'],
-            'categoriacnh'           => null,
-            'validadecnh'            => $request['profissional']['dadosProf']['validadeCnh'],
-            'numerotituloeleitor'    => $request['profissional']['dadosProf']['tituloEleitor'],
-            'zonatituloeleitor'      => $request['profissional']['dadosProf']['zonaTitulo'],
-            'secaotituloeleitor'     => $request['profissional']['dadosProf']['secaoTitulo'],
-            'dadoscontratuais_id'    => Dadoscontratual::firstOrCreate([
-                'tiposalario'             => $request['profissional']['dadosContratuais']['tipoSalario'],
-                'salario'                 => $request['profissional']['dadosContratuais']['salario'],
-                'cargahoraria'            => $request['profissional']['dadosContratuais']['horasMensais'],
-                'insalubridade'           => 0,
-                'percentualinsalubridade' => null,
-                'admissao'                => $request['profissional']['dadosContratuais']['dataAdmissao'],
-                'demissao'                => $request['profissional']['dadosContratuais']['dataDemissao']
-            ])->id
-        ]);
-        if($request['profissional']['dadosProf']['formacao'] != null){
-            $profissional_formacao = ProfissionalFormacao::firstOrCreate([
-                'profissional_id' => $profissional->id,
-                'formacao_id'  => Formacao::firstOrCreate(['descricao' => $request['profissional']['dadosProf']['formacao']['descricao']])->id,
-            ]);
-        }
+    //         // $table->string('secaotituloeleitor')->nullable();
+    //         // $table->unsignedBigInteger('dadoscontratuais_id')->nullable();
+    //         // $table->foreign('dadoscontratuais_id')->references('id')->on('dadoscontratuais')->onDelete('cascade');
+    //     $profissional = Profissional::firstOrCreate([
+    //         'pessoa_id' => Pessoa::firstOrCreate(
+    //             [
+    //                 'cpfcnpj' => $request['profissional']['dadosPf']['cpf']['numero'],
+    //             ],
+    //             [
+    //                 'nome'        => $request['profissional']['dadosPf']['nome'],
+    //                 'nascimento'  => $request['profissional']['dadosPf']['nascimento'],
+    //                 'tipo'        => 'Profissional',
+    //                 'rgie'        => $request['profissional']['dadosPf']['rg']['numero'],
+    //                 'observacoes' => $request['profissional']['observacoes'],
+    //                 'status'      => $request['profissional']['status'],
+    //             ]
+    //         )->id,
+    //         'pessoafisica'           => true,
+    //         'sexo'                   => $request['profissional']['dadosPf']['sexo'],
+    //         'pis'                    => $request['profissional']['dadosProf']['pis'],
+    //         'setor_id'               => null,
+    //         'cargo_id'               => null,
+    //         'numerocarteiratrabalho' => $request['profissional']['dadosProf']['numeroCarteiraTrabalho'],
+    //         'numerocnh'              => $request['profissional']['dadosProf']['numeroCnh'],
+    //         'categoriacnh'           => null,
+    //         'validadecnh'            => $request['profissional']['dadosProf']['validadeCnh'],
+    //         'numerotituloeleitor'    => $request['profissional']['dadosProf']['tituloEleitor'],
+    //         'zonatituloeleitor'      => $request['profissional']['dadosProf']['zonaTitulo'],
+    //         'secaotituloeleitor'     => $request['profissional']['dadosProf']['secaoTitulo'],
+    //         'dadoscontratuais_id'    => Dadoscontratual::firstOrCreate([
+    //             'tiposalario'             => $request['profissional']['dadosContratuais']['tipoSalario'],
+    //             'salario'                 => $request['profissional']['dadosContratuais']['salario'],
+    //             'cargahoraria'            => $request['profissional']['dadosContratuais']['horasMensais'],
+    //             'insalubridade'           => 0,
+    //             'percentualinsalubridade' => null,
+    //             'admissao'                => $request['profissional']['dadosContratuais']['dataAdmissao'],
+    //             'demissao'                => $request['profissional']['dadosContratuais']['dataDemissao']
+    //         ])->id
+    //     ]);
+    //     if($request['profissional']['dadosProf']['formacao'] != null){
+    //         $profissional_formacao = ProfissionalFormacao::firstOrCreate([
+    //             'profissional_id' => $profissional->id,
+    //             'formacao_id'  => Formacao::firstOrCreate(['descricao' => $request['profissional']['dadosProf']['formacao']['descricao']])->id,
+    //         ]);
+    //     }
         
         
-        $usercpf = User::firstWhere(
-            'cpfcnpj' , $request['profissional']['dadosPf']['cpf']['numero']
-        );
-        $useremail = User::firstWhere(
-            'email', $request['profissional']['contato']['email']
-        );
+    //     $usercpf = User::firstWhere(
+    //         'cpfcnpj' , $request['profissional']['dadosPf']['cpf']['numero']
+    //     );
+    //     $useremail = User::firstWhere(
+    //         'email', $request['profissional']['contato']['email']
+    //     );
 
-        if ($usercpf || $useremail) {
-            // foreach ($request['conta']['grupos'] as $key => $acesso) {
-            //     $a = UserAcesso::updateOrCreate(
-            //         ['user_id'  => $usercpf->id, 'acesso_id' => Acesso::firstOrCreate(['nome' => $acesso])->id]
-            //     );
-            // }
-        } else {
-            foreach ($request['conta']['grupos'] as $key => $value) {
-                $teste = UserAcesso::firstOrCreate([
-                    'user_id'  => $user = User::firstOrCreate([
-                        'cpfcnpj' => $request['profissional']['dadosPf']['cpf']['numero'],
-                        'email'   => $request['profissional']['contato']['email'],
-                        'pessoa_id'  => $profissional->pessoa_id,
-                        'password' => bcrypt($request['conta']['senha']),
-                    ])->id, 
-                    'acesso_id' => Acesso::firstOrCreate(['nome' => $value])->id]
-                );
-            }
-        }
+    //     if ($usercpf || $useremail) {
+    //         // foreach ($request['conta']['grupos'] as $key => $acesso) {
+    //         //     $a = UserAcesso::updateOrCreate(
+    //         //         ['user_id'  => $usercpf->id, 'acesso_id' => Acesso::firstOrCreate(['nome' => $acesso])->id]
+    //         //     );
+    //         // }
+    //     } else {
+    //         foreach ($request['conta']['grupos'] as $key => $value) {
+    //             $teste = UserAcesso::firstOrCreate([
+    //                 'user_id'  => $user = User::firstOrCreate([
+    //                     'cpfcnpj' => $request['profissional']['dadosPf']['cpf']['numero'],
+    //                     'email'   => $request['profissional']['contato']['email'],
+    //                     'pessoa_id'  => $profissional->pessoa_id,
+    //                     'password' => bcrypt($request['conta']['senha']),
+    //                 ])->id, 
+    //                 'acesso_id' => Acesso::firstOrCreate(['nome' => $value])->id]
+    //             );
+    //         }
+    //     }
         
-        foreach ($request['profissional']['horarioTrabalho'] as $key => $hora) {
-            $horario = Horariotrabalho::firstOrCreate([
-                'diasemana'       => $hora['diaSemana'],
-                'horarioentrada'  => $hora['horarioEntrada'],
-                'horariosaida'    => $hora['intervaloSaida'],
-                'profissional_id' =>$profissional->id
-            ]);
-        }
-        foreach ($request['profissional']['dadosContratuais']['beneficios'] as $key => $beneficio) {
-            $profissional_beneficios = ProfissionalBeneficio::firstOrCreate([
-                'profissional_id' =>$profissional->id,
-                'beneficio_id'    => Beneficio::firstOrCreate([
-                    'descricao'  => $beneficio['beneficios'],
-                    // 'valor'      => $beneficio['valor'],
-                    'empresa_id' => 1,
-                ])->id
-            ]);
-        }
-        if($request['profissional']['dadosBancario']['banco'] != null && $request['profissional']['dadosBancario']['banco']['codigo'] != null){
-            $dados_bancario = Dadosbancario::firstOrCreate([
-                'banco_id' => Banco::firstOrCreate(
-                    [
-                        'codigo' => ($request['profissional']['dadosBancario']['banco']['codigo'] == null || $request['profissional']['dadosBancario']['banco']['codigo'] == "") ? '000' : $request['profissional']['dadosBancario']['banco']['codigo'],
-                    ],
-                    [
-                        'descricao' => ($request['profissional']['dadosBancario']['banco']['codigo'] == null || $request['profissional']['dadosBancario']['banco']['codigo'] == "") ? 'Outros' : $request['profissional']['dadosBancario']['banco']['descricao']
-                    ]
-                )->id,
-                'pessoa_id'    => $profissional->pessoa_id,
-                'agencia'   => $request['profissional']['dadosBancario']['agencia'  ],
-                'conta'     => $request['profissional']['dadosBancario']['conta'    ],
-                'digito'    => $request['profissional']['dadosBancario']['digito'   ],
-                'tipoconta' => $request['profissional']['dadosBancario']['tipoConta'],
-            ]);
-        }
+    //     foreach ($request['profissional']['horarioTrabalho'] as $key => $hora) {
+    //         $horario = Horariotrabalho::firstOrCreate([
+    //             'diasemana'       => $hora['diaSemana'],
+    //             'horarioentrada'  => $hora['horarioEntrada'],
+    //             'horariosaida'    => $hora['intervaloSaida'],
+    //             'profissional_id' =>$profissional->id
+    //         ]);
+    //     }
+    //     foreach ($request['profissional']['dadosContratuais']['beneficios'] as $key => $beneficio) {
+    //         $profissional_beneficios = ProfissionalBeneficio::firstOrCreate([
+    //             'profissional_id' =>$profissional->id,
+    //             'beneficio_id'    => Beneficio::firstOrCreate([
+    //                 'descricao'  => $beneficio['beneficios'],
+    //                 // 'valor'      => $beneficio['valor'],
+    //                 'empresa_id' => 1,
+    //             ])->id
+    //         ]);
+    //     }
+    //     if($request['profissional']['dadosBancario']['banco'] != null && $request['profissional']['dadosBancario']['banco']['codigo'] != null){
+    //         $dados_bancario = Dadosbancario::firstOrCreate([
+    //             'banco_id' => Banco::firstOrCreate(
+    //                 [
+    //                     'codigo' => ($request['profissional']['dadosBancario']['banco']['codigo'] == null || $request['profissional']['dadosBancario']['banco']['codigo'] == "") ? '000' : $request['profissional']['dadosBancario']['banco']['codigo'],
+    //                 ],
+    //                 [
+    //                     'descricao' => ($request['profissional']['dadosBancario']['banco']['codigo'] == null || $request['profissional']['dadosBancario']['banco']['codigo'] == "") ? 'Outros' : $request['profissional']['dadosBancario']['banco']['descricao']
+    //                 ]
+    //             )->id,
+    //             'pessoa_id'    => $profissional->pessoa_id,
+    //             'agencia'   => $request['profissional']['dadosBancario']['agencia'  ],
+    //             'conta'     => $request['profissional']['dadosBancario']['conta'    ],
+    //             'digito'    => $request['profissional']['dadosBancario']['digito'   ],
+    //             'tipoconta' => $request['profissional']['dadosBancario']['tipoConta'],
+    //         ]);
+    //     }
 
-        if ($request['profissional']['contato']['telefone'] != null && $request['profissional']['contato']['telefone'] != "") {
-            $pessoa_telefones = PessoaTelefone::firstOrCreate([
-                'pessoa_id'   => $profissional->pessoa_id,
-                'telefone_id' => Telefone::firstOrCreate(
-                    [
-                        'telefone' => $request['profissional']['contato']['telefone'],
-                    ]
-                )->id,
-            ]);
-        }
-        if ($request['profissional']['contato']['celular'] != null && $request['profissional']['contato']['celular'] != "") {
-            $pessoa_telefones = PessoaTelefone::firstOrCreate([
-                'pessoa_id'   => $profissional->pessoa_id,
-                'telefone_id' => Telefone::firstOrCreate(
-                    [
-                        'telefone' => $request['profissional']['contato']['celular'],
-                    ]
-                )->id,
-            ]);
-        }
-        if($request['profissional']['contato']['email']){
-            $pessoa_emails = PessoaEmail::firstOrCreate([
-                'pessoa_id' => $profissional->pessoa_id,
-                'email_id'  => Email::firstOrCreate(
-                    [
-                        'email' => $request['profissional']['contato']['email'],
-                    ],
-                    [
-                        'tipo' => 'pessoal',
-                    ]
-                )->id,
-            ]);
-        }
+    //     if ($request['profissional']['contato']['telefone'] != null && $request['profissional']['contato']['telefone'] != "") {
+    //         $pessoa_telefones = PessoaTelefone::firstOrCreate([
+    //             'pessoa_id'   => $profissional->pessoa_id,
+    //             'telefone_id' => Telefone::firstOrCreate(
+    //                 [
+    //                     'telefone' => $request['profissional']['contato']['telefone'],
+    //                 ]
+    //             )->id,
+    //         ]);
+    //     }
+    //     if ($request['profissional']['contato']['celular'] != null && $request['profissional']['contato']['celular'] != "") {
+    //         $pessoa_telefones = PessoaTelefone::firstOrCreate([
+    //             'pessoa_id'   => $profissional->pessoa_id,
+    //             'telefone_id' => Telefone::firstOrCreate(
+    //                 [
+    //                     'telefone' => $request['profissional']['contato']['celular'],
+    //                 ]
+    //             )->id,
+    //         ]);
+    //     }
+    //     if($request['profissional']['contato']['email']){
+    //         $pessoa_emails = PessoaEmail::firstOrCreate([
+    //             'pessoa_id' => $profissional->pessoa_id,
+    //             'email_id'  => Email::firstOrCreate(
+    //                 [
+    //                     'email' => $request['profissional']['contato']['email'],
+    //                 ],
+    //                 [
+    //                     'tipo' => 'pessoal',
+    //                 ]
+    //             )->id,
+    //         ]);
+    //     }
         
         
-        $cidade = Cidade::where('nome', $request['profissional']['endereco']['cidade'])->where('uf', $request['profissional']['endereco']['uf'])->first();
+    //     $cidade = Cidade::where('nome', $request['profissional']['endereco']['cidade'])->where('uf', $request['profissional']['endereco']['uf'])->first();
 
-        $pessoa_endereco = PessoaEndereco::firstOrCreate([
-            'pessoa_id'   => $profissional->pessoa_id,
-            'endereco_id' => Endereco::firstOrCreate(
-                [
-                    'cep'         => $request['profissional']['endereco']['cep'],
-                    'cidade_id'   => ($cidade) ? $cidade->id : null,
-                    'rua'         => $request['profissional']['endereco']['rua'],
-                    'bairro'      => $request['profissional']['endereco']['bairro'],
-                    'numero'      => $request['profissional']['endereco']['numero'],
-                    'complemento' => $request['profissional']['endereco']['complemento'],
-                    'tipo'        => 'Residencial',
-                ]
-            )->id,
-        ]);
-    }
+    //     $pessoa_endereco = PessoaEndereco::firstOrCreate([
+    //         'pessoa_id'   => $profissional->pessoa_id,
+    //         'endereco_id' => Endereco::firstOrCreate(
+    //             [
+    //                 'cep'         => $request['profissional']['endereco']['cep'],
+    //                 'cidade_id'   => ($cidade) ? $cidade->id : null,
+    //                 'rua'         => $request['profissional']['endereco']['rua'],
+    //                 'bairro'      => $request['profissional']['endereco']['bairro'],
+    //                 'numero'      => $request['profissional']['endereco']['numero'],
+    //                 'complemento' => $request['profissional']['endereco']['complemento'],
+    //                 'tipo'        => 'Residencial',
+    //             ]
+    //         )->id,
+    //     ]);
+    // }
 }

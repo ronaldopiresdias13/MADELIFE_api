@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Dadoscontratuais;
+use App\Dadoscontratual;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -24,7 +24,7 @@ class DadoscontratuaisController extends Controller
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
-                    $itens = Dadoscontratuais::where(
+                    $itens = Dadoscontratual::where(
                         ($where['coluna'   ])? $where['coluna'   ] : 'id'  ,
                         ($where['expressao'])? $where['expressao'] : 'like',
                         ($where['valor'    ])? $where['valor'    ] : '%'
@@ -38,7 +38,7 @@ class DadoscontratuaisController extends Controller
                 }
             }
         } else {
-            $itens = Dadoscontratuais::where('id', 'like', '%');
+            $itens = Dadoscontratual::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -95,7 +95,7 @@ class DadoscontratuaisController extends Controller
      */
     public function store(Request $request)
     {
-        $dadoscontratuais = new Dadoscontratuais;
+        $dadoscontratuais = new Dadoscontratual;
         $dadoscontratuais->tiposalario = $request->tiposalario;
         $dadoscontratuais->salario = $request->salario;
         $dadoscontratuais->cargahoraria = $request->cargahoraria;
@@ -109,12 +109,12 @@ class DadoscontratuaisController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Dadoscontratuais  $dadoscontratuais
+     * @param  \App\Dadoscontratual  $dadoscontratuai
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Dadoscontratuais $dadoscontratuais)
+    public function show(Request $request, Dadoscontratual $dadoscontratuai)
     {
-        $iten = $dadoscontratuais;
+        $iten = $dadoscontratuai;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -157,22 +157,22 @@ class DadoscontratuaisController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Dadoscontratuais  $dadoscontratuais
+     * @param  \App\Dadoscontratual  $dadoscontratual
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Dadoscontratuais $dadoscontratuais)
+    public function update(Request $request, Dadoscontratual $dadoscontratuai)
     {
-        $dadoscontratuais->update($request->all());
+        $dadoscontratuai->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Dadoscontratuais  $dadoscontratuais
+     * @param  \App\Dadoscontratual  $dadoscontratuai
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Dadoscontratuais $dadoscontratuais)
+    public function destroy(Dadoscontratual $dadoscontratuai)
     {
-        $dadoscontratuais->delete();
+        $dadoscontratuai->delete();
     }
 }
