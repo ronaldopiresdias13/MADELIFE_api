@@ -95,26 +95,26 @@ class DadoscontratuaisController extends Controller
      */
     public function store(Request $request)
     {
-        $dadoscontratuais = new Dadoscontratual;
-        $dadoscontratuais->tiposalario = $request->tiposalario;
-        $dadoscontratuais->salario = $request->salario;
-        $dadoscontratuais->cargahoraria = $request->cargahoraria;
-        $dadoscontratuais->insalubridade = $request->insalubridade;
-        $dadoscontratuais->percentualinsalubridade = $request->percentualinsalubridade;
-        $dadoscontratuais->admissao = $request->admissao;
-        $dadoscontratuais->demissao = $request->demissao;
-        $dadoscontratuais->save();
+        $dadoscontratual = new Dadoscontratual;
+        $dadoscontratual->tiposalario = $request->tiposalario;
+        $dadoscontratual->salario = $request->salario;
+        $dadoscontratual->cargahoraria = $request->cargahoraria;
+        $dadoscontratual->insalubridade = $request->insalubridade;
+        $dadoscontratual->percentualinsalubridade = $request->percentualinsalubridade;
+        $dadoscontratual->admissao = $request->admissao;
+        $dadoscontratual->demissao = $request->demissao;
+        $dadoscontratual->save();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Dadoscontratual  $dadoscontratuai
+     * @param  \App\Dadoscontratual  $dadoscontratual
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Dadoscontratual $dadoscontratuai)
+    public function show(Request $request, Dadoscontratual $dadoscontratual)
     {
-        $iten = $dadoscontratuai;
+        $iten = $dadoscontratual;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -160,19 +160,19 @@ class DadoscontratuaisController extends Controller
      * @param  \App\Dadoscontratual  $dadoscontratual
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Dadoscontratual $dadoscontratuai)
+    public function update(Request $request, Dadoscontratual $dadoscontratual)
     {
-        $dadoscontratuai->update($request->all());
+        $dadoscontratual->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Dadoscontratual  $dadoscontratuai
+     * @param  \App\Dadoscontratual  $dadoscontratual
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Dadoscontratual $dadoscontratuai)
+    public function destroy(Dadoscontratual $dadoscontratual)
     {
-        $dadoscontratuai->delete();
+        $dadoscontratual->delete();
     }
 }

@@ -14,7 +14,7 @@ class AddResponsavelToOrdemservicosTable extends Migration
     public function up()
     {
         Schema::table('ordemservicos', function (Blueprint $table) {
-            $table->unsignedBigInteger('responsavel_id')->after('orcamento_id');
+            $table->unsignedBigInteger('responsavel_id')->after('orcamento_id')->nullable();
             $table->foreign('responsavel_id')->references('id')->on('responsaveis')->onDelete('cascade');
         });
     }

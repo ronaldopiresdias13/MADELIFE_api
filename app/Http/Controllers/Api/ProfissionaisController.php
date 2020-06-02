@@ -291,9 +291,9 @@ class ProfissionaisController extends Controller
      * @param  \App\Profissional  $profissional
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Profissional $profissionai)
+    public function show(Request $request, Profissional $profissional)
     {
-        $iten = $profissionai;
+        $iten = $profissional;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -336,23 +336,23 @@ class ProfissionaisController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Profissional  $profissionai
+     * @param  \App\Profissional  $profissional
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Profissional $profissionai)
+    public function update(Request $request, Profissional $profissional)
     {
-        $profissionai->update($request->all());
+        $profissional->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Profissional  $profissionai
+     * @param  \App\Profissional  $profissional
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Profissional $profissionai)
+    public function destroy(Profissional $profissional)
     {
-        $profissionai->delete();
+        $profissional->delete();
     }
 
     // /**

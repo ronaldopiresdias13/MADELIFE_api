@@ -106,12 +106,12 @@ class TranscricoesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Transcricao  $transcrico
+     * @param  \App\Transcricao  $transcricao
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Transcricao $transcrico)
+    public function show(Request $request, Transcricao $transcricao)
     {
-        $iten = $transcrico;
+        $iten = $transcricao;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -154,22 +154,22 @@ class TranscricoesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Transcricao  $transcrico
+     * @param  \App\Transcricao  $transcricao
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Transcricao $transcrico)
+    public function update(Request $request, Transcricao $transcricao)
     {
-        $transcrico->update($request->all());
+        $transcricao->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Transcricao  $transcrico
+     * @param  \App\Transcricao  $transcricao
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Transcricao $transcrico)
+    public function destroy(Transcricao $transcricao)
     {
-        $transcrico->delete();
+        $transcricao->delete();
     }
 }

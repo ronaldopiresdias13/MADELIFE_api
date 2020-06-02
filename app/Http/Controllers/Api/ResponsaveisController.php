@@ -104,12 +104,12 @@ class ResponsaveisController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Responsavel  $responsavei
+     * @param  \App\Responsavel  $responsavel
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Responsavel $responsavei)
+    public function show(Request $request, Responsavel $responsavel)
     {
-        $iten = $responsavei;
+        $iten = $responsavel;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -152,22 +152,22 @@ class ResponsaveisController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Responsavel  $responsavei
+     * @param  \App\Responsavel  $responsavel
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Responsavel $responsavei)
+    public function update(Request $request, Responsavel $responsavel)
     {
-        $responsavei->update($responsavei-all());
+        $responsavel->update($responsavel-all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Responsavel  $responsavei
+     * @param  \App\Responsavel  $responsavel
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Responsavel $responsavei)
+    public function destroy(Responsavel $responsavel)
     {
-        $responsavei->delete();
+        $responsavel->delete();
     }
 }
