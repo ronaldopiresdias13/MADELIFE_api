@@ -20,9 +20,11 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
         if(!Auth::attempt($credentials))
             return response()->json([
-                'message' => 'Unauthorized'
+                'message' => 'Email ou Senha Inválidos!'
             ], 401);
         $user        = $request->user();
+        $user->acessos;
+        $user->pessoa;
         $tokenResult = $user->createToken('Personal Access Token');
         $token       = $tokenResult->token;
         if ($request->remember_me)
@@ -33,7 +35,8 @@ class AuthController extends Controller
             'token_type'   => 'Bearer',
             'expires_at'   => Carbon::parse(
                 $tokenResult->token->expires_at
-            )->toDateTimeString()
+            )->toDateTimeString(),
+            'user' => $user
         ]);
     }
 
