@@ -274,6 +274,12 @@ Route::post("/image" , "Controller@uploadimage");
     Route::put   ('profissionais/{profissional}', 'Api\ProfissionaisController@update' );
     Route::delete('profissionais/{profissional}', 'Api\ProfissionaisController@destroy');
 
+    Route::get   ('relatorios'            , 'Api\RelatoriosController@index'  );
+    Route::post  ('relatorios'            , 'Api\RelatoriosController@store'  );
+    Route::get   ('relatorios/{relatorio}', 'Api\RelatoriosController@show'   );
+    Route::put   ('relatorios/{relatorio}', 'Api\RelatoriosController@update' );
+    Route::delete('relatorios/{relatorio}', 'Api\RelatoriosController@destroy');
+
     Route::get   ('responsaveis'              , 'Api\ResponsaveisController@index'  );
     Route::post  ('responsaveis'              , 'Api\ResponsaveisController@store'  );
     Route::get   ('responsaveis/{responsavel}', 'Api\ResponsaveisController@show'   );
