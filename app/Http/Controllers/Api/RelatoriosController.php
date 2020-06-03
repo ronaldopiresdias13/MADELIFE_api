@@ -95,15 +95,14 @@ class RelatoriosController extends Controller
      */
     public function store(Request $request)
     {
-        $relatorio = new Relatorio;
-        $relatorio->empresa_id = $request->empresa_id;
-        $relatorio->escala_id = $request->escala_id;
-        $relatorio->escala_id = $request->escala_id;
-        $relatorio->datahora = $request->datahora;
-        $relatorio->quadro = $request->quadro;
-        $relatorio->tipo = $request->tipo;
-        $relatorio->texto = $request->texto;
-        $relatorio->save();
+        // $relatorio = new Relatorio;
+        // $relatorio->escala_id = $request->escala_id;
+        // $relatorio->datahora = $request->datahora;
+        // $relatorio->quadro = $request->quadro;
+        // $relatorio->tipo = $request->tipo;
+        // $relatorio->texto = $request->texto;
+        // $relatorio->save();
+        Relatorio::create($request->all());
     }
 
     /**
