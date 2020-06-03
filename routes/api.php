@@ -23,6 +23,7 @@ Route::group([
 ], function () {
     Route::post('login'   , 'Auth\AuthController@login'   )->name('login');
     Route::post('register', 'Auth\AuthController@register')               ;
+    Route::post('reset'   , 'Auth\AuthController@reset'   )               ;
     
     Route::group(['middleware' => 'auth:api'], function() {
         Route::get('logout', 'Auth\AuthController@logout');
@@ -46,6 +47,10 @@ Route::post('escalas/migracao'       , 'Api\EscalasController@migracao'       );
 Route::post("/image" , "Controller@uploadimage");
 
 // Route::group(['middleware' => 'auth:api'], function() { // Descomentar para utilizar Autenticação via Token
+
+    Route::get('email', function() {
+        return new \App\Mail\ResetPassword();
+    });
 
     Route::get   ('acessos'         , 'Api\AcessosController@index'  );
     Route::post  ('acessos'         , 'Api\AcessosController@store'  );
