@@ -80,17 +80,18 @@ class AuthController extends Controller
 
     public function change(Request $request)
     {
-        $request->validate([
-            'email'       => 'string|email'   ,
-            'password'    => 'required|string',
-            'newPassword' => 'required|string'
-        ]);
-        $credentials = request(['email', 'password']);
-        if(!Auth::attempt($credentials))
-            return response()->json([
-                'message' => 'Email ou Senha Inválidos!'
-            ], 401);
-        $user        = $request->user();
+        $user = User::firstWhere('email', $request->email);
+        // $request->validate([
+        //     'email'       => 'string|email'   ,
+        //     'password'    => 'required|string',
+        //     'newPassword' => 'required|string'
+        // ]);
+        // $credentials = request(['email', 'password']);
+        // if(!Auth::attempt($credentials))
+        //     return response()->json([
+        //         'message' => 'Email ou Senha Inválidos!'
+        //     ], 401);
+        // $user        = $request->user();
         $user->password = bcrypt($request->newPassword);
         $user->save();
     }

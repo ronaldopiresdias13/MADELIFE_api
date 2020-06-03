@@ -109,6 +109,12 @@ Route::post("/image" , "Controller@uploadimage");
     Route::put   ('cuidados/{cuidado}', 'Api\CuidadosController@update' );
     Route::delete('cuidados/{cuidado}', 'Api\CuidadosController@destroy');
 
+    Route::get   ('cuidadoEscalas'                , 'Api\CuidadoEscalasController@index'  );
+    Route::post  ('cuidadoEscalas'                , 'Api\CuidadoEscalasController@store'  );
+    Route::get   ('cuidadoEscalas/{cuidadoEscala}', 'Api\CuidadoEscalasController@show'   );
+    Route::put   ('cuidadoEscalas/{cuidadoEscala}', 'Api\CuidadoEscalasController@update' );
+    Route::delete('cuidadoEscalas/{cuidadoEscala}', 'Api\CuidadoEscalasController@destroy');
+
     Route::get   ('dadosbancarios'                , 'Api\DadosbancariosController@index'  );
     Route::post  ('dadosbancarios'                , 'Api\DadosbancariosController@store'  );
     Route::get   ('dadosbancarios/{dadosbancario}', 'Api\DadosbancariosController@show'   );
