@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -65,26 +66,33 @@ class AuthController extends Controller
         $user = User::firstWhere(
             ['email' => $request->email]
         );
-        // dd($user);
-        $senha = str_random(8);
-        $user->senha = bcrypt($senha);
+        
+        if ($user == null) {
+            return response()->json([
+                'message' => 'Email não cadastrado!'
+            ], 404);
+        }
+        $senha = Str::random(8);
+        $user->password = bcrypt($senha);
         $user->save();
-        // return new \App\Mail\ResetPassword($user, $senha);
         Mail::send(new \App\Mail\ResetPassword($user, $senha));
+    }
 
-        // $request->validate([
-        //     'email'    => 'string|email|unique:users',
-        //     'password' => 'required|string'
-        // ]);
-
-        // User::updateWhere(
-        //     ['email'    => $request->email],
-        //     ['password' => bcrypt($request->password)]
-        // );
-
-        // return response()->json([
-        //     'message' => 'Senha alterada com Sucesso!'
-        // ], 201);
+    public function change(Request $request)
+    {
+        $request->validate([
+            'email'       => 'string|email'   ,
+            'password'    => 'required|string',
+            'newPassword' => 'required|string'
+        ]);
+        $credentials = request(['email', 'password']);
+        if(!Auth::attempt($credentials))
+            return response()->json([
+                'message' => 'Email ou Senha Inválidos!'
+            ], 401);
+        $user        = $request->user();
+        $user->password = bcrypt($request->newPassword);
+        $user->save();
     }
 
     public function logout(Request $request) {
