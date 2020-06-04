@@ -17,5 +17,8 @@ class Escala extends Model
             'hora'      ,
             'status'    
         );
-    } 
+    }
+    public function pontos(){
+        return $this->hasMany('App\Ponto');
+    }
 }
