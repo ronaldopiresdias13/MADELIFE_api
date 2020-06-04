@@ -17,5 +17,10 @@ class Escala extends Model
             'hora'      ,
             'status'    
         );
-    } 
+    }
+
+    public function ordemservico()
+    {
+        return $this->belongsTo('App\Ordemservico');
+    }
 }
