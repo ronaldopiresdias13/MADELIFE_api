@@ -199,6 +199,12 @@ Route::post("/image" , "Controller@uploadimage");
     Route::put   ('marcas/{marca}', 'Api\MarcasController@update' );
     Route::delete('marcas/{marca}', 'Api\MarcasController@destroy');
 
+    Route::get   ('monitoramentoescalas'                      , 'Api\MonitoramentoescalasController@index'  );
+    Route::post  ('monitoramentoescalas'                      , 'Api\MonitoramentoescalasController@store'  );
+    Route::get   ('monitoramentoescalas/{monitoramentoescala}', 'Api\MonitoramentoescalasController@show'   );
+    Route::put   ('monitoramentoescalas/{monitoramentoescala}', 'Api\MonitoramentoescalasController@update' );
+    Route::delete('monitoramentoescalas/{monitoramentoescala}', 'Api\MonitoramentoescalasController@destroy');
+
     Route::get   ('orcamentos'            , 'Api\OrcamentosController@index'  );
     Route::post  ('orcamentos'            , 'Api\OrcamentosController@store'  );
     Route::get   ('orcamentos/{orcamento}', 'Api\OrcamentosController@show'   );
