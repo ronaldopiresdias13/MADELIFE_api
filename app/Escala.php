@@ -31,4 +31,9 @@ class Escala extends Model
     {
         return $this->belongsTo('App\Ordemservico');
     }
+
+    public function prestador()
+    {
+        return $this->belongsTo('App\Prestador', 'prestador_id');
+    }
 }
