@@ -253,6 +253,12 @@ Route::post("/image" , "Controller@uploadimage");
     Route::put   ('pils/{pil}', 'Api\PilsController@update' );
     Route::delete('pils/{pil}', 'Api\PilsController@destroy');
 
+    Route::get   ('pontos'        , 'Api\PontosController@index'  );
+    Route::post  ('pontos'        , 'Api\PontosController@store'  );
+    Route::get   ('pontos/{ponto}', 'Api\PontosController@show'   );
+    Route::put   ('pontos/{ponto}', 'Api\PontosController@update' );
+    Route::delete('pontos/{ponto}', 'Api\PontosController@destroy');
+
     Route::get   ('prescricoesbs'              , 'Api\PrescricoesbsController@index'  );
     Route::post  ('prescricoesbs'              , 'Api\PrescricoesbsController@store'  );
     Route::get   ('prescricoesbs/{prescricaob}', 'Api\PrescricoesbsController@show'   );

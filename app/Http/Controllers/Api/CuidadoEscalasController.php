@@ -154,7 +154,13 @@ class CuidadoEscalasController extends Controller
      */
     public function update(Request $request, CuidadoEscala $cuidadoEscala)
     {
-        $cuidadoEscala->update($request->all());
+        return $request;
+        $cuidadoEscala->escala_id  = $request->escala_id;
+        $cuidadoEscala->cuidado_id = $request->cuidado_id;
+        $cuidadoEscala->data       = $request->data;
+        $cuidadoEscala->hora       = $request->hora;
+        $cuidadoEscala->status     = $request->status;
+        $cuidadoEscala->save();
     }
 
     /**

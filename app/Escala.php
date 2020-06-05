@@ -18,6 +18,14 @@ class Escala extends Model
             'status'    
         );
     }
+    
+    public function pontos(){
+        return $this->hasMany('App\Ponto');
+    }
+
+    public function monitoramentos(){
+        return $this->hasMany('App\Monitoramentoescala');
+    }
 
     public function ordemservico()
     {
