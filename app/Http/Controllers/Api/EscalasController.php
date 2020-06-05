@@ -176,7 +176,21 @@ class EscalasController extends Controller
      */
     public function update(Request $request, Escala $escala)
     {
-        $escala->update($request->all());
+        $escala->empresa_idree           = $request->empresa_id;
+        $escala->ordemservico_id      = $request->ordemservico_id;
+        $escala->prestador_id         = $request->prestador_id;
+        $escala->horaentrada          = $request->horaentrada;
+        $escala->horasaida            = $request->horasaida;
+        $escala->dataentrada          = $request->dataentrada;
+        $escala->datasaida            = $request->datasaida;
+        $escala->periodo              = $request->periodo;
+        $escala->assinaturaprestador  = $request->assinaturaprestador;
+        $escala->assinaturaresonsavel = $request->assinaturaresonsavel;
+        $escala->observacao           = $request->observacao;
+        $escala->status               = $request->status;
+        $escala->folga                = $request->folga;
+        $escala->substituto           = $request->substituto;
+        $escala->save();
     }
 
     /**

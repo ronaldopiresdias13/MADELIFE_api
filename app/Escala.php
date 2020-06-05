@@ -23,6 +23,10 @@ class Escala extends Model
         return $this->hasMany('App\Ponto');
     }
 
+    public function monitoramentos(){
+        return $this->hasMany('App\Monitoramentoescala');
+    }
+
     public function ordemservico()
     {
         return $this->belongsTo('App\Ordemservico');
