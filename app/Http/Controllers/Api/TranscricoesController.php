@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Transcricao;
+use App\TranscricaoProduto;
+use App\Horariomedicamento;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -95,12 +97,55 @@ class TranscricoesController extends Controller
      */
     public function store(Request $request)
     {
-        $transcricao = new Transcricao;
-        $transcricao->medico = $request->medico;
-        $transcricao->crm = $request->crm;
-        $transcricao->profissional = $request->profissional;
-        $transcricao->pil = $request->pil;
-        $transcricao->save();
+        // "empresa_id": 1,
+        // "ordemservico_id": 2,
+        // "EnfermeiroSupervisor": "Sidmario Dantas",
+        // "Medico": "",
+        // "Receita": "",
+        // "ItensTranscricao": [
+        //     {
+        //         "produto_id": "23",
+        //         "quantidade": "1",
+        //         "apresentacao": "Comprimido",
+        //         "frequencia": "24",
+        //         "tempo": "DIA(S)",
+        //         "Horarios": [
+        //            hora:  "06:00"
+        //         ],
+        //         "Status": false,
+        //         "via": "oral",
+        //         "observacao": null
+        //     }
+        // ]
+
+        $transcricao = Transcricao::create([
+            'empresa_id'      => $request->empresa_id     ,
+            'ordemservico_id' => $request->ordemservico_id,
+            'profissional_id' => $request->profissional_id,
+            'medico'          => $request->medico         ,
+            'receita'         => $request->receita        ,
+            'crm'             => $request->crm            ,
+        ]);
+
+        foreach ($request->ItensTranscricao as $key => $iten) {
+            $transcricao_produto = TranscricaoProduto::firstOrCreate([
+                'transcricao_id' => $transcricao->id   ,
+                'produto_id'     => $iten->produto_id  ,
+                'quantidade'     => $iten->quantidade  ,
+                'apresentacao'   => $iten->apresentacao,
+                'via'            => $iten->via         ,
+                'frequencia'     => $iten->frequencia  ,
+                'tempo'          => $iten->tempo       ,
+                'status'         => $iten->status      ,
+                'observacao'     => $iten->observacao  ,
+            ]);
+            foreach ($iten->horarios as $key => $horario) {
+                $horario_medicamento = Horariomedicamento::create([
+                    'transcricao_produto_id' => $transcricao_produto,
+                    'horario'                => $horario->hora
+                ]);
+            }
+        }
     }
 
     /**

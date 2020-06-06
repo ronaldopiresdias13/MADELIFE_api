@@ -10,8 +10,9 @@ use App\Relatorio;
 use App\Ponto;
 use App\Monitoramentoescala;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class EscalasController extends Controller
 {
@@ -128,6 +129,65 @@ class EscalasController extends Controller
      */
     public function show(Request $request, Escala $escala)
     {
+        // $users = DB::table('users')->select('cpfcnpj', 'email as user_email')->get();
+
+        // $users = DB::table('users')
+        // ->join('user_acesso', function ($join) {
+        //     $join->on('users.id', '=', 'user_acesso.user_id');
+        //         //  ->where('contacts.user_id', '>', 5);
+        // })
+        // ->join('acessos', function ($join){
+        //     $join->on('acessos.id', '=', 'user_acesso.acesso_id');
+        // })
+        // ->get();
+
+        // $escala = Escala::find($escala->id);
+
+        // $escala = $escala->with('ordemservico')->with('orcamento');
+        
+        // $escala = $escala->get();
+
+        // return $escala;
+
+        // $dados = Escala::with('ordemservico')->where('id', 75)->get();
+
+        // $dados = Escala::join('ordemservicos', function($query) {
+        //     $query->on('ordemservicos.id', '=', 'escalas.ordemservico_id');
+        //     // $query->where('veiculo.cor', '=', 'vermelho');
+        // })
+        // ->get();
+
+        // Paciente  full
+        // Escala    full
+        // Prestador nome, formacoes, conselho
+        // Pontos    full
+
+        // $escalas = Escala::all()->take(2);
+        // foreach ($escalas as $key => $escala) {
+        //     $escala->ordemservico->orcamento->homecare;
+        // }
+
+        // $escalas = $escalas->where('id', 2);
+        // $escalas->get();
+
+        // $escala = Escala::find(6);
+        // $escala->ordemservico->orcamento->homecare;
+        // $escalas->ordemservico;
+
+        // return $escalas;
+
+        // $escalas = DB::table('escalas')
+        //     ->join('ordemservicos', 'ordemservicos.id'      , '=', 'escalas.ordemservico_id'   )
+        //     ->join('orcamentos'   , 'orcamentos.id'         , '=', 'ordemservicos.orcamento_id')
+        //     ->join('homecares'    , 'homecares.orcamento_id', '=', 'orcamentos.id'             )
+        //     // ->join('eventos'      , 'eventos.orcamento_id'  , '=', 'orcamentos.id'             )
+        //     // ->join('remocoes'     , 'remocoes.orcamento_id' , '=', 'orcamentos.id'             )
+        //     ->join('prestadores'  , 'prestadores.id'        , '=', 'escalas.prestador_id'      )
+        //     ->select('escalas.*', 'orcamentos.*', 'prestadores.*')
+        //     ->limit(100)
+        //     ->get();
+        // return $escalas;
+
         $iten = $escala;
 
         if ($request->commands) {
