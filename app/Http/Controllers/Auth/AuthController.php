@@ -27,6 +27,7 @@ class AuthController extends Controller
         $user        = $request->user();
         $user->acessos;
         $user->pessoa;
+        $user->pessoa->prestador;
         $tokenResult = $user->createToken('Personal Access Token');
         $token       = $tokenResult->token;
         if ($request->remember_me)

@@ -5,6 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\User;
 use App\Acesso;
+use App\Pessoa;
+use App\Prestador;
+use App\PrestadorFormacao;
+use App\Conselho;
+use App\Email;
+use App\PessoaEmail;
 use App\UserAcesso;
 use Illuminate\Http\Request;
 
@@ -97,7 +103,63 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-       //
+        $cpfcnpj = Pessoa::where(
+            'cpfcnpj', $request['pessoa']['cpfcnpj']
+        );
+        $email = Email::where('email', $request['user']['email']);
+        if ($cpfcnpj) {
+            return response()->json('Usuário já existe!', 400)->header('Content-Type', 'text/plain');
+        }if ($email){
+            return response()->json('Usuário já existe!', 400)->header('Content-Type', 'text/plain');
+        }
+        else{
+            $user = User::create(
+                [
+                    'empresa_id' => 1,
+                    'cpfcnpj'    => $request['cpfcnpj'],
+                    'email'      => $request['user']['email'],
+                    'password'   =>  bcrypt($request['user']['password']),
+                    'pessoa_id'  => Pessoa::create(
+                        [
+                            'empresa_id' => 1,
+                            'nome'       => $request['nome'],
+                            'nascimento' => $request['nascimento'],
+                            'tipo'       => $request['tipo'],
+                            'cpfcnpj'    => $request['cpfcnpj'],
+                            'status'     => $request['status']
+                        ]
+                    )->id
+                ]
+            );
+            $pessoa_email = PessoaEmail::firstOrCreate([
+                'pessoa_id' => $user->pessoa_id,
+                'email_id'  => Email::firstOrCreate(
+                    [
+                        'email'  => $user->email,
+                    ])->id,
+                'tipo'      => 'Pessoal',
+            ]);
+            $conselho = Conselho::create(
+                [
+                    'instituicao' => $request['conselho']['instituicao'],
+                    'numero'      => $request['conselho']['numero'],
+                    'pessoa_id'   => $user->pessoa_id
+                ]
+            );
+            $formacao = PrestadorFormacao::create(
+                [
+                    'prestador_id' => Prestador::create(
+                        [
+                            'pessoa_id' => $user->pessoa_id,
+                            'sexo'      => $request['prestador']['sexo']
+                        ]
+                    )->id,
+                    'formacao_id'   => 66
+                    // 'formacao_id'   => $request['prestador']['formacao_id']
+                ]
+            );
+        }
+        
     }
 
     /**
