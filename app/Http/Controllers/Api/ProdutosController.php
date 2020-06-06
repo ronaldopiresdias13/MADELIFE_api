@@ -195,7 +195,7 @@ class ProdutosController extends Controller
         $produto->quantidadeestoque = $request->quantidadeestoque;
         $produto->armazem = $request->armazem;
         $produto->localizacaofisica = $request->localizacaofisica;
-        $produto->fornecedor_id = $request->fornecedor_id;
+        // $produto->fornecedor_id = $request->fornecedor_id;
         $produto->datacompra = $request->datacompra;
         $produto->marca_id = $request->marca_id; 
         $produto->desvalorizacao = $request->desvalorizacao; 
@@ -234,7 +234,7 @@ class ProdutosController extends Controller
         $produto->quantidadeestoque = $request->quantidade_Estoque;
         $produto->armazem = $request->armazem;
         $produto->localizacaofisica = $request->localizacao_Fisica;
-        $produto->fornecedor_id = null;
+        // $produto->fornecedor_id = null;
         $produto->datacompra = $request->ultima_Compra;
         $produto->marca_id = null; 
         $produto->save();
