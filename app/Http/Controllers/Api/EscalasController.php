@@ -113,7 +113,7 @@ class EscalasController extends Controller
         $escala->datasaida = $request->datasaida;
         $escala->periodo = $request->periodo;
         $escala->assinaturaprestador = $request->assinaturaprestador;
-        $escala->assinaturaresponsavel = $request->assinaturaresponsavel;
+        $escala->assinaturaresonsavel = $request->assinaturaresonsavel;
         $escala->observacao = $request->observacao;
         $escala->status = $request->status;
         $escala->folga = $request->folga;
