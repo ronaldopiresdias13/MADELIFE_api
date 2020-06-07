@@ -8,4 +8,20 @@ class Transcricao extends Model
 {
     protected $table = 'transcricoes';
     protected $guarded = [];
+
+    public function ordemservico(){
+        return $this->belongsTo('App\Ordemservico');
+    }
+
+    public function produtos(){
+        return $this->belongsToMany('App\Produto', 'transcricao_produto')
+        ->withpivot(
+            "quantidade"  ,
+            "apresentacao",
+            "via"         ,
+            "frequencia"  ,
+            "tempo"       ,
+            "observacao"
+        );
+    }
 }

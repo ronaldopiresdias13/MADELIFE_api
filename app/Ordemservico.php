@@ -17,4 +17,8 @@ class Ordemservico extends Model
     {
         return $this->belongsTo('App\Responsavel');
     }
+
+    public function transcricoes(){
+        return $this->hasMany('App\Transcricao');
+    }
 }
