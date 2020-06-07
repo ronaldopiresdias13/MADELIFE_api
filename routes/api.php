@@ -49,6 +49,12 @@ Route::post("/image" , "Controller@uploadimage");
 
 // Route::group(['middleware' => 'auth:api'], function() { // Descomentar para utilizar Autenticação via Token
 
+    Route::get   ('acaomedicamentos'                  , 'Api\AcaomedicamentosController@index'  );
+    Route::post  ('acaomedicamentos'                  , 'Api\AcaomedicamentosController@store'  );
+    Route::get   ('acaomedicamentos/{acaomedicamento}', 'Api\AcaomedicamentosController@show'   );
+    Route::put   ('acaomedicamentos/{acaomedicamento}', 'Api\AcaomedicamentosController@update' );
+    Route::delete('acaomedicamentos/{acaomedicamento}', 'Api\AcaomedicamentosController@destroy');
+
     Route::get   ('acessos'         , 'Api\AcessosController@index'  );
     Route::post  ('acessos'         , 'Api\AcessosController@store'  );
     Route::get   ('acessos/{acesso}', 'Api\AcessosController@show'   );
