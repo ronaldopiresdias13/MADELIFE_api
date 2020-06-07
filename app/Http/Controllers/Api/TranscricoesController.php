@@ -17,6 +17,9 @@ class TranscricoesController extends Controller
      */
     public function index(Request $request)
     {
+
+        $itens = Transcricao::all();
+
         $itens = null;
 
         if ($request->commands) {
@@ -156,6 +159,15 @@ class TranscricoesController extends Controller
      */
     public function show(Request $request, Transcricao $transcricao)
     {
+        $iten = $transcricao;
+        foreach ($transcricao->produtos as $key => $produto) {
+            
+            foreach ($produto->transcricao_produto as $key => $itens) {
+                $itens->horariomedicamentos;
+            }
+        }
+        return $iten;
+
         $iten = $transcricao;
 
         if ($request->commands) {
