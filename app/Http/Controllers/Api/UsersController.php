@@ -154,7 +154,7 @@ class UsersController extends Controller
                             'sexo'      => $request['prestador']['sexo']
                         ]
                     )->id,
-                    'formacao_id'   => 66
+                    'formacao_id'   =>  $request['prestador']['formacao_id']
                     // 'formacao_id'   => $request['prestador']['formacao_id']
                 ]
             );
