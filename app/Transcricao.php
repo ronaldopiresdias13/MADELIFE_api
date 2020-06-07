@@ -16,6 +16,7 @@ class Transcricao extends Model
     public function produtos(){
         return $this->belongsToMany('App\Produto', 'transcricao_produto')
         ->withpivot(
+            "id",
             "quantidade"  ,
             "apresentacao",
             "via"         ,
