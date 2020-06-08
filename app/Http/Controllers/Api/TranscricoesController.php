@@ -18,7 +18,16 @@ class TranscricoesController extends Controller
     public function index(Request $request)
     {
 
-        $itens = Transcricao::all();
+        // $iten = Transcricao::find(1);
+        // foreach ($iten->produtos as $key => $produto) {
+        //     $produto->transcricao_produto->horariomedicamentos;
+        //     // foreach ($produto->transcricao_produto as $key => $itens) {
+        //     //     $itens->horariomedicamentos;
+        //     // }
+        // }
+        // return $iten;
+
+        // $itens = Transcricao::all();
 
         $itens = null;
 
@@ -44,6 +53,7 @@ class TranscricoesController extends Controller
             }
         } else {
             $itens = Transcricao::where('id', 'like', '%');
+            // $itens = Transcricao::find(1);
         }
 
         if ($request['order']) {
@@ -100,27 +110,6 @@ class TranscricoesController extends Controller
      */
     public function store(Request $request)
     {
-        // "empresa_id": 1,
-        // "ordemservico_id": 2,
-        // "EnfermeiroSupervisor": "Sidmario Dantas",
-        // "Medico": "",
-        // "Receita": "",
-        // "ItensTranscricao": [
-        //     {
-        //         "produto_id": "23",
-        //         "quantidade": "1",
-        //         "apresentacao": "Comprimido",
-        //         "frequencia": "24",
-        //         "tempo": "DIA(S)",
-        //         "Horarios": [
-        //            hora:  "06:00"
-        //         ],
-        //         "Status": false,
-        //         "via": "oral",
-        //         "observacao": null
-        //     }
-        // ]
-
         $transcricao = Transcricao::create([
             'empresa_id'      => $request->empresa_id     ,
             'ordemservico_id' => $request->ordemservico_id,
@@ -159,15 +148,6 @@ class TranscricoesController extends Controller
      */
     public function show(Request $request, Transcricao $transcricao)
     {
-        $iten = $transcricao;
-        foreach ($transcricao->produtos as $key => $produto) {
-            
-            foreach ($produto->transcricao_produto as $key => $itens) {
-                $itens->horariomedicamentos;
-            }
-        }
-        return $iten;
-
         $iten = $transcricao;
 
         if ($request->commands) {

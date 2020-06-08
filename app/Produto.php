@@ -8,6 +8,6 @@ class Produto extends Model
 {
     public function transcricao_produto()
     {
-        return $this->hasMany('App\TranscricaoProduto');
+        return $this->hasOne('App\TranscricaoProduto');
     }
 }
