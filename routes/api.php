@@ -240,6 +240,7 @@ Route::post("/image" , "Controller@uploadimage");
     Route::get   ('ordemservicos/{ordemservico}', 'Api\OrdemservicosController@show'   );
     Route::put   ('ordemservicos/{ordemservico}', 'Api\OrdemservicosController@update' );
     Route::delete('ordemservicos/{ordemservico}', 'Api\OrdemservicosController@destroy');
+    Route::get   ('ordemservicos/{ordemservico}/horariomedicamentos', 'Api\OrdemservicosController@horariomedicamentos');
 
     Route::get   ('outros'        , 'Api\OutrosController@index'  );
     Route::post  ('outros'        , 'Api\OutrosController@store'  );

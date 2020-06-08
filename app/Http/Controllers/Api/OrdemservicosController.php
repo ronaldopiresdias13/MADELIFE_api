@@ -226,4 +226,23 @@ class OrdemservicosController extends Controller
 
         ]);
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Ordemservico  $ordemservico
+     * @return \Illuminate\Http\Response
+     */
+    public function horariomedicamentos(Request $request, Ordemservico $ordemservico)
+    {
+        // dd('teste');
+        $iten = $ordemservico;
+        // $iten->transcricoes;
+        foreach ($iten->transcricoes as $key => $transcricao) {
+            foreach ($transcricao->produtos as $key => $produto) {
+                $produto->transcricao_produto->horariomedicamentos;
+            }
+        }
+        return $iten;
+    }
 }

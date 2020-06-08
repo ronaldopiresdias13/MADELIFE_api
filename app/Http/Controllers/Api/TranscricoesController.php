@@ -27,8 +27,6 @@ class TranscricoesController extends Controller
         // }
         // return $iten;
 
-        // $itens = Transcricao::all();
-
         $itens = null;
 
         if ($request->commands) {
@@ -209,4 +207,18 @@ class TranscricoesController extends Controller
     {
         $transcricao->delete();
     }
+
+    // /**
+    //  * Display a listing of the resource.
+    //  *
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function horariomedicamentos(Request $request)
+    // {
+    //     $iten = Transcricao::find(1);
+    //     foreach ($iten->produtos as $key => $produto) {
+    //         $produto->transcricao_produto->horariomedicamentos;
+    //     }
+    //     return $iten;
+    // }
 }
