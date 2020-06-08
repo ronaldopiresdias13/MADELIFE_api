@@ -208,6 +208,7 @@ class PrestadoresController extends Controller
             ->join('homecares'    , 'homecares.orcamento_id', '=', 'orcamentos.id'             )
             ->select('homecares.nome')
             ->groupBy('homecares.nome')
+            ->orderBy('homecares.nome')
             ->limit(100)
             ->get();
         return $escalas;
