@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeToEscalasTable extends Migration
+class RenameColumnToEscalasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,7 @@ class ChangeToEscalasTable extends Migration
     public function up()
     {
         Schema::table('escalas', function (Blueprint $table) {
-            $table->longText('assinaturaprestador')->nullable()->change();
-            $table->longText('assinaturaresonsavel')->nullable()->change();
+            $table->renameColumn('assinaturaresonsavel', 'assinaturaresponsavel');
         });
     }
 
@@ -27,8 +26,7 @@ class ChangeToEscalasTable extends Migration
     public function down()
     {
         Schema::table('escalas', function (Blueprint $table) {
-            $table->string('assinaturaprestador')->nullable()->change();
-            $table->string('assinaturaresonsavel')->nullable()->change();
+            $table->renameColumn('assinaturaresponsavel', 'assinaturaresonsavel');
         });
     }
 }
