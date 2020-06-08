@@ -235,9 +235,7 @@ class OrdemservicosController extends Controller
      */
     public function horariomedicamentos(Request $request, Ordemservico $ordemservico)
     {
-        // dd('teste');
         $iten = $ordemservico;
-        // $iten->transcricoes;
         foreach ($iten->transcricoes as $key => $transcricao) {
             foreach ($transcricao->produtos as $key => $produto) {
                 $produto->transcricao_produto->horariomedicamentos;
