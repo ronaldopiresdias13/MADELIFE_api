@@ -3,22 +3,23 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Prestador;
-use App\Pessoa;
-use App\Formacao;
 use App\User;
-use App\Dadosbancario;
 use App\Banco;
 use App\Cargo;
-use App\PrestadorFormacao;
-use App\PessoaTelefone;
-use App\Telefone;
-use App\PessoaEmail;
 use App\Email;
-use App\PessoaEndereco;
-use App\Endereco;
+use App\Pessoa;
 use App\Cidade;
+use App\Escala;
+use App\Formacao;
+use App\Telefone;
+use App\Endereco;
 use App\Conselho;
+use App\Prestador;
+use App\PessoaEmail;
+use App\Dadosbancario;
+use App\PessoaTelefone;
+use App\PessoaEndereco;
+use App\PrestadorFormacao;
 use Illuminate\Http\Request;
 // use Illuminate\Support\Facades\DB;
 
@@ -191,6 +192,25 @@ class PrestadoresController extends Controller
     public function destroy(Prestador $prestador)
     {
         $prestador->delete();
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Prestador  $prestador
+     * @return \Illuminate\Http\Response
+     */
+    public function meuspacientes(Request $request, Prestador $prestador)
+    {
+        $escalas = Escala::where('prestador_id', $prestador->id)
+            ->join('ordemservicos', 'ordemservicos.id'      , '=', 'escalas.ordemservico_id'   )
+            ->join('orcamentos'   , 'orcamentos.id'         , '=', 'ordemservicos.orcamento_id')
+            ->join('homecares'    , 'homecares.orcamento_id', '=', 'orcamentos.id'             )
+            ->select('homecares.nome')
+            ->groupBy('homecares.nome')
+            ->limit(100)
+            ->get();
+        return $escalas;
     }
 
     /**

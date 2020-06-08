@@ -292,25 +292,6 @@ class EscalasController extends Controller
         $escala->delete();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  $prestador_id
-     * @return \Illuminate\Http\Response
-     */
-    public function meuspacientes($prestador_id)
-    {
-        $escalas = Escala::where('prestador_id', $prestador_id)
-            ->join('ordemservicos', 'ordemservicos.id'      , '=', 'escalas.ordemservico_id'   )
-            ->join('orcamentos'   , 'orcamentos.id'         , '=', 'ordemservicos.orcamento_id')
-            ->join('homecares'    , 'homecares.orcamento_id', '=', 'orcamentos.id'             )
-            ->select('homecares.nome')
-            ->groupBy('homecares.nome')
-            ->limit(100)
-            ->get();
-        return $escalas;
-    }
-
     public function migracao(Request $request){
         $escala = Escala::create([
             'empresa_id' => $request['empresa_id'],
