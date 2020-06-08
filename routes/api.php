@@ -157,11 +157,12 @@ Route::post("/image" , "Controller@uploadimage");
     Route::put   ('enderecos/{endereco}', 'Api\EnderecosController@update' );
     Route::delete('enderecos/{endereco}', 'Api\EnderecosController@destroy');
 
-    Route::get   ('escalas'         , 'Api\EscalasController@index'  );
-    Route::post  ('escalas'         , 'Api\EscalasController@store'  );
-    Route::get   ('escalas/{escala}', 'Api\EscalasController@show'   );
-    Route::put   ('escalas/{escala}', 'Api\EscalasController@update' );
-    Route::delete('escalas/{escala}', 'Api\EscalasController@destroy');
+    Route::get   ('escalas'                             , 'Api\EscalasController@index'        );
+    Route::post  ('escalas'                             , 'Api\EscalasController@store'        );
+    Route::get   ('escalas/{escala}'                    , 'Api\EscalasController@show'         );
+    Route::put   ('escalas/{escala}'                    , 'Api\EscalasController@update'       );
+    Route::delete('escalas/{escala}'                    , 'Api\EscalasController@destroy'      );
+    Route::get   ('escalas/meuspacientes/{prestador_id}', 'Api\EscalasController@meuspacientes');
 
     Route::get   ('formacoes'           , 'Api\FormacoesController@index'  );
     Route::post  ('formacoes'           , 'Api\FormacoesController@store'  );
