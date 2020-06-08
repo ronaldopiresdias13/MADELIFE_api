@@ -123,11 +123,11 @@ class EscalasController extends Controller
 
         foreach ($request->cuidados as $key => $cuidado) {
             $cuidado_escala = CuidadoEscala::create([
-                'escala_id'  => $escala->id                             ,
-                'cuidado_id' => Cuidado::find($cuidado->id)->id,
-                'data'       => $cuidado->data                          ,
-                'hora'       => $cuidado->hora                          ,
-                'status'     => $cuidado->status                        ,
+                'escala_id'  => $escala->id                                 ,
+                'cuidado_id' => Cuidado::find($cuidado['cuidado']['id'])->id,
+                'data'       => $cuidado['data']                 ,
+                'hora'       => $cuidado['hora']                 ,
+                'status'     => $cuidado['status']               ,
             ]);
         }
     }
