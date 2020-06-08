@@ -113,7 +113,7 @@ class EscalasController extends Controller
         $escala->datasaida = $request->datasaida;
         $escala->periodo = $request->periodo;
         $escala->assinaturaprestador = $request->assinaturaprestador;
-        $escala->assinaturaresonsavel = $request->assinaturaresonsavel;
+        $escala->assinaturaresponsavel = $request->assinaturaresponsavel;
         $escala->observacao = $request->observacao;
         $escala->status = $request->status;
         $escala->folga = $request->folga;
@@ -236,7 +236,7 @@ class EscalasController extends Controller
      */
     public function update(Request $request, Escala $escala)
     {
-        $escala->empresa_idree           = $request->empresa_id;
+        $escala->empresa_id           = $request->empresa_id;
         $escala->ordemservico_id      = $request->ordemservico_id;
         $escala->prestador_id         = $request->prestador_id;
         $escala->horaentrada          = $request->horaentrada;
@@ -245,7 +245,7 @@ class EscalasController extends Controller
         $escala->datasaida            = $request->datasaida;
         $escala->periodo              = $request->periodo;
         $escala->assinaturaprestador  = $request->assinaturaprestador;
-        $escala->assinaturaresonsavel = $request->assinaturaresonsavel;
+        $escala->assinaturaresponsavel = $request->assinaturaresponsavel;
         $escala->observacao           = $request->observacao;
         $escala->status               = $request->status;
         $escala->folga                = $request->folga;
@@ -275,7 +275,7 @@ class EscalasController extends Controller
             'datasaida' =>      $request['escala']['datasaida'],
             'periodo' =>        $request['escala']['periodo'],
             'assinaturaprestador' => '',
-            'assinaturaresonsavel' => '',
+            'assinaturaresponsavel' => '',
             'observacao' =>     $request['escala']['observacoes'],
             'status' =>         $request['escala']['status'],
             'folga' =>          $request['escala']['folga'],
