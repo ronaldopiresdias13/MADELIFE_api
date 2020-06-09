@@ -103,22 +103,33 @@ class EscalasController extends Controller
      */
     public function store(Request $request)
     {
-        $escala = new Escala;
-        $escala->empresa_id = $request->empresa_id;
-        $escala->ordemservico_id = $request->ordemservico_id;
-        $escala->prestador_id = $request->prestador_id;
-        $escala->horaentrada = $request->horaentrada;
-        $escala->horasaida = $request->horasaida;
-        $escala->dataentrada = $request->dataentrada;
-        $escala->datasaida = $request->datasaida;
-        $escala->periodo = $request->periodo;
-        $escala->assinaturaprestador = $request->assinaturaprestador;
-        $escala->assinaturaresponsavel = $request->assinaturaresponsavel;
-        $escala->observacao = $request->observacao;
-        $escala->status = $request->status;
-        $escala->folga = $request->folga;
-        $escala->substituto = $request->substituto;
-        $escala->save();
+        $escala = Escala::create([
+            'empresa_id'            => $request->empresa_id           ,
+            'ordemservico_id'       => $request->ordemservico_id      ,
+            'prestador_id'          => $request->prestador_id         ,
+            'servico_id'            => $request->servico_id           ,
+            'horaentrada'           => $request->horaentrada          ,
+            'horasaida'             => $request->horasaida            ,
+            'dataentrada'           => $request->dataentrada          ,
+            'datasaida'             => $request->datasaida            ,
+            'periodo'               => $request->periodo              ,
+            'assinaturaprestador'   => $request->assinaturaprestador  ,
+            'assinaturaresponsavel' => $request->assinaturaresponsavel,
+            'observacao'            => $request->observacao           ,
+            'status'                => $request->status               ,
+            'folga'                 => $request->folga                ,
+            'substituto'            => $request->substituto
+        ]);
+
+        foreach ($request->cuidados as $key => $cuidado) {
+            $cuidado_escala = CuidadoEscala::create([
+                'escala_id'  => $escala->id                                 ,
+                'cuidado_id' => Cuidado::find($cuidado['cuidado']['id'])->id,
+                'data'       => $cuidado['data']                 ,
+                'hora'       => $cuidado['hora']                 ,
+                'status'     => $cuidado['status']               ,
+            ]);
+        }
     }
 
     /**
@@ -187,6 +198,23 @@ class EscalasController extends Controller
         //     ->limit(100)
         //     ->get();
         // return $escalas;
+
+
+
+        // $escalas = DB::table('escalas')->where('prestador_id', 25)
+        //     ->join('ordemservicos', 'ordemservicos.id'      , '=', 'escalas.ordemservico_id'   )
+        //     ->join('orcamentos'   , 'orcamentos.id'         , '=', 'ordemservicos.orcamento_id')
+        //     ->join('homecares'    , 'homecares.orcamento_id', '=', 'orcamentos.id'             )
+        //     ->select('homecares.nome')
+        //     ->groupBy('homecares.nome')
+        //     ->limit(100)
+        //     ->get();
+        // return $escalas;
+
+        
+
+
+
 
         $iten = $escala;
 
@@ -263,6 +291,7 @@ class EscalasController extends Controller
     {
         $escala->delete();
     }
+
     public function migracao(Request $request){
         $escala = Escala::create([
             'empresa_id' => $request['empresa_id'],

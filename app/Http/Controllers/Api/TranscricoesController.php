@@ -17,16 +17,6 @@ class TranscricoesController extends Controller
      */
     public function index(Request $request)
     {
-
-        // $iten = Transcricao::find(1);
-        // foreach ($iten->produtos as $key => $produto) {
-        //     $produto->transcricao_produto->horariomedicamentos;
-        //     // foreach ($produto->transcricao_produto as $key => $itens) {
-        //     //     $itens->horariomedicamentos;
-        //     // }
-        // }
-        // return $iten;
-
         $itens = null;
 
         if ($request->commands) {
@@ -51,7 +41,6 @@ class TranscricoesController extends Controller
             }
         } else {
             $itens = Transcricao::where('id', 'like', '%');
-            // $itens = Transcricao::find(1);
         }
 
         if ($request['order']) {
@@ -207,18 +196,4 @@ class TranscricoesController extends Controller
     {
         $transcricao->delete();
     }
-
-    // /**
-    //  * Display a listing of the resource.
-    //  *
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function horariomedicamentos(Request $request)
-    // {
-    //     $iten = Transcricao::find(1);
-    //     foreach ($iten->produtos as $key => $produto) {
-    //         $produto->transcricao_produto->horariomedicamentos;
-    //     }
-    //     return $iten;
-    // }
 }

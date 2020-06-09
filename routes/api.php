@@ -283,6 +283,7 @@ Route::post("/image" , "Controller@uploadimage");
     Route::get   ('prestadores/{prestador}', 'Api\PrestadoresController@show'   );
     Route::put   ('prestadores/{prestador}', 'Api\PrestadoresController@update' );
     Route::delete('prestadores/{prestador}', 'Api\PrestadoresController@destroy');
+    Route::get   ('prestadores/{prestador}/meuspacientes', 'Api\PrestadoresController@meuspacientes');
 
     Route::get   ('produtos'          , 'Api\ProdutosController@index'  );
     Route::post  ('produtos'          , 'Api\ProdutosController@store'  );
