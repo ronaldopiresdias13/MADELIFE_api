@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Contasbancaria;
 use App\Http\Controllers\Controller;
-use App\OrcamentoProduto;
 use Illuminate\Http\Request;
 
-class OrcamentoProdutosController extends Controller
+class ContasbancariasController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -25,7 +24,7 @@ class OrcamentoProdutosController extends Controller
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
-                    $itens = OrcamentoProduto::where(
+                    $itens = Contasbancaria::where(
                         ($where['coluna'   ])? $where['coluna'   ] : 'id'  ,
                         ($where['expressao'])? $where['expressao'] : 'like',
                         ($where['valor'    ])? $where['valor'    ] : '%'
@@ -39,7 +38,7 @@ class OrcamentoProdutosController extends Controller
                 }
             }
         } else {
-            $itens = OrcamentoProduto::where('id', 'like', '%');
+            $itens = Contasbancaria::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -96,19 +95,27 @@ class OrcamentoProdutosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $contasbancaria = Contasbancaria::create([
+            'empresa_id' => $request->empresa_id,
+            'banco_id'   => $request->banco_id  ,
+            'agencia'    => $request->agencia   ,
+            'conta'      => $request->conta     ,
+            'digito'     => $request->digito    ,
+            'tipo'       => $request->tipo      ,
+            'saldo'      => $request->saldo     ,
+            'descricao'  => $request->descricao ,
+        ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\OrcamentoProduto  $orcamentoProduto
+     * @param  \App\Contasbancaria  $contasbancaria
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, OrcamentoProduto $orcamentoProduto)
+    public function show(Request $request, Contasbancaria $contasbancaria)
     {
-        $iten = $orcamentoProduto;
+        $iten = $contasbancaria;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -151,22 +158,22 @@ class OrcamentoProdutosController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\OrcamentoProduto  $orcamentoProduto
+     * @param  \App\Contasbancaria  $contasbancaria
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, OrcamentoProduto $orcamentoProduto)
+    public function update(Request $request, Contasbancaria $contasbancaria)
     {
-        $orcamentoProduto->update($request->all());
+        $contasbancaria->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\OrcamentoProduto  $orcamentoProduto
+     * @param  \App\Contasbancaria  $contasbancaria
      * @return \Illuminate\Http\Response
      */
-    public function destroy(OrcamentoProduto $orcamentoProduto)
+    public function destroy(Contasbancaria $contasbancaria)
     {
-        $orcamentoProduto->delete();
+        //
     }
 }
