@@ -13,9 +13,78 @@ class ContasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $itens = null;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+        
+        if ($request['where']) {
+            foreach ($request['where'] as $key => $where) {
+                if ($key == 0) {
+                    $itens = Conta::where(
+                        ($where['coluna'   ])? $where['coluna'   ] : 'id'  ,
+                        ($where['expressao'])? $where['expressao'] : 'like',
+                        ($where['valor'    ])? $where['valor'    ] : '%'
+                    );
+                } else {
+                    $itens->where(
+                        ($where['coluna'   ])? $where['coluna'   ] : 'id',
+                        ($where['expressao'])? $where['expressao'] : 'like',
+                        ($where['valor'    ])? $where['valor'    ] : '%'
+                    );
+                }
+            }
+        } else {
+            $itens = Conta::where('id', 'like', '%');
+        }
+
+        if ($request['order']) {
+            foreach ($request['order'] as $key => $order) {
+                $itens->orderBy(
+                    ($order['coluna'])? $order['coluna'] : 'id',
+                    ($order['tipo'  ])? $order['tipo'  ] : 'asc'
+                );
+            }
+        }
+        
+        $itens = $itens->get();
+        
+        if ($request['adicionais']) {
+            foreach ($itens as $key => $iten) {
+                foreach ($request['adicionais'] as $key => $adicional) {
+                    if (is_string($adicional)) {
+                        $iten[$adicional];
+                    } else {
+                        $iten2 = $iten;
+                        foreach ($adicional as $key => $a) {
+                            if ($key == 0) {
+                                if ($iten[0] == null) {
+                                    $iten2 = $iten[$a];
+                                }
+                                else {
+                                    foreach ($iten as $key => $i) {
+                                        $i[$a];
+                                    }
+                                }
+                            } else {
+                                if ($iten2[0] == null) {
+                                    $iten2 = $iten2[$a];
+                                } else {
+                                    foreach ($iten2 as $key => $i) {
+                                        $i[$a];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $itens;
     }
 
     /**
@@ -26,7 +95,21 @@ class ContasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $conta = Conta::create(
+            [
+                'empresa_id'         => $request['empresa_id'        ],
+                'tipopessoa'         => $request['tipopessoa'        ],
+                'pessoa_id'          => $request['pessoa_id'         ],
+                'natureza_id'        => $request['natureza_id'       ],
+                'valortotalconta'    => $request['valortotalconta'   ],
+                'tipoconta'          => $request['tipoconta'         ],
+                'historico'          => $request['historico'         ],
+                'status'             => $request['status'            ],
+                'nfe'                => $request['nfe'               ],
+                'quantidadeconta'    => $request['quantidadeconta'   ],
+                'valorpago'          => $request['valorpago'         ],
+                'tipocontapagamento' => $request['tipocontapagamento']
+            ]);
     }
 
     /**
@@ -35,9 +118,45 @@ class ContasController extends Controller
      * @param  \App\Conta  $conta
      * @return \Illuminate\Http\Response
      */
-    public function show(Conta $conta)
+    public function show(Request $request, Conta $conta)
     {
-        //
+        $iten = $conta;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adicional) {
+                if (is_string($adicional)) {
+                    $iten[$adicional];
+                } else {
+                    $iten2 = $iten;
+                    foreach ($adicional as $key => $a) {
+                        if ($key == 0) {
+                            if ($iten[0] == null) {
+                                $iten2 = $iten[$a];
+                            }
+                            else {
+                                foreach ($iten as $key => $i) {
+                                    $i[$a];
+                                }
+                            }
+                        } else {
+                            if ($iten2[0] == null) {
+                                $iten2 = $iten2[$a];
+                            } else {
+                                foreach ($iten2 as $key => $i) {
+                                    $i[$a];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return $iten;
     }
 
     /**
@@ -49,7 +168,7 @@ class ContasController extends Controller
      */
     public function update(Request $request, Conta $conta)
     {
-        //
+        $contas->update($request->all());
     }
 
     /**
@@ -60,6 +179,6 @@ class ContasController extends Controller
      */
     public function destroy(Conta $conta)
     {
-        //
+        $conta->delete();
     }
 }
