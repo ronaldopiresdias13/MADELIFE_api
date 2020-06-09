@@ -103,6 +103,7 @@ class ContasbancariasController extends Controller
             'digito'     => $request->digito    ,
             'tipo'       => $request->tipo      ,
             'saldo'      => $request->saldo     ,
+            'descricao'  => $request->descricao ,
         ]);
     }
 
