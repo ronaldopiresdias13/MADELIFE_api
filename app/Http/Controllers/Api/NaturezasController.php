@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\OrcamentoProduto;
+use App\Natureza;
 use Illuminate\Http\Request;
 
-class OrcamentoProdutosController extends Controller
+class NaturezasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -25,7 +25,7 @@ class OrcamentoProdutosController extends Controller
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
-                    $itens = OrcamentoProduto::where(
+                    $itens = Natureza::where(
                         ($where['coluna'   ])? $where['coluna'   ] : 'id'  ,
                         ($where['expressao'])? $where['expressao'] : 'like',
                         ($where['valor'    ])? $where['valor'    ] : '%'
@@ -39,7 +39,7 @@ class OrcamentoProdutosController extends Controller
                 }
             }
         } else {
-            $itens = OrcamentoProduto::where('id', 'like', '%');
+            $itens = Natureza::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -96,19 +96,24 @@ class OrcamentoProdutosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $natureza = Natureza::create([
+            'empresa_id'           => $request->empresa_id          ,
+            'decricao'             => $request->decricao            ,
+            'tipo'                 => $request->tipo                ,
+            'status'               => $request->status              ,
+            'categorianatureza_id' => $request->categorianatureza_id,
+        ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\OrcamentoProduto  $orcamentoProduto
+     * @param  \App\Natureza  $natureza
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, OrcamentoProduto $orcamentoProduto)
+    public function show(Request $request, Natureza $natureza)
     {
-        $iten = $orcamentoProduto;
+        $iten = $natureza;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -151,22 +156,22 @@ class OrcamentoProdutosController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\OrcamentoProduto  $orcamentoProduto
+     * @param  \App\Natureza  $natureza
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, OrcamentoProduto $orcamentoProduto)
+    public function update(Request $request, Natureza $natureza)
     {
-        $orcamentoProduto->update($request->all());
+        $natureza->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\OrcamentoProduto  $orcamentoProduto
+     * @param  \App\Natureza  $natureza
      * @return \Illuminate\Http\Response
      */
-    public function destroy(OrcamentoProduto $orcamentoProduto)
+    public function destroy(Natureza $natureza)
     {
-        $orcamentoProduto->delete();
+        //
     }
 }
