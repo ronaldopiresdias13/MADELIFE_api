@@ -106,6 +106,12 @@ Route::get   ('conselhos/{conselho}', 'Api\ConselhosController@show'   );
 Route::put   ('conselhos/{conselho}', 'Api\ConselhosController@update' );
 Route::delete('conselhos/{conselho}', 'Api\ConselhosController@destroy');
 
+Route::get   ('contasbancarias'                 , 'Api\ContasbancariasController@index'  );
+Route::post  ('contasbancarias'                 , 'Api\ContasbancariasController@store'  );
+Route::get   ('contasbancarias/{contasbancaria}', 'Api\ContasbancariasController@show'   );
+Route::put   ('contasbancarias/{contasbancaria}', 'Api\ContasbancariasController@update' );
+Route::delete('contasbancarias/{contasbancaria}', 'Api\ContasbancariasController@destroy');
+
 Route::get   ('convenios'           , 'Api\ConveniosController@index'  );
 Route::post  ('convenios'           , 'Api\ConveniosController@store'  );
 Route::get   ('convenios/{convenio}', 'Api\ConveniosController@show'   );
