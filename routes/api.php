@@ -214,6 +214,12 @@ Route::get   ('monitoramentoescalas/{monitoramentoescala}', 'Api\Monitoramentoes
 Route::put   ('monitoramentoescalas/{monitoramentoescala}', 'Api\MonitoramentoescalasController@update' );
 Route::delete('monitoramentoescalas/{monitoramentoescala}', 'Api\MonitoramentoescalasController@destroy');
 
+Route::get   ('naturezas'           , 'Api\NaturezasController@index'  );
+Route::post  ('naturezas'           , 'Api\NaturezasController@store'  );
+Route::get   ('naturezas/{natureza}', 'Api\NaturezasController@show'   );
+Route::put   ('naturezas/{natureza}', 'Api\NaturezasController@update' );
+Route::delete('naturezas/{natureza}', 'Api\NaturezasController@destroy');
+
 Route::get   ('orcamentos'            , 'Api\OrcamentosController@index'  );
 Route::post  ('orcamentos'            , 'Api\OrcamentosController@store'  );
 Route::get   ('orcamentos/{orcamento}', 'Api\OrcamentosController@show'   );
