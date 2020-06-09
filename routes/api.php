@@ -106,6 +106,12 @@ Route::get   ('conselhos/{conselho}', 'Api\ConselhosController@show'   );
 Route::put   ('conselhos/{conselho}', 'Api\ConselhosController@update' );
 Route::delete('conselhos/{conselho}', 'Api\ConselhosController@destroy');
 
+Route::get   ('contas'                 , 'Api\ContasController@index'  );
+Route::post  ('contas'                 , 'Api\ContasController@store'  );
+Route::get   ('contas/{contas}'        , 'Api\ContasController@show'   );
+Route::put   ('contas/{contas}'        , 'Api\ContasController@update' );
+Route::delete('contas/{contas}'        , 'Api\ContasController@destroy');
+
 Route::get   ('contasbancarias'                 , 'Api\ContasbancariasController@index'  );
 Route::post  ('contasbancarias'                 , 'Api\ContasbancariasController@store'  );
 Route::get   ('contasbancarias/{contasbancaria}', 'Api\ContasbancariasController@show'   );
@@ -268,6 +274,12 @@ Route::post  ('pacientes'           , 'Api\PacientesController@store'  );
 Route::get   ('pacientes/{paciente}', 'Api\PacientesController@show'   );
 Route::put   ('pacientes/{paciente}', 'Api\PacientesController@update' );
 Route::delete('pacientes/{paciente}', 'Api\PacientesController@destroy');
+
+Route::get   ('pagamentos'           , 'Api\pagamentosController@index'  );
+Route::post  ('pagamentos'           , 'Api\pagamentosController@store'  );
+Route::get   ('pagamentos/{pagamento}', 'Api\pagamentosController@show'   );
+Route::put   ('pagamentos/{pagamento}', 'Api\pagamentosController@update' );
+Route::delete('pagamentos/{pagamento}', 'Api\pagamentosController@destroy');
 
 Route::get   ('pessoas'         , 'Api\PessoasController@index'  );
 Route::post  ('pessoas'         , 'Api\PessoasController@store'  );
