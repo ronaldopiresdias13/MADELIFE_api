@@ -95,10 +95,11 @@ class CategorianaturezasController extends Controller
      */
     public function store(Request $request)
     {
-        $categorianatureza = new Categorianatureza;
+        $categorianatureza             = new Categorianatureza;
         $categorianatureza->empresa_id = $request->empresa_id;
-        $categorianatureza->descriciao = $request->descricao;
-        $categorianatureza->status = $request->status;
+        $categorianatureza->descricao  = $request->descricao;
+        $categorianatureza->status     = $request->status;
+        $categorianatureza->save();
     }
 
     /**
