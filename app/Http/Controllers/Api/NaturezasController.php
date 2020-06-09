@@ -97,9 +97,10 @@ class NaturezasController extends Controller
     public function store(Request $request)
     {
         $natureza = Natureza::create([
-            'empresa_id'           => $request->empresa_id          ,
-            'decricao'             => $request->decricao            ,
-            'tipo'                 => $request->tipo                ,
+            'empresa_id'           => 1                             ,
+            'codigo'               => $request->codigo              ,
+            'descricao'            => $request->descricao           ,
+            'tipo'                 => $request->usoNatureza         ,
             'status'               => $request->status              ,
             'categorianatureza_id' => $request->categorianatureza_id,
         ]);
