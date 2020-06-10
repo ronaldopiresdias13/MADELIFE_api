@@ -19,8 +19,8 @@ class CreatePagamentosTable extends Migration
             $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
             $table->unsignedBigInteger('conta_id')->nullable();
             $table->foreign('conta_id')->references('id')->on('contas')->onDelete('cascade');
-            $table->unsignedBigInteger('contabancaria_id')->nullable();
-            $table->foreign('contabancaria_id')->references('id')->on('contabancarias')->onDelete('cascade');
+            $table->unsignedBigInteger('contasbancaria_id')->nullable();
+            $table->foreign('contasbancaria_id')->references('id')->on('contasbancarias')->onDelete('cascade');
             $table->string('numeroboleto')->nullable();
             $table->string('formapagamento')->nullable();
             $table->string('datavencimento')->nullable();
