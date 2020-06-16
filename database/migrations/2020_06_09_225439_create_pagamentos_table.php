@@ -24,13 +24,15 @@ class CreatePagamentosTable extends Migration
             $table->string('numeroboleto')->nullable();
             $table->string('formapagamento')->nullable();
             $table->string('datavencimento')->nullable();
-            $table->string('datapagamento');
-            $table->string('valorconta')->nullable();
+            $table->string('datapagamento')->nullable();
+            $table->float('valorconta')->nullable();
             $table->boolean('status')->nullable();
             $table->string('tipopagamento')->nullable();
-            $table->string('valorpago')->nullable();
-            $table->boolean('pagamentoparcial');
+            $table->float('valorpago')->nullable();
+            $table->boolean('pagamentoparcial')->nullable();
             $table->longText('observacao')->nullable();
+            $table->string('numeroconta')->nullable();
+            $table->string('anexo')->nullable();
             $table->timestamps();
         });
     }
