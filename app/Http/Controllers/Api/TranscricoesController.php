@@ -120,8 +120,8 @@ class TranscricoesController extends Controller
             ]);
             foreach ($iten->horarios as $key => $horario) {
                 $horario_medicamento = Horariomedicamento::create([
-                    'transcricao_produto_id' => $transcricao_produto,
-                    'horario'                => $horario->hora
+                    'transcricao_produto_id' => $transcricao_produto->id,
+                    'horario'                => $horario['hora']
                 ]);
             }
         }
