@@ -49,7 +49,7 @@ return [
             'host' => env('DB_HOST', '10.0.24.14'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'madelife'),
-            'username' => env('DB_USERNAME', 'root'),
+            'username' => env('DB_USERNAME', 'madelife'),
             'password' => env('DB_PASSWORD', 'Madelife@2020'),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
