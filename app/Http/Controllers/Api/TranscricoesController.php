@@ -118,7 +118,7 @@ class TranscricoesController extends Controller
                 'status'         => $iten['status']      ,
                 'observacao'     => $iten['observacao']  ,
             ]);
-            foreach ($iten->horarios as $key => $horario) {
+            foreach ($iten['horarios'] as $key => $horario) {
                 $horario_medicamento = Horariomedicamento::create([
                     'transcricao_produto_id' => $transcricao_produto->id,
                     'horario'                => $horario['horario']
