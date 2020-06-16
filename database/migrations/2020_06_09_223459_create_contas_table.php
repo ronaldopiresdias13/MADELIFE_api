@@ -22,14 +22,16 @@ class CreateContasTable extends Migration
             $table->foreign('pessoa_id')->references('id')->on('pessoas')->onDelete('cascade');
             $table->unsignedBigInteger('natureza_id')->nullable();
             $table->foreign('natureza_id')->references('id')->on('naturezas')->onDelete('cascade');
-            $table->string('valortotalconta')->nullable();
+            $table->float('valortotalconta')->nullable();
             $table->string('tipoconta')->nullable();
             $table->longText('historico')->nullable();
             $table->boolean('status');
             $table->string('nfe')->nullable();
             $table->string('quantidadeconta')->nullable();
-            $table->string('valorpago')->nullable();
+            $table->float('valorpago')->nullable();
             $table->string('tipocontapagamento')->nullable();
+            $table->string('dataemissao')->nullable();
+            $table->string('datavencimento')->nullable();
             $table->timestamps();
         });
     }
