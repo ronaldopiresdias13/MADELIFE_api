@@ -106,7 +106,7 @@ class TranscricoesController extends Controller
             'crm'             => $request->crm            ,
         ]);
 
-        foreach ($request->ItensTranscricao as $key => $iten) {
+        foreach ($request->itensTranscricao as $key => $iten) {
             $transcricao_produto = TranscricaoProduto::firstOrCreate([
                 'transcricao_id' => $transcricao->id   ,
                 'produto_id'     => $iten->produto_id  ,
