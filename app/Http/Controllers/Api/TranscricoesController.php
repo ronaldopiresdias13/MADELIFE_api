@@ -109,14 +109,14 @@ class TranscricoesController extends Controller
         foreach ($request->itensTranscricao as $key => $iten) {
             $transcricao_produto = TranscricaoProduto::firstOrCreate([
                 'transcricao_id' => $transcricao->id   ,
-                'produto_id'     => $iten->produto_id  ,
-                'quantidade'     => $iten->quantidade  ,
-                'apresentacao'   => $iten->apresentacao,
-                'via'            => $iten->via         ,
-                'frequencia'     => $iten->frequencia  ,
-                'tempo'          => $iten->tempo       ,
-                'status'         => $iten->status      ,
-                'observacao'     => $iten->observacao  ,
+                'produto_id'     => $iten['produto_id']  ,
+                'quantidade'     => $iten['quantidade']  ,
+                'apresentacao'   => $iten['apresentacao'],
+                'via'            => $iten['via']         ,
+                'frequencia'     => $iten['frequencia']  ,
+                'tempo'          => $iten['tempo']       ,
+                'status'         => $iten['status']      ,
+                'observacao'     => $iten['observacao']  ,
             ]);
             foreach ($iten->horarios as $key => $horario) {
                 $horario_medicamento = Horariomedicamento::create([
