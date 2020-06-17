@@ -47,4 +47,9 @@ class Pessoa extends Model
     {
         return $this->hasMany('App\Dadosbancario');
     }
+
+    public function conselhos()
+    {
+        return $this->hasMany('App\Conselho');
+    }
 }

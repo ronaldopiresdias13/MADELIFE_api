@@ -106,22 +106,22 @@ class TranscricoesController extends Controller
             'crm'             => $request->crm            ,
         ]);
 
-        foreach ($request->ItensTranscricao as $key => $iten) {
+        foreach ($request->itensTranscricao as $key => $iten) {
             $transcricao_produto = TranscricaoProduto::firstOrCreate([
                 'transcricao_id' => $transcricao->id   ,
-                'produto_id'     => $iten->produto_id  ,
-                'quantidade'     => $iten->quantidade  ,
-                'apresentacao'   => $iten->apresentacao,
-                'via'            => $iten->via         ,
-                'frequencia'     => $iten->frequencia  ,
-                'tempo'          => $iten->tempo       ,
-                'status'         => $iten->status      ,
-                'observacao'     => $iten->observacao  ,
+                'produto_id'     => $iten['produto_id']  ,
+                'quantidade'     => $iten['quantidade']  ,
+                'apresentacao'   => $iten['apresentacao'],
+                'via'            => $iten['via']         ,
+                'frequencia'     => $iten['frequencia']  ,
+                'tempo'          => $iten['tempo']       ,
+                'status'         => $iten['status']      ,
+                'observacao'     => $iten['observacao']  ,
             ]);
-            foreach ($iten->horarios as $key => $horario) {
+            foreach ($iten['horarios'] as $key => $horario) {
                 $horario_medicamento = Horariomedicamento::create([
-                    'transcricao_produto_id' => $transcricao_produto,
-                    'horario'                => $horario->hora
+                    'transcricao_produto_id' => $transcricao_produto->id,
+                    'horario'                => $horario['horario']
                 ]);
             }
         }
