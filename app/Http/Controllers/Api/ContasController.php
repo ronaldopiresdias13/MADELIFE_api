@@ -95,41 +95,8 @@ class ContasController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request['pagamentos'];
         $conta = Conta::create(
             [
-                'empresa_id' => 1,
-                'conta_id'   => Conta::create(
-                    [
-                        'empresa_id'         => 1,
-                        'tipopessoa'         => $request['tipoPessoa'],
-                        'pessoa_id'          => $request['pessoa'],
-                        'natureza_id'        => $request['natureza'],
-                        'valortotalconta'    => $request['valorConta'],
-                        'tipoconta'          => 'Receber',
-                        'historico'          => $request['historico'],
-                        'status'             => $request['status'],
-                        'nfe'                => $request['nfe'],
-                        'quantidadeconta'    => $request['quantidadeParcela'],
-                        'valorpago'          => $request['valorContaPago'],
-                        'tipocontapagamento' => $request['tipoPagamento'],
-                        'datavencimento'     => $request['dataVencimento'],
-                        'dataemissao'        => $request['dataEmissao'],
-                    ]
-                )->id,
-                'contasbancaria_id' =>  $request['contaBancaria'],
-                'numeroboleto'      =>  "",
-                'formapagamento'    =>  $request['formaPagamento'],
-                'datavencimento'    =>  $request['dataVencimento'],
-                'datapagamento'     =>  $request['dataPagamento'],
-                'valorconta'        =>  $request['valorConta'],
-                'status'            =>  $request['status'],
-                'tipopagamento'     =>  $request['tipoPagamento'],
-                'valorpago'         =>  $request['valorContaPago'],
-                'pagamentoparcial'  =>  0,
-                'observacao'        =>  $request['observacao'],
-                'anexo'             =>  "",
-                'numeroconta'       =>  $request['numeroParcela'],
                 'empresa_id'         => 1,
                 'tipopessoa'         => $request['tipopessoa'],
                 'pessoa_id'          => $request['pessoa_id'],
