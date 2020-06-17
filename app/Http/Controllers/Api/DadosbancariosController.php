@@ -17,25 +17,25 @@ class DadosbancariosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = null;
+        $itens = new Dadosbancario();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
         }
-        
+
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
                     $itens = Dadosbancario::where(
-                        ($where['coluna'   ])? $where['coluna'   ] : 'id'  ,
-                        ($where['expressao'])? $where['expressao'] : 'like',
-                        ($where['valor'    ])? $where['valor'    ] : '%'
+                        ($where['coluna']) ? $where['coluna'] : 'id',
+                        ($where['expressao']) ? $where['expressao'] : 'like',
+                        ($where['valor']) ? $where['valor'] : '%'
                     );
                 } else {
                     $itens->where(
-                        ($where['coluna'   ])? $where['coluna'   ] : 'id',
-                        ($where['expressao'])? $where['expressao'] : 'like',
-                        ($where['valor'    ])? $where['valor'    ] : '%'
+                        ($where['coluna']) ? $where['coluna'] : 'id',
+                        ($where['expressao']) ? $where['expressao'] : 'like',
+                        ($where['valor']) ? $where['valor'] : '%'
                     );
                 }
             }
@@ -46,14 +46,14 @@ class DadosbancariosController extends Controller
         if ($request['order']) {
             foreach ($request['order'] as $key => $order) {
                 $itens->orderBy(
-                    ($order['coluna'])? $order['coluna'] : 'id',
-                    ($order['tipo'  ])? $order['tipo'  ] : 'asc'
+                    ($order['coluna']) ? $order['coluna'] : 'id',
+                    ($order['tipo']) ? $order['tipo'] : 'asc'
                 );
             }
         }
-        
+
         $itens = $itens->get();
-        
+
         if ($request['adicionais']) {
             foreach ($itens as $key => $iten) {
                 foreach ($request['adicionais'] as $key => $adicional) {
@@ -65,8 +65,7 @@ class DadosbancariosController extends Controller
                             if ($key == 0) {
                                 if ($iten[0] == null) {
                                     $iten2 = $iten[$a];
-                                }
-                                else {
+                                } else {
                                     foreach ($iten as $key => $i) {
                                         $i[$a];
                                     }
@@ -97,7 +96,7 @@ class DadosbancariosController extends Controller
      */
     public function store(Request $request)
     {
-        $dadosbancario = new Dadosbancario;
+        $dadosbancario = new Dadosbancario();
         // $dadosbancario->pessoa = Pessoa::firstWhere('cpfcnpj', $request->pessoa)->id;
         // $dadosbancario->banco = Banco::firstWhere('codigo', $request->banco)->id;
         $dadosbancario->banco = $request->banco;
@@ -106,7 +105,6 @@ class DadosbancariosController extends Controller
         $dadosbancario->conta = $request->conta;
         $dadosbancario->digito = $request->digito;
         $dadosbancario->tipoconta = $request->tipoconta;
-
     }
 
     /**
@@ -133,8 +131,7 @@ class DadosbancariosController extends Controller
                         if ($key == 0) {
                             if ($iten[0] == null) {
                                 $iten2 = $iten[$a];
-                            }
-                            else {
+                            } else {
                                 foreach ($iten as $key => $i) {
                                     $i[$a];
                                 }
@@ -152,7 +149,7 @@ class DadosbancariosController extends Controller
                 }
             }
         }
-        
+
         return $iten;
     }
 

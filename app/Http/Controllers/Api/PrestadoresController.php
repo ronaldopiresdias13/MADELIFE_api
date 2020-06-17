@@ -244,7 +244,11 @@ class PrestadoresController extends Controller
 
         $prestador_formacao = PrestadorFormacao::firstOrCreate([
             'prestador_id' => $prestador->id,
-            'formacao_id'  => Formacao::firstOrCreate(['descricao' => $request['prestador']['dadosProf']['formacao']['descricao']])->id,
+            'formacao_id'  => Formacao::firstOrCreate(
+                [
+                    'descricao' => $request['prestador']['dadosProf']['formacao']['descricao']
+                ]
+            )->id,
         ]);
 
         $usercpf = User::firstWhere(
