@@ -25,4 +25,7 @@ class Transcricao extends Model
             "observacao"
         );
     }
+    public function itensTranscricao(){
+        return $this->hasMany('App\TranscricaoProduto');
+    }
 }
