@@ -16,7 +16,7 @@ class ContasController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = null;
+        $itens = new Conta();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
