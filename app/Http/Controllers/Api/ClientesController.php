@@ -26,25 +26,25 @@ class ClientesController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = null;
+        $itens = new Cliente();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
         }
-        
+
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
                     $itens = Cliente::where(
-                        ($where['coluna'   ])? $where['coluna'   ] : 'id'  ,
-                        ($where['expressao'])? $where['expressao'] : 'like',
-                        ($where['valor'    ])? $where['valor'    ] : '%'
+                        ($where['coluna']) ? $where['coluna'] : 'id',
+                        ($where['expressao']) ? $where['expressao'] : 'like',
+                        ($where['valor']) ? $where['valor'] : '%'
                     );
                 } else {
                     $itens->where(
-                        ($where['coluna'   ])? $where['coluna'   ] : 'id',
-                        ($where['expressao'])? $where['expressao'] : 'like',
-                        ($where['valor'    ])? $where['valor'    ] : '%'
+                        ($where['coluna']) ? $where['coluna'] : 'id',
+                        ($where['expressao']) ? $where['expressao'] : 'like',
+                        ($where['valor']) ? $where['valor'] : '%'
                     );
                 }
             }
@@ -55,14 +55,14 @@ class ClientesController extends Controller
         if ($request['order']) {
             foreach ($request['order'] as $key => $order) {
                 $itens->orderBy(
-                    ($order['coluna'])? $order['coluna'] : 'id',
-                    ($order['tipo'  ])? $order['tipo'  ] : 'asc'
+                    ($order['coluna']) ? $order['coluna'] : 'id',
+                    ($order['tipo']) ? $order['tipo'] : 'asc'
                 );
             }
         }
-        
+
         $itens = $itens->get();
-        
+
         if ($request['adicionais']) {
             foreach ($itens as $key => $iten) {
                 foreach ($request['adicionais'] as $key => $adicional) {
@@ -74,8 +74,7 @@ class ClientesController extends Controller
                             if ($key == 0) {
                                 if ($iten[0] == null) {
                                     $iten2 = $iten[$a];
-                                }
-                                else {
+                                } else {
                                     foreach ($iten as $key => $i) {
                                         $i[$a];
                                     }
@@ -107,16 +106,19 @@ class ClientesController extends Controller
     public function store(Request $request)
     {
         $pessoa = Pessoa::where(
-            'cpfcnpj', $request['pessoa']['cpfcnpj']
+            'cpfcnpj',
+            $request['pessoa']['cpfcnpj']
         )->where(
-            'empresa_id', $request['pessoa']['empresa_id']
+            'empresa_id',
+            $request['pessoa']['empresa_id']
         )->first();
 
         $cliente = null;
 
         if ($pessoa) {
             $cliente = Cliente::firstWhere(
-                'pessoa_id', $pessoa->id,
+                'pessoa_id',
+                $pessoa->id,
             );
         }
 
@@ -125,22 +127,22 @@ class ClientesController extends Controller
         }
 
         $cliente = Cliente::create([
-            'tipo'       => $request['tipo'      ],
+            'tipo'       => $request['tipo'],
             'empresa_id' => $request['empresa_id'],
             'pessoa_id'  => Pessoa::updateOrCreate(
                 [
-                    'id' => ($request['pessoa']['id'] != '')? $request['id'] : null,
+                    'id' => ($request['pessoa']['id'] != '') ? $request['id'] : null,
                 ],
                 [
-                    'empresa_id'  => $request['pessoa']['empresa_id' ],
-                    'nome'        => $request['pessoa']['nome'       ],
-                    'nascimento'  => $request['pessoa']['nascimento' ],
-                    'tipo'        =>                    'Cliente'     ,
-                    'cpfcnpj'     => $request['pessoa']['cpfcnpj'    ],
-                    'rgie'        => $request['pessoa']['rgie'       ],
+                    'empresa_id'  => $request['pessoa']['empresa_id'],
+                    'nome'        => $request['pessoa']['nome'],
+                    'nascimento'  => $request['pessoa']['nascimento'],
+                    'tipo'        =>                    'Cliente',
+                    'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
+                    'rgie'        => $request['pessoa']['rgie'],
                     'observacoes' => $request['pessoa']['observacoes'],
-                    'perfil'      => $request['pessoa']['perfil'     ],
-                    'status'      => $request['pessoa']['status'     ],
+                    'perfil'      => $request['pessoa']['perfil'],
+                    'status'      => $request['pessoa']['status'],
                 ]
             )->id,
         ]);
@@ -151,7 +153,7 @@ class ClientesController extends Controller
                     'pessoa_id'   => $cliente->pessoa_id,
                     'telefone_id' => Telefone::firstOrCreate(
                         [
-                            'telefone'  => $telefone['telefone' ],
+                            'telefone'  => $telefone['telefone'],
                         ]
                     )->id,
                 ]);
@@ -164,14 +166,14 @@ class ClientesController extends Controller
                     'pessoa_id'   => $cliente->pessoa_id,
                     'endereco_id' => Endereco::firstOrCreate(
                         [
-                            'cep'         => $endereco['cep'        ],
-                            'cidade_id'   => $endereco['cidade_id'  ],
-                            'rua'         => $endereco['rua'        ],
-                            'bairro'      => $endereco['bairro'     ],
-                            'numero'      => $endereco['numero'     ],
+                            'cep'         => $endereco['cep'],
+                            'cidade_id'   => $endereco['cidade_id'],
+                            'rua'         => $endereco['rua'],
+                            'bairro'      => $endereco['bairro'],
+                            'numero'      => $endereco['numero'],
                             'complemento' => $endereco['complemento'],
-                            'tipo'        => $endereco['tipo'       ],
-                            'descricao'   => $endereco['descricao'  ],
+                            'tipo'        => $endereco['tipo'],
+                            'descricao'   => $endereco['descricao'],
                         ]
                     )->id,
                 ]);
@@ -184,7 +186,7 @@ class ClientesController extends Controller
                     'pessoa_id' => $cliente->pessoa_id,
                     'email_id'  => Email::firstOrCreate(
                         [
-                            'email'     => $email['email'    ],
+                            'email'     => $email['email'],
                         ]
                     )->id,
                 ]);
@@ -194,30 +196,32 @@ class ClientesController extends Controller
         if ($request['pessoa']['users']) {
             foreach ($request['pessoa']['users'] as $key => $user) {
                 $usercpf = User::firstWhere(
-                    'cpfcnpj', $user['cpfcnpj'],
+                    'cpfcnpj',
+                    $user['cpfcnpj'],
                 );
                 $useremail = User::firstWhere(
-                    'email', $user['email'],
+                    'email',
+                    $user['email'],
                 );
-        
+
                 $userexist = null;
-        
+
                 if ($usercpf) {
                     $userexist = $usercpf;
                 } elseif ($useremail) {
                     $userexist = $useremail;
                 }
-        
+
                 if (($pessoa == null) || ($pessoa != null && ($userexist == null))) {
                     $userexist = User::create([
-                        'empresa_id' =>        $user['empresa_id'] ,
-                        'cpfcnpj'    =>        $user['cpfcnpj'   ] ,
-                        'email'      =>        $user['email'     ] ,
-                        'password'   => bcrypt($user['password'  ]),
-                        'pessoa_id'  =>        $cliente->pessoa_id ,
+                        'empresa_id' =>        $user['empresa_id'],
+                        'cpfcnpj'    =>        $user['cpfcnpj'],
+                        'email'      =>        $user['email'],
+                        'password'   => bcrypt($user['password']),
+                        'pessoa_id'  =>        $cliente->pessoa_id,
                     ]);
                 }
-    
+
                 foreach ($user['acessos'] as $key => $acesso) {
                     $user_acesso = UserAcesso::firstOrCreate([
                         'user_id'   => $userexist->id,
@@ -229,7 +233,7 @@ class ClientesController extends Controller
 
         return $cliente;
     }
-   
+
     /**
      * Display the specified resource.
      *
@@ -243,7 +247,7 @@ class ClientesController extends Controller
         if ($request->commands) {
             $request = json_decode($request->commands, true);
         }
-        
+
         if ($request['adicionais']) {
             foreach ($request['adicionais'] as $key => $adicional) {
                 if (is_string($adicional)) {
@@ -254,8 +258,7 @@ class ClientesController extends Controller
                         if ($key == 0) {
                             if ($iten[0] == null) {
                                 $iten2 = $iten[$a];
-                            }
-                            else {
+                            } else {
                                 foreach ($iten as $key => $i) {
                                     $i[$a];
                                 }
@@ -299,7 +302,7 @@ class ClientesController extends Controller
     {
         $cliente->delete();
     }
-     /**
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -311,8 +314,8 @@ class ClientesController extends Controller
             'pessoa_id' => Pessoa::firstOrCreate(
                 [
                     'cpfcnpj' => $request['pessoa']['cpfcnpj'],
-                // ],
-                // [
+                    // ],
+                    // [
                     'nome'        => $request['pessoa']['nome'],
                     'nascimento'  => $request['pessoa']['nascimento'],
                     'tipo'        => $request['pessoa']['tipo'],
@@ -323,8 +326,8 @@ class ClientesController extends Controller
             )->id,
             'empresa_id' => 1
         ]);
-       
-        
+
+
         // if ($request['prestador']['contato']['telefone'] != null && $request['prestador']['contato']['telefone'] != "") {
         //     $pessoa_telefones = PessoaTelefone::firstOrCreate([
         //         'pessoa'   => $prestador->pessoa,

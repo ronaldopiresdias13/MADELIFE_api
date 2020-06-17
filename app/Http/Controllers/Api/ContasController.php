@@ -16,25 +16,25 @@ class ContasController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = null;
+        $itens = new Conta();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
         }
-        
+
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
                     $itens = Conta::where(
-                        ($where['coluna'   ])? $where['coluna'   ] : 'id'  ,
-                        ($where['expressao'])? $where['expressao'] : 'like',
-                        ($where['valor'    ])? $where['valor'    ] : '%'
+                        ($where['coluna']) ? $where['coluna'] : 'id',
+                        ($where['expressao']) ? $where['expressao'] : 'like',
+                        ($where['valor']) ? $where['valor'] : '%'
                     );
                 } else {
                     $itens->where(
-                        ($where['coluna'   ])? $where['coluna'   ] : 'id',
-                        ($where['expressao'])? $where['expressao'] : 'like',
-                        ($where['valor'    ])? $where['valor'    ] : '%'
+                        ($where['coluna']) ? $where['coluna'] : 'id',
+                        ($where['expressao']) ? $where['expressao'] : 'like',
+                        ($where['valor']) ? $where['valor'] : '%'
                     );
                 }
             }
@@ -45,14 +45,14 @@ class ContasController extends Controller
         if ($request['order']) {
             foreach ($request['order'] as $key => $order) {
                 $itens->orderBy(
-                    ($order['coluna'])? $order['coluna'] : 'id',
-                    ($order['tipo'  ])? $order['tipo'  ] : 'asc'
+                    ($order['coluna']) ? $order['coluna'] : 'id',
+                    ($order['tipo']) ? $order['tipo'] : 'asc'
                 );
             }
         }
-        
+
         $itens = $itens->get();
-        
+
         if ($request['adicionais']) {
             foreach ($itens as $key => $iten) {
                 foreach ($request['adicionais'] as $key => $adicional) {
@@ -64,8 +64,7 @@ class ContasController extends Controller
                             if ($key == 0) {
                                 if ($iten[0] == null) {
                                     $iten2 = $iten[$a];
-                                }
-                                else {
+                                } else {
                                     foreach ($iten as $key => $i) {
                                         $i[$a];
                                     }
@@ -101,20 +100,20 @@ class ContasController extends Controller
                 'empresa_id' => 1,
                 'conta_id'   => Conta::create(
                     [
-                        'empresa_id'         => 1                             ,
-                        'tipopessoa'         => $request['tipoPessoa'        ],
+                        'empresa_id'         => 1,
+                        'tipopessoa'         => $request['tipoPessoa'],
                         'pessoa_id'          => $request['pessoa'],
-                        'natureza_id'        => $request['natureza'          ],
-                        'valortotalconta'    => $request['valorConta'        ],
-                        'tipoconta'          => 'Receber'                     ,
-                        'historico'          => $request['historico'         ],
-                        'status'             => $request['status'            ],
-                        'nfe'                => $request['nfe'               ],
-                        'quantidadeconta'    => $request['quantidadeParcela' ],
-                        'valorpago'          => $request['valorContaPago'    ],
-                        'tipocontapagamento' => $request['tipoPagamento'     ],
-                        'datavencimento'     => $request['dataVencimento'    ],
-                        'dataemissao'        => $request['dataEmissao'       ],
+                        'natureza_id'        => $request['natureza'],
+                        'valortotalconta'    => $request['valorConta'],
+                        'tipoconta'          => 'Receber',
+                        'historico'          => $request['historico'],
+                        'status'             => $request['status'],
+                        'nfe'                => $request['nfe'],
+                        'quantidadeconta'    => $request['quantidadeParcela'],
+                        'valorpago'          => $request['valorContaPago'],
+                        'tipocontapagamento' => $request['tipoPagamento'],
+                        'datavencimento'     => $request['dataVencimento'],
+                        'dataemissao'        => $request['dataEmissao'],
                     ]
                 )->id,
                 'contasbancaria_id' =>  $request['contaBancaria'],
@@ -158,8 +157,7 @@ class ContasController extends Controller
                         if ($key == 0) {
                             if ($iten[0] == null) {
                                 $iten2 = $iten[$a];
-                            }
-                            else {
+                            } else {
                                 foreach ($iten as $key => $i) {
                                     $i[$a];
                                 }
@@ -177,7 +175,7 @@ class ContasController extends Controller
                 }
             }
         }
-        
+
         return $iten;
     }
 
