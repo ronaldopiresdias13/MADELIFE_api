@@ -260,7 +260,7 @@ class ContasController extends Controller
      */
     public function update(Request $request, Conta $conta)
     {
-        $contas->update($request->all());
+        $conta->update($request->all());
     }
 
     /**

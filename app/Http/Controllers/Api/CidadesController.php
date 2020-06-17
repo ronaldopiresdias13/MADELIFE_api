@@ -94,7 +94,7 @@ class CidadesController extends Controller
      */
     public function store(Request $request)
     {
-        $cidade = new Cidade;
+        $cidade = new Cidade();
         $cidade->nome = $request->nome;
         $cidade->uf   = $request->uf;
         $cidade->save();

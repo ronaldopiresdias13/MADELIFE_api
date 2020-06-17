@@ -98,7 +98,7 @@ class AcessosController extends Controller
         //     ['nome' => $request->nome]
         // );
 
-        $acesso = new Acesso;
+        $acesso = new Acesso();
         $acesso->nome = $request->nome;
         $acesso->save();
     }

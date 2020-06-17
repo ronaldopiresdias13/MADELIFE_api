@@ -94,7 +94,7 @@ class ConselhosController extends Controller
      */
     public function store(Request $request)
     {
-        $conselho = new Conselho;
+        $conselho = new Conselho();
         $conselho->instituicao = $request->instituicao;
         $conselho->uf = $request->uf;
         $conselho->numero = $request->numero;
