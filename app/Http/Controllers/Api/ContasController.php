@@ -21,20 +21,20 @@ class ContasController extends Controller
         if ($request->commands) {
             $request = json_decode($request->commands, true);
         }
-        
+
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
                     $itens = Conta::where(
-                        ($where['coluna'   ])? $where['coluna'   ] : 'id'  ,
-                        ($where['expressao'])? $where['expressao'] : 'like',
-                        ($where['valor'    ])? $where['valor'    ] : '%'
+                        ($where['coluna']) ? $where['coluna'] : 'id',
+                        ($where['expressao']) ? $where['expressao'] : 'like',
+                        ($where['valor']) ? $where['valor'] : '%'
                     );
                 } else {
                     $itens->where(
-                        ($where['coluna'   ])? $where['coluna'   ] : 'id',
-                        ($where['expressao'])? $where['expressao'] : 'like',
-                        ($where['valor'    ])? $where['valor'    ] : '%'
+                        ($where['coluna']) ? $where['coluna'] : 'id',
+                        ($where['expressao']) ? $where['expressao'] : 'like',
+                        ($where['valor']) ? $where['valor'] : '%'
                     );
                 }
             }
@@ -45,14 +45,14 @@ class ContasController extends Controller
         if ($request['order']) {
             foreach ($request['order'] as $key => $order) {
                 $itens->orderBy(
-                    ($order['coluna'])? $order['coluna'] : 'id',
-                    ($order['tipo'  ])? $order['tipo'  ] : 'asc'
+                    ($order['coluna']) ? $order['coluna'] : 'id',
+                    ($order['tipo']) ? $order['tipo'] : 'asc'
                 );
             }
         }
-        
+
         $itens = $itens->get();
-        
+
         if ($request['adicionais']) {
             foreach ($itens as $key => $iten) {
                 foreach ($request['adicionais'] as $key => $adicional) {
@@ -64,8 +64,7 @@ class ContasController extends Controller
                             if ($key == 0) {
                                 if ($iten[0] == null) {
                                     $iten2 = $iten[$a];
-                                }
-                                else {
+                                } else {
                                     foreach ($iten as $key => $i) {
                                         $i[$a];
                                     }
@@ -96,46 +95,45 @@ class ContasController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request['pagamentos'];
         $conta = Conta::create(
             [
-                'empresa_id'         => 1                             ,
-                'tipopessoa'         => $request['tipopessoa'        ],
-                'pessoa_id'          => $request['pessoa_id'         ],
-                'natureza_id'        => $request['natureza_id'       ],
-                'valortotalconta'    => $request['valortotalconta'   ],
-                'tipoconta'          => $request['tipoconta'         ],
-                'historico'          => $request['historico'         ],
-                'status'             => $request['status'            ],
-                'nfe'                => $request['nfe'               ],
-                'quantidadeconta'    => $request['quantidadeconta'   ],
-                'valorpago'          => $request['valorpago'         ],
+                'empresa_id'         => 1,
+                'tipopessoa'         => $request['tipopessoa'],
+                'pessoa_id'          => $request['pessoa_id'],
+                'natureza_id'        => $request['natureza_id'],
+                'valortotalconta'    => $request['valortotalconta'],
+                'tipoconta'          => $request['tipoconta'],
+                'historico'          => $request['historico'],
+                'status'             => $request['status'],
+                'nfe'                => $request['nfe'],
+                'quantidadeconta'    => $request['quantidadeconta'],
+                'valorpago'          => $request['valorpago'],
                 'tipocontapagamento' => $request['tipocontapagamento'],
-                'datavencimento'     => $request['datavencimento'    ],
-                'dataemissao'        => $request['dataemissao'       ],
+                'datavencimento'     => $request['datavencimento'],
+                'dataemissao'        => $request['dataemissao'],
             ]
         );
-            foreach ($request['pagamentos'] as $key => $pagamento) {
-                $conta_pagamento = Pagamento::create([
-                    'empresa_id'        => $pagamento['empresa_id'],
-                    'conta_id'          => $conta->id,
-                    'contasbancaria_id' => $pagamento['contasbancaria_id'],
-                    'numeroboleto'      => $pagamento['numeroboleto'],
-                    'formapagamento'    => $pagamento['formapagamento'],
-                    'datavencimento'    => $pagamento['datavencimento'],
-                    'datapagamento'     => $pagamento['datapagamento'],
-                    'valorconta'        => $pagamento['valorconta'],
-                    'status'            => $pagamento['status'],
-                    'tipopagamento'     => $pagamento['tipopagamento'],
-                    'valorpago'         => $pagamento['valorpago'],
-                    'pagamentoparcial'  => $pagamento['pagamentoparcial'],
-                    'observacao'        => $pagamento['observacao'],
-                    'anexo'             => $pagamento['anexo'],
-                    'numeroconta'       => $pagamento['numeroconta'],
-                    
-                ]);
-             }
-            //  return $conta;
+        foreach ($request['pagamentos'] as $key => $pagamento) {
+            $conta_pagamento = Pagamento::create([
+                'empresa_id'        => $pagamento['empresa_id'],
+                'conta_id'          => $conta->id,
+                'contasbancaria_id' => $pagamento['contasbancaria_id'],
+                'numeroboleto'      => $pagamento['numeroboleto'],
+                'formapagamento'    => $pagamento['formapagamento'],
+                'datavencimento'    => $pagamento['datavencimento'],
+                'datapagamento'     => $pagamento['datapagamento'],
+                'valorconta'        => $pagamento['valorconta'],
+                'status'            => $pagamento['status'],
+                'tipopagamento'     => $pagamento['tipopagamento'],
+                'valorpago'         => $pagamento['valorpago'],
+                'pagamentoparcial'  => $pagamento['pagamentoparcial'],
+                'observacao'        => $pagamento['observacao'],
+                'anexo'             => $pagamento['anexo'],
+                'numeroconta'       => $pagamento['numeroconta'],
+
+            ]);
+        }
+        //  return $conta;
         // $pagamento = Pagamento::create(
         //     [
         //         'empresa_id' => 1,
@@ -198,8 +196,7 @@ class ContasController extends Controller
                         if ($key == 0) {
                             if ($iten[0] == null) {
                                 $iten2 = $iten[$a];
-                            }
-                            else {
+                            } else {
                                 foreach ($iten as $key => $i) {
                                     $i[$a];
                                 }
@@ -217,7 +214,7 @@ class ContasController extends Controller
                 }
             }
         }
-        
+
         return $iten;
     }
 
