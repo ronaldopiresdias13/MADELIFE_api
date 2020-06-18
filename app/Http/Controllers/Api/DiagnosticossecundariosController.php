@@ -94,7 +94,7 @@ class DiagnosticossecundariosController extends Controller
      */
     public function store(Request $request)
     {
-        $diagnosticosecundario = new Diagnosticosecundario;
+        $diagnosticosecundario = new Diagnosticosecundario();
         $diagnosticosecundario->codigo     = $request->codigo;
         $diagnosticosecundario->descricao  = $request->descricao;
         $diagnosticosecundario->observacao = $request->observacao;

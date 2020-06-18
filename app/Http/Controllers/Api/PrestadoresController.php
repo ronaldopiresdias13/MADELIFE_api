@@ -21,6 +21,7 @@ use App\PessoaTelefone;
 use App\PessoaEndereco;
 use App\PrestadorFormacao;
 use Illuminate\Http\Request;
+
 // use Illuminate\Support\Facades\DB;
 
 class PrestadoresController extends Controller
@@ -32,7 +33,7 @@ class PrestadoresController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = null;
+        $itens = new Prestador();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -111,7 +112,7 @@ class PrestadoresController extends Controller
      */
     public function store(Request $request)
     {
-        $prestador = new Prestador;
+        $prestador = new Prestador();
         $prestador->pessoa      = $request->pessoa;
         $prestador->fantasia    = $request->fantasia;
         $prestador->sexo        = $request->sexo;

@@ -17,25 +17,25 @@ class OrdemservicosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = null;
+        $itens = new Ordemservico();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
         }
-        
+
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
                     $itens = Ordemservico::where(
-                        ($where['coluna'   ])? $where['coluna'   ] : 'id'  ,
-                        ($where['expressao'])? $where['expressao'] : 'like',
-                        ($where['valor'    ])? $where['valor'    ] : '%'
+                        ($where['coluna']) ? $where['coluna'] : 'id',
+                        ($where['expressao']) ? $where['expressao'] : 'like',
+                        ($where['valor']) ? $where['valor'] : '%'
                     );
                 } else {
                     $itens->where(
-                        ($where['coluna'   ])? $where['coluna'   ] : 'id',
-                        ($where['expressao'])? $where['expressao'] : 'like',
-                        ($where['valor'    ])? $where['valor'    ] : '%'
+                        ($where['coluna']) ? $where['coluna'] : 'id',
+                        ($where['expressao']) ? $where['expressao'] : 'like',
+                        ($where['valor']) ? $where['valor'] : '%'
                     );
                 }
             }
@@ -46,14 +46,14 @@ class OrdemservicosController extends Controller
         if ($request['order']) {
             foreach ($request['order'] as $key => $order) {
                 $itens->orderBy(
-                    ($order['coluna'])? $order['coluna'] : 'id',
-                    ($order['tipo'  ])? $order['tipo'  ] : 'asc'
+                    ($order['coluna']) ? $order['coluna'] : 'id',
+                    ($order['tipo']) ? $order['tipo'] : 'asc'
                 );
             }
         }
-        
+
         $itens = $itens->get();
-        
+
         if ($request['adicionais']) {
             foreach ($itens as $key => $iten) {
                 foreach ($request['adicionais'] as $key => $adicional) {
@@ -65,8 +65,7 @@ class OrdemservicosController extends Controller
                             if ($key == 0) {
                                 if ($iten[0] == null) {
                                     $iten2 = $iten[$a];
-                                }
-                                else {
+                                } else {
                                     foreach ($iten as $key => $i) {
                                         $i[$a];
                                     }
@@ -110,20 +109,22 @@ class OrdemservicosController extends Controller
                         'pessoa_id' => Pessoa::updateOrCreate(
                             ['cpfcnpj' => $request['responsavel']['pessoa']['cpfcnpj']],
                             [
-                                'nome'        => $request['responsavel']['pessoa']['nome'       ],
-                                'nascimento'  => $request['responsavel']['pessoa']['nascimento' ],
-                                'tipo'        => $request['responsavel']['pessoa']['tipo'       ],
-                                'rgie'        => $request['responsavel']['pessoa']['rgie'       ],
+                                'nome'        => $request['responsavel']['pessoa']['nome'],
+                                'nascimento'  => $request['responsavel']['pessoa']['nascimento'],
+                                'tipo'        => $request['responsavel']['pessoa']['tipo'],
+                                'rgie'        => $request['responsavel']['pessoa']['rgie'],
                                 'observacoes' => $request['responsavel']['pessoa']['observacoes'],
-                            ])->id,
+                            ]
+                        )->id,
                         'parentesco' => $request['responsavel']['parentesco'],
-                    ])->id,
-                'profissional_id'        => $request['profissional_id'       ],
-                'codigo'                 => $request['codigo'                ],
-                'inicio'                 => $request['inicio'                ],
-                'fim'                    => $request['fim'                   ],
-                'status'                 => $request['status'                ],
-                'montagemequipe'         => $request['montagemequipe'        ],
+                    ]
+                )->id,
+                'profissional_id'        => $request['profissional_id'],
+                'codigo'                 => $request['codigo'],
+                'inicio'                 => $request['inicio'],
+                'fim'                    => $request['fim'],
+                'status'                 => $request['status'],
+                'montagemequipe'         => $request['montagemequipe'],
                 'realizacaoprocedimento' => $request['realizacaoprocedimento'],
             ]
         );
@@ -153,8 +154,7 @@ class OrdemservicosController extends Controller
                         if ($key == 0) {
                             if ($iten[0] == null) {
                                 $iten2 = $iten[$a];
-                            }
-                            else {
+                            } else {
                                 foreach ($iten as $key => $i) {
                                     $i[$a];
                                 }
@@ -172,7 +172,7 @@ class OrdemservicosController extends Controller
                 }
             }
         }
-        
+
         return $iten;
     }
 
@@ -199,9 +199,10 @@ class OrdemservicosController extends Controller
         $ordemservico->delete();
     }
 
-    public function migracao(Request $request){
+    public function migracao(Request $request)
+    {
         $ordemservico = Ordemservico::firstOrCreate([
-            'codigo'=> '',
+            'codigo' => '',
             'tipo' => 'Paciente',
             'orcamento_id' => $request['supervisor'],
             'inicio' => null,

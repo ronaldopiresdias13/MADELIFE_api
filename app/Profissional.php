@@ -18,22 +18,22 @@ class Profissional extends Model
     {
         return $this->belongsTo('App\Pessoa');
     }
-    
+
     public function setor()
     {
         return $this->belongsTo('App\Setor');
     }
-    
+
     public function cargo()
     {
         return $this->belongsTo('App\Cargo');
     }
-    
+
     public function dadoscontratual()
     {
         return $this->belongsTo('App\Dadoscontratual', 'dadoscontratuais_id');
     }
-    
+
     public function formacoes()
     {
         return $this->belongsToMany('App\Formacao', 'profissional_formacao');
@@ -48,6 +48,4 @@ class Profissional extends Model
     {
         return $this->belongsToMany('App\Convenio', 'profissional_convenio');
     }
-
-    
 }

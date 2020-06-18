@@ -15,7 +15,7 @@ class ResponsaveisController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = null;
+        $itens = new Responsavel();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -94,7 +94,7 @@ class ResponsaveisController extends Controller
      */
     public function store(Request $request)
     {
-        $responsavel = new Responsavel;
+        $responsavel = new Responsavel();
         $responsavel->pessoa = $request->pessoa;
         $responsavel->parentesco  = $request->parentesco;
         $responsavel->save();
@@ -155,7 +155,7 @@ class ResponsaveisController extends Controller
      */
     public function update(Request $request, Responsavel $responsavel)
     {
-        $responsavel->update($responsavel - all());
+        $responsavel->update($request->all());
     }
 
     /**

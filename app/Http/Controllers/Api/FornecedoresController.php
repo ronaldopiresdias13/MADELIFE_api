@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Acesso;
+use App\User;
 use App\Email;
-use App\Endereco;
-use App\Fornecedor;
+use App\Acesso;
 use App\Pessoa;
-use App\Http\Controllers\Controller;
+use App\Endereco;
+use App\Telefone;
+use App\Fornecedor;
+use App\UserAcesso;
 use App\PessoaEmail;
 use App\PessoaEndereco;
 use App\PessoaTelefone;
-use App\Telefone;
-use App\User;
-use App\UserAcesso;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class FornecedoresController extends Controller
 {

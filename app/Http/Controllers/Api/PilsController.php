@@ -15,25 +15,25 @@ class PilsController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = null;
+        $itens = new Pil();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
         }
-        
+
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
                     $itens = Pil::where(
-                        ($where['coluna'   ])? $where['coluna'   ] : 'id'  ,
-                        ($where['expressao'])? $where['expressao'] : 'like',
-                        ($where['valor'    ])? $where['valor'    ] : '%'
+                        ($where['coluna']) ? $where['coluna'] : 'id',
+                        ($where['expressao']) ? $where['expressao'] : 'like',
+                        ($where['valor']) ? $where['valor'] : '%'
                     );
                 } else {
                     $itens->where(
-                        ($where['coluna'   ])? $where['coluna'   ] : 'id',
-                        ($where['expressao'])? $where['expressao'] : 'like',
-                        ($where['valor'    ])? $where['valor'    ] : '%'
+                        ($where['coluna']) ? $where['coluna'] : 'id',
+                        ($where['expressao']) ? $where['expressao'] : 'like',
+                        ($where['valor']) ? $where['valor'] : '%'
                     );
                 }
             }
@@ -44,14 +44,14 @@ class PilsController extends Controller
         if ($request['order']) {
             foreach ($request['order'] as $key => $order) {
                 $itens->orderBy(
-                    ($order['coluna'])? $order['coluna'] : 'id',
-                    ($order['tipo'  ])? $order['tipo'  ] : 'asc'
+                    ($order['coluna']) ? $order['coluna'] : 'id',
+                    ($order['tipo']) ? $order['tipo'] : 'asc'
                 );
             }
         }
-        
+
         $itens = $itens->get();
-        
+
         if ($request['adicionais']) {
             foreach ($itens as $key => $iten) {
                 foreach ($request['adicionais'] as $key => $adicional) {
@@ -63,8 +63,7 @@ class PilsController extends Controller
                             if ($key == 0) {
                                 if ($iten[0] == null) {
                                     $iten2 = $iten[$a];
-                                }
-                                else {
+                                } else {
                                     foreach ($iten as $key => $i) {
                                         $i[$a];
                                     }
@@ -95,7 +94,7 @@ class PilsController extends Controller
      */
     public function store(Request $request)
     {
-        $pil = new Pil;
+        $pil = new Pil();
         $pil->paciente = $request->paciente;
         $pil->profissional = $request->profissional;
         $pil->diagnosticoprincipal = $request->diagnosticoprincipal;
@@ -131,8 +130,7 @@ class PilsController extends Controller
                         if ($key == 0) {
                             if ($iten[0] == null) {
                                 $iten2 = $iten[$a];
-                            }
-                            else {
+                            } else {
                                 foreach ($iten as $key => $i) {
                                     $i[$a];
                                 }
@@ -150,7 +148,7 @@ class PilsController extends Controller
                 }
             }
         }
-        
+
         return $iten;
     }
 

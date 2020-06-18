@@ -11,19 +11,21 @@ class Escala extends Model
     public function cuidados()
     {
         return $this->belongsToMany('App\Cuidado', 'cuidado_escalas')
-        ->withPivot(
-            'id',
-            'data'      ,
-            'hora'      ,
-            'status'    
-        );
+            ->withPivot(
+                'id',
+                'data',
+                'hora',
+                'status'
+            );
     }
-    
-    public function pontos(){
+
+    public function pontos()
+    {
         return $this->hasMany('App\Ponto');
     }
 
-    public function monitoramentos(){
+    public function monitoramentos()
+    {
         return $this->hasMany('App\Monitoramentoescala');
     }
 

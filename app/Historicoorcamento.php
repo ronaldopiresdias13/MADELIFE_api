@@ -8,7 +8,8 @@ class Historicoorcamento extends Model
 {
     protected $guarded = [];
 
-    public function orcamento(){
+    public function orcamento()
+    {
         return $this->belongsTo('App\Orcamento');
     }
 

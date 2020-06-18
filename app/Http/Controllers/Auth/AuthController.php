@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
         $request->validate([
             // 'cpfcnpj'  => 'string',
             'email'       => 'string|email',
@@ -20,18 +21,20 @@ class AuthController extends Controller
             'remember_me' => 'boolean'
         ]);
         $credentials = request(['email', 'password']);
-        if(!Auth::attempt($credentials))
+        if (!Auth::attempt($credentials)) {
             return response()->json([
                 'message' => 'Email ou Senha Inválidos!'
             ], 401);
+        }
         $user        = $request->user();
         $user->acessos;
         $user->pessoa;
         $user->pessoa->prestador;
         $tokenResult = $user->createToken('Personal Access Token');
         $token       = $tokenResult->token;
-        if ($request->remember_me)
+        if ($request->remember_me) {
             $token->expires_at = Carbon::now()->addWeeks(1);
+        }
         $token->save();
         return response()->json([
             'access_token' => $tokenResult->accessToken,
@@ -51,9 +54,9 @@ class AuthController extends Controller
             'password' => 'required|string'
         ]);
 
-        $user = new User;
-        $user->cpfcnpj  =        $request->cpfcnpj  ;
-        $user->email    =        $request->email    ;
+        $user = new User();
+        $user->cpfcnpj  =        $request->cpfcnpj;
+        $user->email    =        $request->email;
         $user->password = bcrypt($request->password);
         $user->save();
 
@@ -67,7 +70,7 @@ class AuthController extends Controller
         $user = User::firstWhere(
             ['email' => $request->email]
         );
-        
+
         if ($user == null) {
             return response()->json([
                 'message' => 'Email não cadastrado!'
@@ -82,27 +85,29 @@ class AuthController extends Controller
     public function change(Request $request)
     {
         $request->validate([
-            'email'       => 'string|email'   ,
+            'email'       => 'string|email',
             'password'    => 'required|string',
             'newPassword' => 'required|string'
         ]);
         $credentials = request(['email', 'password']);
-        if(!Auth::attempt($credentials))
+        if (!Auth::attempt($credentials)) {
             return response()->json([
                 'message' => 'Email ou Senha Inválidos!'
             ], 401);
+        }
         $user        = $request->user();
         $user->password = bcrypt($request->newPassword);
         $user->save();
     }
 
-    public function logout(Request $request) {
+    public function logout(Request $request)
+    {
         $request->user()->token()->revoke();
         return response()->json([
             'message' => 'Desconectado com Sucesso!'
         ]);
     }
-  
+
     /**
      * Get the authenticated User
      *

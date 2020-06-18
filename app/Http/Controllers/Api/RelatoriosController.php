@@ -15,7 +15,7 @@ class RelatoriosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = null;
+        $itens = new Relatorio();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);

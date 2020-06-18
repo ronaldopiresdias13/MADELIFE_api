@@ -42,7 +42,7 @@ class Pessoa extends Model
     {
         return $this->hasMany('App\User');
     }
-    
+
     public function dadosbancario()
     {
         return $this->hasMany('App\Dadosbancario');

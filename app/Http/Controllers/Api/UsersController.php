@@ -23,25 +23,25 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = null;
+        $itens = new User();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
         }
-        
+
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
                     $itens = User::where(
-                        ($where['coluna'   ])? $where['coluna'   ] : 'id'  ,
-                        ($where['expressao'])? $where['expressao'] : 'like',
-                        ($where['valor'    ])? $where['valor'    ] : '%'
+                        ($where['coluna']) ? $where['coluna'] : 'id',
+                        ($where['expressao']) ? $where['expressao'] : 'like',
+                        ($where['valor']) ? $where['valor'] : '%'
                     );
                 } else {
                     $itens->where(
-                        ($where['coluna'   ])? $where['coluna'   ] : 'id',
-                        ($where['expressao'])? $where['expressao'] : 'like',
-                        ($where['valor'    ])? $where['valor'    ] : '%'
+                        ($where['coluna']) ? $where['coluna'] : 'id',
+                        ($where['expressao']) ? $where['expressao'] : 'like',
+                        ($where['valor']) ? $where['valor'] : '%'
                     );
                 }
             }
@@ -52,14 +52,14 @@ class UsersController extends Controller
         if ($request['order']) {
             foreach ($request['order'] as $key => $order) {
                 $itens->orderBy(
-                    ($order['coluna'])? $order['coluna'] : 'id',
-                    ($order['tipo'  ])? $order['tipo'  ] : 'asc'
+                    ($order['coluna']) ? $order['coluna'] : 'id',
+                    ($order['tipo']) ? $order['tipo'] : 'asc'
                 );
             }
         }
-        
+
         $itens = $itens->get();
-        
+
         if ($request['adicionais']) {
             foreach ($itens as $key => $iten) {
                 foreach ($request['adicionais'] as $key => $adicional) {
@@ -71,8 +71,7 @@ class UsersController extends Controller
                             if ($key == 0) {
                                 if ($iten[0] == null) {
                                     $iten2 = $iten[$a];
-                                }
-                                else {
+                                } else {
                                     foreach ($iten as $key => $i) {
                                         $i[$a];
                                     }
@@ -104,15 +103,16 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         $cpfcnpj = Pessoa::where(
-            'cpfcnpj', $request['pessoa']['cpfcnpj']
+            'cpfcnpj',
+            $request['pessoa']['cpfcnpj']
         );
         $email = Email::where('email', $request['user']['email']);
         if ($cpfcnpj) {
             return response()->json('Usuário já existe!', 400)->header('Content-Type', 'text/plain');
-        }if ($email){
-            return response()->json('Usuário já existe!', 400)->header('Content-Type', 'text/plain');
         }
-        else{
+        if ($email) {
+            return response()->json('Usuário já existe!', 400)->header('Content-Type', 'text/plain');
+        } else {
             $user = User::create(
                 [
                     'empresa_id' => 1,
@@ -136,7 +136,8 @@ class UsersController extends Controller
                 'email_id'  => Email::firstOrCreate(
                     [
                         'email'  => $user->email,
-                    ])->id,
+                    ]
+                )->id,
                 'tipo'      => 'Pessoal',
             ]);
             $conselho = Conselho::create(
@@ -159,7 +160,6 @@ class UsersController extends Controller
                 ]
             );
         }
-        
     }
 
     /**
@@ -186,8 +186,7 @@ class UsersController extends Controller
                         if ($key == 0) {
                             if ($iten[0] == null) {
                                 $iten2 = $iten[$a];
-                            }
-                            else {
+                            } else {
                                 foreach ($iten as $key => $i) {
                                     $i[$a];
                                 }
@@ -205,7 +204,7 @@ class UsersController extends Controller
                 }
             }
         }
-        
+
         return $iten;
     }
 

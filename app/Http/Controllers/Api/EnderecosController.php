@@ -94,7 +94,7 @@ class EnderecosController extends Controller
      */
     public function store(Request $request)
     {
-        $endereco = new Endereco;
+        $endereco = new Endereco();
         $endereco->cep         = $request->cep;
         $endereco->cidade      = $request->cidade;
         $endereco->rua         = $request->rua;

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\empresa;
+use App\Empresa;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -94,7 +94,7 @@ class EmpresasController extends Controller
      */
     public function store(Request $request)
     {
-        $empresa = new Empresa;
+        $empresa = new Empresa();
         $empresa->razao = $request->razao;
         $empresa->cnpj  = $request->cnpj;
         $empresa->ie    = $request->ie;

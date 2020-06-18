@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\email;
+use App\Email;
 use Illuminate\Http\Request;
 
 class EmailsController extends Controller
@@ -94,7 +94,7 @@ class EmailsController extends Controller
      */
     public function store(Request $request)
     {
-        $email = new Email;
+        $email = new Email();
         $email->email = $request->email;
         $email->save();
     }

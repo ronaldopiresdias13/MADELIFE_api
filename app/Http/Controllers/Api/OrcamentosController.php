@@ -3,18 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Aph;
+use App\AphEmail;
+use App\AphTelefone;
 use App\Email;
-use App\Pessoa;
-use App\Remocao;
 use App\Evento;
-use App\EventoEmail;
-use App\EventoTelefone;
-use App\Servico;
+use App\Remocao;
 use App\Telefone;
 use App\Homecare;
 use App\Orcamento;
+use App\EventoEmail;
 use App\RemocaoEmail;
 use App\HomecareEmail;
+use App\EventoTelefone;
 use App\Orcamentocusto;
 use App\RemocaoTelefone;
 use App\OrcamentoServico;
@@ -365,6 +365,7 @@ class OrcamentosController extends Controller
                     ]);
                 }
             }
+
             if ($request['aph']['emails']) {
                 foreach ($request['aph']['emails'] as $key => $email) {
                     $aph_email = AphEmail::firstOrCreate([
@@ -761,6 +762,5 @@ class OrcamentosController extends Controller
     public function migracao(Request $request)
     {
         // dd($request);
-
     }
 }

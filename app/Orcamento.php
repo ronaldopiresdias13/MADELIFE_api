@@ -8,7 +8,8 @@ class Orcamento extends Model
 {
     protected $guarded = [];
 
-    public function historicos(){
+    public function historicos()
+    {
         return $this->hasMany('App\Historicoorcamento');
     }
 
@@ -35,20 +36,20 @@ class Orcamento extends Model
     public function servicos()
     {
         return $this->belongsToMany('App\Servico', 'orcamento_servico')
-        ->withPivot(
-            'quantidade'      ,
-            'frequencia'      ,
-            'basecobranca'    ,
-			'valorunitario'   ,
-			'custo'           ,
-			'subtotal'        ,
-			'subtotalcusto'   ,
-			'icms'            ,
-			'inss'            ,
-			'iss'             ,
-			'valorcustomensal',
-			'valorresultadomensal'
-        );
+            ->withPivot(
+                'quantidade',
+                'frequencia',
+                'basecobranca',
+                'valorunitario',
+                'custo',
+                'subtotal',
+                'subtotalcusto',
+                'icms',
+                'inss',
+                'iss',
+                'valorcustomensal',
+                'valorresultadomensal'
+            );
     }
 
     public function orcamento_produtos()
@@ -59,18 +60,18 @@ class Orcamento extends Model
     public function produtos()
     {
         return $this->belongsToMany('App\Produto', 'orcamento_produto')
-        ->withpivot(
-            "quantidade"      ,
-			"valorunitario"   ,
-			"custo"           ,
-			"subtotal"        ,
-			"subtotalcusto"   ,
-			"icms"            ,
-			"inss"            ,
-			"iss"             ,
-			"valorcustomensal",
-			"valorresultadomensal"
-        );
+            ->withpivot(
+                "quantidade",
+                "valorunitario",
+                "custo",
+                "subtotal",
+                "subtotalcusto",
+                "icms",
+                "inss",
+                "iss",
+                "valorcustomensal",
+                "valorresultadomensal"
+            );
     }
 
     public function orcamentocustos()
@@ -97,5 +98,4 @@ class Orcamento extends Model
     {
         return $this->hasOne('App\Evento');
     }
-
 }

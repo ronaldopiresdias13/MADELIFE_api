@@ -17,7 +17,7 @@ class ProdutosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = null;
+        $itens = new Produto();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -96,7 +96,7 @@ class ProdutosController extends Controller
      */
     public function store(Request $request)
     {
-        $produto = new Produto;
+        $produto = new Produto();
         $produto->descricao = $request->descricao;
         $produto->empresa_id = 1;
         $produto->tipoproduto_id = $request->tipoproduto_id;
@@ -214,7 +214,7 @@ class ProdutosController extends Controller
     public function migracao(Request $request)
     {
         // dd($request['tipoProduto']['descricao']);
-        $produto = new Produto;
+        $produto = new Produto();
         $produto->descricao = $request->descricao;
         $produto->empresa_id = 1;
         $produto->tipoproduto_id = Tipoproduto::firstWhere('descricao', $request['tipoProduto']['descricao'])->id;

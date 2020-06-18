@@ -15,7 +15,7 @@ class ServicosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = null;
+        $itens = new Servico();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -94,7 +94,7 @@ class ServicosController extends Controller
      */
     public function store(Request $request)
     {
-        $servico = new Servico;
+        $servico = new Servico();
         $servico->descricao  = $request->descricao;
         $servico->codigo     = $request->codigo;
         $servico->valor      = $request->valor;
