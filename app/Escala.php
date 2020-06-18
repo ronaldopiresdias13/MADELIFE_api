@@ -23,6 +23,10 @@ class Escala extends Model
     {
         return $this->hasMany('App\Ponto');
     }
+    public function relatorios()
+    {
+        return $this->hasMany('App\Relatorio');
+    }
 
     public function monitoramentos()
     {
