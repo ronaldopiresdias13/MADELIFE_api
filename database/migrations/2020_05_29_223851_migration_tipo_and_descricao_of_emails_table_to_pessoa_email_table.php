@@ -1,7 +1,5 @@
 <?php
 
-namespace App\database\migrations;
-
 use App\Pessoa;
 use App\PessoaEmail;
 use Illuminate\Database\Migrations\Migration;

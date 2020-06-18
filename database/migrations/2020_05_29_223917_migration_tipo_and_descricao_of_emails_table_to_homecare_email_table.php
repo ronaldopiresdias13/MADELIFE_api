@@ -1,7 +1,5 @@
 <?php
 
-namespace App\database\migrations;
-
 use App\Homecare;
 use App\HomecareEmail;
 use Illuminate\Database\Migrations\Migration;

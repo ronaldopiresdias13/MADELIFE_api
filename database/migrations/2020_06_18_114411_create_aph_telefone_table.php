@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEventoTelefoneTable extends Migration
+class CreateAphTelefoneTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateEventoTelefoneTable extends Migration
      */
     public function up()
     {
-        Schema::create('evento_telefone', function (Blueprint $table) {
+        Schema::create('aph_telefone', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('evento_id');
-            $table->foreign('evento_id')->references('id')->on('eventos')->onDelete('cascade');
+            $table->unsignedBigInteger('aph_id');
+            $table->foreign('aph_id')->references('id')->on('aphs')->onDelete('cascade');
             $table->unsignedBigInteger('telefone_id');
             $table->foreign('telefone_id')->references('id')->on('telefones')->onDelete('cascade');
+            $table->string('tipo')->nullable();
+            $table->string('descricao')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +32,6 @@ class CreateEventoTelefoneTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('evento_telefone');
+        Schema::dropIfExists('aph_telefone');
     }
 }

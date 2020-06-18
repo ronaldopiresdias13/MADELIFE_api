@@ -1,7 +1,5 @@
 <?php
 
-namespace App\database\migrations;
-
 use App\Pessoa;
 use App\PessoaTelefone;
 use Illuminate\Database\Migrations\Migration;
