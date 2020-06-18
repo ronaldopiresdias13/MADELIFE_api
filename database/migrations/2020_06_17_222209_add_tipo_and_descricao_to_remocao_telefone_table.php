@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddTipoAndDescricaoToHomecareTelefoneTable extends Migration
+class AddTipoAndDescricaoToRemocaoTelefoneTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,7 @@ class AddTipoAndDescricaoToHomecareTelefoneTable extends Migration
      */
     public function up()
     {
-        Schema::table('homecare_telefone', function (Blueprint $table) {
+        Schema::table('remocao_telefone', function (Blueprint $table) {
             $table->string('descricao')->nullable()->after('telefone_id');
             $table->string('tipo')->nullable()->after('telefone_id');
         });
@@ -28,9 +28,9 @@ class AddTipoAndDescricaoToHomecareTelefoneTable extends Migration
      */
     public function down()
     {
-        Schema::table('homecare_telefone', function (Blueprint $table) {
-            $table->dropColumn('tipo');
+        Schema::table('remocao_telefone', function (Blueprint $table) {
             $table->dropColumn('descricao');
+            $table->dropColumn('tipo');
         });
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+namespace App\database\migrations;
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,7 +15,7 @@ class RenameOrcamentoprodutosToOrcamentoProdutoTable extends Migration
      */
     public function up()
     {
-        Schema::rename('orcamentoprodutos','orcamento_produto');
+        Schema::rename('orcamentoprodutos', 'orcamento_produto');
     }
 
     /**
@@ -23,6 +25,6 @@ class RenameOrcamentoprodutosToOrcamentoProdutoTable extends Migration
      */
     public function down()
     {
-        Schema::rename('orcamento_produto','orcamentoprodutos');
+        Schema::rename('orcamento_produto', 'orcamentoprodutos');
     }
 }

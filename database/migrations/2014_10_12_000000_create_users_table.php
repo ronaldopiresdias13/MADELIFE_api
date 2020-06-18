@@ -1,5 +1,7 @@
 <?php
 
+namespace App\database\migrations;
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,11 +17,11 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string   ('cpfcnpj'          )->nullable()->unique();
-            $table->string   ('email'            )->nullable()->unique();
+            $table->string('cpfcnpj')->nullable()->unique();
+            $table->string('email')->nullable()->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string   ('password'         );
-            $table->string   ('perfil'           )->nullable();
+            $table->string('password');
+            $table->string('perfil')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

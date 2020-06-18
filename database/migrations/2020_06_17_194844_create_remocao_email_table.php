@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBancosTable extends Migration
+class CreateRemocaoEmailTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,9 +15,13 @@ class CreateBancosTable extends Migration
      */
     public function up()
     {
-        Schema::create('bancos', function (Blueprint $table) {
+        Schema::create('remocao_email', function (Blueprint $table) {
             $table->id();
-            $table->string('codigo')->nullable();
+            $table->unsignedBigInteger('remocao_id');
+            $table->foreign('remocao_id')->references('id')->on('remocoes')->onDelete('cascade');
+            $table->unsignedBigInteger('email_id');
+            $table->foreign('email_id')->references('id')->on('emails')->onDelete('cascade');
+            $table->string('tipo')->nullable();
             $table->string('descricao')->nullable();
             $table->timestamps();
         });
@@ -30,6 +34,6 @@ class CreateBancosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bancos');
+        Schema::dropIfExists('remocao_email');
     }
 }
