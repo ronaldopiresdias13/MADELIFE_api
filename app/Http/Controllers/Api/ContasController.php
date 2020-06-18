@@ -95,82 +95,82 @@ class ContasController extends Controller
      */
     public function store(Request $request)
     {
-        // $conta = Conta::create(
-        //     [
-        //         'empresa_id'         => 1,
-        //         'tipopessoa'         => $request['tipopessoa'],
-        //         'pessoa_id'          => $request['pessoa_id'],
-        //         'natureza_id'        => $request['natureza_id'],
-        //         'valortotalconta'    => $request['valortotalconta'],
-        //         'tipoconta'          => $request['tipoconta'],
-        //         'historico'          => $request['historico'],
-        //         'status'             => $request['status'],
-        //         'nfe'                => $request['nfe'],
-        //         'quantidadeconta'    => $request['quantidadeconta'],
-        //         'valorpago'          => $request['valorpago'],
-        //         'tipocontapagamento' => $request['tipocontapagamento'],
-        //         'datavencimento'     => $request['datavencimento'],
-        //         'dataemissao'        => $request['dataemissao'],
-        //     ]
-        // );
-        // foreach ($request['pagamentos'] as $key => $pagamento) {
-        //     $conta_pagamento = Pagamento::create([
-        //         'empresa_id'        => $pagamento['empresa_id'],
-        //         'conta_id'          => $conta->id,
-        //         'contasbancaria_id' => $pagamento['contasbancaria_id'],
-        //         'numeroboleto'      => $pagamento['numeroboleto'],
-        //         'formapagamento'    => $pagamento['formapagamento'],
-        //         'datavencimento'    => $pagamento['datavencimento'],
-        //         'datapagamento'     => $pagamento['datapagamento'],
-        //         'valorconta'        => $pagamento['valorconta'],
-        //         'status'            => $pagamento['status'],
-        //         'tipopagamento'     => $pagamento['tipopagamento'],
-        //         'valorpago'         => $pagamento['valorpago'],
-        //         'pagamentoparcial'  => $pagamento['pagamentoparcial'],
-        //         'observacao'        => $pagamento['observacao'],
-        //         'anexo'             => $pagamento['anexo'],
-        //         'numeroconta'       => $pagamento['numeroconta'],
-
-        //     ]);
-        // }
-        //  return $conta;
-        $pagamento = Pagamento::create(
+        $conta = Conta::create(
             [
-                'empresa_id' => 1,
-                'conta_id'   => Conta::create(
-                    [
-                        'empresa_id'         => 1,
-                        'tipopessoa'         => $request['tipoPessoa'],
-                        'pessoa_id'          => null,
-                        'natureza_id'        => $request['natureza'],
-                        'valortotalconta'    => $request['valorConta'],
-                        'tipoconta'          => $request['tipoConta'],
-                        'historico'          => $request['historico'],
-                        'status'             => $request['status'],
-                        'nfe'                => $request['nfe'],
-                        'quantidadeconta'    => $request['quantidadeParcela'],
-                        'valorpago'          => $request['valorContaPago'],
-                        'tipocontapagamento' => $request['tipoPagamento'],
-                        'datavencimento'     => $request['dataVencimento'],
-                        'dataemissao'        => $request['dataEmissao'],
-                    ]
-                )->id,
-                'contasbancaria_id' =>  $request['contaBancaria'],
-                'numeroboleto'      =>  "",
-                'formapagamento'    =>  $request['formaPagamento'],
-                'datavencimento'    =>  $request['dataVencimento'],
-                'datapagamento'     =>  $request['dataPagamento'],
-                'valorconta'        =>  $request['valorConta'],
-                'status'            =>  $request['status'],
-                'tipopagamento'     =>  $request['tipoPagamento'],
-                'valorpago'         =>  $request['valorContaPago'],
-                'pagamentoparcial'  =>  0,
-                'observacao'        =>  $request['pessoa'],
-                'anexo'             =>  "",
-                'numeroconta'       =>  $request['numeroParcela'],
+                'empresa_id'         => 1,
+                'tipopessoa'         => $request['tipopessoa'],
+                'pessoa_id'          => $request['pessoa_id'],
+                'natureza_id'        => $request['natureza_id'],
+                'valortotalconta'    => $request['valortotalconta'],
+                'tipoconta'          => $request['tipoconta'],
+                'historico'          => $request['historico'],
+                'status'             => $request['status'],
+                'nfe'                => $request['nfe'],
+                'quantidadeconta'    => $request['quantidadeconta'],
+                'valorpago'          => $request['valorpago'],
+                'tipocontapagamento' => $request['tipocontapagamento'],
+                'datavencimento'     => $request['datavencimento'],
+                'dataemissao'        => $request['dataemissao'],
             ]
         );
-        return $pagamento;
+        foreach ($request['pagamentos'] as $key => $pagamento) {
+            $conta_pagamento = Pagamento::create([
+                'empresa_id'        => $pagamento['empresa_id'],
+                'conta_id'          => $conta->id,
+                'contasbancaria_id' => $pagamento['contasbancaria_id'],
+                'numeroboleto'      => $pagamento['numeroboleto'],
+                'formapagamento'    => $pagamento['formapagamento'],
+                'datavencimento'    => $pagamento['datavencimento'],
+                'datapagamento'     => $pagamento['datapagamento'],
+                'valorconta'        => $pagamento['valorconta'],
+                'status'            => $pagamento['status'],
+                'tipopagamento'     => $pagamento['tipopagamento'],
+                'valorpago'         => $pagamento['valorpago'],
+                'pagamentoparcial'  => $pagamento['pagamentoparcial'],
+                'observacao'        => $pagamento['observacao'],
+                'anexo'             => $pagamento['anexo'],
+                'numeroconta'       => $pagamento['numeroconta'],
+
+            ]);
+        }
+        //  return $conta;
+        // $pagamento = Pagamento::create(
+        //     [
+        //         'empresa_id' => 1,
+        //         'conta_id'   => Conta::create(
+        //             [
+        //                 'empresa_id'         => 1,
+        //                 'tipopessoa'         => $request['tipoPessoa'],
+        //                 'pessoa_id'          => $request['pessoa'],
+        //                 'natureza_id'        => $request['natureza'],
+        //                 'valortotalconta'    => $request['valorConta'],
+        //                 'tipoconta'          => $request['tipoConta'],
+        //                 'historico'          => $request['historico'],
+        //                 'status'             => $request['status'],
+        //                 'nfe'                => $request['nfe'],
+        //                 'quantidadeconta'    => $request['quantidadeParcela'],
+        //                 'valorpago'          => $request['valorContaPago'],
+        //                 'tipocontapagamento' => $request['tipoPagamento'],
+        //                 'datavencimento'     => $request['dataVencimento'],
+        //                 'dataemissao'        => $request['dataEmissao'],
+        //             ]
+        //         )->id,
+        //         'contasbancaria_id' =>  $request['contaBancaria'],
+        //         'numeroboleto'      =>  "",
+        //         'formapagamento'    =>  $request['formaPagamento'],
+        //         'datavencimento'    =>  $request['dataVencimento'],
+        //         'datapagamento'     =>  $request['dataPagamento'],
+        //         'valorconta'        =>  $request['valorConta'],
+        //         'status'            =>  $request['status'],
+        //         'tipopagamento'     =>  $request['tipoPagamento'],
+        //         'valorpago'         =>  $request['valorContaPago'],
+        //         'pagamentoparcial'  =>  0,
+        //         'observacao'        =>  "",
+        //         'anexo'             =>  "",
+        //         'numeroconta'       =>  $request['numeroParcela'],
+        //     ]
+        // );
+        // return $pagamento;
     }
 
     /**
