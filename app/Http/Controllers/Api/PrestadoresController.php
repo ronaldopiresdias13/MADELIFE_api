@@ -37,20 +37,20 @@ class PrestadoresController extends Controller
         if ($request->commands) {
             $request = json_decode($request->commands, true);
         }
-        
+
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
                     $itens = Prestador::where(
-                        ($where['coluna'   ])? $where['coluna'   ] : 'id'  ,
-                        ($where['expressao'])? $where['expressao'] : 'like',
-                        ($where['valor'    ])? $where['valor'    ] : '%'
+                        ($where['coluna']) ? $where['coluna'] : 'id',
+                        ($where['expressao']) ? $where['expressao'] : 'like',
+                        ($where['valor']) ? $where['valor'] : '%'
                     );
                 } else {
                     $itens->where(
-                        ($where['coluna'   ])? $where['coluna'   ] : 'id',
-                        ($where['expressao'])? $where['expressao'] : 'like',
-                        ($where['valor'    ])? $where['valor'    ] : '%'
+                        ($where['coluna']) ? $where['coluna'] : 'id',
+                        ($where['expressao']) ? $where['expressao'] : 'like',
+                        ($where['valor']) ? $where['valor'] : '%'
                     );
                 }
             }
@@ -61,14 +61,14 @@ class PrestadoresController extends Controller
         if ($request['order']) {
             foreach ($request['order'] as $key => $order) {
                 $itens->orderBy(
-                    ($order['coluna'])? $order['coluna'] : 'id',
-                    ($order['tipo'  ])? $order['tipo'  ] : 'asc'
+                    ($order['coluna']) ? $order['coluna'] : 'id',
+                    ($order['tipo']) ? $order['tipo'] : 'asc'
                 );
             }
         }
-        
+
         $itens = $itens->get();
-        
+
         if ($request['adicionais']) {
             foreach ($itens as $key => $iten) {
                 foreach ($request['adicionais'] as $key => $adicional) {
@@ -80,8 +80,7 @@ class PrestadoresController extends Controller
                             if ($key == 0) {
                                 if ($iten[0] == null) {
                                     $iten2 = $iten[$a];
-                                }
-                                else {
+                                } else {
                                     foreach ($iten as $key => $i) {
                                         $i[$a];
                                     }
@@ -113,13 +112,13 @@ class PrestadoresController extends Controller
     public function store(Request $request)
     {
         $prestador = new Prestador;
-        $prestador->pessoa      = $request->pessoa     ;
-        $prestador->fantasia    = $request->fantasia   ;
-        $prestador->sexo        = $request->sexo       ;
-        $prestador->pis         = $request->pis        ;
-        $prestador->formacao    = $request->formacao   ;
-        $prestador->cargo       = $request->cargo      ;
-        $prestador->curriculo   = $request->curriculo  ;
+        $prestador->pessoa      = $request->pessoa;
+        $prestador->fantasia    = $request->fantasia;
+        $prestador->sexo        = $request->sexo;
+        $prestador->pis         = $request->pis;
+        $prestador->formacao    = $request->formacao;
+        $prestador->cargo       = $request->cargo;
+        $prestador->curriculo   = $request->curriculo;
         $prestador->certificado = $request->certificado;
         $prestador->save();
     }
@@ -148,8 +147,7 @@ class PrestadoresController extends Controller
                         if ($key == 0) {
                             if ($iten[0] == null) {
                                 $iten2 = $iten[$a];
-                            }
-                            else {
+                            } else {
                                 foreach ($iten as $key => $i) {
                                     $i[$a];
                                 }
@@ -167,7 +165,7 @@ class PrestadoresController extends Controller
                 }
             }
         }
-        
+
         return $iten;
     }
 
@@ -203,9 +201,9 @@ class PrestadoresController extends Controller
     public function meuspacientes(Request $request, Prestador $prestador)
     {
         $escalas = Escala::where('prestador_id', $prestador->id)
-            ->join('ordemservicos', 'ordemservicos.id'      , '=', 'escalas.ordemservico_id'   )
-            ->join('orcamentos'   , 'orcamentos.id'         , '=', 'ordemservicos.orcamento_id')
-            ->join('homecares'    , 'homecares.orcamento_id', '=', 'orcamentos.id'             )
+            ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
+            ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
+            ->join('homecares', 'homecares.orcamento_id', '=', 'orcamentos.id')
             ->select('homecares.nome')
             ->groupBy('homecares.nome')
             ->orderBy('homecares.nome')
@@ -243,21 +241,26 @@ class PrestadoresController extends Controller
             'curriculo'   => null,
             'certificado' => $request['prestador']['id'],
         ]);
-        
+
         $prestador_formacao = PrestadorFormacao::firstOrCreate([
             'prestador_id' => $prestador->id,
-            'formacao_id'  => Formacao::firstOrCreate(['descricao' => $request['prestador']['dadosProf']['formacao']['descricao']])->id,
+            'formacao_id'  => Formacao::firstOrCreate(
+                [
+                    'descricao' => $request['prestador']['dadosProf']['formacao']['descricao']
+                ]
+            )->id,
         ]);
-        
+
         $usercpf = User::firstWhere(
-            'cpfcnpj' , $request['prestador']['dadosPf']['cpf']['numero']
+            'cpfcnpj',
+            $request['prestador']['dadosPf']['cpf']['numero']
         );
         $useremail = User::firstWhere(
-            'email', $request['prestador']['contato']['email']
+            'email',
+            $request['prestador']['contato']['email']
         );
 
         if ($usercpf || $useremail) {
-            
         } else {
             $user = User::create([
                 'cpfcnpj' => $request['prestador']['dadosPf']['cpf']['numero'],
@@ -267,7 +270,7 @@ class PrestadoresController extends Controller
             ]);
         }
 
-        if($request['prestador']['dadosBancario']['banco'] != null && $request['prestador']['dadosBancario']['banco']['codigo'] != null){
+        if ($request['prestador']['dadosBancario']['banco'] != null && $request['prestador']['dadosBancario']['banco']['codigo'] != null) {
             $dados_bancario = Dadosbancario::firstOrCreate([
                 'banco_id' => Banco::firstOrCreate(
                     [
@@ -278,9 +281,9 @@ class PrestadoresController extends Controller
                     ]
                 )->id,
                 'pessoa_id'    => $prestador->pessoa_id,
-                'agencia'   => $request['prestador']['dadosBancario']['agencia'  ],
-                'conta'     => $request['prestador']['dadosBancario']['conta'    ],
-                'digito'    => $request['prestador']['dadosBancario']['digito'   ],
+                'agencia'   => $request['prestador']['dadosBancario']['agencia'],
+                'conta'     => $request['prestador']['dadosBancario']['conta'],
+                'digito'    => $request['prestador']['dadosBancario']['digito'],
                 'tipoconta' => $request['prestador']['dadosBancario']['tipoConta'],
             ]);
         }

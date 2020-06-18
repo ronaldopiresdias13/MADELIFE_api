@@ -32,4 +32,3 @@ class AddResponsavelToOrdemservicosTable extends Migration
         });
     }
 }
-

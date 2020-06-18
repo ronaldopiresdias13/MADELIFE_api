@@ -13,7 +13,7 @@ class RenameOrcamentoprodutosToOrcamentoProdutoTable extends Migration
      */
     public function up()
     {
-        Schema::rename('orcamentoprodutos','orcamento_produto');
+        Schema::rename('orcamentoprodutos', 'orcamento_produto');
     }
 
     /**
@@ -23,6 +23,6 @@ class RenameOrcamentoprodutosToOrcamentoProdutoTable extends Migration
      */
     public function down()
     {
-        Schema::rename('orcamento_produto','orcamentoprodutos');
+        Schema::rename('orcamento_produto', 'orcamentoprodutos');
     }
 }

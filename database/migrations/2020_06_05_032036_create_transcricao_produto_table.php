@@ -22,10 +22,10 @@ class CreateTranscricaoProdutoTable extends Migration
             $table->string('quantidade')->nullable();
             $table->string('apresentacao')->nullable();
             $table->string('via')->nullable();
-            $table->string('frequencia')->nullable();            
-            $table->string('tempo')->nullable();                        
-            $table->boolean('status')->nullable();                        
-            $table->longText('observacao')->nullable();                        
+            $table->string('frequencia')->nullable();
+            $table->string('tempo')->nullable();
+            $table->boolean('status')->nullable();
+            $table->longText('observacao')->nullable();
             $table->timestamps();
         });
     }

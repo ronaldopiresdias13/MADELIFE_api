@@ -1,5 +1,7 @@
 <?php
 
+use App\Pessoa;
+use App\PessoaTelefone;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,11 +15,11 @@ class MigrationTipoAndDescricaoOfTelefonesTableToPessoaTelefoneTable extends Mig
      */
     public function up()
     {
-        $pessoas = App\Pessoa::all();
+        $pessoas = Pessoa::all();
         foreach ($pessoas as $key => $pessoa) {
             $telefones = $pessoa->telefones;
             foreach ($telefones as $key => $telefone) {
-                App\PessoaTelefone::where('telefone_id', $telefone->id)->update(['tipo' => $telefone->tipo, 'descricao' => $telefone->descricao]);
+                PessoaTelefone::where('telefone_id', $telefone->id)->update(['tipo' => $telefone->tipo, 'descricao' => $telefone->descricao]);
             }
         }
     }

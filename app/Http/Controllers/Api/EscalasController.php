@@ -9,7 +9,6 @@ use App\Prestador;
 use App\Relatorio;
 use App\Ponto;
 use App\Monitoramentoescala;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -23,25 +22,25 @@ class EscalasController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = null;
+        $itens = new Escala();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
         }
-        
+
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
                     $itens = Escala::where(
-                        ($where['coluna'   ])? $where['coluna'   ] : 'id'  ,
-                        ($where['expressao'])? $where['expressao'] : 'like',
-                        ($where['valor'    ])? $where['valor'    ] : '%'
+                        ($where['coluna']) ? $where['coluna'] : 'id',
+                        ($where['expressao']) ? $where['expressao'] : 'like',
+                        ($where['valor']) ? $where['valor'] : '%'
                     );
                 } else {
                     $itens->where(
-                        ($where['coluna'   ])? $where['coluna'   ] : 'id',
-                        ($where['expressao'])? $where['expressao'] : 'like',
-                        ($where['valor'    ])? $where['valor'    ] : '%'
+                        ($where['coluna']) ? $where['coluna'] : 'id',
+                        ($where['expressao']) ? $where['expressao'] : 'like',
+                        ($where['valor']) ? $where['valor'] : '%'
                     );
                 }
             }
@@ -52,14 +51,14 @@ class EscalasController extends Controller
         if ($request['order']) {
             foreach ($request['order'] as $key => $order) {
                 $itens->orderBy(
-                    ($order['coluna'])? $order['coluna'] : 'id',
-                    ($order['tipo'  ])? $order['tipo'  ] : 'asc'
+                    ($order['coluna']) ? $order['coluna'] : 'id',
+                    ($order['tipo']) ? $order['tipo'] : 'asc'
                 );
             }
         }
-        
+
         $itens = $itens->get();
-        
+
         if ($request['adicionais']) {
             foreach ($itens as $key => $iten) {
                 foreach ($request['adicionais'] as $key => $adicional) {
@@ -71,8 +70,7 @@ class EscalasController extends Controller
                             if ($key == 0) {
                                 if ($iten[0] == null) {
                                     $iten2 = $iten[$a];
-                                }
-                                else {
+                                } else {
                                     foreach ($iten as $key => $i) {
                                         $i[$a];
                                     }
@@ -104,30 +102,30 @@ class EscalasController extends Controller
     public function store(Request $request)
     {
         $escala = Escala::create([
-            'empresa_id'            => $request->empresa_id           ,
-            'ordemservico_id'       => $request->ordemservico_id      ,
-            'prestador_id'          => $request->prestador_id         ,
-            'servico_id'            => $request->servico_id           ,
-            'horaentrada'           => $request->horaentrada          ,
-            'horasaida'             => $request->horasaida            ,
-            'dataentrada'           => $request->dataentrada          ,
-            'datasaida'             => $request->datasaida            ,
-            'periodo'               => $request->periodo              ,
-            'assinaturaprestador'   => $request->assinaturaprestador  ,
+            'empresa_id'            => $request->empresa_id,
+            'ordemservico_id'       => $request->ordemservico_id,
+            'prestador_id'          => $request->prestador_id,
+            'servico_id'            => $request->servico_id,
+            'horaentrada'           => $request->horaentrada,
+            'horasaida'             => $request->horasaida,
+            'dataentrada'           => $request->dataentrada,
+            'datasaida'             => $request->datasaida,
+            'periodo'               => $request->periodo,
+            'assinaturaprestador'   => $request->assinaturaprestador,
             'assinaturaresponsavel' => $request->assinaturaresponsavel,
-            'observacao'            => $request->observacao           ,
-            'status'                => $request->status               ,
-            'folga'                 => $request->folga                ,
+            'observacao'            => $request->observacao,
+            'status'                => $request->status,
+            'folga'                 => $request->folga,
             'substituto'            => $request->substituto
         ]);
 
         foreach ($request->cuidados as $key => $cuidado) {
             $cuidado_escala = CuidadoEscala::create([
-                'escala_id'  => $escala->id                                 ,
+                'escala_id'  => $escala->id,
                 'cuidado_id' => Cuidado::find($cuidado['cuidado']['id'])->id,
-                'data'       => $cuidado['data']                 ,
-                'hora'       => $cuidado['hora']                 ,
-                'status'     => $cuidado['status']               ,
+                'data'       => $cuidado['data'],
+                'hora'       => $cuidado['hora'],
+                'status'     => $cuidado['status'],
             ]);
         }
     }
@@ -155,7 +153,7 @@ class EscalasController extends Controller
         // $escala = Escala::find($escala->id);
 
         // $escala = $escala->with('ordemservico')->with('orcamento');
-        
+
         // $escala = $escala->get();
 
         // return $escala;
@@ -211,7 +209,7 @@ class EscalasController extends Controller
         //     ->get();
         // return $escalas;
 
-        
+
 
 
 
@@ -232,8 +230,7 @@ class EscalasController extends Controller
                         if ($key == 0) {
                             if ($iten[0] == null) {
                                 $iten2 = $iten[$a];
-                            }
-                            else {
+                            } else {
                                 foreach ($iten as $key => $i) {
                                     $i[$a];
                                 }
@@ -251,7 +248,7 @@ class EscalasController extends Controller
                 }
             }
         }
-        
+
         return $iten;
     }
 
@@ -292,7 +289,8 @@ class EscalasController extends Controller
         $escala->delete();
     }
 
-    public function migracao(Request $request){
+    public function migracao(Request $request)
+    {
         $escala = Escala::create([
             'empresa_id' => $request['empresa_id'],
             'ordemservico_id' => $request['ordemservico_id'],
@@ -310,7 +308,7 @@ class EscalasController extends Controller
             'folga' =>          $request['escala']['folga'],
             'substituto' =>     $request['escala']['substituto'],
         ])->id;
-        if($request['escala']['checkin']!= null){
+        if ($request['escala']['checkin'] != null) {
             $pontoentrada = Ponto::create([
                 'empresa_id' => $request['empresa_id'],
                 'escala_id' => $escala,
@@ -323,7 +321,7 @@ class EscalasController extends Controller
                 'status' => $request['escala']['checkin']['status'],
             ]);
         };
-        if($request['escala']['checkout']!= null){
+        if ($request['escala']['checkout'] != null) {
             $pontosaida = Ponto::create([
                 'empresa_id' => $request['empresa_id'],
                 'escala_id' => $escala,
@@ -336,28 +334,28 @@ class EscalasController extends Controller
                 'status' => $request['escala']['checkout']['status'],
             ]);
         };
-        if($request['escala']['cuidados']){
+        if ($request['escala']['cuidados']) {
             foreach ($request['escala']['cuidados'] as $cuidado) {
-                    $cuidados_escalas = CuidadoEscala::create([
-                        'cuidado_id' => Cuidado::firstOrCreate([
-                                'codigo' => $cuidado['cuidado']['codigo'],
-                            ],
-                            [
-                                'descricao' => $cuidado['cuidado']['descricao'],
-                                'empresa_id' => 1,
-                                'status' => true,
-                            ])->id,
-                        'escala_id' => $escala,
-                        'data' => null,
-                        'hora' => $cuidado['horario'],
-                        'status' => $cuidado['status'],
-                        ]);
-                
+                $cuidados_escalas = CuidadoEscala::create([
+                    'cuidado_id' => Cuidado::firstOrCreate(
+                        [
+                            'codigo' => $cuidado['cuidado']['codigo'],
+                        ],
+                        [
+                            'descricao' => $cuidado['cuidado']['descricao'],
+                            'empresa_id' => 1,
+                            'status' => true,
+                        ]
+                    )->id,
+                    'escala_id' => $escala,
+                    'data' => null,
+                    'hora' => $cuidado['horario'],
+                    'status' => $cuidado['status'],
+                ]);
             }
-            
         };
-        if($request['escala']['itemEscalaMonitoramentos']){
-            foreach ($request['escala']['itemEscalaMonitoramentos'] as $monitor){
+        if ($request['escala']['itemEscalaMonitoramentos']) {
+            foreach ($request['escala']['itemEscalaMonitoramentos'] as $monitor) {
                 $monitoramento = Monitoramentoescala::create([
                     'escala_id' =>  $escala,
                     'data'  =>  '',
@@ -386,7 +384,7 @@ class EscalasController extends Controller
                     'sondas'    =>  $monitor['sondas'],
                     'dextro'    =>  $monitor['dextro'],
                     'o2'        =>  $monitor['o2'],
-                    'observacao'=>  '',
+                    'observacao' =>  '',
                 ]);
             }
         }

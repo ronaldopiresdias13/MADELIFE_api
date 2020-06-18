@@ -15,7 +15,7 @@ class CreateUserAcessoTable extends Migration
     {
         Schema::create('user_acesso', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id'  )->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('acesso_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

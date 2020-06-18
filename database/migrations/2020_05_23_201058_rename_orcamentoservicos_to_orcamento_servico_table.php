@@ -13,7 +13,7 @@ class RenameOrcamentoservicosToOrcamentoServicoTable extends Migration
      */
     public function up()
     {
-        Schema::rename('orcamentoservicos','orcamento_servico');
+        Schema::rename('orcamentoservicos', 'orcamento_servico');
     }
 
     /**
@@ -23,6 +23,6 @@ class RenameOrcamentoservicosToOrcamentoServicoTable extends Migration
      */
     public function down()
     {
-        Schema::rename('orcamento_servico','orcamentoservicos');
+        Schema::rename('orcamento_servico', 'orcamentoservicos');
     }
 }

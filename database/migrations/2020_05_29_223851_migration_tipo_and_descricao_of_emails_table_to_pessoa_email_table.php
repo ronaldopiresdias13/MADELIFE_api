@@ -1,5 +1,7 @@
 <?php
 
+use App\Pessoa;
+use App\PessoaEmail;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,11 +15,11 @@ class MigrationTipoAndDescricaoOfEmailsTableToPessoaEmailTable extends Migration
      */
     public function up()
     {
-        $pessoas = App\Pessoa::all();
+        $pessoas = Pessoa::all();
         foreach ($pessoas as $key => $pessoa) {
             $emails = $pessoa->emails;
             foreach ($emails as $key => $email) {
-                App\PessoaEmail::where('email_id', $email->id)->update(['tipo' => $email->tipo, 'descricao' => $email->descricao]);
+                PessoaEmail::where('email_id', $email->id)->update(['tipo' => $email->tipo, 'descricao' => $email->descricao]);
             }
         }
     }
