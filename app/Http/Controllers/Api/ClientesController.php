@@ -327,42 +327,6 @@ class ClientesController extends Controller
             'empresa_id' => 1
         ]);
 
-
-        // if ($request['prestador']['contato']['telefone'] != null && $request['prestador']['contato']['telefone'] != "") {
-        //     $pessoa_telefones = PessoaTelefone::firstOrCreate([
-        //         'pessoa'   => $prestador->pessoa,
-        //         'telefone' => Telefone::firstOrCreate(
-        //             [
-        //                 'telefone' => $request['prestador']['contato']['telefone'],
-        //             ]
-        //         )->id,
-        //     ]);
-        // }
-        // if ($request['prestador']['contato']['celular'] != null && $request['prestador']['contato']['celular'] != "") {
-        //     $pessoa_telefones = PessoaTelefone::firstOrCreate([
-        //         'pessoa'   => $prestador->pessoa,
-        //         'telefone' => Telefone::firstOrCreate(
-        //             [
-        //                 'telefone' => $request['prestador']['contato']['celular'],
-        //             ]
-        //         )->id,
-        //     ]);
-        // }
-
-        // $pessoa_emails = PessoaEmail::firstOrCreate([
-        //     'pessoa' => $prestador->pessoa,
-        //     'email'  => Email::firstOrCreate(
-        //         [
-        //             'email' => $request['prestador']['contato']['email'],
-        //         ],
-        //         [
-        //             'tipo' => 'pessoal',
-        //         ]
-        //     )->id,
-        // ]);
-
-        // $cidade = Cidade::where('nome', $request['prestador']['endereco']['cidade'])->where('uf', $request['prestador']['endereco']['uf'])->first();
-
         $pessoa_endereco = PessoaEndereco::firstOrCreate([
             'pessoa_id'   => $cliente->pessoa_id,
             'endereco_id' => Endereco::firstOrCreate(
