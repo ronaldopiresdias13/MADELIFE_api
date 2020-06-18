@@ -15,25 +15,25 @@ class EmpresasController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = null;
+        $itens = new Empresa();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
         }
-        
+
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
                     $itens = Empresa::where(
-                        ($where['coluna'   ])? $where['coluna'   ] : 'id'  ,
-                        ($where['expressao'])? $where['expressao'] : 'like',
-                        ($where['valor'    ])? $where['valor'    ] : '%'
+                        ($where['coluna']) ? $where['coluna'] : 'id',
+                        ($where['expressao']) ? $where['expressao'] : 'like',
+                        ($where['valor']) ? $where['valor'] : '%'
                     );
                 } else {
                     $itens->where(
-                        ($where['coluna'   ])? $where['coluna'   ] : 'id',
-                        ($where['expressao'])? $where['expressao'] : 'like',
-                        ($where['valor'    ])? $where['valor'    ] : '%'
+                        ($where['coluna']) ? $where['coluna'] : 'id',
+                        ($where['expressao']) ? $where['expressao'] : 'like',
+                        ($where['valor']) ? $where['valor'] : '%'
                     );
                 }
             }
@@ -44,14 +44,14 @@ class EmpresasController extends Controller
         if ($request['order']) {
             foreach ($request['order'] as $key => $order) {
                 $itens->orderBy(
-                    ($order['coluna'])? $order['coluna'] : 'id',
-                    ($order['tipo'  ])? $order['tipo'  ] : 'asc'
+                    ($order['coluna']) ? $order['coluna'] : 'id',
+                    ($order['tipo']) ? $order['tipo'] : 'asc'
                 );
             }
         }
-        
+
         $itens = $itens->get();
-        
+
         if ($request['adicionais']) {
             foreach ($itens as $key => $iten) {
                 foreach ($request['adicionais'] as $key => $adicional) {
@@ -63,8 +63,7 @@ class EmpresasController extends Controller
                             if ($key == 0) {
                                 if ($iten[0] == null) {
                                     $iten2 = $iten[$a];
-                                }
-                                else {
+                                } else {
                                     foreach ($iten as $key => $i) {
                                         $i[$a];
                                     }
@@ -97,9 +96,9 @@ class EmpresasController extends Controller
     {
         $empresa = new Empresa;
         $empresa->razao = $request->razao;
-        $empresa->cnpj  = $request->cnpj ;
-        $empresa->ie    = $request->ie   ;
-        $empresa->logo  = $request->logo ;
+        $empresa->cnpj  = $request->cnpj;
+        $empresa->ie    = $request->ie;
+        $empresa->logo  = $request->logo;
         $empresa->save();
     }
 
@@ -127,8 +126,7 @@ class EmpresasController extends Controller
                         if ($key == 0) {
                             if ($iten[0] == null) {
                                 $iten2 = $iten[$a];
-                            }
-                            else {
+                            } else {
                                 foreach ($iten as $key => $i) {
                                     $i[$a];
                                 }
@@ -146,7 +144,7 @@ class EmpresasController extends Controller
                 }
             }
         }
-        
+
         return $iten;
     }
 

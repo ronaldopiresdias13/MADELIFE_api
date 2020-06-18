@@ -2,9 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Acesso;
+use App\Email;
+use App\Endereco;
 use App\Fornecedor;
 use App\Pessoa;
 use App\Http\Controllers\Controller;
+use App\PessoaEmail;
+use App\PessoaEndereco;
+use App\PessoaTelefone;
+use App\Telefone;
+use App\User;
+use App\UserAcesso;
 use Illuminate\Http\Request;
 
 class FornecedoresController extends Controller
@@ -16,25 +25,25 @@ class FornecedoresController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = null;
+        $itens = new Fornecedor();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
         }
-        
+
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
                     $itens = Fornecedor::where(
-                        ($where['coluna'   ])? $where['coluna'   ] : 'id'  ,
-                        ($where['expressao'])? $where['expressao'] : 'like',
-                        ($where['valor'    ])? $where['valor'    ] : '%'
+                        ($where['coluna']) ? $where['coluna'] : 'id',
+                        ($where['expressao']) ? $where['expressao'] : 'like',
+                        ($where['valor']) ? $where['valor'] : '%'
                     );
                 } else {
                     $itens->where(
-                        ($where['coluna'   ])? $where['coluna'   ] : 'id',
-                        ($where['expressao'])? $where['expressao'] : 'like',
-                        ($where['valor'    ])? $where['valor'    ] : '%'
+                        ($where['coluna']) ? $where['coluna'] : 'id',
+                        ($where['expressao']) ? $where['expressao'] : 'like',
+                        ($where['valor']) ? $where['valor'] : '%'
                     );
                 }
             }
@@ -45,12 +54,12 @@ class FornecedoresController extends Controller
         if ($request['order']) {
             foreach ($request['order'] as $key => $order) {
                 $itens->orderBy(
-                    ($order['coluna'])? $order['coluna'] : 'id',
-                    ($order['tipo'  ])? $order['tipo'  ] : 'asc'
+                    ($order['coluna']) ? $order['coluna'] : 'id',
+                    ($order['tipo']) ? $order['tipo'] : 'asc'
                 );
             }
         }
-        
+
         $itens = $itens->get();
 
         if ($request['adicionais']) {
@@ -64,8 +73,7 @@ class FornecedoresController extends Controller
                             if ($key == 0) {
                                 if ($iten[0] == null) {
                                     $iten2 = $iten[$a];
-                                }
-                                else {
+                                } else {
                                     foreach ($iten as $key => $i) {
                                         $i[$a];
                                     }
@@ -97,16 +105,19 @@ class FornecedoresController extends Controller
     public function store(Request $request)
     {
         $pessoa = Pessoa::where(
-            'cpfcnpj', $request['pessoa']['cpfcnpj']
+            'cpfcnpj',
+            $request['pessoa']['cpfcnpj']
         )->where(
-            'empresa_id', $request['pessoa']['empresa_id']
+            'empresa_id',
+            $request['pessoa']['empresa_id']
         )->first();
 
         $fornecedor = null;
 
         if ($pessoa) {
             $fornecedor = Fornecedor::firstWhere(
-                'pessoa_id', $pessoa->id,
+                'pessoa_id',
+                $pessoa->id,
             );
         }
 
@@ -115,37 +126,37 @@ class FornecedoresController extends Controller
         }
 
         $fornecedor = Fornecedor::create([
-            'tipo'       => $request['tipo'      ],
+            'tipo'       => $request['tipo'],
             'empresa_id' => $request['empresa_id'],
             'pessoa_id'  => Pessoa::updateOrCreate(
                 [
                     'id' => $request['pessoa']['id'],
                 ],
                 [
-                    'empresa_id'  => $request['pessoa']['empresa_id' ],
-                    'nome'        => $request['pessoa']['nome'       ],
-                    'nascimento'  => $request['pessoa']['nascimento' ],
-                    'tipo'        =>                    'Cliente'     ,
-                    'cpfcnpj'     => $request['pessoa']['cpfcnpj'    ],
-                    'rgie'        => $request['pessoa']['rgie'       ],
+                    'empresa_id'  => $request['pessoa']['empresa_id'],
+                    'nome'        => $request['pessoa']['nome'],
+                    'nascimento'  => $request['pessoa']['nascimento'],
+                    'tipo'        =>                    'Cliente',
+                    'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
+                    'rgie'        => $request['pessoa']['rgie'],
                     'observacoes' => $request['pessoa']['observacoes'],
-                    'perfil'      => $request['pessoa']['perfil'     ],
-                    'status'      => $request['pessoa']['status'     ],
+                    'perfil'      => $request['pessoa']['perfil'],
+                    'status'      => $request['pessoa']['status'],
                 ]
             )->id,
         ]);
 
         foreach ($request['pessoa']['telefones'] as $key => $telefone) {
             $pessoa_telefone = PessoaTelefone::firstOrCreate([
-                'pessoa_id'   => $cliente->pessoa_id,
+                'pessoa_id'   => $fornecedor->pessoa_id,
                 'telefone_id' => Telefone::updateOrCreate(
                     [
                         'id' => $telefone['id'],
                     ],
                     // $telefone,
                     [
-                        'telefone'  => $telefone['telefone' ],
-                        'tipo'      => $telefone['tipo'     ],
+                        'telefone'  => $telefone['telefone'],
+                        'tipo'      => $telefone['tipo'],
                         'descricao' => $telefone['descricao'],
                     ]
                 )->id,
@@ -154,21 +165,21 @@ class FornecedoresController extends Controller
 
         foreach ($request['pessoa']['enderecos'] as $key => $endereco) {
             $pessoa_endereco = PessoaEndereco::firstOrCreate([
-                'pessoa_id'   => $cliente->pessoa_id,
+                'pessoa_id'   => $fornecedor->pessoa_id,
                 'endereco_id' => Endereco::updateOrCreate(
                     [
                         'id' => $endereco['id'],
                     ],
                     // $endereco,
                     [
-                        'cep'         => $endereco['cep'        ],
-                        'cidade_id'   => $endereco['cidade_id'     ],
-                        'rua'         => $endereco['rua'        ],
-                        'bairro'      => $endereco['bairro'     ],
-                        'numero'      => $endereco['numero'     ],
+                        'cep'         => $endereco['cep'],
+                        'cidade_id'   => $endereco['cidade_id'],
+                        'rua'         => $endereco['rua'],
+                        'bairro'      => $endereco['bairro'],
+                        'numero'      => $endereco['numero'],
                         'complemento' => $endereco['complemento'],
-                        'tipo'        => $endereco['tipo'       ],
-                        'descricao'   => $endereco['descricao'  ],
+                        'tipo'        => $endereco['tipo'],
+                        'descricao'   => $endereco['descricao'],
                     ]
                 )->id,
             ]);
@@ -176,15 +187,15 @@ class FornecedoresController extends Controller
 
         foreach ($request['pessoa']['emails'] as $key => $email) {
             $pessoa_email = PessoaEmail::firstOrCreate([
-                'pessoa_id' => $cliente->pessoa_id,
+                'pessoa_id' => $fornecedor->pessoa_id,
                 'email_id'  => Email::updateOrCreate(
                     [
                         'id'  => $email['id'],
                     ],
                     // $email,
                     [
-                        'email'     => $email['email'    ],
-                        'tipo'      => $email['tipo'     ],
+                        'email'     => $email['email'],
+                        'tipo'      => $email['tipo'],
                         'descricao' => $email['descricao'],
                     ]
                 )->id,
@@ -193,27 +204,29 @@ class FornecedoresController extends Controller
 
         foreach ($request['pessoa']['users'] as $key => $user) {
             $usercpf = User::firstWhere(
-                'cpfcnpj', $user['cpfcnpj'],
+                'cpfcnpj',
+                $user['cpfcnpj'],
             );
             $useremail = User::firstWhere(
-                'email', $user['email'],
+                'email',
+                $user['email'],
             );
-    
+
             $userexist = null;
-    
+
             if ($usercpf) {
                 $userexist = $usercpf;
             } elseif ($useremail) {
                 $userexist = $useremail;
             }
-    
+
             if (($pessoa == null) || ($pessoa != null && ($userexist == null))) {
                 $userexist = User::create([
-                    'empresa_id' =>        $user['empresa_id'] ,
-                    'cpfcnpj'    =>        $user['cpfcnpj'   ] ,
-                    'email'      =>        $user['email'     ] ,
-                    'password'   => bcrypt($user['password'  ]),
-                    'pessoa_id'  =>        $cliente->pessoa_id ,
+                    'empresa_id' =>        $user['empresa_id'],
+                    'cpfcnpj'    =>        $user['cpfcnpj'],
+                    'email'      =>        $user['email'],
+                    'password'   => bcrypt($user['password']),
+                    'pessoa_id'  =>        $fornecedor->pessoa_id,
                 ]);
             }
 
@@ -225,7 +238,7 @@ class FornecedoresController extends Controller
             }
         }
 
-        return $cliente;
+        return $fornecedor;
     }
 
     /**
@@ -252,8 +265,7 @@ class FornecedoresController extends Controller
                         if ($key == 0) {
                             if ($iten[0] == null) {
                                 $iten2 = $iten[$a];
-                            }
-                            else {
+                            } else {
                                 foreach ($iten as $key => $i) {
                                     $i[$a];
                                 }
@@ -271,7 +283,7 @@ class FornecedoresController extends Controller
                 }
             }
         }
-        
+
         return $iten;
     }
 
@@ -305,8 +317,8 @@ class FornecedoresController extends Controller
             'pessoa_id' => Pessoa::firstOrCreate(
                 [
                     'cpfcnpj' => 0,
-                // ],
-                // [
+                    // ],
+                    // [
                     'nome'        => $request['dadosPf']['nome'],
                     'nascimento'  => $request['dadosPf']['nascimento'],
                     'tipo'        => 'Fornecedor',
@@ -317,8 +329,8 @@ class FornecedoresController extends Controller
             )->id,
             'empresa_id' => 1
         ]);
-       
-        
+
+
         // if ($request['prestador']['contato']['telefone'] != null && $request['prestador']['contato']['telefone'] != "") {
         //     $pessoa_telefones = PessoaTelefone::firstOrCreate([
         //         'pessoa'   => $prestador->pessoa,
