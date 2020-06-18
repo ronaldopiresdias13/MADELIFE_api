@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\User;
+use App\Email;
 use App\Acesso;
 use App\Pessoa;
-use App\Prestador;
-use App\PrestadorFormacao;
 use App\Conselho;
-use App\Email;
-use App\PessoaEmail;
+use App\Prestador;
 use App\UserAcesso;
+use App\PessoaEmail;
+use App\PrestadorFormacao;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class UsersController extends Controller
 {
@@ -135,7 +135,7 @@ class UsersController extends Controller
                 'pessoa_id' => $user->pessoa_id,
                 'email_id'  => Email::firstOrCreate(
                     [
-                        'email'  => $user->email,
+                        'email' => $user->email,
                     ]
                 )->id,
                 'tipo'      => 'Pessoal',
@@ -155,8 +155,7 @@ class UsersController extends Controller
                             'sexo'      => $request['prestador']['sexo']
                         ]
                     )->id,
-                    'formacao_id'   =>  $request['prestador']['formacao_id']
-                    // 'formacao_id'   => $request['prestador']['formacao_id']
+                    'formacao_id'  => $request['prestador']['formacao_id']
                 ]
             );
         }
