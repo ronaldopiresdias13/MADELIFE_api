@@ -6,6 +6,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -26,7 +27,7 @@ class AuthController extends Controller
                 'message' => 'Email ou Senha Inválidos!'
             ], 401);
         }
-        $user        = $request->user();
+        $user = $request->user();
         $user->acessos;
         $user->pessoa;
         $user->pessoa->prestador;
@@ -48,21 +49,23 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $request->validate([
-            'cpfcnpj'  => 'string|unique:users',
-            'email'    => 'string|email|unique:users',
-            'password' => 'required|string'
-        ]);
+        DB::transaction(function () use ($request) {
+            $request->validate([
+                'cpfcnpj'  => 'string|unique:users',
+                'email'    => 'string|email|unique:users',
+                'password' => 'required|string'
+            ]);
 
-        $user = new User();
-        $user->cpfcnpj  =        $request->cpfcnpj;
-        $user->email    =        $request->email;
-        $user->password = bcrypt($request->password);
-        $user->save();
+            $user = new User();
+            $user->cpfcnpj   =        $request->cpfcnpj;
+            $user->email     =        $request->email;
+            $user->password  = bcrypt($request->password);
+            $user->save();
 
-        return response()->json([
-            'message' => 'Usuario criado com Sucesso!'
-        ], 201);
+            return response()->json([
+                'message' => 'Usuario criado com Sucesso!'
+            ], 201);
+        });
     }
 
     public function reset(Request $request)
