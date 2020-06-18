@@ -1,5 +1,7 @@
 <?php
 
+namespace App\database\migrations;
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -22,10 +24,10 @@ class CreateTranscricaoProdutoTable extends Migration
             $table->string('quantidade')->nullable();
             $table->string('apresentacao')->nullable();
             $table->string('via')->nullable();
-            $table->string('frequencia')->nullable();            
-            $table->string('tempo')->nullable();                        
-            $table->boolean('status')->nullable();                        
-            $table->longText('observacao')->nullable();                        
+            $table->string('frequencia')->nullable();
+            $table->string('tempo')->nullable();
+            $table->boolean('status')->nullable();
+            $table->longText('observacao')->nullable();
             $table->timestamps();
         });
     }
