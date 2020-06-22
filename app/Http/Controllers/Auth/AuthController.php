@@ -3,8 +3,15 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use App\Email;
+use App\Pessoa;
+use App\Conselho;
+use App\Prestador;
 use Carbon\Carbon;
+use App\PessoaEmail;
+use App\PrestadorFormacao;
 use Illuminate\Support\Str;
+use App\Mail\ResetPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -49,23 +56,81 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        DB::transaction(function () use ($request) {
-            $request->validate([
-                'cpfcnpj'  => 'string|unique:users',
-                'email'    => 'string|email|unique:users',
-                'password' => 'required|string'
-            ]);
+        $cpfcnpj = User::firstWhere('cpfcnpj', $request['cpfcnpj']);
 
-            $user = new User();
-            $user->cpfcnpj   =        $request->cpfcnpj;
-            $user->email     =        $request->email;
-            $user->password  = bcrypt($request->password);
-            $user->save();
+        $email = User::firstWhere('email', $request['user']['email']);
 
-            return response()->json([
-                'message' => 'Usuario criado com Sucesso!'
-            ], 201);
-        });
+        if ($cpfcnpj || $email) {
+            return response()->json('Usuário já existe!', 400)->header('Content-Type', 'text/plain');
+        } else {
+            DB::transaction(function () use ($request) {
+                $user = User::create(
+                    [
+                        'empresa_id' => 1,
+                        'cpfcnpj'    => $request['cpfcnpj'],
+                        'email'      => $request['user']['email'],
+                        'password'   =>  bcrypt($request['user']['password']),
+                        'pessoa_id'  => Pessoa::create(
+                            [
+                                'empresa_id' => 1,
+                                'nome'       => $request['nome'],
+                                // 'nascimento' => $request['nascimento'],
+                                'tipo'       => 'Prestador',
+                                'cpfcnpj'    => $request['cpfcnpj'],
+                                'status'     => $request['status']
+                            ]
+                        )->id
+                    ]
+                );
+
+                $pessoa_email = PessoaEmail::firstOrCreate([
+                    'pessoa_id' => $user->pessoa_id,
+                    'email_id'  => Email::firstOrCreate(
+                        [
+                            'email' => $user->email,
+                        ]
+                    )->id,
+                    'tipo'      => 'Pessoal',
+                ]);
+
+                $conselho = Conselho::create(
+                    [
+                        'instituicao' => $request['conselho']['instituicao'],
+                        'numero'      => $request['conselho']['numero'],
+                        'pessoa_id'   => $user->pessoa_id
+                    ]
+                );
+
+                $formacao = PrestadorFormacao::create(
+                    [
+                        'prestador_id' => Prestador::create(
+                            [
+                                'pessoa_id' => $user->pessoa_id,
+                                'sexo'      => $request['prestador']['sexo']
+                            ]
+                        )->id,
+                        'formacao_id'  => $request['prestador']['formacao_id']
+                    ]
+                );
+            });
+        }
+        // DB::transaction(function () use ($request) {
+        //     $request->validate([
+        //         'cpfcnpj'  => 'string|unique:users',
+        //         'email'    => 'string|email|unique:users',
+        //         'password' => 'required|string'
+        //     ]);
+
+        //     $user = new User();
+        //     $user->cpfcnpj   =        $request->cpfcnpj;
+        //     $user->email     =        $request->email;
+        //     $user->password  = bcrypt($request->password);
+        //     $user->save();
+
+        //     return response()->json([
+        //         'message' => 'Usuario criado com Sucesso!'
+        //     ], 201);
+        // });
     }
 
     public function reset(Request $request)
@@ -82,7 +147,7 @@ class AuthController extends Controller
         $senha = Str::random(8);
         $user->password = bcrypt($senha);
         $user->save();
-        Mail::send(new \App\Mail\ResetPassword($user, $senha));
+        Mail::send(new ResetPassword($user, $senha));
     }
 
     public function change(Request $request)
