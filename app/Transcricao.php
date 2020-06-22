@@ -31,4 +31,8 @@ class Transcricao extends Model
     {
         return $this->hasMany('App\TranscricaoProduto');
     }
+
+    public function acoesTrascricao(){
+        return $this->hasMany('App\Horariomedicamento');
+    }
 }
