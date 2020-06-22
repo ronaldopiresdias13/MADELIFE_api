@@ -144,7 +144,7 @@ class ContasController extends Controller
         //                 'pessoa_id'          => $request['pessoa'],
         //                 'natureza_id'        => $request['natureza'],
         //                 'valortotalconta'    => $request['valorConta'],
-        //                 'tipoconta'          => 'Receber',
+        //                 'tipoconta'          => $request['tipoConta'],
         //                 'historico'          => $request['historico'],
         //                 'status'             => $request['status'],
         //                 'nfe'                => $request['nfe'],
@@ -165,7 +165,7 @@ class ContasController extends Controller
         //         'tipopagamento'     =>  $request['tipoPagamento'],
         //         'valorpago'         =>  $request['valorContaPago'],
         //         'pagamentoparcial'  =>  0,
-        //         'observacao'        =>  $request['observacao'],
+        //         'observacao'        =>  "",
         //         'anexo'             =>  "",
         //         'numeroconta'       =>  $request['numeroParcela'],
         //     ]

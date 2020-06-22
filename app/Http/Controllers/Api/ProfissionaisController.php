@@ -255,7 +255,7 @@ class ProfissionaisController extends Controller
                     'pessoa_id' => $profissional->pessoa_id,
                     'email_id'  => Email::firstOrCreate(
                         [
-                            'email'  => $email['email'],
+                            'email' => $email['email'],
                         ]
                     )->id,
                     'tipo'      => $email['tipo'],
@@ -265,13 +265,17 @@ class ProfissionaisController extends Controller
         }
 
         if ($request['pessoa']['users']) {
-            $user = User::create([
-                'empresa_id' =>        $request['empresa_id'],
-                'cpfcnpj'    =>        $request['pessoa']['users']['cpfcnpj'],
-                'email'      =>        $request['pessoa']['users']['email'],
-                'password'   => bcrypt($request['pessoa']['users']['password']),
-                'pessoa_id'  =>        $profissional->pessoa_id,
-            ]);
+            $user = User::firstOrCreate(
+                [
+                    'email'      =>        $request['pessoa']['users']['email'],
+                ],
+                [
+                    'empresa_id' =>        $request['empresa_id'],
+                    'cpfcnpj'    =>        $request['pessoa']['users']['cpfcnpj'],
+                    'password'   => bcrypt($request['pessoa']['users']['password']),
+                    'pessoa_id'  =>        $profissional->pessoa_id,
+                ]
+            );
             foreach ($user['acessos'] as $key => $acesso) {
                 $user_acesso = UserAcesso::firstOrCreate([
                     'user_id'   => $user->id,
