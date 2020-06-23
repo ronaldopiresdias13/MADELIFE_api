@@ -17,6 +17,8 @@ class CreateAtribuicoesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('prestador_id');
             $table->foreign('prestador_id')->references('id')->on('prestadores')->onDelete('cascade');
+            $table->unsignedBigInteger('ordemservico_id');
+            $table->foreign('ordemservico_id')->references('id')->on('ordemservicos')->onDelete('cascade');
             $table->string('descricao');
             $table->float('valor');
             $table->timestamps();
