@@ -290,6 +290,9 @@ class ProfissionaisController extends Controller
         return response()->json('Profissional cadastrado com sucesso!', 200)->header('Content-Type', 'text/plain');
     }
 
+    // ["prestador", "pessoa", "conselhos"],
+    // "pontos", "servico"
+
     /**
      * Display the specified resource.
      *
