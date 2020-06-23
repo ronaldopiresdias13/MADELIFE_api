@@ -97,11 +97,12 @@ class AtribuicoesController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            $atribuicao = new Atribuicao();
-            $atribuicao->prestador_id = $request->prestador_id;
-            $atribuicao->descricao    = $request->descricao;
-            $atribuicao->valor        = $request->valor;
-            $atribuicao->save();
+            $atribuicao = Atribuicao::create($request->all());
+            // $atribuicao = new Atribuicao();
+            // $atribuicao->ordemservico_id = $request->ordemservico_id;
+            // $atribuicao->descricao       = $request->descricao;
+            // $atribuicao->valor           = $request->valor;
+            // $atribuicao->save();
         });
     }
 
