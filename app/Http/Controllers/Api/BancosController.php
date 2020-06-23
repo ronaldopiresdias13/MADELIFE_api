@@ -158,7 +158,9 @@ class BancosController extends Controller
      */
     public function update(Request $request, Banco $banco)
     {
-        $banco->update($request->all());
+        DB::transaction(function () use ($request, $banco) {
+            $banco->update($request->all());
+        });
     }
 
     /**
