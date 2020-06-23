@@ -1,22 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Api;
 
-use App\Banco;
-use App\Http\Controllers\Controller;
+use App\Atribuicao;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
-class BancosController extends Controller
+class AtribuicoesController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $itens = new Banco();
+        $itens = new Atribuicao();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -25,7 +26,7 @@ class BancosController extends Controller
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
-                    $itens = Banco::where(
+                    $itens = Atribuicao::where(
                         ($where['coluna']) ? $where['coluna'] : 'id',
                         ($where['expressao']) ? $where['expressao'] : 'like',
                         ($where['valor']) ? $where['valor'] : '%'
@@ -39,7 +40,7 @@ class BancosController extends Controller
                 }
             }
         } else {
-            $itens = Banco::where('id', 'like', '%');
+            $itens = Atribuicao::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -96,22 +97,24 @@ class BancosController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            $banco = Banco::updateOrCreate(
-                ['codigo'    => $request->codigo],
-                ['descricao' => $request->descricao]
-            );
+            $atribuicao = new Atribuicao();
+            $atribuicao->prestador_id = $request->prestador_id;
+            $atribuicao->descricao    = $request->descricao;
+            $atribuicao->valor        = $request->valor;
+            $atribuicao->save();
         });
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Banco  $banco
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Atribuicao  $atribuicao
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Banco $banco)
+    public function show(Request $request, Atribuicao $atribuicao)
     {
-        $iten = $banco;
+        $iten = $atribuicao;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -153,22 +156,24 @@ class BancosController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Banco  $banco
+     * @param  \App\Atribuicao  $atribuicao
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Banco $banco)
+    public function update(Request $request, Atribuicao $atribuicao)
     {
-        $banco->update($request->all());
+        DB::transaction(function () use ($request, $atribuicao) {
+            $atribuicao->update($request->all());
+        });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Banco  $banco
+     * @param  \App\Atribuicao  $atribuicao
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Banco $banco)
+    public function destroy(Atribuicao $atribuicao)
     {
-        $banco->delete();
+        //
     }
 }

@@ -63,6 +63,12 @@ Route::get('acessos/{acesso}', 'Api\AcessosController@show');
 Route::put('acessos/{acesso}', 'Api\AcessosController@update');
 Route::delete('acessos/{acesso}', 'Api\AcessosController@destroy');
 
+Route::get('atribuicoes', 'Api\AtribuicoesController@index');
+Route::post('atribuicoes', 'Api\AtribuicoesController@store');
+Route::get('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@show');
+Route::put('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@update');
+Route::delete('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@destroy');
+
 Route::get('bancos', 'Api\BancosController@index');
 Route::post('bancos', 'Api\BancosController@store');
 Route::get('bancos/{banco}', 'Api\BancosController@show');

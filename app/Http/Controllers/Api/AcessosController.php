@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Acesso;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class AcessosController extends Controller
 {
@@ -94,13 +95,11 @@ class AcessosController extends Controller
      */
     public function store(Request $request)
     {
-        // $acesso = Acesso::updateOrCreate(
-        //     ['nome' => $request->nome]
-        // );
-
-        $acesso = new Acesso();
-        $acesso->nome = $request->nome;
-        $acesso->save();
+        DB::transaction(function () use ($request) {
+            $acesso = new Acesso();
+            $acesso->nome = $request->nome;
+            $acesso->save();
+        });
     }
 
     /**
@@ -158,7 +157,9 @@ class AcessosController extends Controller
      */
     public function update(Request $request, acesso $acesso)
     {
-        $acesso->update($request->all());
+        DB::transaction(function () use ($request, $acesso) {
+            $acesso->update($request->all());
+        });
     }
 
     /**
