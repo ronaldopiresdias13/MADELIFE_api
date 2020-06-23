@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Acaomedicamento;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AcaomedicamentosController extends Controller
 {
@@ -26,8 +27,9 @@ class AcaomedicamentosController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
-        Acaomedicamento::create($request->all());
+        DB::transaction(function () use ($request) {
+            Acaomedicamento::create($request->all());
+        });
     }
 
     /**
@@ -50,7 +52,9 @@ class AcaomedicamentosController extends Controller
      */
     public function update(Request $request, Acaomedicamento $acaomedicamento)
     {
-        //
+        DB::transaction(function () use ($request, $acaomedicamento) {
+            //
+        });
     }
 
     /**

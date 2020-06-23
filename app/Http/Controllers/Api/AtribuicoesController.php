@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Acesso;
+use App\Atribuicao;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
-class AcessosController extends Controller
+class AtribuicoesController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $itens = new Acesso();
+        $itens = new Atribuicao();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -25,7 +26,7 @@ class AcessosController extends Controller
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
-                    $itens = Acesso::where(
+                    $itens = Atribuicao::where(
                         ($where['coluna']) ? $where['coluna'] : 'id',
                         ($where['expressao']) ? $where['expressao'] : 'like',
                         ($where['valor']) ? $where['valor'] : '%'
@@ -39,7 +40,7 @@ class AcessosController extends Controller
                 }
             }
         } else {
-            $itens = Acesso::where('id', 'like', '%');
+            $itens = Atribuicao::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -96,21 +97,25 @@ class AcessosController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            $acesso = new Acesso();
-            $acesso->nome = $request->nome;
-            $acesso->save();
+            $atribuicao = Atribuicao::create($request->all());
+            // $atribuicao = new Atribuicao();
+            // $atribuicao->ordemservico_id = $request->ordemservico_id;
+            // $atribuicao->descricao       = $request->descricao;
+            // $atribuicao->valor           = $request->valor;
+            // $atribuicao->save();
         });
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\acesso  $acesso
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Atribuicao  $atribuicao
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, acesso $acesso)
+    public function show(Request $request, Atribuicao $atribuicao)
     {
-        $iten = $acesso;
+        $iten = $atribuicao;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -152,24 +157,24 @@ class AcessosController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\acesso  $acesso
+     * @param  \App\Atribuicao  $atribuicao
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, acesso $acesso)
+    public function update(Request $request, Atribuicao $atribuicao)
     {
-        DB::transaction(function () use ($request, $acesso) {
-            $acesso->update($request->all());
+        DB::transaction(function () use ($request, $atribuicao) {
+            $atribuicao->update($request->all());
         });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\acesso  $acesso
+     * @param  \App\Atribuicao  $atribuicao
      * @return \Illuminate\Http\Response
      */
-    public function destroy(acesso $acesso)
+    public function destroy(Atribuicao $atribuicao)
     {
-        $acesso->delete();
+        //
     }
 }

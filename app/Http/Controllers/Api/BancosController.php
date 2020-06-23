@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Banco;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BancosController extends Controller
 {
@@ -94,10 +95,12 @@ class BancosController extends Controller
      */
     public function store(Request $request)
     {
-        $banco = Banco::updateOrCreate(
-            ['codigo'    => $request->codigo],
-            ['descricao' => $request->descricao]
-        );
+        DB::transaction(function () use ($request) {
+            $banco = Banco::updateOrCreate(
+                ['codigo'    => $request->codigo],
+                ['descricao' => $request->descricao]
+            );
+        });
     }
 
     /**
@@ -155,7 +158,9 @@ class BancosController extends Controller
      */
     public function update(Request $request, Banco $banco)
     {
-        $banco->update($request->all());
+        DB::transaction(function () use ($request, $banco) {
+            $banco->update($request->all());
+        });
     }
 
     /**

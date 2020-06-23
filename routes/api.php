@@ -63,6 +63,12 @@ Route::get('acessos/{acesso}', 'Api\AcessosController@show');
 Route::put('acessos/{acesso}', 'Api\AcessosController@update');
 Route::delete('acessos/{acesso}', 'Api\AcessosController@destroy');
 
+Route::get('atribuicoes', 'Api\AtribuicoesController@index');
+Route::post('atribuicoes', 'Api\AtribuicoesController@store');
+Route::get('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@show');
+Route::put('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@update');
+Route::delete('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@destroy');
+
 Route::get('bancos', 'Api\BancosController@index');
 Route::post('bancos', 'Api\BancosController@store');
 Route::get('bancos/{banco}', 'Api\BancosController@show');
@@ -98,6 +104,7 @@ Route::post('clientes', 'Api\ClientesController@store');
 Route::get('clientes/{cliente}', 'Api\ClientesController@show');
 Route::put('clientes/{cliente}', 'Api\ClientesController@update');
 Route::delete('clientes/{cliente}', 'Api\ClientesController@destroy');
+// Route::get('meuspassientes/{cliente}', 'Api\ClientesController@meuspassientes'); // Custon
 
 Route::get('conselhos', 'Api\ConselhosController@index');
 Route::post('conselhos', 'Api\ConselhosController@store');
@@ -260,7 +267,7 @@ Route::post('ordemservicos', 'Api\OrdemservicosController@store');
 Route::get('ordemservicos/{ordemservico}', 'Api\OrdemservicosController@show');
 Route::put('ordemservicos/{ordemservico}', 'Api\OrdemservicosController@update');
 Route::delete('ordemservicos/{ordemservico}', 'Api\OrdemservicosController@destroy');
-Route::get('ordemservicos/{ordemservico}/horariomedicamentos', 'Api\OrdemservicosController@horariomedicamentos');
+Route::get('ordemservicos/{ordemservico}/horariomedicamentos', 'Api\OrdemservicosController@horariomedicamentos'); // Custon
 
 Route::get('outros', 'Api\OutrosController@index');
 Route::post('outros', 'Api\OutrosController@store');
@@ -309,7 +316,7 @@ Route::post('prestadores', 'Api\PrestadoresController@store');
 Route::get('prestadores/{prestador}', 'Api\PrestadoresController@show');
 Route::put('prestadores/{prestador}', 'Api\PrestadoresController@update');
 Route::delete('prestadores/{prestador}', 'Api\PrestadoresController@destroy');
-Route::get('prestadores/{prestador}/meuspacientes', 'Api\PrestadoresController@meuspacientes');
+Route::get('prestadores/{prestador}/meuspacientes', 'Api\PrestadoresController@meuspacientes'); // Custon
 
 Route::get('produtos', 'Api\ProdutosController@index');
 Route::post('produtos', 'Api\ProdutosController@store');
