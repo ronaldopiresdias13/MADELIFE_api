@@ -199,7 +199,7 @@ class PrestadoresController extends Controller
      * @param  \App\Prestador  $prestador
      * @return \Illuminate\Http\Response
      */
-    public function meuspacientes(Request $request, Prestador $prestador)
+    public function meuspacientes(Prestador $prestador)
     {
         $escalas = Escala::where('prestador_id', $prestador->id)
             ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
@@ -208,7 +208,6 @@ class PrestadoresController extends Controller
             ->select('homecares.nome')
             ->groupBy('homecares.nome')
             ->orderBy('homecares.nome')
-            ->limit(100)
             ->get();
         return $escalas;
     }

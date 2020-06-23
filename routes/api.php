@@ -286,6 +286,7 @@ Route::post('pagamentos', 'Api\pagamentosController@store');
 Route::get('pagamentos/{pagamento}', 'Api\pagamentosController@show');
 Route::put('pagamentos/{pagamento}', 'Api\pagamentosController@update');
 Route::delete('pagamentos/{pagamento}', 'Api\pagamentosController@destroy');
+Route::get('pagamentosfiltro', 'Api\pagamentosController@filtro');
 
 Route::get('pessoas', 'Api\PessoasController@index');
 Route::post('pessoas', 'Api\PessoasController@store');
