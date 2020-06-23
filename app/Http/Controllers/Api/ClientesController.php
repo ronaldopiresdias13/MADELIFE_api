@@ -302,44 +302,24 @@ class ClientesController extends Controller
     {
         $cliente->delete();
     }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function migracao(Request $request)
-    {
-        $cliente = Cliente::firstOrCreate([
-            'pessoa_id' => Pessoa::firstOrCreate(
-                [
-                    'cpfcnpj' => $request['pessoa']['cpfcnpj'],
-                    // ],
-                    // [
-                    'nome'        => $request['pessoa']['nome'],
-                    'nascimento'  => $request['pessoa']['nascimento'],
-                    'tipo'        => $request['pessoa']['tipo'],
-                    'rgie'        => $request['pessoa']['rgie'],
-                    'observacoes' => $request['pessoa']['observacoes'],
-                    'status'      => $request['pessoa']['status'],
-                ]
-            )->id,
-            'empresa_id' => 1
-        ]);
 
-        $pessoa_endereco = PessoaEndereco::firstOrCreate([
-            'pessoa_id'   => $cliente->pessoa_id,
-            'endereco_id' => Endereco::firstOrCreate(
-                [
-                    'cep'         => $request['endereco']['cep'],
-                    'cidade_id'   => $request['endereco']['cidade_id'],
-                    'rua'         => $request['endereco']['rua'],
-                    'bairro'      => $request['endereco']['bairro'],
-                    'numero'      => $request['endereco']['numero'],
-                    'complemento' => $request['endereco']['complemento'],
-                    'tipo'        => $request['endereco']['tipo'],
-                ]
-            )->id,
-        ]);
-    }
+    // /**
+    //  * Store a newly created resource in storage.
+    //  *
+    //  * @param  \App\Cliente  $cliente
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function meuspassientes(Cliente $cliente)
+    // {
+    //     $escalas = Escala::where('prestador_id', $prestador->id)
+    //         ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
+    //         ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
+    //         ->join('homecares', 'homecares.orcamento_id', '=', 'orcamentos.id')
+    //         ->select('homecares.nome')
+    //         ->groupBy('homecares.nome')
+    //         ->orderBy('homecares.nome')
+    //         ->limit(100)
+    //         ->get();
+    //     return $escalas;
+    // }
 }
