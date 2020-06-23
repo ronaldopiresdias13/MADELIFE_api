@@ -276,10 +276,10 @@ class ProfissionaisController extends Controller
                     'pessoa_id'  =>        $profissional->pessoa_id,
                 ]
             );
-            foreach ($user['acessos'] as $key => $acesso) {
+            foreach ($request['pessoa']['users']['acessos'] as $key => $acesso) {
                 $user_acesso = UserAcesso::firstOrCreate([
                     'user_id'   => $user->id,
-                    'acesso_id' => Acesso::firstWhere('id', $acesso)->id,
+                    'acesso_id' => $acesso,
                 ]);
             }
         }
