@@ -139,16 +139,16 @@ class ProfissionaisController extends Controller
             $profissional = Profissional::create([
                 'pessoafisica' => 1,
                 'empresa_id'   => 1,
-                'pessoa_id'    => Pessoa::updateOrCreate(
+                'pessoa_id'    => Pessoa::firstOrCreate(
                     [
-                        'id' => ($request['pessoa']['id'] != '') ? $request['pessoa']['id'] : null,
+                        // 'id' => ($request['pessoa']['id'] != '') ? $request['pessoa']['id'] : null,
+                        'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
                     ],
                     [
                         'empresa_id'  => $request['pessoa']['empresa_id'],
                         'nome'        => $request['pessoa']['nome'],
                         'nascimento'  => $request['pessoa']['nascimento'],
                         'tipo'        =>                    'profissional',
-                        'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
                         'rgie'        => $request['pessoa']['rgie'],
                         'observacoes' => $request['pessoa']['observacoes'],
                         'perfil'      => $request['pessoa']['perfil'],
