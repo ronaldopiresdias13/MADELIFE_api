@@ -214,11 +214,11 @@ Route::get('horariostrabalho/{horariostrabalho}', 'Api\HorariostrabalhoControlle
 Route::put('horariostrabalho/{horariostrabalho}', 'Api\HorariostrabalhoController@update');
 Route::delete('horariostrabalho/{horariostrabalho}', 'Api\HorariostrabalhoController@destroy');
 
-Route::get('homecare', 'Api\HomecareController@index');
-Route::post('homecare', 'Api\HomecareController@store');
-Route::get('homecare/{homecare}', 'Api\HomecareController@show');
-Route::put('homecare/{homecare}', 'Api\HomecareController@update');
-Route::delete('homecare/{homecare}', 'Api\HomecareController@destroy');
+Route::get('homecares', 'Api\HomecaresController@index');
+Route::post('homecares', 'Api\HomecaresController@store');
+Route::get('homecares/{homecare}', 'Api\HomecaresController@show');
+Route::put('homecares/{homecare}', 'Api\HomecaresController@update');
+Route::delete('homecares/{homecare}', 'Api\HomecaresController@destroy');
 
 Route::get('impostos', 'Api\ImpostosController@index');
 Route::post('impostos', 'Api\ImpostosController@store');
