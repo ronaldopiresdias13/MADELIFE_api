@@ -2,38 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Homecare;
 use App\Http\Controllers\Controller;
-use App\User;
-use App\Banco;
-use App\Cargo;
-use App\Email;
-use App\Pessoa;
-use App\Cidade;
-use App\Escala;
-use App\Formacao;
-use App\Telefone;
-use App\Endereco;
-use App\Conselho;
-use App\Prestador;
-use App\PessoaEmail;
-use App\Dadosbancario;
-use App\PessoaTelefone;
-use App\PessoaEndereco;
-use App\PrestadorFormacao;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-// use Illuminate\Support\Facades\DB;
-
-class PrestadoresController extends Controller
+class HomecaresController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $itens = new Prestador();
+        $itens = new Homecare();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -42,7 +26,7 @@ class PrestadoresController extends Controller
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
-                    $itens = Prestador::where(
+                    $itens = Homecare::where(
                         ($where['coluna']) ? $where['coluna'] : 'id',
                         ($where['expressao']) ? $where['expressao'] : 'like',
                         ($where['valor']) ? $where['valor'] : '%'
@@ -56,7 +40,7 @@ class PrestadoresController extends Controller
                 }
             }
         } else {
-            $itens = Prestador::where('id', 'like', '%');
+            $itens = Homecare::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -112,27 +96,19 @@ class PrestadoresController extends Controller
      */
     public function store(Request $request)
     {
-        $prestador = new Prestador();
-        $prestador->pessoa      = $request->pessoa;
-        $prestador->fantasia    = $request->fantasia;
-        $prestador->sexo        = $request->sexo;
-        $prestador->pis         = $request->pis;
-        $prestador->formacao    = $request->formacao;
-        $prestador->cargo       = $request->cargo;
-        $prestador->curriculo   = $request->curriculo;
-        $prestador->certificado = $request->certificado;
-        $prestador->save();
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Prestador  $prestador
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Homecare  $homecare
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Prestador $prestador)
+    public function show(Request $request, Homecare $homecare)
     {
-        $iten = $prestador;
+        $iten = $homecare;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -174,41 +150,24 @@ class PrestadoresController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Prestador  $prestador
+     * @param  \App\Homecare  $homecare
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Prestador $prestador)
+    public function update(Request $request, Homecare $homecare)
     {
-        $prestador->update($request->all());
+        DB::transaction(function () use ($request, $homecare) {
+            $homecare->update($request->all());
+        });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Prestador  $prestador
+     * @param  \App\Homecare  $homecare
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Prestador $prestador)
+    public function destroy(Homecare $homecare)
     {
-        $prestador->delete();
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Prestador  $prestador
-     * @return \Illuminate\Http\Response
-     */
-    public function meuspacientes(Prestador $prestador)
-    {
-        $escalas = Escala::where('prestador_id', $prestador->id)
-            ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
-            ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
-            ->join('homecares', 'homecares.orcamento_id', '=', 'orcamentos.id')
-            ->select('homecares.nome')
-            ->groupBy('homecares.nome')
-            ->orderBy('homecares.nome')
-            ->get();
-        return $escalas;
+        //
     }
 }

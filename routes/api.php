@@ -202,17 +202,23 @@ Route::get('grupocuidados/{grupocuidado}', 'Api\GrupocuidadosController@show');
 Route::put('grupocuidados/{grupocuidado}', 'Api\GrupocuidadosController@update');
 Route::delete('grupocuidados/{grupocuidado}', 'Api\GrupocuidadosController@destroy');
 
+Route::get('historicoorcamentos', 'Api\HistoricoorcamentosController@index');
+Route::post('historicoorcamentos', 'Api\HistoricoorcamentosController@store');
+Route::get('historicoorcamentos/{historicoorcamento}', 'Api\HistoricoorcamentosController@show');
+Route::put('historicoorcamentos/{historicoorcamento}', 'Api\HistoricoorcamentosController@update');
+Route::delete('historicoorcamentos/{historicoorcamento}', 'Api\HistoricoorcamentosController@destroy');
+
 Route::get('horariostrabalho', 'Api\HorariostrabalhoController@index');
 Route::post('horariostrabalho', 'Api\HorariostrabalhoController@store');
 Route::get('horariostrabalho/{horariostrabalho}', 'Api\HorariostrabalhoController@show');
 Route::put('horariostrabalho/{horariostrabalho}', 'Api\HorariostrabalhoController@update');
 Route::delete('horariostrabalho/{horariostrabalho}', 'Api\HorariostrabalhoController@destroy');
 
-Route::get('historicoorcamentos', 'Api\HistoricoorcamentosController@index');
-Route::post('historicoorcamentos', 'Api\HistoricoorcamentosController@store');
-Route::get('historicoorcamentos/{historicoorcamento}', 'Api\HistoricoorcamentosController@show');
-Route::put('historicoorcamentos/{historicoorcamento}', 'Api\HistoricoorcamentosController@update');
-Route::delete('historicoorcamentos/{historicoorcamento}', 'Api\HistoricoorcamentosController@destroy');
+Route::get('homecare', 'Api\HomecareController@index');
+Route::post('homecare', 'Api\HomecareController@store');
+Route::get('homecare/{homecare}', 'Api\HomecareController@show');
+Route::put('homecare/{homecare}', 'Api\HomecareController@update');
+Route::delete('homecare/{homecare}', 'Api\HomecareController@destroy');
 
 Route::get('impostos', 'Api\ImpostosController@index');
 Route::post('impostos', 'Api\ImpostosController@store');
