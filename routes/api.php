@@ -202,17 +202,23 @@ Route::get('grupocuidados/{grupocuidado}', 'Api\GrupocuidadosController@show');
 Route::put('grupocuidados/{grupocuidado}', 'Api\GrupocuidadosController@update');
 Route::delete('grupocuidados/{grupocuidado}', 'Api\GrupocuidadosController@destroy');
 
+Route::get('historicoorcamentos', 'Api\HistoricoorcamentosController@index');
+Route::post('historicoorcamentos', 'Api\HistoricoorcamentosController@store');
+Route::get('historicoorcamentos/{historicoorcamento}', 'Api\HistoricoorcamentosController@show');
+Route::put('historicoorcamentos/{historicoorcamento}', 'Api\HistoricoorcamentosController@update');
+Route::delete('historicoorcamentos/{historicoorcamento}', 'Api\HistoricoorcamentosController@destroy');
+
 Route::get('horariostrabalho', 'Api\HorariostrabalhoController@index');
 Route::post('horariostrabalho', 'Api\HorariostrabalhoController@store');
 Route::get('horariostrabalho/{horariostrabalho}', 'Api\HorariostrabalhoController@show');
 Route::put('horariostrabalho/{horariostrabalho}', 'Api\HorariostrabalhoController@update');
 Route::delete('horariostrabalho/{horariostrabalho}', 'Api\HorariostrabalhoController@destroy');
 
-Route::get('historicoorcamentos', 'Api\HistoricoorcamentosController@index');
-Route::post('historicoorcamentos', 'Api\HistoricoorcamentosController@store');
-Route::get('historicoorcamentos/{historicoorcamento}', 'Api\HistoricoorcamentosController@show');
-Route::put('historicoorcamentos/{historicoorcamento}', 'Api\HistoricoorcamentosController@update');
-Route::delete('historicoorcamentos/{historicoorcamento}', 'Api\HistoricoorcamentosController@destroy');
+Route::get('homecares', 'Api\HomecaresController@index');
+Route::post('homecares', 'Api\HomecaresController@store');
+Route::get('homecares/{homecare}', 'Api\HomecaresController@show');
+Route::put('homecares/{homecare}', 'Api\HomecaresController@update');
+Route::delete('homecares/{homecare}', 'Api\HomecaresController@destroy');
 
 Route::get('impostos', 'Api\ImpostosController@index');
 Route::post('impostos', 'Api\ImpostosController@store');
@@ -281,11 +287,12 @@ Route::get('pacientes/{paciente}', 'Api\PacientesController@show');
 Route::put('pacientes/{paciente}', 'Api\PacientesController@update');
 Route::delete('pacientes/{paciente}', 'Api\PacientesController@destroy');
 
-Route::get('pagamentos', 'Api\pagamentosController@index');
-Route::post('pagamentos', 'Api\pagamentosController@store');
-Route::get('pagamentos/{pagamento}', 'Api\pagamentosController@show');
-Route::put('pagamentos/{pagamento}', 'Api\pagamentosController@update');
-Route::delete('pagamentos/{pagamento}', 'Api\pagamentosController@destroy');
+Route::get('pagamentos', 'Api\PagamentosController@index');
+Route::post('pagamentos', 'Api\PagamentosController@store');
+Route::get('pagamentos/{pagamento}', 'Api\PagamentosController@show');
+Route::put('pagamentos/{pagamento}', 'Api\PagamentosController@update');
+Route::delete('pagamentos/{pagamento}', 'Api\PagamentosController@destroy');
+Route::get('pagamentosfiltro', 'Api\PagamentosController@filtro');                    // Custon
 
 Route::get('pessoas', 'Api\PessoasController@index');
 Route::post('pessoas', 'Api\PessoasController@store');

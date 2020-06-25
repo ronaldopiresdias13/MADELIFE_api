@@ -2,20 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Homecare;
 use App\Http\Controllers\Controller;
-use App\Pagamento;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class PagamentosController extends Controller
+class HomecaresController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $itens = new Pagamento();
+        $itens = new Homecare();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -24,7 +26,7 @@ class PagamentosController extends Controller
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
-                    $itens = Pagamento::where(
+                    $itens = Homecare::where(
                         ($where['coluna']) ? $where['coluna'] : 'id',
                         ($where['expressao']) ? $where['expressao'] : 'like',
                         ($where['valor']) ? $where['valor'] : '%'
@@ -38,7 +40,7 @@ class PagamentosController extends Controller
                 }
             }
         } else {
-            $itens = Pagamento::where('id', 'like', '%');
+            $itens = Homecare::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -100,12 +102,13 @@ class PagamentosController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Pagamento  $pagamento
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Homecare  $homecare
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Pagamento $pagamento)
+    public function show(Request $request, Homecare $homecare)
     {
-        $iten = $pagamento;
+        $iten = $homecare;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -147,45 +150,24 @@ class PagamentosController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Pagamento  $pagamento
+     * @param  \App\Homecare  $homecare
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Pagamento $pagamento)
+    public function update(Request $request, Homecare $homecare)
     {
-        $pagamento->update($request->all());
+        DB::transaction(function () use ($request, $homecare) {
+            $homecare->update($request->all());
+        });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Pagamento  $pagamento
+     * @param  \App\Homecare  $homecare
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Pagamento $pagamento)
+    public function destroy(Homecare $homecare)
     {
-        $pagamento->delete();
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function filtro(Request $request)
-    {
-        $pagamentos = Pagamento::where('pagamentos.empresa_id', $request->empresa_id)
-            ->join('contas', 'contas.id', '=', 'pagamentos.conta_id')
-            ->join('pessoas', 'pessoas.id', '=', 'contas.pessoa_id')
-            ->select(
-                'pagamentos.*',
-                'pessoas.nome',
-                'contas.tipoconta',
-                'contas.tipopessoa',
-                'contas.natureza_id',
-                'contas.quantidadeconta',
-            )->where('contas.tipoconta', $request->tipo)
-            ->get();
-        return $pagamentos;
+        //
     }
 }
