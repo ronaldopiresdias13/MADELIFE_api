@@ -287,12 +287,12 @@ Route::get('pacientes/{paciente}', 'Api\PacientesController@show');
 Route::put('pacientes/{paciente}', 'Api\PacientesController@update');
 Route::delete('pacientes/{paciente}', 'Api\PacientesController@destroy');
 
-Route::get('pagamentos', 'Api\pagamentosController@index');
-Route::post('pagamentos', 'Api\pagamentosController@store');
-Route::get('pagamentos/{pagamento}', 'Api\pagamentosController@show');
-Route::put('pagamentos/{pagamento}', 'Api\pagamentosController@update');
-Route::delete('pagamentos/{pagamento}', 'Api\pagamentosController@destroy');
-Route::get('pagamentosfiltro', 'Api\pagamentosController@filtro');
+Route::get('pagamentos', 'Api\PagamentosController@index');
+Route::post('pagamentos', 'Api\PagamentosController@store');
+Route::get('pagamentos/{pagamento}', 'Api\PagamentosController@show');
+Route::put('pagamentos/{pagamento}', 'Api\PagamentosController@update');
+Route::delete('pagamentos/{pagamento}', 'Api\PagamentosController@destroy');
+Route::get('pagamentosfiltro', 'Api\PagamentosController@filtro');                    // Custon
 
 Route::get('pessoas', 'Api\PessoasController@index');
 Route::post('pessoas', 'Api\PessoasController@store');
