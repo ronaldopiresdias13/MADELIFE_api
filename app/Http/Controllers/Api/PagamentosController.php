@@ -165,4 +165,26 @@ class PagamentosController extends Controller
     {
         $pagamento->delete();
     }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function filtro(Request $request)
+    {
+        $pagamentos = Pagamento::where('pagamentos.empresa_id', $request->empresa_id)
+            ->join('contas', 'contas.id', '=', 'pagamentos.conta_id')
+            ->select(
+                'pagamentos.*',
+                'contas.pessoa_id',
+                'contas.tipoconta',
+                'contas.tipopessoa',
+                'contas.natureza_id',
+                'contas.quantidadeconta',
+            )->where('contas.tipoconta', $request->tipo)
+            ->get();
+        return $pagamentos;
+    }
 }

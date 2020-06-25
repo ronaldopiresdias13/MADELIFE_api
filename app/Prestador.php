@@ -18,4 +18,9 @@ class Prestador extends Model
     {
         return $this->belongsTo('App\Pessoa');
     }
+
+    public function atribuicoes()
+    {
+        return $this->hasMany('App\Atribuicao');
+    }
 }

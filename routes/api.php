@@ -63,6 +63,12 @@ Route::get('acessos/{acesso}', 'Api\AcessosController@show');
 Route::put('acessos/{acesso}', 'Api\AcessosController@update');
 Route::delete('acessos/{acesso}', 'Api\AcessosController@destroy');
 
+Route::get('atribuicoes', 'Api\AtribuicoesController@index');
+Route::post('atribuicoes', 'Api\AtribuicoesController@store');
+Route::get('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@show');
+Route::put('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@update');
+Route::delete('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@destroy');
+
 Route::get('bancos', 'Api\BancosController@index');
 Route::post('bancos', 'Api\BancosController@store');
 Route::get('bancos/{banco}', 'Api\BancosController@show');
@@ -196,17 +202,23 @@ Route::get('grupocuidados/{grupocuidado}', 'Api\GrupocuidadosController@show');
 Route::put('grupocuidados/{grupocuidado}', 'Api\GrupocuidadosController@update');
 Route::delete('grupocuidados/{grupocuidado}', 'Api\GrupocuidadosController@destroy');
 
+Route::get('historicoorcamentos', 'Api\HistoricoorcamentosController@index');
+Route::post('historicoorcamentos', 'Api\HistoricoorcamentosController@store');
+Route::get('historicoorcamentos/{historicoorcamento}', 'Api\HistoricoorcamentosController@show');
+Route::put('historicoorcamentos/{historicoorcamento}', 'Api\HistoricoorcamentosController@update');
+Route::delete('historicoorcamentos/{historicoorcamento}', 'Api\HistoricoorcamentosController@destroy');
+
 Route::get('horariostrabalho', 'Api\HorariostrabalhoController@index');
 Route::post('horariostrabalho', 'Api\HorariostrabalhoController@store');
 Route::get('horariostrabalho/{horariostrabalho}', 'Api\HorariostrabalhoController@show');
 Route::put('horariostrabalho/{horariostrabalho}', 'Api\HorariostrabalhoController@update');
 Route::delete('horariostrabalho/{horariostrabalho}', 'Api\HorariostrabalhoController@destroy');
 
-Route::get('historicoorcamentos', 'Api\HistoricoorcamentosController@index');
-Route::post('historicoorcamentos', 'Api\HistoricoorcamentosController@store');
-Route::get('historicoorcamentos/{historicoorcamento}', 'Api\HistoricoorcamentosController@show');
-Route::put('historicoorcamentos/{historicoorcamento}', 'Api\HistoricoorcamentosController@update');
-Route::delete('historicoorcamentos/{historicoorcamento}', 'Api\HistoricoorcamentosController@destroy');
+Route::get('homecares', 'Api\HomecaresController@index');
+Route::post('homecares', 'Api\HomecaresController@store');
+Route::get('homecares/{homecare}', 'Api\HomecaresController@show');
+Route::put('homecares/{homecare}', 'Api\HomecaresController@update');
+Route::delete('homecares/{homecare}', 'Api\HomecaresController@destroy');
 
 Route::get('impostos', 'Api\ImpostosController@index');
 Route::post('impostos', 'Api\ImpostosController@store');
@@ -280,6 +292,7 @@ Route::post('pagamentos', 'Api\pagamentosController@store');
 Route::get('pagamentos/{pagamento}', 'Api\pagamentosController@show');
 Route::put('pagamentos/{pagamento}', 'Api\pagamentosController@update');
 Route::delete('pagamentos/{pagamento}', 'Api\pagamentosController@destroy');
+Route::get('pagamentosfiltro', 'Api\pagamentosController@filtro');
 
 Route::get('pessoas', 'Api\PessoasController@index');
 Route::post('pessoas', 'Api\PessoasController@store');
