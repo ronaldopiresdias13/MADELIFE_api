@@ -176,9 +176,10 @@ class PagamentosController extends Controller
     {
         $pagamentos = Pagamento::where('pagamentos.empresa_id', $request->empresa_id)
             ->join('contas', 'contas.id', '=', 'pagamentos.conta_id')
+            ->join('pessoas', 'pessoas.id', '=', 'contas.pessoa_id')
             ->select(
                 'pagamentos.*',
-                'contas.pessoa_id',
+                'pessoas.nome',
                 'contas.tipoconta',
                 'contas.tipopessoa',
                 'contas.natureza_id',
