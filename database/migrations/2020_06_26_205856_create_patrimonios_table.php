@@ -17,21 +17,11 @@ class CreatePatrimoniosTable extends Migration
             $table->id();
             $table->unsignedBigInteger('empresa_id')->nullable();
             $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
-            $table->string('nome');
-            $table->string('descricao');
             $table->string('codigo');
-            $table->unsignedBigInteger('marca_id')->nullable();
-            $table->foreign('marca_id')->references('id')->on('marcas')->onDelete('cascade');
-            $table->unsignedBigInteger('fornecedor_id')->nullable();
-            $table->foreign('fornecedor_id')->references('id')->on('fornecedores')->onDelete('cascade');
+            $table->unsignedBigInteger('produto_id')->nullable();
+            $table->foreign('produto_id')->references('id')->on('produtos')->onDelete('cascade');
             $table->string('observacao')->nullable();
-            $table->string('valor')->nullable();
-            $table->string('dataaquisicao')->nullable();
-            $table->string('notafiscal')->nullable();
-            $table->string('codigobarras')->nullable();
-            $table->float('desvalorizacao')->nullable();
             $table->boolean('status');
-
             $table->timestamps();
         });
     }
