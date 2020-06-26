@@ -183,6 +183,8 @@ class PagamentosController extends Controller
                 'contas.tipoconta',
                 'contas.tipopessoa',
                 'contas.natureza_id',
+                'contas.historico',
+                'contas.nfe',
                 'contas.quantidadeconta',
             )->where('contas.tipoconta', $request->tipo)
             ->get();

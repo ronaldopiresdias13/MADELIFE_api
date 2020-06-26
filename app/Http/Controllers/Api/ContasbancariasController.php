@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Conta;
+use App\Pagamento;
 use App\Contasbancaria;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -94,15 +96,49 @@ class ContasbancariasController extends Controller
      */
     public function store(Request $request)
     {
-        $contasbancaria = Contasbancaria::create([
-            'empresa_id' => $request->empresa_id,
-            'banco_id'   => $request->banco_id,
-            'agencia'    => $request->agencia,
-            'conta'      => $request->conta,
-            'digito'     => $request->digito,
-            'tipo'       => $request->tipo,
-            'saldo'      => $request->saldo,
-            'descricao'  => $request->descricao,
+        $conta_pagamento = Pagamento::create([
+            'empresa_id'        => $request['empresa_id'],
+            'conta_id'          => Conta::create(
+                [
+                    'empresa_id'         => $request['empresa_id'],
+                    'tipopessoa'         => "Conta Bancária",
+                    'pessoa_id'          => null,
+                    'natureza_id'        => null,
+                    'valortotalconta'    => $request['saldo'],
+                    'tipoconta'          => "Receber",
+                    'historico'          => "Saldo Inicial " . $request['descricao'],
+                    'status'             => 1,
+                    'nfe'                => null,
+                    'quantidadeconta'    => 1,
+                    'valorpago'          => $request['saldo'],
+                    'tipocontapagamento' => "Saldo Inicial",
+                    'datavencimento'     => $request['data'],
+                    'dataemissao'        => $request['data'],
+                ]
+            )->id,
+            'contasbancaria_id' => Contasbancaria::create([
+                'empresa_id' => $request['empresa_id'],
+                'banco_id'   => $request['banco_id'],
+                'agencia'    => $request['agencia'],
+                'conta'      => $request['conta'],
+                'digito'     => $request['digito'],
+                'tipo'       => $request['tipo'],
+                'saldo'      => $request['saldo'],
+                'descricao'  => $request['descricao'],
+            ])->id,
+            'numeroboleto'      => null,
+            'formapagamento'    => "Dinheiro",
+            'datavencimento'    => $request['data'],
+            'datapagamento'     => $request['data'],
+            'valorconta'        => $request['saldo'],
+            'status'            => 1,
+            'tipopagamento'     => "Saldo Inicial",
+            'valorpago'         => $request['saldo'],
+            'pagamentoparcial'  => 0,
+            'observacao'        => $request['descricao'],
+            'anexo'             => null,
+            'numeroconta'       => 1,
+
         ]);
     }
 
