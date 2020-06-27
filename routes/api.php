@@ -123,6 +123,12 @@ Route::get('convenios/{convenio}', 'Api\ConveniosController@show');
 Route::put('convenios/{convenio}', 'Api\ConveniosController@update');
 Route::delete('convenios/{convenio}', 'Api\ConveniosController@destroy');
 
+Route::get('cotacaoTestes', 'Api\cotacaoTesteController@index');
+Route::post('cotacaoTestes', 'Api\cotacaoTesteController@store');
+Route::get('cotacaoTestes/{cotacaoTeste}', 'Api\cotacaoTesteController@show');
+Route::put('cotacaoTestes/{cotacaoTeste}', 'Api\cotacaoTesteController@update');
+Route::delete('cotacaoTestes/{cotacaoTeste}', 'Api\cotacaoTesteController@destroy');
+
 Route::get('cuidados', 'Api\CuidadosController@index');
 Route::post('cuidados', 'Api\CuidadosController@store');
 Route::get('cuidados/{cuidado}', 'Api\CuidadosController@show');
@@ -279,6 +285,12 @@ Route::post('pagamentos', 'Api\pagamentosController@store');
 Route::get('pagamentos/{pagamento}', 'Api\pagamentosController@show');
 Route::put('pagamentos/{pagamento}', 'Api\pagamentosController@update');
 Route::delete('pagamentos/{pagamento}', 'Api\pagamentosController@destroy');
+
+Route::get('patrimonioTestes', 'Api\patrimonioTestesController@index');
+Route::post('patrimonioTestes', 'Api\patrimonioTestesController@store');
+Route::get('patrimonioTestes/{patrimoioTeste}', 'Api\patrimonioTestesController@show');
+Route::put('patrimonioTestes/{patrimoioTeste}', 'Api\patrimonioTestesController@update');
+Route::delete('patrimonioTestes/{patrimoioTeste}', 'Api\patrimonioTestesController@destroy');
 
 Route::get('pessoas', 'Api\PessoasController@index');
 Route::post('pessoas', 'Api\PessoasController@store');
