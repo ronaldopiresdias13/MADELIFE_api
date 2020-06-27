@@ -12,4 +12,8 @@ class Pagamento extends Model
     {
         return $this->belongsTo('App\Conta');
     }
+    public function contasbancaria()
+    {
+        return $this->belongsTo('App\Contasbancaria');
+    }
 }

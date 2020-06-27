@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Banco;
-use App\Pessoa;
-use App\Dadosbancario;
-use App\Http\Controllers\Controller;
+use App\Atribuicao;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
-class DadosbancariosController extends Controller
+class AtribuicoesController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $itens = new Dadosbancario();
+        $itens = new Atribuicao();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -26,7 +26,7 @@ class DadosbancariosController extends Controller
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
-                    $itens = Dadosbancario::where(
+                    $itens = Atribuicao::where(
                         ($where['coluna']) ? $where['coluna'] : 'id',
                         ($where['expressao']) ? $where['expressao'] : 'like',
                         ($where['valor']) ? $where['valor'] : '%'
@@ -40,7 +40,7 @@ class DadosbancariosController extends Controller
                 }
             }
         } else {
-            $itens = Dadosbancario::where('id', 'like', '%');
+            $itens = Atribuicao::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -96,27 +96,21 @@ class DadosbancariosController extends Controller
      */
     public function store(Request $request)
     {
-        $dadosbancario = new Dadosbancario();
-        // $dadosbancario->pessoa = Pessoa::firstWhere('cpfcnpj', $request->pessoa)->id;
-        // $dadosbancario->banco = Banco::firstWhere('codigo', $request->banco)->id;
-        $dadosbancario->banco = $request->banco;
-        $dadosbancario->pessoa = $request->pessoa;
-        $dadosbancario->agencia = $request->agencia;
-        $dadosbancario->conta = $request->conta;
-        $dadosbancario->digito = $request->digito;
-        $dadosbancario->tipoconta = $request->tipoconta;
-        $dadosbancario->save();
+        DB::transaction(function () use ($request) {
+            Atribuicao::create($request->all());
+        });
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Dadosbancario  $dadosbancario
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Atribuicao  $atribuicao
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Dadosbancario $dadosbancario)
+    public function show(Request $request, Atribuicao $atribuicao)
     {
-        $iten = $dadosbancario;
+        $iten = $atribuicao;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -158,22 +152,24 @@ class DadosbancariosController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Dadosbancario  $dadosbancario
+     * @param  \App\Atribuicao  $atribuicao
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Dadosbancario $dadosbancario)
+    public function update(Request $request, Atribuicao $atribuicao)
     {
-        $dadosbancario->update($request->all());
+        DB::transaction(function () use ($request, $atribuicao) {
+            $atribuicao->update($request->all());
+        });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Dadosbancario  $dadosbancario
+     * @param  \App\Atribuicao  $atribuicao
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Dadosbancario $dadosbancario)
+    public function destroy(Atribuicao $atribuicao)
     {
-        $dadosbancario->delete();
+        //
     }
 }

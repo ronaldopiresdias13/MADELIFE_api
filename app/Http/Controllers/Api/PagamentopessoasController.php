@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Banco;
-use App\Pessoa;
-use App\Dadosbancario;
 use App\Http\Controllers\Controller;
+use App\Pagamentopessoa;
 use Illuminate\Http\Request;
 
-class DadosbancariosController extends Controller
+class PagamentopessoasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,16 +15,14 @@ class DadosbancariosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Dadosbancario();
-
+        $itens = new Pagamentopessoa();
         if ($request->commands) {
             $request = json_decode($request->commands, true);
         }
-
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
-                    $itens = Dadosbancario::where(
+                    $itens = Pagamentopessoa::where(
                         ($where['coluna']) ? $where['coluna'] : 'id',
                         ($where['expressao']) ? $where['expressao'] : 'like',
                         ($where['valor']) ? $where['valor'] : '%'
@@ -40,9 +36,8 @@ class DadosbancariosController extends Controller
                 }
             }
         } else {
-            $itens = Dadosbancario::where('id', 'like', '%');
+            $itens = Pagamentopessoa::where('id', 'like', '%');
         }
-
         if ($request['order']) {
             foreach ($request['order'] as $key => $order) {
                 $itens->orderBy(
@@ -51,9 +46,7 @@ class DadosbancariosController extends Controller
                 );
             }
         }
-
         $itens = $itens->get();
-
         if ($request['adicionais']) {
             foreach ($itens as $key => $iten) {
                 foreach ($request['adicionais'] as $key => $adicional) {
@@ -96,32 +89,30 @@ class DadosbancariosController extends Controller
      */
     public function store(Request $request)
     {
-        $dadosbancario = new Dadosbancario();
-        // $dadosbancario->pessoa = Pessoa::firstWhere('cpfcnpj', $request->pessoa)->id;
-        // $dadosbancario->banco = Banco::firstWhere('codigo', $request->banco)->id;
-        $dadosbancario->banco = $request->banco;
-        $dadosbancario->pessoa = $request->pessoa;
-        $dadosbancario->agencia = $request->agencia;
-        $dadosbancario->conta = $request->conta;
-        $dadosbancario->digito = $request->digito;
-        $dadosbancario->tipoconta = $request->tipoconta;
-        $dadosbancario->save();
+        $pagamentopessoa = new Pagamentopessoa();
+        $pagamentopessoa->pessoa_id = $request->pessoa_id;
+        $pagamentopessoa->empresa_id = $request->empresa_id;
+        $pagamentopessoa->ordemservico_id = $request->ordemservico_id;
+        $pagamentopessoa->periodo1 = $request->periodo1;
+        $pagamentopessoa->periodo2 = $request->periodo2;
+        $pagamentopessoa->valor = $request->valor;
+        $pagamentopessoa->observacao = $request->observacao;
+        $pagamentopessoa->status = $request->status;
+        $pagamentopessoa->save();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Dadosbancario  $dadosbancario
+     * @param  \App\Pagamentopessoa  $pagamentopessoa
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Dadosbancario $dadosbancario)
+    public function show(Request $request, Pagamentopessoa $pagamentopessoa)
     {
-        $iten = $dadosbancario;
-
+        $iten = $pagamentopessoa;
         if ($request->commands) {
             $request = json_decode($request->commands, true);
         }
-
         if ($request['adicionais']) {
             foreach ($request['adicionais'] as $key => $adicional) {
                 if (is_string($adicional)) {
@@ -158,22 +149,22 @@ class DadosbancariosController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Dadosbancario  $dadosbancario
+     * @param  \App\Pagamentopessoa  $pagamentopessoa
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Dadosbancario $dadosbancario)
+    public function update(Request $request, Pagamentopessoa $pagamentopessoa)
     {
-        $dadosbancario->update($request->all());
+        $pagamentopessoa->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Dadosbancario  $dadosbancario
+     * @param  \App\Pagamentopessoa  $pagamentopessoa
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Dadosbancario $dadosbancario)
+    public function destroy(Pagamentopessoa $pagamentopessoa)
     {
-        $dadosbancario->delete();
+        $pagamentopessoa>delete();
     }
 }

@@ -98,4 +98,9 @@ class Orcamento extends Model
     {
         return $this->hasOne('App\Evento');
     }
+
+    public function ordemServico()
+    {
+        return $this->hasOne('App\OrdemServico');
+    }
 }
