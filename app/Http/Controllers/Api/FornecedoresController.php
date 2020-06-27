@@ -15,6 +15,7 @@ use App\PessoaEndereco;
 use App\PessoaTelefone;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class FornecedoresController extends Controller
 {
@@ -229,6 +230,111 @@ class FornecedoresController extends Controller
      */
     public function update(Request $request, Fornecedor $fornecedor)
     {
+        // DB::transaction(function () use ($request, $fornecedor) {
+        //     $fornecedor->update([
+        //         'tipo' => $request['tipo'],
+        //         'empresa_id' => $request['empresa_id'],
+        //     ]);
+        //     $pessoa = Pessoa::find($request['pessoa']['id']);
+        //     if ($pessoa) {
+        //         $pessoa->update([
+        //             'empresa_id'  => $request['pessoa']['empresa_id'],
+        //             'nome'        => $request['pessoa']['nome'],
+        //             'nascimento'  => $request['pessoa']['nascimento'],
+        //             'tipo'        => $request['pessoa']['tipo'],
+        //             'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
+        //             'rgie'        => $request['pessoa']['rgie'],
+        //             'observacoes' => $request['pessoa']['observacoes'],
+        //             'perfil'      => $request['pessoa']['perfil'],
+        //             'status'      => $request['pessoa']['status'],
+        //         ]);
+        //     }
+        //     if ($request['pessoa']['telefones']) {
+        //         foreach ($request['pessoa']['telefones'] as $key => $telefone) {
+        //             $pessoa_telefone = PessoaTelefone::firstOrCreate(
+        //                 [
+        //                     'pessoa_id'   => $pessoa->id,
+        //                     'telefone_id' => Telefone::firstOrCreate(
+        //                         [
+        //                             'telefone'  => $telefone['telefone'],
+        //                         ]
+        //                     )->id,
+        //                 ],
+        //                 [
+        //                     'tipo'      => $telefone['pivot']['tipo'],
+        //                     'descricao' => $telefone['pivot']['descricao'],
+        //                 ]
+        //             );
+        //         }
+        //     }
+        //     if ($request['pessoa']['enderecos']) {
+        //         foreach ($request['pessoa']['enderecos'] as $key => $endereco) {
+        //             $pessoa_endereco = PessoaEndereco::updateOrCreate(
+        //                 [
+        //                     'pessoa_id'   => $pessoa->id,
+        //                     'endereco_id' => Endereco::firstOrCreate(
+        //                         [
+        //                             'cep'         => $endereco['cep'],
+        //                             'cidade_id'   => $endereco['cidade_id'],
+        //                             'rua'         => $endereco['rua'],
+        //                             'bairro'      => $endereco['bairro'],
+        //                             'numero'      => $endereco['numero'],
+        //                             'complemento' => $endereco['complemento'],
+        //                             'tipo'        => $endereco['tipo'],
+        //                             'descricao'   => $endereco['descricao'],
+        //                         ]
+        //                     )->id,
+        //                 ]
+        //             );
+        //         }
+        //     }
+        //     if ($request['pessoa']['emails']) {
+        //         foreach ($request['pessoa']['emails'] as $key => $email) {
+        //             $pessoa_email = PessoaEmail::updateOrCreate(
+        //                 [
+        //                     'pessoa_id' => $pessoa->id,
+        //                     'email_id'  => Email::firstOrCreate(
+        //                         [
+        //                             'email' => $email['email'],
+        //                         ]
+        //                     )->id,
+        //                 ],
+        //                 [
+        //                     'tipo'      => $email['pivot']['tipo'],
+        //                     'descricao' => $email['pivot']['descricao'],
+        //                 ]
+        //             );
+        //         }
+        //     }
+        //     if ($request['pessoa']['user']) {
+        //         $user = User::updateOrCreate(
+        //             [
+        //                 'id' => $request['pessoa']['user']['id'],
+        //             ],
+        //             [
+        //                 'cpfcnpj'    => $request['pessoa']['user']['cpfcnpj'],
+        //                 'email'      => $request['pessoa']['user']['email'],
+        //                 'password'   => $request['pessoa']['user']['password'],
+        //                 'pessoa_id'  => $pessoa->id,
+        //                 'empresa_id' => $request['pessoa']['user']['empresa_id'],
+        //             ]
+        //         );
+        //         if ($request['pessoa']['user']['acessos']) {
+        //             foreach ($request['pessoa']['user']['acessos'] as $key => $acesso) {
+        //                 $user_acesso = UserAcesso::firstOrCreate([
+        //                     'user_id'   => $user->id,
+        //                     'acesso_id' => Acesso::firstWhere('id', $acesso)->id,
+        //                 ]);
+        //             }
+        //         }
+        //     }
+        // });
+
+        // return response()->json('Fornecedor atualizado com sucesso!', 200)->header('Content-Type', 'text/plain');
+
+
+
+
         // return $request;
         $pessoa = Pessoa::find($request['pessoa']['id']);
         $pessoa->nome = $request['pessoa']['nome'];

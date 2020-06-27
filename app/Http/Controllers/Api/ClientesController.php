@@ -194,8 +194,8 @@ class ClientesController extends Controller
             }
         }
 
-        if ($request['pessoa']['users']) {
-            foreach ($request['pessoa']['users'] as $key => $user) {
+        if ($request['pessoa']['user']) {
+            foreach ($request['pessoa']['user'] as $key => $user) {
                 $usercpf = User::firstWhere(
                     'cpfcnpj',
                     $user['cpfcnpj'],
@@ -375,7 +375,7 @@ class ClientesController extends Controller
                     [
                         'cpfcnpj'    => $request['pessoa']['user']['cpfcnpj'],
                         'email'      => $request['pessoa']['user']['email'],
-                        'password'   => $request['pessoa']['user']['password'],
+                        'password'   => bcrypt($request['pessoa']['user']['password']),
                         'pessoa_id'  => $pessoa->id,
                         'empresa_id' => $request['pessoa']['user']['empresa_id'],
                     ]
