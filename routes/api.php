@@ -300,6 +300,12 @@ Route::get('pagamentopessoas/{pagamentopessoa}', 'Api\PagamentopessoasController
 Route::put('pagamentopessoas/{pagamentopessoa}', 'Api\PagamentopessoasController@update');
 Route::delete('pagamentopessoas/{pagamentopessoa}', 'Api\PagamentopessoasController@destroy');
 
+Route::get('patrimonios', 'Api\PatrimoniosController@index');
+Route::post('patrimonios', 'Api\PatrimoniosController@store');
+Route::get('patrimonios/{patrimonio}', 'Api\PatrimoniosController@show');
+Route::put('patrimonios/{patrimonio}', 'Api\PatrimoniosController@update');
+Route::delete('patrimonios/{patrimonio}', 'Api\PatrimoniosController@destroy');
+
 Route::get('pessoas', 'Api\PessoasController@index');
 Route::post('pessoas', 'Api\PessoasController@store');
 Route::get('pessoas/{pessoa}', 'Api\PessoasController@show');
