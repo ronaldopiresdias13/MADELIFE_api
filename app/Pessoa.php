@@ -20,7 +20,7 @@ class Pessoa extends Model
 
     public function telefones()
     {
-        return $this->belongsToMany('App\Telefone', 'pessoa_telefone')->withPivot('id','tipo', 'descricao');
+        return $this->belongsToMany('App\Telefone', 'pessoa_telefone')->withPivot('id', 'tipo', 'descricao');
     }
 
     public function prestador()
@@ -35,12 +35,12 @@ class Pessoa extends Model
 
     public function emails()
     {
-        return $this->belongsToMany('App\Email', 'pessoa_email')->withPivot('id','tipo', 'descricao');
+        return $this->belongsToMany('App\Email', 'pessoa_email')->withPivot('id', 'tipo', 'descricao');
     }
 
-    public function users()
+    public function user()
     {
-        return $this->hasMany('App\User');
+        return $this->hasOne('App\User');
     }
 
     public function dadosbancario()
