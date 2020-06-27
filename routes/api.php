@@ -106,6 +106,12 @@ Route::put('clientes/{cliente}', 'Api\ClientesController@update');
 Route::delete('clientes/{cliente}', 'Api\ClientesController@destroy');
 // Route::get('meuspassientes/{cliente}', 'Api\ClientesController@meuspassientes'); // Custon
 
+Route::get('cnabs', 'Api\CnabsController@index');
+Route::post('cnabs', 'Api\CnabsController@store');
+Route::get('cnabs/{cnab}', 'Api\CnabsController@show');
+Route::put('cnabs/{cnab}', 'Api\CnabsController@update');
+Route::delete('cnabs/{cnab}', 'Api\CnabsController@destroy');
+
 Route::get('conselhos', 'Api\ConselhosController@index');
 Route::post('conselhos', 'Api\ConselhosController@store');
 Route::get('conselhos/{conselho}', 'Api\ConselhosController@show');

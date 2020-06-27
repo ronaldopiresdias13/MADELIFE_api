@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Cnab;
+use App\Cnabsantander;
 use App\Http\Controllers\Controller;
-use App\Pagamentopessoa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class PagamentopessoasController extends Controller
+class CnabsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,14 +17,16 @@ class PagamentopessoasController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Pagamentopessoa();
+        $itens = new Cnab();
+
         if ($request->commands) {
             $request = json_decode($request->commands, true);
         }
+
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
-                    $itens = Pagamentopessoa::where(
+                    $itens = Cnab::where(
                         ($where['coluna']) ? $where['coluna'] : 'id',
                         ($where['expressao']) ? $where['expressao'] : 'like',
                         ($where['valor']) ? $where['valor'] : '%'
@@ -36,8 +40,9 @@ class PagamentopessoasController extends Controller
                 }
             }
         } else {
-            $itens = Pagamentopessoa::where('id', 'like', '%');
+            $itens = Cnab::where('id', 'like', '%');
         }
+
         if ($request['order']) {
             foreach ($request['order'] as $key => $order) {
                 $itens->orderBy(
@@ -46,7 +51,9 @@ class PagamentopessoasController extends Controller
                 );
             }
         }
+
         $itens = $itens->get();
+
         if ($request['adicionais']) {
             foreach ($itens as $key => $iten) {
                 foreach ($request['adicionais'] as $key => $adicional) {
@@ -89,91 +96,56 @@ class PagamentopessoasController extends Controller
      */
     public function store(Request $request)
     {
-        $pagamentopessoa = new Pagamentopessoa();
-        $pagamentopessoa->pessoa_id = $request->pessoa_id;
-        $pagamentopessoa->empresa_id = $request->empresa_id;
-        $pagamentopessoa->ordemservico_id = $request->ordemservico_id;
-        $pagamentopessoa->periodo1 = $request->periodo1;
-        $pagamentopessoa->periodo2 = $request->periodo2;
-        $pagamentopessoa->valor = $request->valor;
-        $pagamentopessoa->observacao = $request->observacao;
-        $pagamentopessoa->status = $request->status;
-        $pagamentopessoa->save();
+        DB::transaction(function () use ($request, $cnab) {
+            if ($request['cnabsantander']['tipo'] == 'Folha') {
+                foreach ($request['cnabsantander'][''] as $key => $value) {
+                    # code...
+                }
+            }
+            $cnabsantander = Cnabsantander::crete([
+                'cnab_id' => Cnab::create([
+                    'empresa_id' => $request['empresa_id'],
+                    'data'       => $request['data']
+
+                ])->id,
+                'tipo' => ['tipo'],
+                'cnabheaderarquivo_id'
+
+            ]);
+        });
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Pagamentopessoa  $pagamentopessoa
+     * @param  \App\Cnab  $cnab
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Pagamentopessoa $pagamentopessoa)
+    public function show(Cnab $cnab)
     {
-        $iten = $pagamentopessoa;
-        if ($request->commands) {
-            $request = json_decode($request->commands, true);
-        }
-        if ($request['adicionais']) {
-            foreach ($request['adicionais'] as $key => $adicional) {
-                if (is_string($adicional)) {
-                    $iten[$adicional];
-                } else {
-                    $iten2 = $iten;
-                    foreach ($adicional as $key => $a) {
-                        if ($key == 0) {
-                            if ($iten[0] == null) {
-                                $iten2 = $iten[$a];
-                            } else {
-                                foreach ($iten as $key => $i) {
-                                    $i[$a];
-                                }
-                            }
-                        } else {
-                            if ($iten2[0] == null) {
-                                $iten2 = $iten2[$a];
-                            } else {
-                                foreach ($iten2 as $key => $i) {
-                                    $i[$a];
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return $iten;
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Pagamentopessoa  $pagamentopessoa
+     * @param  \App\Cnab  $cnab
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Pagamentopessoa $pagamentopessoa)
+    public function update(Request $request, Cnab $cnab)
     {
-        $pagamentopessoa->empresa_id      = $request['empresa_id'];
-        $pagamentopessoa->pessoa_id       = $request['pessoa_id'];
-        $pagamentopessoa->ordemservico_id = $request['ordemservico_id'];
-        $pagamentopessoa->periodo1        = $request['periodo1'];
-        $pagamentopessoa->periodo2        = $request['periodo2'];
-        $pagamentopessoa->valor           = $request['valor'];
-        $pagamentopessoa->observacao      = $request['observacao'];
-        $pagamentopessoa->status          = $request['status'];
-        $pagamentopessoa->situacao        = $request['situacao'];
-        $pagamentopessoa->update();
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Pagamentopessoa  $pagamentopessoa
+     * @param  \App\Cnab  $cnab
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Pagamentopessoa $pagamentopessoa)
+    public function destroy(Cnab $cnab)
     {
-        $pagamentopessoa->delete();
+        //
     }
 }
