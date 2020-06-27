@@ -290,6 +290,7 @@ class ClientesController extends Controller
      */
     public function update(Request $request, Cliente $cliente)
     {
+        // dd($cliente);
         DB::transaction(function () use ($request, $cliente) {
             $cliente->update([
                 'tipo' => $request['tipo'],
@@ -318,8 +319,8 @@ class ClientesController extends Controller
                                 'telefone'  => $telefone['telefone'],
                             ]
                         )->id,
-                        'tipo'      => $telefone['tipo'],
-                        'descricao' => $telefone['descricao'],
+                        'tipo'      => $telefone['pivot']['tipo'],
+                        'descricao' => $telefone['pivot']['descricao'],
                     ]);
                 }
             }
@@ -351,8 +352,8 @@ class ClientesController extends Controller
                                 'email' => $email['email'],
                             ]
                         )->id,
-                        'tipo'      => $email['tipo'],
-                        'descricao' => $email['descricao'],
+                        'tipo'      => $email['pivot']['tipo'],
+                        'descricao' => $email['pivot']['descricao'],
                     ]);
                 }
             }
