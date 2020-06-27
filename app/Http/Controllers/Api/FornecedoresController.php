@@ -124,20 +124,29 @@ class FornecedoresController extends Controller
         foreach ($request['pessoa']['telefones'] as $key => $telefone) {
             $pessoa_telefone = PessoaTelefone::firstOrCreate([
                 'pessoa_id'   => $fornecedor->pessoa_id,
-                'telefone_id' => Telefone::updateOrCreate(
-                    [
-                        'id' => $telefone['id'],
-                    ],
-                    // $telefone,
+                'telefone_id' => Telefone::firstOrCreate(
                     [
                         'telefone'  => $telefone['telefone'],
-                        'tipo'      => $telefone['tipo'],
-                        'descricao' => $telefone['descricao'],
                     ]
                 )->id,
+                'tipo'      => $telefone['tipo'],
+                'descricao' => $telefone['descricao'],
             ]);
         }
-
+        foreach ($request['pessoa']['emails'] as $key => $email) {
+            foreach ($request['pessoa']['emails'] as $key => $email) {
+                $pessoa_email = PessoaEmail::firstOrCreate([
+                    'pessoa_id' => $fornecedor->pessoa_id,
+                    'email_id'  => Email::firstOrCreate(
+                        [
+                            'email' => $email['email'],
+                        ]
+                    )->id,
+                    'tipo'      => $email['tipo'],
+                    'descricao' => $email['descricao'],
+                ]);
+            }
+        }
         foreach ($request['pessoa']['enderecos'] as $key => $endereco) {
             $pessoa_endereco = PessoaEndereco::firstOrCreate([
                 'pessoa_id'   => $fornecedor->pessoa_id,
@@ -160,22 +169,7 @@ class FornecedoresController extends Controller
             ]);
         }
 
-        foreach ($request['pessoa']['emails'] as $key => $email) {
-            $pessoa_email = PessoaEmail::firstOrCreate([
-                'pessoa_id' => $fornecedor->pessoa_id,
-                'email_id'  => Email::updateOrCreate(
-                    [
-                        'id'  => $email['id'],
-                    ],
-                    // $email,
-                    [
-                        'email'     => $email['email'],
-                        'tipo'      => $email['tipo'],
-                        'descricao' => $email['descricao'],
-                    ]
-                )->id,
-            ]);
-        }
+
 
         return $fornecedor;
     }
@@ -235,7 +229,98 @@ class FornecedoresController extends Controller
      */
     public function update(Request $request, Fornecedor $fornecedor)
     {
-        //
+        // return $request;
+        $pessoa = Pessoa::find($request['pessoa']['id']);
+        $pessoa->nome = $request['pessoa']['nome'];
+        $pessoa->nascimento = $request['pessoa']['nascimento'];
+        $pessoa->cpfcnpj = $request['pessoa']['cpfcnpj'];
+        $pessoa->rgie = $request['pessoa']['rgie'];
+        $pessoa->observacoes = $request['pessoa']['observacoes'];
+        $pessoa->perfil = $request['pessoa']['perfil'];
+        $pessoa->status = $request['pessoa']['status'];
+        $pessoa->update();
+
+        foreach ($request['pessoa']['telefones'] as $key => $telefone) {
+            if (!$telefone['id']) {
+                $pessoa_telefone = PessoaTelefone::firstOrCreate([
+                    'pessoa_id'   => $pessoa->id,
+                    'telefone_id' => Telefone::firstOrCreate(
+                        [
+                            'telefone'  => $telefone['telefone'],
+                        ]
+                    )->id,
+                    'tipo'      => $telefone['tipo'],
+                    'descricao' => $telefone['descricao'],
+                ]);
+            } else {
+                $pessoa_telefone = PessoaTelefone::where('pessoa_id', $telefone['pivot']['pessoa_id'])
+                    ->where('telefone_id', $telefone['pivot']['telefone_id'])
+                    ->update([
+                        'tipo' => $telefone['pivot']['tipo'],
+                        'descricao' => $telefone['pivot']['descricao']
+                    ]);
+                $phone = Telefone::find($telefone['id']);
+                $phone->telefone = $telefone['telefone'];
+                $phone->update();
+            }
+        }
+        foreach ($request['pessoa']['emails'] as $key => $email) {
+            if (!$email['id']) {
+                $pessoa_email = PessoaEmail::firstOrCreate([
+                    'pessoa_id' => $fornecedor->pessoa_id,
+                    'email_id'  => Email::firstOrCreate(
+                        [
+                            'email' => $email['email'],
+                        ]
+                    )->id,
+                    'tipo'      => $email['tipo'],
+                    'descricao' => $email['descricao'],
+                ]);
+            } else {
+                $pessoa_email = PessoaEmail::where('pessoa_id', $email['pivot']['pessoa_id'])
+                    ->where('email_id', $email['pivot']['email_id'])
+                    ->update([
+                        'tipo' =>      $email['pivot']['tipo'],
+                        'descricao' => $email['pivot']['descricao']
+                    ]);
+                $mail = Email::find($email['id']);
+                $mail->email = $email['email'];
+                $mail->update();
+            }
+        }
+        foreach ($request['pessoa']['enderecos'] as $key => $endereco) {
+            if (!$endereco['id']) {
+                $pessoa_endereco = PessoaEndereco::firstOrCreate([
+                    'pessoa_id'   => $fornecedor->pessoa_id,
+                    'endereco_id' => Endereco::updateOrCreate(
+                        [
+                            'id' => $endereco['id'],
+                        ],
+                        [
+                            'cep'         => $endereco['cep'],
+                            'cidade_id'   => $endereco['cidade_id'],
+                            'rua'         => $endereco['rua'],
+                            'bairro'      => $endereco['bairro'],
+                            'numero'      => $endereco['numero'],
+                            'complemento' => $endereco['complemento'],
+                            'tipo'        => $endereco['tipo'],
+                            'descricao'   => $endereco['descricao'],
+                        ]
+                    )->id,
+                ]);
+            } else {
+                $address = Endereco::find($endereco['id']);
+                $address->cep         = $endereco['cep'];
+                $address->cidade_id   = $endereco['cidade_id'];
+                $address->rua         = $endereco['rua'];
+                $address->bairro      = $endereco['bairro'];
+                $address->numero      = $endereco['numero'];
+                $address->complemento = $endereco['complemento'];
+                $address->tipo        = $endereco['tipo'];
+                $address->descricao   = $endereco['descricao'];
+                $address->update();
+            }
+        }
     }
 
     /**

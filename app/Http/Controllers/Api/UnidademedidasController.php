@@ -162,7 +162,6 @@ class UnidademedidasController extends Controller
      */
     public function update(Request $request, Unidademedida $unidademedida)
     {
-        dd($unidademedida);
         $unidademedida->update($request->all());
     }
 
