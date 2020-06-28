@@ -245,6 +245,14 @@ class ClientesController extends Controller
     {
         $iten = $cliente;
 
+        // $iten->empresa;
+
+        // $enderecos = $iten->pessoa->enderecos;
+
+        // foreach ($enderecos as $key => $endereco) {
+        //     $endereco->cidade;
+        // }
+
         if ($request->commands) {
             $request = json_decode($request->commands, true);
         }
@@ -265,11 +273,13 @@ class ClientesController extends Controller
                                 }
                             }
                         } else {
-                            if ($iten2[0] == null) {
-                                $iten2 = $iten2[$a];
-                            } else {
-                                foreach ($iten2 as $key => $i) {
-                                    $i[$a];
+                            if ($iten2->count() > 0) {
+                                if ($iten2[0] == null) {
+                                    $iten2 = $iten2[$a];
+                                } else {
+                                    foreach ($iten2 as $key => $i) {
+                                        $i[$a];
+                                    }
                                 }
                             }
                         }
