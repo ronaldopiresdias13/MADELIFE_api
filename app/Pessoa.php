@@ -8,9 +8,9 @@ class Pessoa extends Model
 {
     protected $guarded = [];
 
-    public function clientes()
+    public function cliente()
     {
-        return $this->hasMany('App\Cliente');
+        return $this->hasOne('App\Cliente');
     }
 
     public function enderecos()

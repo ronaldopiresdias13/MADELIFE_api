@@ -779,15 +779,4 @@ class OrcamentosController extends Controller
     {
         $orcamento->delete();
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function migracao(Request $request)
-    {
-        // dd($request);
-    }
 }
