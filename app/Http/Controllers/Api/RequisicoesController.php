@@ -101,7 +101,7 @@ class RequisicoesController extends Controller
      */
     public function store(Request $request)
     {
-        DB::transaction(function ($request) {
+        DB::transaction(function () use ($request) {
             $requisicao = Requisicao::create([
                 'empresa_id' => $request['empresa_id'],
                 'pessoa_id'  => $request['pessoa_id'],
@@ -115,7 +115,7 @@ class RequisicoesController extends Controller
                         'requisicao_id' => $requisicao->id,
                         'produto_id'    => $produto['produto_id'],
                         'quantidade'    => $produto['quantidade'],
-                        'observacao'    => $produto['observccao'],
+                        'observacao'    => $produto['observacao'],
                         'status'        => $produto['status'],
                     ]);
                 }
