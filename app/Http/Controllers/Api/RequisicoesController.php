@@ -3,26 +3,29 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Pagamentopessoa;
+use App\Requisicao;
 use Illuminate\Http\Request;
 
-class PagamentopessoasController extends Controller
+class RequisicoesController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $itens = new Pagamentopessoa();
+        $itens = new Requisicao();
+
         if ($request->commands) {
             $request = json_decode($request->commands, true);
         }
+
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
-                    $itens = Pagamentopessoa::where(
+                    $itens = Requisicao::where(
                         ($where['coluna']) ? $where['coluna'] : 'id',
                         ($where['expressao']) ? $where['expressao'] : 'like',
                         ($where['valor']) ? $where['valor'] : '%'
@@ -36,8 +39,9 @@ class PagamentopessoasController extends Controller
                 }
             }
         } else {
-            $itens = Pagamentopessoa::where('id', 'like', '%');
+            $itens = Requisicao::where('id', 'like', '%');
         }
+
         if ($request['order']) {
             foreach ($request['order'] as $key => $order) {
                 $itens->orderBy(
@@ -46,7 +50,9 @@ class PagamentopessoasController extends Controller
                 );
             }
         }
+
         $itens = $itens->get();
+
         if ($request['adicionais']) {
             foreach ($itens as $key => $iten) {
                 foreach ($request['adicionais'] as $key => $adicional) {
@@ -93,30 +99,24 @@ class PagamentopessoasController extends Controller
      */
     public function store(Request $request)
     {
-        $pagamentopessoa = new Pagamentopessoa();
-        $pagamentopessoa->pessoa_id = $request->pessoa_id;
-        $pagamentopessoa->empresa_id = $request->empresa_id;
-        $pagamentopessoa->ordemservico_id = $request->ordemservico_id;
-        $pagamentopessoa->periodo1 = $request->periodo1;
-        $pagamentopessoa->periodo2 = $request->periodo2;
-        $pagamentopessoa->valor = $request->valor;
-        $pagamentopessoa->observacao = $request->observacao;
-        $pagamentopessoa->status = $request->status;
-        $pagamentopessoa->save();
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Pagamentopessoa  $pagamentopessoa
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Requisicao  $requisicao
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Pagamentopessoa $pagamentopessoa)
+    public function show(Request $request, Requisicao $requisicao)
     {
-        $iten = $pagamentopessoa;
+        $iten = $requisicao;
+
         if ($request->commands) {
             $request = json_decode($request->commands, true);
         }
+
         if ($request['adicionais']) {
             foreach ($request['adicionais'] as $key => $adicional) {
                 if (is_string($adicional)) {
@@ -157,31 +157,22 @@ class PagamentopessoasController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Pagamentopessoa  $pagamentopessoa
+     * @param  \App\Requisicao  $requisicao
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Pagamentopessoa $pagamentopessoa)
+    public function update(Request $request, Requisicao $requisicao)
     {
-        $pagamentopessoa->empresa_id      = $request['empresa_id'];
-        $pagamentopessoa->pessoa_id       = $request['pessoa_id'];
-        $pagamentopessoa->ordemservico_id = $request['ordemservico_id'];
-        $pagamentopessoa->periodo1        = $request['periodo1'];
-        $pagamentopessoa->periodo2        = $request['periodo2'];
-        $pagamentopessoa->valor           = $request['valor'];
-        $pagamentopessoa->observacao      = $request['observacao'];
-        $pagamentopessoa->status          = $request['status'];
-        $pagamentopessoa->situacao        = $request['situacao'];
-        $pagamentopessoa->update();
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Pagamentopessoa  $pagamentopessoa
+     * @param  \App\Requisicao  $requisicao
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Pagamentopessoa $pagamentopessoa)
+    public function destroy(Requisicao $requisicao)
     {
-        $pagamentopessoa->delete();
+        //
     }
 }
