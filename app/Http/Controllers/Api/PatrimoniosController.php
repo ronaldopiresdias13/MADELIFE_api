@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Unidademedida;
+use App\Patrimonio;
 use Illuminate\Http\Request;
 
-class UnidademedidasController extends Controller
+class PatrimoniosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class UnidademedidasController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Unidademedida();
+        $itens = new Patrimonio();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -24,7 +24,7 @@ class UnidademedidasController extends Controller
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
-                    $itens = Unidademedida::where(
+                    $itens = Patrimonio::where(
                         ($where['coluna']) ? $where['coluna'] : 'id',
                         ($where['expressao']) ? $where['expressao'] : 'like',
                         ($where['valor']) ? $where['valor'] : '%'
@@ -38,7 +38,7 @@ class UnidademedidasController extends Controller
                 }
             }
         } else {
-            $itens = Unidademedida::where('id', 'like', '%');
+            $itens = Patrimonio::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -94,28 +94,24 @@ class UnidademedidasController extends Controller
      */
     public function store(Request $request)
     {
-        $unidademedida = new Unidademedida();
-        // $unidademedida->empresa_id = $request->empresa_id;
-        $unidademedida->empresa_id = 1;
-        $unidademedida->descricao = $request->descricao;
-        $unidademedida->sigla = $request->sigla;
-        $unidademedida->grupo = $request->grupo;
-        $unidademedida->padrao = $request->padrao;
-        // $unidademedida->status = $request->status;
-        $unidademedida->status = 1;
-        $unidademedida->sigla = $request->sigla;
-        $unidademedida->save();
+        $patrimonio = new Patrimonio();
+        $patrimonio->empresa_id = 1;
+        $patrimonio->produto_id = $request->produto_id;
+        $patrimonio->codigo = $request->codigo;
+        $patrimonio->observacoes = $request->observacoes;
+        $patrimonio->status = $request->status;
+        $patrimonio->save();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Unidademedida  $unidademedida
+     * @param  \App\Patrimonio  $patrimonio
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Unidademedida $unidademedida)
+    public function show(Request $request, Patrimonio $patrimonio)
     {
-        $iten = $unidademedida;
+        $iten = $patrimonio;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -157,35 +153,22 @@ class UnidademedidasController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Unidademedida  $unidademedida
+     * @param  \App\Patrimonio  $patrimonio
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Unidademedida $unidademedida)
+    public function update(Request $request, Patrimonio $patrimonio)
     {
-        $unidademedida->update($request->all());
+        $patrimonio->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Unidademedida  $unidademedida
+     * @param  \App\Patrimonio  $patrimonio
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Unidademedida $unidademedida)
+    public function destroy(Patrimonio $patrimonio)
     {
-        $unidademedida->delete();
-    }
-
-    public function migracao(Request $request)
-    {
-        // dd($request);
-        $unidade = new Unidademedida();
-        $unidade->descricao = $request->descricao;
-        $unidade->sigla = $request->sigla;
-        $unidade->grupo = $request->grupo;
-        $unidade->padrao = true;
-        $unidade->status = true;
-        $unidade->empresa_id = 1;
-        $unidade->save();
+        // $patrimonio->delete();
     }
 }

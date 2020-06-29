@@ -743,6 +743,33 @@ class OrcamentosController extends Controller
     }
 
     /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Orcamento  $orcamento
+     * @return \Illuminate\Http\Response
+     */
+    public function alterarSituacao(Request $request, Orcamento $orcamento)
+    {
+        // $orcamento->empresa_id        = $request['empresa_id'];
+        // $orcamento->cliente_id        = $request['cliente_id'];
+        // $orcamento->numero            = $request['numero'];
+        // $orcamento->processo          = $request['processo'];
+        // $orcamento->cidade_id         = $request['cidade_id'];
+        // $orcamento->tipo              = $request['tipo'];
+        // $orcamento->data              = $request['data'];
+        // $orcamento->unidade           = $request['unidade'];
+        // $orcamento->quantidade        = $request['quantidade'];
+        $orcamento->situacao          = $request['situacao'];
+        // $orcamento->descricao         = $request['descricao'];
+        // $orcamento->valortotalservico = $request['valortotalservico'];
+        // $orcamento->valortotalcusto   = $request['valortotalcusto'];
+        // $orcamento->valortotalproduto = $request['valortotalproduto'];
+        // $orcamento->observacao        = $request['observacao'];
+        // $orcamento->status            = $request['status'];
+        $orcamento->update();
+    }
+    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Orcamento  $orcamento

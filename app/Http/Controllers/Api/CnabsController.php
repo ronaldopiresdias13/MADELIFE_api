@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Cnab;
+use App\Cnabsantander;
 use App\Http\Controllers\Controller;
-use App\Unidademedida;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class UnidademedidasController extends Controller
+class CnabsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +17,7 @@ class UnidademedidasController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Unidademedida();
+        $itens = new Cnab();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -24,7 +26,7 @@ class UnidademedidasController extends Controller
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
-                    $itens = Unidademedida::where(
+                    $itens = Cnab::where(
                         ($where['coluna']) ? $where['coluna'] : 'id',
                         ($where['expressao']) ? $where['expressao'] : 'like',
                         ($where['valor']) ? $where['valor'] : '%'
@@ -38,7 +40,7 @@ class UnidademedidasController extends Controller
                 }
             }
         } else {
-            $itens = Unidademedida::where('id', 'like', '%');
+            $itens = Cnab::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -94,98 +96,56 @@ class UnidademedidasController extends Controller
      */
     public function store(Request $request)
     {
-        $unidademedida = new Unidademedida();
-        // $unidademedida->empresa_id = $request->empresa_id;
-        $unidademedida->empresa_id = 1;
-        $unidademedida->descricao = $request->descricao;
-        $unidademedida->sigla = $request->sigla;
-        $unidademedida->grupo = $request->grupo;
-        $unidademedida->padrao = $request->padrao;
-        // $unidademedida->status = $request->status;
-        $unidademedida->status = 1;
-        $unidademedida->sigla = $request->sigla;
-        $unidademedida->save();
+        DB::transaction(function () use ($request, $cnab) {
+            if ($request['cnabsantander']['tipo'] == 'Folha') {
+                foreach ($request['cnabsantander'][''] as $key => $value) {
+                    # code...
+                }
+            }
+            $cnabsantander = Cnabsantander::crete([
+                'cnab_id' => Cnab::create([
+                    'empresa_id' => $request['empresa_id'],
+                    'data'       => $request['data']
+
+                ])->id,
+                'tipo' => ['tipo'],
+                'cnabheaderarquivo_id'
+
+            ]);
+        });
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Unidademedida  $unidademedida
+     * @param  \App\Cnab  $cnab
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Unidademedida $unidademedida)
+    public function show(Cnab $cnab)
     {
-        $iten = $unidademedida;
-
-        if ($request->commands) {
-            $request = json_decode($request->commands, true);
-        }
-
-        if ($request['adicionais']) {
-            foreach ($request['adicionais'] as $key => $adicional) {
-                if (is_string($adicional)) {
-                    $iten[$adicional];
-                } else {
-                    $iten2 = $iten;
-                    foreach ($adicional as $key => $a) {
-                        if ($key == 0) {
-                            if ($iten[0] == null) {
-                                $iten2 = $iten[$a];
-                            } else {
-                                foreach ($iten as $key => $i) {
-                                    $i[$a];
-                                }
-                            }
-                        } else {
-                            if ($iten2[0] == null) {
-                                $iten2 = $iten2[$a];
-                            } else {
-                                foreach ($iten2 as $key => $i) {
-                                    $i[$a];
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return $iten;
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Unidademedida  $unidademedida
+     * @param  \App\Cnab  $cnab
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Unidademedida $unidademedida)
+    public function update(Request $request, Cnab $cnab)
     {
-        $unidademedida->update($request->all());
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Unidademedida  $unidademedida
+     * @param  \App\Cnab  $cnab
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Unidademedida $unidademedida)
+    public function destroy(Cnab $cnab)
     {
-        $unidademedida->delete();
-    }
-
-    public function migracao(Request $request)
-    {
-        // dd($request);
-        $unidade = new Unidademedida();
-        $unidade->descricao = $request->descricao;
-        $unidade->sigla = $request->sigla;
-        $unidade->grupo = $request->grupo;
-        $unidade->padrao = true;
-        $unidade->status = true;
-        $unidade->empresa_id = 1;
-        $unidade->save();
+        //
     }
 }

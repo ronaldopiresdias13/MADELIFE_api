@@ -106,6 +106,12 @@ Route::put('clientes/{cliente}', 'Api\ClientesController@update');
 Route::delete('clientes/{cliente}', 'Api\ClientesController@destroy');
 // Route::get('meuspassientes/{cliente}', 'Api\ClientesController@meuspassientes'); // Custon
 
+Route::get('cnabs', 'Api\CnabsController@index');
+Route::post('cnabs', 'Api\CnabsController@store');
+Route::get('cnabs/{cnab}', 'Api\CnabsController@show');
+Route::put('cnabs/{cnab}', 'Api\CnabsController@update');
+Route::delete('cnabs/{cnab}', 'Api\CnabsController@destroy');
+
 Route::get('conselhos', 'Api\ConselhosController@index');
 Route::post('conselhos', 'Api\ConselhosController@store');
 Route::get('conselhos/{conselho}', 'Api\ConselhosController@show');
@@ -254,6 +260,7 @@ Route::get('orcamentos', 'Api\OrcamentosController@index');
 Route::post('orcamentos', 'Api\OrcamentosController@store');
 Route::get('orcamentos/{orcamento}', 'Api\OrcamentosController@show');
 Route::put('orcamentos/{orcamento}', 'Api\OrcamentosController@update');
+Route::put('alterarsituacao/{orcamento}', 'Api\OrcamentosController@alterarSituacao');
 Route::delete('orcamentos/{orcamento}', 'Api\OrcamentosController@destroy');
 
 Route::get('orcamentocustos', 'Api\OrcamentoCustosController@index');
@@ -306,11 +313,11 @@ Route::get('pagamentopessoas/{pagamentopessoa}', 'Api\PagamentopessoasController
 Route::put('pagamentopessoas/{pagamentopessoa}', 'Api\PagamentopessoasController@update');
 Route::delete('pagamentopessoas/{pagamentopessoa}', 'Api\PagamentopessoasController@destroy');
 
-Route::get('patrimonioTestes', 'Api\patrimonioTestesController@index');
-Route::post('patrimonioTestes', 'Api\patrimonioTestesController@store');
-Route::get('patrimonioTestes/{patrimoioTeste}', 'Api\patrimonioTestesController@show');
-Route::put('patrimonioTestes/{patrimoioTeste}', 'Api\patrimonioTestesController@update');
-Route::delete('patrimonioTestes/{patrimoioTeste}', 'Api\patrimonioTestesController@destroy');
+Route::get('patrimonios', 'Api\PatrimoniosController@index');
+Route::post('patrimonios', 'Api\PatrimoniosController@store');
+Route::get('patrimonios/{patrimonio}', 'Api\PatrimoniosController@show');
+Route::put('patrimonios/{patrimonio}', 'Api\PatrimoniosController@update');
+Route::delete('patrimonios/{patrimonio}', 'Api\PatrimoniosController@destroy');
 
 Route::get('pessoas', 'Api\PessoasController@index');
 Route::post('pessoas', 'Api\PessoasController@store');

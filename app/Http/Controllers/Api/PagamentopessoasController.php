@@ -154,7 +154,16 @@ class PagamentopessoasController extends Controller
      */
     public function update(Request $request, Pagamentopessoa $pagamentopessoa)
     {
-        $pagamentopessoa->update($request->all());
+        $pagamentopessoa->empresa_id      = $request['empresa_id'];
+        $pagamentopessoa->pessoa_id       = $request['pessoa_id'];
+        $pagamentopessoa->ordemservico_id = $request['ordemservico_id'];
+        $pagamentopessoa->periodo1        = $request['periodo1'];
+        $pagamentopessoa->periodo2        = $request['periodo2'];
+        $pagamentopessoa->valor           = $request['valor'];
+        $pagamentopessoa->observacao      = $request['observacao'];
+        $pagamentopessoa->status          = $request['status'];
+        $pagamentopessoa->situacao        = $request['situacao'];
+        $pagamentopessoa->update();
     }
 
     /**
@@ -165,6 +174,6 @@ class PagamentopessoasController extends Controller
      */
     public function destroy(Pagamentopessoa $pagamentopessoa)
     {
-        $pagamentopessoa>delete();
+        $pagamentopessoa->delete();
     }
 }
