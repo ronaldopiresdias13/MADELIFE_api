@@ -4,8 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RemocaoTelefone extends Model
+class Requisicao extends Model
 {
-    protected $table = 'remocao_telefone';
+    protected $table = 'requisicoes';
     protected $guarded = [];
 }
