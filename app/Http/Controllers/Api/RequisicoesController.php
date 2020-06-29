@@ -103,20 +103,20 @@ class RequisicoesController extends Controller
     {
         DB::transaction(function ($request) {
             $requisicao = Requisicao::create([
-                'empresa_id' => $request->empresa_id,
-                'pessoa_id'  => $request->pessoa_id,
-                'data'       => $request->data,
-                'observacao' => $request->observacao,
-                'status'     => $request->status,
+                'empresa_id' => $request['empresa_id'],
+                'pessoa_id'  => $request['pessoa_id'],
+                'data'       => $request['data'],
+                'observacao' => $request['observacao'],
+                'status'     => $request['status'],
             ]);
-            if ($request->produtos) {
-                foreach ($request->produtos as $key => $produto) {
+            if ($request['produtos']) {
+                foreach ($request['produtos'] as $key => $produto) {
                     $requisicao_produto = RequisicaoProduto::create([
                         'requisicao_id' => $requisicao->id,
-                        'produto_id'    => $produto->produto_id,
-                        'quantidade'    => $produto->quantidade,
-                        'observacao'    => $produto->observccao,
-                        'status'        => $produto->status,
+                        'produto_id'    => $produto['produto_id'],
+                        'quantidade'    => $produto['quantidade'],
+                        'observacao'    => $produto['observccao'],
+                        'status'        => $produto['status'],
                     ]);
                 }
             }
