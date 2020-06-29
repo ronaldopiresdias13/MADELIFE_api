@@ -136,6 +136,12 @@ Route::get('convenios/{convenio}', 'Api\ConveniosController@show');
 Route::put('convenios/{convenio}', 'Api\ConveniosController@update');
 Route::delete('convenios/{convenio}', 'Api\ConveniosController@destroy');
 
+Route::get('cotacaoTestes', 'Api\cotacaoTesteController@index');
+Route::post('cotacaoTestes', 'Api\cotacaoTesteController@store');
+Route::get('cotacaoTestes/{cotacaoTeste}', 'Api\cotacaoTesteController@show');
+Route::put('cotacaoTestes/{cotacaoTeste}', 'Api\cotacaoTesteController@update');
+Route::delete('cotacaoTestes/{cotacaoTeste}', 'Api\cotacaoTesteController@destroy');
+
 Route::get('cuidados', 'Api\CuidadosController@index');
 Route::post('cuidados', 'Api\CuidadosController@store');
 Route::get('cuidados/{cuidado}', 'Api\CuidadosController@show');

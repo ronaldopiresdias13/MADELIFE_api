@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\CotacaoTeste;
 use App\Http\Controllers\Controller;
-use App\Patrimonio;
 use Illuminate\Http\Request;
 
-class PatrimoniosController extends Controller
+class CotacaoTesteController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class PatrimoniosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Patrimonio();
+        $itens = new CotacaoTeste();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -24,7 +24,7 @@ class PatrimoniosController extends Controller
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
-                    $itens = Patrimonio::where(
+                    $itens = CotacaoTeste::where(
                         ($where['coluna']) ? $where['coluna'] : 'id',
                         ($where['expressao']) ? $where['expressao'] : 'like',
                         ($where['valor']) ? $where['valor'] : '%'
@@ -38,7 +38,7 @@ class PatrimoniosController extends Controller
                 }
             }
         } else {
-            $itens = Patrimonio::where('id', 'like', '%');
+            $itens = CotacaoTeste::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -94,24 +94,23 @@ class PatrimoniosController extends Controller
      */
     public function store(Request $request)
     {
-        $patrimonio = new Patrimonio();
-        $patrimonio->empresa_id = 1;
-        $patrimonio->produto_id = $request->produto_id;
-        $patrimonio->codigo = $request->codigo;
-        $patrimonio->observacao = $request->observacao;
-        $patrimonio->status = $request->status;
-        $patrimonio->save();
+        $cotacaoTeste = new CotacaoTeste();
+        $cotacaoTeste->nome = $request->nome;
+        $cotacaoTeste->codigo = $request->codigo;
+        $cotacaoTeste->descricao = $request->descricao;
+        $cotacaoTeste->valor = $request->valor;
+        $cotacaoTeste->save();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Patrimonio  $patrimonio
+     * @param  \App\CotacaoTeste  $cotacaoTeste
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Patrimonio $patrimonio)
+    public function show(CotacaoTeste $cotacaoTeste)
     {
-        $iten = $patrimonio;
+        $iten = $cotacaoTeste;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -153,22 +152,22 @@ class PatrimoniosController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Patrimonio  $patrimonio
+     * @param  \App\CotacaoTeste  $cotacaoTeste
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Patrimonio $patrimonio)
+    public function update(Request $request, CotacaoTeste $cotacaoTeste)
     {
-        $patrimonio->update($request->all());
+        $cotacaoTeste->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Patrimonio  $patrimonio
+     * @param  \App\CotacaoTeste  $cotacaoTeste
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Patrimonio $patrimonio)
+    public function destroy(CotacaoTeste $cotacaoTeste)
     {
-        // $patrimonio->delete();
+        //
     }
 }
