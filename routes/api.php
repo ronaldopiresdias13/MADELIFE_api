@@ -45,7 +45,7 @@ Route::group([
 // Route::post('profissionais/migracao', 'Api\ProfissionaisController@migracao');
 // Route::post('escalas/migracao', 'Api\EscalasController@migracao');
 
-Route::post("/image", "Controller@uploadimage");
+Route::post("/files/upload", "Api\FilesController@upload");
 
 /* ------------- Rotas Utilizando Token ------------- */
 Route::group(['middleware' => 'auth:api'], function () {
