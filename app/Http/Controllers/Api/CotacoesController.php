@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Convenio;
+use App\Cotacao;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ConveniosController extends Controller
+class CotacoesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class ConveniosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Convenio();
+        $itens = new Cotacao();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -25,7 +25,7 @@ class ConveniosController extends Controller
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
-                    $itens = Convenio::where(
+                    $itens = Cotacao::where(
                         ($where['coluna']) ? $where['coluna'] : 'id',
                         ($where['expressao']) ? $where['expressao'] : 'like',
                         ($where['valor']) ? $where['valor'] : '%'
@@ -39,7 +39,7 @@ class ConveniosController extends Controller
                 }
             }
         } else {
-            $itens = Convenio::where('id', 'like', '%');
+            $itens = Cotacao::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -70,11 +70,15 @@ class ConveniosController extends Controller
                                     }
                                 }
                             } else {
-                                if ($iten2[0] == null) {
-                                    $iten2 = $iten2[$a];
-                                } else {
-                                    foreach ($iten2 as $key => $i) {
-                                        $i[$a];
+                                if ($iten2 != null) {
+                                    if ($iten2->count() > 0) {
+                                        if ($iten2[0] == null) {
+                                            $iten2 = $iten2[$a];
+                                        } else {
+                                            foreach ($iten2 as $key => $i) {
+                                                $i[$a];
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -95,18 +99,19 @@ class ConveniosController extends Controller
      */
     public function store(Request $request)
     {
-        Convenio::create($request->all());
+        Cotacao::create($request->all());
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Convenio  $convenio
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Cotacao  $cotacao
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Convenio $convenio)
+    public function show(Request $request, Cotacao $cotacao)
     {
-        $iten = $convenio;
+        $iten = $cotacao;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -128,11 +133,15 @@ class ConveniosController extends Controller
                                 }
                             }
                         } else {
-                            if ($iten2[0] == null) {
-                                $iten2 = $iten2[$a];
-                            } else {
-                                foreach ($iten2 as $key => $i) {
-                                    $i[$a];
+                            if ($iten2 != null) {
+                                if ($iten2->count() > 0) {
+                                    if ($iten2[0] == null) {
+                                        $iten2 = $iten2[$a];
+                                    } else {
+                                        foreach ($iten2 as $key => $i) {
+                                            $i[$a];
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -148,22 +157,22 @@ class ConveniosController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Convenio  $convenio
+     * @param  \App\Cotacao  $cotacao
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Convenio $convenio)
+    public function update(Request $request, Cotacao $cotacao)
     {
-        $convenio->update($request->all());
+        $cotacao->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Convenio  $convenio
+     * @param  \App\Cotacao  $cotacao
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Convenio $convenio)
+    public function destroy(Cotacao $cotacao)
     {
-        $convenio->delete();
+        $cotacao->delete();
     }
 }
