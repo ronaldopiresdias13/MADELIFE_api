@@ -114,7 +114,7 @@ class RelatorioescalasController extends Controller
                 DB::transaction(function () use ($escala, $caminho, $nome, $nomeOriginal) {
                     $relatorio_escala = Relatorioescala::create([
                         'escala_id' => $escala['id'],
-                        'caminho'   => $caminho . $nome,
+                        'caminho'   => $caminho . '/' . $nome,
                         'nome'      => $nomeOriginal,
                     ]);
                 });
