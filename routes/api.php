@@ -136,11 +136,17 @@ Route::get('convenios/{convenio}', 'Api\ConveniosController@show');
 Route::put('convenios/{convenio}', 'Api\ConveniosController@update');
 Route::delete('convenios/{convenio}', 'Api\ConveniosController@destroy');
 
-Route::get('cotacaoTestes', 'Api\cotacaoTesteController@index');
-Route::post('cotacaoTestes', 'Api\cotacaoTesteController@store');
-Route::get('cotacaoTestes/{cotacaoTeste}', 'Api\cotacaoTesteController@show');
-Route::put('cotacaoTestes/{cotacaoTeste}', 'Api\cotacaoTesteController@update');
-Route::delete('cotacaoTestes/{cotacaoTeste}', 'Api\cotacaoTesteController@destroy');
+Route::get('cotacoes', 'Api\CotacoesController@index');
+Route::post('cotacoes', 'Api\CotacoesController@store');
+Route::get('cotacoes/{cotacao}', 'Api\CotacoesController@show');
+Route::put('cotacoes/{cotacao}', 'Api\CotacoesController@update');
+Route::delete('cotacoes/{cotacao}', 'Api\CotacoesController@destroy');
+
+Route::get('cotacaoproduto', 'Api\CotacaoprodutoController@index');
+Route::post('cotacaoproduto', 'Api\CotacaoprodutoController@store');
+Route::get('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoprodutoController@show');
+Route::put('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoprodutoController@update');
+Route::delete('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoprodutoController@destroy');
 
 Route::get('cuidados', 'Api\CuidadosController@index');
 Route::post('cuidados', 'Api\CuidadosController@store');
