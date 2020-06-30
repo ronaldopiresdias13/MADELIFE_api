@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Escala;
 use App\Http\Controllers\Controller;
 use App\Relatorioescala;
+use Facade\FlareClient\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -114,7 +115,7 @@ class RelatorioescalasController extends Controller
                 DB::transaction(function () use ($escala, $caminho, $nome, $nomeOriginal) {
                     $relatorio_escala = Relatorioescala::create([
                         'escala_id' => $escala['id'],
-                        'caminho'   => $caminho . $nome,
+                        'caminho'   => $caminho . '/' . $nome,
                         'nome'      => $nomeOriginal,
                     ]);
                 });
@@ -136,7 +137,32 @@ class RelatorioescalasController extends Controller
     public function show(Relatorioescala $relatorioescala)
     {
         $file = Storage::get($relatorioescala['caminho']);
-        return $file;
+
+        $response =  array(
+            'nome' => $relatorioescala['nome'],
+            // 'file' => "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64," . base64_encode($file)
+            'file' => base64_encode($file)
+        );
+
+        return response()->json($response);
+
+        // // dd(
+        // //     storage_path('public')
+        // // );
+        // // storage_path()
+        // // $file = public_path() . '\\' . $relatorioescala['caminho'];
+        // $file = storage_path() . '/5b7347f7aa382e1cd4b8f4472dde89b6.pdf';
+        // // dd($file);
+        // //
+
+        // $headers = array(
+        //     'Content-Type: application/pdf',
+        // );
+
+        // return response()->download($file, $relatorioescala['nome'], $headers);
+
+        // // $file = Storage::get($relatorioescala['caminho']);
+        // // return $file;
     }
 
     /**
