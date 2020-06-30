@@ -368,6 +368,12 @@ Route::get('requisicoes/{requisicao}', 'Api\RequisicoesController@show');
 Route::put('requisicoes/{requisicao}', 'Api\RequisicoesController@update');
 Route::delete('requisicoes/{requisicao}', 'Api\RequisicoesController@destroy');
 
+Route::get('requisicaoprodudos', 'Api\RequisicaoProdutosController@index');
+Route::post('requisicaoprodudos', 'Api\RequisicaoProdutosController@store');
+Route::get('requisicaoprodudos/{requisicaoProduto}', 'Api\RequisicaoProdutosController@show');
+Route::put('requisicaoprodudos/{requisicaoProduto}', 'Api\RequisicaoProdutosController@update');
+Route::delete('requisicaoprodudos/{requisicaoProduto}', 'Api\RequisicaoProdutosController@destroy');
+
 Route::get('responsaveis', 'Api\ResponsaveisController@index');
 Route::post('responsaveis', 'Api\ResponsaveisController@store');
 Route::get('responsaveis/{responsavel}', 'Api\ResponsaveisController@show');

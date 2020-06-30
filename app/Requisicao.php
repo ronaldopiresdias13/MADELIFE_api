@@ -16,6 +16,6 @@ class Requisicao extends Model
     public function produtos()
     {
         return $this->belongsToMany('App\Produto', 'requisicao_produto')
-            ->withPivot('quantidade', 'observacao', 'status');
+            ->withPivot('id', 'quantidade', 'observacao', 'status');
     }
 }
