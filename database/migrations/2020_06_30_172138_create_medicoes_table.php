@@ -19,6 +19,8 @@ class CreateMedicoesTable extends Migration
             $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
             $table->unsignedBigInteger('cliente_id');
             $table->foreign('cliente_id')->references('id')->on('clientes')->onDelete('cascade');
+            $table->unsignedBigInteger('ordemservico_id');
+            $table->foreign('ordemservico_id')->references('id')->on('ordemservicos')->onDelete('cascade');
             $table->string('data1');
             $table->string('data2');
             $table->string('valor');
