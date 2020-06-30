@@ -368,11 +368,23 @@ Route::get('relatorios/{relatorio}', 'Api\RelatoriosController@show');
 Route::put('relatorios/{relatorio}', 'Api\RelatoriosController@update');
 Route::delete('relatorios/{relatorio}', 'Api\RelatoriosController@destroy');
 
+Route::get('relatorioescalas', 'Api\RelatorioescalasController@index');
+Route::post('relatorioescalas/{escala}', 'Api\RelatorioescalasController@store');
+Route::get('relatorioescalas/{relatorioescala}', 'Api\RelatorioescalasController@show');
+Route::put('relatorioescalas/{relatorioescala}', 'Api\RelatorioescalasController@update');
+Route::delete('relatorioescalas/{relatorioescala}', 'Api\RelatorioescalasController@destroy');
+
 Route::get('requisicoes', 'Api\RequisicoesController@index');
 Route::post('requisicoes', 'Api\RequisicoesController@store');
 Route::get('requisicoes/{requisicao}', 'Api\RequisicoesController@show');
 Route::put('requisicoes/{requisicao}', 'Api\RequisicoesController@update');
 Route::delete('requisicoes/{requisicao}', 'Api\RequisicoesController@destroy');
+
+Route::get('requisicaoprodudos', 'Api\RequisicaoProdutosController@index');
+Route::post('requisicaoprodudos', 'Api\RequisicaoProdutosController@store');
+Route::get('requisicaoprodudos/{requisicaoProduto}', 'Api\RequisicaoProdutosController@show');
+Route::put('requisicaoprodudos/{requisicaoProduto}', 'Api\RequisicaoProdutosController@update');
+Route::delete('requisicaoprodudos/{requisicaoProduto}', 'Api\RequisicaoProdutosController@destroy');
 
 Route::get('responsaveis', 'Api\ResponsaveisController@index');
 Route::post('responsaveis', 'Api\ResponsaveisController@store');

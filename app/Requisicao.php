@@ -9,9 +9,13 @@ class Requisicao extends Model
     protected $table = 'requisicoes';
     protected $guarded = [];
 
+    public function pessoa()
+    {
+        return $this->belongsTo('App\Pessoa');
+    }
     public function produtos()
     {
         return $this->belongsToMany('App\Produto', 'requisicao_produto')
-            ->withPivot('quantidade', 'observacao', 'status');
+            ->withPivot('id', 'quantidade', 'observacao', 'status');
     }
 }

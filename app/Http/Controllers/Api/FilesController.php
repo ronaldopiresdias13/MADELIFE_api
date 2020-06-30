@@ -10,7 +10,7 @@ class FilesController extends Controller
 {
     public function upload(Request $request)
     {
-        // $file = Storage::get('relatorioescalas/1/3364692105f5e966456ce0f8fb742d8c.pdf');
+        $file = Storage::get('relatorioescalas/1/3364692105f5e966456ce0f8fb742d8c.pdf');
         // $file = Storage::download('relatorioescalas/1/3364692105f5e966456ce0f8fb742d8c.pdf');
         // $file = Storage::url('relatorioescalas/1/3364692105f5e966456ce0f8fb742d8c.pdf');
         // $file = Storage::temporaryUrl(
@@ -18,10 +18,11 @@ class FilesController extends Controller
         //     now()->addMinutes(5)
         // );
 
-        // dd($file);
+        dd($file);
 
         $file = $request->file('file'); // ou $request->file;
         // $extension = $file->extension();
+        // dd($file->getClientOriginalName());
         if ($file->isValid()) {
             $md5 = md5_file($file);
             // dd($md5);
