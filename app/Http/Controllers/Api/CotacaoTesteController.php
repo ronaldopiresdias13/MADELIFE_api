@@ -2,22 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Homecare;
+use App\CotacaoTeste;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class HomecaresController extends Controller
+class CotacaoTesteController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $itens = new Homecare();
+        $itens = new CotacaoTeste();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -26,7 +24,7 @@ class HomecaresController extends Controller
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
-                    $itens = Homecare::where(
+                    $itens = CotacaoTeste::where(
                         ($where['coluna']) ? $where['coluna'] : 'id',
                         ($where['expressao']) ? $where['expressao'] : 'like',
                         ($where['valor']) ? $where['valor'] : '%'
@@ -40,7 +38,7 @@ class HomecaresController extends Controller
                 }
             }
         } else {
-            $itens = Homecare::where('id', 'like', '%');
+            $itens = CotacaoTeste::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -96,29 +94,23 @@ class HomecaresController extends Controller
      */
     public function store(Request $request)
     {
-        $homecare = Homecare::create([
-            // 'empresa_id'           => $request->empresa_id,
-            'nome'               => $request->nome,
-            'sexo'             => $request->sexo,
-            'nascimento'                 => $request->nascimento,
-            'cpfcnpj'               => $request->cpf,
-            'rgie'               => $request->rg,
-            'observacao'               => $request->observacao,
-            // 'status'               => $request->status,
-            'orcamento_id' => $request->orcamento_id,
-        ]);
+        $cotacaoTeste = new CotacaoTeste();
+        $cotacaoTeste->nome = $request->nome;
+        $cotacaoTeste->codigo = $request->codigo;
+        $cotacaoTeste->descricao = $request->descricao;
+        $cotacaoTeste->valor = $request->valor;
+        $cotacaoTeste->save();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Homecare  $homecare
+     * @param  \App\CotacaoTeste  $cotacaoTeste
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Homecare $homecare)
+    public function show(CotacaoTeste $cotacaoTeste)
     {
-        $iten = $homecare;
+        $iten = $cotacaoTeste;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -160,23 +152,21 @@ class HomecaresController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Homecare  $homecare
+     * @param  \App\CotacaoTeste  $cotacaoTeste
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Homecare $homecare)
+    public function update(Request $request, CotacaoTeste $cotacaoTeste)
     {
-        DB::transaction(function () use ($request, $homecare) {
-            $homecare->update($request->all());
-        });
+        $cotacaoTeste->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Homecare  $homecare
+     * @param  \App\CotacaoTeste  $cotacaoTeste
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Homecare $homecare)
+    public function destroy(CotacaoTeste $cotacaoTeste)
     {
         //
     }
