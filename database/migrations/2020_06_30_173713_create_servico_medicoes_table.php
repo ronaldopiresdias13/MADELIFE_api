@@ -15,6 +15,17 @@ class CreateServicoMedicoesTable extends Migration
     {
         Schema::create('servico_medicoes', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('medicoes_id');
+            $table->foreign('medicoes_id')->references('id')->on('medicoes')->onDelete('cascade');
+            $table->unsignedBigInteger('servico_id');
+            $table->foreign('servico_id')->references('id')->on('servicos')->onDelete('cascade');
+            $table->string('quantidade');
+            $table->string('atendido');
+            $table->string('valor');
+            $table->string('subtotal');
+            $table->string('situacao');
+            $table->string('observacao');
+            $table->boolean('status');
             $table->timestamps();
         });
     }
