@@ -5,13 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Escala;
 use App\Cuidado;
 use App\CuidadoEscala;
-use App\Prestador;
-use App\Relatorio;
-use App\Ponto;
-use App\Monitoramentoescala;
+use App\Relatorioescala;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class EscalasController extends Controller
 {
@@ -289,114 +287,52 @@ class EscalasController extends Controller
         $escala->delete();
     }
 
-    // public function migracao(Request $request)
+    // /**
+    //  * Update the specified resource in storage.
+    //  *
+    //  * @param  \Illuminate\Http\Request  $request
+    //  * @param  \App\Escala  $escala
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function uploadFile(Request $request, Escala $escala)
     // {
-    //     $escala = Escala::create([
-    //         'empresa_id' => $request['empresa_id'],
-    //         'ordemservico_id' => $request['ordemservico_id'],
-    //         'prestador_id' => $request['prestadorId']['id'],
-    //         'servico_id' => ($request['servico_id']) ? $request['servico_id']['id'] : null,
-    //         'horaentrada' =>    $request['escala']['horaentrada'],
-    //         'horasaida' =>      $request['escala']['horasaida'],
-    //         'dataentrada' =>    $request['escala']['dataentrada'],
-    //         'datasaida' =>      $request['escala']['datasaida'],
-    //         'periodo' =>        $request['escala']['periodo'],
-    //         'assinaturaprestador' => '',
-    //         'assinaturaresponsavel' => '',
-    //         'observacao' =>     $request['escala']['observacoes'],
-    //         'status' =>         $request['escala']['status'],
-    //         'folga' =>          $request['escala']['folga'],
-    //         'substituto' =>     $request['escala']['substituto'],
-    //     ])->id;
-    //     if ($request['escala']['checkin'] != null) {
-    //         $pontoentrada = Ponto::create([
-    //             'empresa_id' => $request['empresa_id'],
-    //             'escala_id' => $escala,
-    //             'latitude' =>   $request['escala']['checkin']['latitude'],
-    //             'longitude' =>  $request['escala']['checkin']['longitude'],
-    //             'data' =>       $request['escala']['checkin']['data'],
-    //             'hora' =>       $request['escala']['checkin']['hora'],
-    //             'tipo' => 'Checkin',
-    //             'observacao' => '',
-    //             'status' => $request['escala']['checkin']['status'],
-    //         ]);
-    //     };
-    //     if ($request['escala']['checkout'] != null) {
-    //         $pontosaida = Ponto::create([
-    //             'empresa_id' => $request['empresa_id'],
-    //             'escala_id' => $escala,
-    //             'latitude' =>   $request['escala']['checkout']['latitude'],
-    //             'longitude' =>  $request['escala']['checkout']['longitude'],
-    //             'data' =>       $request['escala']['checkout']['data'],
-    //             'hora' =>       $request['escala']['checkout']['hora'],
-    //             'tipo' => 'Checkout',
-    //             'observacao' => '',
-    //             'status' => $request['escala']['checkout']['status'],
-    //         ]);
-    //     };
-    //     if ($request['escala']['cuidados']) {
-    //         foreach ($request['escala']['cuidados'] as $cuidado) {
-    //             $cuidados_escalas = CuidadoEscala::create([
-    //                 'cuidado_id' => Cuidado::firstOrCreate(
-    //                     [
-    //                         'codigo' => $cuidado['cuidado']['codigo'],
-    //                     ],
-    //                     [
-    //                         'descricao' => $cuidado['cuidado']['descricao'],
-    //                         'empresa_id' => 1,
-    //                         'status' => true,
-    //                     ]
-    //                 )->id,
-    //                 'escala_id' => $escala,
-    //                 'data' => null,
-    //                 'hora' => $cuidado['horario'],
-    //                 'status' => $cuidado['status'],
-    //             ]);
+    //     $file = $request->file('file'); // ou $request->file;
+    //     // $extension = $file->extension();
+    //     // dd($file->getClientOriginalName());
+    //     if ($file->isValid()) {
+    //         $md5 = md5_file($file);
+    //         // dd($md5);
+    //         $caminho = 'relatorioescalas/' . $escala['id'];
+    //         $nome = $md5 . '.' . $file->extension();
+    //         $upload = $file->storeAs($caminho, $nome);
+    //         $nomeOriginal = $file->getClientOriginalName();
+
+    //         if ($upload) {
+    //             DB::transaction(function () use ($escala, $caminho, $nome, $nomeOriginal) {
+    //                 $relatorio_escala = Relatorioescala::create([
+    //                     'escala_id' => $escala['id'],
+    //                     'caminho'   => $caminho . $nome,
+    //                     'nome'      => $nomeOriginal,
+    //                 ]);
+    //             });
+    //             return response()->json(["message" => "Image Uploaded Succesfully"]);
+    //         } else {
+    //             return response()->json(["message" => "Erro"]);
     //         }
-    //     };
-    //     if ($request['escala']['itemEscalaMonitoramentos']) {
-    //         foreach ($request['escala']['itemEscalaMonitoramentos'] as $monitor) {
-    //             $monitoramento = Monitoramentoescala::create([
-    //                 'escala_id' =>  $escala,
-    //                 'data'  =>  '',
-    //                 'hora'  =>  $monitor['horario'],
-    //                 'pa'  =>  $monitor['pa'],
-    //                 'p'  =>  $monitor['p'],
-    //                 't'  =>  $monitor['t'],
-    //                 'fr'  =>  $monitor['fr'],
-    //                 'sat'  =>  $monitor['sat'],
-    //                 'criev'  =>  $monitor['criEv'],
-    //                 'ev'  =>  $monitor['ev'],
-    //                 'dieta'  =>  $monitor['dieta'],
-    //                 'cridieta'  =>  $monitor['criDieta'],
-    //                 'criliquido'  =>  $monitor['criLiq'],
-    //                 'liquido'  =>  $monitor['liq'],
-    //                 'cridiurese'  =>  $monitor['criDiurese'],
-    //                 'diurese'  =>  $monitor['diurese'],
-    //                 'evac'  =>  $monitor['evac'],
-    //                 'crievac'  =>  $monitor['criEvac'],
-    //                 'crivomito'  =>  $monitor['criVomito'],
-    //                 'vomito'  =>  $monitor['vomito'],
-    //                 'asp'  =>  $monitor['asp'],
-    //                 'decub'  =>  $monitor['decub'],
-    //                 'curativo'  =>  $monitor['curativo'],
-    //                 'fraldas'  =>  $monitor['fraldas'],
-    //                 'sondas'    =>  $monitor['sondas'],
-    //                 'dextro'    =>  $monitor['dextro'],
-    //                 'o2'        =>  $monitor['o2'],
-    //                 'observacao' =>  '',
-    //             ]);
-    //         }
+    //     } else {
+    //         return response()->json(["message" => "Select image first."]);
     //     }
-    //     foreach ($request['relatorio'] as $relatorio) {
-    //         $relatorio_escala = Relatorio::create([
-    //             'escala_id' => $escala,
-    //             'hora' => $relatorio['hora'],
-    //             'data' => $relatorio['data'],
-    //             'quadro' => $relatorio['quadro'],
-    //             'tipo' => $relatorio['tipo'],
-    //             'texto' => $relatorio['texto']
-    //         ]);
-    //     }
+    // }
+
+    // /**
+    //  * Update the specified resource in storage.
+    //  *
+    //  * @param  string  $caminho
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function downloadFile(string $caminho)
+    // {
+    //     $file = Storage::get($caminho['caminho']);
+    //     return $file;
     // }
 }
