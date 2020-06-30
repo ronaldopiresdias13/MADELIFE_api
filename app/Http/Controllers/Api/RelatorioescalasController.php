@@ -140,8 +140,8 @@ class RelatorioescalasController extends Controller
 
         $response =  array(
             'nome' => $relatorioescala['nome'],
-            'file' => "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64," .
-                base64_encode($file)
+            // 'file' => "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64," . base64_encode($file)
+            'file' => base64_encode($file)
         );
 
         return response()->json($response);
