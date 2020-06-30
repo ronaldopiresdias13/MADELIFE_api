@@ -140,29 +140,10 @@ class RelatorioescalasController extends Controller
 
         $response =  array(
             'nome' => $relatorioescala['nome'],
-            // 'file' => "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64," . base64_encode($file)
             'file' => base64_encode($file)
         );
 
         return response()->json($response);
-
-        // // dd(
-        // //     storage_path('public')
-        // // );
-        // // storage_path()
-        // // $file = public_path() . '\\' . $relatorioescala['caminho'];
-        // $file = storage_path() . '/5b7347f7aa382e1cd4b8f4472dde89b6.pdf';
-        // // dd($file);
-        // //
-
-        // $headers = array(
-        //     'Content-Type: application/pdf',
-        // );
-
-        // return response()->download($file, $relatorioescala['nome'], $headers);
-
-        // // $file = Storage::get($relatorioescala['caminho']);
-        // // return $file;
     }
 
     /**
