@@ -49,7 +49,7 @@ class RequisicaoProdutosController extends Controller
      */
     public function update(Request $request, RequisicaoProduto $requisicaoProduto)
     {
-        //
+        $requisicaoProduto->update($request->all());
     }
 
     /**
