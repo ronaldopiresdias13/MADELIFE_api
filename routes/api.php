@@ -362,6 +362,12 @@ Route::get('relatorios/{relatorio}', 'Api\RelatoriosController@show');
 Route::put('relatorios/{relatorio}', 'Api\RelatoriosController@update');
 Route::delete('relatorios/{relatorio}', 'Api\RelatoriosController@destroy');
 
+Route::get('relatorioescalas', 'Api\RelatorioescalasController@index');
+Route::post('relatorioescalas/{escala}', 'Api\RelatorioescalasController@store');
+Route::get('relatorioescalas/{relatorioescala}', 'Api\RelatorioescalasController@show');
+Route::put('relatorioescalas/{relatorioescala}', 'Api\RelatorioescalasController@update');
+Route::delete('relatorioescalas/{relatorioescala}', 'Api\RelatorioescalasController@destroy');
+
 Route::get('requisicoes', 'Api\RequisicoesController@index');
 Route::post('requisicoes', 'Api\RequisicoesController@store');
 Route::get('requisicoes/{requisicao}', 'Api\RequisicoesController@show');
