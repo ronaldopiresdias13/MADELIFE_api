@@ -15,32 +15,32 @@ class CreateCnabheaderarquivosTable extends Migration
     {
         Schema::create('cnabheaderarquivos', function (Blueprint $table) {
             $table->id();
-            $table->char('codigobanco', 3);
-            $table->char('loteservico', 4);
-            $table->char('tiporegistro', 1);
-            $table->char('filler', 9);
-            $table->char('tipoinscemp', 1);
-            $table->char('numinscemp', 14);
-            $table->char('codigoconvbanco', 20);
-            $table->char('agenciaconta', 5);
-            $table->char('digitoagencia', 1);
-            $table->char('numcontacorrente', 12);
-            $table->char('digitoconta', 1);
-            $table->char('digitoagenciaconta', 1);
-            $table->char('nomeempresa', 30);
-            $table->char('nomebanco', 30);
-            $table->char('filler2', 10);
-            $table->char('codremessa', 1);
-            $table->char('dataarquivo', 8);
-            $table->char('horaarquivo', 6);
-            $table->char('numseqarquivo', 6);
-            $table->char('numversaolayout', 3);
-            $table->char('densidadegravacaoarquivo', 5);
-            $table->char('reservadobanco', 20); //Apenas Fornecedores
-            $table->char('usobanco', 20);
-            $table->char('usoempresa', 20);
-            $table->char('filler3', 19);
-            $table->char('ocorrenciasretorno', 10);
+            $table->string('codigobanco')->nullable();
+            $table->string('loteservico')->nullable();
+            $table->string('tiporegistro')->nullable();
+            $table->string('filler')->nullable();
+            $table->string('tipoinscemp')->nullable();
+            $table->string('numinscemp')->nullable();
+            $table->string('codigoconvbanco')->nullable();
+            $table->string('agenciaconta')->nullable();
+            $table->string('digitoagencia')->nullable();
+            $table->string('numcontacorrente')->nullable();
+            $table->string('digitoconta')->nullable();
+            $table->string('digitoagenciaconta')->nullable();
+            $table->string('nomeempresa')->nullable();
+            $table->string('nomebanco')->nullable();
+            $table->string('filler2')->nullable();
+            $table->string('codremessa')->nullable();
+            $table->string('dataarquivo')->nullable();
+            $table->string('horaarquivo')->nullable();
+            $table->string('numseqarquivo')->nullable();
+            $table->string('numversaolayout')->nullable();
+            $table->string('densidadegravacaoarquivo')->nullable();
+            $table->string('reservadobanco')->nullable(); //Apenas Fornecedores
+            $table->string('usobanco')->nullable();
+            $table->string('usoempresa')->nullable();
+            $table->string('filler3')->nullable();
+            $table->string('ocorrenciasretorno')->nullable();
             $table->timestamps();
         });
     }
