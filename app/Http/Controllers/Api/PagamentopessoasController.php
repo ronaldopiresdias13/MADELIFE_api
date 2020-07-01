@@ -93,16 +93,18 @@ class PagamentopessoasController extends Controller
      */
     public function store(Request $request)
     {
-        $pagamentopessoa = new Pagamentopessoa();
-        $pagamentopessoa->pessoa_id = $request->pessoa_id;
-        $pagamentopessoa->empresa_id = $request->empresa_id;
-        $pagamentopessoa->ordemservico_id = $request->ordemservico_id;
-        $pagamentopessoa->periodo1 = $request->periodo1;
-        $pagamentopessoa->periodo2 = $request->periodo2;
-        $pagamentopessoa->valor = $request->valor;
-        $pagamentopessoa->observacao = $request->observacao;
-        $pagamentopessoa->status = $request->status;
-        $pagamentopessoa->save();
+        Pagamentopessoa::create($request->all());
+        // $pagamentopessoa = new Pagamentopessoa();
+        // $pagamentopessoa->pessoa_id = $request->pessoa_id;
+        // $pagamentopessoa->empresa_id = $request->empresa_id;
+        // $pagamentopessoa->ordemservico_id = $request->ordemservico_id;
+        // $pagamentopessoa->periodo1 = $request->periodo1;
+        // $pagamentopessoa->periodo2 = $request->periodo2;
+        // $pagamentopessoa->valor = $request->valor;
+        // $pagamentopessoa->observacao = $request->observacao;
+        // $pagamentopessoa->status     = $request->status;
+        // $pagamentopessoa->situacao   = $request->situacao;
+        // $pagamentopessoa->save();
     }
 
     /**

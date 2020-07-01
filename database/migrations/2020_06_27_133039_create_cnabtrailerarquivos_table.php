@@ -15,13 +15,13 @@ class CreateCnabtrailerarquivosTable extends Migration
     {
         Schema::create('cnabtrailerarquivos', function (Blueprint $table) {
             $table->id();
-            $table->string('codigobanco')->nullable();
-            $table->string('loteservico')->nullable();
-            $table->string('tiporegistro')->nullable();
-            $table->string('filler')->nullable();
-            $table->string('quantidadelotesarquivo')->nullable();
-            $table->string('quantidaderegarquivo')->nullable();
-            $table->string('filler2')->nullable();
+            $table->char('codigobanco', 3);
+            $table->char('loteservico', 4);
+            $table->char('tiporegistro', 1);
+            $table->char('filler', 9);
+            $table->char('quantidadelotesarquivo', 6);
+            $table->char('quantidaderegarquivo', 6);
+            $table->char('filler2', 211);
             $table->timestamps();
         });
     }

@@ -15,16 +15,16 @@ class CreateCnabtrailerlotesTable extends Migration
     {
         Schema::create('cnabtrailerlotes', function (Blueprint $table) {
             $table->id();
-            $table->string('codigobanco')->nullable();
-            $table->string('loteservico')->nullable();
-            $table->string('tiporegistro')->nullable();
-            $table->string('filler')->nullable();
-            $table->string('quantidadereglote')->nullable();
-            $table->string('somatoriavalores')->nullable();
-            $table->string('somatoriaquantmoeda')->nullable();
-            $table->string('numeroavisodebito')->nullable();
-            $table->string('filler2')->nullable();
-            $table->string('ocorrenciasretorno')->nullable();
+            $table->char('codigobanco', 3);
+            $table->char('loteservico', 4);
+            $table->char('tiporegistro', 1);
+            $table->char('filler', 9);
+            $table->char('quantidadereglote', 6);
+            $table->char('somatoriavalores', 18);
+            $table->char('somatoriaquantmoeda', 18);
+            $table->char('numeroavisodebito', 6);
+            $table->char('filler2', 165);
+            $table->char('ocorrenciasretorno', 10);
             $table->timestamps();
         });
     }

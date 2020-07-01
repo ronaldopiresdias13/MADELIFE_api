@@ -15,36 +15,36 @@ class CreateCnabdetalheasTable extends Migration
     {
         Schema::create('cnabdetalheas', function (Blueprint $table) {
             $table->id();
-            $table->string('codigobanco')->nullable();
-            $table->string('loteservico')->nullable();
-            $table->string('tiporegistro')->nullable();
-            $table->string('numeroseqregistrolote')->nullable();
-            $table->string('codigosegregistrodetalhe')->nullable();
-            $table->string('tipomovimento')->nullable();
-            $table->string('codigoinstmovimento')->nullable();
-            $table->string('codigocamaracomp')->nullable();
-            $table->string('codigobancofavo')->nullable();
-            $table->string('codigoagenciafavo')->nullable();
-            $table->string('digitoagenciafavo')->nullable();
-            $table->string('ccfavorecido')->nullable();
-            $table->string('digitoconta')->nullable();
-            $table->string('digitoagenciaconta')->nullable();
-            $table->string('nome')->nullable();
-            $table->string('numerocliente')->nullable();
-            $table->string('datapagamento')->nullable();
-            $table->string('tipomoeda')->nullable();
-            $table->string('quantidademoeda')->nullable();
-            $table->string('valorpagamento')->nullable();
-            $table->string('numerodocbanco')->nullable();
-            $table->string('datarealpag')->nullable();
-            $table->string('valorrealpag')->nullable();
-            $table->string('outrasinfo')->nullable();
-            $table->string('finalidadedoc')->nullable();
-            $table->string('finalidadeted')->nullable(); // Fornecedores
-            $table->string('codigocomplementar')->nullable(); // Fornecedores
-            $table->string('filler')->nullable();
-            $table->string('emissaofavorecido')->nullable();
-            $table->string('ocorrenciasretorno')->nullable();
+            $table->char('codigobanco', 3);
+            $table->char('loteservico', 4);
+            $table->char('tiporegistro', 1);
+            $table->char('numeroseqregistrolote', 5);
+            $table->char('codigosegregistrodetalhe', 1);
+            $table->char('tipomovimento', 1);
+            $table->char('codigoinstmovimento', 2);
+            $table->char('codigocamaracomp', 3);
+            $table->char('codigobancofavo', 3);
+            $table->char('codigoagenciafavo', 5);
+            $table->char('digitoagenciafavo', 1);
+            $table->char('ccfavorecido', 12);
+            $table->char('digitoconta', 1);
+            $table->char('digitoagenciaconta', 1);
+            $table->char('nome', 30);
+            $table->char('numerocliente', 20);
+            $table->char('datapagamento', 8);
+            $table->char('tipomoeda', 3);
+            $table->char('quantidademoeda', 15);
+            $table->char('valorpagamento', 15);
+            $table->char('numerodocbanco', 20);
+            $table->char('datarealpag', 8);
+            $table->char('valorrealpag', 15);
+            $table->char('outrasinfo', 40);
+            $table->char('finalidadedoc', 2);
+            $table->char('finalidadeted', 5); // Fornecedores
+            $table->char('codigocomplementar', 2); // Fornecedores
+            $table->char('filler', 3);
+            $table->char('emissaofavorecido', 1);
+            $table->char('ocorrenciasretorno', 10);
             $table->timestamps();
         });
     }

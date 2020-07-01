@@ -115,7 +115,7 @@ class CotacoesController extends Controller
                     $cotacao_produto = CotacaoProduto::updateOrCreate(
                         [
                             'cotacao_id'          => $cotacao->id,
-                            'produto_id'          => $produto['id'],
+                            'produto_id'          => $produto['pivot']['produto_id'],
                         ],
                         [
                             'fornecedor_id'       => $produto['pivot']['fornecedor_id'],
@@ -210,7 +210,7 @@ class CotacoesController extends Controller
                     $cotacao_produto = CotacaoProduto::updateOrCreate(
                         [
                             'cotacao_id'          => $cotacao->id,
-                            'produto_id'          => $produto['id'],
+                            'produto_id'          => $produto['pivot']['produto_id'],
                         ],
                         [
                             'fornecedor_id'       => $produto['pivot']['fornecedor_id'],
