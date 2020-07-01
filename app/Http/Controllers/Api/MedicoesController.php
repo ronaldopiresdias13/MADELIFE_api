@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Medicao;
+use App\ServicoMedicao;
 use Illuminate\Http\Request;
 
 class MedicoesController extends Controller
@@ -94,7 +95,30 @@ class MedicoesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $medicao = Medicao::create([
+            'empresa_id' => $request['empresa_id'],
+            'cliente_id' => $request['cliente_id'],
+            'ordemservico_id' => $request['ordemservico_id'],
+            'data1' => $request['data1'],
+            'data2' => $request['data2'],
+            'valor' => $request['valor'],
+            'situacao' => $request['situacao'],
+            'observacao' => $request['observacao'],
+            'status' => $request['status']
+        ])->id;
+        foreach ($request['servicos'] as $key => $servico){
+            $servico_medicao = ServicoMedicao::create([
+                'medicoes_id' => $medicao->id,
+                'servico_id' => $servico['servico_id'],
+                'quantidade' => $servico['quantidade'],
+                'atendido' => $servico['atendido'],
+                'valor' => $servico['valor'],
+                'subtotal' => $servico['subtotal'],
+                'situacao' => $servico['situacao'],
+                'observacao' => $servico['observacao'],
+                'status' => $servico['status'],
+            ]);
+        }
     }
 
     /**

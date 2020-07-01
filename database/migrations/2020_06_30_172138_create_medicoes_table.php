@@ -21,11 +21,11 @@ class CreateMedicoesTable extends Migration
             $table->foreign('cliente_id')->references('id')->on('clientes')->onDelete('cascade');
             $table->unsignedBigInteger('ordemservico_id');
             $table->foreign('ordemservico_id')->references('id')->on('ordemservicos')->onDelete('cascade');
-            $table->string('data1');
-            $table->string('data2');
-            $table->string('valor');
-            $table->string('situacao');
-            $table->string('observacao');
+            $table->string('data1')->nullable();
+            $table->string('data2')->nullable();
+            $table->string('valor')->nullable();
+            $table->string('situacao')->nullable();
+            $table->string('observacao')->nullable();
             $table->boolean('status');
             $table->timestamps();
         });

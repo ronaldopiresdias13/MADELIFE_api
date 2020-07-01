@@ -250,6 +250,12 @@ Route::get('marcas/{marca}', 'Api\MarcasController@show');
 Route::put('marcas/{marca}', 'Api\MarcasController@update');
 Route::delete('marcas/{marca}', 'Api\MarcasController@destroy');
 
+Route::get('medicoes', 'Api\MedicoesController@index');
+Route::post('medicoes', 'Api\MedicoesController@store');
+Route::get('medicoes/{medicao}', 'Api\MedicoesController@show');
+Route::put('medicoes/{medicao}', 'Api\MedicoesController@update');
+Route::delete('medicoes/{medicao}', 'Api\MedicoesController@destroy');
+
 Route::get('monitoramentoescalas', 'Api\MonitoramentoescalasController@index');
 Route::post('monitoramentoescalas', 'Api\MonitoramentoescalasController@store');
 Route::get('monitoramentoescalas/{monitoramentoescala}', 'Api\MonitoramentoescalasController@show');

@@ -19,12 +19,12 @@ class CreateServicoMedicoesTable extends Migration
             $table->foreign('medicoes_id')->references('id')->on('medicoes')->onDelete('cascade');
             $table->unsignedBigInteger('servico_id');
             $table->foreign('servico_id')->references('id')->on('servicos')->onDelete('cascade');
-            $table->string('quantidade');
-            $table->string('atendido');
-            $table->string('valor');
-            $table->string('subtotal');
-            $table->string('situacao');
-            $table->string('observacao');
+            $table->string('quantidade')->nullable();
+            $table->string('atendido')->nullable();
+            $table->string('valor')->nullable();
+            $table->string('subtotal')->nullable();
+            $table->string('situacao')->nullable();
+            $table->string('observacao')->nullable();
             $table->boolean('status');
             $table->timestamps();
         });
