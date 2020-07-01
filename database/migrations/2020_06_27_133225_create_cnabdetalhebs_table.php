@@ -15,34 +15,34 @@ class CreateCnabdetalhebsTable extends Migration
     {
         Schema::create('cnabdetalhebs', function (Blueprint $table) {
             $table->id();
-            $table->char('codigobanco', 3);
-            $table->char('loteservico', 4);
-            $table->char('tiporegistro', 1);
-            $table->char('numeroseqregistrolote', 5);
-            $table->char('codigosegregistrodetalhe', 1);
-            $table->char('filler', 3);
-            $table->char('tipoinscfavorecido', 1);
-            $table->char('cpfcnpjfavorecido', 14);
-            $table->char('logradourofavorecido', 30);
-            $table->char('numerolocalfavorecido', 5);
-            $table->char('complocalfavorecido', 15);
-            $table->char('bairrofavorecido', 15);
-            $table->char('cidadefavorecido', 20);
-            $table->char('cepfavorecido', 8);
-            $table->char('estadofavorecido', 2);
-            $table->char('datavencimento', 8);
-            $table->char('valordocumento', 15);
-            $table->char('valorabatimento', 15);
-            $table->char('valordesconto', 15);
-            $table->char('valormora', 15);
-            $table->char('valormulta', 15);
-            $table->char('horarioenvio', 4);
-            $table->char('filler2', 11);
-            $table->char('codigohistcredito', 4);
-            $table->char('ocorrenciasretorno', 1);
-            $table->char('filler3', 1); // Fornecedores
-            $table->char('tedfinanceira', 1); // Fornecedores
-            $table->char('identificacaospb', 8); // Fornecedores
+            $table->string('codigobanco')->nullable();
+            $table->string('loteservico')->nullable();
+            $table->string('tiporegistro')->nullable();
+            $table->string('numeroseqregistrolote')->nullable();
+            $table->string('codigosegregistrodetalhe')->nullable();
+            $table->string('filler')->nullable();
+            $table->string('tipoinscfavorecido')->nullable();
+            $table->string('cpfcnpjfavorecido')->nullable();
+            $table->string('logradourofavorecido')->nullable();
+            $table->string('numerolocalfavorecido')->nullable();
+            $table->string('complocalfavorecido')->nullable();
+            $table->string('bairrofavorecido')->nullable();
+            $table->string('cidadefavorecido')->nullable();
+            $table->string('cepfavorecido')->nullable();
+            $table->string('estadofavorecido')->nullable();
+            $table->string('datavencimento')->nullable();
+            $table->string('valordocumento')->nullable();
+            $table->string('valorabatimento')->nullable();
+            $table->string('valordesconto')->nullable();
+            $table->string('valormora')->nullable();
+            $table->string('valormulta')->nullable();
+            $table->string('horarioenvio')->nullable();
+            $table->string('filler2')->nullable();
+            $table->string('codigohistcredito')->nullable();
+            $table->string('ocorrenciasretorno')->nullable();
+            $table->string('filler3')->nullable(); // Fornecedores
+            $table->string('tedfinanceira')->nullable(); // Fornecedores
+            $table->string('identificacaospb')->nullable(); // Fornecedores
             $table->timestamps();
         });
     }
