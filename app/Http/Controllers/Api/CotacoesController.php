@@ -118,6 +118,7 @@ class CotacoesController extends Controller
                             'produto_id'          => $produto['id'],
                         ],
                         [
+                            'produto_id'       => $produto['pivot']['produto_id'],
                             'fornecedor_id'       => $produto['pivot']['fornecedor_id'],
                             'unidademedida'       => $produto['pivot']['unidademedida'],
                             'quantidade'          => $produto['pivot']['quantidade'],
