@@ -14,7 +14,7 @@ class MedicoesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $itens = new Medicao();
 
@@ -108,7 +108,7 @@ class MedicoesController extends Controller
         ])->id;
         foreach ($request['servicos'] as $key => $servico){
             $servico_medicao = ServicoMedicao::create([
-                'medicoes_id' => $medicao->id,
+                'medicoes_id' => $medicao,
                 'servico_id' => $servico['servico_id'],
                 'quantidade' => $servico['quantidade'],
                 'atendido' => $servico['atendido'],
