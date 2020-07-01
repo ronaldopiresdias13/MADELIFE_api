@@ -18,6 +18,7 @@ use App\Http\Controllers\Controller;
 use App\Pagamentopessoa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class CnabsController extends Controller
 {
@@ -470,12 +471,43 @@ class CnabsController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param  string  $tipo
      * @param  \App\Cnab  $cnab
      * @return \Illuminate\Http\Response
      */
-    public function show(Cnab $cnab)
+    public function show(Cnab $cnab, string $tipo)
     {
-        //
+        // $cnabsantander = Cnabsantander::firstWhere('tipo', $tipo);
+        // $cnabsantander->cnabheaderarquivo->cnabtrailerlotes;
+        // $cnabsantander->cnabtrailerarquivo;
+        // foreach ($cnabsantander->cnabheaderarquivo->cnabheaderlotes as $key => $cnabheaderlote) {
+        //     $cnabheaderlote->cnabdetalheas;
+        //     $cnabheaderlote->cnabdetalhebs;
+        // }
+
+        // $texto = '';
+        // $cnabsantander->cnabheaderarquivo;
+        // $cnabsantander->cnabheaderarquivo;
+        // $cnabsantander->cnabheaderarquivo;
+        // $cnabsantander->cnabheaderarquivo;
+        // $cnabsantander->cnabheaderarquivo;
+
+        // Storage::disk('public')->put('\\cnabs\\' . $cnab->id . '\\' . $tipo . ".txt", 'Contents');
+
+        // dd('Pronto');
+
+        // $myfile = fopen(storage_path('app\\public') . '\\cnabs\\' . $cnab->id . '\\' . $tipo . ".txt", "w") or die("Unable to open file!");
+        // $myfile = fopen(storage_path('app\\public') . '\\' . $tipo . ".txt", "w") or die("Unable to open file!");
+        // dd($myfile);
+        // $txt = "John Doe\n";
+        // fwrite($myfile, $txt);
+        // $txt = "Jane Doe\n";
+        // fwrite($myfile, $txt);
+        // fclose($myfile);
+
+        // dd($myfile);
+
+        return $cnabsantander;
     }
 
     /**
