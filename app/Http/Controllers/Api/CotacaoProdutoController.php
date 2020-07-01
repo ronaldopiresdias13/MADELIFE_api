@@ -162,7 +162,21 @@ class CotacaoProdutoController extends Controller
      */
     public function update(Request $request, CotacaoProduto $cotacaoProduto)
     {
-        $cotacaoProduto->update($request->all());
+        // return $request;
+        $cotacaoProduto->cotacao_id;
+        $cotacaoProduto->produto_id;
+        $cotacaoProduto->fornecedor_id;
+        $cotacaoProduto->unidademedida;
+        $cotacaoProduto->quantidade;
+        $cotacaoProduto->quantidadeembalagem;
+        $cotacaoProduto->quantidadetotal;
+        $cotacaoProduto->valorunitario;
+        $cotacaoProduto->valortotal;
+        $cotacaoProduto->formapagamento;
+        $cotacaoProduto->prazoentrega;
+        $cotacaoProduto->observacao;
+        $cotacaoProduto->situacao;
+        $cotacaoProduto->update();
     }
 
     /**
