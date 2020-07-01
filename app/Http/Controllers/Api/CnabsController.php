@@ -15,6 +15,7 @@ use App\Cnabsantander;
 use App\Cnabtrailerarquivo;
 use App\Cnabtrailerlote;
 use App\Http\Controllers\Controller;
+use App\Pagamentopessoa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -106,6 +107,9 @@ class CnabsController extends Controller
      */
     public function store(Request $request)
     {
+        $request = $request->getContent();
+        $request = json_decode($request, true);
+
         DB::transaction(function () use ($request) {
             $cnab = Cnab::create([
                 'empresa_id' => $request['empresa_id'],
@@ -283,6 +287,8 @@ class CnabsController extends Controller
                 }
             }
             if ($request['cnabSantanderFornecedores240']) {
+                // dd('' . $request['cnabSantanderFornecedores240']['cnabSantanderFornecedores240HeaderArquivo']['filler']);
+                // dd('' . $request->cnabSantanderFornecedores240->cnabSantanderFornecedores240HeaderArquivo->filler);
                 $cnabsantander = Cnabsantander::create([
                     'cnab_id' => $cnab->id,
                     'tipo'    => $request['cnabSantanderFornecedores240']['tipo'],
@@ -449,6 +455,13 @@ class CnabsController extends Controller
                             'ocorrenciasretorno'  => $cnabTrailerLote['ocorrenciasretorno'],
                         ])->id
                     ]);
+                }
+            }
+            if ($request['pagementopessoas']) {
+                foreach ($request['pagementopessoas'] as $key => $pagamento) {
+                    $pagamentopessoas = Pagamentopessoa::find($pagamento);
+                    $pagamentopessoas->status = true;
+                    $pagamentopessoas->save();
                 }
             }
         });
