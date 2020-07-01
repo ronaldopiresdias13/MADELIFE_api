@@ -108,7 +108,7 @@ Route::delete('clientes/{cliente}', 'Api\ClientesController@destroy');
 
 Route::get('cnabs', 'Api\CnabsController@index');
 Route::post('cnabs', 'Api\CnabsController@store');
-Route::get('cnabs/{cnab}', 'Api\CnabsController@show');
+Route::get('cnabs/{cnab}/{tipo}', 'Api\CnabsController@show');
 Route::put('cnabs/{cnab}', 'Api\CnabsController@update');
 Route::delete('cnabs/{cnab}', 'Api\CnabsController@destroy');
 
