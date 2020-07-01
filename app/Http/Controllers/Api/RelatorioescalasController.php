@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Homecare;
+use App\Escala;
 use App\Http\Controllers\Controller;
+use App\Relatorioescala;
+use Facade\FlareClient\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
-class HomecaresController extends Controller
+class RelatorioescalasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +20,7 @@ class HomecaresController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Homecare();
+        $itens = new Relatorioescala();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -26,7 +29,7 @@ class HomecaresController extends Controller
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
-                    $itens = Homecare::where(
+                    $itens = Relatorioescala::where(
                         ($where['coluna']) ? $where['coluna'] : 'id',
                         ($where['expressao']) ? $where['expressao'] : 'like',
                         ($where['valor']) ? $where['valor'] : '%'
@@ -40,7 +43,7 @@ class HomecaresController extends Controller
                 }
             }
         } else {
-            $itens = Homecare::where('id', 'like', '%');
+            $itens = Relatorioescala::where('id', 'like', '%')->limit(5);
         }
 
         if ($request['order']) {
@@ -71,11 +74,15 @@ class HomecaresController extends Controller
                                     }
                                 }
                             } else {
-                                if ($iten2[0] == null) {
-                                    $iten2 = $iten2[$a];
-                                } else {
-                                    foreach ($iten2 as $key => $i) {
-                                        $i[$a];
+                                if ($iten2 != null) {
+                                    if ($iten2->count() > 0) {
+                                        if ($iten2[0] == null) {
+                                            $iten2 = $iten2[$a];
+                                        } else {
+                                            foreach ($iten2 as $key => $i) {
+                                                $i[$a];
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -91,92 +98,73 @@ class HomecaresController extends Controller
     /**
      * Store a newly created resource in storage.
      *
+     * @param  \App\Escala  $escala
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Escala $escala)
     {
-        $homecare = Homecare::create([
-            // 'empresa_id'           => $request->empresa_id,
-            'nome'               => $request->nome,
-            'sexo'             => $request->sexo,
-            'nascimento'                 => $request->nascimento,
-            'cpfcnpj'               => $request->cpf,
-            'rgie'               => $request->rg,
-            'observacao'               => $request->observacao,
-            // 'status'               => $request->status,
-            'orcamento_id' => $request->orcamento_id,
-        ]);
+        $file = $request->file('file');
+        if ($file->isValid()) {
+            $md5 = md5_file($file);
+            $caminho = 'relatorioescalas/' . $escala['id'];
+            $nome = $md5 . '.' . $file->extension();
+            $upload = $file->storeAs($caminho, $nome);
+            $nomeOriginal = $file->getClientOriginalName();
+            if ($upload) {
+                DB::transaction(function () use ($escala, $caminho, $nome, $nomeOriginal) {
+                    $relatorio_escala = Relatorioescala::create([
+                        'escala_id' => $escala['id'],
+                        'caminho'   => $caminho . '/' . $nome,
+                        'nome'      => $nomeOriginal,
+                    ]);
+                });
+                return response()->json('Upload de arquivo bem sucedido!', 200)->header('Content-Type', 'text/plain');
+            } else {
+                return response()->json('Erro, Upload não realizado!', 400)->header('Content-Type', 'text/plain');
+            }
+        } else {
+            return response()->json('Arquivo inválido ou corrompido!', 400)->header('Content-Type', 'text/plain');
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Homecare  $homecare
+     * @param  \App\Relatorioescala  $relatorioescala
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Homecare $homecare)
+    public function show(Relatorioescala $relatorioescala)
     {
-        $iten = $homecare;
+        $file = Storage::get($relatorioescala['caminho']);
 
-        if ($request->commands) {
-            $request = json_decode($request->commands, true);
-        }
+        $response =  array(
+            'nome' => $relatorioescala['nome'],
+            'file' => base64_encode($file)
+        );
 
-        if ($request['adicionais']) {
-            foreach ($request['adicionais'] as $key => $adicional) {
-                if (is_string($adicional)) {
-                    $iten[$adicional];
-                } else {
-                    $iten2 = $iten;
-                    foreach ($adicional as $key => $a) {
-                        if ($key == 0) {
-                            if ($iten[0] == null) {
-                                $iten2 = $iten[$a];
-                            } else {
-                                foreach ($iten as $key => $i) {
-                                    $i[$a];
-                                }
-                            }
-                        } else {
-                            if ($iten2[0] == null) {
-                                $iten2 = $iten2[$a];
-                            } else {
-                                foreach ($iten2 as $key => $i) {
-                                    $i[$a];
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return $iten;
+        return response()->json($response);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Homecare  $homecare
+     * @param  \App\Relatorioescala  $relatorioescala
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Homecare $homecare)
+    public function update(Request $request, Relatorioescala $relatorioescala)
     {
-        DB::transaction(function () use ($request, $homecare) {
-            $homecare->update($request->all());
-        });
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Homecare  $homecare
+     * @param  \App\Relatorioescala  $relatorioescala
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Homecare $homecare)
+    public function destroy(Relatorioescala $relatorioescala)
     {
         //
     }

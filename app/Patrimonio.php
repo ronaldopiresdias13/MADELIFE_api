@@ -4,12 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Dadosbancario extends Model
+class Patrimonio extends Model
 {
     protected $guarded = [];
 
-    public function banco()
+    public function produto()
     {
-        return $this->belongsTo('App\Banco');
+        return $this->belongsTo('App\Produto');
     }
 }

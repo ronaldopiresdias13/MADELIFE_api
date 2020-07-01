@@ -2,27 +2,32 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Cotacao;
+use App\CotacaoProduto;
 use App\Http\Controllers\Controller;
-use App\Pagamentopessoa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class PagamentopessoasController extends Controller
+class CotacoesController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $itens = new Pagamentopessoa();
+        $itens = new Cotacao();
+
         if ($request->commands) {
             $request = json_decode($request->commands, true);
         }
+
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
-                    $itens = Pagamentopessoa::where(
+                    $itens = Cotacao::where(
                         ($where['coluna']) ? $where['coluna'] : 'id',
                         ($where['expressao']) ? $where['expressao'] : 'like',
                         ($where['valor']) ? $where['valor'] : '%'
@@ -36,8 +41,9 @@ class PagamentopessoasController extends Controller
                 }
             }
         } else {
-            $itens = Pagamentopessoa::where('id', 'like', '%');
+            $itens = Cotacao::where('id', 'like', '%');
         }
+
         if ($request['order']) {
             foreach ($request['order'] as $key => $order) {
                 $itens->orderBy(
@@ -46,7 +52,9 @@ class PagamentopessoasController extends Controller
                 );
             }
         }
+
         $itens = $itens->get();
+
         if ($request['adicionais']) {
             foreach ($itens as $key => $iten) {
                 foreach ($request['adicionais'] as $key => $adicional) {
@@ -93,32 +101,56 @@ class PagamentopessoasController extends Controller
      */
     public function store(Request $request)
     {
-        Pagamentopessoa::create($request->all());
-        // $pagamentopessoa = new Pagamentopessoa();
-        // $pagamentopessoa->pessoa_id = $request->pessoa_id;
-        // $pagamentopessoa->empresa_id = $request->empresa_id;
-        // $pagamentopessoa->ordemservico_id = $request->ordemservico_id;
-        // $pagamentopessoa->periodo1 = $request->periodo1;
-        // $pagamentopessoa->periodo2 = $request->periodo2;
-        // $pagamentopessoa->valor = $request->valor;
-        // $pagamentopessoa->observacao = $request->observacao;
-        // $pagamentopessoa->status     = $request->status;
-        // $pagamentopessoa->situacao   = $request->situacao;
-        // $pagamentopessoa->save();
+        DB::transaction(function () use ($request) {
+            $cotacao = Cotacao::create([
+                'codigo'          => $request['codigo'],
+                'profissional_id' => $request['profissional_id'],
+                'empresa_id'      => $request['empresa_id'],
+                'observacao'      => $request['observacao'],
+                'situacao'        => $request['situacao'],
+                'motivo'          => $request['motivo'],
+            ]);
+            if ($request['produtos']) {
+                foreach ($request['produtos'] as $key => $produto) {
+                    $cotacao_produto = CotacaoProduto::updateOrCreate(
+                        [
+                            'cotacao_id'          => $cotacao->id,
+                            'produto_id'          => $produto['pivot']['produto_id'],
+                        ],
+                        [
+                            'fornecedor_id'       => $produto['pivot']['fornecedor_id'],
+                            'unidademedida'       => $produto['pivot']['unidademedida'],
+                            'quantidade'          => $produto['pivot']['quantidade'],
+                            'quantidadeembalagem' => $produto['pivot']['quantidadeembalagem'],
+                            'quantidadetotal'     => $produto['pivot']['quantidadetotal'],
+                            'valorunitario'       => $produto['pivot']['valorunitario'],
+                            'valortotal'          => $produto['pivot']['valortotal'],
+                            'formapagamento'      => $produto['pivot']['formapagamento'],
+                            'prazoentrega'        => $produto['pivot']['prazoentrega'],
+                            'observacao'          => $produto['pivot']['observacao'],
+                            'situacao'            => $produto['pivot']['situacao']
+                        ]
+                    );
+                }
+            }
+        });
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Pagamentopessoa  $pagamentopessoa
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Cotacao  $cotacao
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Pagamentopessoa $pagamentopessoa)
+    public function show(Request $request, Cotacao $cotacao)
     {
-        $iten = $pagamentopessoa;
+        $iten = $cotacao;
+
         if ($request->commands) {
             $request = json_decode($request->commands, true);
         }
+
         if ($request['adicionais']) {
             foreach ($request['adicionais'] as $key => $adicional) {
                 if (is_string($adicional)) {
@@ -159,31 +191,54 @@ class PagamentopessoasController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Pagamentopessoa  $pagamentopessoa
+     * @param  \App\Cotacao  $cotacao
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Pagamentopessoa $pagamentopessoa)
+    public function update(Request $request, Cotacao $cotacao)
     {
-        $pagamentopessoa->empresa_id      = $request['empresa_id'];
-        $pagamentopessoa->pessoa_id       = $request['pessoa_id'];
-        $pagamentopessoa->ordemservico_id = $request['ordemservico_id'];
-        $pagamentopessoa->periodo1        = $request['periodo1'];
-        $pagamentopessoa->periodo2        = $request['periodo2'];
-        $pagamentopessoa->valor           = $request['valor'];
-        $pagamentopessoa->observacao      = $request['observacao'];
-        $pagamentopessoa->status          = $request['status'];
-        $pagamentopessoa->situacao        = $request['situacao'];
-        $pagamentopessoa->update();
+        DB::transaction(function () use ($request, $cotacao) {
+            $cotacao->update([
+                'codigo'          => $request['codigo'],
+                'profissional_id' => $request['profissional_id'],
+                'empresa_id'      => $request['empresa_id'],
+                'observacao'      => $request['observacao'],
+                'situacao'        => $request['situacao'],
+                'motivo'          => $request['motivo'],
+            ]);
+            if ($request['produtos']) {
+                foreach ($request['produtos'] as $key => $produto) {
+                    $cotacao_produto = CotacaoProduto::updateOrCreate(
+                        [
+                            'cotacao_id'          => $cotacao->id,
+                            'produto_id'          => $produto['pivot']['produto_id'],
+                        ],
+                        [
+                            'fornecedor_id'       => $produto['pivot']['fornecedor_id'],
+                            'unidademedida'       => $produto['pivot']['unidademedida'],
+                            'quantidade'          => $produto['pivot']['quantidade'],
+                            'quantidadeembalagem' => $produto['pivot']['quantidadeembalagem'],
+                            'quantidadetotal'     => $produto['pivot']['quantidadetotal'],
+                            'valorunitario'       => $produto['pivot']['valorunitario'],
+                            'valortotal'          => $produto['pivot']['valortotal'],
+                            'formapagamento'      => $produto['pivot']['formapagamento'],
+                            'prazoentrega'        => $produto['pivot']['prazoentrega'],
+                            'observacao'          => $produto['pivot']['observacao'],
+                            'situacao'            => $produto['pivot']['situacao']
+                        ]
+                    );
+                }
+            }
+        });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Pagamentopessoa  $pagamentopessoa
+     * @param  \App\Cotacao  $cotacao
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Pagamentopessoa $pagamentopessoa)
+    public function destroy(Cotacao $cotacao)
     {
-        $pagamentopessoa->delete();
+        $cotacao->delete();
     }
 }

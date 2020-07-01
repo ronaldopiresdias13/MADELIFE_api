@@ -45,7 +45,7 @@ Route::group([
 // Route::post('profissionais/migracao', 'Api\ProfissionaisController@migracao');
 // Route::post('escalas/migracao', 'Api\EscalasController@migracao');
 
-Route::post("/image", "Controller@uploadimage");
+Route::post("/files/upload", "Api\FilesController@upload");
 
 /* ------------- Rotas Utilizando Token ------------- */
 Route::group(['middleware' => 'auth:api'], function () {
@@ -106,6 +106,12 @@ Route::put('clientes/{cliente}', 'Api\ClientesController@update');
 Route::delete('clientes/{cliente}', 'Api\ClientesController@destroy');
 // Route::get('meuspassientes/{cliente}', 'Api\ClientesController@meuspassientes'); // Custon
 
+Route::get('cnabs', 'Api\CnabsController@index');
+Route::post('cnabs', 'Api\CnabsController@store');
+Route::get('cnabs/{cnab}/{tipo}', 'Api\CnabsController@show');
+Route::put('cnabs/{cnab}', 'Api\CnabsController@update');
+Route::delete('cnabs/{cnab}', 'Api\CnabsController@destroy');
+
 Route::get('conselhos', 'Api\ConselhosController@index');
 Route::post('conselhos', 'Api\ConselhosController@store');
 Route::get('conselhos/{conselho}', 'Api\ConselhosController@show');
@@ -129,6 +135,18 @@ Route::post('convenios', 'Api\ConveniosController@store');
 Route::get('convenios/{convenio}', 'Api\ConveniosController@show');
 Route::put('convenios/{convenio}', 'Api\ConveniosController@update');
 Route::delete('convenios/{convenio}', 'Api\ConveniosController@destroy');
+
+Route::get('cotacoes', 'Api\CotacoesController@index');
+Route::post('cotacoes', 'Api\CotacoesController@store');
+Route::get('cotacoes/{cotacao}', 'Api\CotacoesController@show');
+Route::put('cotacoes/{cotacao}', 'Api\CotacoesController@update');
+Route::delete('cotacoes/{cotacao}', 'Api\CotacoesController@destroy');
+
+Route::get('cotacaoproduto', 'Api\CotacaoprodutoController@index');
+Route::post('cotacaoproduto', 'Api\CotacaoprodutoController@store');
+Route::get('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoprodutoController@show');
+Route::put('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoprodutoController@update');
+Route::delete('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoprodutoController@destroy');
 
 Route::get('cuidados', 'Api\CuidadosController@index');
 Route::post('cuidados', 'Api\CuidadosController@store');
@@ -232,6 +250,12 @@ Route::get('marcas/{marca}', 'Api\MarcasController@show');
 Route::put('marcas/{marca}', 'Api\MarcasController@update');
 Route::delete('marcas/{marca}', 'Api\MarcasController@destroy');
 
+Route::get('medicoes', 'Api\MedicoesController@index');
+Route::post('medicoes', 'Api\MedicoesController@store');
+Route::get('medicoes/{medicao}', 'Api\MedicoesController@show');
+Route::put('medicoes/{medicao}', 'Api\MedicoesController@update');
+Route::delete('medicoes/{medicao}', 'Api\MedicoesController@destroy');
+
 Route::get('monitoramentoescalas', 'Api\MonitoramentoescalasController@index');
 Route::post('monitoramentoescalas', 'Api\MonitoramentoescalasController@store');
 Route::get('monitoramentoescalas/{monitoramentoescala}', 'Api\MonitoramentoescalasController@show');
@@ -248,6 +272,7 @@ Route::get('orcamentos', 'Api\OrcamentosController@index');
 Route::post('orcamentos', 'Api\OrcamentosController@store');
 Route::get('orcamentos/{orcamento}', 'Api\OrcamentosController@show');
 Route::put('orcamentos/{orcamento}', 'Api\OrcamentosController@update');
+Route::put('alterarsituacao/{orcamento}', 'Api\OrcamentosController@alterarSituacao');
 Route::delete('orcamentos/{orcamento}', 'Api\OrcamentosController@destroy');
 
 Route::get('orcamentocustos', 'Api\OrcamentoCustosController@index');
@@ -300,6 +325,12 @@ Route::get('pagamentopessoas/{pagamentopessoa}', 'Api\PagamentopessoasController
 Route::put('pagamentopessoas/{pagamentopessoa}', 'Api\PagamentopessoasController@update');
 Route::delete('pagamentopessoas/{pagamentopessoa}', 'Api\PagamentopessoasController@destroy');
 
+Route::get('patrimonios', 'Api\PatrimoniosController@index');
+Route::post('patrimonios', 'Api\PatrimoniosController@store');
+Route::get('patrimonios/{patrimonio}', 'Api\PatrimoniosController@show');
+Route::put('patrimonios/{patrimonio}', 'Api\PatrimoniosController@update');
+Route::delete('patrimonios/{patrimonio}', 'Api\PatrimoniosController@destroy');
+
 Route::get('pessoas', 'Api\PessoasController@index');
 Route::post('pessoas', 'Api\PessoasController@store');
 Route::get('pessoas/{pessoa}', 'Api\PessoasController@show');
@@ -348,6 +379,24 @@ Route::post('relatorios', 'Api\RelatoriosController@store');
 Route::get('relatorios/{relatorio}', 'Api\RelatoriosController@show');
 Route::put('relatorios/{relatorio}', 'Api\RelatoriosController@update');
 Route::delete('relatorios/{relatorio}', 'Api\RelatoriosController@destroy');
+
+Route::get('relatorioescalas', 'Api\RelatorioescalasController@index');
+Route::post('relatorioescalas/{escala}', 'Api\RelatorioescalasController@store');
+Route::get('relatorioescalas/{relatorioescala}', 'Api\RelatorioescalasController@show');
+Route::put('relatorioescalas/{relatorioescala}', 'Api\RelatorioescalasController@update');
+Route::delete('relatorioescalas/{relatorioescala}', 'Api\RelatorioescalasController@destroy');
+
+Route::get('requisicoes', 'Api\RequisicoesController@index');
+Route::post('requisicoes', 'Api\RequisicoesController@store');
+Route::get('requisicoes/{requisicao}', 'Api\RequisicoesController@show');
+Route::put('requisicoes/{requisicao}', 'Api\RequisicoesController@update');
+Route::delete('requisicoes/{requisicao}', 'Api\RequisicoesController@destroy');
+
+Route::get('requisicaoprodudos', 'Api\RequisicaoProdutosController@index');
+Route::post('requisicaoprodudos', 'Api\RequisicaoProdutosController@store');
+Route::get('requisicaoprodudos/{requisicaoProduto}', 'Api\RequisicaoProdutosController@show');
+Route::put('requisicaoprodudos/{requisicaoProduto}', 'Api\RequisicaoProdutosController@update');
+Route::delete('requisicaoprodudos/{requisicaoProduto}', 'Api\RequisicaoProdutosController@destroy');
 
 Route::get('responsaveis', 'Api\ResponsaveisController@index');
 Route::post('responsaveis', 'Api\ResponsaveisController@store');

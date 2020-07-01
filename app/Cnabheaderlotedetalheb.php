@@ -4,8 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RemocaoTelefone extends Model
+class Cnabheaderlotedetalheb extends Model
 {
-    protected $table = 'remocao_telefone';
     protected $guarded = [];
 }

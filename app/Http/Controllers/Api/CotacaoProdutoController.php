@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\CotacaoProduto;
 use App\Http\Controllers\Controller;
-use App\Unidademedida;
 use Illuminate\Http\Request;
 
-class UnidademedidasController extends Controller
+class CotacaoProdutoController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $itens = new Unidademedida();
+        $itens = new CotacaoProduto();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -24,7 +25,7 @@ class UnidademedidasController extends Controller
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
-                    $itens = Unidademedida::where(
+                    $itens = CotacaoProduto::where(
                         ($where['coluna']) ? $where['coluna'] : 'id',
                         ($where['expressao']) ? $where['expressao'] : 'like',
                         ($where['valor']) ? $where['valor'] : '%'
@@ -38,7 +39,7 @@ class UnidademedidasController extends Controller
                 }
             }
         } else {
-            $itens = Unidademedida::where('id', 'like', '%');
+            $itens = CotacaoProduto::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -69,11 +70,15 @@ class UnidademedidasController extends Controller
                                     }
                                 }
                             } else {
-                                if ($iten2[0] == null) {
-                                    $iten2 = $iten2[$a];
-                                } else {
-                                    foreach ($iten2 as $key => $i) {
-                                        $i[$a];
+                                if ($iten2 != null) {
+                                    if ($iten2->count() > 0) {
+                                        if ($iten2[0] == null) {
+                                            $iten2 = $iten2[$a];
+                                        } else {
+                                            foreach ($iten2 as $key => $i) {
+                                                $i[$a];
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -94,28 +99,19 @@ class UnidademedidasController extends Controller
      */
     public function store(Request $request)
     {
-        $unidademedida = new Unidademedida();
-        // $unidademedida->empresa_id = $request->empresa_id;
-        $unidademedida->empresa_id = 1;
-        $unidademedida->descricao = $request->descricao;
-        $unidademedida->sigla = $request->sigla;
-        $unidademedida->grupo = $request->grupo;
-        $unidademedida->padrao = $request->padrao;
-        // $unidademedida->status = $request->status;
-        $unidademedida->status = 1;
-        $unidademedida->sigla = $request->sigla;
-        $unidademedida->save();
+        CotacaoProduto::create($request->all());
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Unidademedida  $unidademedida
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\CotacaoProduto  $cotacaoProduto
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Unidademedida $unidademedida)
+    public function show(Request $request, CotacaoProduto $cotacaoProduto)
     {
-        $iten = $unidademedida;
+        $iten = $cotacaoProduto;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -137,11 +133,15 @@ class UnidademedidasController extends Controller
                                 }
                             }
                         } else {
-                            if ($iten2[0] == null) {
-                                $iten2 = $iten2[$a];
-                            } else {
-                                foreach ($iten2 as $key => $i) {
-                                    $i[$a];
+                            if ($iten2 != null) {
+                                if ($iten2->count() > 0) {
+                                    if ($iten2[0] == null) {
+                                        $iten2 = $iten2[$a];
+                                    } else {
+                                        foreach ($iten2 as $key => $i) {
+                                            $i[$a];
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -157,35 +157,22 @@ class UnidademedidasController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Unidademedida  $unidademedida
+     * @param  \App\CotacaoProduto  $cotacaoProduto
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Unidademedida $unidademedida)
+    public function update(Request $request, CotacaoProduto $cotacaoProduto)
     {
-        $unidademedida->update($request->all());
+        $cotacaoProduto->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Unidademedida  $unidademedida
+     * @param  \App\CotacaoProduto  $cotacaoProduto
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Unidademedida $unidademedida)
+    public function destroy(CotacaoProduto $cotacaoProduto)
     {
-        $unidademedida->delete();
-    }
-
-    public function migracao(Request $request)
-    {
-        // dd($request);
-        $unidade = new Unidademedida();
-        $unidade->descricao = $request->descricao;
-        $unidade->sigla = $request->sigla;
-        $unidade->grupo = $request->grupo;
-        $unidade->padrao = true;
-        $unidade->status = true;
-        $unidade->empresa_id = 1;
-        $unidade->save();
+        $cotacaoProduto->delete();
     }
 }
