@@ -112,21 +112,25 @@ class CotacoesController extends Controller
             ]);
             if ($request['produtos']) {
                 foreach ($request['produtos'] as $key => $produto) {
-                    $cotacao_produto = CotacaoProduto::create([
-                        'cotacao_id'          => $cotacao->id,
-                        'produto_id'          => $produto['id'],
-                        'fornecedor_id'       => $produto['pivot']['fornecedor_id'],
-                        'unidademedida'       => $produto['pivot']['unidademedida'],
-                        'quantidade'          => $produto['pivot']['quantidade'],
-                        'quantidadeembalagem' => $produto['pivot']['quantidadeembalagem'],
-                        'quantidadetotal'     => $produto['pivot']['quantidadetotal'],
-                        'valorunitario'       => $produto['pivot']['valorunitario'],
-                        'valortotal'          => $produto['pivot']['valortotal'],
-                        'formapagamento'      => $produto['pivot']['formapagamento'],
-                        'prazoentrega'        => $produto['pivot']['prazoentrega'],
-                        'observacao'          => $produto['pivot']['observacao'],
-                        'situacao'            => $produto['pivot']['situacao']
-                    ]);
+                    $cotacao_produto = CotacaoProduto::updateOrCreate(
+                        [
+                            'cotacao_id'          => $cotacao->id,
+                            'produto_id'          => $produto['id'],
+                        ],
+                        [
+                            'fornecedor_id'       => $produto['pivot']['fornecedor_id'],
+                            'unidademedida'       => $produto['pivot']['unidademedida'],
+                            'quantidade'          => $produto['pivot']['quantidade'],
+                            'quantidadeembalagem' => $produto['pivot']['quantidadeembalagem'],
+                            'quantidadetotal'     => $produto['pivot']['quantidadetotal'],
+                            'valorunitario'       => $produto['pivot']['valorunitario'],
+                            'valortotal'          => $produto['pivot']['valortotal'],
+                            'formapagamento'      => $produto['pivot']['formapagamento'],
+                            'prazoentrega'        => $produto['pivot']['prazoentrega'],
+                            'observacao'          => $produto['pivot']['observacao'],
+                            'situacao'            => $produto['pivot']['situacao']
+                        ]
+                    );
                 }
             }
         });
@@ -192,43 +196,39 @@ class CotacoesController extends Controller
      */
     public function update(Request $request, Cotacao $cotacao)
     {
-        // DB::transaction(function () use ($request) {
-
-        //     $cotacao = Cotacao::updateOrCreate(
-        //         ['id'    => $request['id']],
-        //         ['price' => 99]
-        //     );
-        //     $cotacao = Cotacao->update(
-        //         [],
-        //         [
-        //             'codigo'          => $request['codigo'],
-        //             'profissional_id' => $request['profissional_id'],
-        //             'empresa_id'      => $request['empresa_id'],
-        //             'observacao'      => $request['observacao'],
-        //             'situacao'        => $request['situacao'],
-        //             'motivo'          => $request['motivo'],
-        //         ]
-        //     );
-        //     if ($request['produtos']) {
-        //         foreach ($request['produtos'] as $key => $produto) {
-        //             $cotacao_produto = CotacaoProduto::create([
-        //                 'cotacao_id'          => $cotacao->id,
-        //                 'produto_id'          => $produto['id'],
-        //                 'fornecedor_id'       => $produto['pivot']['fornecedor_id'],
-        //                 'unidademedida'       => $produto['pivot']['unidademedida'],
-        //                 'quantidade'          => $produto['pivot']['quantidade'],
-        //                 'quantidadeembalagem' => $produto['pivot']['quantidadeembalagem'],
-        //                 'quantidadetotal'     => $produto['pivot']['quantidadetotal'],
-        //                 'valorunitario'       => $produto['pivot']['valorunitario'],
-        //                 'valortotal'          => $produto['pivot']['valortotal'],
-        //                 'formapagamento'      => $produto['pivot']['formapagamento'],
-        //                 'prazoentrega'        => $produto['pivot']['prazoentrega'],
-        //                 'observacao'          => $produto['pivot']['observacao'],
-        //                 'situacao'            => $produto['pivot']['situacao']
-        //             ]);
-        //         }
-        //     }
-        // });
+        DB::transaction(function () use ($request, $cotacao) {
+            $cotacao->update([
+                'codigo'          => $request['codigo'],
+                'profissional_id' => $request['profissional_id'],
+                'empresa_id'      => $request['empresa_id'],
+                'observacao'      => $request['observacao'],
+                'situacao'        => $request['situacao'],
+                'motivo'          => $request['motivo'],
+            ]);
+            if ($request['produtos']) {
+                foreach ($request['produtos'] as $key => $produto) {
+                    $cotacao_produto = CotacaoProduto::updateOrCreate(
+                        [
+                            'cotacao_id'          => $cotacao->id,
+                            'produto_id'          => $produto['id'],
+                        ],
+                        [
+                            'fornecedor_id'       => $produto['pivot']['fornecedor_id'],
+                            'unidademedida'       => $produto['pivot']['unidademedida'],
+                            'quantidade'          => $produto['pivot']['quantidade'],
+                            'quantidadeembalagem' => $produto['pivot']['quantidadeembalagem'],
+                            'quantidadetotal'     => $produto['pivot']['quantidadetotal'],
+                            'valorunitario'       => $produto['pivot']['valorunitario'],
+                            'valortotal'          => $produto['pivot']['valortotal'],
+                            'formapagamento'      => $produto['pivot']['formapagamento'],
+                            'prazoentrega'        => $produto['pivot']['prazoentrega'],
+                            'observacao'          => $produto['pivot']['observacao'],
+                            'situacao'            => $produto['pivot']['situacao']
+                        ]
+                    );
+                }
+            }
+        });
     }
 
     /**
