@@ -15,8 +15,10 @@ use App\Cnabsantander;
 use App\Cnabtrailerarquivo;
 use App\Cnabtrailerlote;
 use App\Http\Controllers\Controller;
+use App\Pagamentopessoa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class CnabsController extends Controller
 {
@@ -106,6 +108,9 @@ class CnabsController extends Controller
      */
     public function store(Request $request)
     {
+        $request = $request->getContent();
+        $request = json_decode($request, true);
+
         DB::transaction(function () use ($request) {
             $cnab = Cnab::create([
                 'empresa_id' => $request['empresa_id'],
@@ -283,6 +288,8 @@ class CnabsController extends Controller
                 }
             }
             if ($request['cnabSantanderFornecedores240']) {
+                // dd('' . $request['cnabSantanderFornecedores240']['cnabSantanderFornecedores240HeaderArquivo']['filler']);
+                // dd('' . $request->cnabSantanderFornecedores240->cnabSantanderFornecedores240HeaderArquivo->filler);
                 $cnabsantander = Cnabsantander::create([
                     'cnab_id' => $cnab->id,
                     'tipo'    => $request['cnabSantanderFornecedores240']['tipo'],
@@ -451,18 +458,56 @@ class CnabsController extends Controller
                     ]);
                 }
             }
+            if ($request['pagementopessoas']) {
+                foreach ($request['pagementopessoas'] as $key => $pagamento) {
+                    $pagamentopessoas = Pagamentopessoa::find($pagamento);
+                    $pagamentopessoas->status = true;
+                    $pagamentopessoas->save();
+                }
+            }
         });
     }
 
     /**
      * Display the specified resource.
      *
+     * @param  string  $tipo
      * @param  \App\Cnab  $cnab
      * @return \Illuminate\Http\Response
      */
-    public function show(Cnab $cnab)
+    public function show(Cnab $cnab, string $tipo)
     {
-        //
+        // $cnabsantander = Cnabsantander::firstWhere('tipo', $tipo);
+        // $cnabsantander->cnabheaderarquivo->cnabtrailerlotes;
+        // $cnabsantander->cnabtrailerarquivo;
+        // foreach ($cnabsantander->cnabheaderarquivo->cnabheaderlotes as $key => $cnabheaderlote) {
+        //     $cnabheaderlote->cnabdetalheas;
+        //     $cnabheaderlote->cnabdetalhebs;
+        // }
+
+        // $texto = '';
+        // $cnabsantander->cnabheaderarquivo;
+        // $cnabsantander->cnabheaderarquivo;
+        // $cnabsantander->cnabheaderarquivo;
+        // $cnabsantander->cnabheaderarquivo;
+        // $cnabsantander->cnabheaderarquivo;
+
+        // Storage::disk('public')->put('\\cnabs\\' . $cnab->id . '\\' . $tipo . ".txt", 'Contents');
+
+        // dd('Pronto');
+
+        // $myfile = fopen(storage_path('app\\public') . '\\cnabs\\' . $cnab->id . '\\' . $tipo . ".txt", "w") or die("Unable to open file!");
+        // $myfile = fopen(storage_path('app\\public') . '\\' . $tipo . ".txt", "w") or die("Unable to open file!");
+        // dd($myfile);
+        // $txt = "John Doe\n";
+        // fwrite($myfile, $txt);
+        // $txt = "Jane Doe\n";
+        // fwrite($myfile, $txt);
+        // fclose($myfile);
+
+        // dd($myfile);
+
+        return $cnabsantander;
     }
 
     /**

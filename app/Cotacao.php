@@ -9,6 +9,10 @@ class Cotacao extends Model
     protected $table = 'cotacoes';
     protected $guarded = [];
 
+    public function profissional()
+    {
+        return $this->belongsTo('App\Profissional');
+    }
     public function produtos()
     {
         return $this->belongsToMany('App\Produto', 'cotacao_produto')
