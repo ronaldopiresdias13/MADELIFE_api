@@ -11,6 +11,6 @@ class Medicao extends Model
 
     public function medicao_servicos()
     {
-        return $this->hasMany('App\ServicoMedicao');
+        return $this->hasMany('App\ServicoMedicao', 'medicoes_id');
     }
 }
