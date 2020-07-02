@@ -434,7 +434,7 @@ class ClientesController extends Controller
                         'email'      => $request['pessoa']['user']['email'],
                         'password'   => bcrypt($request['pessoa']['user']['password']),
                         'pessoa_id'  => $pessoa->id,
-                        'empresa_id' => $request['pessoa']['user']['empresa_id'],
+                        'empresa_id' => 1,
                     ]
                 );
                 if ($request['pessoa']['user']['acessos']) {
