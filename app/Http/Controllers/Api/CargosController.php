@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Cargo;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CargosController extends Controller
 {
@@ -94,14 +95,12 @@ class CargosController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->descricao);
-        $cargo = Cargo::firstOrCreate(
-            ['cbo' => $request->cbo],
-            ['descricao' =>  $request->descricao]
-        );
-        // $cargo->cbo = $request->cbo;
-        // $cargo->descricao = $request->descricao;
-        // $cargo->save();
+        DB::transaction(function () use ($request) {
+            $cargo = Cargo::firstOrCreate(
+                ['cbo' => $request->cbo],
+                ['descricao' =>  $request->descricao]
+            );
+        });
     }
 
     /**
@@ -159,12 +158,9 @@ class CargosController extends Controller
      */
     public function update(Request $request, Cargo $cargo)
     {
-        dd($request->cbo);
-        // foreach ($request->acessos as $key => $value) {
-        //     $teste = Cargo::updateOrCreate(
-        //         ['cbo'  => $user->id, 'acesso' => Acesso::FirstOrCreate(['nome' => $value['nome']])->id]
-        //     );
-        // }
+        DB::transaction(function () use ($request, $cargo) {
+            $cargo->update($request->all());
+        });
     }
 
     /**

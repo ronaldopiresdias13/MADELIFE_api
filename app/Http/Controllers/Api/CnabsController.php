@@ -477,37 +477,173 @@ class CnabsController extends Controller
      */
     public function show(Cnab $cnab, string $tipo)
     {
-        // $cnabsantander = Cnabsantander::firstWhere('tipo', $tipo);
-        // $cnabsantander->cnabheaderarquivo->cnabtrailerlotes;
-        // $cnabsantander->cnabtrailerarquivo;
-        // foreach ($cnabsantander->cnabheaderarquivo->cnabheaderlotes as $key => $cnabheaderlote) {
-        //     $cnabheaderlote->cnabdetalheas;
-        //     $cnabheaderlote->cnabdetalhebs;
-        // }
+        $caminho = '\\cnabs\\' . $cnab->id . '\\' . $tipo . '.txt';
 
-        // $texto = '';
-        // $cnabsantander->cnabheaderarquivo;
-        // $cnabsantander->cnabheaderarquivo;
-        // $cnabsantander->cnabheaderarquivo;
-        // $cnabsantander->cnabheaderarquivo;
-        // $cnabsantander->cnabheaderarquivo;
+        $cnabsantander = Cnabsantander::firstWhere('tipo', $tipo);
 
-        // Storage::disk('public')->put('\\cnabs\\' . $cnab->id . '\\' . $tipo . ".txt", 'Contents');
+        $header = $cnabsantander->cnabheaderarquivo->codigobanco .
+            $cnabsantander->cnabheaderarquivo->loteservico .
+            $cnabsantander->cnabheaderarquivo->tiporegistro .
+            $cnabsantander->cnabheaderarquivo->filler .
+            $cnabsantander->cnabheaderarquivo->tipoinscemp .
+            $cnabsantander->cnabheaderarquivo->numinscemp .
+            $cnabsantander->cnabheaderarquivo->codigoconvbanco .
+            $cnabsantander->cnabheaderarquivo->agenciaconta .
+            $cnabsantander->cnabheaderarquivo->digitoagencia .
+            $cnabsantander->cnabheaderarquivo->numcontacorrente .
+            $cnabsantander->cnabheaderarquivo->digitoconta .
+            $cnabsantander->cnabheaderarquivo->digitoagenciaconta .
+            $cnabsantander->cnabheaderarquivo->nomeempresa .
+            $cnabsantander->cnabheaderarquivo->nomebanco .
+            $cnabsantander->cnabheaderarquivo->filler2 .
+            $cnabsantander->cnabheaderarquivo->codremessa .
+            $cnabsantander->cnabheaderarquivo->dataarquivo .
+            $cnabsantander->cnabheaderarquivo->horaarquivo .
+            $cnabsantander->cnabheaderarquivo->numseqarquivo .
+            $cnabsantander->cnabheaderarquivo->numversaolayout .
+            $cnabsantander->cnabheaderarquivo->densidadegravacaoarquivo .
+            $cnabsantander->cnabheaderarquivo->reservadobanco .
+            $cnabsantander->cnabheaderarquivo->usobanco .
+            $cnabsantander->cnabheaderarquivo->usoempresa .
+            $cnabsantander->cnabheaderarquivo->filler3 .
+            $cnabsantander->cnabheaderarquivo->ocorrenciasretorno;
 
-        // dd('Pronto');
+        // Criar arquivo com primeira linha
+        Storage::disk('public')->put($caminho, $header);
 
-        // $myfile = fopen(storage_path('app\\public') . '\\cnabs\\' . $cnab->id . '\\' . $tipo . ".txt", "w") or die("Unable to open file!");
-        // $myfile = fopen(storage_path('app\\public') . '\\' . $tipo . ".txt", "w") or die("Unable to open file!");
-        // dd($myfile);
-        // $txt = "John Doe\n";
-        // fwrite($myfile, $txt);
-        // $txt = "Jane Doe\n";
-        // fwrite($myfile, $txt);
-        // fclose($myfile);
+        foreach ($cnabsantander->cnabheaderarquivo->cnabheaderlotes as $key => $cnabheaderlote) {
+            $headerlote = $cnabheaderlote->codigobanco .
+                $cnabheaderlote->loteservico .
+                $cnabheaderlote->tiporegistro .
+                $cnabheaderlote->tipooperacao .
+                $cnabheaderlote->tiposervico .
+                $cnabheaderlote->formalancamento .
+                $cnabheaderlote->numerolote .
+                $cnabheaderlote->filler .
+                $cnabheaderlote->tipoinscemp .
+                $cnabheaderlote->numinscemp .
+                $cnabheaderlote->codigoconvbanco .
+                $cnabheaderlote->agenciaconta .
+                $cnabheaderlote->digitoagencia .
+                $cnabheaderlote->numcontacorrente .
+                $cnabheaderlote->digitoconta .
+                $cnabheaderlote->digitoagenciaconta .
+                $cnabheaderlote->nomeempresa .
+                $cnabheaderlote->filler2 .
+                $cnabheaderlote->endereco .
+                $cnabheaderlote->numero .
+                $cnabheaderlote->compendereco .
+                $cnabheaderlote->cidade .
+                $cnabheaderlote->cep .
+                $cnabheaderlote->complcep .
+                $cnabheaderlote->uf .
+                $cnabheaderlote->filler3 .
+                $cnabheaderlote->ocorrenciasretorno;
 
-        // dd($myfile);
+            Storage::append($caminho, $headerlote);
 
-        return $cnabsantander;
+            foreach ($cnabheaderlote->cnabdetalheas as $key => $cnabdetalhea) {
+                $a = $cnabdetalhea->codigobanco .
+                    $cnabdetalhea->loteservico .
+                    $cnabdetalhea->tiporegistro .
+                    $cnabdetalhea->numeroseqregistrolote .
+                    $cnabdetalhea->codigosegregistrodetalhe .
+                    $cnabdetalhea->tipomovimento .
+                    $cnabdetalhea->codigoinstmovimento .
+                    $cnabdetalhea->codigocamaracomp .
+                    $cnabdetalhea->codigobancofavo .
+                    $cnabdetalhea->codigoagenciafavo .
+                    $cnabdetalhea->digitoagenciafavo .
+                    $cnabdetalhea->ccfavorecido .
+                    $cnabdetalhea->digitoconta .
+                    $cnabdetalhea->digitoagenciaconta .
+                    $cnabdetalhea->nome .
+                    $cnabdetalhea->numerocliente .
+                    $cnabdetalhea->datapagamento .
+                    $cnabdetalhea->tipomoeda .
+                    $cnabdetalhea->quantidademoeda .
+                    $cnabdetalhea->valorpagamento .
+                    $cnabdetalhea->numerodocbanco .
+                    $cnabdetalhea->datarealpag .
+                    $cnabdetalhea->valorrealpag .
+                    $cnabdetalhea->outrasinfo .
+                    $cnabdetalhea->finalidadedoc .
+                    $cnabdetalhea->finalidadeted .
+                    $cnabdetalhea->codigocomplementar .
+                    $cnabdetalhea->filler .
+                    $cnabdetalhea->emissaofavorecido .
+                    $cnabdetalhea->ocorrenciasretorno;
+
+                Storage::append($caminho, $a);
+            }
+
+            foreach ($cnabheaderlote->cnabdetalhebs as $key => $cnabdetalheb) {
+                $b = $cnabdetalheb->codigobanco .
+                    $cnabdetalheb->loteservico .
+                    $cnabdetalheb->tiporegistro .
+                    $cnabdetalheb->numeroseqregistrolote .
+                    $cnabdetalheb->codigosegregistrodetalhe .
+                    $cnabdetalheb->filler .
+                    $cnabdetalheb->tipoinscfavorecido .
+                    $cnabdetalheb->cpfcnpjfavorecido .
+                    $cnabdetalheb->logradourofavorecido .
+                    $cnabdetalheb->numerolocalfavorecido .
+                    $cnabdetalheb->complocalfavorecido .
+                    $cnabdetalheb->bairrofavorecido .
+                    $cnabdetalheb->cidadefavorecido .
+                    $cnabdetalheb->cepfavorecido .
+                    $cnabdetalheb->estadofavorecido .
+                    $cnabdetalheb->datavencimento .
+                    $cnabdetalheb->valordocumento .
+                    $cnabdetalheb->valorabatimento .
+                    $cnabdetalheb->valordesconto .
+                    $cnabdetalheb->valormora .
+                    $cnabdetalheb->valormulta .
+                    $cnabdetalheb->horarioenvio .
+                    $cnabdetalheb->filler2 .
+                    $cnabdetalheb->codigohistcredito .
+                    $cnabdetalheb->ocorrenciasretorno .
+                    $cnabdetalheb->filler3 .
+                    $cnabdetalheb->tedfinanceira .
+                    $cnabdetalheb->identificacaospb;
+
+                Storage::append($caminho, $b);
+            }
+        }
+
+        foreach ($cnabsantander->cnabheaderarquivo->cnabtrailerlotes as $key => $cnabtrailerlote) {
+            $trailer = $cnabtrailerlote->codigobanco .
+                $cnabtrailerlote->loteservico .
+                $cnabtrailerlote->tiporegistro .
+                $cnabtrailerlote->filler .
+                $cnabtrailerlote->quantidadereglote .
+                $cnabtrailerlote->somatoriavalores .
+                $cnabtrailerlote->somatoriaquantmoeda .
+                $cnabtrailerlote->numeroavisodebito .
+                $cnabtrailerlote->filler2 .
+                $cnabtrailerlote->ocorrenciasretorno;
+
+            Storage::append($caminho, $trailer);
+        }
+
+        $trailer = $cnabsantander->cnabtrailerarquivo->codigobanco .
+            $cnabsantander->cnabtrailerarquivo->loteservico .
+            $cnabsantander->cnabtrailerarquivo->tiporegistro .
+            $cnabsantander->cnabtrailerarquivo->filler .
+            $cnabsantander->cnabtrailerarquivo->quantidadelotesarquivo .
+            $cnabsantander->cnabtrailerarquivo->quantidaderegarquivo .
+            $cnabsantander->cnabtrailerarquivo->filler2;
+
+        Storage::append($caminho, $trailer);
+
+        $file = Storage::get($caminho);
+
+        $response =  array(
+            'nome' => $tipo . '.txt',
+            'file' => base64_encode($file)
+        );
+
+        return response()->json($response);
     }
 
     /**

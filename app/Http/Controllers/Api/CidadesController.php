@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Cidade;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CidadesController extends Controller
 {
@@ -94,10 +95,12 @@ class CidadesController extends Controller
      */
     public function store(Request $request)
     {
-        $cidade = new Cidade();
-        $cidade->nome = $request->nome;
-        $cidade->uf   = $request->uf;
-        $cidade->save();
+        DB::transaction(function () use ($request) {
+            $cidade = new Cidade();
+            $cidade->nome = $request->nome;
+            $cidade->uf   = $request->uf;
+            $cidade->save();
+        });
     }
 
     /**
@@ -155,7 +158,9 @@ class CidadesController extends Controller
      */
     public function update(Request $request, Cidade $cidade)
     {
-        $cidade->update($request->all());
+        DB::transaction(function () use ($request, $cidade) {
+            $cidade->update($request->all());
+        });
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Convenio;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ConveniosController extends Controller
 {
@@ -95,7 +96,9 @@ class ConveniosController extends Controller
      */
     public function store(Request $request)
     {
-        Convenio::create($request->all());
+        DB::transaction(function () use ($request) {
+            Convenio::create($request->all());
+        });
     }
 
     /**
@@ -153,7 +156,9 @@ class ConveniosController extends Controller
      */
     public function update(Request $request, Convenio $convenio)
     {
-        $convenio->update($request->all());
+        DB::transaction(function () use ($request, $convenio) {
+            $convenio->update($request->all());
+        });
     }
 
     /**
