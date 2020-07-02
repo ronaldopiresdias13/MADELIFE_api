@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\CotacaoProduto;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CotacaoProdutoController extends Controller
 {
@@ -99,7 +100,9 @@ class CotacaoProdutoController extends Controller
      */
     public function store(Request $request)
     {
-        CotacaoProduto::create($request->all());
+        DB::transaction(function () use ($request) {
+            CotacaoProduto::create($request->all());
+        });
     }
 
     /**
@@ -162,21 +165,9 @@ class CotacaoProdutoController extends Controller
      */
     public function update(Request $request, CotacaoProduto $cotacaoProduto)
     {
-        // return $request;
-        $cotacaoProduto->cotacao_id;
-        $cotacaoProduto->produto_id;
-        $cotacaoProduto->fornecedor_id;
-        $cotacaoProduto->unidademedida;
-        $cotacaoProduto->quantidade;
-        $cotacaoProduto->quantidadeembalagem;
-        $cotacaoProduto->quantidadetotal;
-        $cotacaoProduto->valorunitario;
-        $cotacaoProduto->valortotal;
-        $cotacaoProduto->formapagamento;
-        $cotacaoProduto->prazoentrega;
-        $cotacaoProduto->observacao;
-        $cotacaoProduto->situacao;
-        $cotacaoProduto->update();
+        DB::transaction(function () use ($request, $cotacaoProduto) {
+            $cotacaoProduto->update($request->all());
+        });
     }
 
     /**
