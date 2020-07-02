@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Categorianatureza;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CategorianaturezasController extends Controller
 {
@@ -94,11 +95,13 @@ class CategorianaturezasController extends Controller
      */
     public function store(Request $request)
     {
-        $categorianatureza             = new Categorianatureza();
-        $categorianatureza->empresa_id = $request->empresa_id;
-        $categorianatureza->descricao  = $request->descricao;
-        $categorianatureza->status     = $request->status;
-        $categorianatureza->save();
+        DB::transaction(function () use ($request) {
+            $categorianatureza             = new Categorianatureza();
+            $categorianatureza->empresa_id = $request->empresa_id;
+            $categorianatureza->descricao  = $request->descricao;
+            $categorianatureza->status     = $request->status;
+            $categorianatureza->save();
+        });
     }
 
     /**
@@ -156,7 +159,9 @@ class CategorianaturezasController extends Controller
      */
     public function update(Request $request, Categorianatureza $categorianatureza)
     {
-        $categorianatureza->update($request->all());
+        DB::transaction(function () use ($request, $categorianatureza) {
+            $categorianatureza->update($request->all());
+        });
     }
 
     /**
