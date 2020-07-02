@@ -178,6 +178,8 @@ class MedicoesController extends Controller
                 }
             }
         });
+
+        return response()->json('Medição atualizada com sucesso!', 200)->header('Content-Type', 'text/plain');
     }
 
     /**
