@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Medicao;
 use App\ServicoMedicao;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MedicoesController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -106,7 +108,7 @@ class MedicoesController extends Controller
             'observacao' => $request['observacao'],
             'status' => $request['status']
         ])->id;
-        foreach ($request['servicos'] as $key => $servico){
+        foreach ($request['servicos'] as $key => $servico) {
             $servico_medicao = ServicoMedicao::create([
                 'medicoes_id' => $medicao,
                 'servico_id' => $servico['servico_id'],
@@ -141,7 +143,43 @@ class MedicoesController extends Controller
      */
     public function update(Request $request, Medicao $medicao)
     {
-        //
+        DB::transaction(function () use ($request, $medicao) {
+            $medicao->update(
+                [
+                    'empresa_id'      => $request['empresa_id'],
+                    'cliente_id'      => $request['cliente_id'],
+                    'ordemservico_id' => $request['ordemservico_id'],
+                    'data1'           => $request['data1'],
+                    'data2'           => $request['data2'],
+                    'valor'           => $request['valor'],
+                    'situacao'        => $request['situacao'],
+                    'observacao'      => $request['observacao'],
+                    'status'          => $request['status'],
+                ]
+            );
+            if ($request['medicao_servicos']) {
+                foreach ($request['medicao_servicos'] as $key => $servico) {
+                    $medicao_sevico = ServicoMedicao::updateOrCreate(
+                        [
+                            'id' => $servico['id'],
+                        ],
+                        [
+                            'medicoes_id' => $servico['medicoes_id'],
+                            'servico_id'  => $servico['servico_id'],
+                            'quantidade'  => $servico['quantidade'],
+                            'atendido'    => $servico['atendido'],
+                            'valor'       => $servico['valor'],
+                            'subtotal'    => $servico['subtotal'],
+                            'situacao'    => $servico['situacao'],
+                            'observacao'  => $servico['observacao'],
+                            'status'      => $servico['status'],
+                        ]
+                    );
+                }
+            }
+        });
+
+        return response()->json('Medição atualizada com sucesso!', 200)->header('Content-Type', 'text/plain');
     }
 
     /**
@@ -152,6 +190,6 @@ class MedicoesController extends Controller
      */
     public function destroy(Medicao $medicao)
     {
-        //
+        $medicao->delete();
     }
 }
