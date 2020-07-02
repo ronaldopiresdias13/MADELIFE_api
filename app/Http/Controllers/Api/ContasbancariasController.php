@@ -201,7 +201,15 @@ class ContasbancariasController extends Controller
     public function update(Request $request, Contasbancaria $contasbancaria)
     {
         DB::transaction(function () use ($request, $contasbancaria) {
-            $contasbancaria->update($request->all());
+            $contasbancaria->empresa_id = $request->empresa_id;
+            $contasbancaria->banco_id = $request->banco_id;
+            $contasbancaria->agencia = $request->agencia;
+            $contasbancaria->conta = $request->conta;
+            $contasbancaria->digito = $request->digito;
+            $contasbancaria->tipo = $request->tipo;
+            $contasbancaria->descricao = $request->descricao;
+            $contasbancaria->status = $request->status;
+            $contasbancaria->update();
         });
     }
 
@@ -213,6 +221,6 @@ class ContasbancariasController extends Controller
      */
     public function destroy(Contasbancaria $contasbancaria)
     {
-        //
+        $contasbancaria->delete();
     }
 }
