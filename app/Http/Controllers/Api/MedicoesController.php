@@ -161,7 +161,7 @@ class MedicoesController extends Controller
                 foreach ($request['medicao_servicos'] as $key => $servico) {
                     $medicao_sevico = ServicoMedicao::updateOrCreate(
                         [
-                            'id' => $servico['servico_id'],
+                            'id' => $servico['id'],
                         ],
                         [
                             'medicoes_id' => $servico['medicoes_id'],
