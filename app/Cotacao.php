@@ -17,6 +17,7 @@ class Cotacao extends Model
     {
         return $this->belongsToMany('App\Produto', 'cotacao_produto')
             ->withPivot(
+                'id',
                 'produto_id',
                 'fornecedor_id',
                 'unidademedida',

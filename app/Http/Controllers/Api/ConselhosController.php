@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Conselho;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ConselhosController extends Controller
 {
@@ -94,12 +95,14 @@ class ConselhosController extends Controller
      */
     public function store(Request $request)
     {
-        $conselho = new Conselho();
-        $conselho->instituicao = $request->instituicao;
-        $conselho->uf = $request->uf;
-        $conselho->numero = $request->numero;
-        $conselho->pessoa = $request->pessoa;
-        $conselho->save();
+        DB::transaction(function () use ($request) {
+            $conselho = new Conselho();
+            $conselho->instituicao = $request->instituicao;
+            $conselho->uf          = $request->uf;
+            $conselho->numero      = $request->numero;
+            $conselho->pessoa      = $request->pessoa;
+            $conselho->save();
+        });
     }
 
     /**
@@ -157,7 +160,9 @@ class ConselhosController extends Controller
      */
     public function update(Request $request, Conselho $conselho)
     {
-        $conselho->update($request->all());
+        DB::transaction(function () use ($request, $conselho) {
+            $conselho->update($request->all());
+        });
     }
 
     /**

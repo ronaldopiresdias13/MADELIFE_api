@@ -7,6 +7,7 @@ use App\Responsavel;
 use App\Ordemservico;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class OrdemservicosController extends Controller
 {
@@ -96,38 +97,42 @@ class OrdemservicosController extends Controller
      */
     public function store(Request $request)
     {
-        $ordemservico = Ordemservico::updateOrCreate(
-            [
-                'orcamento_id' => $request['orcamento_id'],
-            ],
-            [
-                'responsavel_id' => Responsavel::updateOrCreate(
-                    [
-                        'id' => $request['responsavel']['id'],
-                    ],
-                    [
-                        'pessoa_id' => Pessoa::updateOrCreate(
-                            ['cpfcnpj' => $request['responsavel']['pessoa']['cpfcnpj']],
-                            [
-                                'nome'        => $request['responsavel']['pessoa']['nome'],
-                                'nascimento'  => $request['responsavel']['pessoa']['nascimento'],
-                                'tipo'        => $request['responsavel']['pessoa']['tipo'],
-                                'rgie'        => $request['responsavel']['pessoa']['rgie'],
-                                'observacoes' => $request['responsavel']['pessoa']['observacoes'],
-                            ]
-                        )->id,
-                        'parentesco' => $request['responsavel']['parentesco'],
-                    ]
-                )->id,
-                'profissional_id'        => $request['profissional_id'],
-                'codigo'                 => $request['codigo'],
-                'inicio'                 => $request['inicio'],
-                'fim'                    => $request['fim'],
-                'status'                 => $request['status'],
-                'montagemequipe'         => $request['montagemequipe'],
-                'realizacaoprocedimento' => $request['realizacaoprocedimento'],
-            ]
-        );
+        DB::transaction(function () use ($request) {
+            $ordemservico = Ordemservico::updateOrCreate(
+                [
+                    'orcamento_id' => $request['orcamento_id'],
+                ],
+                [
+                    'responsavel_id' => Responsavel::updateOrCreate(
+                        [
+                            'id' => $request['responsavel']['id'],
+                        ],
+                        [
+                            'pessoa_id' => Pessoa::updateOrCreate(
+                                ['cpfcnpj' => $request['responsavel']['pessoa']['cpfcnpj']],
+                                [
+                                    'nome'        => $request['responsavel']['pessoa']['nome'],
+                                    'nascimento'  => $request['responsavel']['pessoa']['nascimento'],
+                                    'tipo'        => $request['responsavel']['pessoa']['tipo'],
+                                    'rgie'        => $request['responsavel']['pessoa']['rgie'],
+                                    'observacoes' => $request['responsavel']['pessoa']['observacoes'],
+                                ]
+                            )->id,
+                            'parentesco' => $request['responsavel']['parentesco'],
+                        ]
+                    )->id,
+                    'profissional_id'        => $request['profissional_id'],
+                    'codigo'                 => $request['codigo'],
+                    'inicio'                 => $request['inicio'],
+                    'fim'                    => $request['fim'],
+                    'status'                 => $request['status'],
+                    'montagemequipe'         => $request['montagemequipe'],
+                    'realizacaoprocedimento' => $request['realizacaoprocedimento'],
+                ]
+            );
+        });
+
+        return response()->json('Ordem de Serviço cadastrado com sucesso!', 200)->header('Content-Type', 'text/plain');
     }
 
     /**

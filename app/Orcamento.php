@@ -66,9 +66,9 @@ class Orcamento extends Model
                 "custo",
                 "subtotal",
                 "subtotalcusto",
-                "icms",
-                "inss",
-                "iss",
+                // "icms",
+                // "inss",
+                // "iss",
                 "valorcustomensal",
                 "valorresultadomensal"
             );
