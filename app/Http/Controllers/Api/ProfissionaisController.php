@@ -266,19 +266,19 @@ class ProfissionaisController extends Controller
                 }
             }
 
-            if ($request['pessoa']['users']) {
+            if ($request['pessoa']['user']) {
                 $user = User::firstOrCreate(
                     [
-                        'email'      =>        $request['pessoa']['users']['email'],
+                        'email'      =>        $request['pessoa']['user']['email'],
                     ],
                     [
                         'empresa_id' =>        $request['empresa_id'],
-                        'cpfcnpj'    =>        $request['pessoa']['users']['cpfcnpj'],
-                        'password'   => bcrypt($request['pessoa']['users']['password']),
+                        'cpfcnpj'    =>        $request['pessoa']['user']['cpfcnpj'],
+                        'password'   => bcrypt($request['pessoa']['user']['password']),
                         'pessoa_id'  =>        $profissional->pessoa_id,
                     ]
                 );
-                foreach ($request['pessoa']['users']['acessos'] as $key => $acesso) {
+                foreach ($request['pessoa']['user']['acessos'] as $key => $acesso) {
                     $user_acesso = UserAcesso::firstOrCreate([
                         'user_id'   => $user->id,
                         'acesso_id' => $acesso,
