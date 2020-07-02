@@ -199,43 +199,84 @@ class ClientesController extends Controller
                 }
             }
 
+
             if ($request['pessoa']['user']) {
-                foreach ($request['pessoa']['user'] as $key => $user) {
-                    $usercpf = User::firstWhere(
-                        'cpfcnpj',
-                        $user['cpfcnpj'],
-                    );
-                    $useremail = User::firstWhere(
-                        'email',
-                        $user['email'],
-                    );
-
-                    $userexist = null;
-
-                    if ($usercpf) {
-                        $userexist = $usercpf;
-                    } elseif ($useremail) {
-                        $userexist = $useremail;
+                if ($request['pessoa']['user']['email'] !== '') {
+                    $user = new User();
+                    if ($request['pessoa']['user']['password'] !== '') {
+                        $user = User::updateOrCreate(
+                            [
+                                'email'      =>        $request['pessoa']['user']['email'],
+                            ],
+                            [
+                                'empresa_id' =>        $request['empresa_id'],
+                                'cpfcnpj'    =>        $request['pessoa']['user']['cpfcnpj'],
+                                'password'   => bcrypt($request['pessoa']['user']['password']),
+                                'pessoa_id'  =>        $cliente->pessoa_id,
+                            ]
+                        );
+                    } else {
+                        $user = User::firstOrCreate(
+                            [
+                                'email'      =>        $request['pessoa']['user']['email'],
+                            ],
+                            [
+                                'empresa_id' =>        $request['empresa_id'],
+                                'cpfcnpj'    =>        $request['pessoa']['user']['cpfcnpj'],
+                                'password'   => bcrypt($request['pessoa']['user']['password']),
+                                'pessoa_id'  =>        $cliente->pessoa_id,
+                            ]
+                        );
                     }
-
-                    if (($pessoa == null) || ($pessoa != null && ($userexist == null))) {
-                        $userexist = User::create([
-                            'empresa_id' =>        $user['empresa_id'],
-                            'cpfcnpj'    =>        $user['cpfcnpj'],
-                            'email'      =>        $user['email'],
-                            'password'   => bcrypt($user['password']),
-                            'pessoa_id'  =>        $cliente->pessoa_id,
-                        ]);
-                    }
-
-                    foreach ($user['acessos'] as $key => $acesso) {
-                        $user_acesso = UserAcesso::firstOrCreate([
-                            'user_id'   => $userexist->id,
-                            'acesso_id' => Acesso::firstWhere('id', $acesso)->id,
-                        ]);
+                    if ($request['pessoa']['user']['acessos']) {
+                        foreach ($request['pessoa']['user']['acessos'] as $key => $acesso) {
+                            $user_acesso = UserAcesso::firstOrCreate([
+                                'user_id'   => $user->id,
+                                'acesso_id' => $acesso,
+                            ]);
+                        }
                     }
                 }
             }
+
+
+            // if ($request['pessoa']['user']) {
+            //     foreach ($request['pessoa']['user'] as $key => $user) {
+            //         $usercpf = User::firstWhere(
+            //             'cpfcnpj',
+            //             $user['cpfcnpj'],
+            //         );
+            //         $useremail = User::firstWhere(
+            //             'email',
+            //             $user['email'],
+            //         );
+
+            //         $userexist = null;
+
+            //         if ($usercpf) {
+            //             $userexist = $usercpf;
+            //         } elseif ($useremail) {
+            //             $userexist = $useremail;
+            //         }
+
+            //         if (($pessoa == null) || ($pessoa != null && ($userexist == null))) {
+            //             $userexist = User::create([
+            //                 'empresa_id' =>        $user['empresa_id'],
+            //                 'cpfcnpj'    =>        $user['cpfcnpj'],
+            //                 'email'      =>        $user['email'],
+            //                 'password'   => bcrypt($user['password']),
+            //                 'pessoa_id'  =>        $cliente->pessoa_id,
+            //             ]);
+            //         }
+
+            //         foreach ($user['acessos'] as $key => $acesso) {
+            //             $user_acesso = UserAcesso::firstOrCreate([
+            //                 'user_id'   => $userexist->id,
+            //                 'acesso_id' => Acesso::firstWhere('id', $acesso)->id,
+            //             ]);
+            //         }
+            //     }
+            // }
         });
         return response()->json('Cliente atualizado com sucesso!', 200)->header('Content-Type', 'text/plain');
     }

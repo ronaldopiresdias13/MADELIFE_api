@@ -372,48 +372,67 @@ class ProfissionaisController extends Controller
     public function update(Request $request, Profissional $profissional)
     {
         DB::transaction(function () use ($request, $profissional) {
-            $profissional = Profissional::updateOrCreate([
-                'pessoafisica' => 1,
-                'empresa_id'   => 1,
-                'pessoa_id'    => Pessoa::updateOrCreate(
-                    [
-                        'id' => ($request['pessoa']['id'] != '') ? $request['pessoa']['id'] : null,
-                        // 'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
-                    ],
-                    [
-                        'empresa_id'  => $request['pessoa']['empresa_id'],
-                        'nome'        => $request['pessoa']['nome'],
-                        'nascimento'  => $request['pessoa']['nascimento'],
-                        'tipo'        =>                    'profissional',
-                        'rgie'        => $request['pessoa']['rgie'],
-                        'observacoes' => $request['pessoa']['observacoes'],
-                        'perfil'      => $request['pessoa']['perfil'],
-                        'status'      => $request['pessoa']['status'],
-                    ]
-                )->id,
-                'sexo'                        => $request['sexo'],
-                'setor_id'                    => $request['setor_id'],
-                'cargo_id'                    => $request['cargo_id'],
-                'pis'                         => $request['pis'],
-                'numerocarteiratrabalho'      => $request['numerocarteiratrabalho'],
-                'numerocnh'                   => $request['numerocnh'],
-                'categoriacnh'                => $request['categoriacnh'],
-                'validadecnh'                 => $request['validadecnh'],
-                'numerotituloeleitor'         => $request['numerotituloeleitor'],
-                'zonatituloeleitor'           => $request['zonatituloeleitor'],
-                'dadoscontratuais_id'         => Dadoscontratual::updateOrCreate([
-                    'tiposalario'             => $request['dadoscontratuais']['tiposalario'],
-                    'salario'                 => $request['dadoscontratuais']['salario'],
-                    'cargahoraria'            => $request['dadoscontratuais']['cargahoraria'],
-                    'insalubridade'           => $request['dadoscontratuais']['insalubridade'],
-                    'percentualinsalubridade' => $request['dadoscontratuais']['percentualinsalubridade'],
-                    // 'cargahoraria'            => null,
-                    // 'insalubridade'           => 0,
-                    // 'percentualinsalubridade' => null,
-                    'admissao'                => $request['dadoscontratuais']['admissao'],
-                    'demissao'                => $request['dadoscontratuais']['demissao'],
-                ])->id,
-            ]);
+            // $profissional->empresa_id             = $request->empresa_id;
+            // $profissional->pessoa_id              = $request->pessoa_id;
+            // $profissional->pessoafisica           = $request->pessoafisica;
+            // $profissional->sexo                   = $request->sexo;
+            // $profissional->setor_id               = $request->setor_id;
+            // $profissional->cargo_id               = $request->cargo_id;
+            // $profissional->pis                    = $request->pis;
+            // $profissional->numerocarteiratrabalho = $request->numerocarteiratrabalho;
+            // $profissional->numerocnh              = $request->numerocnh;
+            // $profissional->categoriacnh           = $request->categoriacnh;
+            // $profissional->numerotituloeleitor    = $request->numerotituloeleitor;
+            // $profissional->zonatituloeleitor      = $request->zonatituloeleitor;
+            // $profissional->secaotituloeleitor     = $request->secaotituloeleitor;
+
+            $profissional = Profissional::updateOrCreate(
+                [
+                    'id' => $request['id'],
+                ],
+                [
+                    'pessoafisica' => 1,
+                    'empresa_id'   => 1,
+                    'pessoa_id'    => Pessoa::updateOrCreate(
+                        [
+                            // 'id' => ($request['pessoa']['id'] != '') ? $request['pessoa']['id'] : null,
+                            'id' => $request['pessoa_id'],
+                        ],
+                        [
+                            'empresa_id'  => $request['pessoa']['empresa_id'],
+                            'nome'        => $request['pessoa']['nome'],
+                            'nascimento'  => $request['pessoa']['nascimento'],
+                            'tipo'        =>                    'profissional',
+                            'rgie'        => $request['pessoa']['rgie'],
+                            'observacoes' => $request['pessoa']['observacoes'],
+                            'perfil'      => $request['pessoa']['perfil'],
+                            'status'      => $request['pessoa']['status'],
+                        ]
+                    )->id,
+                    'sexo'                        => $request['sexo'],
+                    'setor_id'                    => $request['setor_id'],
+                    'cargo_id'                    => $request['cargo_id'],
+                    'pis'                         => $request['pis'],
+                    'numerocarteiratrabalho'      => $request['numerocarteiratrabalho'],
+                    'numerocnh'                   => $request['numerocnh'],
+                    'categoriacnh'                => $request['categoriacnh'],
+                    'validadecnh'                 => $request['validadecnh'],
+                    'numerotituloeleitor'         => $request['numerotituloeleitor'],
+                    'zonatituloeleitor'           => $request['zonatituloeleitor'],
+                    'dadoscontratuais_id'         => Dadoscontratual::updateOrCreate([
+                        'tiposalario'             => $request['dadoscontratuais']['tiposalario'],
+                        'salario'                 => $request['dadoscontratuais']['salario'],
+                        'cargahoraria'            => $request['dadoscontratuais']['cargahoraria'],
+                        'insalubridade'           => $request['dadoscontratuais']['insalubridade'],
+                        'percentualinsalubridade' => $request['dadoscontratuais']['percentualinsalubridade'],
+                        // 'cargahoraria'            => null,
+                        // 'insalubridade'           => 0,
+                        // 'percentualinsalubridade' => null,
+                        'admissao'                => $request['dadoscontratuais']['admissao'],
+                        'demissao'                => $request['dadoscontratuais']['demissao'],
+                    ])->id,
+                ]
+            );
             if ($request['formacoes']) {
                 foreach ($request['formacoes'] as $key => $formacao) {
                     $profissional_formacao = ProfissionalFormacao::firstOrCreate([
