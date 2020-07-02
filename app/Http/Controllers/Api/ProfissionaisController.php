@@ -372,20 +372,6 @@ class ProfissionaisController extends Controller
     public function update(Request $request, Profissional $profissional)
     {
         DB::transaction(function () use ($request, $profissional) {
-            // $profissional->empresa_id             = $request->empresa_id;
-            // $profissional->pessoa_id              = $request->pessoa_id;
-            // $profissional->pessoafisica           = $request->pessoafisica;
-            // $profissional->sexo                   = $request->sexo;
-            // $profissional->setor_id               = $request->setor_id;
-            // $profissional->cargo_id               = $request->cargo_id;
-            // $profissional->pis                    = $request->pis;
-            // $profissional->numerocarteiratrabalho = $request->numerocarteiratrabalho;
-            // $profissional->numerocnh              = $request->numerocnh;
-            // $profissional->categoriacnh           = $request->categoriacnh;
-            // $profissional->numerotituloeleitor    = $request->numerotituloeleitor;
-            // $profissional->zonatituloeleitor      = $request->zonatituloeleitor;
-            // $profissional->secaotituloeleitor     = $request->secaotituloeleitor;
-
             $profissional = Profissional::updateOrCreate(
                 [
                     'id' => $request['id'],
@@ -514,8 +500,8 @@ class ProfissionaisController extends Controller
                                 'email' => $email['email'],
                             ]
                         )->id,
-                        'tipo'      => $email['tipo'],
-                        'descricao' => $email['descricao'],
+                        'tipo'      => $email['pivot']['tipo'],
+                        'descricao' => $email['pivot']['descricao'],
                     ]);
                 }
             }
@@ -552,7 +538,7 @@ class ProfissionaisController extends Controller
                         foreach ($request['pessoa']['user']['acessos'] as $key => $acesso) {
                             $user_acesso = UserAcesso::firstOrCreate([
                                 'user_id'   => $user->id,
-                                'acesso_id' => $acesso,
+                                'acesso_id' => $acesso['id'],
                             ]);
                         }
                     }
