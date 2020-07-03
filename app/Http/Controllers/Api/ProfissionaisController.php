@@ -423,7 +423,7 @@ class ProfissionaisController extends Controller
                 foreach ($request['formacoes'] as $key => $formacao) {
                     $profissional_formacao = ProfissionalFormacao::firstOrCreate([
                         'profissional_id' => $profissional->id,
-                        'formacao_id'     => $formacao['formacao_id'],
+                        'formacao_id'     => $formacao['id'],
                     ]);
                 }
             }
@@ -431,7 +431,7 @@ class ProfissionaisController extends Controller
                 foreach ($request['beneficios'] as $key => $beneficio) {
                     $profissional_beneficio = ProfissionalBeneficio::firstOrCreate([
                         'profissional_id' => $profissional->id,
-                        'beneficio_id'    => $beneficio['beneficio_id']
+                        'beneficio_id'    => $beneficio['id']
                     ]);
                 }
             }
@@ -439,7 +439,7 @@ class ProfissionaisController extends Controller
                 foreach ($request['convenios'] as $key => $convenio) {
                     $profissional_convenio = ProfissionalConvenio::firstOrCreate([
                         'profissional_id' => $profissional->id,
-                        'convenio_id'    => $convenio['convenio_id']
+                        'convenio_id'    => $convenio['id']
                     ]);
                 }
             }
@@ -485,8 +485,8 @@ class ProfissionaisController extends Controller
                                 'telefone'  => $telefone['telefone'],
                             ]
                         )->id,
-                        'tipo'      => $telefone['tipo'],
-                        'descricao' => $telefone['descricao'],
+                        'tipo'      => $telefone['pivot']['tipo'],
+                        'descricao' => $telefone['pivot']['descricao'],
                     ]);
                 }
             }
