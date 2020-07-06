@@ -1,0 +1,11 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class EmpresaPrestador extends Model
+{
+    protected $table = 'empresa_prestador';
+    protected $guarded = [];
+}
