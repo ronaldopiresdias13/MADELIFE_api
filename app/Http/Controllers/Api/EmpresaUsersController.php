@@ -2,20 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Empresa;
-use Illuminate\Http\Request;
+use App\EmpresaUser;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class EmpresasController extends Controller
+class EmpresaUsersController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $itens = new Empresa();
+        $itens = new EmpresaUser();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -24,7 +26,7 @@ class EmpresasController extends Controller
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
-                    $itens = Empresa::where(
+                    $itens = EmpresaUser::where(
                         ($where['coluna']) ? $where['coluna'] : 'id',
                         ($where['expressao']) ? $where['expressao'] : 'like',
                         ($where['valor']) ? $where['valor'] : '%'
@@ -38,7 +40,7 @@ class EmpresasController extends Controller
                 }
             }
         } else {
-            $itens = Empresa::where('id', 'like', '%');
+            $itens = EmpresaUser::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -90,27 +92,31 @@ class EmpresasController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \App\EmpresaUser  $empresaUser
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, EmpresaUser $empresaUser)
     {
-        $empresa = new Empresa();
-        $empresa->razao = $request->razao;
-        $empresa->cnpj  = $request->cnpj;
-        $empresa->ie    = $request->ie;
-        $empresa->logo  = $request->logo;
-        $empresa->save();
+        DB::transaction(function () use ($request, $empresaUser) {
+            $empresa = new EmpresaUser();
+            $empresa->razao = $request->razao;
+            $empresa->cnpj  = $request->cnpj;
+            $empresa->ie    = $request->ie;
+            $empresa->logo  = $request->logo;
+            $empresa->save();
+        });
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\empresa  $empresa
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\EmpresaUser  $empresaUser
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, empresa $empresa)
+    public function show(Request $request, EmpresaUser $empresaUser)
     {
-        $iten = $empresa;
+        $iten = $empresaUser;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -152,22 +158,26 @@ class EmpresasController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\empresa  $empresa
+     * @param  \App\EmpresaUser  $empresaUser
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, empresa $empresa)
+    public function update(Request $request, EmpresaUser $empresaUser)
     {
-        $empresa->update($request->all());
+        DB::transaction(function () use ($request, $empresaUser) {
+            $empresaUser->update($request->all());
+        });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\empresa  $empresa
+     * @param  \App\EmpresaUser  $empresaUser
      * @return \Illuminate\Http\Response
      */
-    public function destroy(empresa $empresa)
+    public function destroy(EmpresaUser $empresaUser)
     {
-        // $empresa->delete();
+        DB::transaction(function () use ($empresaUser) {
+            $empresaUser->delete();
+        });
     }
 }

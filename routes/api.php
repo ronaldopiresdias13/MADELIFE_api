@@ -190,6 +190,12 @@ Route::get('empresas/{empresa}', 'Api\EmpresasController@show');
 Route::put('empresas/{empresa}', 'Api\EmpresasController@update');
 Route::delete('empresas/{empresa}', 'Api\EmpresasController@destroy');
 
+Route::get('empresaUser', 'Api\EmpresaUsersController@index');
+Route::post('empresaUser', 'Api\EmpresaUsersController@store');
+Route::get('empresaUser/{empresaUser}', 'Api\EmpresaUsersController@show');
+Route::put('empresaUser/{empresaUser}', 'Api\EmpresaUsersController@update');
+Route::delete('empresaUser/{empresaUser}', 'Api\EmpresaUsersController@destroy');
+
 Route::get('enderecos', 'Api\EnderecosController@index');
 Route::post('enderecos', 'Api\EnderecosController@store');
 Route::get('enderecos/{endereco}', 'Api\EnderecosController@show');
