@@ -4,8 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class EmpresaUser extends Model
+class EmpresaPrestador extends Model
 {
-    protected $table = 'empresa_user';
+    protected $table = 'empresa_prestador';
     protected $guarded = [];
 }

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\EmpresaUser;
+use App\EmpresaPrestador;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class EmpresaUsersController extends Controller
+class EmpresaPrestadorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +17,7 @@ class EmpresaUsersController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new EmpresaUser();
+        $itens = new EmpresaPrestador();
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -26,7 +26,7 @@ class EmpresaUsersController extends Controller
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
                 if ($key == 0) {
-                    $itens = EmpresaUser::where(
+                    $itens = EmpresaPrestador::where(
                         ($where['coluna']) ? $where['coluna'] : 'id',
                         ($where['expressao']) ? $where['expressao'] : 'like',
                         ($where['valor']) ? $where['valor'] : '%'
@@ -40,7 +40,7 @@ class EmpresaUsersController extends Controller
                 }
             }
         } else {
-            $itens = EmpresaUser::where('id', 'like', '%');
+            $itens = EmpresaPrestador::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -92,13 +92,13 @@ class EmpresaUsersController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\EmpresaUser  $empresaUser
+     * @param  \App\EmpresaPrestador  $empresaPrestador
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, EmpresaUser $empresaUser)
+    public function store(Request $request, EmpresaPrestador $empresaPrestador)
     {
-        DB::transaction(function () use ($request, $empresaUser) {
-            $empresa = new EmpresaUser();
+        DB::transaction(function () use ($request, $empresaPrestador) {
+            $empresa = new EmpresaPrestador();
             $empresa->razao = $request->razao;
             $empresa->cnpj  = $request->cnpj;
             $empresa->ie    = $request->ie;
@@ -111,12 +111,12 @@ class EmpresaUsersController extends Controller
      * Display the specified resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\EmpresaUser  $empresaUser
+     * @param  \App\EmpresaPrestador  $empresaPrestador
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, EmpresaUser $empresaUser)
+    public function show(Request $request, EmpresaPrestador $empresaPrestador)
     {
-        $iten = $empresaUser;
+        $iten = $empresaPrestador;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -158,26 +158,26 @@ class EmpresaUsersController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\EmpresaUser  $empresaUser
+     * @param  \App\EmpresaPrestador  $empresaPrestador
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, EmpresaUser $empresaUser)
+    public function update(Request $request, EmpresaPrestador $empresaPrestador)
     {
-        DB::transaction(function () use ($request, $empresaUser) {
-            $empresaUser->update($request->all());
+        DB::transaction(function () use ($request, $empresaPrestador) {
+            $empresaPrestador->update($request->all());
         });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\EmpresaUser  $empresaUser
+     * @param  \App\EmpresaPrestador  $empresaPrestador
      * @return \Illuminate\Http\Response
      */
-    public function destroy(EmpresaUser $empresaUser)
+    public function destroy(EmpresaPrestador $empresaPrestador)
     {
-        DB::transaction(function () use ($empresaUser) {
-            $empresaUser->delete();
+        DB::transaction(function () use ($empresaPrestador) {
+            $empresaPrestador->delete();
         });
     }
 }
