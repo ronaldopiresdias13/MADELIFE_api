@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Produto;
 use App\RequisicaoProduto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RequisicaoProdutosController extends Controller
 {
@@ -49,7 +51,12 @@ class RequisicaoProdutosController extends Controller
      */
     public function update(Request $request, RequisicaoProduto $requisicaoProduto)
     {
+        $produto = Produto::find($request["produto_id"]);
         $requisicaoProduto->update($request->all());
+        if ($request["status"] === "Aprovado") {
+            $produto->quantidadeestoque = $produto->quantidadeestoque - $request["quantidade"];
+            $produto->update();
+        }
     }
 
     /**

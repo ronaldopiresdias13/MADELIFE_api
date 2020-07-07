@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Cotacao;
 use App\CotacaoProduto;
 use App\Http\Controllers\Controller;
+use App\Produto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -165,9 +167,12 @@ class CotacaoProdutoController extends Controller
      */
     public function update(Request $request, CotacaoProduto $cotacaoProduto)
     {
-        DB::transaction(function () use ($request, $cotacaoProduto) {
-            $cotacaoProduto->update($request->all());
-        });
+        $produto = Produto::find($request["produto_id"]);
+        $cotacaoProduto->update($request->all());
+        if ($request["situacao"] === "Aprovado") {
+            $produto->quantidadeestoque = $produto->quantidadeestoque + $request["quantidade"];
+            $produto->update();
+        }
     }
 
     /**
