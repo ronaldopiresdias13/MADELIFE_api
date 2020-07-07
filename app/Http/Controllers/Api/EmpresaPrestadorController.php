@@ -132,10 +132,10 @@ class EmpresaPrestadorController extends Controller
                         'status'       => $request['status'],
                     ]);
                 });
+                return response()->json('Dados salvos com sucesso!', 200)->header('Content-Type', 'text/plain');
             } else {
                 return response()->json('Arquivo inválido ou corrompido!', 400)->header('Content-Type', 'text/plain');
             }
-            return response()->json('Dados salvos com sucesso!', 200)->header('Content-Type', 'text/plain');
         }
 
 
