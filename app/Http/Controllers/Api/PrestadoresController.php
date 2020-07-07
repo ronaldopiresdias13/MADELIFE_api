@@ -3,23 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\User;
-use App\Banco;
-use App\Cargo;
-use App\Email;
-use App\Pessoa;
-use App\Cidade;
 use App\Escala;
-use App\Formacao;
-use App\Telefone;
-use App\Endereco;
-use App\Conselho;
 use App\Prestador;
-use App\PessoaEmail;
-use App\Dadosbancario;
-use App\PessoaTelefone;
-use App\PessoaEndereco;
-use App\PrestadorFormacao;
 use Illuminate\Http\Request;
 
 // use Illuminate\Support\Facades\DB;
