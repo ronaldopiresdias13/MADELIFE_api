@@ -92,19 +92,58 @@ class EmpresaPrestadorController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\EmpresaPrestador  $empresaPrestador
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, EmpresaPrestador $empresaPrestador)
+    public function store(Request $request)
     {
-        DB::transaction(function () use ($request, $empresaPrestador) {
-            $empresa = new EmpresaPrestador();
-            $empresa->razao = $request->razao;
-            $empresa->cnpj  = $request->cnpj;
-            $empresa->ie    = $request->ie;
-            $empresa->logo  = $request->logo;
-            $empresa->save();
-        });
+        $file = $request->file('file');
+        $request = json_decode($request->data, true);
+        if ($file->isValid()) {
+            $md5 = md5_file($file);
+            $caminho = 'contratosPrestadores/' . $request['prestador_id'];
+            $nome = $md5 . '.' . $file->extension();
+            $upload = $file->storeAs($caminho, $nome);
+            $nomeOriginal = $file->getClientOriginalName();
+            if ($upload) {
+                DB::transaction(function () use ($request, $caminho, $nome, $nomeOriginal) {
+                    $empresa_prestador = EmpresaPrestador::create([
+                        'empresa_id'   => $request['empresa_id'],
+                        'prestador_id' => $request['prestador_id'],
+                        'contrato'     => $caminho . '/' . $nome,
+                        'nome'         => $nomeOriginal,
+                        'dataInicio'   => $request['dataInicio'],
+                        'dataFim'      => $request['dataFim'],
+                        'status'       => $request['status'],
+                    ]);
+                });
+                return response()->json('Upload de arquivo bem sucedido!', 200)->header('Content-Type', 'text/plain');
+            } else {
+                return response()->json('Erro, Upload não realizado!', 400)->header('Content-Type', 'text/plain');
+            }
+        } else {
+            if ($request['contrato'] == '') {
+                DB::transaction(function () use ($request) {
+                    $empresa_prestador = EmpresaPrestador::create([
+                        'empresa_id'   => $request['empresa_id'],
+                        'prestador_id' => $request['prestador_id'],
+                        'contrato'     => $request[''],
+                        'nome'         => $request[''],
+                        'dataInicio'   => $request['dataInicio'],
+                        'dataFim'      => $request['dataFim'],
+                        'status'       => $request['status'],
+                    ]);
+                });
+                return response()->json('Dados salvos com sucesso!', 200)->header('Content-Type', 'text/plain');
+            } else {
+                return response()->json('Arquivo inválido ou corrompido!', 400)->header('Content-Type', 'text/plain');
+            }
+        }
+
+
+
+        // DB::transaction(function () use ($request) {
+        //     EmpresaPrestador::create($request->all());
+        // });
     }
 
     /**
@@ -177,7 +216,8 @@ class EmpresaPrestadorController extends Controller
     public function destroy(EmpresaPrestador $empresaPrestador)
     {
         DB::transaction(function () use ($empresaPrestador) {
-            $empresaPrestador->delete();
+            $empresaPrestador->status = 'Desativado';
+            $empresaPrestador->save();
         });
     }
 }

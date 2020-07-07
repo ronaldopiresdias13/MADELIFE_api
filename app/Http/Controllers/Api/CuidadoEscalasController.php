@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\CuidadoEscala;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CuidadoEscalasController extends Controller
 {
@@ -152,13 +153,15 @@ class CuidadoEscalasController extends Controller
      */
     public function update(Request $request, CuidadoEscala $cuidadoEscala)
     {
-        return $request;
-        $cuidadoEscala->escala_id  = $request->escala_id;
-        $cuidadoEscala->cuidado_id = $request->cuidado_id;
-        $cuidadoEscala->data       = $request->data;
-        $cuidadoEscala->hora       = $request->hora;
-        $cuidadoEscala->status     = $request->status;
-        $cuidadoEscala->save();
+        // $cuidadoEscala->escala_id  = $request['escala_id'];
+        // $cuidadoEscala->cuidado_id = $request['cuidado_id'];
+        // $cuidadoEscala->data       = $request['data'];
+        // $cuidadoEscala->hora       = $request['hora'];
+        // $cuidadoEscala->status     = $request['status'];
+        // return $request;
+        DB::transaction(function () use ($request, $cuidadoEscala) {
+            $cuidadoEscala->update($request->all());
+        });
     }
 
     /**
