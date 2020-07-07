@@ -92,18 +92,12 @@ class EmpresaPrestadorController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\EmpresaPrestador  $empresaPrestador
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, EmpresaPrestador $empresaPrestador)
+    public function store(Request $request)
     {
-        DB::transaction(function () use ($request, $empresaPrestador) {
-            $empresa = new EmpresaPrestador();
-            $empresa->razao = $request->razao;
-            $empresa->cnpj  = $request->cnpj;
-            $empresa->ie    = $request->ie;
-            $empresa->logo  = $request->logo;
-            $empresa->save();
+        DB::transaction(function () use ($request) {
+            EmpresaPrestador::create($request->all());
         });
     }
 
@@ -177,7 +171,8 @@ class EmpresaPrestadorController extends Controller
     public function destroy(EmpresaPrestador $empresaPrestador)
     {
         DB::transaction(function () use ($empresaPrestador) {
-            $empresaPrestador->delete();
+            $empresaPrestador->status = 'Desativado';
+            $empresaPrestador->save();
         });
     }
 }
