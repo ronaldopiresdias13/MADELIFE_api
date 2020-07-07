@@ -96,7 +96,8 @@ class EmpresaPrestadorController extends Controller
      */
     public function store(Request $request)
     {
-        $file = $request->file('contrato');
+        $file = $request->file('file');
+        $request = json_decode($request->data, true);
         if ($file->isValid()) {
             $md5 = md5_file($file);
             $caminho = 'contratosPrestadores/' . $request['prestador_id'];
