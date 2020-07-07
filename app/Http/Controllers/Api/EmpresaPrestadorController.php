@@ -202,9 +202,46 @@ class EmpresaPrestadorController extends Controller
      */
     public function update(Request $request, EmpresaPrestador $empresaPrestador)
     {
-        DB::transaction(function () use ($request, $empresaPrestador) {
-            $empresaPrestador->update($request->all());
-        });
+        $file = $request->file('file');
+        $request = json_decode($request->data, true);
+        if ($file->isValid()) {
+            $md5 = md5_file($file);
+            $caminho = 'contratosPrestadores/' . $request['prestador_id'];
+            $nome = $md5 . '.' . $file->extension();
+            $upload = $file->storeAs($caminho, $nome);
+            $nomeOriginal = $file->getClientOriginalName();
+            if ($upload) {
+                DB::transaction(function () use ($request, $caminho, $nome, $nomeOriginal, $empresaPrestador) {
+                    $empresaPrestador->contrato   = $caminho . '/' . $nome;
+                    $empresaPrestador->nome       = $nomeOriginal;
+                    $empresaPrestador->dataInicio = $request['dataInicio'];
+                    $empresaPrestador->dataFim    = $request['dataFim'];
+                    $empresaPrestador->status     = $request['status'];
+                    $empresaPrestador->save();
+                });
+                return response()->json('Upload de arquivo bem sucedido!', 200)->header('Content-Type', 'text/plain');
+            } else {
+                return response()->json('Erro, Upload não realizado!', 400)->header('Content-Type', 'text/plain');
+            }
+        } else {
+            if ($request['contrato'] == '') {
+                DB::transaction(function () use ($request, $empresaPrestador) {
+                    $empresaPrestador->contrato   = '';
+                    $empresaPrestador->nome       = '';
+                    $empresaPrestador->dataInicio = $request['dataInicio'];
+                    $empresaPrestador->dataFim    = $request['dataFim'];
+                    $empresaPrestador->status     = $request['status'];
+                    $empresaPrestador->save();
+                });
+                return response()->json('Dados salvos com sucesso!', 200)->header('Content-Type', 'text/plain');
+            } else {
+                return response()->json('Arquivo inválido ou corrompido!', 400)->header('Content-Type', 'text/plain');
+            }
+        }
+
+        // DB::transaction(function () use ($request, $empresaPrestador) {
+        //     $empresaPrestador->update($request->all());
+        // });
     }
 
     /**
