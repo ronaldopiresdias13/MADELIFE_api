@@ -205,7 +205,7 @@ class EmpresaPrestadorController extends Controller
     {
         $file = $request->file('file');
         $request = json_decode($request->data, true);
-        if ($file->isValid()) {
+        if ($file && $file->isValid()) {
             $md5 = md5_file($file);
             $caminho = 'contratosPrestadores/' . $request['prestador_id'];
             $nome = $md5 . '.' . $file->extension();
@@ -225,7 +225,7 @@ class EmpresaPrestadorController extends Controller
                 return response()->json('Erro, Upload não realizado!', 400)->header('Content-Type', 'text/plain');
             }
         } else {
-            if ($request['contrato'] == '') {
+            if ($file == null) {
                 DB::transaction(function () use ($request, $empresaPrestador) {
                     $empresaPrestador->contrato   = '';
                     $empresaPrestador->nome       = '';
