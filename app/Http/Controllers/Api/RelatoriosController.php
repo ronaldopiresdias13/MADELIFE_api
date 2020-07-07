@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Relatorio;
+use App\Ordemservico;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class RelatoriosController extends Controller
 {
@@ -171,5 +173,24 @@ class RelatoriosController extends Controller
     public function destroy(Relatorio $relatorio)
     {
         $relatorio->delete();
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \App\Ordemservico  $ordemservico
+     * @return \Illuminate\Http\Response
+     */
+    public function relatoriosOfOrdemservico(Ordemservico $ordemservico)
+    {
+        $relatorios = DB::table('relatorios')
+            ->join('escalas', 'escalas.id', '=', 'relatorios.escala_id')
+            ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
+            ->select('relatorios.*')
+            // ->groupBy('relatorios.nome')
+            ->orderBy('relatorios.data', 'desc')
+            ->limit(20)
+            ->get();
+        return $relatorios;
     }
 }
