@@ -268,7 +268,8 @@ class EmpresaPrestadorController extends Controller
      */
     public function downloadFile(EmpresaPrestador $empresaPrestador)
     {
-        $file = Storage::get($empresaPrestador['caminho']);
+        // return $empresaPrestador;
+        $file = Storage::get($empresaPrestador['contrato']);
 
         $response =  array(
             'nome' => $empresaPrestador['nome'],
