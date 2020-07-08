@@ -52,4 +52,9 @@ class Pessoa extends Model
     {
         return $this->hasMany('App\Conselho');
     }
+
+    public function responsavel()
+    {
+        return $this->hasOne('App\Responsavel');
+    }
 }

@@ -95,7 +95,7 @@ class ResponsaveisController extends Controller
     public function store(Request $request)
     {
         $responsavel = new Responsavel();
-        $responsavel->pessoa = $request->pessoa;
+        $responsavel->pessoa_id = $request->pessoa_id;
         $responsavel->parentesco  = $request->parentesco;
         $responsavel->save();
     }
