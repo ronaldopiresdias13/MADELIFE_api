@@ -6,6 +6,7 @@ use App\EmpresaPrestador;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class EmpresaPrestadorController extends Controller
 {
@@ -257,5 +258,23 @@ class EmpresaPrestadorController extends Controller
             $empresaPrestador->status = 'Desativado';
             $empresaPrestador->save();
         });
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\EmpresaPrestador  $empresaPrestador
+     * @return \Illuminate\Http\Response
+     */
+    public function downloadFile(EmpresaPrestador $empresaPrestador)
+    {
+        $file = Storage::get($empresaPrestador['caminho']);
+
+        $response =  array(
+            'nome' => $empresaPrestador['nome'],
+            'file' => base64_encode($file)
+        );
+
+        return response()->json($response);
     }
 }
