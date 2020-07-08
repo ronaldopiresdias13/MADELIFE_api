@@ -195,6 +195,7 @@ Route::post('empresaPrestador', 'Api\EmpresaPrestadorController@store');
 Route::get('empresaPrestador/{empresaPrestador}', 'Api\EmpresaPrestadorController@show');
 Route::put('empresaPrestador/{empresaPrestador}', 'Api\EmpresaPrestadorController@update');
 Route::delete('empresaPrestador/{empresaPrestador}', 'Api\EmpresaPrestadorController@destroy');
+Route::get('empresaPrestador/{empresaPrestador}/downloadFile', 'Api\EmpresaPrestadorController@downloadFile');
 
 Route::get('enderecos', 'Api\EnderecosController@index');
 Route::post('enderecos', 'Api\EnderecosController@store');
