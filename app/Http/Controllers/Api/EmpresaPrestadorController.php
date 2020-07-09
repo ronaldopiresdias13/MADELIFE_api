@@ -228,8 +228,8 @@ class EmpresaPrestadorController extends Controller
         } else {
             if ($file == null) {
                 DB::transaction(function () use ($request, $empresaPrestador) {
-                    $empresaPrestador->contrato   = '';
-                    $empresaPrestador->nome       = '';
+                    $empresaPrestador->contrato   = $request['contrato'];
+                    $empresaPrestador->nome       = $request['nome'];
                     $empresaPrestador->dataInicio = $request['dataInicio'];
                     $empresaPrestador->dataFim    = $request['dataFim'];
                     $empresaPrestador->status     = $request['status'];
@@ -268,7 +268,8 @@ class EmpresaPrestadorController extends Controller
      */
     public function downloadFile(EmpresaPrestador $empresaPrestador)
     {
-        $file = Storage::get($empresaPrestador['caminho']);
+        // return $empresaPrestador;
+        $file = Storage::get($empresaPrestador['contrato']);
 
         $response =  array(
             'nome' => $empresaPrestador['nome'],
