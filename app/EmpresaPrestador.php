@@ -13,4 +13,9 @@ class EmpresaPrestador extends Model
     {
         return $this->belongsTo("App\Prestador");
     }
+
+    public function empresa()
+    {
+        return $this->belongsTo("App\Empresa");
+    }
 }
