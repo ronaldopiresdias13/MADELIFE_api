@@ -154,7 +154,8 @@ class FormacoesController extends Controller
      */
     public function update(Request $request, Formacao $formacao)
     {
-        $formacao->update($request->all());
+        $formacao->descricao = $request['descricao'];
+        $formacao->save();
     }
 
     /**
