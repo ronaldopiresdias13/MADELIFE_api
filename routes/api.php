@@ -51,6 +51,9 @@ Route::post("/files/upload", "Api\FilesController@upload");
 Route::group(['middleware' => 'auth:api'], function () {
 });
 
+
+Route::get("/teste", "TesteController@index");
+
 Route::get('acaomedicamentos', 'Api\AcaomedicamentosController@index');
 Route::post('acaomedicamentos', 'Api\AcaomedicamentosController@store');
 Route::get('acaomedicamentos/{acaomedicamento}', 'Api\AcaomedicamentosController@show');
