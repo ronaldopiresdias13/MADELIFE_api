@@ -32,20 +32,7 @@ Route::group([
     });
 });
 
-// Route::post('prestadores/migracao', 'Api\PrestadoresController@migracao');
-// Route::post('clientes/migracao', 'Api\ClientesController@migracao');
-// Route::post('orcamentos/migracao', 'Api\OrcamentosController@migracao');
-// Route::post('cuidados/migracao', 'Api\CuidadosController@migracao');
-// Route::post('grupocuidados/migracao', 'Api\GrupocuidadosController@migracao');
-// Route::post('fornecedores/migracao', 'Api\FornecedoresController@migracao');
-// Route::post('unidadesmedida/migracao', 'Api\UnidademedidasController@migracao');
-// Route::post('tipoprodutos/migracao', 'Api\TipoprodutosController@migracao');
-// Route::post('produtos/migracao', 'Api\ProdutosController@migracao');
-// Route::post('ordemservicos/migracao', 'Api\OrdemservicosController@migracao');
-// Route::post('profissionais/migracao', 'Api\ProfissionaisController@migracao');
-// Route::post('escalas/migracao', 'Api\EscalasController@migracao');
-
-Route::post("/files/upload", "Api\FilesController@upload");
+// Route::post("/files/upload", "Api\FilesController@upload");
 
 /* ------------- Rotas Utilizando Token ------------- */
 Route::group(['middleware' => 'auth:api'], function () {
@@ -195,6 +182,7 @@ Route::post('empresaPrestador', 'Api\EmpresaPrestadorController@store');
 Route::get('empresaPrestador/{empresaPrestador}', 'Api\EmpresaPrestadorController@show');
 Route::put('empresaPrestador/{empresaPrestador}', 'Api\EmpresaPrestadorController@update');
 Route::delete('empresaPrestador/{empresaPrestador}', 'Api\EmpresaPrestadorController@destroy');
+Route::get('empresaPrestador/{empresaPrestador}/downloadFile', 'Api\EmpresaPrestadorController@downloadFile');
 
 Route::get('enderecos', 'Api\EnderecosController@index');
 Route::post('enderecos', 'Api\EnderecosController@store');

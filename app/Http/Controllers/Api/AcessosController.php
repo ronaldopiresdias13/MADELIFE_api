@@ -171,6 +171,6 @@ class AcessosController extends Controller
      */
     public function destroy(acesso $acesso)
     {
-        $acesso->delete();
+        // $acesso->delete();
     }
 }

@@ -184,6 +184,6 @@ class PagamentopessoasController extends Controller
      */
     public function destroy(Pagamentopessoa $pagamentopessoa)
     {
-        $pagamentopessoa->delete();
+        // $pagamentopessoa->delete();
     }
 }

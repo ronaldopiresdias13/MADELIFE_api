@@ -201,36 +201,7 @@ class OrdemservicosController extends Controller
      */
     public function destroy(Ordemservico $ordemservico)
     {
-        $ordemservico->delete();
-    }
-
-    public function migracao(Request $request)
-    {
-        $ordemservico = Ordemservico::firstOrCreate([
-            'codigo' => '',
-            'tipo' => 'Paciente',
-            'orcamento_id' => $request['supervisor'],
-            'inicio' => null,
-            'fim' => null,
-            'status' => $request['status'],
-            'montagemequipe' => true,
-            'realizacaoprocedimento' => false,
-            'nome' => $request['nome'],
-            'sexo' => $request['sexo'],
-            'nascimento' => $request['nascimento'],
-            'cpfcnpj' => $request['dataInicio'],
-            'rgie' => $request['dataFim'],
-            'endereco1' => $request['endereco']['rua'],
-            'cidade1' => $request['endereco']['cidade'],
-            'cep1' => $request['endereco']['cep'],
-            'endereco2' => '',
-            'cidade2' => '',
-            'cep2' => '',
-            'contato' => $request['contato']['celular'],
-            'email' => $request['contato']['email'],
-            'profissional_id' => null,
-
-        ]);
+        // $ordemservico->delete();
     }
 
     /**

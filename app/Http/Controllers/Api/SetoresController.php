@@ -162,6 +162,6 @@ class SetoresController extends Controller
      */
     public function destroy(Setor $setor)
     {
-        $setor->delete();
+        // $setor->delete();
     }
 }

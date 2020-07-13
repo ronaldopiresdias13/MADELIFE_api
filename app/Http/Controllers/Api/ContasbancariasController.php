@@ -221,6 +221,6 @@ class ContasbancariasController extends Controller
      */
     public function destroy(Contasbancaria $contasbancaria)
     {
-        $contasbancaria->delete();
+        // $contasbancaria->delete();
     }
 }
