@@ -172,7 +172,7 @@ class RelatoriosController extends Controller
      */
     public function destroy(Relatorio $relatorio)
     {
-        $relatorio->delete();
+        // $relatorio->delete();
     }
 
     /**

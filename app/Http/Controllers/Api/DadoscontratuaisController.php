@@ -171,6 +171,6 @@ class DadoscontratuaisController extends Controller
      */
     public function destroy(Dadoscontratual $dadoscontratual)
     {
-        $dadoscontratual->delete();
+        // $dadoscontratual->delete();
     }
 }

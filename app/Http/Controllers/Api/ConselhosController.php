@@ -173,6 +173,6 @@ class ConselhosController extends Controller
      */
     public function destroy(Conselho $conselho)
     {
-        $conselho->delete();
+        // $conselho->delete();
     }
 }

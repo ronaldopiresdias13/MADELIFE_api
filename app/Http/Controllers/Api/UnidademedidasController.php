@@ -173,19 +173,6 @@ class UnidademedidasController extends Controller
      */
     public function destroy(Unidademedida $unidademedida)
     {
-        $unidademedida->delete();
-    }
-
-    public function migracao(Request $request)
-    {
-        // dd($request);
-        $unidade = new Unidademedida();
-        $unidade->descricao = $request->descricao;
-        $unidade->sigla = $request->sigla;
-        $unidade->grupo = $request->grupo;
-        $unidade->padrao = true;
-        $unidade->status = true;
-        $unidade->empresa_id = 1;
-        $unidade->save();
+        // $unidademedida->delete();
     }
 }

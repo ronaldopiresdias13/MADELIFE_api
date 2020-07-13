@@ -168,6 +168,6 @@ class PrescricoesbsController extends Controller
      */
     public function destroy(Prescricaob $prescricaob)
     {
-        $prescricaob->delete();
+        // $prescricaob->delete();
     }
 }

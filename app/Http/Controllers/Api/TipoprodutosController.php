@@ -168,17 +168,6 @@ class TipoprodutosController extends Controller
      */
     public function destroy(Tipoproduto $tipoproduto)
     {
-        $tipoproduto->delete();
-    }
-
-    public function migracao(Request $request)
-    {
-        // dd($request);
-        $tipo = new Tipoproduto();
-        $tipo->descricao = $request->descricao;
-        $tipo->status = true;
-        $tipo->empresa_id = 1;
-        $tipo->save();
-        // Tipoproduto::create($request->all());
+        // $tipoproduto->delete();
     }
 }

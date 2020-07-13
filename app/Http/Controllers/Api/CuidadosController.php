@@ -168,20 +168,6 @@ class CuidadosController extends Controller
      */
     public function destroy(Cuidado $cuidado)
     {
-        $cuidado->delete();
-    }
-
-    public function migracao(Request $request)
-    {
-        $cuidado = Cuidado::firstOrCreate(
-            [
-                'codigo' => $request['codigo'],
-            ],
-            [
-                'descricao' => $request['descricao'],
-                'empresa_id' => 1,
-                'status' => true,
-            ]
-        );
+        // $cuidado->delete();
     }
 }

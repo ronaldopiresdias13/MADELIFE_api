@@ -165,6 +165,6 @@ class OrcamentoProdutosController extends Controller
      */
     public function destroy(OrcamentoProduto $orcamentoProduto)
     {
-        $orcamentoProduto->delete();
+        // $orcamentoProduto->delete();
     }
 }
