@@ -18,7 +18,7 @@ class GrupocuidadosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Grupocuidado();
+        $itens = Grupocuidado::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -26,22 +26,22 @@ class GrupocuidadosController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Grupocuidado::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Grupocuidado::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Grupocuidado::where('id', 'like', '%');
+            // } else {
+            //     $itens = Grupocuidado::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -170,35 +170,7 @@ class GrupocuidadosController extends Controller
      */
     public function destroy(Grupocuidado $grupocuidado)
     {
-        $grupocuidado->delete();
-    }
-
-
-    public function migracao(Request $request)
-    {
-        foreach ($request['cuidado'] as $cuidado) {
-            $cuidados_grupocuidados = CuidadoGrupocuidado::firstOrCreate([
-                'cuidado_id' => Cuidado::firstOrCreate(
-                    [
-                        'codigo' => $cuidado['codigo'],
-                    ],
-                    [
-                        'descricao' => $request['descricao'],
-                        'empresa_id' => 1,
-                        'status' => true,
-                    ]
-                )->id,
-                'grupocuidado_id' => Grupocuidado::firstOrCreate(
-                    [
-                        'codigo' => $request['codigoGrupo'],
-                    ],
-                    [
-                        'descricao' => $request['descricao'],
-                        'empresa_id' => 1,
-                        'status' => true,
-                    ]
-                )->id,
-            ]);
-        }
+        $grupocuidado->ativo = false;
+        $grupocuidado->save();
     }
 }

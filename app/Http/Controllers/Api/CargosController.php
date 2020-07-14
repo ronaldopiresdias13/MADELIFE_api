@@ -16,7 +16,7 @@ class CargosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Cargo();
+        $itens = Cargo::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -24,22 +24,22 @@ class CargosController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Cargo::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Cargo::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Cargo::where('id', 'like', '%');
+            // } else {
+            //     $itens = Cargo::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -171,6 +171,7 @@ class CargosController extends Controller
      */
     public function destroy(Cargo $cargo)
     {
-        //
+        $cargo->ativo = false;
+        $cargo->save();
     }
 }

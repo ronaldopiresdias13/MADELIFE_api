@@ -15,7 +15,7 @@ class PilsController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Pil();
+        $itens = Pil::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -23,22 +23,22 @@ class PilsController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Pil::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Pil::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Pil::where('id', 'like', '%');
+            // } else {
+            //     $itens = Pil::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -172,6 +172,7 @@ class PilsController extends Controller
      */
     public function destroy(Pil $pil)
     {
-        $pil->delete();
+        $pil->ativo = false;
+        $pil->save();
     }
 }

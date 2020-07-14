@@ -17,7 +17,7 @@ class RelatoriosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Relatorio();
+        $itens = Relatorio::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -25,22 +25,22 @@ class RelatoriosController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Relatorio::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Relatorio::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Relatorio::where('id', 'like', '%');
+            // } else {
+            //     $itens = Relatorio::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -172,7 +172,8 @@ class RelatoriosController extends Controller
      */
     public function destroy(Relatorio $relatorio)
     {
-        $relatorio->delete();
+        $relatorio->ativo = false;
+        $relatorio->save();
     }
 
     /**

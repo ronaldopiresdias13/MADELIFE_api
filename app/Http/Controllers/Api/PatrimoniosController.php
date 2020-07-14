@@ -15,7 +15,7 @@ class PatrimoniosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Patrimonio();
+        $itens = Patrimonio::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -23,22 +23,22 @@ class PatrimoniosController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Patrimonio::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Patrimonio::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Patrimonio::where('id', 'like', '%');
+            // } else {
+            //     $itens = Patrimonio::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -169,6 +169,7 @@ class PatrimoniosController extends Controller
      */
     public function destroy(Patrimonio $patrimonio)
     {
-        // $patrimonio->delete();
+        $patrimonio->ativo = false;
+        $patrimonio->save();
     }
 }

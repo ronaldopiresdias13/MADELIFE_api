@@ -15,7 +15,7 @@ class PontosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Ponto();
+        $itens = Ponto::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -23,22 +23,22 @@ class PontosController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Ponto::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Ponto::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Ponto::where('id', 'like', '%');
+            // } else {
+            //     $itens = Ponto::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -173,6 +173,7 @@ class PontosController extends Controller
      */
     public function destroy(Ponto $ponto)
     {
-        $ponto->delete();
+        $ponto->ativo = false;
+        $ponto->save();
     }
 }
