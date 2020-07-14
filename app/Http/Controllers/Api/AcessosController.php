@@ -17,7 +17,7 @@ class AcessosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Acesso();
+        $itens = Acesso::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -25,22 +25,22 @@ class AcessosController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Acesso::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Acesso::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Acesso::where('id', 'like', '%');
+            // } else {
+            //     $itens = Acesso::where('id', 'like', '%');
         }
 
         if ($request['order']) {

@@ -15,28 +15,28 @@ class PagamentopessoasController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Pagamentopessoa();
+        $itens = Pagamentopessoa::where('ativo', true);
         if ($request->commands) {
             $request = json_decode($request->commands, true);
         }
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Pagamentopessoa::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Pagamentopessoa::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Pagamentopessoa::where('id', 'like', '%');
+            // } else {
+            //     $itens = Pagamentopessoa::where('id', 'like', '%');
         }
         if ($request['order']) {
             foreach ($request['order'] as $key => $order) {

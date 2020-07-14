@@ -18,7 +18,7 @@ class EmpresaPrestadorController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new EmpresaPrestador();
+        $itens = EmpresaPrestador::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -26,22 +26,22 @@ class EmpresaPrestadorController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = EmpresaPrestador::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = EmpresaPrestador::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = EmpresaPrestador::where('id', 'like', '%');
+            // } else {
+            //     $itens = EmpresaPrestador::where('id', 'like', '%');
         }
 
         if ($request['order']) {
