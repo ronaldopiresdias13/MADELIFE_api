@@ -168,6 +168,7 @@ class ServicosController extends Controller
      */
     public function destroy(Servico $servico)
     {
-        // $servico->delete();
+        $servico->ativo = false;
+        $servico->save();
     }
 }

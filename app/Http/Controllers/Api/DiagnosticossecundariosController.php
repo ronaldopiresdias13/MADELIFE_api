@@ -169,6 +169,7 @@ class DiagnosticossecundariosController extends Controller
      */
     public function destroy(Diagnosticosecundario $diagnosticosecundario)
     {
-        // $diagnosticosecundario->delete();
+        $diagnosticosecundario->ativo = false;
+        $diagnosticosecundario->save();
     }
 }

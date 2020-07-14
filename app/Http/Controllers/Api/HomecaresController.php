@@ -178,6 +178,7 @@ class HomecaresController extends Controller
      */
     public function destroy(Homecare $homecare)
     {
-        //
+        $homecare->ativo = false;
+        $homecare->save();
     }
 }

@@ -163,6 +163,7 @@ class OutrosController extends Controller
      */
     public function destroy(Outro $outro)
     {
-        //
+        $outro->ativo = false;
+        $outro->save();
     }
 }

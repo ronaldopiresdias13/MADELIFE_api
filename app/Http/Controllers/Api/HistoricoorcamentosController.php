@@ -128,6 +128,7 @@ class HistoricoorcamentosController extends Controller
      */
     public function destroy(Historicoorcamento $historicoorcamento)
     {
-        // $historicoorcamento->delete();
+        $historicoorcamento->ativo = false;
+        $historicoorcamento->save();
     }
 }

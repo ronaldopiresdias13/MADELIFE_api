@@ -626,6 +626,7 @@ class ProfissionaisController extends Controller
      */
     public function destroy(Profissional $profissional)
     {
-        // $profissional->delete();
+        $profissional->ativo = false;
+        $profissional->save();
     }
 }

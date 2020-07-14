@@ -666,6 +666,7 @@ class CnabsController extends Controller
      */
     public function destroy(Cnab $cnab)
     {
-        //
+        $cnab->ativo = false;
+        $cnab->save();
     }
 }

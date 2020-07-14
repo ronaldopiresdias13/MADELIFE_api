@@ -163,7 +163,8 @@ class PagamentosController extends Controller
      */
     public function destroy(Pagamento $pagamento)
     {
-        // $pagamento->delete();
+        $pagamento->ativo = false;
+        $pagamento->save();
     }
 
     /**

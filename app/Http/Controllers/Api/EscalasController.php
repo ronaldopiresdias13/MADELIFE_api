@@ -208,6 +208,7 @@ class EscalasController extends Controller
      */
     public function destroy(Escala $escala)
     {
-        // $escala->delete();
+        $escala->ativo = false;
+        $escala->save();
     }
 }

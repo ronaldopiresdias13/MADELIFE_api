@@ -173,6 +173,7 @@ class PontosController extends Controller
      */
     public function destroy(Ponto $ponto)
     {
-        // $ponto->delete();
+        $ponto->ativo = false;
+        $ponto->save();
     }
 }

@@ -168,6 +168,7 @@ class TipoprodutosController extends Controller
      */
     public function destroy(Tipoproduto $tipoproduto)
     {
-        // $tipoproduto->delete();
+        $tipoproduto->ativo = false;
+        $tipoproduto->save();
     }
 }

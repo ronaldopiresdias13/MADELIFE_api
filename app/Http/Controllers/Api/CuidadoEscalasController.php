@@ -172,6 +172,7 @@ class CuidadoEscalasController extends Controller
      */
     public function destroy(CuidadoEscala $cuidadoEscala)
     {
-        $cuidadoEscala->delete();
+        $cuidadoEscala->ativo = false;
+        $cuidadoEscala->save();
     }
 }

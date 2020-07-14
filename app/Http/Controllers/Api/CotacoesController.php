@@ -239,6 +239,7 @@ class CotacoesController extends Controller
      */
     public function destroy(Cotacao $cotacao)
     {
-        // $cotacao->delete();
+        $cotacao->ativo = false;
+        $cotacao->save();
     }
 }

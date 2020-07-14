@@ -163,6 +163,7 @@ class OrcamentoCustosController extends Controller
      */
     public function destroy(Orcamentocusto $orcamentocusto)
     {
-        // $orcamentocusto->delete();
+        $orcamentocusto->ativo = false;
+        $orcamentocusto->save();
     }
 }

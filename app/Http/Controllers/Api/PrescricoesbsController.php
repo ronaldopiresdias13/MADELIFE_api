@@ -168,6 +168,7 @@ class PrescricoesbsController extends Controller
      */
     public function destroy(Prescricaob $prescricaob)
     {
-        // $prescricaob->delete();
+        $prescricaob->ativo = false;
+        $prescricaob->save();
     }
 }

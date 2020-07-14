@@ -231,6 +231,7 @@ class UsersController extends Controller
      */
     public function destroy(user $user)
     {
-        //
+        $user->ativo = false;
+        $user->save();
     }
 }

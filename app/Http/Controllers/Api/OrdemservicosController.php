@@ -201,7 +201,8 @@ class OrdemservicosController extends Controller
      */
     public function destroy(Ordemservico $ordemservico)
     {
-        // $ordemservico->delete();
+        $ordemservico->ativo = false;
+        $ordemservico->save();
     }
 
     /**

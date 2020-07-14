@@ -178,6 +178,7 @@ class PessoasController extends Controller
      */
     public function destroy(Pessoa $pessoa)
     {
-        // $pessoa->delete();
+        $pessoa->ativo = false;
+        $pessoa->save();
     }
 }

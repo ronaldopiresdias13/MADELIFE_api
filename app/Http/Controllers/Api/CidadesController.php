@@ -171,6 +171,7 @@ class CidadesController extends Controller
      */
     public function destroy(Cidade $cidade)
     {
-        // $cidade->delete();
+        $cidade->ativo = false;
+        $cidade->save();
     }
 }

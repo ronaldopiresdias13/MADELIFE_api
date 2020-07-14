@@ -164,6 +164,7 @@ class ImpostosController extends Controller
      */
     public function destroy(Imposto $imposto)
     {
-        //
+        $imposto->ativo = false;
+        $imposto->save();
     }
 }

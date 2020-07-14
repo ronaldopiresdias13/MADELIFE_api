@@ -183,6 +183,7 @@ class CotacaoProdutoController extends Controller
      */
     public function destroy(CotacaoProduto $cotacaoProduto)
     {
-        $cotacaoProduto->delete();
+        $cotacaoProduto->ativo = false;
+        $cotacaoProduto->save();
     }
 }

@@ -190,6 +190,7 @@ class MedicoesController extends Controller
      */
     public function destroy(Medicao $medicao)
     {
-        // $medicao->delete();
+        $medicao->ativo = false;
+        $medicao->save();
     }
 }

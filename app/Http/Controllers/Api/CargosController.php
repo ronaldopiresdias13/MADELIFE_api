@@ -171,6 +171,7 @@ class CargosController extends Controller
      */
     public function destroy(Cargo $cargo)
     {
-        //
+        $cargo->ativo = false;
+        $cargo->save();
     }
 }

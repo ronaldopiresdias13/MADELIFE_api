@@ -167,6 +167,7 @@ class PacientesController extends Controller
      */
     public function destroy(Paciente $paciente)
     {
-        // $paciente->delete();
+        $paciente->ativo = false;
+        $paciente->save();
     }
 }

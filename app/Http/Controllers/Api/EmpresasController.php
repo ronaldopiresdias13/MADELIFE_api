@@ -168,6 +168,7 @@ class EmpresasController extends Controller
      */
     public function destroy(empresa $empresa)
     {
-        // $empresa->delete();
+        $empresa->ativo = false;
+        $empresa->save();
     }
 }

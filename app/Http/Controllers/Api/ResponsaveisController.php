@@ -306,6 +306,7 @@ class ResponsaveisController extends Controller
      */
     public function destroy(Responsavel $responsavel)
     {
-        // $responsavel->delete();
+        $responsavel->ativo = false;
+        $responsavel->save();
     }
 }

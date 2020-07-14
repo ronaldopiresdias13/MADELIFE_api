@@ -168,6 +168,7 @@ class HorariostrabalhoController extends Controller
      */
     public function destroy(Horariotrabalho $horariotrabalho)
     {
-        // $horariotrabalho->delete();
+        $horariotrabalho->ativo = false;
+        $horariotrabalho->save();
     }
 }

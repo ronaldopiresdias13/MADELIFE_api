@@ -172,6 +172,7 @@ class CategorianaturezasController extends Controller
      */
     public function destroy(Categorianatureza $categorianatureza)
     {
-        // $categorianatureza->delete();
+        $categorianatureza->ativo = false;
+        $categorianatureza->save();
     }
 }

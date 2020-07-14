@@ -169,6 +169,7 @@ class ConveniosController extends Controller
      */
     public function destroy(Convenio $convenio)
     {
-        // $convenio->delete();
+        $convenio->ativo = false;
+        $convenio->save();
     }
 }

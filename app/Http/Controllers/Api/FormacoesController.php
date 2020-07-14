@@ -166,6 +166,7 @@ class FormacoesController extends Controller
      */
     public function destroy(Formacao $formacao)
     {
-        // $formacao->delete();
+        $formacao->ativo = false;
+        $formacao->save();
     }
 }

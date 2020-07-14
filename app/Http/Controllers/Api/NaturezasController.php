@@ -171,6 +171,7 @@ class NaturezasController extends Controller
      */
     public function destroy(Natureza $natureza)
     {
-        //
+        $natureza->ativo = false;
+        $natureza->save();
     }
 }

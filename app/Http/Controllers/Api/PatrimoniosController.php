@@ -169,6 +169,7 @@ class PatrimoniosController extends Controller
      */
     public function destroy(Patrimonio $patrimonio)
     {
-        // $patrimonio->delete();
+        $patrimonio->ativo = false;
+        $patrimonio->save();
     }
 }

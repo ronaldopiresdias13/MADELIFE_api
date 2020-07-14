@@ -206,6 +206,7 @@ class ContasController extends Controller
      */
     public function destroy(Conta $conta)
     {
-        // $conta->delete();
+        $conta->ativo = false;
+        $conta->save();
     }
 }

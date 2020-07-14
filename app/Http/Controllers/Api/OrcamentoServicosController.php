@@ -60,6 +60,7 @@ class OrcamentoServicosController extends Controller
      */
     public function destroy(OrcamentoServico $orcamentoServico)
     {
-        $orcamentoServico->delete();
+        $orcamentoServico->ativo = false;
+        $orcamentoServico->save();
     }
 }

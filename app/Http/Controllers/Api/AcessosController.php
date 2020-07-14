@@ -171,6 +171,7 @@ class AcessosController extends Controller
      */
     public function destroy(acesso $acesso)
     {
-        // $acesso->delete();
+        $acesso->ativo = false;
+        $acesso->save();
     }
 }

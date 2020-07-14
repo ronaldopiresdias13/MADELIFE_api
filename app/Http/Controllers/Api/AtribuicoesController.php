@@ -170,6 +170,7 @@ class AtribuicoesController extends Controller
      */
     public function destroy(Atribuicao $atribuicao)
     {
-        //
+        $atribuicao->ativo = false;
+        $atribuicao->save();
     }
 }

@@ -166,6 +166,7 @@ class RelatorioescalasController extends Controller
      */
     public function destroy(Relatorioescala $relatorioescala)
     {
-        //
+        $relatorioescala->ativo = false;
+        $relatorioescala->save();
     }
 }

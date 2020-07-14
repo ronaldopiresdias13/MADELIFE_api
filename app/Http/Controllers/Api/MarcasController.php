@@ -163,6 +163,7 @@ class MarcasController extends Controller
      */
     public function destroy(Marca $marca)
     {
-        // $marca->delete();
+        $marca->ativo = false;
+        $marca->save();
     }
 }

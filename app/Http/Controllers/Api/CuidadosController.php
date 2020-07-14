@@ -168,6 +168,7 @@ class CuidadosController extends Controller
      */
     public function destroy(Cuidado $cuidado)
     {
-        // $cuidado->delete();
+        $cuidado->ativo = false;
+        $cuidado->save();
     }
 }

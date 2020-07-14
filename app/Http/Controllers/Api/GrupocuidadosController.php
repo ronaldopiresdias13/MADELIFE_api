@@ -170,6 +170,7 @@ class GrupocuidadosController extends Controller
      */
     public function destroy(Grupocuidado $grupocuidado)
     {
-        // $grupocuidado->delete();
+        $grupocuidado->ativo = false;
+        $grupocuidado->save();
     }
 }

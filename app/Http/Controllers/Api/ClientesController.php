@@ -425,9 +425,15 @@ class ClientesController extends Controller
                 }
             }
             if ($request['pessoa']['user']) {
-                if ($request['pessoa']['user']['email'] !== '' && $request['pessoa']['user']['email'] !== null) {
+                if (
+                    $request['pessoa']['user']['email'] !== '' &&
+                    $request['pessoa']['user']['email'] !== null
+                ) {
                     $user = new User();
-                    if ($request['pessoa']['user']['password'] !== '' && $request['pessoa']['user']['password'] !== null) {
+                    if (
+                        $request['pessoa']['user']['password'] !== '' &&
+                        $request['pessoa']['user']['password'] !== null
+                    ) {
                         $user = User::updateOrCreate(
                             [
                                 'email'      => $request['pessoa']['user']['email'],
@@ -476,6 +482,7 @@ class ClientesController extends Controller
      */
     public function destroy(Cliente $cliente)
     {
-        // $cliente->delete();
+        $cliente->ativo = false;
+        $cliente->save();
     }
 }

@@ -256,12 +256,13 @@ class EmpresaPrestadorController extends Controller
     {
         DB::transaction(function () use ($empresaPrestador) {
             $empresaPrestador->status = 'Desativado';
+            $empresaPrestador->ativo = false;
             $empresaPrestador->save();
         });
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Download the specified resource from storage.
      *
      * @param  \App\EmpresaPrestador  $empresaPrestador
      * @return \Illuminate\Http\Response

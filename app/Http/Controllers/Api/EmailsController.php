@@ -165,6 +165,7 @@ class EmailsController extends Controller
      */
     public function destroy(email $email)
     {
-        // $email->delete();
+        $email->ativo = false;
+        $email->save();
     }
 }

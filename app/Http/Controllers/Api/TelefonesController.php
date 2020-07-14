@@ -167,6 +167,7 @@ class TelefonesController extends Controller
      */
     public function destroy(Telefone $telefone)
     {
-        // $telefone->delete();
+        $telefone->ativo = false;
+        $telefone->save();
     }
 }

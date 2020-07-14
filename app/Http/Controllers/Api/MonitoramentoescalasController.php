@@ -192,6 +192,7 @@ class MonitoramentoescalasController extends Controller
      */
     public function destroy(Monitoramentoescala $monitoramentoescala)
     {
-        // $monitoramentoescala->delete();
+        $monitoramentoescala->ativo = false;
+        $monitoramentoescala->save();
     }
 }

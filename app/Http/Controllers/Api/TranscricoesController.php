@@ -192,6 +192,7 @@ class TranscricoesController extends Controller
      */
     public function destroy(Transcricao $transcricao)
     {
-        // $transcricao->delete();
+        $transcricao->ativo = false;
+        $transcricao->save();
     }
 }

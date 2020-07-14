@@ -415,6 +415,7 @@ class FornecedoresController extends Controller
      */
     public function destroy(Fornecedor $fornecedor)
     {
-        //
+        $fornecedor->ativo = false;
+        $fornecedor->save();
     }
 }

@@ -211,6 +211,7 @@ class ProdutosController extends Controller
      */
     public function destroy(Produto $produto)
     {
-        // $produto->delete();
+        $produto->ativo = false;
+        $produto->save();
     }
 }

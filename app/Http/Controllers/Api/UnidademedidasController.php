@@ -173,6 +173,7 @@ class UnidademedidasController extends Controller
      */
     public function destroy(Unidademedida $unidademedida)
     {
-        // $unidademedida->delete();
+        $unidademedida->ativo = false;
+        $unidademedida->save();
     }
 }
