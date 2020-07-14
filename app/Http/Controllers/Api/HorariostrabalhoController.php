@@ -15,7 +15,7 @@ class HorariostrabalhoController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Horariotrabalho();
+        $itens = Horariotrabalho::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -23,22 +23,22 @@ class HorariostrabalhoController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Horariotrabalho::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Horariotrabalho::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Horariotrabalho::where('id', 'like', '%');
+            // } else {
+            //     $itens = Horariotrabalho::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -168,6 +168,7 @@ class HorariostrabalhoController extends Controller
      */
     public function destroy(Horariotrabalho $horariotrabalho)
     {
-        // $horariotrabalho->delete();
+        $horariotrabalho->ativo = false;
+        $horariotrabalho->save();
     }
 }

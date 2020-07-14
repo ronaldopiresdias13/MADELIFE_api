@@ -31,7 +31,7 @@ class ProfissionaisController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Profissional();
+        $itens = Profissional::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -39,22 +39,22 @@ class ProfissionaisController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Profissional::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Profissional::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Profissional::where('id', 'like', '%');
+            // } else {
+            //     $itens = Profissional::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -626,6 +626,7 @@ class ProfissionaisController extends Controller
      */
     public function destroy(Profissional $profissional)
     {
-        // $profissional->delete();
+        $profissional->ativo = false;
+        $profissional->save();
     }
 }

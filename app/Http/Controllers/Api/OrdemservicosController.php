@@ -18,7 +18,7 @@ class OrdemservicosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Ordemservico();
+        $itens = Ordemservico::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -26,22 +26,22 @@ class OrdemservicosController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Ordemservico::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Ordemservico::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Ordemservico::where('id', 'like', '%');
+            // } else {
+            //     $itens = Ordemservico::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -201,7 +201,8 @@ class OrdemservicosController extends Controller
      */
     public function destroy(Ordemservico $ordemservico)
     {
-        // $ordemservico->delete();
+        $ordemservico->ativo = false;
+        $ordemservico->save();
     }
 
     /**

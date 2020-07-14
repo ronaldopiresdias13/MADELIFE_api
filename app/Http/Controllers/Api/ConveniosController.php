@@ -17,7 +17,7 @@ class ConveniosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Convenio();
+        $itens = Convenio::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -25,22 +25,22 @@ class ConveniosController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Convenio::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Convenio::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Convenio::where('id', 'like', '%');
+            // } else {
+            //     $itens = Convenio::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -169,6 +169,7 @@ class ConveniosController extends Controller
      */
     public function destroy(Convenio $convenio)
     {
-        // $convenio->delete();
+        $convenio->ativo = false;
+        $convenio->save();
     }
 }

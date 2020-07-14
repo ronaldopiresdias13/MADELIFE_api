@@ -16,7 +16,7 @@ class CategorianaturezasController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Categorianatureza();
+        $itens = Categorianatureza::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -24,22 +24,22 @@ class CategorianaturezasController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Categorianatureza::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Categorianatureza::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Categorianatureza::where('id', 'like', '%');
+            // } else {
+            //     $itens = Categorianatureza::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -172,6 +172,7 @@ class CategorianaturezasController extends Controller
      */
     public function destroy(Categorianatureza $categorianatureza)
     {
-        // $categorianatureza->delete();
+        $categorianatureza->ativo = false;
+        $categorianatureza->save();
     }
 }

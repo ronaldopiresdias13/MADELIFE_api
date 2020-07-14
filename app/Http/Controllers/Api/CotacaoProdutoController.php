@@ -19,7 +19,7 @@ class CotacaoProdutoController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new CotacaoProduto();
+        $itens = CotacaoProduto::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -27,22 +27,22 @@ class CotacaoProdutoController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = CotacaoProduto::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = CotacaoProduto::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = CotacaoProduto::where('id', 'like', '%');
+            // } else {
+            //     $itens = CotacaoProduto::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -183,6 +183,7 @@ class CotacaoProdutoController extends Controller
      */
     public function destroy(CotacaoProduto $cotacaoProduto)
     {
-        $cotacaoProduto->delete();
+        $cotacaoProduto->ativo = false;
+        $cotacaoProduto->save();
     }
 }
