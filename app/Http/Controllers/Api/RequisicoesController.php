@@ -219,6 +219,6 @@ class RequisicoesController extends Controller
      */
     public function destroy(Requisicao $requisicao)
     {
-        $requisicao->delete();
+        // $requisicao->delete();
     }
 }

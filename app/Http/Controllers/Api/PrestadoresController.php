@@ -175,7 +175,7 @@ class PrestadoresController extends Controller
      */
     public function destroy(Prestador $prestador)
     {
-        $prestador->delete();
+        // $prestador->delete();
     }
 
     /**

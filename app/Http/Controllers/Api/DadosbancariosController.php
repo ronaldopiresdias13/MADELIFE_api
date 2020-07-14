@@ -174,6 +174,6 @@ class DadosbancariosController extends Controller
      */
     public function destroy(Dadosbancario $dadosbancario)
     {
-        $dadosbancario->delete();
+        // $dadosbancario->delete();
     }
 }

@@ -777,6 +777,6 @@ class OrcamentosController extends Controller
      */
     public function destroy(Orcamento $orcamento)
     {
-        $orcamento->delete();
+        // $orcamento->delete();
     }
 }

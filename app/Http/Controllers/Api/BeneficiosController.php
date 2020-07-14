@@ -167,6 +167,6 @@ class BeneficiosController extends Controller
      */
     public function destroy(Beneficio $beneficio)
     {
-        $beneficio->delete();
+        // $beneficio->delete();
     }
 }

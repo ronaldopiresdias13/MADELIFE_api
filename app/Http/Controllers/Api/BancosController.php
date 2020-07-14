@@ -171,6 +171,6 @@ class BancosController extends Controller
      */
     public function destroy(Banco $banco)
     {
-        $banco->delete();
+        // $banco->delete();
     }
 }

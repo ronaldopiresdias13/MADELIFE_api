@@ -172,6 +172,6 @@ class PilsController extends Controller
      */
     public function destroy(Pil $pil)
     {
-        $pil->delete();
+        // $pil->delete();
     }
 }

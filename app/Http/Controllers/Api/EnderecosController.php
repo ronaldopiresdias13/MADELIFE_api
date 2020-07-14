@@ -171,6 +171,6 @@ class EnderecosController extends Controller
      */
     public function destroy(Endereco $endereco)
     {
-        $endereco->delete();
+        // $endereco->delete();
     }
 }

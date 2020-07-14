@@ -67,6 +67,6 @@ class RequisicaoProdutosController extends Controller
      */
     public function destroy(RequisicaoProduto $requisicaoProduto)
     {
-        $requisicaoProduto->delete();
+        // $requisicaoProduto->delete();
     }
 }

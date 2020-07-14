@@ -169,6 +169,6 @@ class DiagnosticossecundariosController extends Controller
      */
     public function destroy(Diagnosticosecundario $diagnosticosecundario)
     {
-        $diagnosticosecundario->delete();
+        // $diagnosticosecundario->delete();
     }
 }
