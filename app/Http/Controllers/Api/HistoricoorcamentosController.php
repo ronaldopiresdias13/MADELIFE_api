@@ -15,7 +15,7 @@ class HistoricoorcamentosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Historicoorcamento();
+        $itens = Historicoorcamento::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -23,22 +23,22 @@ class HistoricoorcamentosController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Historicoorcamento::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Historicoorcamento::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Historicoorcamento::where('id', 'like', '%');
+            // } else {
+            //     $itens = Historicoorcamento::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -128,6 +128,7 @@ class HistoricoorcamentosController extends Controller
      */
     public function destroy(Historicoorcamento $historicoorcamento)
     {
-        // $historicoorcamento->delete();
+        $historicoorcamento->ativo = false;
+        $historicoorcamento->save();
     }
 }

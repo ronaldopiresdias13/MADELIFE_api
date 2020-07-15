@@ -17,7 +17,7 @@ class DadosbancariosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Dadosbancario();
+        $itens = Dadosbancario::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -25,22 +25,22 @@ class DadosbancariosController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Dadosbancario::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Dadosbancario::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Dadosbancario::where('id', 'like', '%');
+            // } else {
+            //     $itens = Dadosbancario::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -174,6 +174,7 @@ class DadosbancariosController extends Controller
      */
     public function destroy(Dadosbancario $dadosbancario)
     {
-        $dadosbancario->delete();
+        $dadosbancario->ativo = false;
+        $dadosbancario->save();
     }
 }

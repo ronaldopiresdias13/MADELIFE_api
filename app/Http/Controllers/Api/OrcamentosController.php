@@ -33,7 +33,7 @@ class OrcamentosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Orcamento();
+        $itens = Orcamento::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -41,22 +41,22 @@ class OrcamentosController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Orcamento::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Orcamento::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Orcamento::where('id', 'like', '%');
+            // } else {
+            //     $itens = Orcamento::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -777,6 +777,7 @@ class OrcamentosController extends Controller
      */
     public function destroy(Orcamento $orcamento)
     {
-        $orcamento->delete();
+        $orcamento->ativo = false;
+        $orcamento->save();
     }
 }

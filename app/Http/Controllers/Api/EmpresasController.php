@@ -15,7 +15,7 @@ class EmpresasController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Empresa();
+        $itens = Empresa::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -23,22 +23,22 @@ class EmpresasController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Empresa::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Empresa::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Empresa::where('id', 'like', '%');
+            // } else {
+            //     $itens = Empresa::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -168,6 +168,7 @@ class EmpresasController extends Controller
      */
     public function destroy(empresa $empresa)
     {
-        // $empresa->delete();
+        $empresa->ativo = false;
+        $empresa->save();
     }
 }

@@ -20,7 +20,7 @@ class RelatorioescalasController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Relatorioescala();
+        $itens = Relatorioescala::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -28,22 +28,22 @@ class RelatorioescalasController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Relatorioescala::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Relatorioescala::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Relatorioescala::where('id', 'like', '%')->limit(5);
+            // } else {
+            //     $itens = Relatorioescala::where('id', 'like', '%')->limit(5);
         }
 
         if ($request['order']) {
@@ -166,6 +166,7 @@ class RelatorioescalasController extends Controller
      */
     public function destroy(Relatorioescala $relatorioescala)
     {
-        //
+        $relatorioescala->ativo = false;
+        $relatorioescala->save();
     }
 }

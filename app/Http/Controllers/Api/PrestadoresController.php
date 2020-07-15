@@ -18,7 +18,7 @@ class PrestadoresController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Prestador();
+        $itens = Prestador::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -26,22 +26,22 @@ class PrestadoresController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Prestador::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Prestador::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Prestador::where('id', 'like', '%');
+            // } else {
+            //     $itens = Prestador::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -175,7 +175,8 @@ class PrestadoresController extends Controller
      */
     public function destroy(Prestador $prestador)
     {
-        $prestador->delete();
+        $prestador->ativo = false;
+        $prestador->save();
     }
 
     /**
@@ -191,6 +192,7 @@ class PrestadoresController extends Controller
             ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
             ->join('homecares', 'homecares.orcamento_id', '=', 'orcamentos.id')
             ->select('homecares.nome')
+            ->where('homecares.ativo', true)
             ->groupBy('homecares.nome')
             ->orderBy('homecares.nome')
             ->get();
