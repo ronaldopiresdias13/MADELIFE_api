@@ -27,7 +27,7 @@ class ClientesController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Cliente();
+        $itens = Cliente::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -35,22 +35,22 @@ class ClientesController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Cliente::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Cliente::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Cliente::where('id', 'like', '%');
+            // } else {
+            //     $itens = Cliente::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -425,9 +425,15 @@ class ClientesController extends Controller
                 }
             }
             if ($request['pessoa']['user']) {
-                if ($request['pessoa']['user']['email'] !== '' && $request['pessoa']['user']['email'] !== null) {
+                if (
+                    $request['pessoa']['user']['email'] !== '' &&
+                    $request['pessoa']['user']['email'] !== null
+                ) {
                     $user = new User();
-                    if ($request['pessoa']['user']['password'] !== '' && $request['pessoa']['user']['password'] !== null) {
+                    if (
+                        $request['pessoa']['user']['password'] !== '' &&
+                        $request['pessoa']['user']['password'] !== null
+                    ) {
                         $user = User::updateOrCreate(
                             [
                                 'email'      => $request['pessoa']['user']['email'],
@@ -476,6 +482,7 @@ class ClientesController extends Controller
      */
     public function destroy(Cliente $cliente)
     {
-        // $cliente->delete();
+        $cliente->ativo = false;
+        $cliente->save();
     }
 }

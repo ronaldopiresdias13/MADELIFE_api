@@ -23,7 +23,7 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new User();
+        $itens = User::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -31,22 +31,22 @@ class UsersController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = User::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = User::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = User::where('id', 'like', '%');
+            // } else {
+            //     $itens = User::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -231,6 +231,7 @@ class UsersController extends Controller
      */
     public function destroy(user $user)
     {
-        //
+        $user->ativo = false;
+        $user->save();
     }
 }

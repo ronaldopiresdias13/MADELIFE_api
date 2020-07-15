@@ -15,7 +15,7 @@ class OrcamentoCustosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Orcamentocusto();
+        $itens = Orcamentocusto::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -23,22 +23,22 @@ class OrcamentoCustosController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Orcamentocusto::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Orcamentocusto::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Orcamentocusto::where('id', 'like', '%');
+            // } else {
+            //     $itens = Orcamentocusto::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -163,6 +163,7 @@ class OrcamentoCustosController extends Controller
      */
     public function destroy(Orcamentocusto $orcamentocusto)
     {
-        // $orcamentocusto->delete();
+        $orcamentocusto->ativo = false;
+        $orcamentocusto->save();
     }
 }

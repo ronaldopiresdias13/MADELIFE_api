@@ -20,7 +20,7 @@ class EscalasController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Escala();
+        $itens = Escala::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -28,22 +28,22 @@ class EscalasController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Escala::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Escala::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Escala::where('id', 'like', '%')->limit(5);
+            // } else {
+            //     $itens = Escala::where('id', 'like', '%')->limit(5);
         }
 
         if ($request['order']) {
@@ -208,6 +208,7 @@ class EscalasController extends Controller
      */
     public function destroy(Escala $escala)
     {
-        // $escala->delete();
+        $escala->ativo = false;
+        $escala->save();
     }
 }
