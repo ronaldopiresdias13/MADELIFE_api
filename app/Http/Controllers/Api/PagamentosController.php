@@ -188,7 +188,7 @@ class PagamentosController extends Controller
                 'contas.nfe',
                 'contas.quantidadeconta',
             )->where('contas.tipoconta', $request->tipo)
-            ->where('contas.ativo', true)
+            ->where('pagamentos.ativo', true)
             ->get();
         return $pagamentos;
     }
