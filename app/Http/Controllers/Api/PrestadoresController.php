@@ -192,6 +192,7 @@ class PrestadoresController extends Controller
             ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
             ->join('homecares', 'homecares.orcamento_id', '=', 'orcamentos.id')
             ->select('homecares.nome')
+            ->where('homecares.ativo', true)
             ->groupBy('homecares.nome')
             ->orderBy('homecares.nome')
             ->get();
