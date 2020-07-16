@@ -508,6 +508,7 @@ class CnabsController extends Controller
             $cnabsantander->cnabheaderarquivo->filler3 .
             $cnabsantander->cnabheaderarquivo->ocorrenciasretorno;
 
+
         // Criar arquivo com primeira linha
         Storage::disk('public')->put($caminho, $header);
 
