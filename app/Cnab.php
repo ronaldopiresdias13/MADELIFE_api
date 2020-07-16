@@ -12,9 +12,4 @@ class Cnab extends Model
     {
         return $this->hasMany('App\Cnabsantander');
     }
-
-    public function teste()
-    {
-        return $this->hasMany('App\Cnabsantander');
-    }
 }

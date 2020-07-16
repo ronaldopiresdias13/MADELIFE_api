@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Cnab;
 use Illuminate\Http\Request;
 
 class Teste extends Controller
 {
     public function teste()
     {
+        $string = 'ÁÍÓÚÉÄÏÖÜËÀÌÒÙÈÃÕÂÎÔÛÊáíóúéäïöüëàìòùèãõâîôûêÇçýÝñÑ';
+        //Substitua pela string que desejas converter
+        return preg_replace('/[`^~\'"]/', null, iconv('UTF-8', 'ASCII//TRANSLIT', $string));
+        //Irá exibir "AIOUEAIOUEAIOUEAOAIOUEaioueaioueaioueaoaioueCc"
+
+        // $teste = Cnab::teste();
+
         // $file = "ação-íaaa.jpg";
         // $file = iconv('UTF-8', 'ASCII//TRANSLIT', $file);
         // return "{$file} <br>";
