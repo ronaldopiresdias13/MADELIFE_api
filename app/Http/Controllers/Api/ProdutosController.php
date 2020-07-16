@@ -119,6 +119,7 @@ class ProdutosController extends Controller
         $produto->desvalorizacao    = $request->desvalorizacao;
         $produto->valorfinal        = $request->valorfinal;
         $produto->tipo              = $request->tipo;
+        $produto->categoria         = $request->categoria;
         $produto->save();
     }
 
