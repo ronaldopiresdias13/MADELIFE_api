@@ -508,7 +508,8 @@ class CnabsController extends Controller
             $cnabsantander->cnabheaderarquivo->filler3 .
             $cnabsantander->cnabheaderarquivo->ocorrenciasretorno;
 
-
+        // Remover caracteres inválidos
+        $header = preg_replace('/[`^~\'"]/', null, iconv('UTF-8', 'ASCII//TRANSLIT', $header));
         // Criar arquivo com primeira linha
         Storage::disk('public')->put($caminho, $header);
 
@@ -541,6 +542,7 @@ class CnabsController extends Controller
                 $cnabheaderlote->filler3 .
                 $cnabheaderlote->ocorrenciasretorno;
 
+            $headerlote = preg_replace('/[`^~\'"]/', null, iconv('UTF-8', 'ASCII//TRANSLIT', $headerlote));
             Storage::append($caminho, $headerlote);
 
             foreach ($cnabheaderlote->cnabdetalheas as $key => $cnabdetalhea) {
@@ -575,6 +577,7 @@ class CnabsController extends Controller
                     $cnabdetalhea->emissaofavorecido .
                     $cnabdetalhea->ocorrenciasretorno;
 
+                $a = preg_replace('/[`^~\'"]/', null, iconv('UTF-8', 'ASCII//TRANSLIT', $a));
                 Storage::append($caminho, $a);
             }
 
@@ -608,6 +611,7 @@ class CnabsController extends Controller
                     $cnabdetalheb->tedfinanceira .
                     $cnabdetalheb->identificacaospb;
 
+                $b = preg_replace('/[`^~\'"]/', null, iconv('UTF-8', 'ASCII//TRANSLIT', $b));
                 Storage::append($caminho, $b);
             }
         }
@@ -624,6 +628,7 @@ class CnabsController extends Controller
                 $cnabtrailerlote->filler2 .
                 $cnabtrailerlote->ocorrenciasretorno;
 
+            $trailer = preg_replace('/[`^~\'"]/', null, iconv('UTF-8', 'ASCII//TRANSLIT', $trailer));
             Storage::append($caminho, $trailer);
         }
 
@@ -635,6 +640,7 @@ class CnabsController extends Controller
             $cnabsantander->cnabtrailerarquivo->quantidaderegarquivo .
             $cnabsantander->cnabtrailerarquivo->filler2;
 
+        $trailer = preg_replace('/[`^~\'"]/', null, iconv('UTF-8', 'ASCII//TRANSLIT', $trailer));
         Storage::append($caminho, $trailer);
 
         $file = Storage::get($caminho);
