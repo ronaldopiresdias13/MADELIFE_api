@@ -99,7 +99,8 @@ class PatrimoniosController extends Controller
         $patrimonio->produto_id = $request->produto_id;
         $patrimonio->codigo = $request->codigo;
         $patrimonio->observacao = $request->observacao;
-        $patrimonio->status = $request->status;
+        $patrimonio->tipo = $request->tipo;
+        $patrimonio->status = $request->status ? $request->status : null;
         $patrimonio->save();
     }
 

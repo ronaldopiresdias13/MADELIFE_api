@@ -32,7 +32,7 @@ Route::group([
     });
 });
 
-// Route::post("/files/upload", "Api\FilesController@upload");
+Route::get("/teste", "Teste@teste");
 
 /* ------------- Rotas Utilizando Token ------------- */
 Route::group(['middleware' => 'auth:api'], function () {
