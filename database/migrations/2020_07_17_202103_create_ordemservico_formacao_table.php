@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrdemservicoPrestadorTable extends Migration
+class CreateOrdemservicoFormacaoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateOrdemservicoPrestadorTable extends Migration
      */
     public function up()
     {
-        Schema::create('ordemservico_prestador', function (Blueprint $table) {
+        Schema::create('ordemservico_formacao', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('ordemservico_id');
             $table->foreign('ordemservico_id')->references('id')->on('ordemservicos')->onDelete('cascade');
-            $table->unsignedBigInteger('prestador_id');
-            $table->foreign('prestador_id')->references('id')->on('prestadores')->onDelete('cascade');
+            $table->unsignedBigInteger('formacao_id');
+            $table->foreign('formacao_id')->references('id')->on('formacoes')->onDelete('cascade');
+            $table->string('descricao');
+            $table->float('valor');
             $table->boolean('ativo')->default(true);
             $table->index('ativo');
             $table->timestamps();
@@ -32,6 +34,6 @@ class CreateOrdemservicoPrestadorTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ordemservico_prestador');
+        Schema::dropIfExists('ordemservico_formacao');
     }
 }
