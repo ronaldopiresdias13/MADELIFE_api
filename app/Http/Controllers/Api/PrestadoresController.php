@@ -98,14 +98,16 @@ class PrestadoresController extends Controller
     public function store(Request $request)
     {
         $prestador = new Prestador();
-        $prestador->pessoa      = $request->pessoa;
-        $prestador->fantasia    = $request->fantasia;
-        $prestador->sexo        = $request->sexo;
-        $prestador->pis         = $request->pis;
-        $prestador->formacao    = $request->formacao;
-        $prestador->cargo       = $request->cargo;
-        $prestador->curriculo   = $request->curriculo;
-        $prestador->certificado = $request->certificado;
+        $prestador->pessoa             = $request->pessoa;
+        $prestador->fantasia           = $request->fantasia;
+        $prestador->sexo               = $request->sexo;
+        $prestador->pis                = $request->pis;
+        $prestador->formacao           = $request->formacao;
+        $prestador->cargo              = $request->cargo;
+        $prestador->curriculo          = $request->curriculo;
+        $prestador->certificado        = $request->certificado;
+        $prestador->meiativa           = $request->meiativa ? $request->meiativa : 0;
+        $prestador->dataverificacaomei = $request->dataverificacaomei ? $request->dataverificacaomei : null;
         $prestador->save();
     }
 
