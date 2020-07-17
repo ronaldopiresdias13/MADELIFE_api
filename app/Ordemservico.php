@@ -18,6 +18,11 @@ class Ordemservico extends Model
         return $this->belongsTo('App\Responsavel');
     }
 
+    public function profissional()
+    {
+        return $this->belongsTo('App\Profissional');
+    }
+
     public function transcricoes()
     {
         return $this->hasMany('App\Transcricao');

@@ -7,6 +7,7 @@ use App\Produto;
 use App\Pessoa;
 use App\Tipoproduto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProdutosController extends Controller
 {
@@ -96,30 +97,33 @@ class ProdutosController extends Controller
      */
     public function store(Request $request)
     {
-        $produto = new Produto();
-        $produto->descricao         = $request->descricao;
-        $produto->empresa_id        = 1;
-        $produto->tipoproduto_id    = $request->tipoproduto_id;
-        $produto->codigo            = $request->codigo;
-        $produto->unidademedida_id  = $request->unidademedida_id;
-        $produto->codigobarra       = $request->codigobarra;
-        $produto->validade          = $request->validade;
-        $produto->grupo             = $request->grupo;
-        $produto->observacoes       = $request->observacoes;
-        $produto->valorcusto        = $request->valorcusto;
-        $produto->valorvenda        = $request->valorvenda;
-        $produto->ultimopreco       = $request->ultimopreco;
-        $produto->estoqueminimo     = $request->estoqueminimo;
-        $produto->estoquemaximo     = $request->estoquemaximo;
-        $produto->quantidadeestoque = $request->quantidadeestoque;
-        $produto->armazem           = $request->armazem;
-        $produto->localizacaofisica = $request->localizacaofisica;
-        $produto->datacompra        = $request->datacompra;
-        $produto->marca_id          = $request->marca_id;
-        $produto->desvalorizacao    = $request->desvalorizacao;
-        $produto->valorfinal        = $request->valorfinal;
-        $produto->tipo              = $request->tipo;
-        $produto->save();
+        DB::transaction(function () use ($request) {
+            $produto = new Produto();
+            $produto->descricao         = $request->descricao;
+            $produto->empresa_id        = 1;
+            $produto->tipoproduto_id    = $request->tipoproduto_id;
+            $produto->codigo            = $request->codigo;
+            $produto->unidademedida_id  = $request->unidademedida_id;
+            $produto->codigobarra       = $request->codigobarra;
+            $produto->validade          = $request->validade;
+            $produto->grupo             = $request->grupo;
+            $produto->observacoes       = $request->observacoes;
+            $produto->valorcusto        = $request->valorcusto;
+            $produto->valorvenda        = $request->valorvenda;
+            $produto->ultimopreco       = $request->ultimopreco;
+            $produto->estoqueminimo     = $request->estoqueminimo;
+            $produto->estoquemaximo     = $request->estoquemaximo;
+            $produto->quantidadeestoque = $request->quantidadeestoque;
+            $produto->armazem           = $request->armazem;
+            $produto->localizacaofisica = $request->localizacaofisica;
+            $produto->datacompra        = $request->datacompra;
+            $produto->marca_id          = $request->marca_id;
+            $produto->desvalorizacao    = $request->desvalorizacao;
+            $produto->valorfinal        = $request->valorfinal;
+            $produto->tipo              = $request->tipo;
+            $produto->categoria         = $request->categoria ? $request->categoria : null;
+            $produto->save();
+        });
     }
 
     /**
@@ -200,7 +204,8 @@ class ProdutosController extends Controller
         $produto->desvalorizacao    = $request->desvalorizacao;
         $produto->valorfinal        = $request->valorfinal;
         $produto->tipo              = $request->tipo;
-        $produto->update();
+        $produto->categoria         = $request->categoria ? $request->categoria : null;
+        $produto->save();
     }
 
     /**

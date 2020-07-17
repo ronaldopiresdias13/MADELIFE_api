@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Atribuicao extends Model
+class Certificadoprestador extends Model
 {
-    protected $table = 'atribuicoes';
+    protected $table = 'certificadoprestadores';
     protected $guarded = [];
 
     public function prestador()
