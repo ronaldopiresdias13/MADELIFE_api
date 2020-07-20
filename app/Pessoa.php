@@ -28,6 +28,11 @@ class Pessoa extends Model
         return $this->hasOne('App\Prestador');
     }
 
+    public function profissional()
+    {
+        return $this->hasOne('App\Profissional');
+    }
+
     public function fornecedor()
     {
         return $this->hasOne('App\Fornecedor');

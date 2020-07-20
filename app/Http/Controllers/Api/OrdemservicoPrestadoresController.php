@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Atribuicao;
+use App\Http\Controllers\Controller;
+use App\OrdemservicoPrestador;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
 
-class AtribuicoesController extends Controller
+class OrdemservicoPrestadoresController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +17,7 @@ class AtribuicoesController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = Atribuicao::where('ativo', true);
+        $itens = OrdemservicoPrestador::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -25,22 +25,12 @@ class AtribuicoesController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                // if ($key == 0) {
-                //     $itens = Atribuicao::where(
-                //         ($where['coluna']) ? $where['coluna'] : 'id',
-                //         ($where['expressao']) ? $where['expressao'] : 'like',
-                //         ($where['valor']) ? $where['valor'] : '%'
-                //     );
-                // } else {
                 $itens->where(
                     ($where['coluna']) ? $where['coluna'] : 'id',
                     ($where['expressao']) ? $where['expressao'] : 'like',
                     ($where['valor']) ? $where['valor'] : '%'
                 );
-                // }
             }
-            // } else {
-            //     $itens = Atribuicao::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -71,11 +61,15 @@ class AtribuicoesController extends Controller
                                     }
                                 }
                             } else {
-                                if ($iten2[0] == null) {
-                                    $iten2 = $iten2[$a];
-                                } else {
-                                    foreach ($iten2 as $key => $i) {
-                                        $i[$a];
+                                if ($iten2 != null) {
+                                    if ($iten2->count() > 0) {
+                                        if ($iten2[0] == null) {
+                                            $iten2 = $iten2[$a];
+                                        } else {
+                                            foreach ($iten2 as $key => $i) {
+                                                $i[$a];
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -97,7 +91,7 @@ class AtribuicoesController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            Atribuicao::create($request->all());
+            OrdemservicoPrestador::create($request->all());
         });
     }
 
@@ -105,12 +99,12 @@ class AtribuicoesController extends Controller
      * Display the specified resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Atribuicao  $atribuicao
+     * @param  \App\OrdemservicoPrestador  $ordemservicoPrestador
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Atribuicao $atribuicao)
+    public function show(Request $request, OrdemservicoPrestador $ordemservicoPrestador)
     {
-        $iten = $atribuicao;
+        $iten = $ordemservicoPrestador;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -132,11 +126,15 @@ class AtribuicoesController extends Controller
                                 }
                             }
                         } else {
-                            if ($iten2[0] == null) {
-                                $iten2 = $iten2[$a];
-                            } else {
-                                foreach ($iten2 as $key => $i) {
-                                    $i[$a];
+                            if ($iten2 != null) {
+                                if ($iten2->count() > 0) {
+                                    if ($iten2[0] == null) {
+                                        $iten2 = $iten2[$a];
+                                    } else {
+                                        foreach ($iten2 as $key => $i) {
+                                            $i[$a];
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -152,25 +150,25 @@ class AtribuicoesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Atribuicao  $atribuicao
+     * @param  \App\OrdemservicoPrestador  $ordemservicoPrestador
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Atribuicao $atribuicao)
+    public function update(Request $request, OrdemservicoPrestador $ordemservicoPrestador)
     {
-        DB::transaction(function () use ($request, $atribuicao) {
-            $atribuicao->update($request->all());
+        DB::transaction(function () use ($request, $ordemservicoPrestador) {
+            $ordemservicoPrestador->update($request->all());
         });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Atribuicao  $atribuicao
+     * @param  \App\OrdemservicoPrestador  $ordemservicoPrestador
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Atribuicao $atribuicao)
+    public function destroy(OrdemservicoPrestador $ordemservicoPrestador)
     {
-        $atribuicao->ativo = false;
-        $atribuicao->save();
+        $ordemservicoPrestador->ativo = false;
+        $ordemservicoPrestador->save();
     }
 }
