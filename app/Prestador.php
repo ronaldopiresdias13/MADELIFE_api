@@ -19,8 +19,8 @@ class Prestador extends Model
         return $this->belongsTo('App\Pessoa');
     }
 
-    public function atribuicoes()
+    public function ordemservicoPrestadores()
     {
-        return $this->hasMany('App\Atribuicao');
+        return $this->hasMany('App\OrdemservicoPrestador');
     }
 }
