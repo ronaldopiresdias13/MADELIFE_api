@@ -16,7 +16,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -43,6 +45,9 @@ class AuthController extends Controller
         // if ($user->pessoa['tipo'] == 'Cliente') {
         $user->pessoa->cliente;
         // }
+        // if ($user->pessoa['tipo'] == 'Profissional') {
+        $user->pessoa->profissional;
+        // }
         $tokenResult = $user->createToken('Personal Access Token');
         $token       = $tokenResult->token;
         if ($request->remember_me) {
@@ -57,6 +62,24 @@ class AuthController extends Controller
             )->toDateTimeString(),
             'user' => $user
         ]);
+
+        // $loginData = $request->validate([
+        //     'email' => 'email|required',
+        //     'password' => 'required'
+        // ]);
+
+        // $user = User::where('email', $request->email)->first();
+
+        // if (!$user || !Hash::check($loginData)) {
+        //     throw ValidationException::withMessages([
+        //         message
+        //     ])
+        //     return response()->json(['message' => 'Email ou Senha Inválidos!']);
+        // }
+
+        // $accessToken = auth()->user()->createToken('authToken')->accessToken;
+
+        // return response(['user' => auth()->user(), 'access_token' => $accessToken]);
     }
 
     public function register(Request $request)
