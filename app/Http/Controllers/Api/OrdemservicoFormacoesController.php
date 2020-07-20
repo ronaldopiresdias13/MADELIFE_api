@@ -3,22 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Escala;
-use App\Prestador;
+use App\OrdemservicoFormacao;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-// use Illuminate\Support\Facades\DB;
-
-class PrestadoresController extends Controller
+class OrdemservicoFormacoesController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $itens = Prestador::where('ativo', true);
+        $itens = OrdemservicoFormacao::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -26,22 +25,12 @@ class PrestadoresController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                // if ($key == 0) {
-                //     $itens = Prestador::where(
-                //         ($where['coluna']) ? $where['coluna'] : 'id',
-                //         ($where['expressao']) ? $where['expressao'] : 'like',
-                //         ($where['valor']) ? $where['valor'] : '%'
-                //     );
-                // } else {
                 $itens->where(
                     ($where['coluna']) ? $where['coluna'] : 'id',
                     ($where['expressao']) ? $where['expressao'] : 'like',
                     ($where['valor']) ? $where['valor'] : '%'
                 );
-                // }
             }
-            // } else {
-            //     $itens = Prestador::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -72,11 +61,15 @@ class PrestadoresController extends Controller
                                     }
                                 }
                             } else {
-                                if ($iten2[0] == null) {
-                                    $iten2 = $iten2[$a];
-                                } else {
-                                    foreach ($iten2 as $key => $i) {
-                                        $i[$a];
+                                if ($iten2 != null) {
+                                    if ($iten2->count() > 0) {
+                                        if ($iten2[0] == null) {
+                                            $iten2 = $iten2[$a];
+                                        } else {
+                                            foreach ($iten2 as $key => $i) {
+                                                $i[$a];
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -97,29 +90,21 @@ class PrestadoresController extends Controller
      */
     public function store(Request $request)
     {
-        $prestador = new Prestador();
-        $prestador->pessoa             = $request->pessoa;
-        $prestador->fantasia           = $request->fantasia;
-        $prestador->sexo               = $request->sexo;
-        $prestador->pis                = $request->pis;
-        $prestador->formacao           = $request->formacao;
-        $prestador->cargo              = $request->cargo;
-        $prestador->curriculo          = $request->curriculo;
-        $prestador->certificado        = $request->certificado;
-        $prestador->meiativa           = $request->meiativa ? $request->meiativa : 0;
-        $prestador->dataverificacaomei = $request->dataverificacaomei ? $request->dataverificacaomei : null;
-        $prestador->save();
+        DB::transaction(function () use ($request) {
+            OrdemservicoFormacao::create($request->all());
+        });
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Prestador  $prestador
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\OrdemservicoFormacao  $ordemservicoFormacao
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Prestador $prestador)
+    public function show(Request $request, OrdemservicoFormacao $ordemservicoFormacao)
     {
-        $iten = $prestador;
+        $iten = $ordemservicoFormacao;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -141,11 +126,15 @@ class PrestadoresController extends Controller
                                 }
                             }
                         } else {
-                            if ($iten2[0] == null) {
-                                $iten2 = $iten2[$a];
-                            } else {
-                                foreach ($iten2 as $key => $i) {
-                                    $i[$a];
+                            if ($iten2 != null) {
+                                if ($iten2->count() > 0) {
+                                    if ($iten2[0] == null) {
+                                        $iten2 = $iten2[$a];
+                                    } else {
+                                        foreach ($iten2 as $key => $i) {
+                                            $i[$a];
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -161,43 +150,25 @@ class PrestadoresController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Prestador  $prestador
+     * @param  \App\OrdemservicoFormacao  $ordemservicoFormacao
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Prestador $prestador)
+    public function update(Request $request, OrdemservicoFormacao $ordemservicoFormacao)
     {
-        $prestador->update($request->all());
+        DB::transaction(function () use ($request, $ordemservicoFormacao) {
+            $ordemservicoFormacao->update($request->all());
+        });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Prestador  $prestador
+     * @param  \App\OrdemservicoFormacao  $ordemservicoFormacao
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Prestador $prestador)
+    public function destroy(OrdemservicoFormacao $ordemservicoFormacao)
     {
-        $prestador->ativo = false;
-        $prestador->save();
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Prestador  $prestador
-     * @return \Illuminate\Http\Response
-     */
-    public function meuspacientes(Prestador $prestador)
-    {
-        $escalas = Escala::where('prestador_id', $prestador->id)
-            ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
-            ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
-            ->join('homecares', 'homecares.orcamento_id', '=', 'orcamentos.id')
-            ->select('homecares.nome')
-            ->where('homecares.ativo', true)
-            ->groupBy('homecares.nome')
-            ->orderBy('homecares.nome')
-            ->get();
-        return $escalas;
+        $ordemservicoFormacao->ativo = false;
+        $ordemservicoFormacao->save();
     }
 }
