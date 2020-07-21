@@ -27,4 +27,15 @@ class Ordemservico extends Model
     {
         return $this->hasMany('App\Transcricao');
     }
+
+    public function servicos()
+    {
+        return $this->belongsToMany('App\Servico', 'ordemservico_servico')
+            ->withPivot(
+                'id',
+                'descricao',
+                'valor',
+                'adicionalnoturno'
+            )->wherePivot('ativo', true);
+    }
 }
