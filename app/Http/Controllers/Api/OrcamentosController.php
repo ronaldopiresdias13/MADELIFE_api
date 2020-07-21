@@ -226,8 +226,8 @@ class OrcamentosController extends Controller
                                     'telefone'  => $telefone['telefone'],
                                 ]
                             )->id,
-                            'tipo'      => $telefone['tipo'],
-                            'descricao' => $telefone['descricao'],
+                            'tipo'      => $telefone['pivot']['tipo'],
+                            'descricao' => $telefone['pivot']['descricao'],
                         ]);
                     }
                 }
@@ -241,8 +241,8 @@ class OrcamentosController extends Controller
                                     'email'     => $email['email'],
                                 ]
                             )->id,
-                            'tipo'      => $email['tipo'],
-                            'descricao' => $email['descricao'],
+                            'tipo'      => $email['pivot']['tipo'],
+                            'descricao' => $email['pivot']['descricao'],
                         ]);
                     }
                 }
@@ -276,8 +276,8 @@ class OrcamentosController extends Controller
                                     'telefone'  => $telefone['telefone'],
                                 ]
                             )->id,
-                            'tipo'      => $telefone['tipo'],
-                            'descricao' => $telefone['descricao'],
+                            'tipo'      => $telefone['pivot']['tipo'],
+                            'descricao' => $telefone['pivot']['descricao'],
                         ]);
                     }
                 }
@@ -290,8 +290,8 @@ class OrcamentosController extends Controller
                                     'email'     => $email['email'],
                                 ]
                             )->id,
-                            'tipo'      => $email['tipo'],
-                            'descricao' => $email['descricao'],
+                            'tipo'      => $email['pivot']['tipo'],
+                            'descricao' => $email['pivot']['descricao'],
                         ]);
                     }
                 }
@@ -319,8 +319,8 @@ class OrcamentosController extends Controller
                                     'telefone' => $telefone['telefone'],
                                 ]
                             )->id,
-                            'tipo'      => $telefone['tipo'],
-                            'descricao' => $telefone['descricao'],
+                            'tipo'      => $telefone['pivot']['tipo'],
+                            'descricao' => $telefone['pivot']['descricao'],
                         ]);
                     }
                 }
@@ -333,8 +333,8 @@ class OrcamentosController extends Controller
                                     'email' => $email['email'],
                                 ]
                             )->id,
-                            'tipo'      => $email['tipo'],
-                            'descricao' => $email['descricao'],
+                            'tipo'      => $email['pivot']['tipo'],
+                            'descricao' => $email['pivot']['descricao'],
                         ]);
                     }
                 }
@@ -362,8 +362,8 @@ class OrcamentosController extends Controller
                                     'telefone' => $telefone['telefone'],
                                 ]
                             )->id,
-                            'tipo'      => $telefone['tipo'],
-                            'descricao' => $telefone['descricao'],
+                            'tipo'      => $telefone['pivot']['tipo'],
+                            'descricao' => $telefone['pivot']['descricao'],
                         ]);
                     }
                 }
@@ -377,8 +377,8 @@ class OrcamentosController extends Controller
                                     'email' => $email['email'],
                                 ]
                             )->id,
-                            'tipo'      => $email['tipo'],
-                            'descricao' => $email['descricao'],
+                            'tipo'      => $email['pivot']['tipo'],
+                            'descricao' => $email['pivot']['descricao'],
                         ]);
                     }
                 }
@@ -561,10 +561,10 @@ class OrcamentosController extends Controller
                                 ],
                                 [
                                     'telefone'  => $telefone['telefone'],
-                                    'tipo'      => $telefone['pivot']['tipo'],
-                                    'descricao' => $telefone['pivot']['descricao'],
                                 ]
                             )->id,
+                            'tipo'      => $telefone['pivot']['tipo'],
+                            'descricao' => $telefone['pivot']['descricao'],
                         ]);
                     }
                 }
@@ -579,10 +579,10 @@ class OrcamentosController extends Controller
                                 ],
                                 [
                                     'email'     => $email['email'],
-                                    'tipo'      => $email['pivot']['tipo'],
-                                    'descricao' => $email['pivot']['descricao'],
                                 ]
                             )->id,
+                            'tipo'      => $email['pivot']['tipo'],
+                            'descricao' => $email['pivot']['descricao'],
                         ]);
                     }
                 }
@@ -617,10 +617,10 @@ class OrcamentosController extends Controller
                                 ],
                                 [
                                     'telefone'  => $telefone['telefone'],
-                                    'tipo'      => $telefone['tipo'],
-                                    'descricao' => $telefone['descricao'],
                                 ]
                             )->id,
+                            'tipo'      => $telefone['pivot']['tipo'],
+                            'descricao' => $telefone['pivot']['descricao'],
                         ]);
                     }
                 }
@@ -634,10 +634,10 @@ class OrcamentosController extends Controller
                                 ],
                                 [
                                     'email'     => $email['email'],
-                                    'tipo'      => $email['tipo'],
-                                    'descricao' => $email['descricao'],
                                 ]
                             )->id,
+                            'tipo'      => $email['pivot']['tipo'],
+                            'descricao' => $email['pivot']['descricao'],
                         ]);
                     }
                 }
@@ -666,10 +666,10 @@ class OrcamentosController extends Controller
                                 ],
                                 [
                                     'telefone'  => $telefone['telefone'],
-                                    'tipo'      => $telefone['tipo'],
-                                    'descricao' => $telefone['descricao'],
                                 ]
                             )->id,
+                            'tipo'      => $telefone['pivot']['tipo'],
+                            'descricao' => $telefone['pivot']['descricao'],
                         ]);
                     }
                 }
@@ -684,10 +684,10 @@ class OrcamentosController extends Controller
                                 ],
                                 [
                                     'email'     => $email['email'],
-                                    'tipo'      => $email['tipo'],
-                                    'descricao' => $email['descricao'],
                                 ]
                             )->id,
+                            'tipo'      => $email['pivot']['tipo'],
+                            'descricao' => $email['pivot']['descricao'],
                         ]);
                     }
                 }
@@ -716,10 +716,10 @@ class OrcamentosController extends Controller
                                 ],
                                 [
                                     'telefone'  => $telefone['telefone'],
-                                    'tipo'      => $telefone['tipo'],
-                                    'descricao' => $telefone['descricao'],
                                 ]
                             )->id,
+                            'tipo'      => $telefone['pivot']['tipo'],
+                            'descricao' => $telefone['pivot']['descricao'],
                         ]);
                     }
                 }
@@ -734,10 +734,10 @@ class OrcamentosController extends Controller
                                 ],
                                 [
                                     'email'     => $email['email'],
-                                    'tipo'      => $email['tipo'],
-                                    'descricao' => $email['descricao'],
                                 ]
                             )->id,
+                            'tipo'      => $email['pivot']['tipo'],
+                            'descricao' => $email['pivot']['descricao'],
                         ]);
                     }
                 }
