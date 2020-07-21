@@ -7,6 +7,8 @@ use App\Responsavel;
 use App\Ordemservico;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Orcamento;
+use App\OrdemservicoServico;
 use Illuminate\Support\Facades\DB;
 
 class OrdemservicosController extends Controller
@@ -130,6 +132,32 @@ class OrdemservicosController extends Controller
                     'realizacaoprocedimento' => $request['realizacaoprocedimento'],
                 ]
             );
+
+            $orcamento = Orcamento::Where('id', $request['orcamento_id'])->first();
+
+            foreach ($orcamento->servicos as $key => $servico) {
+                if ($servico['pivot']['basecobranca'] == 'Plantão') {
+                    $ordemservico_servico = OrdemservicoServico::create(
+                        [
+                            'ordemservico_id'  => $ordemservico->id,
+                            'servico_id'       => $servico->id,
+                            'descricao'        => $servico['pivot']['basecobranca'],
+                            'valor'            => ($servico['pivot']['custo'] / 2),
+                            'adicionalnoturno' => $servico['pivot']['adicionalnoturno'],
+                        ]
+                    );
+                } else {
+                    $ordemservico_servico = OrdemservicoServico::create(
+                        [
+                            'ordemservico_id'  => $ordemservico->id,
+                            'servico_id'       => $servico->id,
+                            'descricao'        => $servico['pivot']['basecobranca'],
+                            'valor'            => ($servico['pivot']['custo']),
+                            'adicionalnoturno' => $servico['pivot']['adicionalnoturno'],
+                        ]
+                    );
+                }
+            }
         });
 
         return response()->json('Ordem de Serviço cadastrado com sucesso!', 200)->header('Content-Type', 'text/plain');
