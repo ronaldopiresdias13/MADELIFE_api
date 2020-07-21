@@ -25,14 +25,24 @@ class RenameAtribuicoesToOrdemservicoPrestadorTable extends Migration
     {
         Schema::rename('ordemservico_prestador', 'atribuicoes');
         Schema::table('atribuicoes', function (Blueprint $table) {
+            // $table->dropForeign('ordemservico_prestador_prestador_id_foreign');
+            // $table->foreign('prestador_id')->references('id')->on('prestadores')->onDelete('cascade');
+            // $table->dropForeign('ordemservico_prestador_ordemservico_id_foreign');
+            // $table->foreign('ordemservico_id')->references('id')->on('ordemservicos')->onDelete('cascade');
+
+            // $table->renameIndex('ordemservico_prestador_prestador_id_foreign', 'atribuicoes_prestador_id_foreign');
+            // $table->renameIndex('ordemservico_prestador_ordemservico_id_foreign', 'atribuicoes_ordemservico_id_foreign');
+            // $table->renameIndex('ordemservico_prestador_ativo_index', 'atribuicoes_ativo_index');
             $table->dropForeign('ordemservico_prestador_prestador_id_foreign');
+            $table->dropIndex('ordemservico_prestador_prestador_id_foreign');
             $table->foreign('prestador_id')->references('id')->on('prestadores')->onDelete('cascade');
+
             $table->dropForeign('ordemservico_prestador_ordemservico_id_foreign');
+            $table->dropIndex('ordemservico_prestador_ordemservico_id_foreign');
             $table->foreign('ordemservico_id')->references('id')->on('ordemservicos')->onDelete('cascade');
 
-            $table->renameIndex('ordemservico_prestador_prestador_id_foreign', 'atribuicoes_prestador_id_foreign');
-            $table->renameIndex('ordemservico_prestador_ordemservico_id_foreign', 'atribuicoes_ordemservico_id_foreign');
-            $table->renameIndex('ordemservico_prestador_ativo_index', 'atribuicoes_ativo_index');
+            $table->dropIndex('ordemservico_prestador_ativo_index');
+            $table->index('ativo');
         });
     }
 }
