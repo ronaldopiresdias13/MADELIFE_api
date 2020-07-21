@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\OrdemservicoFormacao;
+use App\OrdemservicoServico;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class OrdemservicoFormacoesController extends Controller
+class OrdemservicoServicoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +17,7 @@ class OrdemservicoFormacoesController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = OrdemservicoFormacao::where('ativo', true);
+        $itens = OrdemservicoServico::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -91,7 +91,7 @@ class OrdemservicoFormacoesController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            OrdemservicoFormacao::create($request->all());
+            OrdemservicoServico::create($request->all());
         });
     }
 
@@ -99,12 +99,12 @@ class OrdemservicoFormacoesController extends Controller
      * Display the specified resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\OrdemservicoFormacao  $ordemservicoFormacao
+     * @param  \App\OrdemservicoServico  $ordemservicoServico
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, OrdemservicoFormacao $ordemservicoFormacao)
+    public function show(Request $request, OrdemservicoServico $ordemservicoServico)
     {
-        $iten = $ordemservicoFormacao;
+        $iten = $ordemservicoServico;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -150,25 +150,25 @@ class OrdemservicoFormacoesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\OrdemservicoFormacao  $ordemservicoFormacao
+     * @param  \App\OrdemservicoServico  $ordemservicoServico
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, OrdemservicoFormacao $ordemservicoFormacao)
+    public function update(Request $request, OrdemservicoServico $ordemservicoServico)
     {
-        DB::transaction(function () use ($request, $ordemservicoFormacao) {
-            $ordemservicoFormacao->update($request->all());
+        DB::transaction(function () use ($request, $ordemservicoServico) {
+            $ordemservicoServico->update($request->all());
         });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\OrdemservicoFormacao  $ordemservicoFormacao
+     * @param  \App\OrdemservicoServico  $ordemservicoServico
      * @return \Illuminate\Http\Response
      */
-    public function destroy(OrdemservicoFormacao $ordemservicoFormacao)
+    public function destroy(OrdemservicoServico $ordemservicoServico)
     {
-        $ordemservicoFormacao->ativo = false;
-        $ordemservicoFormacao->save();
+        $ordemservicoServico->ativo = false;
+        $ordemservicoServico->save();
     }
 }
