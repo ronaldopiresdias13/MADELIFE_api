@@ -44,6 +44,7 @@ class Orcamento extends Model
                 'custo',
                 'subtotal',
                 'subtotalcusto',
+                'adicionalnoturno',
                 'icms',
                 'inss',
                 'iss',
