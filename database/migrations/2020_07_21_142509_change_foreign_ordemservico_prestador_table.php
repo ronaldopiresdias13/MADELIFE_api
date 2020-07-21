@@ -15,12 +15,13 @@ class ChangeForeignOrdemservicoPrestadorTable extends Migration
     {
         Schema::table('ordemservico_prestador', function (Blueprint $table) {
             $table->dropForeign('atribuicoes_prestador_id_foreign');
+            $table->renameIndex('atribuicoes_prestador_id_foreign', 'ordemservico_prestador_prestador_id_foreign');
             $table->foreign('prestador_id')->references('id')->on('prestadores')->onDelete('cascade');
+
             $table->dropForeign('atribuicoes_ordemservico_id_foreign');
+            $table->renameIndex('atribuicoes_ordemservico_id_foreign', 'ordemservico_prestador_ordemservico_id_foreign');
             $table->foreign('ordemservico_id')->references('id')->on('ordemservicos')->onDelete('cascade');
 
-            $table->renameIndex('atribuicoes_prestador_id_foreign', 'ordemservico_prestador_prestador_id_foreign');
-            $table->renameIndex('atribuicoes_ordemservico_id_foreign', 'ordemservico_prestador_ordemservico_id_foreign');
             $table->renameIndex('atribuicoes_ativo_index', 'ordemservico_prestador_ativo_index');
         });
     }
