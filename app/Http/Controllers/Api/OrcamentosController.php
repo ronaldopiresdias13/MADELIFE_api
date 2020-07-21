@@ -211,7 +211,7 @@ class OrcamentosController extends Controller
                     'cpfcnpj'      => $request['homecare']['cpfcnpj'],
                     'rgie'         => $request['homecare']['rgie'],
                     'endereco'     => $request['homecare']['endereco'],
-                    'cidade_id'    => $request['homecare']['cidade'],
+                    'cidade_id'    => $request['homecare']['cidade_id'],
                     'observacao'   => $request['homecare']['observacao'],
                 ]
             );
@@ -543,7 +543,7 @@ class OrcamentosController extends Controller
                     'cpfcnpj'    => $request['homecare']['cpfcnpj'],
                     'rgie'       => $request['homecare']['rgie'],
                     'endereco'   => $request['homecare']['endereco'],
-                    'cidade_id'  => $request['homecare']['cidade'],
+                    'cidade_id'  => $request['homecare']['cidade_id'],
                     'observacao' => $request['homecare']['observacao'],
                 ]
             );
