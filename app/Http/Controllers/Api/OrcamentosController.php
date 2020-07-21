@@ -146,12 +146,13 @@ class OrcamentosController extends Controller
                     [
                         'quantidade'           => $servico['quantidade'],
                         'frequencia'           => $servico['frequencia'],
-                        'basecobranca'           => $servico['basecobranca'],
-                        'valorunitario'           => $servico['valorunitario'],
+                        'basecobranca'         => $servico['basecobranca'],
+                        'valorunitario'        => $servico['valorunitario'],
                         'custo'                => $servico['custo'],
-                        'subtotal'               => $servico['subtotal'],
-                        'subtotalcusto'           => $servico['subtotalcusto'],
-                        'icms'                   => $servico['icms'],
+                        'subtotal'             => $servico['subtotal'],
+                        'subtotalcusto'        => $servico['subtotalcusto'],
+                        'adicionalnoturno'     => $servico['adicionalnoturno'],
+                        'icms'                 => $servico['icms'],
                         'inss'                 => $servico['inss'],
                         'iss'                  => $servico['iss'],
                         'valorcustomensal'     => $servico['valorcustomensal'],
@@ -170,10 +171,10 @@ class OrcamentosController extends Controller
                     ],
                     [
                         'quantidade'           => $produto['quantidade'],
-                        'valorunitario'           => $produto['valorunitario'],
+                        'valorunitario'        => $produto['valorunitario'],
                         'custo'                => $produto['custo'],
-                        'subtotal'               => $produto['subtotal'],
-                        'subtotalcusto'           => $produto['subtotalcusto'],
+                        'subtotal'             => $produto['subtotal'],
+                        'subtotalcusto'        => $produto['subtotalcusto'],
                         'valorresultadomensal' => $produto['valorresultadomensal'],
                         'valorcustomensal'     => $produto['valorcustomensal']
                     ]
@@ -191,7 +192,7 @@ class OrcamentosController extends Controller
                     [
                         'quantidade'    => $custo['quantidade'],
                         'unidade'       => $custo['unidade'],
-                        'valorunitario'    => $custo['valorunitario'],
+                        'valorunitario' => $custo['valorunitario'],
                         'valortotal'    => $custo['valortotal'],
                     ]
                 );
@@ -207,7 +208,7 @@ class OrcamentosController extends Controller
                     'nome'         => $request['homecare']['nome'],
                     'sexo'         => $request['homecare']['sexo'],
                     'nascimento'   => $request['homecare']['nascimento'],
-                    'cpfcnpj'       => $request['homecare']['cpf'],
+                    'cpfcnpj'      => $request['homecare']['cpf'],
                     'rgie'         => $request['homecare']['rg'],
                     'endereco'     => $request['homecare']['endereco'],
                     'cidade_id'    => $request['homecare']['cidade'],
@@ -255,7 +256,7 @@ class OrcamentosController extends Controller
                     'nome'            => $request['remocao']['nome'],
                     'sexo'            => $request['remocao']['sexo'],
                     'nascimento'      => $request['remocao']['nascimento'],
-                    'cpfcnpj'          => $request['remocao']['cpf'],
+                    'cpfcnpj'         => $request['remocao']['cpf'],
                     'rgie'            => $request['remocao']['rg'],
                     'enderecoorigem'  => $request['remocao']['enderecoorigem'],
                     'cidadeorigem'    => $request['remocao']['cidadeorigem'],
@@ -301,10 +302,10 @@ class OrcamentosController extends Controller
                     'orcamento_id' => $orcamento->id,
                 ],
                 [
-                    'nome'         => $request['evento']['nome'],
-                    'endereco'     => $request['evento']['endereco'],
-                    'cep'          => $request['evento']['cep'],
-                    'cidade'       => $request['evento']['cidade'],
+                    'nome'     => $request['evento']['nome'],
+                    'endereco' => $request['evento']['endereco'],
+                    'cep'      => $request['evento']['cep'],
+                    'cidade'   => $request['evento']['cidade'],
                 ]
             );
 
@@ -314,7 +315,7 @@ class OrcamentosController extends Controller
                         'evento_id'   => $evento->id,
                         'telefone_id' => Telefone::firstOrCreate(
                             [
-                                'telefone'  => $telefone['telefone'],
+                                'telefone' => $telefone['telefone'],
                             ]
                         )->id,
                         'tipo'      => $telefone['tipo'],
@@ -328,7 +329,7 @@ class OrcamentosController extends Controller
                         'evento_id' => $evento->id,
                         'email_id'  => Email::firstOrCreate(
                             [
-                                'email'     => $email['email'],
+                                'email' => $email['email'],
                             ]
                         )->id,
                         'tipo'      => $email['tipo'],
@@ -344,10 +345,10 @@ class OrcamentosController extends Controller
                     'orcamento_id' => $orcamento->id,
                 ],
                 [
-                    'nome'         => $request['aph']['nome'],
-                    'endereco'     => $request['aph']['endereco'],
-                    'cep'          => $request['aph']['cep'],
-                    'cidade'       => $request['aph']['cidade'],
+                    'nome'     => $request['aph']['nome'],
+                    'endereco' => $request['aph']['endereco'],
+                    'cep'      => $request['aph']['cep'],
+                    'cidade'   => $request['aph']['cidade'],
                 ]
             );
 
@@ -357,7 +358,7 @@ class OrcamentosController extends Controller
                         'aph_id'      => $aph->id,
                         'telefone_id' => Telefone::firstOrCreate(
                             [
-                                'telefone'  => $telefone['telefone'],
+                                'telefone' => $telefone['telefone'],
                             ]
                         )->id,
                         'tipo'      => $telefone['tipo'],
@@ -372,7 +373,7 @@ class OrcamentosController extends Controller
                         'aph_id'   => $aph->id,
                         'email_id' => Email::firstOrCreate(
                             [
-                                'email'     => $email['email'],
+                                'email' => $email['email'],
                             ]
                         )->id,
                         'tipo'      => $email['tipo'],
@@ -477,12 +478,13 @@ class OrcamentosController extends Controller
                     [
                         'quantidade'           => $servico['quantidade'],
                         'frequencia'           => $servico['frequencia'],
-                        'basecobranca'           => $servico['basecobranca'],
-                        'valorunitario'           => $servico['valorunitario'],
+                        'basecobranca'         => $servico['basecobranca'],
+                        'valorunitario'        => $servico['valorunitario'],
                         'custo'                => $servico['custo'],
-                        'subtotal'               => $servico['subtotal'],
-                        'subtotalcusto'           => $servico['subtotalcusto'],
-                        'icms'                   => $servico['icms'],
+                        'subtotal'             => $servico['subtotal'],
+                        'subtotalcusto'        => $servico['subtotalcusto'],
+                        'adicionalnoturno'     => $servico['adicionalnoturno'],
+                        'icms'                 => $servico['icms'],
                         'inss'                 => $servico['inss'],
                         'iss'                  => $servico['iss'],
                         'valorcustomensal'     => $servico['valorcustomensal'],
@@ -501,10 +503,10 @@ class OrcamentosController extends Controller
                     ],
                     [
                         'quantidade'           => $produto['quantidade'],
-                        'valorunitario'           => $produto['valorunitario'],
+                        'valorunitario'        => $produto['valorunitario'],
                         'custo'                => $produto['custo'],
-                        'subtotal'               => $produto['subtotal'],
-                        'subtotalcusto'           => $produto['subtotalcusto'],
+                        'subtotal'             => $produto['subtotal'],
+                        'subtotalcusto'        => $produto['subtotalcusto'],
                         'valorresultadomensal' => $produto['valorresultadomensal'],
                         'valorcustomensal'     => $produto['valorcustomensal']
                     ]
@@ -522,7 +524,7 @@ class OrcamentosController extends Controller
                     [
                         'quantidade'    => $custo['quantidade'],
                         'unidade'       => $custo['unidade'],
-                        'valorunitario'    => $custo['valorunitario'],
+                        'valorunitario' => $custo['valorunitario'],
                         'valortotal'    => $custo['valortotal'],
                     ]
                 );
@@ -535,14 +537,14 @@ class OrcamentosController extends Controller
                     'orcamento_id' => $orcamento->id,
                 ],
                 [
-                    'nome'         => $request['homecare']['nome'],
-                    'sexo'         => $request['homecare']['sexo'],
-                    'nascimento'   => $request['homecare']['nascimento'],
-                    'cpfcnpj'       => $request['homecare']['cpf'],
-                    'rgie'         => $request['homecare']['rg'],
-                    'endereco'     => $request['homecare']['endereco'],
-                    'cidade_id'    => $request['homecare']['cidade'],
-                    'observacao'   => $request['homecare']['observacao'],
+                    'nome'       => $request['homecare']['nome'],
+                    'sexo'       => $request['homecare']['sexo'],
+                    'nascimento' => $request['homecare']['nascimento'],
+                    'cpfcnpj'    => $request['homecare']['cpf'],
+                    'rgie'       => $request['homecare']['rg'],
+                    'endereco'   => $request['homecare']['endereco'],
+                    'cidade_id'  => $request['homecare']['cidade'],
+                    'observacao' => $request['homecare']['observacao'],
                 ]
             );
 
@@ -592,7 +594,7 @@ class OrcamentosController extends Controller
                     'nome'            => $request['remocao']['nome'],
                     'sexo'            => $request['remocao']['sexo'],
                     'nascimento'      => $request['remocao']['nascimento'],
-                    'cpfcnpj'          => $request['remocao']['cpf'],
+                    'cpfcnpj'         => $request['remocao']['cpf'],
                     'rgie'            => $request['remocao']['rg'],
                     'enderecoorigem'  => $request['remocao']['enderecoorigem'],
                     'cidadeorigem'    => $request['remocao']['cidadeorigem'],
@@ -644,10 +646,10 @@ class OrcamentosController extends Controller
                     'orcamento_id' => $orcamento->id,
                 ],
                 [
-                    'nome'         => $request['evento']['nome'],
-                    'endereco'     => $request['evento']['endereco'],
-                    'cep'          => $request['evento']['cep'],
-                    'cidade'       => $request['evento']['cidade'],
+                    'nome'     => $request['evento']['nome'],
+                    'endereco' => $request['evento']['endereco'],
+                    'cep'      => $request['evento']['cep'],
+                    'cidade'   => $request['evento']['cidade'],
                 ]
             );
 
@@ -668,6 +670,7 @@ class OrcamentosController extends Controller
                     ]);
                 }
             }
+
             if ($request['evento']['emails']) {
                 foreach ($request['evento']['emails'] as $key => $email) {
                     $evento_email = EventoEmail::updateOrCreate([
@@ -693,10 +696,10 @@ class OrcamentosController extends Controller
                     'orcamento_id' => $orcamento->id,
                 ],
                 [
-                    'nome'         => $request['aph']['nome'],
-                    'endereco'     => $request['aph']['endereco'],
-                    'cep'          => $request['aph']['cep'],
-                    'cidade'       => $request['aph']['cidade'],
+                    'nome'     => $request['aph']['nome'],
+                    'endereco' => $request['aph']['endereco'],
+                    'cep'      => $request['aph']['cep'],
+                    'cidade'   => $request['aph']['cidade'],
                 ]
             );
 
@@ -717,6 +720,7 @@ class OrcamentosController extends Controller
                     ]);
                 }
             }
+
             if ($request['aph']['emails']) {
                 foreach ($request['aph']['emails'] as $key => $email) {
                     $aph_email = AphEmail::updateOrCreate([
@@ -769,6 +773,7 @@ class OrcamentosController extends Controller
         // $orcamento->status            = $request['status'];
         $orcamento->update();
     }
+
     /**
      * Remove the specified resource from storage.
      *
