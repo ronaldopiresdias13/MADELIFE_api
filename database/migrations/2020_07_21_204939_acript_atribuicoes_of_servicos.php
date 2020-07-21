@@ -23,7 +23,7 @@ class AcriptAtribuicoesOfServicos extends Migration
                 // foreach ($ordemservico->orcamento as $key => $orcamento) {
                 foreach ($ordemservico->orcamento->servicos as $key => $servico) {
                     if ($servico['pivot']['basecobranca'] == 'Plantão') {
-                        $ordemservico_servico = OrdemservicoServico::create(
+                        $ordemservico_servico = OrdemservicoServico::firstOrCreate(
                             [
                                 'ordemservico_id'  => $ordemservico->id,
                                 'servico_id'       => $servico->id,
@@ -33,7 +33,7 @@ class AcriptAtribuicoesOfServicos extends Migration
                             ]
                         );
                     } else {
-                        $ordemservico_servico = OrdemservicoServico::create(
+                        $ordemservico_servico = OrdemservicoServico::firstOrCreate(
                             [
                                 'ordemservico_id'  => $ordemservico->id,
                                 'servico_id'       => $servico->id,
