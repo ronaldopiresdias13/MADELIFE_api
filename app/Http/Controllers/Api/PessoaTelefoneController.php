@@ -180,6 +180,7 @@ class PessoaTelefoneController extends Controller
      */
     public function destroy(PessoaTelefone $pessoaTelefone)
     {
-        $pessoaTelefone->delete();
+        $pessoaTelefone->ativo = false;
+        $pessoaTelefone->save();
     }
 }
