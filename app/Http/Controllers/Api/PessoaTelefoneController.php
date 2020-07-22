@@ -90,20 +90,56 @@ class PessoaTelefoneController extends Controller
      */
     public function store(Request $request)
     {
-        DB::transaction(function () {
-            PessoaTelefone::firstOrCreate([]);
+        DB::transaction(function () use ($request) {
+            PessoaTelefone::firstOrCreate($request->all());
         });
     }
 
     /**
      * Display the specified resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  \App\PessoaTelefone  $pessoaTelefone
      * @return \Illuminate\Http\Response
      */
-    public function show(PessoaTelefone $pessoaTelefone)
+    public function show(Request $request, PessoaTelefone $pessoaTelefone)
     {
-        //
+        $iten = $pessoaTelefone;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adicional) {
+                if (is_string($adicional)) {
+                    $iten[$adicional];
+                } else {
+                    $iten2 = $iten;
+                    foreach ($adicional as $key => $a) {
+                        if ($key == 0) {
+                            if ($iten[0] == null) {
+                                $iten2 = $iten[$a];
+                            } else {
+                                foreach ($iten as $key => $i) {
+                                    $i[$a];
+                                }
+                            }
+                        } else {
+                            if ($iten2[0] == null) {
+                                $iten2 = $iten2[$a];
+                            } else {
+                                foreach ($iten2 as $key => $i) {
+                                    $i[$a];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $iten;
     }
 
     /**
@@ -115,7 +151,7 @@ class PessoaTelefoneController extends Controller
      */
     public function update(Request $request, PessoaTelefone $pessoaTelefone)
     {
-        //
+        $pessoaTelefone->update($request->all());
     }
 
     /**
@@ -126,6 +162,6 @@ class PessoaTelefoneController extends Controller
      */
     public function destroy(PessoaTelefone $pessoaTelefone)
     {
-        //
+        $pessoaTelefone->delete();
     }
 }
