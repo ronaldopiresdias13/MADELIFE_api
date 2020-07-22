@@ -34,8 +34,8 @@ class Ordemservico extends Model
             ->withPivot(
                 'id',
                 'descricao',
-                'valor',
-                'adicionalnoturno'
+                'valordiurno',
+                'valornoturno'
             )->wherePivot('ativo', true);
     }
 }
