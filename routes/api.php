@@ -294,11 +294,11 @@ Route::put('ordemservicos/{ordemservico}', 'Api\OrdemservicosController@update')
 Route::delete('ordemservicos/{ordemservico}', 'Api\OrdemservicosController@destroy');
 Route::get('ordemservicos/{ordemservico}/horariomedicamentos', 'Api\OrdemservicosController@horariomedicamentos'); // Custon
 
-Route::get('ordemservicoFormacoes', 'Api\OrdemservicoFormacoesController@index');
-Route::post('ordemservicoFormacoes', 'Api\OrdemservicoFormacoesController@store');
-Route::get('ordemservicoFormacoes/{ordemservicoFormacao}', 'Api\OrdemservicoFormacoesController@show');
-Route::put('ordemservicoFormacoes/{ordemservicoFormacao}', 'Api\OrdemservicoFormacoesController@update');
-Route::delete('ordemservicoFormacoes/{ordemservicoFormacao}', 'Api\OrdemservicoFormacoesController@destroy');
+Route::get('ordemservicoServicos', 'Api\OrdemservicoServicosController@index');
+Route::post('ordemservicoServicos', 'Api\OrdemservicoServicosController@store');
+Route::get('ordemservicoServicos/{ordemservicoServico}', 'Api\OrdemservicoServicosController@show');
+Route::put('ordemservicoServicos/{ordemservicoServico}', 'Api\OrdemservicoServicosController@update');
+Route::delete('ordemservicoServicos/{ordemservicoServico}', 'Api\OrdemservicoServicosController@destroy');
 
 Route::get('ordemservicoPrestadores', 'Api\OrdemservicoPrestadoresController@index');
 Route::post('ordemservicoPrestadores', 'Api\OrdemservicoPrestadoresController@store');
