@@ -14,7 +14,7 @@ class AddServicoIdToOrdemservicoPrestadorTable extends Migration
     public function up()
     {
         Schema::table('ordemservico_prestador', function (Blueprint $table) {
-            $table->unsignedBigInteger('servico_id');
+            $table->unsignedBigInteger('servico_id')->nullable()->after('ordemservico_id');
             $table->foreign('servico_id')->references('id')->on('servicos')->onDelete('cascade');
         });
     }
@@ -28,6 +28,7 @@ class AddServicoIdToOrdemservicoPrestadorTable extends Migration
     {
         Schema::table('ordemservico_prestador', function (Blueprint $table) {
             $table->dropForeign(['servico_id']);
+            $table->dropColumn('servico_id');
         });
     }
 }
