@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Email;
 use App\Http\Controllers\Controller;
 use App\PessoaEmail;
 use Illuminate\Http\Request;
@@ -91,7 +92,19 @@ class PessoaEmailController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            PessoaEmail::firstOrCreate($request->all());
+            PessoaEmail::updateOrCreate(
+                [
+                    'pessoa_id' => $request->pessoa_id,
+                    'email_id'  => Email::firstOrCreate(
+                        ['email' => $request->email]
+                    )->id,
+                ],
+                [
+                    'tipo'      => $request->pivot->tipo,
+                    'descricao' => $request->pivot->descricao,
+                    'ativo'     => true
+                ]
+            );
         });
     }
 
@@ -151,7 +164,12 @@ class PessoaEmailController extends Controller
      */
     public function update(Request $request, PessoaEmail $pessoaEmail)
     {
-        $pessoaEmail->update($request->all());
+        DB::transaction(function () use ($request, $pessoaEmail) {
+            $pessoaEmail->email_id  = Email::firstOrCreate(['email' => $request->email])->id;
+            $pessoaEmail->tipo      = $request->pivot->tipo;
+            $pessoaEmail->descricao = $request->pivot->descricao;
+            $pessoaEmail->ativo     = true;
+        });
     }
 
     /**

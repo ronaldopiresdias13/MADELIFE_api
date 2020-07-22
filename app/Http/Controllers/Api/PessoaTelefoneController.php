@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\PessoaTelefone;
+use App\Telefone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -91,7 +92,19 @@ class PessoaTelefoneController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            PessoaTelefone::firstOrCreate($request->all());
+            PessoaTelefone::updateOrCreate(
+                [
+                    'pessoa_id' => $request->pessoa_id,
+                    'telefone_id'  => Telefone::firstOrCreate(
+                        ['telefone' => $request->telefone]
+                    )->id,
+                ],
+                [
+                    'tipo'      => $request->pivot->tipo,
+                    'descricao' => $request->pivot->descricao,
+                    'ativo'     => true
+                ]
+            );
         });
     }
 
@@ -151,7 +164,12 @@ class PessoaTelefoneController extends Controller
      */
     public function update(Request $request, PessoaTelefone $pessoaTelefone)
     {
-        $pessoaTelefone->update($request->all());
+        DB::transaction(function () use ($request, $pessoaTelefone) {
+            $pessoaTelefone->email_id  = Telefone::firstOrCreate(['telefone' => $request->telefone])->id;
+            $pessoaTelefone->tipo      = $request->pivot->tipo;
+            $pessoaTelefone->descricao = $request->pivot->descricao;
+            $pessoaTelefone->ativo     = true;
+        });
     }
 
     /**
