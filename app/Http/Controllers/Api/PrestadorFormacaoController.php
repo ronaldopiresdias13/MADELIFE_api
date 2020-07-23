@@ -2,28 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\User;
-use App\Email;
-use App\Acesso;
-use App\Pessoa;
-use App\Conselho;
-use App\Prestador;
-use App\UserAcesso;
-use App\PessoaEmail;
+use App\Http\Controllers\Controller;
 use App\PrestadorFormacao;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
-class UsersController extends Controller
+class PrestadorFormacaoController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $itens = User::where('ativo', true);
+        $itens = PrestadorFormacao::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -31,22 +25,12 @@ class UsersController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                // if ($key == 0) {
-                //     $itens = User::where(
-                //         ($where['coluna']) ? $where['coluna'] : 'id',
-                //         ($where['expressao']) ? $where['expressao'] : 'like',
-                //         ($where['valor']) ? $where['valor'] : '%'
-                //     );
-                // } else {
                 $itens->where(
                     ($where['coluna']) ? $where['coluna'] : 'id',
                     ($where['expressao']) ? $where['expressao'] : 'like',
                     ($where['valor']) ? $where['valor'] : '%'
                 );
-                // }
             }
-            // } else {
-            //     $itens = User::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -106,74 +90,31 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        $cpfcnpj = Pessoa::where(
-            'cpfcnpj',
-            $request['pessoa']['cpfcnpj']
-        );
-        $email = Email::where('email', $request['user']['email']);
-        if ($cpfcnpj) {
-            return response()->json('Usuário já existe!', 400)->header('Content-Type', 'text/plain');
-        }
-        if ($email) {
-            return response()->json('Usuário já existe!', 400)->header('Content-Type', 'text/plain');
-        } else {
-            $user = User::create(
+        DB::transaction(function () use ($request) {
+            PrestadorFormacao::updateOrCreate(
                 [
-                    'empresa_id' => 1,
-                    'cpfcnpj'    => $request['cpfcnpj'],
-                    'email'      => $request['user']['email'],
-                    'password'   =>  bcrypt($request['user']['password']),
-                    'pessoa_id'  => Pessoa::create(
-                        [
-                            'empresa_id' => 1,
-                            'nome'       => $request['nome'],
-                            'nascimento' => $request['nascimento'],
-                            'tipo'       => $request['tipo'],
-                            'cpfcnpj'    => $request['cpfcnpj'],
-                            'status'     => $request['status']
-                        ]
-                    )->id
+                    'prestador_id' => $request->prestador_id,
+                    'formacao_id'  => $request->formacao_id,
+                    'nome'         => $request->nome,
+                    'caminho'      => $request->caminho,
+                ],
+                [
+                    'ativo' => true
                 ]
             );
-            $pessoa_email = PessoaEmail::firstOrCreate([
-                'pessoa_id' => $user->pessoa_id,
-                'email_id'  => Email::firstOrCreate(
-                    [
-                        'email' => $user->email,
-                    ]
-                )->id,
-                'tipo'      => 'Pessoal',
-            ]);
-            $conselho = Conselho::create(
-                [
-                    'instituicao' => $request['conselho']['instituicao'],
-                    'numero'      => $request['conselho']['numero'],
-                    'pessoa_id'   => $user->pessoa_id
-                ]
-            );
-            $formacao = PrestadorFormacao::create(
-                [
-                    'prestador_id' => Prestador::create(
-                        [
-                            'pessoa_id' => $user->pessoa_id,
-                            'sexo'      => $request['prestador']['sexo']
-                        ]
-                    )->id,
-                    'formacao_id'  => $request['prestador']['formacao_id']
-                ]
-            );
-        }
+        });
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\user  $user
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\PrestadorFormacao  $prestadorFormacao
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, user $user)
+    public function show(Request $request, PrestadorFormacao $prestadorFormacao)
     {
-        $iten = $user;
+        $iten = $prestadorFormacao;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -219,27 +160,32 @@ class UsersController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\user  $user
+     * @param  \App\PrestadorFormacao  $prestadorFormacao
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, user $user)
+    public function update(Request $request, PrestadorFormacao $prestadorFormacao)
     {
-        foreach ($request->acessos as $key => $value) {
-            $teste = UserAcesso::updateOrCreate(
-                ['user'  => $user->id, 'acesso' => Acesso::FirstOrCreate(['nome' => $value['nome']])->id]
-            );
-        }
+        DB::transaction(function () use ($request, $prestadorFormacao) {
+            $prestadorFormacao->prestador_id = $request->prestador_id;
+            $prestadorFormacao->formacao_id  = $request->formacao_id;
+            $prestadorFormacao->nome         = $request->nome;
+            $prestadorFormacao->caminho      = $request->caminho;
+            $prestadorFormacao->ativo        = true;
+            $prestadorFormacao->save();
+        });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\user  $user
+     * @param  \App\PrestadorFormacao  $prestadorFormacao
      * @return \Illuminate\Http\Response
      */
-    public function destroy(user $user)
+    public function destroy(PrestadorFormacao $prestadorFormacao)
     {
-        $user->ativo = false;
-        $user->save();
+        DB::transaction(function () use ($prestadorFormacao) {
+            $prestadorFormacao->ativo = false;
+            $prestadorFormacao->save();
+        });
     }
 }

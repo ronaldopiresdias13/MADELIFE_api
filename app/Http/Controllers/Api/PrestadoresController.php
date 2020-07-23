@@ -197,7 +197,7 @@ class PrestadoresController extends Controller
                             'id' => $request['pessoa_id'],
                         ],
                         [
-                            'empresa_id'  => $request['pessoa']['empresa_id'],
+                            // 'empresa_id'  => $request['pessoa']['empresa_id'],
                             'nome'        => $request['pessoa']['nome'],
                             'nascimento'  => $request['pessoa']['nascimento'],
                             'tipo'        => $request['pessoa']['tipo'],
