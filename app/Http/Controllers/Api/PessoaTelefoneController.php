@@ -100,8 +100,8 @@ class PessoaTelefoneController extends Controller
                     )->id,
                 ],
                 [
-                    'tipo'      => $request->pivot->tipo,
-                    'descricao' => $request->pivot->descricao,
+                    'tipo'      => $request['pivot']['tipo'],
+                    'descricao' => $request['pivot']['descricao'],
                     'ativo'     => true
                 ]
             );
@@ -165,10 +165,11 @@ class PessoaTelefoneController extends Controller
     public function update(Request $request, PessoaTelefone $pessoaTelefone)
     {
         DB::transaction(function () use ($request, $pessoaTelefone) {
-            $pessoaTelefone->email_id  = Telefone::firstOrCreate(['telefone' => $request->telefone])->id;
-            $pessoaTelefone->tipo      = $request->pivot->tipo;
-            $pessoaTelefone->descricao = $request->pivot->descricao;
+            $pessoaTelefone->telefone_id  = Telefone::firstOrCreate(['telefone' => $request['telefone']])->id;
+            $pessoaTelefone->tipo      = $request['pivot']['tipo'];
+            $pessoaTelefone->descricao = $request['pivot']['descricao'];
             $pessoaTelefone->ativo     = true;
+            $pessoaTelefone->save();
         });
     }
 
