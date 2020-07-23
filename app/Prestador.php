@@ -11,7 +11,7 @@ class Prestador extends Model
 
     public function formacoes()
     {
-        return $this->belongsToMany('App\Formacao', 'prestador_formacao')->wherePivot('status', true);
+        return $this->belongsToMany('App\Formacao', 'prestador_formacao')->withPivot('id')->wherePivot('ativo', true);
     }
 
     public function pessoa()
