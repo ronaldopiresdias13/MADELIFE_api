@@ -61,6 +61,6 @@ class Pessoa extends Model
 
     public function conselhos()
     {
-        return $this->hasMany('App\Conselho');
+        return $this->hasMany('App\Conselho')->where('ativo', true);
     }
 }
