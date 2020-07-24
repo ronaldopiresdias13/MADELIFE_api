@@ -100,8 +100,8 @@ class PessoaEmailController extends Controller
                     )->id,
                 ],
                 [
-                    'tipo'      => $request->pivot->tipo,
-                    'descricao' => $request->pivot->descricao,
+                    'tipo'      => $request['pivot']['tipo'],
+                    'descricao' => $request['pivot']['descricao'],
                     'ativo'     => true
                 ]
             );
@@ -165,10 +165,11 @@ class PessoaEmailController extends Controller
     public function update(Request $request, PessoaEmail $pessoaEmail)
     {
         DB::transaction(function () use ($request, $pessoaEmail) {
-            $pessoaEmail->email_id  = Email::firstOrCreate(['email' => $request->email])->id;
-            $pessoaEmail->tipo      = $request->pivot->tipo;
-            $pessoaEmail->descricao = $request->pivot->descricao;
+            $pessoaEmail->email_id  = Email::firstOrCreate(['email' => $request['email']])->id;
+            $pessoaEmail->tipo      = $request['pivot']['tipo'];
+            $pessoaEmail->descricao = $request['pivot']['descricao'];
             $pessoaEmail->ativo     = true;
+            $pessoaEmail->save();
         });
     }
 

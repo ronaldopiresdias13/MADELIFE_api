@@ -349,6 +349,12 @@ Route::get('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@sho
 Route::put('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@update');
 Route::delete('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@destroy');
 
+Route::get('pessoaEmails', 'Api\PessoaEmailController@index');
+Route::post('pessoaEmails', 'Api\PessoaEmailController@store');
+Route::get('pessoaEmails/{pessoaEmail}', 'Api\PessoaEmailController@show');
+Route::put('pessoaEmails/{pessoaEmail}', 'Api\PessoaEmailController@update');
+Route::delete('pessoaEmails/{pessoaEmail}', 'Api\PessoaEmailController@destroy');
+
 Route::get('pils', 'Api\PilsController@index');
 Route::post('pils', 'Api\PilsController@store');
 Route::get('pils/{pil}', 'Api\PilsController@show');
