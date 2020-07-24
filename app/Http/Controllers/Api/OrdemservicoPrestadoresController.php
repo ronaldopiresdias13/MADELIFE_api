@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\OrdemservicoPrestador;
+use App\Prestador;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -170,5 +171,37 @@ class OrdemservicoPrestadoresController extends Controller
     {
         $ordemservicoPrestador->ativo = false;
         $ordemservicoPrestador->save();
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \App\Prestador  $prestador
+     * @return \Illuminate\Http\Response
+     */
+    public function listaPorPrestador(Prestador $prestador)
+    {
+        $ordemservicoPrestador = OrdemservicoPrestador::where('prestador_id', $prestador->id)
+        // ->join('ordemservicos', function ($join) {
+        //     $join->on('ordemservicos.id', '=', 'ordemservico_prestador.ordemservico_id');
+        // })
+        ->join('ordemservicos', 'ordemservicos.id', '=', 'ordemservico_prestador.ordemservico_id')
+        ->select('ordemservicos.*', 'ordemservico_prestador.*')
+        ->groupBy('ordemservicos.id')
+        // ->select('ordemservico_prestador.*')
+        ->groupBy('ordemservico_prestador.id')
+        // ->select('ordemservicos.*')//->groupBy('ordemservicos.id')
+        ->get();
+        return $ordemservicoPrestador;
+        // $escalas = Escala::where('prestador_id', $prestador->id)
+        //     ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
+        //     ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
+        //     ->join('homecares', 'homecares.orcamento_id', '=', 'orcamentos.id')
+        //     ->select('homecares.nome')
+        //     ->where('homecares.ativo', true)
+        //     ->groupBy('homecares.nome')
+        //     ->orderBy('homecares.nome')
+        //     ->get();
+        // return $escalas;
     }
 }

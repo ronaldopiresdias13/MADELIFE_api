@@ -305,6 +305,7 @@ Route::post('ordemservicoPrestadores', 'Api\OrdemservicoPrestadoresController@st
 Route::get('ordemservicoPrestadores/{ordemservicoPrestador}', 'Api\OrdemservicoPrestadoresController@show');
 Route::put('ordemservicoPrestadores/{ordemservicoPrestador}', 'Api\OrdemservicoPrestadoresController@update');
 Route::delete('ordemservicoPrestadores/{ordemservicoPrestador}', 'Api\OrdemservicoPrestadoresController@destroy');
+Route::get('ordemservicoPrestadores/{prestador}/listaPorPrestador', 'Api\OrdemservicoPrestadoresController@listaPorPrestador'); // Custon
 
 Route::get('outros', 'Api\OutrosController@index');
 Route::post('outros', 'Api\OutrosController@store');
