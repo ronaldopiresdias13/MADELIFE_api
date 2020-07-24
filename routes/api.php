@@ -343,6 +343,12 @@ Route::get('pessoas/{pessoa}', 'Api\PessoasController@show');
 Route::put('pessoas/{pessoa}', 'Api\PessoasController@update');
 Route::delete('pessoas/{pessoa}', 'Api\PessoasController@destroy');
 
+Route::get('pessoaTelefones', 'Api\PessoaTelefoneController@index');
+Route::post('pessoaTelefones', 'Api\PessoaTelefoneController@store');
+Route::get('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@show');
+Route::put('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@update');
+Route::delete('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@destroy');
+
 Route::get('pils', 'Api\PilsController@index');
 Route::post('pils', 'Api\PilsController@store');
 Route::get('pils/{pil}', 'Api\PilsController@show');
