@@ -181,6 +181,7 @@ class PessoaEmailController extends Controller
      */
     public function destroy(PessoaEmail $pessoaEmail)
     {
-        $pessoaEmail->delete();
+        $pessoaEmail->ativo = false;
+        $pessoaEmail->save();
     }
 }

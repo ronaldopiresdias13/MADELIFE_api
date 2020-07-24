@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Endereco;
 use App\Http\Controllers\Controller;
-use App\PessoaTelefone;
-use App\Telefone;
+use App\PessoaEndereco;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class PessoaTelefoneController extends Controller
+class PessoaEnderecoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +18,7 @@ class PessoaTelefoneController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = PessoaTelefone::where('ativo', true);
+        $itens = PessoaEndereco::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -92,17 +92,24 @@ class PessoaTelefoneController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            PessoaTelefone::updateOrCreate(
+            PessoaEndereco::updateOrCreate(
                 [
                     'pessoa_id' => $request->pessoa_id,
-                    'telefone_id'  => Telefone::firstOrCreate(
-                        ['telefone' => $request->telefone]
+                    'endereco_id'  => Endereco::firstOrCreate(
+                        [
+                            'cep'         => $request['cep'],
+                            'cidade_id'   => $request['cidade_id'],
+                            'rua'         => $request['rua'],
+                            'bairro'      => $request['bairro'],
+                            'numero'      => $request['numero'],
+                            'complemento' => $request['complemento'],
+                            'tipo'        => $request['tipo'],
+                            'descricao'   => $request['descricao'],
+                        ]
                     )->id,
                 ],
                 [
-                    'tipo'      => $request['pivot']['tipo'],
-                    'descricao' => $request['pivot']['descricao'],
-                    'ativo'     => true
+                    'ativo' => true,
                 ]
             );
         });
@@ -112,12 +119,12 @@ class PessoaTelefoneController extends Controller
      * Display the specified resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\PessoaTelefone  $pessoaTelefone
+     * @param  \App\PessoaEndereco  $pessoaEndereco
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, PessoaTelefone $pessoaTelefone)
+    public function show(Request $request, PessoaEndereco $pessoaEndereco)
     {
-        $iten = $pessoaTelefone;
+        $iten = $pessoaEndereco;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -159,29 +166,38 @@ class PessoaTelefoneController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\PessoaTelefone  $pessoaTelefone
+     * @param  \App\PessoaEndereco  $pessoaEndereco
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PessoaTelefone $pessoaTelefone)
+    public function update(Request $request, PessoaEndereco $pessoaEndereco)
     {
-        DB::transaction(function () use ($request, $pessoaTelefone) {
-            $pessoaTelefone->telefone_id  = Telefone::firstOrCreate(['telefone' => $request['telefone']])->id;
-            $pessoaTelefone->tipo      = $request['pivot']['tipo'];
-            $pessoaTelefone->descricao = $request['pivot']['descricao'];
-            $pessoaTelefone->ativo     = true;
-            $pessoaTelefone->save();
+        DB::transaction(function () use ($request, $pessoaEndereco) {
+            $pessoaEndereco->endereco_id  = Endereco::firstOrCreate(
+                [
+                    'cep'         => $request['cep'],
+                    'cidade_id'   => $request['cidade_id'],
+                    'rua'         => $request['rua'],
+                    'bairro'      => $request['bairro'],
+                    'numero'      => $request['numero'],
+                    'complemento' => $request['complemento'],
+                    'tipo'        => $request['tipo'],
+                    'descricao'   => $request['descricao'],
+                ]
+            )->id;
+            $pessoaEndereco->ativo = true;
+            $pessoaEndereco->save();
         });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\PessoaTelefone  $pessoaTelefone
+     * @param  \App\PessoaEndereco  $pessoaEndereco
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PessoaTelefone $pessoaTelefone)
+    public function destroy(PessoaEndereco $pessoaEndereco)
     {
-        $pessoaTelefone->ativo = false;
-        $pessoaTelefone->save();
+        $pessoaEndereco->ativo = false;
+        $pessoaEndereco->save();
     }
 }

@@ -11,7 +11,7 @@ class Prestador extends Model
 
     public function formacoes()
     {
-        return $this->belongsToMany('App\Formacao', 'prestador_formacao');
+        return $this->belongsToMany('App\Formacao', 'prestador_formacao')->withPivot('id')->wherePivot('ativo', true);
     }
 
     public function pessoa()
@@ -21,6 +21,6 @@ class Prestador extends Model
 
     public function ordemservicoPrestadores()
     {
-        return $this->hasMany('App\OrdemservicoPrestador');
+        return $this->hasMany('App\OrdemservicoPrestador')->where('ativo', true);
     }
 }

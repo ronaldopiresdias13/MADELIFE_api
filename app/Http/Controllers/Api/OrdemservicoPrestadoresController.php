@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\OrdemservicoPrestador;
+use App\Prestador;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\PessoaTelefone;
-use App\Telefone;
+use App\PrestadorFormacao;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class PessoaTelefoneController extends Controller
+class PrestadorFormacaoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +17,7 @@ class PessoaTelefoneController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = PessoaTelefone::where('ativo', true);
+        $itens = PrestadorFormacao::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -92,17 +91,15 @@ class PessoaTelefoneController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            PessoaTelefone::updateOrCreate(
+            PrestadorFormacao::updateOrCreate(
                 [
-                    'pessoa_id' => $request->pessoa_id,
-                    'telefone_id'  => Telefone::firstOrCreate(
-                        ['telefone' => $request->telefone]
-                    )->id,
+                    'prestador_id' => $request->prestador_id,
+                    'formacao_id'  => $request->formacao_id,
+                    'nome'         => $request->nome,
+                    'caminho'      => $request->caminho,
                 ],
                 [
-                    'tipo'      => $request['pivot']['tipo'],
-                    'descricao' => $request['pivot']['descricao'],
-                    'ativo'     => true
+                    'ativo' => true
                 ]
             );
         });
@@ -112,12 +109,12 @@ class PessoaTelefoneController extends Controller
      * Display the specified resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\PessoaTelefone  $pessoaTelefone
+     * @param  \App\PrestadorFormacao  $prestadorFormacao
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, PessoaTelefone $pessoaTelefone)
+    public function show(Request $request, PrestadorFormacao $prestadorFormacao)
     {
-        $iten = $pessoaTelefone;
+        $iten = $prestadorFormacao;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -139,11 +136,15 @@ class PessoaTelefoneController extends Controller
                                 }
                             }
                         } else {
-                            if ($iten2[0] == null) {
-                                $iten2 = $iten2[$a];
-                            } else {
-                                foreach ($iten2 as $key => $i) {
-                                    $i[$a];
+                            if ($iten2 != null) {
+                                if ($iten2->count() > 0) {
+                                    if ($iten2[0] == null) {
+                                        $iten2 = $iten2[$a];
+                                    } else {
+                                        foreach ($iten2 as $key => $i) {
+                                            $i[$a];
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -159,29 +160,32 @@ class PessoaTelefoneController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\PessoaTelefone  $pessoaTelefone
+     * @param  \App\PrestadorFormacao  $prestadorFormacao
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PessoaTelefone $pessoaTelefone)
+    public function update(Request $request, PrestadorFormacao $prestadorFormacao)
     {
-        DB::transaction(function () use ($request, $pessoaTelefone) {
-            $pessoaTelefone->telefone_id  = Telefone::firstOrCreate(['telefone' => $request['telefone']])->id;
-            $pessoaTelefone->tipo      = $request['pivot']['tipo'];
-            $pessoaTelefone->descricao = $request['pivot']['descricao'];
-            $pessoaTelefone->ativo     = true;
-            $pessoaTelefone->save();
+        DB::transaction(function () use ($request, $prestadorFormacao) {
+            $prestadorFormacao->prestador_id = $request->prestador_id;
+            $prestadorFormacao->formacao_id  = $request->formacao_id;
+            $prestadorFormacao->nome         = $request->nome;
+            $prestadorFormacao->caminho      = $request->caminho;
+            $prestadorFormacao->ativo        = true;
+            $prestadorFormacao->save();
         });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\PessoaTelefone  $pessoaTelefone
+     * @param  \App\PrestadorFormacao  $prestadorFormacao
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PessoaTelefone $pessoaTelefone)
+    public function destroy(PrestadorFormacao $prestadorFormacao)
     {
-        $pessoaTelefone->ativo = false;
-        $pessoaTelefone->save();
+        DB::transaction(function () use ($prestadorFormacao) {
+            $prestadorFormacao->ativo = false;
+            $prestadorFormacao->save();
+        });
     }
 }
