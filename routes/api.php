@@ -349,6 +349,12 @@ Route::get('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@sho
 Route::put('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@update');
 Route::delete('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@destroy');
 
+Route::get('pessoaEmails', 'Api\PessoaEmailController@index');
+Route::post('pessoaEmails', 'Api\PessoaEmailController@store');
+Route::get('pessoaEmails/{pessoaEmail}', 'Api\PessoaEmailController@show');
+Route::put('pessoaEmails/{pessoaEmail}', 'Api\PessoaEmailController@update');
+Route::delete('pessoaEmails/{pessoaEmail}', 'Api\PessoaEmailController@destroy');
+
 Route::get('pils', 'Api\PilsController@index');
 Route::post('pils', 'Api\PilsController@store');
 Route::get('pils/{pil}', 'Api\PilsController@show');
@@ -373,6 +379,13 @@ Route::get('prestadores/{prestador}', 'Api\PrestadoresController@show');
 Route::put('prestadores/{prestador}', 'Api\PrestadoresController@update');
 Route::delete('prestadores/{prestador}', 'Api\PrestadoresController@destroy');
 Route::get('prestadores/{prestador}/meuspacientes', 'Api\PrestadoresController@meuspacientes'); // Custon
+
+Route::get('prestadorFormacao', 'Api\PrestadorFormacaoController@index');
+Route::post('prestadorFormacao', 'Api\PrestadorFormacaoController@store');
+Route::get('prestadorFormacao/{prestadorFormacao}', 'Api\PrestadorFormacaoController@show');
+Route::put('prestadorFormacao/{prestadorFormacao}', 'Api\PrestadorFormacaoController@update');
+Route::delete('prestadorFormacao/{prestadorFormacao}', 'Api\PrestadorFormacaoController@destroy');
+Route::get('prestadorFormacao/{prestadorFormacao}/downloadFile', 'Api\PrestadorFormacaoController@downloadFile'); // Custon
 
 Route::get('produtos', 'Api\ProdutosController@index');
 Route::post('produtos', 'Api\ProdutosController@store');

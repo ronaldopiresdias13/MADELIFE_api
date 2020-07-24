@@ -23,8 +23,8 @@ class Pessoa extends Model
     public function telefones()
     {
         return $this->belongsToMany('App\Telefone', 'pessoa_telefone')
-        ->withPivot('id', 'tipo', 'descricao')
-        ->wherePivot('ativo', true);
+            ->withPivot('id', 'tipo', 'descricao')
+            ->wherePivot('ativo', true);
     }
 
     public function prestador()
@@ -45,8 +45,8 @@ class Pessoa extends Model
     public function emails()
     {
         return $this->belongsToMany('App\Email', 'pessoa_email')
-        ->withPivot('id', 'tipo', 'descricao')
-        ->wherePivot('ativo', true);
+            ->withPivot('id', 'tipo', 'descricao')
+            ->wherePivot('ativo', true);
     }
 
     public function user()
@@ -56,11 +56,11 @@ class Pessoa extends Model
 
     public function dadosbancario()
     {
-        return $this->hasMany('App\Dadosbancario');
+        return $this->hasMany('App\Dadosbancario')->where('ativo', true);
     }
 
     public function conselhos()
     {
-        return $this->hasMany('App\Conselho');
+        return $this->hasMany('App\Conselho')->where('ativo', true);
     }
 }
