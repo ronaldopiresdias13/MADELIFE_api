@@ -15,11 +15,11 @@ class Historicoorcamento extends Model
 
     public function orcamentoservicos()
     {
-        return $this->belongsToMany('App\Orcamentoservico', 'historico_orcamento_servico');
+        return $this->belongsToMany('App\Orcamentoservico', 'historico_orcamento_servico')->wherePivot('ativo', true);
     }
 
     public function orcamentoprodutos()
     {
-        return $this->belongsToMany('App\Orcamentoproduto', 'historico_orcamento_produto');
+        return $this->belongsToMany('App\Orcamentoproduto', 'historico_orcamento_produto')->wherePivot('ativo', true);
     }
 }

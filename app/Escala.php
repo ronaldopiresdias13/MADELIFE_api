@@ -16,21 +16,22 @@ class Escala extends Model
                 'data',
                 'hora',
                 'status'
-            );
+            )->wherePivot('ativo', true);
     }
 
     public function pontos()
     {
-        return $this->hasMany('App\Ponto');
+        return $this->hasMany('App\Ponto')->where('ativo', true);
     }
+
     public function relatorios()
     {
-        return $this->hasMany('App\Relatorio');
+        return $this->hasMany('App\Relatorio')->where('ativo', true);
     }
 
     public function monitoramentos()
     {
-        return $this->hasMany('App\Monitoramentoescala');
+        return $this->hasMany('App\Monitoramentoescala')->where('ativo', true);
     }
 
     public function ordemservico()
@@ -42,6 +43,7 @@ class Escala extends Model
     {
         return $this->belongsTo('App\Prestador', 'prestador_id');
     }
+
     public function servico()
     {
         return $this->belongsTo('App\Servico', 'servico_id');
