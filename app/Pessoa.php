@@ -56,7 +56,7 @@ class Pessoa extends Model
 
     public function dadosbancario()
     {
-        return $this->hasMany('App\Dadosbancario');
+        return $this->hasMany('App\Dadosbancario')->where('ativo', true);
     }
 
     public function conselhos()
