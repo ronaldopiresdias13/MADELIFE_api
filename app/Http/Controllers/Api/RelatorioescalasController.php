@@ -28,22 +28,12 @@ class RelatorioescalasController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                // if ($key == 0) {
-                //     $itens = Relatorioescala::where(
-                //         ($where['coluna']) ? $where['coluna'] : 'id',
-                //         ($where['expressao']) ? $where['expressao'] : 'like',
-                //         ($where['valor']) ? $where['valor'] : '%'
-                //     );
-                // } else {
                 $itens->where(
                     ($where['coluna']) ? $where['coluna'] : 'id',
                     ($where['expressao']) ? $where['expressao'] : 'like',
                     ($where['valor']) ? $where['valor'] : '%'
                 );
-                // }
             }
-            // } else {
-            //     $itens = Relatorioescala::where('id', 'like', '%')->limit(5);
         }
 
         if ($request['order']) {

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\PrestadorFormacao;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PrestadorFormacaoController extends Controller
 {
@@ -90,19 +91,33 @@ class PrestadorFormacaoController extends Controller
      */
     public function store(Request $request)
     {
-        DB::transaction(function () use ($request) {
-            PrestadorFormacao::updateOrCreate(
-                [
-                    'prestador_id' => $request->prestador_id,
-                    'formacao_id'  => $request->formacao_id,
-                    'nome'         => $request->nome,
-                    'caminho'      => $request->caminho,
-                ],
-                [
-                    'ativo' => true
-                ]
-            );
-        });
+        $file = $request->file('file');
+        if ($file->isValid()) {
+            $md5 = md5_file($file);
+            $caminho = 'certificados/' . $request['prestador_id'];
+            $nome = $md5 . '.' . $file->extension();
+            $upload = $file->storeAs($caminho, $nome);
+            $nomeOriginal = $file->getClientOriginalName();
+            if ($upload) {
+                DB::transaction(function () use ($request, $caminho, $nome, $nomeOriginal) {
+                    $prestador_formacao = PrestadorFormacao::updateOrCreate([
+                        'prestador_id' => $request->prestador_id,
+                        'formacao_id'  => $request->formacao_id,
+                        'caminho'      => $caminho . '/' . $nome,
+                        'nome'         => $nomeOriginal,
+                    ],
+                    [
+                        'ativo' => true
+                    ]
+                );
+                });
+                return response()->json('Upload de arquivo bem sucedido!', 200)->header('Content-Type', 'text/plain');
+            } else {
+                return response()->json('Erro, Upload não realizado!', 400)->header('Content-Type', 'text/plain');
+            }
+        } else {
+            return response()->json('Arquivo inválido ou corrompido!', 400)->header('Content-Type', 'text/plain');
+        }
     }
 
     /**
@@ -187,5 +202,23 @@ class PrestadorFormacaoController extends Controller
             $prestadorFormacao->ativo = false;
             $prestadorFormacao->save();
         });
+    }
+
+    /**
+     * Download the file specified resource.
+     *
+     * @param  \App\PrestadorFormacao  $prestadorFormacao
+     * @return \Illuminate\Http\Response
+     */
+    public function downloadFile(PrestadorFormacao $prestadorFormacao)
+    {
+        $file = Storage::get($prestadorFormacao['caminho']);
+
+        $response =  array(
+            'nome' => $prestadorFormacao['nome'],
+            'file' => base64_encode($file)
+        );
+
+        return response()->json($response);
     }
 }
