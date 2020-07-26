@@ -355,6 +355,12 @@ Route::get('pessoaEmails/{pessoaEmail}', 'Api\PessoaEmailController@show');
 Route::put('pessoaEmails/{pessoaEmail}', 'Api\PessoaEmailController@update');
 Route::delete('pessoaEmails/{pessoaEmail}', 'Api\PessoaEmailController@destroy');
 
+Route::get('pessoaEnderecos', 'Api\PessoaEnderecoController@index');
+Route::post('pessoaEnderecos', 'Api\PessoaEnderecoController@store');
+Route::get('pessoaEnderecos/{pessoaEndereco}', 'Api\PessoaEnderecoController@show');
+Route::put('pessoaEnderecos/{pessoaEndereco}', 'Api\PessoaEnderecoController@update');
+Route::delete('pessoaEnderecos/{pessoaEndereco}', 'Api\PessoaEnderecoController@destroy');
+
 Route::get('pils', 'Api\PilsController@index');
 Route::post('pils', 'Api\PilsController@store');
 Route::get('pils/{pil}', 'Api\PilsController@show');

@@ -91,10 +91,11 @@ class PessoaEnderecoController extends Controller
      */
     public function store(Request $request)
     {
+        // return $request;
         DB::transaction(function () use ($request) {
             PessoaEndereco::updateOrCreate(
                 [
-                    'pessoa_id' => $request->pessoa_id,
+                    'pessoa_id' => $request['pessoa_id'],
                     'endereco_id'  => Endereco::firstOrCreate(
                         [
                             'cep'         => $request['cep'],
