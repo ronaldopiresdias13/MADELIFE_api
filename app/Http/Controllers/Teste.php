@@ -3,50 +3,109 @@
 namespace App\Http\Controllers;
 
 use App\Cnab;
+use App\Escala;
 use Illuminate\Http\Request;
 
 class Teste extends Controller
 {
     public function teste()
     {
-        $string = 'ÁÍÓÚÉÄÏÖÜËÀÌÒÙÈÃÕÂÎÔÛÊáíóúéäïöüëàìòùèãõâîôûêÇçýÝñÑ';
-        //Substitua pela string que desejas converter
-        return preg_replace('/[`^~\'"]/', null, iconv('UTF-8', 'ASCII//TRANSLIT', $string));
-        //Irá exibir "AIOUEAIOUEAIOUEAOAIOUEaioueaioueaioueaoaioueCc"
+        // "where": [
+        //     {
+        //       "coluna": "empresa_id",
+        //       "expressao": "=",
+        //       "valor": 1
+        //     },
+        //     {
+        //       "coluna": "ordemservico_id",
+        //       "expressao": "=",
+        //       "valor": 129
+        //     }
+        //   ],
+        //   "order": [
+        //     {
+        //       "coluna": "dataentrada",
+        //       "tipo": "asc"
+        //     }
+        //   ],
+        //   "adicionais": [
+        //     ["prestador", "pessoa", "conselhos"],
+        //             ["prestador", "servicos"],
+        //     "pontos",
+        //     "servico"
+        //   ]
 
-        // $teste = Cnab::teste();
 
-        // $file = "ação-íaaa.jpg";
-        // $file = iconv('UTF-8', 'ASCII//TRANSLIT', $file);
-        // return "{$file} <br>";
 
-        // setlocale(LC_ALL, 'pt_BR');
-        // $file = iconv('UTF-8', 'ASCII//TRANSLIT', 'aáeé');
-        // return "{$file} <br>";
+        $escalas = Escala::where('ativo', true)
+        ->where('empresa_id', 1)->where('ordemservico_id', 129)
+        ->orderBy('dataentrada')
+        ->get();
 
-        $string = "olá à mim! ñ";
+        foreach ($escalas as $key => $escala) {
+            $escala->servico['teste'];
+        }
 
-        return preg_replace(
-            array(
-                "/(á|à|ã|â|ä)/",
-                "/(Á|À|Ã|Â|Ä)/",
-                "/(é|è|ê|ë)/",
-                "/(É|È|Ê|Ë)/",
-                "/(í|ì|î|ï)/",
-                "/(Í|Ì|Î|Ï)/",
-                "/(ó|ò|õ|ô|ö)/",
-                "/(Ó|Ò|Õ|Ô|Ö)/",
-                "/(ú|ù|û|ü)/",
-                "/(Ú|Ù|Û|Ü)/",
-                "/(ç)/",
-                "/(Ç)/",
-                "/(ñ)/",
-                "/(Ñ)/",
-                "/(ý)/",
-                "/(Ý)/"
-            ),
-            explode(" ", "a A e E i I o O u U c C n N y Y"),
-            $string
-        );
+
+
+        return $escalas;
+
+        // if ($request->commands) {
+        //     $request = json_decode($request->commands, true);
+        // }
+
+        // if ($request['where']) {
+        //     foreach ($request['where'] as $key => $where) {
+        //         $itens->where(
+        //             ($where['coluna']) ? $where['coluna'] : 'id',
+        //             ($where['expressao']) ? $where['expressao'] : 'like',
+        //             ($where['valor']) ? $where['valor'] : '%'
+        //         );
+        //     }
+        // }
+
+        // if ($request['order']) {
+        //     foreach ($request['order'] as $key => $order) {
+        //         $itens->orderBy(
+        //             ($order['coluna']) ? $order['coluna'] : 'id',
+        //             ($order['tipo']) ? $order['tipo'] : 'asc'
+        //         );
+        //     }
+        // }
+
+        // $itens = $itens->get();
+
+        // if ($request['adicionais']) {
+        //     foreach ($itens as $key => $iten) {
+        //         foreach ($request['adicionais'] as $key => $adicional) {
+        //             if (is_string($adicional)) {
+        //                 $iten[$adicional];
+        //             } else {
+        //                 $iten2 = $iten;
+        //                 foreach ($adicional as $key => $a) {
+        //                     if ($key == 0) {
+        //                         if ($iten[0] == null) {
+        //                             $iten2 = $iten[$a];
+        //                         } else {
+        //                             foreach ($iten as $key => $i) {
+        //                                 $i[$a];
+        //                             }
+        //                         }
+        //                     } else {
+        //                         if ($iten2[0] == null) {
+        //                             $iten2 = $iten2[$a];
+        //                         } else {
+        //                             foreach ($iten2 as $key => $i) {
+        //                                 $i[$a];
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+
+        // return $itens;
     }
 }
