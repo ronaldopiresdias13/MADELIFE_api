@@ -86,6 +86,12 @@ Route::get('cidades/{cidade}', 'Api\CidadesController@show');
 Route::put('cidades/{cidade}', 'Api\CidadesController@update');
 Route::delete('cidades/{cidade}', 'Api\CidadesController@destroy');
 
+Route::get('certificadoprestadores', 'Api\CertificadoprestadoresController@index');
+Route::post('certificadoprestadores', 'Api\CertificadoprestadoresController@store');
+Route::get('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@show');
+Route::put('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@update');
+Route::delete('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@destroy');
+
 Route::get('clientes', 'Api\ClientesController@index');
 Route::post('clientes', 'Api\ClientesController@store');
 Route::get('clientes/{cliente}', 'Api\ClientesController@show');
