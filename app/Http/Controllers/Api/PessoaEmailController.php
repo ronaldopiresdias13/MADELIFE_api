@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Atribuicao;
+use App\Email;
+use App\Http\Controllers\Controller;
+use App\PessoaEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
 
-class AtribuicoesController extends Controller
+class PessoaEmailController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +18,7 @@ class AtribuicoesController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = Atribuicao::where('ativo', true);
+        $itens = PessoaEmail::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -25,22 +26,12 @@ class AtribuicoesController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                // if ($key == 0) {
-                //     $itens = Atribuicao::where(
-                //         ($where['coluna']) ? $where['coluna'] : 'id',
-                //         ($where['expressao']) ? $where['expressao'] : 'like',
-                //         ($where['valor']) ? $where['valor'] : '%'
-                //     );
-                // } else {
                 $itens->where(
                     ($where['coluna']) ? $where['coluna'] : 'id',
                     ($where['expressao']) ? $where['expressao'] : 'like',
                     ($where['valor']) ? $where['valor'] : '%'
                 );
-                // }
             }
-            // } else {
-            //     $itens = Atribuicao::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -71,11 +62,15 @@ class AtribuicoesController extends Controller
                                     }
                                 }
                             } else {
-                                if ($iten2[0] == null) {
-                                    $iten2 = $iten2[$a];
-                                } else {
-                                    foreach ($iten2 as $key => $i) {
-                                        $i[$a];
+                                if ($iten2 != null) {
+                                    if ($iten2->count() > 0) {
+                                        if ($iten2[0] == null) {
+                                            $iten2 = $iten2[$a];
+                                        } else {
+                                            foreach ($iten2 as $key => $i) {
+                                                $i[$a];
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -97,7 +92,19 @@ class AtribuicoesController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            Atribuicao::create($request->all());
+            PessoaEmail::updateOrCreate(
+                [
+                    'pessoa_id' => $request->pessoa_id,
+                    'email_id'  => Email::firstOrCreate(
+                        ['email' => $request->email]
+                    )->id,
+                ],
+                [
+                    'tipo'      => $request->pivot->tipo,
+                    'descricao' => $request->pivot->descricao,
+                    'ativo'     => true
+                ]
+            );
         });
     }
 
@@ -105,12 +112,12 @@ class AtribuicoesController extends Controller
      * Display the specified resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Atribuicao  $atribuicao
+     * @param  \App\PessoaEmail  $pessoaEmail
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Atribuicao $atribuicao)
+    public function show(Request $request, PessoaEmail $pessoaEmail)
     {
-        $iten = $atribuicao;
+        $iten = $pessoaEmail;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -152,25 +159,28 @@ class AtribuicoesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Atribuicao  $atribuicao
+     * @param  \App\PessoaEmail  $pessoaEmail
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Atribuicao $atribuicao)
+    public function update(Request $request, PessoaEmail $pessoaEmail)
     {
-        DB::transaction(function () use ($request, $atribuicao) {
-            $atribuicao->update($request->all());
+        DB::transaction(function () use ($request, $pessoaEmail) {
+            $pessoaEmail->email_id  = Email::firstOrCreate(['email' => $request->email])->id;
+            $pessoaEmail->tipo      = $request->pivot->tipo;
+            $pessoaEmail->descricao = $request->pivot->descricao;
+            $pessoaEmail->ativo     = true;
         });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Atribuicao  $atribuicao
+     * @param  \App\PessoaEmail  $pessoaEmail
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Atribuicao $atribuicao)
+    public function destroy(PessoaEmail $pessoaEmail)
     {
-        $atribuicao->ativo = false;
-        $atribuicao->save();
+        $pessoaEmail->ativo = false;
+        $pessoaEmail->save();
     }
 }

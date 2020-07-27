@@ -2,27 +2,23 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Endereco;
 use App\Http\Controllers\Controller;
-use App\Pessoa;
+use App\PessoaEndereco;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-// use Illuminate\Support\Facades\DB;
-
-class PessoasController extends Controller
+class PessoaEnderecoController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        // $pessoas = Pessoa::where('status', true)->get();
-        // foreach ($pessoas as $key => $p) {
-        //     $p->enderecos;
-        // }
-        // return $pessoas;
-        $itens = Pessoa::where('ativo', true);
+        $itens = PessoaEndereco::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -30,22 +26,12 @@ class PessoasController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                // if ($key == 0) {
-                //     $itens = Pessoa::where(
-                //         ($where['coluna']) ? $where['coluna'] : 'id',
-                //         ($where['expressao']) ? $where['expressao'] : 'like',
-                //         ($where['valor']) ? $where['valor'] : '%'
-                //     );
-                // } else {
                 $itens->where(
                     ($where['coluna']) ? $where['coluna'] : 'id',
                     ($where['expressao']) ? $where['expressao'] : 'like',
                     ($where['valor']) ? $where['valor'] : '%'
                 );
-                // }
             }
-            // } else {
-            //     $itens = Pessoa::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -105,26 +91,40 @@ class PessoasController extends Controller
      */
     public function store(Request $request)
     {
-        $pessoa = new Pessoa();
-        $pessoa->nome = $request->nome;
-        $pessoa->nascimento = $request->nascimento;
-        $pessoa->tipo = $request->tipo;
-        $pessoa->cpfcnpj = $request->cpfcnpj;
-        $pessoa->rgie = $request->rgie;
-        $pessoa->observacoes = $request->observacoes;
-        $pessoa->status = $request->status;
-        $pessoa->save();
+        DB::transaction(function () use ($request) {
+            PessoaEndereco::updateOrCreate(
+                [
+                    'pessoa_id' => $request->pessoa_id,
+                    'endereco_id'  => Endereco::firstOrCreate(
+                        [
+                            'cep'         => $request['cep'],
+                            'cidade_id'   => $request['cidade_id'],
+                            'rua'         => $request['rua'],
+                            'bairro'      => $request['bairro'],
+                            'numero'      => $request['numero'],
+                            'complemento' => $request['complemento'],
+                            'tipo'        => $request['tipo'],
+                            'descricao'   => $request['descricao'],
+                        ]
+                    )->id,
+                ],
+                [
+                    'ativo' => true,
+                ]
+            );
+        });
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Pessoa  $pessoa
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\PessoaEndereco  $pessoaEndereco
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Pessoa $pessoa)
+    public function show(Request $request, PessoaEndereco $pessoaEndereco)
     {
-        $iten = $pessoa;
+        $iten = $pessoaEndereco;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -146,15 +146,11 @@ class PessoasController extends Controller
                                 }
                             }
                         } else {
-                            if ($iten2 != null) {
-                                if ($iten2->count() > 0) {
-                                    if ($iten2[0] == null) {
-                                        $iten2 = $iten2[$a];
-                                    } else {
-                                        foreach ($iten2 as $key => $i) {
-                                            $i[$a];
-                                        }
-                                    }
+                            if ($iten2[0] == null) {
+                                $iten2 = $iten2[$a];
+                            } else {
+                                foreach ($iten2 as $key => $i) {
+                                    $i[$a];
                                 }
                             }
                         }
@@ -170,23 +166,38 @@ class PessoasController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Pessoa  $pessoa
+     * @param  \App\PessoaEndereco  $pessoaEndereco
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Pessoa $pessoa)
+    public function update(Request $request, PessoaEndereco $pessoaEndereco)
     {
-        $pessoa->update($request->all());
+        DB::transaction(function () use ($request, $pessoaEndereco) {
+            $pessoaEndereco->endereco_id  = Endereco::firstOrCreate(
+                [
+                    'cep'         => $request['cep'],
+                    'cidade_id'   => $request['cidade_id'],
+                    'rua'         => $request['rua'],
+                    'bairro'      => $request['bairro'],
+                    'numero'      => $request['numero'],
+                    'complemento' => $request['complemento'],
+                    'tipo'        => $request['tipo'],
+                    'descricao'   => $request['descricao'],
+                ]
+            )->id;
+            $pessoaEndereco->ativo = true;
+            $pessoaEndereco->save();
+        });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Pessoa  $pessoa
+     * @param  \App\PessoaEndereco  $pessoaEndereco
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Pessoa $pessoa)
+    public function destroy(PessoaEndereco $pessoaEndereco)
     {
-        $pessoa->ativo = false;
-        $pessoa->save();
+        $pessoaEndereco->ativo = false;
+        $pessoaEndereco->save();
     }
 }

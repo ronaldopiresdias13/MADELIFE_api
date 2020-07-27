@@ -536,7 +536,7 @@ class ProfissionaisController extends Controller
                         foreach ($request['pessoa']['user']['acessos'] as $key => $acesso) {
                             $user_acesso = UserAcesso::firstOrCreate([
                                 'user_id'   => $user->id,
-                                'acesso_id' => $acesso['id'],
+                                'acesso_id' => $acesso,
                             ]);
                         }
                     }

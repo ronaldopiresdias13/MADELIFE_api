@@ -15,17 +15,26 @@ class Pessoa extends Model
 
     public function enderecos()
     {
-        return $this->belongsToMany('App\Endereco', 'pessoa_endereco');
+        return $this->belongsToMany('App\Endereco', 'pessoa_endereco')
+        ->withPivot('id')
+        ->wherePivot('ativo', true);
     }
 
     public function telefones()
     {
-        return $this->belongsToMany('App\Telefone', 'pessoa_telefone')->withPivot('id', 'tipo', 'descricao');
+        return $this->belongsToMany('App\Telefone', 'pessoa_telefone')
+        ->withPivot('id', 'tipo', 'descricao')
+        ->wherePivot('ativo', true);
     }
 
     public function prestador()
     {
         return $this->hasOne('App\Prestador');
+    }
+
+    public function profissional()
+    {
+        return $this->hasOne('App\Profissional');
     }
 
     public function fornecedor()
@@ -35,7 +44,9 @@ class Pessoa extends Model
 
     public function emails()
     {
-        return $this->belongsToMany('App\Email', 'pessoa_email')->withPivot('id', 'tipo', 'descricao');
+        return $this->belongsToMany('App\Email', 'pessoa_email')
+        ->withPivot('id', 'tipo', 'descricao')
+        ->wherePivot('ativo', true);
     }
 
     public function user()
