@@ -11,6 +11,6 @@ class TranscricaoProduto extends Model
 
     public function horariomedicamentos()
     {
-        return $this->hasMany('App\Horariomedicamento');
+        return $this->hasMany('App\Horariomedicamento')->where('ativo', true);
     }
 }

@@ -14,6 +14,6 @@ class Servico extends Model
     }
     public function orcamentoservicos()
     {
-        return $this->hasMany('App\Orcamentoservico');
+        return $this->hasMany('App\Orcamentoservico')->where('ativo', true);
     }
 }

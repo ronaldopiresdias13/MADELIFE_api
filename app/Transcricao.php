@@ -25,14 +25,14 @@ class Transcricao extends Model
                 "frequencia",
                 "tempo",
                 "observacao"
-            );
+            )->wherePivot('ativo', true);
     }
     public function itensTranscricao()
     {
-        return $this->hasMany('App\TranscricaoProduto');
+        return $this->hasMany('App\TranscricaoProduto')->where('ativo', true);
     }
 
     public function acoesTrascricao(){
-        return $this->hasMany('App\Horariomedicamento');
+        return $this->hasMany('App\Horariomedicamento')->where('ativo', true);
     }
 }

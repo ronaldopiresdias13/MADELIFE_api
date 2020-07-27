@@ -23,4 +23,9 @@ class Prestador extends Model
     {
         return $this->hasMany('App\OrdemservicoPrestador')->where('ativo', true);
     }
+
+    public function servicos()
+    {
+        return $this->belongsToMany('App\Servico', 'prestador_servico')->withPivot('id')->wherePivot('ativo', true);
+    }
 }

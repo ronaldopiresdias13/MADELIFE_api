@@ -86,6 +86,12 @@ Route::get('cidades/{cidade}', 'Api\CidadesController@show');
 Route::put('cidades/{cidade}', 'Api\CidadesController@update');
 Route::delete('cidades/{cidade}', 'Api\CidadesController@destroy');
 
+Route::get('certificadoprestadores', 'Api\CertificadoprestadoresController@index');
+Route::post('certificadoprestadores', 'Api\CertificadoprestadoresController@store');
+Route::get('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@show');
+Route::put('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@update');
+Route::delete('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@destroy');
+
 Route::get('clientes', 'Api\ClientesController@index');
 Route::post('clientes', 'Api\ClientesController@store');
 Route::get('clientes/{cliente}', 'Api\ClientesController@show');
@@ -355,6 +361,12 @@ Route::get('pessoaEmails/{pessoaEmail}', 'Api\PessoaEmailController@show');
 Route::put('pessoaEmails/{pessoaEmail}', 'Api\PessoaEmailController@update');
 Route::delete('pessoaEmails/{pessoaEmail}', 'Api\PessoaEmailController@destroy');
 
+Route::get('pessoaEnderecos', 'Api\PessoaEnderecoController@index');
+Route::post('pessoaEnderecos', 'Api\PessoaEnderecoController@store');
+Route::get('pessoaEnderecos/{pessoaEndereco}', 'Api\PessoaEnderecoController@show');
+Route::put('pessoaEnderecos/{pessoaEndereco}', 'Api\PessoaEnderecoController@update');
+Route::delete('pessoaEnderecos/{pessoaEndereco}', 'Api\PessoaEnderecoController@destroy');
+
 Route::get('pils', 'Api\PilsController@index');
 Route::post('pils', 'Api\PilsController@store');
 Route::get('pils/{pil}', 'Api\PilsController@show');
@@ -366,6 +378,8 @@ Route::post('pontos', 'Api\PontosController@store');
 Route::get('pontos/{ponto}', 'Api\PontosController@show');
 Route::put('pontos/{ponto}', 'Api\PontosController@update');
 Route::delete('pontos/{ponto}', 'Api\PontosController@destroy');
+Route::post('pontos/checkin/{escala}', 'Api\PontosController@checkin'); // Custon
+Route::post('pontos/checkout/{escala}', 'Api\PontosController@checkout'); // Custon
 
 Route::get('prescricoesbs', 'Api\PrescricoesbsController@index');
 Route::post('prescricoesbs', 'Api\PrescricoesbsController@store');
