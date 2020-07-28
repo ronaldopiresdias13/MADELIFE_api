@@ -99,12 +99,14 @@ class DadosbancariosController extends Controller
         $dadosbancario = new Dadosbancario();
         // $dadosbancario->pessoa = Pessoa::firstWhere('cpfcnpj', $request->pessoa)->id;
         // $dadosbancario->banco = Banco::firstWhere('codigo', $request->banco)->id;
-        $dadosbancario->banco = $request->banco;
-        $dadosbancario->pessoa = $request->pessoa;
+        $dadosbancario->empresa_id = $request->empresa_id;
+        $dadosbancario->banco_id = $request->banco_id;
+        $dadosbancario->pessoa_id = $request->pessoa_id;
         $dadosbancario->agencia = $request->agencia;
         $dadosbancario->conta = $request->conta;
         $dadosbancario->digito = $request->digito;
         $dadosbancario->tipoconta = $request->tipoconta;
+        $dadosbancario->ativo = 1;
         $dadosbancario->save();
     }
 
@@ -163,7 +165,13 @@ class DadosbancariosController extends Controller
      */
     public function update(Request $request, Dadosbancario $dadosbancario)
     {
-        $dadosbancario->update($request->all());
+        $dadosbancario->banco_id = $request->banco_id;
+        $dadosbancario->pessoa_id = $request->pessoa_id;
+        $dadosbancario->agencia = $request->agencia;
+        $dadosbancario->conta = $request->conta;
+        $dadosbancario->digito = $request->digito;
+        $dadosbancario->tipoconta = $request->tipoconta;
+        $dadosbancario->save();
     }
 
     /**

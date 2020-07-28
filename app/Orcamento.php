@@ -10,7 +10,7 @@ class Orcamento extends Model
 
     public function historicos()
     {
-        return $this->hasMany('App\Historicoorcamento');
+        return $this->hasMany('App\Historicoorcamento')->where('ativo', true);
     }
 
     public function cliente()
@@ -30,7 +30,7 @@ class Orcamento extends Model
 
     public function orcamento_servicos()
     {
-        return $this->hasMany('App\OrcamentoServico');
+        return $this->hasMany('App\OrcamentoServico')->where('ativo', true);
     }
 
     public function servicos()
@@ -44,23 +44,24 @@ class Orcamento extends Model
                 'custo',
                 'subtotal',
                 'subtotalcusto',
+                'adicionalnoturno',
                 'icms',
                 'inss',
                 'iss',
                 'valorcustomensal',
                 'valorresultadomensal'
-            );
+            )->wherePivot('ativo', true);
     }
 
     public function orcamento_produtos()
     {
-        return $this->hasMany('App\OrcamentoProduto');
+        return $this->hasMany('App\OrcamentoProduto')->where('ativo', true);
     }
 
     public function produtos()
     {
         return $this->belongsToMany('App\Produto', 'orcamento_produto')
-            ->withpivot(
+            ->withPivot(
                 "quantidade",
                 "valorunitario",
                 "custo",
@@ -71,12 +72,12 @@ class Orcamento extends Model
                 // "iss",
                 "valorcustomensal",
                 "valorresultadomensal"
-            );
+            )->where('ativo', true);
     }
 
     public function orcamentocustos()
     {
-        return $this->hasMany('App\Orcamentocusto');
+        return $this->hasMany('App\Orcamentocusto')->where('ativo', true);
     }
 
     public function homecare()

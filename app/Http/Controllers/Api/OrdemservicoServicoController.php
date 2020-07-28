@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Conselho;
 use App\Http\Controllers\Controller;
+use App\OrdemservicoServico;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class ConselhosController extends Controller
+class OrdemservicoServicoController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $itens = Conselho::where('ativo', true);
+        $itens = OrdemservicoServico::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -24,22 +25,12 @@ class ConselhosController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                // if ($key == 0) {
-                //     $itens = Conselho::where(
-                //         ($where['coluna']) ? $where['coluna'] : 'id',
-                //         ($where['expressao']) ? $where['expressao'] : 'like',
-                //         ($where['valor']) ? $where['valor'] : '%'
-                //     );
-                // } else {
                 $itens->where(
                     ($where['coluna']) ? $where['coluna'] : 'id',
                     ($where['expressao']) ? $where['expressao'] : 'like',
                     ($where['valor']) ? $where['valor'] : '%'
                 );
-                // }
             }
-            // } else {
-            //     $itens = Conselho::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -70,11 +61,15 @@ class ConselhosController extends Controller
                                     }
                                 }
                             } else {
-                                if ($iten2[0] == null) {
-                                    $iten2 = $iten2[$a];
-                                } else {
-                                    foreach ($iten2 as $key => $i) {
-                                        $i[$a];
+                                if ($iten2 != null) {
+                                    if ($iten2->count() > 0) {
+                                        if ($iten2[0] == null) {
+                                            $iten2 = $iten2[$a];
+                                        } else {
+                                            foreach ($iten2 as $key => $i) {
+                                                $i[$a];
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -96,24 +91,20 @@ class ConselhosController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            $conselho = new Conselho();
-            $conselho->instituicao = $request->instituicao;
-            $conselho->uf          = $request->uf;
-            $conselho->numero      = $request->numero;
-            $conselho->pessoa_id   = $request->pessoa_id;
-            $conselho->save();
+            OrdemservicoServico::create($request->all());
         });
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Conselho  $conselho
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\OrdemservicoServico  $ordemservicoServico
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Conselho $conselho)
+    public function show(Request $request, OrdemservicoServico $ordemservicoServico)
     {
-        $iten = $conselho;
+        $iten = $ordemservicoServico;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -135,11 +126,15 @@ class ConselhosController extends Controller
                                 }
                             }
                         } else {
-                            if ($iten2[0] == null) {
-                                $iten2 = $iten2[$a];
-                            } else {
-                                foreach ($iten2 as $key => $i) {
-                                    $i[$a];
+                            if ($iten2 != null) {
+                                if ($iten2->count() > 0) {
+                                    if ($iten2[0] == null) {
+                                        $iten2 = $iten2[$a];
+                                    } else {
+                                        foreach ($iten2 as $key => $i) {
+                                            $i[$a];
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -155,25 +150,25 @@ class ConselhosController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Conselho  $conselho
+     * @param  \App\OrdemservicoServico  $ordemservicoServico
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Conselho $conselho)
+    public function update(Request $request, OrdemservicoServico $ordemservicoServico)
     {
-        DB::transaction(function () use ($request, $conselho) {
-            $conselho->update($request->all());
+        DB::transaction(function () use ($request, $ordemservicoServico) {
+            $ordemservicoServico->update($request->all());
         });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Conselho  $conselho
+     * @param  \App\OrdemservicoServico  $ordemservicoServico
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Conselho $conselho)
+    public function destroy(OrdemservicoServico $ordemservicoServico)
     {
-        $conselho->ativo = false;
-        $conselho->save();
+        $ordemservicoServico->ativo = false;
+        $ordemservicoServico->save();
     }
 }

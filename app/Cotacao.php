@@ -30,6 +30,6 @@ class Cotacao extends Model
                 'prazoentrega',
                 'observacao',
                 'situacao'
-            );
+            )->wherePivot('ativo', true);
     }
 }

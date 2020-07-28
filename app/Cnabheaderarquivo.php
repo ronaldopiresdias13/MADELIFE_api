@@ -10,11 +10,11 @@ class Cnabheaderarquivo extends Model
 
     public function cnabheaderlotes()
     {
-        return $this->belongsToMany('App\Cnabheaderlote', 'cnabheaderarquivoheaderlotes');
+        return $this->belongsToMany('App\Cnabheaderlote', 'cnabheaderarquivoheaderlotes')->wherePivot('ativo', true);
     }
 
     public function cnabtrailerlotes()
     {
-        return $this->belongsToMany('App\Cnabtrailerlote', 'cnabheaderarquivotrailerlotes');
+        return $this->belongsToMany('App\Cnabtrailerlote', 'cnabheaderarquivotrailerlotes')->wherePivot('ativo', true);
     }
 }

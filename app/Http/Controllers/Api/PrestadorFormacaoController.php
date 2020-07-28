@@ -3,26 +3,22 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Pessoa;
+use App\PrestadorFormacao;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
-// use Illuminate\Support\Facades\DB;
-
-class PessoasController extends Controller
+class PrestadorFormacaoController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        // $pessoas = Pessoa::where('status', true)->get();
-        // foreach ($pessoas as $key => $p) {
-        //     $p->enderecos;
-        // }
-        // return $pessoas;
-        $itens = Pessoa::where('ativo', true);
+        $itens = PrestadorFormacao::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -30,22 +26,12 @@ class PessoasController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                // if ($key == 0) {
-                //     $itens = Pessoa::where(
-                //         ($where['coluna']) ? $where['coluna'] : 'id',
-                //         ($where['expressao']) ? $where['expressao'] : 'like',
-                //         ($where['valor']) ? $where['valor'] : '%'
-                //     );
-                // } else {
                 $itens->where(
                     ($where['coluna']) ? $where['coluna'] : 'id',
                     ($where['expressao']) ? $where['expressao'] : 'like',
                     ($where['valor']) ? $where['valor'] : '%'
                 );
-                // }
             }
-            // } else {
-            //     $itens = Pessoa::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -105,26 +91,45 @@ class PessoasController extends Controller
      */
     public function store(Request $request)
     {
-        $pessoa = new Pessoa();
-        $pessoa->nome = $request->nome;
-        $pessoa->nascimento = $request->nascimento;
-        $pessoa->tipo = $request->tipo;
-        $pessoa->cpfcnpj = $request->cpfcnpj;
-        $pessoa->rgie = $request->rgie;
-        $pessoa->observacoes = $request->observacoes;
-        $pessoa->status = $request->status;
-        $pessoa->save();
+        $file = $request->file('file');
+        if ($file->isValid()) {
+            $md5 = md5_file($file);
+            $caminho = 'certificados/' . $request['prestador_id'];
+            $nome = $md5 . '.' . $file->extension();
+            $upload = $file->storeAs($caminho, $nome);
+            $nomeOriginal = $file->getClientOriginalName();
+            if ($upload) {
+                DB::transaction(function () use ($request, $caminho, $nome, $nomeOriginal) {
+                    $prestador_formacao = PrestadorFormacao::updateOrCreate([
+                        'prestador_id' => $request->prestador_id,
+                        'formacao_id'  => $request->formacao_id,
+                        'caminho'      => $caminho . '/' . $nome,
+                        'nome'         => $nomeOriginal,
+                    ],
+                    [
+                        'ativo' => true
+                    ]
+                );
+                });
+                return response()->json('Upload de arquivo bem sucedido!', 200)->header('Content-Type', 'text/plain');
+            } else {
+                return response()->json('Erro, Upload não realizado!', 400)->header('Content-Type', 'text/plain');
+            }
+        } else {
+            return response()->json('Arquivo inválido ou corrompido!', 400)->header('Content-Type', 'text/plain');
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Pessoa  $pessoa
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\PrestadorFormacao  $prestadorFormacao
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Pessoa $pessoa)
+    public function show(Request $request, PrestadorFormacao $prestadorFormacao)
     {
-        $iten = $pessoa;
+        $iten = $prestadorFormacao;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -170,23 +175,50 @@ class PessoasController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Pessoa  $pessoa
+     * @param  \App\PrestadorFormacao  $prestadorFormacao
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Pessoa $pessoa)
+    public function update(Request $request, PrestadorFormacao $prestadorFormacao)
     {
-        $pessoa->update($request->all());
+        DB::transaction(function () use ($request, $prestadorFormacao) {
+            $prestadorFormacao->prestador_id = $request->prestador_id;
+            $prestadorFormacao->formacao_id  = $request->formacao_id;
+            $prestadorFormacao->nome         = $request->nome;
+            $prestadorFormacao->caminho      = $request->caminho;
+            $prestadorFormacao->ativo        = true;
+            $prestadorFormacao->save();
+        });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Pessoa  $pessoa
+     * @param  \App\PrestadorFormacao  $prestadorFormacao
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Pessoa $pessoa)
+    public function destroy(PrestadorFormacao $prestadorFormacao)
     {
-        $pessoa->ativo = false;
-        $pessoa->save();
+        DB::transaction(function () use ($prestadorFormacao) {
+            $prestadorFormacao->ativo = false;
+            $prestadorFormacao->save();
+        });
+    }
+
+    /**
+     * Download the file specified resource.
+     *
+     * @param  \App\PrestadorFormacao  $prestadorFormacao
+     * @return \Illuminate\Http\Response
+     */
+    public function downloadFile(PrestadorFormacao $prestadorFormacao)
+    {
+        $file = Storage::get($prestadorFormacao['caminho']);
+
+        $response =  array(
+            'nome' => $prestadorFormacao['nome'],
+            'file' => base64_encode($file)
+        );
+
+        return response()->json($response);
     }
 }

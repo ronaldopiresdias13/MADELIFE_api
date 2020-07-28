@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\OrdemservicoFormacao;
+use App\PessoaTelefone;
+use App\Telefone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class OrdemservicoFormacoesController extends Controller
+class PessoaTelefoneController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +18,7 @@ class OrdemservicoFormacoesController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = OrdemservicoFormacao::where('ativo', true);
+        $itens = PessoaTelefone::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -91,7 +92,19 @@ class OrdemservicoFormacoesController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            OrdemservicoFormacao::create($request->all());
+            PessoaTelefone::updateOrCreate(
+                [
+                    'pessoa_id' => $request->pessoa_id,
+                    'telefone_id'  => Telefone::firstOrCreate(
+                        ['telefone' => $request->telefone]
+                    )->id,
+                ],
+                [
+                    'tipo'      => $request['pivot']['tipo'],
+                    'descricao' => $request['pivot']['descricao'],
+                    'ativo'     => true
+                ]
+            );
         });
     }
 
@@ -99,12 +112,12 @@ class OrdemservicoFormacoesController extends Controller
      * Display the specified resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\OrdemservicoFormacao  $ordemservicoFormacao
+     * @param  \App\PessoaTelefone  $pessoaTelefone
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, OrdemservicoFormacao $ordemservicoFormacao)
+    public function show(Request $request, PessoaTelefone $pessoaTelefone)
     {
-        $iten = $ordemservicoFormacao;
+        $iten = $pessoaTelefone;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -126,15 +139,11 @@ class OrdemservicoFormacoesController extends Controller
                                 }
                             }
                         } else {
-                            if ($iten2 != null) {
-                                if ($iten2->count() > 0) {
-                                    if ($iten2[0] == null) {
-                                        $iten2 = $iten2[$a];
-                                    } else {
-                                        foreach ($iten2 as $key => $i) {
-                                            $i[$a];
-                                        }
-                                    }
+                            if ($iten2[0] == null) {
+                                $iten2 = $iten2[$a];
+                            } else {
+                                foreach ($iten2 as $key => $i) {
+                                    $i[$a];
                                 }
                             }
                         }
@@ -150,25 +159,29 @@ class OrdemservicoFormacoesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\OrdemservicoFormacao  $ordemservicoFormacao
+     * @param  \App\PessoaTelefone  $pessoaTelefone
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, OrdemservicoFormacao $ordemservicoFormacao)
+    public function update(Request $request, PessoaTelefone $pessoaTelefone)
     {
-        DB::transaction(function () use ($request, $ordemservicoFormacao) {
-            $ordemservicoFormacao->update($request->all());
+        DB::transaction(function () use ($request, $pessoaTelefone) {
+            $pessoaTelefone->telefone_id  = Telefone::firstOrCreate(['telefone' => $request['telefone']])->id;
+            $pessoaTelefone->tipo      = $request['pivot']['tipo'];
+            $pessoaTelefone->descricao = $request['pivot']['descricao'];
+            $pessoaTelefone->ativo     = true;
+            $pessoaTelefone->save();
         });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\OrdemservicoFormacao  $ordemservicoFormacao
+     * @param  \App\PessoaTelefone  $pessoaTelefone
      * @return \Illuminate\Http\Response
      */
-    public function destroy(OrdemservicoFormacao $ordemservicoFormacao)
+    public function destroy(PessoaTelefone $pessoaTelefone)
     {
-        $ordemservicoFormacao->ativo = false;
-        $ordemservicoFormacao->save();
+        $pessoaTelefone->ativo = false;
+        $pessoaTelefone->save();
     }
 }

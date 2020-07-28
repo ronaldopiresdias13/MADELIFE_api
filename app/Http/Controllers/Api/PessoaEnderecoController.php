@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Conselho;
+use App\Endereco;
 use App\Http\Controllers\Controller;
+use App\PessoaEndereco;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class ConselhosController extends Controller
+class PessoaEnderecoController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $itens = Conselho::where('ativo', true);
+        $itens = PessoaEndereco::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -24,22 +26,12 @@ class ConselhosController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                // if ($key == 0) {
-                //     $itens = Conselho::where(
-                //         ($where['coluna']) ? $where['coluna'] : 'id',
-                //         ($where['expressao']) ? $where['expressao'] : 'like',
-                //         ($where['valor']) ? $where['valor'] : '%'
-                //     );
-                // } else {
                 $itens->where(
                     ($where['coluna']) ? $where['coluna'] : 'id',
                     ($where['expressao']) ? $where['expressao'] : 'like',
                     ($where['valor']) ? $where['valor'] : '%'
                 );
-                // }
             }
-            // } else {
-            //     $itens = Conselho::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -70,11 +62,15 @@ class ConselhosController extends Controller
                                     }
                                 }
                             } else {
-                                if ($iten2[0] == null) {
-                                    $iten2 = $iten2[$a];
-                                } else {
-                                    foreach ($iten2 as $key => $i) {
-                                        $i[$a];
+                                if ($iten2 != null) {
+                                    if ($iten2->count() > 0) {
+                                        if ($iten2[0] == null) {
+                                            $iten2 = $iten2[$a];
+                                        } else {
+                                            foreach ($iten2 as $key => $i) {
+                                                $i[$a];
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -95,25 +91,41 @@ class ConselhosController extends Controller
      */
     public function store(Request $request)
     {
+        // return $request;
         DB::transaction(function () use ($request) {
-            $conselho = new Conselho();
-            $conselho->instituicao = $request->instituicao;
-            $conselho->uf          = $request->uf;
-            $conselho->numero      = $request->numero;
-            $conselho->pessoa_id   = $request->pessoa_id;
-            $conselho->save();
+            PessoaEndereco::updateOrCreate(
+                [
+                    'pessoa_id' => $request['pessoa_id'],
+                    'endereco_id'  => Endereco::firstOrCreate(
+                        [
+                            'cep'         => $request['cep'],
+                            'cidade_id'   => $request['cidade_id'],
+                            'rua'         => $request['rua'],
+                            'bairro'      => $request['bairro'],
+                            'numero'      => $request['numero'],
+                            'complemento' => $request['complemento'],
+                            'tipo'        => $request['tipo'],
+                            'descricao'   => $request['descricao'],
+                        ]
+                    )->id,
+                ],
+                [
+                    'ativo' => true,
+                ]
+            );
         });
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Conselho  $conselho
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\PessoaEndereco  $pessoaEndereco
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Conselho $conselho)
+    public function show(Request $request, PessoaEndereco $pessoaEndereco)
     {
-        $iten = $conselho;
+        $iten = $pessoaEndereco;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -155,25 +167,38 @@ class ConselhosController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Conselho  $conselho
+     * @param  \App\PessoaEndereco  $pessoaEndereco
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Conselho $conselho)
+    public function update(Request $request, PessoaEndereco $pessoaEndereco)
     {
-        DB::transaction(function () use ($request, $conselho) {
-            $conselho->update($request->all());
+        DB::transaction(function () use ($request, $pessoaEndereco) {
+            $pessoaEndereco->endereco_id  = Endereco::firstOrCreate(
+                [
+                    'cep'         => $request['cep'],
+                    'cidade_id'   => $request['cidade_id'],
+                    'rua'         => $request['rua'],
+                    'bairro'      => $request['bairro'],
+                    'numero'      => $request['numero'],
+                    'complemento' => $request['complemento'],
+                    'tipo'        => $request['tipo'],
+                    'descricao'   => $request['descricao'],
+                ]
+            )->id;
+            $pessoaEndereco->ativo = true;
+            $pessoaEndereco->save();
         });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Conselho  $conselho
+     * @param  \App\PessoaEndereco  $pessoaEndereco
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Conselho $conselho)
+    public function destroy(PessoaEndereco $pessoaEndereco)
     {
-        $conselho->ativo = false;
-        $conselho->save();
+        $pessoaEndereco->ativo = false;
+        $pessoaEndereco->save();
     }
 }
