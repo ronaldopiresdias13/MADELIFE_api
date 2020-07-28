@@ -114,9 +114,9 @@ class ProfissionaisController extends Controller
             $pessoa = Pessoa::where(
                 'cpfcnpj',
                 $request['pessoa']['cpfcnpj']
-            )->where(
-                'empresa_id',
-                $request['pessoa']['empresa_id']
+            // )->where(
+            //     'empresa_id',
+            //     $request['pessoa']['empresa_id']
             )->first();
         } elseif ($request['pessoa_id']) {
             $pessoa = Pessoa::find($request['pessoa_id']);
@@ -145,7 +145,6 @@ class ProfissionaisController extends Controller
                         'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
                     ],
                     [
-                        'empresa_id'  => $request['pessoa']['empresa_id'],
                         'nome'        => $request['pessoa']['nome'],
                         'nascimento'  => $request['pessoa']['nascimento'],
                         'tipo'        =>                    'profissional',
