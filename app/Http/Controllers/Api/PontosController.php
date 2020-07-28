@@ -6,6 +6,7 @@ use App\Escala;
 use App\Http\Controllers\Controller;
 use App\Ponto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PontosController extends Controller
 {
@@ -182,28 +183,31 @@ class PontosController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \App\Escala  $escala
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function checkin(Escala $escala)
+    public function checkin(Escala $escala, Request $request)
     {
-        $ponto = Ponto::where('escala_id', $escala->id)
+        $ponto = Ponto::where('escala_id', $request->escala_id)
         ->where('tipo', 'Check-in')->first();
         if ($ponto) {
             return response()->json('Você já possui Check-in nessa escala!', 400)->header('Content-Type', 'text/plain');
         } else {
-            $ponto = Ponto::create(
-                [
-                    'empresa_id' => $escala->empresa_id,
-                    'escala_id'  => $escala->id,
-                    'latitude'   => $escala->escala_id,
-                    'longitude'  => $escala->longitude,
-                    'data'       => $escala->data,
-                    'hora'       => $escala->hora,
-                    'tipo'       => 'Check-in',
-                    'observacao' => $escala->observacao,
-                    'status'     => $escala->status,
-                ]
-            );
+            DB::transaction(function () use ($request) {
+                Ponto::create(
+                    [
+                        'empresa_id' => $request->empresa_id,
+                        'escala_id'  => $request->escala_id,
+                        'latitude'   => $request->latitude,
+                        'longitude'  => $request->longitude,
+                        'data'       => $request->data,
+                        'hora'       => $request->hora,
+                        'tipo'       => 'Check-in',
+                        'observacao' => $request->observacao,
+                        'status'     => $request->status,
+                    ]
+                );
+            });
             return response()->json('Check-in realizado com Sucesso!', 200)->header('Content-Type', 'text/plain');
         }
     }
@@ -212,32 +216,34 @@ class PontosController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \App\Escala  $escala
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function checkout(Escala $escala)
+    public function checkout(Escala $escala, Request $request)
     {
-        $ponto = Ponto::where('escala_id', $escala->id)
+        $ponto = Ponto::where('escala_id', $request->escala_id)
         ->where('tipo', 'Check-out')->first();
         if ($ponto) {
             return response()->json('Você já possui Check-out nessa escala!', 400)->header('Content-Type', 'text/plain');
         } else {
-            $ponto = Ponto::create(
-                [
-                    'empresa_id' => $escala->empresa_id,
-                    'escala_id'  => $escala->id,
-                    'latitude'   => $escala->escala_id,
-                    'longitude'  => $escala->longitude,
-                    'data'       => $escala->data,
-                    'hora'       => $escala->hora,
-                    'tipo'       => 'Check-out',
-                    'observacao' => $escala->observacao,
-                    'status'     => $escala->status,
-                ]
-            );
+            DB::transaction(function () use ($request) {
+                Ponto::create(
+                    [
+                        'empresa_id' => $request->empresa_id,
+                        'escala_id'  => $request->escala_id,
+                        'latitude'   => $request->latitude,
+                        'longitude'  => $request->longitude,
+                        'data'       => $request->data,
+                        'hora'       => $request->hora,
+                        'tipo'       => 'Check-out',
+                        'observacao' => $request->observacao,
+                        'status'     => $request->status,
+                    ]
+                );
+            });
             $escala->status = true;
             $escala->save();
             return response()->json('Check-out realizado com Sucesso!', 200)->header('Content-Type', 'text/plain');
         }
-
     }
 }
