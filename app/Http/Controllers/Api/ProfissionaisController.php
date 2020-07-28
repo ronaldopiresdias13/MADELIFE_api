@@ -506,112 +506,49 @@ class ProfissionaisController extends Controller
             if ($request['pessoa']['user']) {
                 if ($request['pessoa']['user']['email'] !== '') {
                     $user = new User();
+                    
                     if ($request['pessoa']['user']['password'] !== '') {
-                        $user = User::updateOrCreate(
-                            [
-                                'email'      =>        $request['pessoa']['user']['email'],
-                            ],
-                            [
+                        $user = User::firstWhere('email', $request['pessoa']['user']['email']);
+                        if ($user) {
+                            $user->update([
                                 'empresa_id' =>        $request['empresa_id'],
                                 'cpfcnpj'    =>        $request['pessoa']['user']['cpfcnpj'],
                                 'password'   => bcrypt($request['pessoa']['user']['password']),
                                 'pessoa_id'  =>        $profissional->pessoa_id,
-                            ]
-                        );
-                    } else {
-                        $user = User::firstOrCreate(
-                            [
-                                'email'      =>        $request['pessoa']['user']['email'],
-                            ],
-                            [
-                                'empresa_id' =>        $request['empresa_id'],
-                                'cpfcnpj'    =>        $request['pessoa']['user']['cpfcnpj'],
-                                'password'   => bcrypt($request['pessoa']['user']['password']),
-                                'pessoa_id'  =>        $profissional->pessoa_id,
-                            ]
-                        );
-                    }
-                    if ($request['pessoa']['user']['acessos']) {
-                        foreach ($request['pessoa']['user']['acessos'] as $key => $acesso) {
-                            $user_acesso = UserAcesso::firstOrCreate([
-                                'user_id'   => $user->id,
-                                'acesso_id' => $acesso,
                             ]);
+                        } else {
+                            $user = User::firstWhere('cpfcnpj', $request['pessoa']['user']['cpfcnpj']);
+                            if ($user) {
+                                $user->update([
+                                    'email'      =>        $request['pessoa']['user']['email'],
+                                    'empresa_id' =>        $request['empresa_id'],
+                                    'password'   => bcrypt($request['pessoa']['user']['password']),
+                                    'pessoa_id'  =>        $profissional->pessoa_id,
+                                ]);
+                            } else {
+                                $user = User::create([
+                                    'empresa_id' =>        $request['empresa_id'],
+                                    'email'      =>        $request['pessoa']['user']['email'],
+                                    'cpfcnpj'    =>        $request['pessoa']['user']['cpfcnpj'],
+                                    'password'   => bcrypt($request['pessoa']['user']['password']),
+                                    'pessoa_id'  =>        $profissional->pessoa_id,
+                                ]);
+                            }
+                        }
+                    }
+
+                    if ($request['pessoa']['user']['acessos']) {
+                        if ($user) {
+                            foreach ($request['pessoa']['user']['acessos'] as $key => $acesso) {
+                                $user_acesso = UserAcesso::firstOrCreate([
+                                    'user_id'   => $user->id,
+                                    'acesso_id' => $acesso,
+                                ]);
+                            }
                         }
                     }
                 }
             }
-            // $pessoa = Pessoa::find($request['pessoa']['id']);
-            // if ($pessoa) {
-            //     $pessoa->update([
-            //         'empresa_id'  => $request['pessoa']['empresa_id'],
-            //         'nome'        => $request['pessoa']['nome'],
-            //         'nascimento'  => $request['pessoa']['nascimento'],
-            //         'tipo'        => $request['pessoa']['tipo'],
-            //         'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
-            //         'rgie'        => $request['pessoa']['rgie'],
-            //         'observacoes' => $request['pessoa']['observacoes'],
-            //         'perfil'      => $request['pessoa']['perfil'],
-            //         'status'      => $request['pessoa']['status'],
-            //     ]);
-            // }
-            // if ($request['pessoa']['telefones']) {
-            //     foreach ($request['pessoa']['telefones'] as $key => $telefone) {
-            //         $pessoa_telefone = PessoaTelefone::firstOrCreate(
-            //             [
-            //                 'pessoa_id'   => $pessoa->id,
-            //                 'telefone_id' => Telefone::firstOrCreate(
-            //                     [
-            //                         'telefone'  => $telefone['telefone'],
-            //                     ]
-            //                 )->id,
-            //             ],
-            //             [
-            //                 'tipo'      => $telefone['pivot']['tipo'],
-            //                 'descricao' => $telefone['pivot']['descricao'],
-            //             ]
-            //         );
-            //     }
-            // }
-            // if ($request['pessoa']['enderecos']) {
-            //     foreach ($request['pessoa']['enderecos'] as $key => $endereco) {
-            //         $pessoa_endereco = PessoaEndereco::updateOrCreate(
-            //             [
-            //                 'pessoa_id'   => $pessoa->id,
-            //                 'endereco_id' => Endereco::firstOrCreate(
-            //                     [
-            //                         'cep'         => $endereco['cep'],
-            //                         'cidade_id'   => $endereco['cidade_id'],
-            //                         'rua'         => $endereco['rua'],
-            //                         'bairro'      => $endereco['bairro'],
-            //                         'numero'      => $endereco['numero'],
-            //                         'complemento' => $endereco['complemento'],
-            //                         'tipo'        => $endereco['tipo'],
-            //                         'descricao'   => $endereco['descricao'],
-            //                     ]
-            //                 )->id,
-            //             ]
-            //         );
-            //     }
-            // }
-            // if ($request['pessoa']['emails']) {
-            //     foreach ($request['pessoa']['emails'] as $key => $email) {
-            //         $pessoa_email = PessoaEmail::updateOrCreate(
-            //             [
-            //                 'pessoa_id' => $pessoa->id,
-            //                 'email_id'  => Email::firstOrCreate(
-            //                     [
-            //                         'email' => $email['email'],
-            //                     ]
-            //                 )->id,
-            //             ],
-            //             [
-            //                 'tipo'      => $email['pivot']['tipo'],
-            //                 'descricao' => $email['pivot']['descricao'],
-            //             ]
-            //         );
-            //     }
-            // }
         });
     }
 
