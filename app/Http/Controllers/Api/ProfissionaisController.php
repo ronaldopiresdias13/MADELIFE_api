@@ -114,9 +114,9 @@ class ProfissionaisController extends Controller
             $pessoa = Pessoa::where(
                 'cpfcnpj',
                 $request['pessoa']['cpfcnpj']
-            )->where(
-                'empresa_id',
-                $request['pessoa']['empresa_id']
+            // )->where(
+            //     'empresa_id',
+            //     $request['pessoa']['empresa_id']
             )->first();
         } elseif ($request['pessoa_id']) {
             $pessoa = Pessoa::find($request['pessoa_id']);
@@ -145,7 +145,6 @@ class ProfissionaisController extends Controller
                         'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
                     ],
                     [
-                        'empresa_id'  => $request['pessoa']['empresa_id'],
                         'nome'        => $request['pessoa']['nome'],
                         'nascimento'  => $request['pessoa']['nascimento'],
                         'tipo'        =>                    'profissional',
@@ -377,14 +376,14 @@ class ProfissionaisController extends Controller
                 ],
                 [
                     'pessoafisica' => 1,
-                    'empresa_id'   => 1,
+                    'empresa_id'   => $request['empresa_id'],
                     'pessoa_id'    => Pessoa::updateOrCreate(
                         [
                             // 'id' => ($request['pessoa']['id'] != '') ? $request['pessoa']['id'] : null,
                             'id' => $request['pessoa_id'],
                         ],
                         [
-                            'empresa_id'  => $request['pessoa']['empresa_id'],
+                            // 'empresa_id'  => $request['pessoa']['empresa_id'],
                             'nome'        => $request['pessoa']['nome'],
                             'nascimento'  => $request['pessoa']['nascimento'],
                             'tipo'        =>                    'profissional',
@@ -444,7 +443,7 @@ class ProfissionaisController extends Controller
             if ($request['dadosBancario']) {
                 foreach ($request['dadosBancario'] as $key => $dadosbancario) {
                     $dados_bancario = Dadosbancario::firstOrCreate([
-                        'empresa_id'  => $request["pessoa"]['empresa_id'],
+                        'empresa_id'  => $request['empresa_id'],
                         'banco_id'    => $dadosbancario['banco_id'],
                         'agencia'     => $dadosbancario['agencia'],
                         'conta'       => $dadosbancario['conta'],

@@ -72,7 +72,7 @@ class Orcamento extends Model
                 // "iss",
                 "valorcustomensal",
                 "valorresultadomensal"
-            )->where('ativo', true);
+            )->wherePivot('ativo', true);
     }
 
     public function orcamentocustos()

@@ -38,12 +38,12 @@ class Teste extends Controller
 
 
         $escalas = Escala::where('ativo', true)
-        ->where('empresa_id', 1)->where('ordemservico_id', 129)
+        ->where('empresa_id', 1)->where('ordemservico.id', 129)
         ->orderBy('dataentrada')
         ->get();
 
         foreach ($escalas as $key => $escala) {
-            $escala->servico['teste'];
+            $escala->servico;
         }
 
 
