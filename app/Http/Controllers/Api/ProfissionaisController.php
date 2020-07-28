@@ -376,7 +376,7 @@ class ProfissionaisController extends Controller
                 ],
                 [
                     'pessoafisica' => 1,
-                    'empresa_id'   => 1,
+                    'empresa_id'   => $request['empresa_id'],
                     'pessoa_id'    => Pessoa::updateOrCreate(
                         [
                             // 'id' => ($request['pessoa']['id'] != '') ? $request['pessoa']['id'] : null,
@@ -443,7 +443,7 @@ class ProfissionaisController extends Controller
             if ($request['dadosBancario']) {
                 foreach ($request['dadosBancario'] as $key => $dadosbancario) {
                     $dados_bancario = Dadosbancario::firstOrCreate([
-                        'empresa_id'  => $request["pessoa"]['empresa_id'],
+                        'empresa_id'  => $request['empresa_id'],
                         'banco_id'    => $dadosbancario['banco_id'],
                         'agencia'     => $dadosbancario['agencia'],
                         'conta'       => $dadosbancario['conta'],
