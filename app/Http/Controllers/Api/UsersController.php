@@ -125,7 +125,6 @@ class UsersController extends Controller
                     'password'   =>  bcrypt($request['user']['password']),
                     'pessoa_id'  => Pessoa::create(
                         [
-                            'empresa_id' => 1,
                             'nome'       => $request['nome'],
                             'nascimento' => $request['nascimento'],
                             'tipo'       => $request['tipo'],
