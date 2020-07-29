@@ -14,7 +14,7 @@ class AddColumnHorascuidadoToOrcamentoServicoTable extends Migration
     public function up()
     {
         Schema::table('orcamento_servico', function (Blueprint $table) {
-            $table->float('horascuidado')->default(1)->after('adicionalnoturno');
+            $table->integer('horascuidado')->default(1)->after('adicionalnoturno');
         });
     }
 
