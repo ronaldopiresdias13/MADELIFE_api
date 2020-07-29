@@ -36,16 +36,16 @@ class Profissional extends Model
 
     public function formacoes()
     {
-        return $this->belongsToMany('App\Formacao', 'profissional_formacao');
+        return $this->belongsToMany('App\Formacao', 'profissional_formacao')->wherePivot('ativo', true);
     }
 
     public function beneficios()
     {
-        return $this->belongsToMany('App\Beneficio', 'profissional_beneficio');
+        return $this->belongsToMany('App\Beneficio', 'profissional_beneficio')->wherePivot('ativo', true);
     }
 
     public function convenios()
     {
-        return $this->belongsToMany('App\Convenio', 'profissional_convenio');
+        return $this->belongsToMany('App\Convenio', 'profissional_convenio')->wherePivot('ativo', true);
     }
 }

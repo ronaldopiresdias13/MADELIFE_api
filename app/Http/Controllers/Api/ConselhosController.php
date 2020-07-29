@@ -100,7 +100,7 @@ class ConselhosController extends Controller
             $conselho->instituicao = $request->instituicao;
             $conselho->uf          = $request->uf;
             $conselho->numero      = $request->numero;
-            $conselho->pessoa      = $request->pessoa;
+            $conselho->pessoa_id   = $request->pessoa_id;
             $conselho->save();
         });
     }

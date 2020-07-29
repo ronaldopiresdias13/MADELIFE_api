@@ -25,7 +25,7 @@ class Ordemservico extends Model
 
     public function transcricoes()
     {
-        return $this->hasMany('App\Transcricao');
+        return $this->hasMany('App\Transcricao')->where('ativo', true);
     }
 
     public function servicos()
@@ -37,5 +37,11 @@ class Ordemservico extends Model
                 'valordiurno',
                 'valornoturno'
             )->wherePivot('ativo', true);
+    }
+
+    public function prestadores()
+    {
+        return $this->belongsToMany('App\Prestador', 'ordemservico_prestador')
+            ->wherePivot('ativo', true);
     }
 }

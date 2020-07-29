@@ -107,7 +107,6 @@ class ResponsaveisController extends Controller
                 'empresa_id' => $request['empresa_id'],
                 'parentesco' => $request['parentesco'],
                 'pessoa_id'  => Pessoa::create([
-                    'empresa_id'  => $request['pessoa']['empresa_id'],
                     'nome'        => $request['pessoa']['nome'],
                     'nascimento'  => $request['pessoa']['nascimento'],
                     'tipo'        =>                    'Responsável',
@@ -227,7 +226,6 @@ class ResponsaveisController extends Controller
             $pessoa = Pessoa::find($request['pessoa']['id']);
             if ($pessoa) {
                 $pessoa->update([
-                    'empresa_id'  => $request['pessoa']['empresa_id'],
                     'nome'        => $request['pessoa']['nome'],
                     'nascimento'  => $request['pessoa']['nascimento'],
                     'tipo'        => $request['pessoa']['tipo'],
