@@ -10,7 +10,7 @@ class Conta extends Model
 
     public function pagamentos()
     {
-        return $this->hasMany('App\Pagamento');
+        return $this->hasMany('App\Pagamento')->where('ativo', true);
     }
     public function pessoa()
     {

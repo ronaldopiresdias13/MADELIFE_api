@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\User;
 use App\Email;
-use App\Acesso;
 use App\Pessoa;
 use App\Endereco;
 use App\Telefone;
 use App\Fornecedor;
-use App\UserAcesso;
 use App\PessoaEmail;
 use App\PessoaEndereco;
 use App\PessoaTelefone;
@@ -26,7 +23,7 @@ class FornecedoresController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Fornecedor();
+        $itens = Fornecedor::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -34,22 +31,22 @@ class FornecedoresController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Fornecedor::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Fornecedor::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Fornecedor::where('id', 'like', '%');
+            // } else {
+            //     $itens = Fornecedor::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -80,11 +77,15 @@ class FornecedoresController extends Controller
                                     }
                                 }
                             } else {
-                                if ($iten2[0] == null) {
-                                    $iten2 = $iten2[$a];
-                                } else {
-                                    foreach ($iten2 as $key => $i) {
-                                        $i[$a];
+                                if ($iten2 != null) {
+                                    if ($iten2->count() > 0) {
+                                        if ($iten2[0] == null) {
+                                            $iten2 = $iten2[$a];
+                                        } else {
+                                            foreach ($iten2 as $key => $i) {
+                                                $i[$a];
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -415,78 +416,7 @@ class FornecedoresController extends Controller
      */
     public function destroy(Fornecedor $fornecedor)
     {
-        //
-    }
-
-    public function migracao(Request $request)
-    {
-        // dd($request);
-        $fornecedor = Fornecedor::firstOrCreate([
-            'pessoa_id' => Pessoa::firstOrCreate(
-                [
-                    'cpfcnpj' => 0,
-                    // ],
-                    // [
-                    'nome'        => $request['dadosPf']['nome'],
-                    'nascimento'  => $request['dadosPf']['nascimento'],
-                    'tipo'        => 'Fornecedor',
-                    'rgie'        => 0,
-                    'observacoes' => $request['observacoes'],
-                    'status'      => $request['status'],
-                ]
-            )->id,
-            'empresa_id' => 1
-        ]);
-
-
-        // if ($request['prestador']['contato']['telefone'] != null && $request['prestador']['contato']['telefone'] != "") {
-        //     $pessoa_telefones = PessoaTelefone::firstOrCreate([
-        //         'pessoa'   => $prestador->pessoa,
-        //         'telefone' => Telefone::firstOrCreate(
-        //             [
-        //                 'telefone' => $request['prestador']['contato']['telefone'],
-        //             ]
-        //         )->id,
-        //     ]);
-        // }
-        // if ($request['prestador']['contato']['celular'] != null && $request['prestador']['contato']['celular'] != "") {
-        //     $pessoa_telefones = PessoaTelefone::firstOrCreate([
-        //         'pessoa'   => $prestador->pessoa,
-        //         'telefone' => Telefone::firstOrCreate(
-        //             [
-        //                 'telefone' => $request['prestador']['contato']['celular'],
-        //             ]
-        //         )->id,
-        //     ]);
-        // }
-
-        // $pessoa_emails = PessoaEmail::firstOrCreate([
-        //     'pessoa' => $prestador->pessoa,
-        //     'email'  => Email::firstOrCreate(
-        //         [
-        //             'email' => $request['prestador']['contato']['email'],
-        //         ],
-        //         [
-        //             'tipo' => 'pessoal',
-        //         ]
-        //     )->id,
-        // ]);
-
-        // $cidade = Cidade::where('nome', $request['prestador']['endereco']['cidade'])->where('uf', $request['prestador']['endereco']['uf'])->first();
-
-        // $pessoa_endereco = PessoaEndereco::firstOrCreate([
-        //     'pessoa_id'   => $cliente->pessoa_id,
-        //     'endereco_id' => Endereco::firstOrCreate(
-        //         [
-        //             'cep'         => $request['endereco']['cep'],
-        //             'cidade_id'   => $request['endereco']['cidade_id'],
-        //             'rua'         => $request['endereco']['rua'],
-        //             'bairro'      => $request['endereco']['bairro'],
-        //             'numero'      => $request['endereco']['numero'],
-        //             'complemento' => $request['endereco']['complemento'],
-        //             'tipo'        => $request['endereco']['tipo'],
-        //         ]
-        //     )->id,
-        // ]);
+        $fornecedor->ativo = false;
+        $fornecedor->save();
     }
 }

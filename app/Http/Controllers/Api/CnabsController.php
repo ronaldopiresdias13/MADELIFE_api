@@ -29,7 +29,7 @@ class CnabsController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Cnab();
+        $itens = Cnab::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -37,22 +37,22 @@ class CnabsController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Cnab::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Cnab::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Cnab::where('id', 'like', '%');
+            // } else {
+            //     $itens = Cnab::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -508,6 +508,8 @@ class CnabsController extends Controller
             $cnabsantander->cnabheaderarquivo->filler3 .
             $cnabsantander->cnabheaderarquivo->ocorrenciasretorno;
 
+        // Remover caracteres inválidos
+        $header = preg_replace('/[`^~\'"]/', null, iconv('UTF-8', 'ASCII//TRANSLIT', $header));
         // Criar arquivo com primeira linha
         Storage::disk('public')->put($caminho, $header);
 
@@ -540,6 +542,7 @@ class CnabsController extends Controller
                 $cnabheaderlote->filler3 .
                 $cnabheaderlote->ocorrenciasretorno;
 
+            $headerlote = preg_replace('/[`^~\'"]/', null, iconv('UTF-8', 'ASCII//TRANSLIT', $headerlote));
             Storage::append($caminho, $headerlote);
 
             foreach ($cnabheaderlote->cnabdetalheas as $key => $cnabdetalhea) {
@@ -574,6 +577,7 @@ class CnabsController extends Controller
                     $cnabdetalhea->emissaofavorecido .
                     $cnabdetalhea->ocorrenciasretorno;
 
+                $a = preg_replace('/[`^~\'"]/', null, iconv('UTF-8', 'ASCII//TRANSLIT', $a));
                 Storage::append($caminho, $a);
             }
 
@@ -607,6 +611,7 @@ class CnabsController extends Controller
                     $cnabdetalheb->tedfinanceira .
                     $cnabdetalheb->identificacaospb;
 
+                $b = preg_replace('/[`^~\'"]/', null, iconv('UTF-8', 'ASCII//TRANSLIT', $b));
                 Storage::append($caminho, $b);
             }
         }
@@ -623,6 +628,7 @@ class CnabsController extends Controller
                 $cnabtrailerlote->filler2 .
                 $cnabtrailerlote->ocorrenciasretorno;
 
+            $trailer = preg_replace('/[`^~\'"]/', null, iconv('UTF-8', 'ASCII//TRANSLIT', $trailer));
             Storage::append($caminho, $trailer);
         }
 
@@ -634,6 +640,7 @@ class CnabsController extends Controller
             $cnabsantander->cnabtrailerarquivo->quantidaderegarquivo .
             $cnabsantander->cnabtrailerarquivo->filler2;
 
+        $trailer = preg_replace('/[`^~\'"]/', null, iconv('UTF-8', 'ASCII//TRANSLIT', $trailer));
         Storage::append($caminho, $trailer);
 
         $file = Storage::get($caminho);
@@ -666,6 +673,7 @@ class CnabsController extends Controller
      */
     public function destroy(Cnab $cnab)
     {
-        //
+        $cnab->ativo = false;
+        $cnab->save();
     }
 }

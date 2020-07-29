@@ -6,11 +6,27 @@ use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 
 class User extends Authenticatable
 {
     use HasApiTokens;
     use Notifiable;
+    use Uuid;
+
+    /**
+     * The "type" of the auto-incrementing ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
 
     /**
      * The attributes that are mass assignable.
@@ -46,6 +62,6 @@ class User extends Authenticatable
 
     public function acessos()
     {
-        return $this->belongsToMany('App\Acesso', 'user_acesso');
+        return $this->belongsToMany('App\Acesso', 'user_acesso')->wherePivot('ativo', true);
     }
 }

@@ -32,7 +32,7 @@ Route::group([
     });
 });
 
-Route::post("/files/upload", "Api\FilesController@upload");
+Route::get("/teste", "Teste@teste");
 
 /* ------------- Rotas Utilizando Token ------------- */
 Route::group(['middleware' => 'auth:api'], function () {
@@ -85,6 +85,12 @@ Route::post('cidades', 'Api\CidadesController@store');
 Route::get('cidades/{cidade}', 'Api\CidadesController@show');
 Route::put('cidades/{cidade}', 'Api\CidadesController@update');
 Route::delete('cidades/{cidade}', 'Api\CidadesController@destroy');
+
+Route::get('certificadoprestadores', 'Api\CertificadoprestadoresController@index');
+Route::post('certificadoprestadores', 'Api\CertificadoprestadoresController@store');
+Route::get('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@show');
+Route::put('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@update');
+Route::delete('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@destroy');
 
 Route::get('clientes', 'Api\ClientesController@index');
 Route::post('clientes', 'Api\ClientesController@store');
@@ -294,6 +300,18 @@ Route::put('ordemservicos/{ordemservico}', 'Api\OrdemservicosController@update')
 Route::delete('ordemservicos/{ordemservico}', 'Api\OrdemservicosController@destroy');
 Route::get('ordemservicos/{ordemservico}/horariomedicamentos', 'Api\OrdemservicosController@horariomedicamentos'); // Custon
 
+Route::get('ordemservicoServicos', 'Api\OrdemservicoServicoController@index');
+Route::post('ordemservicoServicos', 'Api\OrdemservicoServicoController@store');
+Route::get('ordemservicoServicos/{ordemservicoServico}', 'Api\OrdemservicoServicoController@show');
+Route::put('ordemservicoServicos/{ordemservicoServico}', 'Api\OrdemservicoServicoController@update');
+Route::delete('ordemservicoServicos/{ordemservicoServico}', 'Api\OrdemservicoServicoController@destroy');
+
+Route::get('ordemservicoPrestadores', 'Api\OrdemservicoPrestadoresController@index');
+Route::post('ordemservicoPrestadores', 'Api\OrdemservicoPrestadoresController@store');
+Route::get('ordemservicoPrestadores/{ordemservicoPrestador}', 'Api\OrdemservicoPrestadoresController@show');
+Route::put('ordemservicoPrestadores/{ordemservicoPrestador}', 'Api\OrdemservicoPrestadoresController@update');
+Route::delete('ordemservicoPrestadores/{ordemservicoPrestador}', 'Api\OrdemservicoPrestadoresController@destroy');
+
 Route::get('outros', 'Api\OutrosController@index');
 Route::post('outros', 'Api\OutrosController@store');
 Route::get('outros/{outro}', 'Api\OutrosController@show');
@@ -331,6 +349,24 @@ Route::get('pessoas/{pessoa}', 'Api\PessoasController@show');
 Route::put('pessoas/{pessoa}', 'Api\PessoasController@update');
 Route::delete('pessoas/{pessoa}', 'Api\PessoasController@destroy');
 
+Route::get('pessoaTelefones', 'Api\PessoaTelefoneController@index');
+Route::post('pessoaTelefones', 'Api\PessoaTelefoneController@store');
+Route::get('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@show');
+Route::put('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@update');
+Route::delete('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@destroy');
+
+Route::get('pessoaEmails', 'Api\PessoaEmailController@index');
+Route::post('pessoaEmails', 'Api\PessoaEmailController@store');
+Route::get('pessoaEmails/{pessoaEmail}', 'Api\PessoaEmailController@show');
+Route::put('pessoaEmails/{pessoaEmail}', 'Api\PessoaEmailController@update');
+Route::delete('pessoaEmails/{pessoaEmail}', 'Api\PessoaEmailController@destroy');
+
+Route::get('pessoaEnderecos', 'Api\PessoaEnderecoController@index');
+Route::post('pessoaEnderecos', 'Api\PessoaEnderecoController@store');
+Route::get('pessoaEnderecos/{pessoaEndereco}', 'Api\PessoaEnderecoController@show');
+Route::put('pessoaEnderecos/{pessoaEndereco}', 'Api\PessoaEnderecoController@update');
+Route::delete('pessoaEnderecos/{pessoaEndereco}', 'Api\PessoaEnderecoController@destroy');
+
 Route::get('pils', 'Api\PilsController@index');
 Route::post('pils', 'Api\PilsController@store');
 Route::get('pils/{pil}', 'Api\PilsController@show');
@@ -342,6 +378,8 @@ Route::post('pontos', 'Api\PontosController@store');
 Route::get('pontos/{ponto}', 'Api\PontosController@show');
 Route::put('pontos/{ponto}', 'Api\PontosController@update');
 Route::delete('pontos/{ponto}', 'Api\PontosController@destroy');
+Route::post('pontos/checkin/{escala}', 'Api\PontosController@checkin'); // Custon
+Route::post('pontos/checkout/{escala}', 'Api\PontosController@checkout'); // Custon
 
 Route::get('prescricoesbs', 'Api\PrescricoesbsController@index');
 Route::post('prescricoesbs', 'Api\PrescricoesbsController@store');
@@ -355,6 +393,13 @@ Route::get('prestadores/{prestador}', 'Api\PrestadoresController@show');
 Route::put('prestadores/{prestador}', 'Api\PrestadoresController@update');
 Route::delete('prestadores/{prestador}', 'Api\PrestadoresController@destroy');
 Route::get('prestadores/{prestador}/meuspacientes', 'Api\PrestadoresController@meuspacientes'); // Custon
+
+Route::get('prestadorFormacao', 'Api\PrestadorFormacaoController@index');
+Route::post('prestadorFormacao', 'Api\PrestadorFormacaoController@store');
+Route::get('prestadorFormacao/{prestadorFormacao}', 'Api\PrestadorFormacaoController@show');
+Route::put('prestadorFormacao/{prestadorFormacao}', 'Api\PrestadorFormacaoController@update');
+Route::delete('prestadorFormacao/{prestadorFormacao}', 'Api\PrestadorFormacaoController@destroy');
+Route::get('prestadorFormacao/{prestadorFormacao}/downloadFile', 'Api\PrestadorFormacaoController@downloadFile'); // Custon
 
 Route::get('produtos', 'Api\ProdutosController@index');
 Route::post('produtos', 'Api\ProdutosController@store');

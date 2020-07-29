@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Atribuicao;
+use App\Http\Controllers\Controller;
+use App\PessoaTelefone;
+use App\Telefone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
 
-class AtribuicoesController extends Controller
+class PessoaTelefoneController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +18,7 @@ class AtribuicoesController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Atribuicao();
+        $itens = PessoaTelefone::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -25,22 +26,12 @@ class AtribuicoesController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Atribuicao::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
             }
-        } else {
-            $itens = Atribuicao::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -71,11 +62,15 @@ class AtribuicoesController extends Controller
                                     }
                                 }
                             } else {
-                                if ($iten2[0] == null) {
-                                    $iten2 = $iten2[$a];
-                                } else {
-                                    foreach ($iten2 as $key => $i) {
-                                        $i[$a];
+                                if ($iten2 != null) {
+                                    if ($iten2->count() > 0) {
+                                        if ($iten2[0] == null) {
+                                            $iten2 = $iten2[$a];
+                                        } else {
+                                            foreach ($iten2 as $key => $i) {
+                                                $i[$a];
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -97,7 +92,19 @@ class AtribuicoesController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            Atribuicao::create($request->all());
+            PessoaTelefone::updateOrCreate(
+                [
+                    'pessoa_id' => $request->pessoa_id,
+                    'telefone_id'  => Telefone::firstOrCreate(
+                        ['telefone' => $request->telefone]
+                    )->id,
+                ],
+                [
+                    'tipo'      => $request['pivot']['tipo'],
+                    'descricao' => $request['pivot']['descricao'],
+                    'ativo'     => true
+                ]
+            );
         });
     }
 
@@ -105,12 +112,12 @@ class AtribuicoesController extends Controller
      * Display the specified resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Atribuicao  $atribuicao
+     * @param  \App\PessoaTelefone  $pessoaTelefone
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Atribuicao $atribuicao)
+    public function show(Request $request, PessoaTelefone $pessoaTelefone)
     {
-        $iten = $atribuicao;
+        $iten = $pessoaTelefone;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -152,24 +159,29 @@ class AtribuicoesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Atribuicao  $atribuicao
+     * @param  \App\PessoaTelefone  $pessoaTelefone
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Atribuicao $atribuicao)
+    public function update(Request $request, PessoaTelefone $pessoaTelefone)
     {
-        DB::transaction(function () use ($request, $atribuicao) {
-            $atribuicao->update($request->all());
+        DB::transaction(function () use ($request, $pessoaTelefone) {
+            $pessoaTelefone->telefone_id  = Telefone::firstOrCreate(['telefone' => $request['telefone']])->id;
+            $pessoaTelefone->tipo      = $request['pivot']['tipo'];
+            $pessoaTelefone->descricao = $request['pivot']['descricao'];
+            $pessoaTelefone->ativo     = true;
+            $pessoaTelefone->save();
         });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Atribuicao  $atribuicao
+     * @param  \App\PessoaTelefone  $pessoaTelefone
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Atribuicao $atribuicao)
+    public function destroy(PessoaTelefone $pessoaTelefone)
     {
-        //
+        $pessoaTelefone->ativo = false;
+        $pessoaTelefone->save();
     }
 }

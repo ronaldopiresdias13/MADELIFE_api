@@ -27,7 +27,7 @@ class ClientesController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Cliente();
+        $itens = Cliente::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -35,22 +35,22 @@ class ClientesController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Cliente::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Cliente::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Cliente::where('id', 'like', '%');
+            // } else {
+            //     $itens = Cliente::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -425,9 +425,15 @@ class ClientesController extends Controller
                 }
             }
             if ($request['pessoa']['user']) {
-                if ($request['pessoa']['user']['email'] !== '' && $request['pessoa']['user']['email'] !== null) {
+                if (
+                    $request['pessoa']['user']['email'] !== '' &&
+                    $request['pessoa']['user']['email'] !== null
+                ) {
                     $user = new User();
-                    if ($request['pessoa']['user']['password'] !== '' && $request['pessoa']['user']['password'] !== null) {
+                    if (
+                        $request['pessoa']['user']['password'] !== '' &&
+                        $request['pessoa']['user']['password'] !== null
+                    ) {
                         $user = User::updateOrCreate(
                             [
                                 'email'      => $request['pessoa']['user']['email'],
@@ -466,109 +472,6 @@ class ClientesController extends Controller
         });
 
         return response()->json('Cliente atualizado com sucesso!', 200)->header('Content-Type', 'text/plain');
-
-        // dd(null);
-
-        // $pessoa = Pessoa::find($request['pessoa']['id']);
-        // $pessoa->nome = $request['pessoa']['nome'];
-        // $pessoa->nascimento = $request['pessoa']['nascimento'];
-        // $pessoa->cpfcnpj = $request['pessoa']['cpfcnpj'];
-        // $pessoa->rgie = $request['pessoa']['rgie'];
-        // $pessoa->observacoes = $request['pessoa']['observacoes'];
-        // $pessoa->perfil = $request['pessoa']['perfil'];
-        // $pessoa->status = $request['pessoa']['status'];
-        // $pessoa->update();
-
-        // if ($request['pessoa']['telefones']) {
-        //     foreach ($request['pessoa']['telefones'] as $key => $telefone) {
-        //         if (!$telefone['id']) {
-        //             $pessoa_telefone = PessoaTelefone::firstOrCreate([
-        //                 'pessoa_id'   => $pessoa->id,
-        //                 'telefone_id' => Telefone::firstOrCreate(
-        //                     [
-        //                         'telefone'  => $telefone['telefone'],
-        //                     ]
-        //                 )->id,
-        //                 'tipo'      => $telefone['tipo'],
-        //                 'descricao' => $telefone['descricao'],
-        //             ]);
-        //         } else {
-        //             $pessoa_telefone = PessoaTelefone::where('pessoa_id', $telefone['pivot']['pessoa_id'])
-        //                 ->where('telefone_id', $telefone['pivot']['telefone_id'])
-        //                 ->update([
-        //                     'tipo' => $telefone['pivot']['tipo'],
-        //                     'descricao' => $telefone['pivot']['descricao']
-        //                 ]);
-        //             $phone = Telefone::find($telefone['id']);
-        //             $phone->telefone = $telefone['telefone'];
-        //             $phone->update();
-        //         }
-        //     }
-        // }
-
-
-        // if ($request['pessoa']['emails']) {
-        //     foreach ($request['pessoa']['emails'] as $key => $email) {
-        //         if (!$email['id']) {
-        //             $pessoa_email = PessoaEmail::firstOrCreate([
-        //                 'pessoa_id' => $cliente->pessoa_id,
-        //                 'email_id'  => Email::firstOrCreate(
-        //                     [
-        //                         'email' => $email['email'],
-        //                     ]
-        //                 )->id,
-        //                 'tipo'      => $email['tipo'],
-        //                 'descricao' => $email['descricao'],
-        //             ]);
-        //         } else {
-        //             $pessoa_email = PessoaEmail::where('pessoa_id', $email['pivot']['pessoa_id'])
-        //                 ->where('email_id', $email['pivot']['email_id'])
-        //                 ->update([
-        //                     'tipo' =>      $email['pivot']['tipo'],
-        //                     'descricao' => $email['pivot']['descricao']
-        //                 ]);
-        //             $mail = Email::find($email['id']);
-        //             $mail->email = $email['email'];
-        //             $mail->update();
-        //         }
-        //     }
-        // }
-
-        // if ($request['pessoa']['enderecos']) {
-        //     foreach ($request['pessoa']['enderecos'] as $key => $endereco) {
-        //         if (!$endereco['id']) {
-        //             $pessoa_endereco = PessoaEndereco::firstOrCreate([
-        //                 'pessoa_id'   => $cliente->pessoa_id,
-        //                 'endereco_id' => Endereco::updateOrCreate(
-        //                     [
-        //                         'id' => $endereco['id'],
-        //                     ],
-        //                     [
-        //                         'cep'         => $endereco['cep'],
-        //                         'cidade_id'   => $endereco['cidade_id'],
-        //                         'rua'         => $endereco['rua'],
-        //                         'bairro'      => $endereco['bairro'],
-        //                         'numero'      => $endereco['numero'],
-        //                         'complemento' => $endereco['complemento'],
-        //                         'tipo'        => $endereco['tipo'],
-        //                         'descricao'   => $endereco['descricao'],
-        //                     ]
-        //                 )->id,
-        //             ]);
-        //         } else {
-        //             $address = Endereco::find($endereco['id']);
-        //             $address->cep         = $endereco['cep'];
-        //             $address->cidade_id   = $endereco['cidade_id'];
-        //             $address->rua         = $endereco['rua'];
-        //             $address->bairro      = $endereco['bairro'];
-        //             $address->numero      = $endereco['numero'];
-        //             $address->complemento = $endereco['complemento'];
-        //             $address->tipo        = $endereco['tipo'];
-        //             $address->descricao   = $endereco['descricao'];
-        //             $address->update();
-        //         }
-        //     }
-        // }
     }
 
     /**
@@ -579,26 +482,7 @@ class ClientesController extends Controller
      */
     public function destroy(Cliente $cliente)
     {
-        $cliente->delete();
+        $cliente->ativo = false;
+        $cliente->save();
     }
-
-    // /**
-    //  * Store a newly created resource in storage.
-    //  *
-    //  * @param  \App\Cliente  $cliente
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function meuspassientes(Cliente $cliente)
-    // {
-    //     $escalas = Escala::where('prestador_id', $prestador->id)
-    //         ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
-    //         ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
-    //         ->join('homecares', 'homecares.orcamento_id', '=', 'orcamentos.id')
-    //         ->select('homecares.nome')
-    //         ->groupBy('homecares.nome')
-    //         ->orderBy('homecares.nome')
-    //         ->limit(100)
-    //         ->get();
-    //     return $escalas;
-    // }
 }

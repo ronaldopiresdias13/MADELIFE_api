@@ -15,7 +15,7 @@ class TipoprodutosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Tipoproduto();
+        $itens = Tipoproduto::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -23,22 +23,22 @@ class TipoprodutosController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Tipoproduto::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Tipoproduto::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Tipoproduto::where('id', 'like', '%');
+            // } else {
+            //     $itens = Tipoproduto::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -168,17 +168,7 @@ class TipoprodutosController extends Controller
      */
     public function destroy(Tipoproduto $tipoproduto)
     {
-        $tipoproduto->delete();
-    }
-
-    public function migracao(Request $request)
-    {
-        // dd($request);
-        $tipo = new Tipoproduto();
-        $tipo->descricao = $request->descricao;
-        $tipo->status = true;
-        $tipo->empresa_id = 1;
-        $tipo->save();
-        // Tipoproduto::create($request->all());
+        $tipoproduto->ativo = false;
+        $tipoproduto->save();
     }
 }

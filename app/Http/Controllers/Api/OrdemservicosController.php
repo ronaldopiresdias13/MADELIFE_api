@@ -7,6 +7,8 @@ use App\Responsavel;
 use App\Ordemservico;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Orcamento;
+use App\OrdemservicoServico;
 use Illuminate\Support\Facades\DB;
 
 class OrdemservicosController extends Controller
@@ -18,7 +20,7 @@ class OrdemservicosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Ordemservico();
+        $itens = Ordemservico::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -26,22 +28,22 @@ class OrdemservicosController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Ordemservico::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Ordemservico::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Ordemservico::where('id', 'like', '%');
+            // } else {
+            //     $itens = Ordemservico::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -130,6 +132,32 @@ class OrdemservicosController extends Controller
                     'realizacaoprocedimento' => $request['realizacaoprocedimento'],
                 ]
             );
+
+            $orcamento = Orcamento::Where('id', $request['orcamento_id'])->first();
+
+            foreach ($orcamento->servicos as $key => $servico) {
+                if ($servico['pivot']['basecobranca'] == 'Plantão') {
+                    $ordemservico_servico = OrdemservicoServico::create(
+                        [
+                            'ordemservico_id'  => $ordemservico->id,
+                            'servico_id'       => $servico->id,
+                            'descricao'        => $servico['pivot']['basecobranca'],
+                            'valor'            => ($servico['pivot']['custo'] / 2),
+                            'adicionalnoturno' => $servico['pivot']['adicionalnoturno'],
+                        ]
+                    );
+                } else {
+                    $ordemservico_servico = OrdemservicoServico::create(
+                        [
+                            'ordemservico_id'  => $ordemservico->id,
+                            'servico_id'       => $servico->id,
+                            'descricao'        => $servico['pivot']['basecobranca'],
+                            'valor'            => ($servico['pivot']['custo']),
+                            'adicionalnoturno' => $servico['pivot']['adicionalnoturno'],
+                        ]
+                    );
+                }
+            }
         });
 
         return response()->json('Ordem de Serviço cadastrado com sucesso!', 200)->header('Content-Type', 'text/plain');
@@ -201,36 +229,8 @@ class OrdemservicosController extends Controller
      */
     public function destroy(Ordemservico $ordemservico)
     {
-        $ordemservico->delete();
-    }
-
-    public function migracao(Request $request)
-    {
-        $ordemservico = Ordemservico::firstOrCreate([
-            'codigo' => '',
-            'tipo' => 'Paciente',
-            'orcamento_id' => $request['supervisor'],
-            'inicio' => null,
-            'fim' => null,
-            'status' => $request['status'],
-            'montagemequipe' => true,
-            'realizacaoprocedimento' => false,
-            'nome' => $request['nome'],
-            'sexo' => $request['sexo'],
-            'nascimento' => $request['nascimento'],
-            'cpfcnpj' => $request['dataInicio'],
-            'rgie' => $request['dataFim'],
-            'endereco1' => $request['endereco']['rua'],
-            'cidade1' => $request['endereco']['cidade'],
-            'cep1' => $request['endereco']['cep'],
-            'endereco2' => '',
-            'cidade2' => '',
-            'cep2' => '',
-            'contato' => $request['contato']['celular'],
-            'email' => $request['contato']['email'],
-            'profissional_id' => null,
-
-        ]);
+        $ordemservico->ativo = false;
+        $ordemservico->save();
     }
 
     /**

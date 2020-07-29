@@ -18,8 +18,30 @@ class Ordemservico extends Model
         return $this->belongsTo('App\Responsavel');
     }
 
+    public function profissional()
+    {
+        return $this->belongsTo('App\Profissional');
+    }
+
     public function transcricoes()
     {
-        return $this->hasMany('App\Transcricao');
+        return $this->hasMany('App\Transcricao')->where('ativo', true);
+    }
+
+    public function servicos()
+    {
+        return $this->belongsToMany('App\Servico', 'ordemservico_servico')
+            ->withPivot(
+                'id',
+                'descricao',
+                'valordiurno',
+                'valornoturno'
+            )->wherePivot('ativo', true);
+    }
+
+    public function prestadores()
+    {
+        return $this->belongsToMany('App\Prestador', 'ordemservico_prestador')
+            ->wherePivot('ativo', true);
     }
 }

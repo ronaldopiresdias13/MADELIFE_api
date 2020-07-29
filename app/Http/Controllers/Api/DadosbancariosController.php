@@ -17,7 +17,7 @@ class DadosbancariosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = new Dadosbancario();
+        $itens = Dadosbancario::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -25,22 +25,22 @@ class DadosbancariosController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                if ($key == 0) {
-                    $itens = Dadosbancario::where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                } else {
-                    $itens->where(
-                        ($where['coluna']) ? $where['coluna'] : 'id',
-                        ($where['expressao']) ? $where['expressao'] : 'like',
-                        ($where['valor']) ? $where['valor'] : '%'
-                    );
-                }
+                // if ($key == 0) {
+                //     $itens = Dadosbancario::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
+                $itens->where(
+                    ($where['coluna']) ? $where['coluna'] : 'id',
+                    ($where['expressao']) ? $where['expressao'] : 'like',
+                    ($where['valor']) ? $where['valor'] : '%'
+                );
+                // }
             }
-        } else {
-            $itens = Dadosbancario::where('id', 'like', '%');
+            // } else {
+            //     $itens = Dadosbancario::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -99,12 +99,14 @@ class DadosbancariosController extends Controller
         $dadosbancario = new Dadosbancario();
         // $dadosbancario->pessoa = Pessoa::firstWhere('cpfcnpj', $request->pessoa)->id;
         // $dadosbancario->banco = Banco::firstWhere('codigo', $request->banco)->id;
-        $dadosbancario->banco = $request->banco;
-        $dadosbancario->pessoa = $request->pessoa;
+        $dadosbancario->empresa_id = $request->empresa_id;
+        $dadosbancario->banco_id = $request->banco_id;
+        $dadosbancario->pessoa_id = $request->pessoa_id;
         $dadosbancario->agencia = $request->agencia;
         $dadosbancario->conta = $request->conta;
         $dadosbancario->digito = $request->digito;
         $dadosbancario->tipoconta = $request->tipoconta;
+        $dadosbancario->ativo = 1;
         $dadosbancario->save();
     }
 
@@ -163,7 +165,13 @@ class DadosbancariosController extends Controller
      */
     public function update(Request $request, Dadosbancario $dadosbancario)
     {
-        $dadosbancario->update($request->all());
+        $dadosbancario->banco_id = $request->banco_id;
+        $dadosbancario->pessoa_id = $request->pessoa_id;
+        $dadosbancario->agencia = $request->agencia;
+        $dadosbancario->conta = $request->conta;
+        $dadosbancario->digito = $request->digito;
+        $dadosbancario->tipoconta = $request->tipoconta;
+        $dadosbancario->save();
     }
 
     /**
@@ -174,6 +182,7 @@ class DadosbancariosController extends Controller
      */
     public function destroy(Dadosbancario $dadosbancario)
     {
-        $dadosbancario->delete();
+        $dadosbancario->ativo = false;
+        $dadosbancario->save();
     }
 }
