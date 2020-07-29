@@ -153,6 +153,7 @@ class OrcamentosController extends Controller
                             'subtotal'             => $servico['subtotal'],
                             'subtotalcusto'        => $servico['subtotalcusto'],
                             'adicionalnoturno'     => $servico['adicionalnoturno'],
+                            'horascuidado'         => $servico['horascuidado'],
                             'icms'                 => $servico['icms'],
                             'inss'                 => $servico['inss'],
                             'iss'                  => $servico['iss'],
@@ -489,6 +490,7 @@ class OrcamentosController extends Controller
                             'subtotal'             => $servico['subtotal'],
                             'subtotalcusto'        => $servico['subtotalcusto'],
                             'adicionalnoturno'     => $servico['adicionalnoturno'],
+                            'horascuidado'         => $servico['horascuidado'],
                             'icms'                 => $servico['icms'],
                             'inss'                 => $servico['inss'],
                             'iss'                  => $servico['iss'],
@@ -785,7 +787,7 @@ class OrcamentosController extends Controller
         // $orcamento->valortotalproduto = $request['valortotalproduto'];
         // $orcamento->observacao        = $request['observacao'];
         // $orcamento->status            = $request['status'];
-        $orcamento->update();
+        $orcamento->save();
     }
 
     /**
