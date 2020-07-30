@@ -9,6 +9,7 @@ use App\Relatorioescala;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\OrdemservicoServico;
 use Illuminate\Support\Facades\Storage;
 
 class EscalasController extends Controller
@@ -99,23 +100,49 @@ class EscalasController extends Controller
      */
     public function store(Request $request)
     {
-        $escala = Escala::create([
-            'empresa_id'            => $request->empresa_id,
-            'ordemservico_id'       => $request->ordemservico_id,
-            'prestador_id'          => $request->prestador_id,
-            'servico_id'            => $request->servico_id,
-            'horaentrada'           => $request->horaentrada,
-            'horasaida'             => $request->horasaida,
-            'dataentrada'           => $request->dataentrada,
-            'datasaida'             => $request->datasaida,
-            'periodo'               => $request->periodo,
-            'assinaturaprestador'   => $request->assinaturaprestador,
-            'assinaturaresponsavel' => $request->assinaturaresponsavel,
-            'observacao'            => $request->observacao,
-            'status'                => $request->status,
-            'folga'                 => $request->folga,
-            'substituto'            => $request->substituto
-        ]);
+        $ordemservicoServico = OrdemservicoServico::where('ordemservico_id', $request->ordemservico_id)->where('servico_id', $request->servico_id)->first();
+        
+        $escala = new Escala;
+        if ($ordemservicoServico) {
+            $escala->tipo             = $ordemservicoServico->descricao;
+            $escala->valorhoradiurno  = $ordemservicoServico->valordiurno;
+            $escala->valorhoranoturno = $ordemservicoServico->valornoturno;
+            $escala->valoradicional   = 0;
+        }
+        $escala->empresa_id            = $request->empresa_id;
+        $escala->ordemservico_id       = $request->ordemservico_id;
+        $escala->prestador_id          = $request->prestador_id;
+        $escala->servico_id            = $request->servico_id;
+        $escala->horaentrada           = $request->horaentrada;
+        $escala->horasaida             = $request->horasaida;
+        $escala->dataentrada           = $request->dataentrada;
+        $escala->datasaida             = $request->datasaida;
+        $escala->periodo               = $request->periodo;
+        $escala->assinaturaprestador   = $request->assinaturaprestador;
+        $escala->assinaturaresponsavel = $request->assinaturaresponsavel;
+        $escala->observacao            = $request->observacao;
+        $escala->status                = $request->status;
+        $escala->folga                 = $request->folga;
+        $escala->substituto            = $request->substituto;
+        $escala->save();
+
+        // $escala = Escala::create([
+        //     'empresa_id'            => $request->empresa_id,
+        //     'ordemservico_id'       => $request->ordemservico_id,
+        //     'prestador_id'          => $request->prestador_id,
+        //     'servico_id'            => $request->servico_id,
+        //     'horaentrada'           => $request->horaentrada,
+        //     'horasaida'             => $request->horasaida,
+        //     'dataentrada'           => $request->dataentrada,
+        //     'datasaida'             => $request->datasaida,
+        //     'periodo'               => $request->periodo,
+        //     'assinaturaprestador'   => $request->assinaturaprestador,
+        //     'assinaturaresponsavel' => $request->assinaturaresponsavel,
+        //     'observacao'            => $request->observacao,
+        //     'status'                => $request->status,
+        //     'folga'                 => $request->folga,
+        //     'substituto'            => $request->substituto
+        // ]);
 
         foreach ($request->cuidados as $key => $cuidado) {
             $cuidado_escala = CuidadoEscala::create([
