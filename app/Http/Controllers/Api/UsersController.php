@@ -13,6 +13,7 @@ use App\PessoaEmail;
 use App\PrestadorFormacao;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
 {
@@ -106,61 +107,54 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        $cpfcnpj = Pessoa::where(
-            'cpfcnpj',
-            $request['pessoa']['cpfcnpj']
-        );
-        $email = Email::where('email', $request['user']['email']);
-        if ($cpfcnpj) {
-            return response()->json('Usuário já existe!', 400)->header('Content-Type', 'text/plain');
+        $userCpf   = User::firstWhere('cpfcnpj', $request['cpfcnpj']);
+        $userEmail = User::firstWhere('cpfcnpj', $request['cpfcnpj']);
+        if ($userCpf) {
+            $user = $userCpf;
+        } elseif ($userEmail) {
+            $user = $userEmail;
         }
-        if ($email) {
-            return response()->json('Usuário já existe!', 400)->header('Content-Type', 'text/plain');
-        } else {
-            $user = User::create(
-                [
-                    'empresa_id' => 1,
-                    'cpfcnpj'    => $request['cpfcnpj'],
-                    'email'      => $request['user']['email'],
-                    'password'   =>  bcrypt($request['user']['password']),
-                    'pessoa_id'  => Pessoa::create(
-                        [
-                            'nome'       => $request['nome'],
-                            'nascimento' => $request['nascimento'],
-                            'tipo'       => $request['tipo'],
-                            'cpfcnpj'    => $request['cpfcnpj'],
-                            'status'     => $request['status']
-                        ]
-                    )->id
-                ]
-            );
-            $pessoa_email = PessoaEmail::firstOrCreate([
-                'pessoa_id' => $user->pessoa_id,
-                'email_id'  => Email::firstOrCreate(
+
+        if ($user) {
+            DB::transaction(function () use ($request, $user) {
+                $user->update(
                     [
-                        'email' => $user->email,
+                        'cpfcnpj'    => $request['cpfcnpj'],
+                        'email'      => $request['user']['email'],
+                        'password'   =>  bcrypt($request['user']['password']),
+                        'pessoa_id'  => $request->pessoa_id
                     ]
-                )->id,
-                'tipo'      => 'Pessoal',
-            ]);
-            $conselho = Conselho::create(
-                [
-                    'instituicao' => $request['conselho']['instituicao'],
-                    'numero'      => $request['conselho']['numero'],
-                    'pessoa_id'   => $user->pessoa_id
-                ]
-            );
-            $formacao = PrestadorFormacao::create(
-                [
-                    'prestador_id' => Prestador::create(
-                        [
-                            'pessoa_id' => $user->pessoa_id,
-                            'sexo'      => $request['prestador']['sexo']
-                        ]
-                    )->id,
-                    'formacao_id'  => $request['prestador']['formacao_id']
-                ]
-            );
+                );
+
+                if ($request['acessos']) {
+                    foreach ($request['acessos'] as $key => $acesso) {
+                        $user_acesso = UserAcesso::firstOrCreate([
+                            'user_id'   => $user->id,
+                            'acesso_id' => $acesso,
+                        ]);
+                    }
+                }
+            });
+        } else {
+            DB::transaction(function () use ($request) {
+                $user = User::create(
+                    [
+                        'cpfcnpj'    => $request['cpfcnpj'],
+                        'email'      => $request['user']['email'],
+                        'password'   =>  bcrypt($request['user']['password']),
+                        'pessoa_id'  => $request->pessoa_id
+                    ]
+                );
+
+                if ($request['acessos']) {
+                    foreach ($request['acessos'] as $key => $acesso) {
+                        $user_acesso = UserAcesso::firstOrCreate([
+                            'user_id'   => $user->id,
+                            'acesso_id' => $acesso,
+                        ]);
+                    }
+                }
+            });
         }
     }
 

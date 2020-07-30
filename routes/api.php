@@ -481,7 +481,8 @@ Route::put('unidademedidas/{unidademedida}', 'Api\UnidademedidasController@updat
 Route::delete('unidademedidas/{unidademedida}', 'Api\UnidademedidasController@destroy');
 
 Route::get('users', 'Api\UsersController@index');
-Route::post('users', 'Api\UsersController@store');
+Route::post('users', 'Api\PrestadoresController@store');                                      // Mudar na proxima versão do App
 Route::get('users/{user}', 'Api\UsersController@show');
 Route::put('users/{user}', 'Api\UsersController@update');
 Route::delete('users/{user}', 'Api\UsersController@destroy');
+Route::post('users/new', 'Api\UsersController@store');                                      // Mudar na proxima versão do App
