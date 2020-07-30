@@ -60,6 +60,6 @@ class UserAcessoController extends Controller
      */
     public function destroy(UserAcesso $userAcesso)
     {
-        //
+        $userAcesso->delete();
     }
 }

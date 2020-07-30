@@ -62,6 +62,6 @@ class User extends Authenticatable
 
     public function acessos()
     {
-        return $this->belongsToMany('App\Acesso', 'user_acesso')->wherePivot('ativo', true);
+        return $this->belongsToMany('App\Acesso', 'user_acesso')->withPivot('id')->wherePivot('ativo', true);
     }
 }
