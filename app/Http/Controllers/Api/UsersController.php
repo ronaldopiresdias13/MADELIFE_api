@@ -107,14 +107,16 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        $user = new User();
         $userCpf   = User::firstWhere('cpfcnpj', $request['cpfcnpj']);
-        $userEmail = User::firstWhere('cpfcnpj', $request['cpfcnpj']);
+        $userEmail = User::firstWhere('email', $request['email']);
+        $user = new User();
         if ($userCpf) {
             $user = $userCpf;
         } elseif ($userEmail) {
             $user = $userEmail;
         }
+
+        dd($user);
 
         if ($user) {
             DB::transaction(function () use ($request, $user) {
