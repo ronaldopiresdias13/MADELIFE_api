@@ -254,51 +254,48 @@ class ProfissionaisController extends Controller
                 }
             }
 
-            if ($request['pessoa']['user']) {
-                if ($request['pessoa']['user']['email'] !== '') {
-                    $user = new User();
-                    if ($request['pessoa']['user']['password'] !== '') {
-                        $user = User::updateOrCreate(
-                            [
-                                'email'      =>        $request['pessoa']['user']['email'],
-                            ],
-                            [
-                                // 'empresa_id' =>        $request['empresa_id'],
-                                'cpfcnpj'    =>        $request['pessoa']['user']['cpfcnpj'],
-                                'password'   => bcrypt($request['pessoa']['user']['password']),
-                                'pessoa_id'  =>        $profissional->pessoa_id,
-                            ]
-                        );
-                    } else {
-                        $user = User::firstOrCreate(
-                            [
-                                'email'      =>        $request['pessoa']['user']['email'],
-                            ],
-                            [
-                                // 'empresa_id' =>        $request['empresa_id'],
-                                'cpfcnpj'    =>        $request['pessoa']['user']['cpfcnpj'],
-                                'password'   => bcrypt($request['pessoa']['user']['password']),
-                                'pessoa_id'  =>        $profissional->pessoa_id,
-                            ]
-                        );
-                    }
-                    if ($request['pessoa']['user']['acessos']) {
-                        foreach ($request['pessoa']['user']['acessos'] as $key => $acesso) {
-                            $user_acesso = UserAcesso::firstOrCreate([
-                                'user_id'   => $user->id,
-                                'acesso_id' => $acesso,
-                            ]);
-                        }
-                    }
-                }
-            }
+            // if ($request['pessoa']['user']) {
+            //     if ($request['pessoa']['user']['email'] !== '') {
+            //         $user = new User();
+            //         if ($request['pessoa']['user']['password'] !== '') {
+            //             $user = User::updateOrCreate(
+            //                 [
+            //                     'email'      =>        $request['pessoa']['user']['email'],
+            //                 ],
+            //                 [
+            //                     // 'empresa_id' =>        $request['empresa_id'],
+            //                     'cpfcnpj'    =>        $request['pessoa']['user']['cpfcnpj'],
+            //                     'password'   => bcrypt($request['pessoa']['user']['password']),
+            //                     'pessoa_id'  =>        $profissional->pessoa_id,
+            //                 ]
+            //             );
+            //         } else {
+            //             $user = User::firstOrCreate(
+            //                 [
+            //                     'email'      =>        $request['pessoa']['user']['email'],
+            //                 ],
+            //                 [
+            //                     // 'empresa_id' =>        $request['empresa_id'],
+            //                     'cpfcnpj'    =>        $request['pessoa']['user']['cpfcnpj'],
+            //                     'password'   => bcrypt($request['pessoa']['user']['password']),
+            //                     'pessoa_id'  =>        $profissional->pessoa_id,
+            //                 ]
+            //             );
+            //         }
+            //         if ($request['pessoa']['user']['acessos']) {
+            //             foreach ($request['pessoa']['user']['acessos'] as $key => $acesso) {
+            //                 $user_acesso = UserAcesso::firstOrCreate([
+            //                     'user_id'   => $user->id,
+            //                     'acesso_id' => $acesso,
+            //                 ]);
+            //             }
+            //         }
+            //     }
+            // }
         });
-        // return $profissional;
+        
         return response()->json('Profissional cadastrado com sucesso!', 200)->header('Content-Type', 'text/plain');
     }
-
-    // ["prestador", "pessoa", "conselhos"],
-    // "pontos", "servico"
 
     /**
      * Display the specified resource.

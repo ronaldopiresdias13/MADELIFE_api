@@ -94,7 +94,7 @@ class AuthController extends Controller
             DB::transaction(function () use ($request) {
                 $user = User::create(
                     [
-                        'empresa_id' => 1,
+                        // 'empresa_id' => 1,
                         'cpfcnpj'    => $request['cpfcnpj'],
                         'email'      => $request['user']['email'],
                         'password'   =>  bcrypt($request['user']['password']),
