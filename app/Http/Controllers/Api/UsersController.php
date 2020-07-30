@@ -109,14 +109,12 @@ class UsersController extends Controller
     {
         $userCpf   = User::firstWhere('cpfcnpj', $request['cpfcnpj']);
         $userEmail = User::firstWhere('email', $request['email']);
-        $user = new User();
+        $user = null;
         if ($userCpf) {
             $user = $userCpf;
         } elseif ($userEmail) {
             $user = $userEmail;
         }
-
-        dd($user);
 
         if ($user) {
             DB::transaction(function () use ($request, $user) {
