@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\UserAcesso;
 use Illuminate\Http\Request;
 
-class \UserAcessoController extends Controller
+class UserAcessoController extends Controller
 {
     /**
      * Display a listing of the resource.
