@@ -107,6 +107,7 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
+        $user = new User();
         $userCpf   = User::firstWhere('cpfcnpj', $request['cpfcnpj']);
         $userEmail = User::firstWhere('cpfcnpj', $request['cpfcnpj']);
         if ($userCpf) {
@@ -120,8 +121,8 @@ class UsersController extends Controller
                 $user->update(
                     [
                         'cpfcnpj'    => $request['cpfcnpj'],
-                        'email'      => $request['user']['email'],
-                        'password'   =>  bcrypt($request['user']['password']),
+                        'email'      => $request['email'],
+                        'password'   =>  bcrypt($request['password']),
                         'pessoa_id'  => $request->pessoa_id
                     ]
                 );
@@ -140,9 +141,9 @@ class UsersController extends Controller
                 $user = User::create(
                     [
                         'cpfcnpj'    => $request['cpfcnpj'],
-                        'email'      => $request['user']['email'],
-                        'password'   =>  bcrypt($request['user']['password']),
-                        'pessoa_id'  => $request->pessoa_id
+                        'email'      => $request['email'],
+                        'password'   =>  bcrypt($request['password']),
+                        'pessoa_id'  => $request['pessoa_id']
                     ]
                 );
 
