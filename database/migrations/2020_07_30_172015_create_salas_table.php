@@ -15,7 +15,6 @@ class CreateSalasTable extends Migration
     {
         Schema::create('salas', function (Blueprint $table) {
             $table->id();
-            $table->id();
             $table->boolean('ativo')->default(true);
             $table->timestamps();
         });
