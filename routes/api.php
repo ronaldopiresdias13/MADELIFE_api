@@ -50,6 +50,12 @@ Route::get('acessos/{acesso}', 'Api\AcessosController@show');
 Route::put('acessos/{acesso}', 'Api\AcessosController@update');
 Route::delete('acessos/{acesso}', 'Api\AcessosController@destroy');
 
+Route::get('agendamentos', 'Api\AgendamentosController@index');
+Route::post('agendamentos', 'Api\AgendamentosController@store');
+Route::get('agendamentos/{agendamento}', 'Api\AgendamentosController@show');
+Route::put('agendamentos/{agendamento}', 'Api\AgendamentosController@update');
+Route::delete('agendamentos/{agendamento}', 'Api\AgendamentosController@destroy');
+
 Route::get('atribuicoes', 'Api\AtribuicoesController@index');
 Route::post('atribuicoes', 'Api\AtribuicoesController@store');
 Route::get('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@show');
@@ -443,6 +449,12 @@ Route::post('responsaveis', 'Api\ResponsaveisController@store');
 Route::get('responsaveis/{responsavel}', 'Api\ResponsaveisController@show');
 Route::put('responsaveis/{responsavel}', 'Api\ResponsaveisController@update');
 Route::delete('responsaveis/{responsavel}', 'Api\ResponsaveisController@destroy');
+
+Route::get('salas', 'Api\SalasController@index');
+Route::post('salas', 'Api\SalasController@store');
+Route::get('salas/{sala}', 'Api\SalasController@show');
+Route::put('salas/{sala}', 'Api\SalasController@update');
+Route::delete('salas/{sala}', 'Api\SalasController@destroy');
 
 Route::get('servicos', 'Api\ServicosController@index');
 Route::post('servicos', 'Api\ServicosController@store');

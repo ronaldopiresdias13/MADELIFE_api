@@ -14,7 +14,11 @@ class CreateSalasTable extends Migration
     public function up()
     {
         Schema::create('salas', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->string('nome')->nullable();
+            $table->string('descricao')->nullable();
+            $table->unsignedBigInteger('empresa_id');
+            $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
             $table->boolean('ativo')->default(true);
             $table->timestamps();
         });

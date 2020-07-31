@@ -2,20 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Agendamento;
 use App\Http\Controllers\Controller;
-use App\Imposto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class ImpostosController extends Controller
+class AgendamentosController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $itens = Imposto::where('ativo', true);
+        $itens = Agendamento::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -23,22 +25,12 @@ class ImpostosController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                // if ($key == 0) {
-                //     $itens = Imposto::where(
-                //         ($where['coluna']) ? $where['coluna'] : 'id',
-                //         ($where['expressao']) ? $where['expressao'] : 'like',
-                //         ($where['valor']) ? $where['valor'] : '%'
-                //     );
-                // } else {
                 $itens->where(
                     ($where['coluna']) ? $where['coluna'] : 'id',
                     ($where['expressao']) ? $where['expressao'] : 'like',
                     ($where['valor']) ? $where['valor'] : '%'
                 );
-                // }
             }
-            // } else {
-            //     $itens = Imposto::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -69,11 +61,15 @@ class ImpostosController extends Controller
                                     }
                                 }
                             } else {
-                                if ($iten2[0] == null) {
-                                    $iten2 = $iten2[$a];
-                                } else {
-                                    foreach ($iten2 as $key => $i) {
-                                        $i[$a];
+                                if ($iten2 != null) {
+                                    if ($iten2->count() > 0) {
+                                        if ($iten2[0] == null) {
+                                            $iten2 = $iten2[$a];
+                                        } else {
+                                            foreach ($iten2 as $key => $i) {
+                                                $i[$a];
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -94,19 +90,21 @@ class ImpostosController extends Controller
      */
     public function store(Request $request)
     {
-        Imposto::create($request->all());
+        DB::transaction(function () use ($request) {
+            Agendamento::create($request->all());
+        });
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Imposto  $imposto
+     * @param  \App\Agendamento  $agendamento
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Imposto $imposto)
+    public function show(Request $request, Agendamento $agendamento)
     {
-        $iten = $imposto;
+        $iten = $agendamento;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -128,11 +126,15 @@ class ImpostosController extends Controller
                                 }
                             }
                         } else {
-                            if ($iten2[0] == null) {
-                                $iten2 = $iten2[$a];
-                            } else {
-                                foreach ($iten2 as $key => $i) {
-                                    $i[$a];
+                            if ($iten2 != null) {
+                                if ($iten2->count() > 0) {
+                                    if ($iten2[0] == null) {
+                                        $iten2 = $iten2[$a];
+                                    } else {
+                                        foreach ($iten2 as $key => $i) {
+                                            $i[$a];
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -148,23 +150,25 @@ class ImpostosController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Imposto  $imposto
+     * @param  \App\Agendamento  $agendamento
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Imposto $imposto)
+    public function update(Request $request, Agendamento $agendamento)
     {
-        $imposto->update($request->all());
+        DB::transaction(function () use ($request, $agendamento) {
+            $agendamento->update($request->all());
+        });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Imposto  $imposto
+     * @param  \App\Agendamento  $agendamento
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Imposto $imposto)
+    public function destroy(Agendamento $agendamento)
     {
-        $imposto->ativo = false;
-        $imposto->save();
+        $agendamento->ativo = false;
+        $agendamento->save();
     }
 }
