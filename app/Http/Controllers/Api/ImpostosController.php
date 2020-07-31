@@ -153,7 +153,7 @@ class ImpostosController extends Controller
      */
     public function update(Request $request, Imposto $imposto)
     {
-        //
+        $imposto->update($request->all());
     }
 
     /**
