@@ -50,6 +50,12 @@ Route::get('acessos/{acesso}', 'Api\AcessosController@show');
 Route::put('acessos/{acesso}', 'Api\AcessosController@update');
 Route::delete('acessos/{acesso}', 'Api\AcessosController@destroy');
 
+Route::get('agendamentos', 'Api\AgendamentosController@index');
+Route::post('agendamentos', 'Api\AgendamentosController@store');
+Route::get('agendamentos/{agendamento}', 'Api\AgendamentosController@show');
+Route::put('agendamentos/{agendamento}', 'Api\AgendamentosController@update');
+Route::delete('agendamentos/{agendamento}', 'Api\AgendamentosController@destroy');
+
 Route::get('atribuicoes', 'Api\AtribuicoesController@index');
 Route::post('atribuicoes', 'Api\AtribuicoesController@store');
 Route::get('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@show');
@@ -444,6 +450,12 @@ Route::get('responsaveis/{responsavel}', 'Api\ResponsaveisController@show');
 Route::put('responsaveis/{responsavel}', 'Api\ResponsaveisController@update');
 Route::delete('responsaveis/{responsavel}', 'Api\ResponsaveisController@destroy');
 
+Route::get('salas', 'Api\SalasController@index');
+Route::post('salas', 'Api\SalasController@store');
+Route::get('salas/{sala}', 'Api\SalasController@show');
+Route::put('salas/{sala}', 'Api\SalasController@update');
+Route::delete('salas/{sala}', 'Api\SalasController@destroy');
+
 Route::get('servicos', 'Api\ServicosController@index');
 Route::post('servicos', 'Api\ServicosController@store');
 Route::get('servicos/{servico}', 'Api\ServicosController@show');
@@ -485,3 +497,10 @@ Route::post('users', 'Api\UsersController@store');
 Route::get('users/{user}', 'Api\UsersController@show');
 Route::put('users/{user}', 'Api\UsersController@update');
 Route::delete('users/{user}', 'Api\UsersController@destroy');
+// Route::post('users/new', 'Api\UsersController@store');                                      // Mudar na proxima versão do App
+
+Route::get('userAcessos', 'Api\UserAcessoController@index');
+Route::post('userAcessos', 'Api\UserAcessoController@store');                                      // Mudar na proxima versão do App
+Route::get('userAcessos/{userAcesso}', 'Api\UserAcessoController@show');
+Route::put('userAcessos/{userAcesso}', 'Api\UserAcessoController@update');
+Route::delete('userAcessos/{userAcesso}', 'Api\UserAcessoController@destroy');

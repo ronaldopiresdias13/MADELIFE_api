@@ -5,11 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Escala;
 use App\Cuidado;
 use App\CuidadoEscala;
-use App\Relatorioescala;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Storage;
+use App\OrdemservicoServico;
 
 class EscalasController extends Controller
 {
@@ -28,22 +26,12 @@ class EscalasController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                // if ($key == 0) {
-                //     $itens = Escala::where(
-                //         ($where['coluna']) ? $where['coluna'] : 'id',
-                //         ($where['expressao']) ? $where['expressao'] : 'like',
-                //         ($where['valor']) ? $where['valor'] : '%'
-                //     );
-                // } else {
                 $itens->where(
                     ($where['coluna']) ? $where['coluna'] : 'id',
                     ($where['expressao']) ? $where['expressao'] : 'like',
                     ($where['valor']) ? $where['valor'] : '%'
                 );
-                // }
             }
-            // } else {
-            //     $itens = Escala::where('id', 'like', '%')->limit(5);
         }
 
         if ($request['order']) {
@@ -99,23 +87,31 @@ class EscalasController extends Controller
      */
     public function store(Request $request)
     {
-        $escala = Escala::create([
-            'empresa_id'            => $request->empresa_id,
-            'ordemservico_id'       => $request->ordemservico_id,
-            'prestador_id'          => $request->prestador_id,
-            'servico_id'            => $request->servico_id,
-            'horaentrada'           => $request->horaentrada,
-            'horasaida'             => $request->horasaida,
-            'dataentrada'           => $request->dataentrada,
-            'datasaida'             => $request->datasaida,
-            'periodo'               => $request->periodo,
-            'assinaturaprestador'   => $request->assinaturaprestador,
-            'assinaturaresponsavel' => $request->assinaturaresponsavel,
-            'observacao'            => $request->observacao,
-            'status'                => $request->status,
-            'folga'                 => $request->folga,
-            'substituto'            => $request->substituto
-        ]);
+        $ordemservicoServico = OrdemservicoServico::where('ordemservico_id', $request->ordemservico_id)->where('servico_id', $request->servico_id)->first();
+        
+        $escala = new Escala;
+        if ($ordemservicoServico) {
+            $escala->tipo             = $ordemservicoServico->descricao;
+            $escala->valorhoradiurno  = $ordemservicoServico->valordiurno;
+            $escala->valorhoranoturno = $ordemservicoServico->valornoturno;
+            $escala->valoradicional   = 0;
+        }
+        $escala->empresa_id            = $request->empresa_id;
+        $escala->ordemservico_id       = $request->ordemservico_id;
+        $escala->prestador_id          = $request->prestador_id;
+        $escala->servico_id            = $request->servico_id;
+        $escala->horaentrada           = $request->horaentrada;
+        $escala->horasaida             = $request->horasaida;
+        $escala->dataentrada           = $request->dataentrada;
+        $escala->datasaida             = $request->datasaida;
+        $escala->periodo               = $request->periodo;
+        $escala->assinaturaprestador   = $request->assinaturaprestador;
+        $escala->assinaturaresponsavel = $request->assinaturaresponsavel;
+        $escala->observacao            = $request->observacao;
+        $escala->status                = $request->status;
+        $escala->folga                 = $request->folga;
+        $escala->substituto            = $request->substituto;
+        $escala->save();
 
         foreach ($request->cuidados as $key => $cuidado) {
             $cuidado_escala = CuidadoEscala::create([
@@ -198,6 +194,11 @@ class EscalasController extends Controller
         $escala->status                = $request->status;
         $escala->folga                 = $request->folga;
         $escala->substituto            = $request->substituto;
+        $escala->tipo                  = $request->tipo;
+        $escala->valorhoradiurno       = $request->valorhoradiurno;
+        $escala->valorhoranoturno      = $request->valorhoranoturno;
+        $escala->valoradicional        = $request->valoradicional;
+        $escala->motivoadicional       = $request->motivoadicional;
         $escala->save();
     }
 
