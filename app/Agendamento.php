@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 
-class Sala extends Model
+class Agendamento extends Model
 {
     use Uuid;
 
@@ -24,9 +24,14 @@ class Sala extends Model
     public $incrementing = false;
 
     protected $guarded = [];
-
-    public function agendamentos()
+    
+    public function sala()
     {
-        return $this->hasMany('App\Agendamento')->where('ativo', true);
+        return $this->belongsTo('App\Sala');
+    }
+
+    public function profissional()
+    {
+        return $this->belongsTo('App\Profissional');
     }
 }
