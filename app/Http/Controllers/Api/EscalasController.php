@@ -194,6 +194,11 @@ class EscalasController extends Controller
         $escala->status                = $request->status;
         $escala->folga                 = $request->folga;
         $escala->substituto            = $request->substituto;
+        $escala->tipo                  = $request->tipo;
+        $escala->valorhoradiurno       = $request->valorhoradiurno;
+        $escala->valorhoranoturno      = $request->valorhoranoturno;
+        $escala->valoradicional        = $request->valoradicional;
+        $escala->motivoadicional       = $request->motivoadicional;
         $escala->save();
     }
 
