@@ -3,19 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Servico;
+use App\Sala;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class ServicosController extends Controller
+class SalasController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $itens = Servico::where('ativo', true);
+        $itens = Sala::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -59,11 +61,15 @@ class ServicosController extends Controller
                                     }
                                 }
                             } else {
-                                if ($iten2[0] == null) {
-                                    $iten2 = $iten2[$a];
-                                } else {
-                                    foreach ($iten2 as $key => $i) {
-                                        $i[$a];
+                                if ($iten2 != null) {
+                                    if ($iten2->count() > 0) {
+                                        if ($iten2[0] == null) {
+                                            $iten2 = $iten2[$a];
+                                        } else {
+                                            foreach ($iten2 as $key => $i) {
+                                                $i[$a];
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -84,23 +90,21 @@ class ServicosController extends Controller
      */
     public function store(Request $request)
     {
-        $servico = new Servico();
-        $servico->descricao  = $request->descricao;
-        $servico->codigo     = $request->codigo;
-        $servico->valor      = $request->valor;
-        $servico->empresa_id = $request->empresa_id;
-        $servico->save();
+        DB::transaction(function () use ($request) {
+            Sala::create($request->all());
+        });
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Servico  $servico
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Sala  $sala
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Servico $servico)
+    public function show(Request $request, Sala $sala)
     {
-        $iten = $servico;
+        $iten = $sala;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -122,11 +126,15 @@ class ServicosController extends Controller
                                 }
                             }
                         } else {
-                            if ($iten2[0] == null) {
-                                $iten2 = $iten2[$a];
-                            } else {
-                                foreach ($iten2 as $key => $i) {
-                                    $i[$a];
+                            if ($iten2 != null) {
+                                if ($iten2->count() > 0) {
+                                    if ($iten2[0] == null) {
+                                        $iten2 = $iten2[$a];
+                                    } else {
+                                        foreach ($iten2 as $key => $i) {
+                                            $i[$a];
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -142,23 +150,25 @@ class ServicosController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Servico  $servico
+     * @param  \App\Sala  $sala
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Servico $servico)
+    public function update(Request $request, Sala $sala)
     {
-        $servico->update($request->all());
+        DB::transaction(function () use ($request, $sala) {
+            $sala->update($request->all());
+        });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Servico  $servico
+     * @param  \App\Sala  $sala
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Servico $servico)
+    public function destroy(Sala $sala)
     {
-        $servico->ativo = false;
-        $servico->save();
+        $sala->ativo = false;
+        $sala->save();
     }
 }

@@ -29,4 +29,9 @@ class Sala extends Model
     {
         return $this->hasMany('App\Agendamento')->where('ativo', true);
     }
+
+    public function empresa()
+    {
+        return $this->belongsTo('App\Empresa');
+    }
 }
