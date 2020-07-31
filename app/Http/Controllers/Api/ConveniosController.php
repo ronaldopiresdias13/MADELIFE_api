@@ -25,22 +25,12 @@ class ConveniosController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                // if ($key == 0) {
-                //     $itens = Convenio::where(
-                //         ($where['coluna']) ? $where['coluna'] : 'id',
-                //         ($where['expressao']) ? $where['expressao'] : 'like',
-                //         ($where['valor']) ? $where['valor'] : '%'
-                //     );
-                // } else {
                 $itens->where(
                     ($where['coluna']) ? $where['coluna'] : 'id',
                     ($where['expressao']) ? $where['expressao'] : 'like',
                     ($where['valor']) ? $where['valor'] : '%'
                 );
-                // }
             }
-            // } else {
-            //     $itens = Convenio::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -71,11 +61,15 @@ class ConveniosController extends Controller
                                     }
                                 }
                             } else {
-                                if ($iten2[0] == null) {
-                                    $iten2 = $iten2[$a];
-                                } else {
-                                    foreach ($iten2 as $key => $i) {
-                                        $i[$a];
+                                if ($iten2 != null) {
+                                    if ($iten2->count() > 0) {
+                                        if ($iten2[0] == null) {
+                                            $iten2 = $iten2[$a];
+                                        } else {
+                                            foreach ($iten2 as $key => $i) {
+                                                $i[$a];
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -131,11 +125,15 @@ class ConveniosController extends Controller
                                 }
                             }
                         } else {
-                            if ($iten2[0] == null) {
-                                $iten2 = $iten2[$a];
-                            } else {
-                                foreach ($iten2 as $key => $i) {
-                                    $i[$a];
+                            if ($iten2 != null) {
+                                if ($iten2->count() > 0) {
+                                    if ($iten2[0] == null) {
+                                        $iten2 = $iten2[$a];
+                                    } else {
+                                        foreach ($iten2 as $key => $i) {
+                                            $i[$a];
+                                        }
+                                    }
                                 }
                             }
                         }
