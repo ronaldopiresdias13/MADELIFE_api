@@ -14,10 +14,11 @@ class CreateAgendamentosTable extends Migration
     public function up()
     {
         Schema::create('agendamentos', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
+            $table->uuid('uuid')->unique();
             $table->unsignedBigInteger('profissional_id');
             $table->foreign('profissional_id')->references('id')->on('profissionais')->onDelete('cascade');
-            $table->uuid('sala_id');
+            $table->unsignedBigInteger('sala_id');
             $table->foreign('sala_id')->references('id')->on('salas')->onDelete('cascade');
             $table->string('nome')->nullable();
             $table->string('descricao')->nullable();
