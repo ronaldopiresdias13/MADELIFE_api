@@ -37,22 +37,12 @@ class CnabsController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                // if ($key == 0) {
-                //     $itens = Cnab::where(
-                //         ($where['coluna']) ? $where['coluna'] : 'id',
-                //         ($where['expressao']) ? $where['expressao'] : 'like',
-                //         ($where['valor']) ? $where['valor'] : '%'
-                //     );
-                // } else {
                 $itens->where(
                     ($where['coluna']) ? $where['coluna'] : 'id',
                     ($where['expressao']) ? $where['expressao'] : 'like',
                     ($where['valor']) ? $where['valor'] : '%'
                 );
-                // }
             }
-            // } else {
-            //     $itens = Cnab::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -83,11 +73,15 @@ class CnabsController extends Controller
                                     }
                                 }
                             } else {
-                                if ($iten2[0] == null) {
-                                    $iten2 = $iten2[$a];
-                                } else {
-                                    foreach ($iten2 as $key => $i) {
-                                        $i[$a];
+                                if ($iten2 != null) {
+                                    if ($iten2->count() > 0) {
+                                        if ($iten2[0] == null) {
+                                            $iten2 = $iten2[$a];
+                                        } else {
+                                            foreach ($iten2 as $key => $i) {
+                                                $i[$a];
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -162,7 +156,6 @@ class CnabsController extends Controller
                 ]);
 
                 foreach ($request['cnabSantanderFolha240']['cnabSantanderFolha240HeaderArquivo']['cnabSantanderFolha240HeaderLote'] as $key => $cnabHeaderLote) {
-                    // dd($cnabHeaderLote['ocorrenciasretorno']);
                     $cnabheaderarquivoheaderlote = Cnabheaderarquivoheaderlote::create([
                         'cnabheaderarquivo_id' => $cnabsantander->cnabheaderarquivo_id,
                         'cnabheaderlote_id'    => Cnabheaderlote::create([
@@ -288,8 +281,6 @@ class CnabsController extends Controller
                 }
             }
             if ($request['cnabSantanderFornecedores240']) {
-                // dd('' . $request['cnabSantanderFornecedores240']['cnabSantanderFornecedores240HeaderArquivo']['filler']);
-                // dd('' . $request->cnabSantanderFornecedores240->cnabSantanderFornecedores240HeaderArquivo->filler);
                 $cnabsantander = Cnabsantander::create([
                     'cnab_id' => $cnab->id,
                     'tipo'    => $request['cnabSantanderFornecedores240']['tipo'],
@@ -333,7 +324,6 @@ class CnabsController extends Controller
                 ]);
 
                 foreach ($request['cnabSantanderFornecedores240']['cnabSantanderFornecedores240HeaderArquivo']['cnabSantanderFornecedores240HeaderLote'] as $key => $cnabHeaderLote) {
-                    // dd($cnabHeaderLote['ocorrenciasretorno']);
                     $cnabheaderarquivoheaderlote = Cnabheaderarquivoheaderlote::create([
                         'cnabheaderarquivo_id' => $cnabsantander->cnabheaderarquivo_id,
                         'cnabheaderlote_id'    => Cnabheaderlote::create([

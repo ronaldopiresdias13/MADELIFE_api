@@ -15,6 +15,7 @@ use App\PessoaTelefone;
 use App\Prestador;
 use App\PrestadorFormacao;
 use App\Telefone;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -108,18 +109,74 @@ class PrestadoresController extends Controller
      */
     public function store(Request $request)
     {
-        $prestador = new Prestador();
-        $prestador->pessoa             = $request->pessoa;
-        $prestador->fantasia           = $request->fantasia;
-        $prestador->sexo               = $request->sexo;
-        $prestador->pis                = $request->pis;
-        $prestador->formacao           = $request->formacao;
-        $prestador->cargo              = $request->cargo;
-        $prestador->curriculo          = $request->curriculo;
-        $prestador->certificado        = $request->certificado;
-        $prestador->meiativa           = $request->meiativa ? $request->meiativa : 0;
-        $prestador->dataverificacaomei = $request->dataverificacaomei ? $request->dataverificacaomei : null;
-        $prestador->save();
+        $cpfcnpj = Pessoa::where(
+            'cpfcnpj',
+            $request['pessoa']['cpfcnpj']
+        );
+        $email = Email::where('email', $request['user']['email']);
+        if ($cpfcnpj) {
+            return response()->json('Usuário já existe!', 400)->header('Content-Type', 'text/plain');
+        }
+        if ($email) {
+            return response()->json('Usuário já existe!', 400)->header('Content-Type', 'text/plain');
+        } else {
+            $user = User::create(
+                [
+                    'cpfcnpj'    => $request['cpfcnpj'],
+                    'email'      => $request['user']['email'],
+                    'password'   =>  bcrypt($request['user']['password']),
+                    'pessoa_id'  => Pessoa::create(
+                        [
+                            'nome'       => $request['nome'],
+                            'nascimento' => $request['nascimento'],
+                            'tipo'       => $request['tipo'],
+                            'cpfcnpj'    => $request['cpfcnpj'],
+                            'status'     => $request['status']
+                        ]
+                    )->id
+                ]
+            );
+            $pessoa_email = PessoaEmail::firstOrCreate([
+                'pessoa_id' => $user->pessoa_id,
+                'email_id'  => Email::firstOrCreate(
+                    [
+                        'email' => $user->email,
+                    ]
+                )->id,
+                'tipo'      => 'Pessoal',
+            ]);
+            $conselho = Conselho::create(
+                [
+                    'instituicao' => $request['conselho']['instituicao'],
+                    'numero'      => $request['conselho']['numero'],
+                    'pessoa_id'   => $user->pessoa_id
+                ]
+            );
+            $formacao = PrestadorFormacao::create(
+                [
+                    'prestador_id' => Prestador::create(
+                        [
+                            'pessoa_id' => $user->pessoa_id,
+                            'sexo'      => $request['prestador']['sexo']
+                        ]
+                    )->id,
+                    'formacao_id'  => $request['prestador']['formacao_id']
+                ]
+            );
+        }
+        
+        // $prestador = new Prestador();
+        // $prestador->pessoa             = $request->pessoa;
+        // $prestador->fantasia           = $request->fantasia;
+        // $prestador->sexo               = $request->sexo;
+        // $prestador->pis                = $request->pis;
+        // $prestador->formacao           = $request->formacao;
+        // $prestador->cargo              = $request->cargo;
+        // $prestador->curriculo          = $request->curriculo;
+        // $prestador->certificado        = $request->certificado;
+        // $prestador->meiativa           = $request->meiativa ? $request->meiativa : 0;
+        // $prestador->dataverificacaomei = $request->dataverificacaomei ? $request->dataverificacaomei : null;
+        // $prestador->save();
     }
 
     /**

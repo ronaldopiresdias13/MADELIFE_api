@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Conselho;
 use App\Http\Controllers\Controller;
+use App\Sala;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class ConselhosController extends Controller
+class SalasController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $itens = Conselho::where('ativo', true);
+        $itens = Sala::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -90,24 +91,20 @@ class ConselhosController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            $conselho = new Conselho();
-            $conselho->instituicao = $request->instituicao;
-            $conselho->uf          = $request->uf;
-            $conselho->numero      = $request->numero;
-            $conselho->pessoa_id   = $request->pessoa_id;
-            $conselho->save();
+            Sala::create($request->all());
         });
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Conselho  $conselho
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Sala  $sala
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Conselho $conselho)
+    public function show(Request $request, Sala $sala)
     {
-        $iten = $conselho;
+        $iten = $sala;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -153,25 +150,25 @@ class ConselhosController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Conselho  $conselho
+     * @param  \App\Sala  $sala
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Conselho $conselho)
+    public function update(Request $request, Sala $sala)
     {
-        DB::transaction(function () use ($request, $conselho) {
-            $conselho->update($request->all());
+        DB::transaction(function () use ($request, $sala) {
+            $sala->update($request->all());
         });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Conselho  $conselho
+     * @param  \App\Sala  $sala
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Conselho $conselho)
+    public function destroy(Sala $sala)
     {
-        $conselho->ativo = false;
-        $conselho->save();
+        $sala->ativo = false;
+        $sala->save();
     }
 }

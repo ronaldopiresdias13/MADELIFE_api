@@ -39,22 +39,12 @@ class ProfissionaisController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                // if ($key == 0) {
-                //     $itens = Profissional::where(
-                //         ($where['coluna']) ? $where['coluna'] : 'id',
-                //         ($where['expressao']) ? $where['expressao'] : 'like',
-                //         ($where['valor']) ? $where['valor'] : '%'
-                //     );
-                // } else {
                 $itens->where(
                     ($where['coluna']) ? $where['coluna'] : 'id',
                     ($where['expressao']) ? $where['expressao'] : 'like',
                     ($where['valor']) ? $where['valor'] : '%'
                 );
-                // }
             }
-            // } else {
-            //     $itens = Profissional::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -118,9 +108,6 @@ class ProfissionaisController extends Controller
             $pessoa = Pessoa::where(
                 'cpfcnpj',
                 $request['pessoa']['cpfcnpj']
-            // )->where(
-            //     'empresa_id',
-            //     $request['pessoa']['empresa_id']
             )->first();
         } elseif ($request['pessoa_id']) {
             $pessoa = Pessoa::find($request['pessoa_id']);
@@ -145,7 +132,6 @@ class ProfissionaisController extends Controller
                 'empresa_id'   => 1,
                 'pessoa_id'    => Pessoa::firstOrCreate(
                     [
-                        // 'id' => ($request['pessoa']['id'] != '') ? $request['pessoa']['id'] : null,
                         'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
                     ],
                     [
@@ -268,51 +254,48 @@ class ProfissionaisController extends Controller
                 }
             }
 
-            if ($request['pessoa']['user']) {
-                if ($request['pessoa']['user']['email'] !== '') {
-                    $user = new User();
-                    if ($request['pessoa']['user']['password'] !== '') {
-                        $user = User::updateOrCreate(
-                            [
-                                'email'      =>        $request['pessoa']['user']['email'],
-                            ],
-                            [
-                                'empresa_id' =>        $request['empresa_id'],
-                                'cpfcnpj'    =>        $request['pessoa']['user']['cpfcnpj'],
-                                'password'   => bcrypt($request['pessoa']['user']['password']),
-                                'pessoa_id'  =>        $profissional->pessoa_id,
-                            ]
-                        );
-                    } else {
-                        $user = User::firstOrCreate(
-                            [
-                                'email'      =>        $request['pessoa']['user']['email'],
-                            ],
-                            [
-                                'empresa_id' =>        $request['empresa_id'],
-                                'cpfcnpj'    =>        $request['pessoa']['user']['cpfcnpj'],
-                                'password'   => bcrypt($request['pessoa']['user']['password']),
-                                'pessoa_id'  =>        $profissional->pessoa_id,
-                            ]
-                        );
-                    }
-                    // if ($request['pessoa']['user']['acessos']) {
-                    //     foreach ($request['pessoa']['user']['acessos'] as $key => $acesso) {
-                    //         $user_acesso = UserAcesso::firstOrCreate([
-                    //             'user_id'   => $user->id,
-                    //             'acesso_id' => $acesso,
-                    //         ]);
-                    //     }
-                    // }
-                }
-            }
+            // if ($request['pessoa']['user']) {
+            //     if ($request['pessoa']['user']['email'] !== '') {
+            //         $user = new User();
+            //         if ($request['pessoa']['user']['password'] !== '') {
+            //             $user = User::updateOrCreate(
+            //                 [
+            //                     'email'      =>        $request['pessoa']['user']['email'],
+            //                 ],
+            //                 [
+            //                     // 'empresa_id' =>        $request['empresa_id'],
+            //                     'cpfcnpj'    =>        $request['pessoa']['user']['cpfcnpj'],
+            //                     'password'   => bcrypt($request['pessoa']['user']['password']),
+            //                     'pessoa_id'  =>        $profissional->pessoa_id,
+            //                 ]
+            //             );
+            //         } else {
+            //             $user = User::firstOrCreate(
+            //                 [
+            //                     'email'      =>        $request['pessoa']['user']['email'],
+            //                 ],
+            //                 [
+            //                     // 'empresa_id' =>        $request['empresa_id'],
+            //                     'cpfcnpj'    =>        $request['pessoa']['user']['cpfcnpj'],
+            //                     'password'   => bcrypt($request['pessoa']['user']['password']),
+            //                     'pessoa_id'  =>        $profissional->pessoa_id,
+            //                 ]
+            //             );
+            //         }
+            //         if ($request['pessoa']['user']['acessos']) {
+            //             foreach ($request['pessoa']['user']['acessos'] as $key => $acesso) {
+            //                 $user_acesso = UserAcesso::firstOrCreate([
+            //                     'user_id'   => $user->id,
+            //                     'acesso_id' => $acesso,
+            //                 ]);
+            //             }
+            //         }
+            //     }
+            // }
         });
-        // return $profissional;
+        
         return response()->json('Profissional cadastrado com sucesso!', 200)->header('Content-Type', 'text/plain');
     }
-
-    // ["prestador", "pessoa", "conselhos"],
-    // "pontos", "servico"
 
     /**
      * Display the specified resource.
