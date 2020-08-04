@@ -91,25 +91,29 @@ class PrestadorFormacaoController extends Controller
      */
     public function store(Request $request)
     {
-        $file = $request->file('file');
-        if ($file->isValid()) {
+        // return $request;
+        $file = $request->file("file");
+        $request = json_decode($request->data, true);
+        // return $request;
+        if ($file && $file->isValid()) {
             $md5 = md5_file($file);
-            $caminho = 'certificados/' . $request['prestador_id'];
+            $caminho = 'certificados/' . $request["prestador_id"];
             $nome = $md5 . '.' . $file->extension();
             $upload = $file->storeAs($caminho, $nome);
             $nomeOriginal = $file->getClientOriginalName();
             if ($upload) {
                 DB::transaction(function () use ($request, $caminho, $nome, $nomeOriginal) {
-                    $prestador_formacao = PrestadorFormacao::updateOrCreate([
-                        'prestador_id' => $request->prestador_id,
-                        'formacao_id'  => $request->formacao_id,
-                        'caminho'      => $caminho . '/' . $nome,
-                        'nome'         => $nomeOriginal,
-                    ],
-                    [
-                        'ativo' => true
-                    ]
-                );
+                    $prestador_formacao = PrestadorFormacao::updateOrCreate(
+                        [
+                            'prestador_id' => $request['prestador_id'],
+                            'formacao_id'  => $request['formacao_id'],
+                            'caminho'      => $caminho . '/' . $nome,
+                            'nome'         => $nomeOriginal,
+                        ],
+                        [
+                            'ativo' => true
+                        ]
+                    );
                 });
                 return response()->json('Upload de arquivo bem sucedido!', 200)->header('Content-Type', 'text/plain');
             } else {
@@ -180,6 +184,7 @@ class PrestadorFormacaoController extends Controller
      */
     public function update(Request $request, PrestadorFormacao $prestadorFormacao)
     {
+        return 'UpDate';
         DB::transaction(function () use ($request, $prestadorFormacao) {
             $prestadorFormacao->prestador_id = $request->prestador_id;
             $prestadorFormacao->formacao_id  = $request->formacao_id;
