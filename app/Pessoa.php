@@ -63,4 +63,9 @@ class Pessoa extends Model
     {
         return $this->hasMany('App\Conselho')->where('ativo', true);
     }
+
+    public function responsavel()
+    {
+        return $this->hasOne('App\Responsavel');
+    }
 }

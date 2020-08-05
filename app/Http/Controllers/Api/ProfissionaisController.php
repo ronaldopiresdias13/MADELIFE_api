@@ -490,55 +490,55 @@ class ProfissionaisController extends Controller
                 }
             }
 
-            if ($request['pessoa']['user']) {
-                if ($request['pessoa']['user']['email'] !== '') {
-                    $user = new User();
+            // if ($request['pessoa']['user']) {
+            //     if ($request['pessoa']['user']['email'] !== '') {
+            //         $user = new User();
 
-                    if ($request['pessoa']['user']['password'] !== '') {
-                        $user = User::where('email', $request['pessoa']['user']['email'])->first();
-                        if ($user) {
-                            // return 'Teste 1';
-                            $user->update([
-                                'empresa_id' =>        $request['empresa_id'],
-                                'cpfcnpj'    =>        $request['pessoa']['user']['cpfcnpj'],
-                                'password'   => bcrypt($request['pessoa']['user']['password']),
-                                'pessoa_id'  =>        $profissional->pessoa_id,
-                            ]);
-                        } else {
-                            $user = User::where('cpfcnpj', $request['pessoa']['user']['cpfcnpj'])->first();
-                            if ($user) {
-                                // return 'Teste 2';
-                                $user->update([
-                                    'email'      =>        $request['pessoa']['user']['email'],
-                                    'empresa_id' =>        $request['empresa_id'],
-                                    'password'   => bcrypt($request['pessoa']['user']['password']),
-                                    'pessoa_id'  =>        $profissional->pessoa_id,
-                                ]);
-                            } else {
-                                // return 'Teste 3';
-                                $user = User::create([
-                                    'empresa_id' =>        $request['empresa_id'],
-                                    'email'      =>        $request['pessoa']['user']['email'],
-                                    'cpfcnpj'    =>        $request['pessoa']['user']['cpfcnpj'],
-                                    'password'   => bcrypt($request['pessoa']['user']['password']),
-                                    'pessoa_id'  =>        $profissional->pessoa_id,
-                                ]);
-                            }
-                        }
-                    }
+            //         if ($request['pessoa']['user']['password'] !== '') {
+            //             $user = User::where('email', $request['pessoa']['user']['email'])->first();
+            //             if ($user) {
+            //                 // return 'Teste 1';
+            //                 $user->update([
+            //                     'empresa_id' =>        $request['empresa_id'],
+            //                     'cpfcnpj'    =>        $request['pessoa']['user']['cpfcnpj'],
+            //                     'password'   => bcrypt($request['pessoa']['user']['password']),
+            //                     'pessoa_id'  =>        $profissional->pessoa_id,
+            //                 ]);
+            //             } else {
+            //                 $user = User::where('cpfcnpj', $request['pessoa']['user']['cpfcnpj'])->first();
+            //                 if ($user) {
+            //                     // return 'Teste 2';
+            //                     $user->update([
+            //                         'email'      =>        $request['pessoa']['user']['email'],
+            //                         'empresa_id' =>        $request['empresa_id'],
+            //                         'password'   => bcrypt($request['pessoa']['user']['password']),
+            //                         'pessoa_id'  =>        $profissional->pessoa_id,
+            //                     ]);
+            //                 } else {
+            //                     // return 'Teste 3';
+            //                     $user = User::create([
+            //                         'empresa_id' =>        $request['empresa_id'],
+            //                         'email'      =>        $request['pessoa']['user']['email'],
+            //                         'cpfcnpj'    =>        $request['pessoa']['user']['cpfcnpj'],
+            //                         'password'   => bcrypt($request['pessoa']['user']['password']),
+            //                         'pessoa_id'  =>        $profissional->pessoa_id,
+            //                     ]);
+            //                 }
+            //             }
+            //         }
 
-                    if ($request['pessoa']['user']['acessos']) {
-                        if ($user) {
-                            foreach ($request['pessoa']['user']['acessos'] as $key => $acesso) {
-                                $user_acesso = UserAcesso::firstOrCreate([
-                                    'user_id'   => $user->id,
-                                    'acesso_id' => $acesso,
-                                ]);
-                            }
-                        }
-                    }
-                }
-            }
+            //         if ($request['pessoa']['user']['acessos']) {
+            //             if ($user) {
+            //                 foreach ($request['pessoa']['user']['acessos'] as $key => $acesso) {
+            //                     $user_acesso = UserAcesso::firstOrCreate([
+            //                         'user_id'   => $user->id,
+            //                         'acesso_id' => $acesso,
+            //                     ]);
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
         });
     }
 
