@@ -12,9 +12,9 @@ class Sala extends Model
     protected $keyType = 'string';
     protected $primaryKey = 'uuid';
     protected $guarded = [];
-    protected $hidden = [
-        'id'
-    ];
+    // protected $hidden = [
+    //     'id'
+    // ];
 
     public function agendamentos()
     {
