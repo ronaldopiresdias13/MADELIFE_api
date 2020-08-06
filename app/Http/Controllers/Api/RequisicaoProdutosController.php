@@ -157,7 +157,13 @@ class RequisicaoProdutosController extends Controller
     public function update(Request $request, RequisicaoProduto $requisicaoProduto)
     {
         $produto = Produto::find($request["produto_id"]);
-        $requisicaoProduto->update($request->all());
+        $requisicaoProduto->update([
+            'requisicao_id' => $request['requisicao_id'],
+            'produto_id'    => $request['produto_id'],
+            'quantidade'    => $request['quantidade'],
+            'observacao'    => $request['observacao'],
+            'status'        => $request['status']
+        ]);
         if ($request["status"] === "Aprovado") {
             $produto->quantidadeestoque = $produto->quantidadeestoque - $request["quantidade"];
             $produto->update();

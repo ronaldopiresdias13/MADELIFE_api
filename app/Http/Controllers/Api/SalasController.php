@@ -156,7 +156,10 @@ class SalasController extends Controller
     public function update(Request $request, Sala $sala)
     {
         DB::transaction(function () use ($request, $sala) {
-            $sala->update($request->all());
+            $sala->nome      = $request['nome'];
+            $sala->descricao = $request['descricao'];
+            $sala->save();
+            // $sala->update($request->all());
         });
     }
 
