@@ -86,39 +86,29 @@ class AuthController extends Controller
     {
         $cpfcnpj = User::firstWhere('cpfcnpj', $request['cpfcnpj']);
 
+        // return $cpfcnpj;
+
         $email = User::firstWhere('email', $request['user']['email']);
 
         $user = null;
 
         if ($cpfcnpj) {
+            // return 'entrou';
             $user = $cpfcnpj;
         } elseif ($email) {
             $user = $email;
         }
 
+        // return $user;
+
+        // dd('PARE');
+
         if ($user) {
             $prestador = Prestador::firstWhere('pessoa_id', $user->pessoa->id);
             if ($prestador) {
-                return response()->json('Usuário já existe!', 400)->header('Content-Type', 'text/plain');
+                return response()->json('Você já possui cadastro!', 400)->header('Content-Type', 'text/plain');
             } else {
-                DB::transaction(function () use ($request) {
-                    $user = User::create(
-                        [
-                            // 'empresa_id' => 1,
-                            'cpfcnpj'    => $request['cpfcnpj'],
-                            'email'      => $request['user']['email'],
-                            'password'   =>  bcrypt($request['user']['password']),
-                            'pessoa_id'  => Pessoa::create(
-                                [
-                                    'nome'       => $request['nome'],
-                                    // 'nascimento' => $request['nascimento'],
-                                    'tipo'       => 'Prestador',
-                                    'cpfcnpj'    => $request['cpfcnpj'],
-                                    'status'     => $request['status']
-                                ]
-                            )->id
-                        ]
-                    );
+                DB::transaction(function () use ($request, $user) {
 
                     $pessoa_email = PessoaEmail::firstOrCreate([
                         'pessoa_id' => $user->pessoa_id,
@@ -151,6 +141,55 @@ class AuthController extends Controller
                     );
                 });
             }
+        } else {
+            DB::transaction(function () use ($request) {
+                $user = User::create(
+                    [
+                        'cpfcnpj'    => $request['cpfcnpj'],
+                        'email'      => $request['user']['email'],
+                        'password'   =>  bcrypt($request['user']['password']),
+                        'pessoa_id'  => Pessoa::create(
+                            [
+                                'nome'       => $request['nome'],
+                                // 'nascimento' => $request['nascimento'],
+                                'tipo'       => 'Prestador',
+                                'cpfcnpj'    => $request['cpfcnpj'],
+                                'status'     => $request['status']
+                            ]
+                        )->id
+                    ]
+                );
+
+                $pessoa_email = PessoaEmail::firstOrCreate([
+                    'pessoa_id' => $user->pessoa_id,
+                    'email_id'  => Email::firstOrCreate(
+                        [
+                            'email' => $user->email,
+                        ]
+                    )->id,
+                    'tipo'      => 'Pessoal',
+                ]);
+
+                $conselho = Conselho::create(
+                    [
+                        'instituicao' => $request['conselho']['instituicao'],
+                        'numero'      => $request['conselho']['numero'],
+                        'pessoa_id'   => $user->pessoa_id
+                    ]
+                );
+
+                $formacao = PrestadorFormacao::create(
+                    [
+                        'prestador_id' => Prestador::create(
+                            [
+                                'pessoa_id' => $user->pessoa_id,
+                                'sexo'      => $request['prestador']['sexo']
+                            ]
+                        )->id,
+                        'formacao_id'  => $request['prestador']['formacao_id']
+                    ]
+                );
+            });
         }
     }
 
