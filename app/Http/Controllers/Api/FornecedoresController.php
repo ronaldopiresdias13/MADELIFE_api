@@ -110,7 +110,6 @@ class FornecedoresController extends Controller
             'empresa_id' => $request['empresa_id'],
             'pessoa_id'  => Pessoa::create(
                 [
-                    'empresa_id'  => $request['pessoa']['empresa_id'],
                     'nome'        => $request['pessoa']['nome'],
                     'nascimento'  => $request['pessoa']['nascimento'],
                     'tipo'        =>                    'Fornecedor',
@@ -239,7 +238,6 @@ class FornecedoresController extends Controller
             $pessoa = Pessoa::find($request['pessoa']['id']);
             if ($pessoa) {
                 $pessoa->update([
-                    'empresa_id'  => $request['pessoa']['empresa_id'],
                     'nome'        => $request['pessoa']['nome'],
                     'nascimento'  => $request['pessoa']['nascimento'],
                     'tipo'        => $request['pessoa']['tipo'],
