@@ -98,7 +98,6 @@ class EmpresaPrestadorController extends Controller
     public function store(Request $request)
     {
         $file = $request->file('file');
-        // return $file;
         $request = json_decode($request->data, true);
         if ($file && $file->isValid()) {
             $md5 = md5_file($file);
