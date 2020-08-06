@@ -130,8 +130,8 @@ class FornecedoresController extends Controller
                         'telefone'  => $telefone['telefone'],
                     ]
                 )->id,
-                'tipo'      => $telefone['tipo'],
-                'descricao' => $telefone['descricao'],
+                'tipo'      => $telefone['pivot']['tipo'],
+                'descricao' => $telefone['pivot']['descricao'],
             ]);
         }
         foreach ($request['pessoa']['emails'] as $key => $email) {
@@ -143,8 +143,8 @@ class FornecedoresController extends Controller
                             'email' => $email['email'],
                         ]
                     )->id,
-                    'tipo'      => $email['tipo'],
-                    'descricao' => $email['descricao'],
+                    'tipo'      => $email['pivot']['tipo'],
+                    'descricao' => $email['pivot']['descricao'],
                 ]);
             }
         }
