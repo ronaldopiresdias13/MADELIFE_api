@@ -110,7 +110,6 @@ class FornecedoresController extends Controller
             'empresa_id' => $request['empresa_id'],
             'pessoa_id'  => Pessoa::create(
                 [
-                    'empresa_id'  => $request['pessoa']['empresa_id'],
                     'nome'        => $request['pessoa']['nome'],
                     'nascimento'  => $request['pessoa']['nascimento'],
                     'tipo'        =>                    'Fornecedor',
@@ -131,8 +130,8 @@ class FornecedoresController extends Controller
                         'telefone'  => $telefone['telefone'],
                     ]
                 )->id,
-                'tipo'      => $telefone['tipo'],
-                'descricao' => $telefone['descricao'],
+                'tipo'      => $telefone['pivot']['tipo'],
+                'descricao' => $telefone['pivot']['descricao'],
             ]);
         }
         foreach ($request['pessoa']['emails'] as $key => $email) {
@@ -144,8 +143,8 @@ class FornecedoresController extends Controller
                             'email' => $email['email'],
                         ]
                     )->id,
-                    'tipo'      => $email['tipo'],
-                    'descricao' => $email['descricao'],
+                    'tipo'      => $email['pivot']['tipo'],
+                    'descricao' => $email['pivot']['descricao'],
                 ]);
             }
         }
@@ -239,7 +238,6 @@ class FornecedoresController extends Controller
             $pessoa = Pessoa::find($request['pessoa']['id']);
             if ($pessoa) {
                 $pessoa->update([
-                    'empresa_id'  => $request['pessoa']['empresa_id'],
                     'nome'        => $request['pessoa']['nome'],
                     'nascimento'  => $request['pessoa']['nascimento'],
                     'tipo'        => $request['pessoa']['tipo'],
