@@ -103,9 +103,6 @@ class ClientesController extends Controller
         $pessoa = Pessoa::where(
             'cpfcnpj',
             $request['pessoa']['cpfcnpj']
-        )->where(
-            'empresa_id',
-            $request['pessoa']['empresa_id']
         )->first();
 
         $cliente = null;
@@ -130,7 +127,6 @@ class ClientesController extends Controller
                         'id' => ($request['pessoa']['id'] != '') ? $request['id'] : null,
                     ],
                     [
-                        'empresa_id'  => $request['pessoa']['empresa_id'],
                         'nome'        => $request['pessoa']['nome'],
                         'nascimento'  => $request['pessoa']['nascimento'],
                         'tipo'        =>                    'Cliente',
@@ -299,7 +295,6 @@ class ClientesController extends Controller
             $pessoa = Pessoa::find($request['pessoa']['id']);
             if ($pessoa) {
                 $pessoa->update([
-                    'empresa_id'  => $request['pessoa']['empresa_id'],
                     'nome'        => $request['pessoa']['nome'],
                     'nascimento'  => $request['pessoa']['nascimento'],
                     'tipo'        => $request['pessoa']['tipo'],
