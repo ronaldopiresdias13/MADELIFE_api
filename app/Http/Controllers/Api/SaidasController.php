@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Saida;
+use App\SaidaProduto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -90,9 +91,27 @@ class SaidasController extends Controller
      */
     public function store(Request $request)
     {
-        DB::transaction(function () use ($request) {
-            Saida::create($request->all());
-        });
+        // DB::transaction(function () use ($request) {
+        $saida = Saida::create([
+            'empresa_id'      => $request['empresa_id'],
+            'data'            => $request['data'],
+            'descricao'       => $request['descricao'],
+            'profissional_id' => $request['profissional_id']
+        ]);
+
+        return $saida;
+
+        // foreach ($request['produtos'] as $key => $produto) {
+        //     $saida_produto = SaidaProduto::create([
+        //         'saida_id'      => $saida->id,
+        //         'produto_id'    => $produto['produto_id'],
+        //         'quantidade'    => $produto['quantidade'],
+        //         'lote'          => $produto['lote'],
+        //         'valor'         => $produto['valor'],
+        //         'ativo'         => 1
+        //     ]);
+        // }
+        // });
     }
 
     /**
