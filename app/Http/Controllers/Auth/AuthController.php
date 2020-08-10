@@ -62,46 +62,21 @@ class AuthController extends Controller
             )->toDateTimeString(),
             'user' => $user
         ]);
-
-        // $loginData = $request->validate([
-        //     'email' => 'email|required',
-        //     'password' => 'required'
-        // ]);
-
-        // $user = User::where('email', $request->email)->first();
-
-        // if (!$user || !Hash::check($loginData)) {
-        //     throw ValidationException::withMessages([
-        //         message
-        //     ])
-        //     return response()->json(['message' => 'Email ou Senha Inválidos!']);
-        // }
-
-        // $accessToken = auth()->user()->createToken('authToken')->accessToken;
-
-        // return response(['user' => auth()->user(), 'access_token' => $accessToken]);
     }
 
     public function register(Request $request)
     {
         $cpfcnpj = User::firstWhere('cpfcnpj', $request['cpfcnpj']);
 
-        // return $cpfcnpj;
-
         $email = User::firstWhere('email', $request['user']['email']);
 
         $user = null;
 
         if ($cpfcnpj) {
-            // return 'entrou';
             $user = $cpfcnpj;
         } elseif ($email) {
             $user = $email;
         }
-
-        // return $user;
-
-        // dd('PARE');
 
         if ($user) {
             $prestador = Prestador::firstWhere('pessoa_id', $user->pessoa->id);
