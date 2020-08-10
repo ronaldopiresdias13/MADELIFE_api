@@ -2,20 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Endereco;
 use App\Http\Controllers\Controller;
+use App\SaidaProduto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class EnderecosController extends Controller
+class SaidaProdutoController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $itens = Endereco::where('ativo', true);
+        $itens = SaidaProduto::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -59,11 +61,15 @@ class EnderecosController extends Controller
                                     }
                                 }
                             } else {
-                                if ($iten2[0] == null) {
-                                    $iten2 = $iten2[$a];
-                                } else {
-                                    foreach ($iten2 as $key => $i) {
-                                        $i[$a];
+                                if ($iten2 != null) {
+                                    if ($iten2->count() > 0) {
+                                        if ($iten2[0] == null) {
+                                            $iten2 = $iten2[$a];
+                                        } else {
+                                            foreach ($iten2 as $key => $i) {
+                                                $i[$a];
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -84,26 +90,21 @@ class EnderecosController extends Controller
      */
     public function store(Request $request)
     {
-        $endereco = new Endereco();
-        $endereco->cep         = $request->cep;
-        $endereco->cidade      = $request->cidade;
-        $endereco->rua         = $request->rua;
-        $endereco->bairro      = $request->bairro;
-        $endereco->numero      = $request->numero;
-        $endereco->complemento = $request->complemento;
-        $endereco->tipo        = $request->tipo;
-        $endereco->save();
+        DB::transaction(function () use ($request) {
+            SaidaProduto::create($request->all());
+        });
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Endereco  $endereco
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\SaidaProduto  $saidaProduto
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Endereco $endereco)
+    public function show(Request $request, SaidaProduto $saidaProduto)
     {
-        $iten = $endereco;
+        $iten = $saidaProduto;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -125,11 +126,15 @@ class EnderecosController extends Controller
                                 }
                             }
                         } else {
-                            if ($iten2[0] == null) {
-                                $iten2 = $iten2[$a];
-                            } else {
-                                foreach ($iten2 as $key => $i) {
-                                    $i[$a];
+                            if ($iten2 != null) {
+                                if ($iten2->count() > 0) {
+                                    if ($iten2[0] == null) {
+                                        $iten2 = $iten2[$a];
+                                    } else {
+                                        foreach ($iten2 as $key => $i) {
+                                            $i[$a];
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -145,23 +150,25 @@ class EnderecosController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Endereco  $endereco
+     * @param  \App\SaidaProduto  $saidaProduto
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Endereco $endereco)
+    public function update(Request $request, SaidaProduto $saidaProduto)
     {
-        $endereco->update($request->all());
+        DB::transaction(function () use ($request, $saidaProduto) {
+            $saidaProduto->update($request->all());
+        });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Endereco  $endereco
+     * @param  \App\SaidaProduto  $saidaProduto
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Endereco $endereco)
+    public function destroy(SaidaProduto $saidaProduto)
     {
-        $endereco->ativo = false;
-        $endereco->save();
+        $saidaProduto->ativo = false;
+        $saidaProduto->save();
     }
 }

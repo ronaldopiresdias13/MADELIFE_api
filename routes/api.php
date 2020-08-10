@@ -450,6 +450,12 @@ Route::get('responsaveis/{responsavel}', 'Api\ResponsaveisController@show');
 Route::put('responsaveis/{responsavel}', 'Api\ResponsaveisController@update');
 Route::delete('responsaveis/{responsavel}', 'Api\ResponsaveisController@destroy');
 
+Route::get('saidas', 'Api\SaidasController@index');
+Route::post('saidas', 'Api\SaidasController@store');
+Route::get('saidas/{saida}', 'Api\SaidasController@show');
+Route::put('saidas/{saida}', 'Api\SaidasController@update');
+Route::delete('saidas/{saida}', 'Api\SaidasController@destroy');
+
 Route::get('salas', 'Api\SalasController@index');
 Route::post('salas', 'Api\SalasController@store');
 Route::get('salas/{sala}', 'Api\SalasController@show');
