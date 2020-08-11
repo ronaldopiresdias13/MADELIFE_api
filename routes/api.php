@@ -202,6 +202,12 @@ Route::get('enderecos/{endereco}', 'Api\EnderecosController@show');
 Route::put('enderecos/{endereco}', 'Api\EnderecosController@update');
 Route::delete('enderecos/{endereco}', 'Api\EnderecosController@destroy');
 
+Route::get('entradas', 'Api\EntradasController@index');
+Route::post('entradas', 'Api\EntradasController@store');
+Route::get('entradas/{entrada}', 'Api\EntradasController@show');
+Route::put('entradas/{entrada}', 'Api\EntradasController@update');
+Route::delete('entradas/{entrada}', 'Api\EntradasController@destroy');
+
 Route::get('escalas', 'Api\EscalasController@index');
 Route::post('escalas', 'Api\EscalasController@store');
 Route::get('escalas/{escala}', 'Api\EscalasController@show');

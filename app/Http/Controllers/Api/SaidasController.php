@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Produto;
 use App\Saida;
 use App\SaidaProduto;
 use Illuminate\Http\Request;
@@ -91,27 +92,30 @@ class SaidasController extends Controller
      */
     public function store(Request $request)
     {
-        // DB::transaction(function () use ($request) {
-        $saida = Saida::create([
-            'empresa_id'      => $request['empresa_id'],
-            'data'            => $request['data'],
-            'descricao'       => $request['descricao'],
-            'profissional_id' => $request['profissional_id']
-        ]);
+        DB::transaction(function () use ($request) {
+            $saida = Saida::create([
+                'empresa_id'      => $request['empresa_id'],
+                'data'            => $request['data'],
+                'descricao'       => $request['descricao'],
+                'profissional_id' => $request['profissional_id']
+            ]);
 
-        return $saida;
+            // return $saida;
 
-        // foreach ($request['produtos'] as $key => $produto) {
-        //     $saida_produto = SaidaProduto::create([
-        //         'saida_id'      => $saida->id,
-        //         'produto_id'    => $produto['produto_id'],
-        //         'quantidade'    => $produto['quantidade'],
-        //         'lote'          => $produto['lote'],
-        //         'valor'         => $produto['valor'],
-        //         'ativo'         => 1
-        //     ]);
-        // }
-        // });
+            foreach ($request['produtos'] as $key => $produto) {
+                $saida_produto = SaidaProduto::create([
+                    'saida_id'      => $saida->id,
+                    'produto_id'    => $produto['produto_id'],
+                    'quantidade'    => $produto['quantidade'],
+                    'lote'          => $produto['lote'],
+                    'valor'         => $produto['valor'],
+                    'ativo'         => 1
+                ]);
+                $prod = Produto::find($produto["produto_id"]);
+                $prod->quantidadeestoque = $prod->quantidadeestoque - $produto["quantidade"];
+                $prod->update();
+            }
+        });
     }
 
     /**
