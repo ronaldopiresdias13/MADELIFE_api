@@ -3,8 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Pessoa;
 use App\Produto;
+use App\Profissional;
+use App\Requisicao;
 use App\RequisicaoProduto;
+use App\Saida;
+use App\SaidaProduto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -165,6 +170,23 @@ class RequisicaoProdutosController extends Controller
             'status'        => $request['status']
         ]);
         if ($request["status"] === "Aprovado") {
+            $requisicao = Requisicao::find($request['requisicao_id']);
+            $pessoa = Pessoa::find($requisicao['profissional_id']);
+            $profissional = Profissional::where('pessoa_id', $pessoa->id);
+            $saidaproduto = SaidaProduto::create([
+                'saida_id' => Saida::create([
+                    'empresa_id'      => $request['empresa_id'],
+                    'data'            => $request['data'],
+                    'descricao'       => "Requisição de Material",
+                    'profissional_id' => $profissional->id
+                ]),
+                'produto_id'    => $request['produto_id'],
+                'quantidade'    => $request['quantidade'],
+                'lote'          => "",
+                'valor'         => $produto->valorcusto,
+                'ativo'         => 1
+            ]);
+
             $produto->quantidadeestoque = $produto->quantidadeestoque - $request["quantidade"];
             $produto->update();
         }
