@@ -15,7 +15,7 @@ class Saida extends Model
     public function produtos()
     {
         return $this->belongsToMany('App\Produto', 'saida_produto')
-            // ->withPivot('id', 'quantidade', 'observacao', 'status')
+            ->withPivot('id', 'quantidade', 'valor', 'lote')
             ->wherePivot('ativo', true);
     }
 }

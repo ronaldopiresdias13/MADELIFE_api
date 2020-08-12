@@ -16,7 +16,7 @@ class Entrada extends Model
     public function produtos()
     {
         return $this->belongsToMany('App\Produto', 'entrada_produto')
-            // ->withPivot('id', 'quantidade', 'observacao', 'status')
+            ->withPivot('id', 'quantidade', 'valor', 'lote', 'validade')
             ->wherePivot('ativo', true);
     }
 }
