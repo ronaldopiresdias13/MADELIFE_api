@@ -105,24 +105,7 @@ class OrdemservicosController extends Controller
                     'orcamento_id' => $request['orcamento_id'],
                 ],
                 [
-                    'responsavel_id' => Responsavel::updateOrCreate(
-                        [
-                            'id' => $request['responsavel']['id'],
-                        ],
-                        [
-                            'pessoa_id' => Pessoa::updateOrCreate(
-                                ['cpfcnpj' => $request['responsavel']['pessoa']['cpfcnpj']],
-                                [
-                                    'nome'        => $request['responsavel']['pessoa']['nome'],
-                                    'nascimento'  => $request['responsavel']['pessoa']['nascimento'],
-                                    'tipo'        => $request['responsavel']['pessoa']['tipo'],
-                                    'rgie'        => $request['responsavel']['pessoa']['rgie'],
-                                    'observacoes' => $request['responsavel']['pessoa']['observacoes'],
-                                ]
-                            )->id,
-                            'parentesco' => $request['responsavel']['parentesco'],
-                        ]
-                    )->id,
+                    'responsavel_id'         => null,
                     'profissional_id'        => $request['profissional_id'],
                     'codigo'                 => $request['codigo'],
                     'inicio'                 => $request['inicio'],
