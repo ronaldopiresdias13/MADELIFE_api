@@ -32,11 +32,16 @@ class AuthController extends Controller
 
         $user = User::firstWhere('email', $request['email']);
 
-        if (! Hash::check($request['password'], $user->password)) {
+        if (!Hash::check($request['password'], $user->password)) {
             return response()->json([
                 'message' => 'Email ou Senha Inválidos!'
             ], 401);
         }
+
+        // if ($user && password_verify($request->password, $user->password)) {
+        //     // authenticated user,
+        //     // do something...
+        // }
 
         $user->acessos;
         $user->pessoa;

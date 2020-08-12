@@ -87,9 +87,11 @@ class EscalasController extends Controller
      */
     public function store(Request $request)
     {
-        $ordemservicoServico = OrdemservicoServico::where('ordemservico_id', $request->ordemservico_id)->where('servico_id', $request->servico_id)->first();
-        
-        $escala = new Escala;
+        $ordemservicoServico = OrdemservicoServico::where('ordemservico_id', $request->ordemservico_id)
+            ->where('servico_id', $request->servico_id)
+            ->first();
+
+        $escala = new Escala();
         if ($ordemservicoServico) {
             $escala->tipo             = $ordemservicoServico->descricao;
             $escala->valorhoradiurno  = $ordemservicoServico->valordiurno;
