@@ -1,4 +1,4 @@
-o<?php
+<?php
 
 namespace App\Http\Controllers\Api;
 
@@ -105,7 +105,7 @@ class OrdemservicosController extends Controller
                     'orcamento_id' => $request['orcamento_id'],
                 ],
                 [
-r                    'responsavel_id'         => null,
+                    'responsavel_id'         => null,
                     'profissional_id'        => $request['profissional_id'],
                     'codigo'                 => $request['codigo'],
                     'inicio'                 => $request['inicio'],
