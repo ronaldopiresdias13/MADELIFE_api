@@ -170,16 +170,14 @@ class RequisicaoProdutosController extends Controller
             'status'        => $request['status']
         ]);
         if ($request["status"] === "Aprovado") {
-            $requisicao = Requisicao::find($request['requisicao_id']);
-            $pessoa = Pessoa::find($requisicao['profissional_id']);
-            $profissional = Profissional::where('pessoa_id', $pessoa->id);
+            $profissional = Profissional::firstWhere('pessoa_id', Pessoa::find(Requisicao::find($request['requisicao_id'])->pessoa_id)->id);
             $saidaproduto = SaidaProduto::create([
                 'saida_id' => Saida::create([
-                    'empresa_id'      => $request['empresa_id'],
+                    'empresa_id'      => $profissional->empresa_id,
                     'data'            => $request['data'],
                     'descricao'       => "Requisição de Material",
                     'profissional_id' => $profissional->id
-                ]),
+                ])->id,
                 'produto_id'    => $request['produto_id'],
                 'quantidade'    => $request['quantidade'],
                 'lote'          => "",
