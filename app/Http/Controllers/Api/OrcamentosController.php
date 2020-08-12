@@ -142,7 +142,7 @@ class OrcamentosController extends Controller
                     $orcamento_servico = OrcamentoServico::updateOrCreate(
                         [
                             'orcamento_id' => $orcamento->id,
-                            'servico_id'   => $servico['servico_id'],
+                            'servico_id'   => $servico['servico_id']['id'],
                         ],
                         [
                             'quantidade'           => $servico['quantidade'],
@@ -157,6 +157,7 @@ class OrcamentosController extends Controller
                             'icms'                 => $servico['icms'],
                             'inss'                 => $servico['inss'],
                             'iss'                  => $servico['iss'],
+                            'descricao'            => $servico['descricao'],
                             'valorcustomensal'     => $servico['valorcustomensal'],
                             'valorresultadomensal' => $servico['valorresultadomensal'],
                         ]
@@ -177,6 +178,7 @@ class OrcamentosController extends Controller
                             'custo'                => $produto['custo'],
                             'subtotal'             => $produto['subtotal'],
                             'subtotalcusto'        => $produto['subtotalcusto'],
+                            'descricao'            => $servico['descricao'],
                             'valorresultadomensal' => $produto['valorresultadomensal'],
                             'valorcustomensal'     => $produto['valorcustomensal']
                         ]
@@ -308,7 +310,7 @@ class OrcamentosController extends Controller
                         'nome'     => $request['evento']['nome'],
                         'endereco' => $request['evento']['endereco'],
                         'cep'      => $request['evento']['cep'],
-                        'cidade'   => $request['evento']['cidade'],
+                        'cidade_id'   => $request['evento']['cidade_id'],
                     ]
                 );
 

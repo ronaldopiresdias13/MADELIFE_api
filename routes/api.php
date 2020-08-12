@@ -202,6 +202,12 @@ Route::get('enderecos/{endereco}', 'Api\EnderecosController@show');
 Route::put('enderecos/{endereco}', 'Api\EnderecosController@update');
 Route::delete('enderecos/{endereco}', 'Api\EnderecosController@destroy');
 
+Route::get('entradas', 'Api\EntradasController@index');
+Route::post('entradas', 'Api\EntradasController@store');
+Route::get('entradas/{entrada}', 'Api\EntradasController@show');
+Route::put('entradas/{entrada}', 'Api\EntradasController@update');
+Route::delete('entradas/{entrada}', 'Api\EntradasController@destroy');
+
 Route::get('escalas', 'Api\EscalasController@index');
 Route::post('escalas', 'Api\EscalasController@store');
 Route::get('escalas/{escala}', 'Api\EscalasController@show');
@@ -449,6 +455,12 @@ Route::post('responsaveis', 'Api\ResponsaveisController@store');
 Route::get('responsaveis/{responsavel}', 'Api\ResponsaveisController@show');
 Route::put('responsaveis/{responsavel}', 'Api\ResponsaveisController@update');
 Route::delete('responsaveis/{responsavel}', 'Api\ResponsaveisController@destroy');
+
+Route::get('saidas', 'Api\SaidasController@index');
+Route::post('saidas', 'Api\SaidasController@store');
+Route::get('saidas/{saida}', 'Api\SaidasController@show');
+Route::put('saidas/{saida}', 'Api\SaidasController@update');
+Route::delete('saidas/{saida}', 'Api\SaidasController@destroy');
 
 Route::get('salas', 'Api\SalasController@index');
 Route::post('salas', 'Api\SalasController@store');

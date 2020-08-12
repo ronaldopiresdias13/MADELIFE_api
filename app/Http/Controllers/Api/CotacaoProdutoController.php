@@ -159,10 +159,10 @@ class CotacaoProdutoController extends Controller
     {
         $produto = Produto::find($request["produto_id"]);
         $cotacaoProduto->update($request->all());
-        if ($request["situacao"] === "Aprovado") {
-            $produto->quantidadeestoque = $produto->quantidadeestoque + $request["quantidade"];
-            $produto->update();
-        }
+        // if ($request["situacao"] === "Aprovado") {
+        //     $produto->quantidadeestoque = $produto->quantidadeestoque + $request["quantidade"];
+        //     $produto->update();
+        // }
     }
 
     /**
