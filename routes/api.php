@@ -310,7 +310,10 @@ Route::post('ordemservicos', 'Api\OrdemservicosController@store');
 Route::get('ordemservicos/{ordemservico}', 'Api\OrdemservicosController@show');
 Route::put('ordemservicos/{ordemservico}', 'Api\OrdemservicosController@update');
 Route::delete('ordemservicos/{ordemservico}', 'Api\OrdemservicosController@destroy');
-Route::get('ordemservicos/{ordemservico}/horariomedicamentos', 'Api\OrdemservicosController@horariomedicamentos'); // Custon
+Route::get(
+    'ordemservicos/{ordemservico}/horariomedicamentos',
+    'Api\OrdemservicosController@horariomedicamentos'
+); // Custon
 
 Route::get('ordemservicoServicos', 'Api\OrdemservicoServicoController@index');
 Route::post('ordemservicoServicos', 'Api\OrdemservicoServicoController@store');
@@ -411,7 +414,10 @@ Route::post('prestadorFormacao', 'Api\PrestadorFormacaoController@store');
 Route::get('prestadorFormacao/{prestadorFormacao}', 'Api\PrestadorFormacaoController@show');
 Route::put('prestadorFormacao/{prestadorFormacao}', 'Api\PrestadorFormacaoController@update');
 Route::delete('prestadorFormacao/{prestadorFormacao}', 'Api\PrestadorFormacaoController@destroy');
-Route::get('prestadorFormacao/{prestadorFormacao}/downloadFile', 'Api\PrestadorFormacaoController@downloadFile'); // Custon
+Route::get(
+    'prestadorFormacao/{prestadorFormacao}/downloadFile',
+    'Api\PrestadorFormacaoController@downloadFile'
+); // Custon
 
 Route::get('produtos', 'Api\ProdutosController@index');
 Route::post('produtos', 'Api\ProdutosController@store');
@@ -509,10 +515,9 @@ Route::post('users', 'Api\UsersController@store');
 Route::get('users/{user}', 'Api\UsersController@show');
 Route::put('users/{user}', 'Api\UsersController@update');
 Route::delete('users/{user}', 'Api\UsersController@destroy');
-// Route::post('users/new', 'Api\UsersController@store');                                      // Mudar na proxima versão do App
 
 Route::get('userAcessos', 'Api\UserAcessoController@index');
-Route::post('userAcessos', 'Api\UserAcessoController@store');                                      // Mudar na proxima versão do App
+Route::post('userAcessos', 'Api\UserAcessoController@store');
 Route::get('userAcessos/{userAcesso}', 'Api\UserAcessoController@show');
 Route::put('userAcessos/{userAcesso}', 'Api\UserAcessoController@update');
 Route::delete('userAcessos/{userAcesso}', 'Api\UserAcessoController@destroy');
