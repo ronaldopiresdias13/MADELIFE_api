@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Estoque;
 use App\Http\Controllers\Controller;
 use App\Produto;
 use App\Saida;
@@ -103,6 +104,27 @@ class SaidasController extends Controller
             // return $saida;
 
             foreach ($request['produtos'] as $key => $produto) {
+                $prod = Produto::find($produto["produto_id"]);
+                if ($prod->controlelote) {
+                    if ($produto['lote']) {
+                        $estoque = Estoque::firstWhere('lote', $produto['lote']);
+                        if ($estoque) {
+                            $atualiza_quantidade_estoque = Estoque::firstWhere('lote', $produto['lote']);
+                            $atualiza_quantidade_estoque->quantidade = $atualiza_quantidade_estoque->quantidade - $produto['quantidade'];
+                            $atualiza_quantidade_estoque->update();
+                        } else {
+                            $nova_estoque = Estoque::create([
+                                'produto_id' => $produto['produto_id'],
+                                'unidade'    => $prod->unidademedida_id,
+                                'quantidade' => $produto['quantidade'],
+                                'lote'       => $produto['lote'],
+                                'validade'   => $produto['validade'],
+                                'ativo'      => 1
+                            ]);
+                        }
+                        // return $estoque;
+                    }
+                }
                 $saida_produto = SaidaProduto::create([
                     'saida_id'      => $saida->id,
                     'produto_id'    => $produto['produto_id'],
@@ -111,7 +133,6 @@ class SaidasController extends Controller
                     'valor'         => $produto['valor'],
                     'ativo'         => 1
                 ]);
-                $prod = Produto::find($produto["produto_id"]);
                 $prod->quantidadeestoque = $prod->quantidadeestoque - $produto["quantidade"];
                 $prod->update();
             }

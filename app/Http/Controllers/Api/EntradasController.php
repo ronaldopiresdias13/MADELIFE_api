@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Entrada;
 use App\EntradaProduto;
+use App\Estoque;
 use App\Http\Controllers\Controller;
 use App\Produto;
 use Illuminate\Http\Request;
@@ -93,20 +94,41 @@ class EntradasController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            // Entrada::create($request->all());
             $entrada = Entrada::create([
                 'empresa_id'      => $request['empresa_id'],
                 'data'            => $request['data'],
-                // 'descricao'       => $request['descricao'],
                 'numeronota'      => $request['numeronota'],
                 'fornecedor_id'   => $request['fornecedor_id']
             ]);
 
-            // return $saida;
 
             foreach ($request['produtos'] as $key => $produto) {
+                $prod = Produto::find($produto['produto_id']);
+                if ($prod->controlelote) {
+                    if ($produto['lote']) {
+                        $estoque = Estoque::firstWhere('lote', $produto['lote']);
+                        if ($estoque) {
+                            $atualiza_quantidade_estoque = Estoque::firstWhere('lote', $produto['lote']);
+                            $atualiza_quantidade_estoque->quantidade = $atualiza_quantidade_estoque->quantidade + $produto['quantidade'];
+                            $atualiza_quantidade_estoque->update();
+                        } else {
+                            $nova_estoque = Estoque::create([
+                                'produto_id' => $produto['produto_id'],
+                                'unidade'    => $prod->unidademedida_id,
+                                'quantidade' => $produto['quantidade'],
+                                'lote'       => $produto['lote'],
+                                'validade'   => $produto['validade'],
+                                'ativo'      => 1
+                            ]);
+                        }
+                        // return $estoque;
+                    }
+                }
+                // return $prod;
+
                 $entrada_produto = EntradaProduto::create([
-                    'entrada_id'    => $entrada->id,
+                    'entrada_id'    => 5,
+                    // 'entrada_id'    => $entrada->id,
                     'produto_id'    => $produto['produto_id'],
                     'quantidade'    => $produto['quantidade'],
                     'lote'          => $produto['lote'],
@@ -114,8 +136,6 @@ class EntradasController extends Controller
                     'valor'         => $produto['valor'],
                     'ativo'         => 1
                 ]);
-
-                $prod = Produto::find($produto["produto_id"]);
                 $prod->quantidadeestoque = $prod->quantidadeestoque + $produto["quantidade"];
                 $prod->update();
             }
