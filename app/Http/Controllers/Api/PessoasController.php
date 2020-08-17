@@ -17,11 +17,6 @@ class PessoasController extends Controller
      */
     public function index(Request $request)
     {
-        // $pessoas = Pessoa::where('status', true)->get();
-        // foreach ($pessoas as $key => $p) {
-        //     $p->enderecos;
-        // }
-        // return $pessoas;
         $itens = Pessoa::where('ativo', true);
 
         if ($request->commands) {
@@ -30,22 +25,12 @@ class PessoasController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                // if ($key == 0) {
-                //     $itens = Pessoa::where(
-                //         ($where['coluna']) ? $where['coluna'] : 'id',
-                //         ($where['expressao']) ? $where['expressao'] : 'like',
-                //         ($where['valor']) ? $where['valor'] : '%'
-                //     );
-                // } else {
                 $itens->where(
                     ($where['coluna']) ? $where['coluna'] : 'id',
                     ($where['expressao']) ? $where['expressao'] : 'like',
                     ($where['valor']) ? $where['valor'] : '%'
                 );
-                // }
             }
-            // } else {
-            //     $itens = Pessoa::where('id', 'like', '%');
         }
 
         if ($request['order']) {

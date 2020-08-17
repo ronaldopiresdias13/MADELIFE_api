@@ -188,6 +188,7 @@ class RelatoriosController extends Controller
             ->join('escalas', 'escalas.id', '=', 'relatorios.escala_id')
             ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
             ->select('relatorios.*')
+            ->where('ordemservicos.id', $ordemservico->id)
             // ->groupBy('relatorios.nome')
             ->orderBy('relatorios.data', 'desc')
             ->limit(20)

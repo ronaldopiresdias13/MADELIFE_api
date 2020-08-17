@@ -56,11 +56,11 @@ Route::get('agendamentos/{agendamento}', 'Api\AgendamentosController@show');
 Route::put('agendamentos/{agendamento}', 'Api\AgendamentosController@update');
 Route::delete('agendamentos/{agendamento}', 'Api\AgendamentosController@destroy');
 
-Route::get('atribuicoes', 'Api\AtribuicoesController@index');
-Route::post('atribuicoes', 'Api\AtribuicoesController@store');
-Route::get('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@show');
-Route::put('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@update');
-Route::delete('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@destroy');
+// Route::get('atribuicoes', 'Api\AtribuicoesController@index');
+// Route::post('atribuicoes', 'Api\AtribuicoesController@store');
+// Route::get('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@show');
+// Route::put('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@update');
+// Route::delete('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@destroy');
 
 Route::get('bancos', 'Api\BancosController@index');
 Route::post('bancos', 'Api\BancosController@store');
