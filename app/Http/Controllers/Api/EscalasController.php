@@ -43,6 +43,14 @@ class EscalasController extends Controller
             }
         }
 
+        if ($request['take']) {
+            $itens->take($request['take']);
+        }
+
+        if ($request['limit']) {
+            $itens->limit($request['limit']);
+        }
+
         $itens = $itens->get();
 
         if ($request['adicionais']) {
@@ -76,7 +84,9 @@ class EscalasController extends Controller
             }
         }
 
+        // return $itens->paginate(5);
         return $itens;
+        // return '$itens';
     }
 
     /**
