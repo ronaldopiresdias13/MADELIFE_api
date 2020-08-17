@@ -204,51 +204,54 @@ class OrcamentosController extends Controller
             }
 
             if ($request['homecare']) {
-                $homecare = Homecare::updateOrCreate(
-                    [
-                        'orcamento_id' => $orcamento->id,
-                    ],
-                    [
-                        'nome'         => $request['homecare']['nome'],
-                        'sexo'         => $request['homecare']['sexo'],
-                        'nascimento'   => $request['homecare']['nascimento'],
-                        'cpfcnpj'      => $request['homecare']['cpfcnpj'],
-                        'rgie'         => $request['homecare']['rgie'],
-                        'endereco'     => $request['homecare']['endereco'],
-                        'cidade_id'    => $request['homecare']['cidade_id'],
-                        'observacao'   => $request['homecare']['observacao'],
-                    ]
-                );
+                $homecare = Homecare::find($request['homecare']);
+                $homecare->orcamento_id = $orcamento->id;
+                $homecare->update();
+                // $homecare = Homecare::updateOrCreate(
+                //     [
+                //         'orcamento_id' => $orcamento->id,
+                //     ],
+                //     [
+                //         'nome'         => $request['homecare']['nome'],
+                //         'sexo'         => $request['homecare']['sexo'],
+                //         'nascimento'   => $request['homecare']['nascimento'],
+                //         'cpfcnpj'      => $request['homecare']['cpfcnpj'],
+                //         'rgie'         => $request['homecare']['rgie'],
+                //         'endereco'     => $request['homecare']['endereco'],
+                //         'cidade_id'    => $request['homecare']['cidade_id'],
+                //         'observacao'   => $request['homecare']['observacao'],
+                //     ]
+                // );
 
-                if ($request['homecare']['telefones']) {
-                    foreach ($request['homecare']['telefones'] as $key => $telefone) {
-                        $homecare_telefone = HomecareTelefone::firstOrCreate([
-                            'homecare_id' => $homecare->id,
-                            'telefone_id' => Telefone::firstOrCreate(
-                                [
-                                    'telefone'  => $telefone['telefone'],
-                                ]
-                            )->id,
-                            'tipo'      => $telefone['pivot']['tipo'],
-                            'descricao' => $telefone['pivot']['descricao'],
-                        ]);
-                    }
-                }
+                // if ($request['homecare']['telefones']) {
+                //     foreach ($request['homecare']['telefones'] as $key => $telefone) {
+                //         $homecare_telefone = HomecareTelefone::firstOrCreate([
+                //             'homecare_id' => $homecare->id,
+                //             'telefone_id' => Telefone::firstOrCreate(
+                //                 [
+                //                     'telefone'  => $telefone['telefone'],
+                //                 ]
+                //             )->id,
+                //             'tipo'      => $telefone['pivot']['tipo'],
+                //             'descricao' => $telefone['pivot']['descricao'],
+                //         ]);
+                //     }
+                // }
 
-                if ($request['homecare']['emails']) {
-                    foreach ($request['homecare']['emails'] as $key => $email) {
-                        $homecare_email = HomecareEmail::firstOrCreate([
-                            'homecare_id' => $homecare->id,
-                            'email_id'    => Email::firstOrCreate(
-                                [
-                                    'email'     => $email['email'],
-                                ]
-                            )->id,
-                            'tipo'      => $email['pivot']['tipo'],
-                            'descricao' => $email['pivot']['descricao'],
-                        ]);
-                    }
-                }
+                // if ($request['homecare']['emails']) {
+                //     foreach ($request['homecare']['emails'] as $key => $email) {
+                //         $homecare_email = HomecareEmail::firstOrCreate([
+                //             'homecare_id' => $homecare->id,
+                //             'email_id'    => Email::firstOrCreate(
+                //                 [
+                //                     'email'     => $email['email'],
+                //                 ]
+                //             )->id,
+                //             'tipo'      => $email['pivot']['tipo'],
+                //             'descricao' => $email['pivot']['descricao'],
+                //         ]);
+                //     }
+                // }
             }
 
             if ($request['remocao']) {

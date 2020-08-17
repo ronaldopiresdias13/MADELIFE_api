@@ -97,14 +97,14 @@ class HomecaresController extends Controller
     public function store(Request $request)
     {
         $homecare = Homecare::create([
-            // 'empresa_id'           => $request->empresa_id,
-            'nome'               => $request->nome,
-            'sexo'             => $request->sexo,
-            'nascimento'                 => $request->nascimento,
-            'cpfcnpj'               => $request->cpf,
-            'rgie'               => $request->rg,
-            'observacao'               => $request->observacao,
-            // 'status'               => $request->status,
+            // 'empresa_id' => $request->empresa_id,
+            'nome'         => $request->nome,
+            'sexo'         => $request->sexo,
+            'nascimento'   => $request->nascimento,
+            'cpfcnpj'      => $request->cpfcnpj,
+            'rgie'         => $request->rgie,
+            'observacao'   => $request->observacao,
+            // 'status'    => $request->status,
             'orcamento_id' => $request->orcamento_id,
         ]);
     }
