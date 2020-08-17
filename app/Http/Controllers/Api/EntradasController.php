@@ -124,11 +124,8 @@ class EntradasController extends Controller
                         // return $estoque;
                     }
                 }
-                // return $prod;
-
                 $entrada_produto = EntradaProduto::create([
-                    'entrada_id'    => 5,
-                    // 'entrada_id'    => $entrada->id,
+                    'entrada_id'    => $entrada->id,
                     'produto_id'    => $produto['produto_id'],
                     'quantidade'    => $produto['quantidade'],
                     'lote'          => $produto['lote'],
