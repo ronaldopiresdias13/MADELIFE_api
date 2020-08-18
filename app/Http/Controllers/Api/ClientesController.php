@@ -362,51 +362,6 @@ class ClientesController extends Controller
                     );
                 }
             }
-            if ($request['pessoa']['user']) {
-                if (
-                    $request['pessoa']['user']['email'] !== '' &&
-                    $request['pessoa']['user']['email'] !== null
-                ) {
-                    $user = new User();
-                    if (
-                        $request['pessoa']['user']['password'] !== '' &&
-                        $request['pessoa']['user']['password'] !== null
-                    ) {
-                        $user = User::updateOrCreate(
-                            [
-                                'email'      => $request['pessoa']['user']['email'],
-                            ],
-                            [
-                                'cpfcnpj'    => $request['pessoa']['user']['cpfcnpj'],
-                                'email'      => $request['pessoa']['user']['email'],
-                                'password'   => bcrypt($request['pessoa']['user']['password']),
-                                'pessoa_id'  => $pessoa->id,
-                                // 'empresa_id' => 1,
-                            ]
-                        );
-                    } else {
-                        $user = User::firstOrCreate(
-                            [
-                                'email'      =>        $request['pessoa']['user']['email'],
-                            ],
-                            [
-                                // 'empresa_id' =>        1,
-                                'cpfcnpj'    =>        $request['pessoa']['user']['cpfcnpj'],
-                                'password'   => bcrypt($request['pessoa']['user']['password']),
-                                'pessoa_id'  =>        $pessoa->id,
-                            ]
-                        );
-                    }
-                    if ($request['pessoa']['user']['acessos']) {
-                        foreach ($request['pessoa']['user']['acessos'] as $key => $acesso) {
-                            $user_acesso = UserAcesso::firstOrCreate([
-                                'user_id'   => $user->id,
-                                'acesso_id' => Acesso::firstWhere('id', $acesso)->id,
-                            ]);
-                        }
-                    }
-                }
-            }
         });
 
         return response()->json('Cliente atualizado com sucesso!', 200)->header('Content-Type', 'text/plain');
