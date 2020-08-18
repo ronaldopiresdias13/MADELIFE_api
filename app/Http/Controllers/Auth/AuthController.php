@@ -15,6 +15,7 @@ use App\Mail\ResetPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -24,25 +25,112 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
+        // // $request->validate([
+        // //     'email'       => 'string|email',
+        // //     'password'    => 'required|string',
+        // //     'remember_me' => 'boolean'
+        // // ]);
+
+        // // $user = User::firstWhere('email', $request['email']);
+
+        // // $user->acessos;
+        // // $user->pessoa;
+        // // // if ($user->pessoa['tipo'] == 'Prestador') {
+        // // $user->pessoa->prestador;
+        // // // }
+        // // // if ($user->pessoa['tipo'] == 'Cliente') {
+        // // $user->pessoa->cliente;
+        // // // }
+        // // // if ($user->pessoa['tipo'] == 'Profissional') {
+        // // $user->pessoa->profissional;
+        // // // }
+
+
+
+        // $user = User::with([
+        //     'acessos',
+        //     'pessoa' => function (BelongsTo $query) {
+        //         $query->with(['prestador']);
+        //         $query->with(['cliente']);
+        //         $query->with(['profissional']);
+        //     }
+        // ])
+        //     ->where('email', $request['email'])
+        //     ->first();
+
+        // return $user;
+
+
+
+
+
+
+
+
+        // if (!Hash::check($request['password'], $user->password)) {
+        //     return response()->json([
+        //         'message' => 'Email ou Senha Inválidos!'
+        //     ], 401);
+        // }
+
+        // // if ($user && password_verify($request->password, $user->password)) {
+        // //     // authenticated user,
+        // //     // do something...
+        // // }
+
+        // // $user->acessos;
+        // // $user->pessoa;
+        // // // if ($user->pessoa['tipo'] == 'Prestador') {
+        // // $user->pessoa->prestador;
+        // // // }
+        // // // if ($user->pessoa['tipo'] == 'Cliente') {
+        // // $user->pessoa->cliente;
+        // // // }
+        // // // if ($user->pessoa['tipo'] == 'Profissional') {
+        // // $user->pessoa->profissional;
+        // // // }
+
+
+
+        // // return $user;
+
+
+
+
+
+        // $tokenResult = $user->createToken('Personal Access Token');
+        // $token       = $tokenResult->token;
+        // if ($request->remember_me) {
+        //     $token->expires_at = Carbon::now()->addWeeks(1);
+        // }
+        // $token->save();
+
+        // return response()->json([
+        //     'access_token' => $tokenResult->accessToken,
+        //     'token_type'   => 'Bearer',
+        //     'expires_at'   => Carbon::parse(
+        //         $tokenResult->token->expires_at
+        //     )->toDateTimeString(),
+        //     'user' => $user
+        // ]);
+
+
+
+
+
         $request->validate([
+            // 'cpfcnpj'  => 'string',
             'email'       => 'string|email',
             'password'    => 'required|string',
             'remember_me' => 'boolean'
         ]);
-
-        $user = User::firstWhere('email', $request['email']);
-
-        if (!Hash::check($request['password'], $user->password)) {
+        $credentials = request(['email', 'password']);
+        if (!Auth::attempt($credentials)) {
             return response()->json([
                 'message' => 'Email ou Senha Inválidos!'
             ], 401);
         }
-
-        // if ($user && password_verify($request->password, $user->password)) {
-        //     // authenticated user,
-        //     // do something...
-        // }
-
+        $user = $request->user();
         $user->acessos;
         $user->pessoa;
         // if ($user->pessoa['tipo'] == 'Prestador') {
@@ -60,7 +148,6 @@ class AuthController extends Controller
             $token->expires_at = Carbon::now()->addWeeks(1);
         }
         $token->save();
-
         return response()->json([
             'access_token' => $tokenResult->accessToken,
             'token_type'   => 'Bearer',
@@ -69,49 +156,6 @@ class AuthController extends Controller
             )->toDateTimeString(),
             'user' => $user
         ]);
-
-
-
-
-
-        // $request->validate([
-        //     // 'cpfcnpj'  => 'string',
-        //     'email'       => 'string|email',
-        //     'password'    => 'required|string',
-        //     'remember_me' => 'boolean'
-        // ]);
-        // $credentials = request(['email', 'password']);
-        // if (!Auth::attempt($credentials)) {
-        //     return response()->json([
-        //         'message' => 'Email ou Senha Inválidos!'
-        //     ], 401);
-        // }
-        // $user = $request->user();
-        // $user->acessos;
-        // $user->pessoa;
-        // // if ($user->pessoa['tipo'] == 'Prestador') {
-        // $user->pessoa->prestador;
-        // // }
-        // // if ($user->pessoa['tipo'] == 'Cliente') {
-        // $user->pessoa->cliente;
-        // // }
-        // // if ($user->pessoa['tipo'] == 'Profissional') {
-        // $user->pessoa->profissional;
-        // // }
-        // $tokenResult = $user->createToken('Personal Access Token');
-        // $token       = $tokenResult->token;
-        // if ($request->remember_me) {
-        //     $token->expires_at = Carbon::now()->addWeeks(1);
-        // }
-        // $token->save();
-        // return response()->json([
-        //     'access_token' => $tokenResult->accessToken,
-        //     'token_type'   => 'Bearer',
-        //     'expires_at'   => Carbon::parse(
-        //         $tokenResult->token->expires_at
-        //     )->toDateTimeString(),
-        //     'user' => $user
-        // ]);
     }
 
     public function register(Request $request)
