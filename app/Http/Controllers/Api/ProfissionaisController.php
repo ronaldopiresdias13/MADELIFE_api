@@ -137,7 +137,7 @@ class ProfissionaisController extends Controller
                     [
                         'nome'        => $request['pessoa']['nome'],
                         'nascimento'  => $request['pessoa']['nascimento'],
-                        'tipo'        =>                    'profissional',
+                        'tipo'        =>                    'Profissional',
                         'rgie'        => $request['pessoa']['rgie'],
                         'observacoes' => $request['pessoa']['observacoes'],
                         'perfil'      => $request['pessoa']['perfil'],
@@ -293,7 +293,7 @@ class ProfissionaisController extends Controller
             //     }
             // }
         });
-        
+
         return response()->json('Profissional cadastrado com sucesso!', 200)->header('Content-Type', 'text/plain');
     }
 
