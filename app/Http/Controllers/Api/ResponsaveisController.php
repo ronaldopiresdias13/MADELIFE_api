@@ -11,6 +11,7 @@ use App\PessoaEndereco;
 use App\PessoaTelefone;
 use App\Responsavel;
 use App\Telefone;
+use App\Tipopessoa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -109,13 +110,17 @@ class ResponsaveisController extends Controller
                 'pessoa_id'  => Pessoa::create([
                     'nome'        => $request['pessoa']['nome'],
                     'nascimento'  => $request['pessoa']['nascimento'],
-                    'tipo'        =>                    'Responsável',
                     'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
                     'rgie'        => $request['pessoa']['rgie'],
                     'observacoes' => $request['pessoa']['observacoes'],
                     'perfil'      => $request['pessoa']['perfil'],
                     'status'      => $request['pessoa']['status'],
                 ])->id
+            ]);
+            $tipopessoa = Tipopessoa::create([
+                'tipo'      => 'Responsável',
+                'pessoa_id' => $responsavel->pessoa_id,
+                'ativo'     => 1
             ]);
             if ($request['pessoa']['telefones']) {
                 foreach ($request['pessoa']['telefones'] as $key => $telefone) {

@@ -20,6 +20,7 @@ use App\ProfissionalFormacao;
 use App\ProfissionalConvenio;
 use App\ProfissionalBeneficio;
 use App\Http\Controllers\Controller;
+use App\Tipopessoa;
 use Illuminate\Support\Facades\DB;
 
 class ProfissionaisController extends Controller
@@ -137,7 +138,6 @@ class ProfissionaisController extends Controller
                     [
                         'nome'        => $request['pessoa']['nome'],
                         'nascimento'  => $request['pessoa']['nascimento'],
-                        'tipo'        =>                    'Profissional',
                         'rgie'        => $request['pessoa']['rgie'],
                         'observacoes' => $request['pessoa']['observacoes'],
                         'perfil'      => $request['pessoa']['perfil'],
@@ -165,6 +165,11 @@ class ProfissionaisController extends Controller
                     'admissao'                => $request['dadoscontratuais']['admissao'],
                     'demissao'                => $request['dadoscontratuais']['demissao'],
                 ])->id,
+            ]);
+            $tipopessoa = Tipopessoa::create([
+                'tipo'      => 'Profissional',
+                'pessoa_id' => $profissional->pessoa_id,
+                'ativo'     => 1
             ]);
             if ($request['formacoes']) {
                 foreach ($request['formacoes'] as $key => $formacao) {
@@ -373,7 +378,6 @@ class ProfissionaisController extends Controller
                             // 'empresa_id'  => $request['pessoa']['empresa_id'],
                             'nome'        => $request['pessoa']['nome'],
                             'nascimento'  => $request['pessoa']['nascimento'],
-                            'tipo'        =>                    'profissional',
                             'rgie'        => $request['pessoa']['rgie'],
                             'observacoes' => $request['pessoa']['observacoes'],
                             'perfil'      => $request['pessoa']['perfil'],

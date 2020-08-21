@@ -15,6 +15,7 @@ use App\PessoaEmail;
 use App\PessoaTelefone;
 use App\PessoaEndereco;
 use App\Http\Controllers\Controller;
+use App\Tipopessoa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -129,7 +130,7 @@ class ClientesController extends Controller
                     [
                         'nome'        => $request['pessoa']['nome'],
                         'nascimento'  => $request['pessoa']['nascimento'],
-                        'tipo'        =>                    'Cliente',
+
                         'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
                         'rgie'        => $request['pessoa']['rgie'],
                         'observacoes' => $request['pessoa']['observacoes'],
@@ -137,6 +138,11 @@ class ClientesController extends Controller
                         'status'      => $request['pessoa']['status'],
                     ]
                 )->id,
+            ]);
+            $tipopessoa = Tipopessoa::create([
+                'tipo'      => 'Cliente',
+                'pessoa_id' => $cliente->pessoa_id,
+                'ativo'     => 1
             ]);
 
             if ($request['pessoa']['telefones']) {
