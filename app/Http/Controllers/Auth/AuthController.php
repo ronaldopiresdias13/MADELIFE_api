@@ -317,4 +317,38 @@ class AuthController extends Controller
         return response()->json($user);
         // return response()->json($request->user());
     }
+
+    public function loginApp(Request $request)
+    {
+        $request->validate([
+            'email'       => 'string|email',
+            'password'    => 'required|string',
+            'remember_me' => 'boolean'
+        ]);
+
+        $credentials = request(['email', 'password']);
+
+        if (!Auth::attempt($credentials)) {
+            return response()->json([
+                'message' => 'Email ou Senha Inválidos!'
+            ], 401);
+        }
+
+        $user = $request->user();
+        $tokenResult = $user->createToken('Personal Access Token');
+        $token       = $tokenResult->token;
+
+        if ($request->remember_me) {
+            $token->expires_at = Carbon::now()->addMonths(1);
+        }
+
+        $token->save();
+        return response()->json([
+            'access_token' => $tokenResult->accessToken,
+            'token_type'   => 'Bearer',
+            'expires_at'   => Carbon::parse(
+                $tokenResult->token->expires_at
+            )->toDateTimeString()
+        ]);
+    }
 }
