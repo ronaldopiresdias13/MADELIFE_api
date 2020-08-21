@@ -12,6 +12,7 @@ use App\PessoaEndereco;
 use App\PessoaTelefone;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Tipopessoa;
 use Illuminate\Support\Facades\DB;
 
 class FornecedoresController extends Controller
@@ -112,7 +113,6 @@ class FornecedoresController extends Controller
                 [
                     'nome'        => $request['pessoa']['nome'],
                     'nascimento'  => $request['pessoa']['nascimento'],
-                    'tipo'        =>                    'Fornecedor',
                     'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
                     'rgie'        => $request['pessoa']['rgie'],
                     'observacoes' => $request['pessoa']['observacoes'],
@@ -121,7 +121,11 @@ class FornecedoresController extends Controller
                 ]
             )->id,
         ]);
-
+        $tipopessoa = Tipopessoa::create([
+            'tipo'      => 'Fornecedor',
+            'pessoa_id' => $fornecedor->pessoa_id,
+            'ativo'     => 1
+        ]);
         foreach ($request['pessoa']['telefones'] as $key => $telefone) {
             $pessoa_telefone = PessoaTelefone::firstOrCreate([
                 'pessoa_id'   => $fornecedor->pessoa_id,

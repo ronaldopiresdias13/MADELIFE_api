@@ -15,6 +15,7 @@ use App\Mail\ResetPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Tipopessoa;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -178,7 +179,6 @@ class AuthController extends Controller
                 return response()->json('Você já possui cadastro!', 400)->header('Content-Type', 'text/plain');
             } else {
                 DB::transaction(function () use ($request, $user) {
-
                     $pessoa_email = PessoaEmail::firstOrCreate([
                         'pessoa_id' => $user->pessoa_id,
                         'email_id'  => Email::firstOrCreate(
@@ -221,14 +221,17 @@ class AuthController extends Controller
                             [
                                 'nome'       => $request['nome'],
                                 // 'nascimento' => $request['nascimento'],
-                                'tipo'       => 'Prestador',
                                 'cpfcnpj'    => $request['cpfcnpj'],
                                 'status'     => $request['status']
                             ]
                         )->id
                     ]
                 );
-
+                $tipopessoa = Tipopessoa::create([
+                    'tipo'      => 'Prestador',
+                    'pessoa_id' => $user->pessoa_id,
+                    'ativo'     => 1
+                ]);
                 $pessoa_email = PessoaEmail::firstOrCreate([
                     'pessoa_id' => $user->pessoa_id,
                     'email_id'  => Email::firstOrCreate(
