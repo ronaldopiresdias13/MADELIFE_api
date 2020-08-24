@@ -45,13 +45,13 @@ class EscalasController extends Controller
             }
         }
 
-        if ($request['take']) {
-            $itens->take($request['take']);
-        }
+        // if ($request['take']) {
+        //     $itens->take($request['take']);
+        // }
 
-        if ($request['limit']) {
-            $itens->limit($request['limit']);
-        }
+        // if ($request['limit']) {
+        //     $itens->limit($request['limit']);
+        // }
 
         $itens = $itens->get();
 
