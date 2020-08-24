@@ -8,6 +8,8 @@ use App\CuidadoEscala;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\OrdemservicoServico;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class EscalasController extends Controller
 {
@@ -224,5 +226,115 @@ class EscalasController extends Controller
     {
         $escala->ativo = false;
         $escala->save();
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getEscalasHoje(Request $request)
+    {
+        // $user = $request->user();
+        // $prestador = $user->pessoa->prestador;
+
+        // $hoje = getdate();
+
+        // $escalasHoje = Escala::where('prestador_id', $prestador->id)
+        //     ->where(
+        //         'dataentrada',
+        //         $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $hoje['mday']
+        //     )->select(
+        //         'escalas.id',
+        //         'escalas.periodo',
+        //         'escalas.dataentrada',
+        //         'escalas.datasaida',
+        //         'escalas.horaentrada',
+        //         'escalas.horasaida',
+        //         'escalas.status'
+        //     )
+        //     ->orderBy('dataentrada', 'asc')
+        //     ->get();
+
+        // return $escalasHoje;
+
+        $user = $request->user();
+        $prestador = $user->pessoa->prestador;
+
+        $hoje = getdate();
+
+        $escalas = Escala::with(['ordemservico' => function (BelongsTo $query) {
+            $query->select('id', 'orcamento_id');
+            $query->with(['orcamento' => function (BelongsTo $query) {
+                $query->select('id');
+                $query->with(['homecare' => function ($query) {
+                    $query->select('id', 'orcamento_id', 'nome');
+                }]);
+            }]);
+        }])
+            ->where('prestador_id', $prestador->id)
+            ->where(
+                'dataentrada',
+                $hoje['year'] . '-' . ($hoje['mon'] <= 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $hoje['mday']
+            )
+            ->get([
+                'id',
+                'ordemservico_id',
+                'periodo',
+                'dataentrada',
+                'datasaida',
+                'horaentrada',
+                'horasaida',
+                'status'
+            ]);
+
+        return $escalas;
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getEscalasMes(Request $request)
+    {
+        $user = $request->user();
+        $prestador = $user->pessoa->prestador;
+
+        $hoje = getdate();
+        $dias = cal_days_in_month(CAL_GREGORIAN, $hoje['mon'], $hoje['year']); // 31
+
+        $escalas = Escala::with(['ordemservico' => function (BelongsTo $query) {
+            $query->select('id', 'orcamento_id');
+            $query->with(['orcamento' => function (BelongsTo $query) {
+                $query->select('id');
+                $query->with(['homecare' => function (HasOne $query) {
+                    $query->select('id', 'orcamento_id', 'nome');
+                }]);
+            }]);
+        }])
+            ->where('prestador_id', $prestador->id)
+            ->where(
+                'dataentrada',
+                '>=',
+                $hoje['year'] . '-' . ($hoje['mon'] <= 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . 1
+            )
+            ->where(
+                'dataentrada',
+                '<=',
+                $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $dias
+            )
+            ->get([
+                'id',
+                'ordemservico_id',
+                'periodo',
+                'dataentrada',
+                'datasaida',
+                'horaentrada',
+                'horasaida',
+                'status'
+            ]);
+
+        return $escalas;
     }
 }

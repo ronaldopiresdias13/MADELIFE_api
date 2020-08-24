@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Route;
 Route::group([
     'prefix' => 'auth'
 ], function () {
+    Route::post('loginApp', 'Auth\AuthController@loginApp');
+
     Route::post('login', 'Auth\AuthController@login')->name('login');
     Route::post('register', 'Auth\AuthController@register');
     Route::post('reset', 'Auth\AuthController@reset');
@@ -36,7 +38,12 @@ Route::get("/teste", "Teste@teste");
 
 /* ------------- Rotas Utilizando Token ------------- */
 Route::group(['middleware' => 'auth:api'], function () {
+    /*--------------------App--------------------*/
+    Route::get('getEscalasHoje', 'Api\EscalasController@getEscalasHoje');
+    Route::get('getEscalasMes', 'Api\EscalasController@getEscalasMes');
 });
+
+// Route::get('getEscalasHoje', 'Api\EscalasController@getEscalasHoje')->middleware('auth:api');
 
 Route::get('acaomedicamentos', 'Api\AcaomedicamentosController@index');
 Route::post('acaomedicamentos', 'Api\AcaomedicamentosController@store');
