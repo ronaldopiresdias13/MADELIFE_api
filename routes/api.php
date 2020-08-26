@@ -321,6 +321,7 @@ Route::get(
     'ordemservicos/{ordemservico}/horariomedicamentos',
     'Api\OrdemservicosController@horariomedicamentos'
 ); // Custon
+Route::get('ordemservicos/count/{empresa}', 'Api\OrdemservicosController@quantidadeordemservicos');
 
 Route::get('ordemservicoServicos', 'Api\OrdemservicoServicoController@index');
 Route::post('ordemservicoServicos', 'Api\OrdemservicoServicoController@store');
@@ -486,6 +487,7 @@ Route::post('servicos', 'Api\ServicosController@store');
 Route::get('servicos/{servico}', 'Api\ServicosController@show');
 Route::put('servicos/{servico}', 'Api\ServicosController@update');
 Route::delete('servicos/{servico}', 'Api\ServicosController@destroy');
+Route::get('servicos/empresa/{empresa}', 'Api\ServicosController@indexbyempresa');
 
 Route::get('setores', 'Api\SetoresController@index');
 Route::post('setores', 'Api\SetoresController@store');

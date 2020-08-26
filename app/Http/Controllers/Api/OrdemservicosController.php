@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Pessoa;
+use App\Empresa;
 use App\Responsavel;
 use App\Ordemservico;
 use Illuminate\Http\Request;
@@ -252,5 +253,21 @@ class OrdemservicosController extends Controller
             }
         }
         return $iten;
+    }
+    public function quantidadeordemservicos(Empresa $empresa){
+        //return Ordemservico::where('empresa_id',$empresa['id'])->count();
+        // return DB::select("SELECT count(os.id) FROM ordemservicos os inner join orcamentos o on o.id = os.orcamento_id
+        // where o.tipo = 'Home Care'");
+
+        // $count = Ordemservico::with('orcamento')
+        // ->where('empresa_id',$empresa['id'])
+        // ->where('orcamentos.tipo','Home Care')
+        // ->get();
+
+        // dd($count);
+        return Ordemservico::with('orcamento')
+        ->where('empresa_id',$empresa['id'])
+        ->where('status',1)
+        ->get()->where('orcamento.tipo', 'Home Care')->count();
     }
 }

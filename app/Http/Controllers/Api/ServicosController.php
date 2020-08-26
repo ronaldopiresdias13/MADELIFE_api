@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Servico;
+use App\Empresa;
 use Illuminate\Http\Request;
 
 class ServicosController extends Controller
@@ -15,28 +16,7 @@ class ServicosController extends Controller
      */
     public function index(Request $request)
     {
-        $with = [];
-
-        if ($request['adicionais']) {
-            foreach ($request['adicionais'] as $key => $adicional) {
-                if (is_string($adicional)) {
-                    array_push($with, $adicional);
-                } else {
-                    $filho = '';
-                    foreach ($adicional as $key => $a) {
-                        if ($key == 0) {
-                            $filho = $a;
-                        } else {
-                            $filho = $filho . '.' . $a;
-                        }
-                    }
-                    array_push($with, $filho);
-                }
-            }
-            $itens = Servico::with($with)->where('ativo', true);
-        } else {
-            $itens = Servico::where('ativo', true);
-        }
+        $itens = Servico::where('ativo', true);
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -181,5 +161,12 @@ class ServicosController extends Controller
     {
         $servico->ativo = false;
         $servico->save();
+    }
+    public function indexbyempresa(Empresa $empresa)
+    {
+        return Servico::Where('empresa_id',$empresa['id'])
+        ->where('ativo',1)
+        ->get();
+        
     }
 }
