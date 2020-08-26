@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\EmpresaPrestador;
+use App\Empresa;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -298,5 +299,8 @@ class EmpresaPrestadorController extends Controller
         );
 
         return response()->json($response);
+    }
+    public function quantidadeempresaprestador(Empresa $empresa){
+        return EmpresaPrestador::where('empresa_id',$empresa['id'])->where('ativo', 1)->count();
     }
 }

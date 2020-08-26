@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Cuidado;
+use App\Empresa;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -191,5 +192,15 @@ class CuidadosController extends Controller
     {
         $cuidado->ativo = false;
         $cuidado->save();
+    }
+    public function quantidadecuidados(Empresa $empresa){
+        return Cuidado::where('empresa_id',$empresa['id'])->where('ativo', 1)->count();
+    }
+    public function indexbyempresa(Empresa $empresa)
+    {
+        return Cuidado::Where('empresa_id',$empresa['id'])
+        ->where('ativo',1)
+        ->get();
+        
     }
 }

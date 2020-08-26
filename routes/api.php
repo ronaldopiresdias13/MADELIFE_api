@@ -159,6 +159,8 @@ Route::post('cuidados', 'Api\CuidadosController@store');
 Route::get('cuidados/{cuidado}', 'Api\CuidadosController@show');
 Route::put('cuidados/{cuidado}', 'Api\CuidadosController@update');
 Route::delete('cuidados/{cuidado}', 'Api\CuidadosController@destroy');
+Route::get('cuidados/count/{empresa}', 'Api\CuidadosController@quantidadecuidados');
+Route::get('cuidados/empresa/{empresa}', 'Api\CuidadosController@indexbyempresa');
 
 Route::get('cuidadoEscalas', 'Api\CuidadoEscalasController@index');
 Route::post('cuidadoEscalas', 'Api\CuidadoEscalasController@store');
@@ -202,6 +204,8 @@ Route::get('empresaPrestador/{empresaPrestador}', 'Api\EmpresaPrestadorControlle
 Route::put('empresaPrestador/{empresaPrestador}', 'Api\EmpresaPrestadorController@update');
 Route::delete('empresaPrestador/{empresaPrestador}', 'Api\EmpresaPrestadorController@destroy');
 Route::get('empresaPrestador/{empresaPrestador}/downloadFile', 'Api\EmpresaPrestadorController@downloadFile');
+Route::get('empresaPrestador/empresa/{empresa}', 'Api\EmpresaPrestadorController@indexbyempresa');
+Route::get('empresaPrestador/count/{empresa}', 'Api\EmpresaPrestadorController@quantidadeempresaprestador');
 
 Route::get('enderecos', 'Api\EnderecosController@index');
 Route::post('enderecos', 'Api\EnderecosController@store');
