@@ -49,7 +49,8 @@ class Orcamento extends Model
                 'inss',
                 'iss',
                 'valorcustomensal',
-                'valorresultadomensal'
+                'valorresultadomensal',
+                'descricao'
             )->wherePivot('ativo', true);
     }
 
@@ -71,7 +72,8 @@ class Orcamento extends Model
                 // "inss",
                 // "iss",
                 "valorcustomensal",
-                "valorresultadomensal"
+                "valorresultadomensal",
+                "descricao"
             )->wherePivot('ativo', true);
     }
 
