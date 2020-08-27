@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Escala;
+use App\Empresa;
 use App\Cuidado;
 use App\CuidadoEscala;
 use Illuminate\Http\Request;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\OrdemservicoServico;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\DB;
 
 class EscalasController extends Controller
 {
@@ -358,5 +360,11 @@ class EscalasController extends Controller
             ]);
 
         return $escalas;
+    }
+    public function buscaescalasdodia(Empresa $empresa){
+        // return DB::select('select * from escalas e inner join pontos p on p.escala_id = e.id limit 3');
+        // return Escala::all();
+        return Escala::With(['cuidados', 'monitoramentos','pontos', 'relatorios', 'servico',  'prestador.formacoes','prestador.pessoa.conselhos','ordemservico.orcamento.homecare'])->where('ativo', true)->where('dataentrada', date('Y-m-d'))->get();
+        // return DB::table('escalas')->join('pontos', 'pontos.escala_id', '=', 'escalas.id')->where('ativo', true)->limit(1)->get();
     }
 }
