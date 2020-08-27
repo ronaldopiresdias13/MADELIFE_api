@@ -2,36 +2,32 @@
 
 namespace App;
 
+use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Model;
-use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 
 class Sala extends Model
 {
     use Uuid;
 
-    /**
-     * The "type" of the auto-incrementing ID.
-     *
-     * @var string
-     */
     protected $keyType = 'string';
-
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-    public $incrementing = false;
-
+    protected $primaryKey = 'uuid';
     protected $guarded = [];
+    // protected $hidden = [
+    //     'id'
+    // ];
 
     public function agendamentos()
     {
-        return $this->hasMany('App\Agendamento')->where('ativo', true);
+        return $this->hasMany('App\Agendamento', 'sala_id', 'id')->where('ativo', true);
     }
 
     public function empresa()
     {
         return $this->belongsTo('App\Empresa');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany('App\Comment', 'foreign_key', 'local_key');
     }
 }

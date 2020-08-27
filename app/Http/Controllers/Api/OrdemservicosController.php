@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Pessoa;
+use App\Empresa;
 use App\Responsavel;
 use App\Ordemservico;
 use Illuminate\Http\Request;
@@ -20,7 +21,28 @@ class OrdemservicosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = Ordemservico::where('ativo', true);
+        $with = [];
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adicional) {
+                if (is_string($adicional)) {
+                    array_push($with, $adicional);
+                } else {
+                    $filho = '';
+                    foreach ($adicional as $key => $a) {
+                        if ($key == 0) {
+                            $filho = $a;
+                        } else {
+                            $filho = $filho . '.' . $a;
+                        }
+                    }
+                    array_push($with, $filho);
+                }
+            }
+            $itens = Ordemservico::with($with)->where('ativo', true);
+        } else {
+            $itens = Ordemservico::where('ativo', true);
+        }
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -105,24 +127,7 @@ class OrdemservicosController extends Controller
                     'orcamento_id' => $request['orcamento_id'],
                 ],
                 [
-                    'responsavel_id' => Responsavel::updateOrCreate(
-                        [
-                            'id' => $request['responsavel']['id'],
-                        ],
-                        [
-                            'pessoa_id' => Pessoa::updateOrCreate(
-                                ['cpfcnpj' => $request['responsavel']['pessoa']['cpfcnpj']],
-                                [
-                                    'nome'        => $request['responsavel']['pessoa']['nome'],
-                                    'nascimento'  => $request['responsavel']['pessoa']['nascimento'],
-                                    'tipo'        => $request['responsavel']['pessoa']['tipo'],
-                                    'rgie'        => $request['responsavel']['pessoa']['rgie'],
-                                    'observacoes' => $request['responsavel']['pessoa']['observacoes'],
-                                ]
-                            )->id,
-                            'parentesco' => $request['responsavel']['parentesco'],
-                        ]
-                    )->id,
+                    'responsavel_id'         => null,
                     'profissional_id'        => $request['profissional_id'],
                     'codigo'                 => $request['codigo'],
                     'inicio'                 => $request['inicio'],
@@ -248,5 +253,21 @@ class OrdemservicosController extends Controller
             }
         }
         return $iten;
+    }
+    public function quantidadeordemservicos(Empresa $empresa){
+        //return Ordemservico::where('empresa_id',$empresa['id'])->count();
+        // return DB::select("SELECT count(os.id) FROM ordemservicos os inner join orcamentos o on o.id = os.orcamento_id
+        // where o.tipo = 'Home Care'");
+
+        // $count = Ordemservico::with('orcamento')
+        // ->where('empresa_id',$empresa['id'])
+        // ->where('orcamentos.tipo','Home Care')
+        // ->get();
+
+        // dd($count);
+        return Ordemservico::with('orcamento')
+        ->where('empresa_id',$empresa['id'])
+        ->where('status',1)
+        ->get()->where('orcamento.tipo', 'Home Care')->count();
     }
 }

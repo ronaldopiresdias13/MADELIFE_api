@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Route;
 Route::group([
     'prefix' => 'auth'
 ], function () {
+    Route::post('loginApp', 'Auth\AuthController@loginApp');
+
     Route::post('login', 'Auth\AuthController@login')->name('login');
     Route::post('register', 'Auth\AuthController@register');
     Route::post('reset', 'Auth\AuthController@reset');
@@ -36,7 +38,12 @@ Route::get("/teste", "Teste@teste");
 
 /* ------------- Rotas Utilizando Token ------------- */
 Route::group(['middleware' => 'auth:api'], function () {
+    /*--------------------App--------------------*/
+    Route::get('getEscalasHoje', 'Api\EscalasController@getEscalasHoje');
+    Route::get('getEscalasMes', 'Api\EscalasController@getEscalasMes');
 });
+
+// Route::get('getEscalasHoje', 'Api\EscalasController@getEscalasHoje')->middleware('auth:api');
 
 Route::get('acaomedicamentos', 'Api\AcaomedicamentosController@index');
 Route::post('acaomedicamentos', 'Api\AcaomedicamentosController@store');
@@ -56,11 +63,11 @@ Route::get('agendamentos/{agendamento}', 'Api\AgendamentosController@show');
 Route::put('agendamentos/{agendamento}', 'Api\AgendamentosController@update');
 Route::delete('agendamentos/{agendamento}', 'Api\AgendamentosController@destroy');
 
-Route::get('atribuicoes', 'Api\AtribuicoesController@index');
-Route::post('atribuicoes', 'Api\AtribuicoesController@store');
-Route::get('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@show');
-Route::put('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@update');
-Route::delete('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@destroy');
+// Route::get('atribuicoes', 'Api\AtribuicoesController@index');
+// Route::post('atribuicoes', 'Api\AtribuicoesController@store');
+// Route::get('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@show');
+// Route::put('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@update');
+// Route::delete('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@destroy');
 
 Route::get('bancos', 'Api\BancosController@index');
 Route::post('bancos', 'Api\BancosController@store');
@@ -152,6 +159,8 @@ Route::post('cuidados', 'Api\CuidadosController@store');
 Route::get('cuidados/{cuidado}', 'Api\CuidadosController@show');
 Route::put('cuidados/{cuidado}', 'Api\CuidadosController@update');
 Route::delete('cuidados/{cuidado}', 'Api\CuidadosController@destroy');
+Route::get('cuidados/count/{empresa}', 'Api\CuidadosController@quantidadecuidados');
+Route::get('cuidados/empresa/{empresa}', 'Api\CuidadosController@indexbyempresa');
 
 Route::get('cuidadoEscalas', 'Api\CuidadoEscalasController@index');
 Route::post('cuidadoEscalas', 'Api\CuidadoEscalasController@store');
@@ -195,6 +204,8 @@ Route::get('empresaPrestador/{empresaPrestador}', 'Api\EmpresaPrestadorControlle
 Route::put('empresaPrestador/{empresaPrestador}', 'Api\EmpresaPrestadorController@update');
 Route::delete('empresaPrestador/{empresaPrestador}', 'Api\EmpresaPrestadorController@destroy');
 Route::get('empresaPrestador/{empresaPrestador}/downloadFile', 'Api\EmpresaPrestadorController@downloadFile');
+Route::get('empresaPrestador/empresa/{empresa}', 'Api\EmpresaPrestadorController@indexbyempresa');
+Route::get('empresaPrestador/count/{empresa}', 'Api\EmpresaPrestadorController@quantidadeempresaprestador');
 
 Route::get('enderecos', 'Api\EnderecosController@index');
 Route::post('enderecos', 'Api\EnderecosController@store');
@@ -202,11 +213,18 @@ Route::get('enderecos/{endereco}', 'Api\EnderecosController@show');
 Route::put('enderecos/{endereco}', 'Api\EnderecosController@update');
 Route::delete('enderecos/{endereco}', 'Api\EnderecosController@destroy');
 
+Route::get('entradas', 'Api\EntradasController@index');
+Route::post('entradas', 'Api\EntradasController@store');
+Route::get('entradas/{entrada}', 'Api\EntradasController@show');
+Route::put('entradas/{entrada}', 'Api\EntradasController@update');
+Route::delete('entradas/{entrada}', 'Api\EntradasController@destroy');
+
 Route::get('escalas', 'Api\EscalasController@index');
 Route::post('escalas', 'Api\EscalasController@store');
 Route::get('escalas/{escala}', 'Api\EscalasController@show');
 Route::put('escalas/{escala}', 'Api\EscalasController@update');
 Route::delete('escalas/{escala}', 'Api\EscalasController@destroy');
+Route::get('escalas/empresa/{empresa}/dia', 'Api\EscalasController@buscaescalasdodia');
 
 Route::get('formacoes', 'Api\FormacoesController@index');
 Route::post('formacoes', 'Api\FormacoesController@store');
@@ -304,7 +322,11 @@ Route::post('ordemservicos', 'Api\OrdemservicosController@store');
 Route::get('ordemservicos/{ordemservico}', 'Api\OrdemservicosController@show');
 Route::put('ordemservicos/{ordemservico}', 'Api\OrdemservicosController@update');
 Route::delete('ordemservicos/{ordemservico}', 'Api\OrdemservicosController@destroy');
-Route::get('ordemservicos/{ordemservico}/horariomedicamentos', 'Api\OrdemservicosController@horariomedicamentos'); // Custon
+Route::get(
+    'ordemservicos/{ordemservico}/horariomedicamentos',
+    'Api\OrdemservicosController@horariomedicamentos'
+); // Custon
+Route::get('ordemservicos/count/{empresa}', 'Api\OrdemservicosController@quantidadeordemservicos');
 
 Route::get('ordemservicoServicos', 'Api\OrdemservicoServicoController@index');
 Route::post('ordemservicoServicos', 'Api\OrdemservicoServicoController@store');
@@ -405,7 +427,10 @@ Route::post('prestadorFormacao', 'Api\PrestadorFormacaoController@store');
 Route::get('prestadorFormacao/{prestadorFormacao}', 'Api\PrestadorFormacaoController@show');
 Route::put('prestadorFormacao/{prestadorFormacao}', 'Api\PrestadorFormacaoController@update');
 Route::delete('prestadorFormacao/{prestadorFormacao}', 'Api\PrestadorFormacaoController@destroy');
-Route::get('prestadorFormacao/{prestadorFormacao}/downloadFile', 'Api\PrestadorFormacaoController@downloadFile'); // Custon
+Route::get(
+    'prestadorFormacao/{prestadorFormacao}/downloadFile',
+    'Api\PrestadorFormacaoController@downloadFile'
+); // Custon
 
 Route::get('produtos', 'Api\ProdutosController@index');
 Route::post('produtos', 'Api\ProdutosController@store');
@@ -450,6 +475,12 @@ Route::get('responsaveis/{responsavel}', 'Api\ResponsaveisController@show');
 Route::put('responsaveis/{responsavel}', 'Api\ResponsaveisController@update');
 Route::delete('responsaveis/{responsavel}', 'Api\ResponsaveisController@destroy');
 
+Route::get('saidas', 'Api\SaidasController@index');
+Route::post('saidas', 'Api\SaidasController@store');
+Route::get('saidas/{saida}', 'Api\SaidasController@show');
+Route::put('saidas/{saida}', 'Api\SaidasController@update');
+Route::delete('saidas/{saida}', 'Api\SaidasController@destroy');
+
 Route::get('salas', 'Api\SalasController@index');
 Route::post('salas', 'Api\SalasController@store');
 Route::get('salas/{sala}', 'Api\SalasController@show');
@@ -461,6 +492,7 @@ Route::post('servicos', 'Api\ServicosController@store');
 Route::get('servicos/{servico}', 'Api\ServicosController@show');
 Route::put('servicos/{servico}', 'Api\ServicosController@update');
 Route::delete('servicos/{servico}', 'Api\ServicosController@destroy');
+Route::get('servicos/empresa/{empresa}', 'Api\ServicosController@indexbyempresa');
 
 Route::get('setores', 'Api\SetoresController@index');
 Route::post('setores', 'Api\SetoresController@store');
@@ -497,10 +529,9 @@ Route::post('users', 'Api\UsersController@store');
 Route::get('users/{user}', 'Api\UsersController@show');
 Route::put('users/{user}', 'Api\UsersController@update');
 Route::delete('users/{user}', 'Api\UsersController@destroy');
-// Route::post('users/new', 'Api\UsersController@store');                                      // Mudar na proxima versão do App
 
 Route::get('userAcessos', 'Api\UserAcessoController@index');
-Route::post('userAcessos', 'Api\UserAcessoController@store');                                      // Mudar na proxima versão do App
+Route::post('userAcessos', 'Api\UserAcessoController@store');
 Route::get('userAcessos/{userAcesso}', 'Api\UserAcessoController@show');
 Route::put('userAcessos/{userAcesso}', 'Api\UserAcessoController@update');
 Route::delete('userAcessos/{userAcesso}', 'Api\UserAcessoController@destroy');

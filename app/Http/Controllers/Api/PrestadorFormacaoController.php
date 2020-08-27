@@ -18,7 +18,28 @@ class PrestadorFormacaoController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = PrestadorFormacao::where('ativo', true);
+        $with = [];
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adicional) {
+                if (is_string($adicional)) {
+                    array_push($with, $adicional);
+                } else {
+                    $filho = '';
+                    foreach ($adicional as $key => $a) {
+                        if ($key == 0) {
+                            $filho = $a;
+                        } else {
+                            $filho = $filho . '.' . $a;
+                        }
+                    }
+                    array_push($with, $filho);
+                }
+            }
+            $itens = PrestadorFormacao::with($with)->where('ativo', true);
+        } else {
+            $itens = PrestadorFormacao::where('ativo', true);
+        }
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -91,25 +112,29 @@ class PrestadorFormacaoController extends Controller
      */
     public function store(Request $request)
     {
-        $file = $request->file('file');
-        if ($file->isValid()) {
+        // return $request;
+        $file = $request->file("file");
+        $request = json_decode($request->data, true);
+        // return $request;
+        if ($file && $file->isValid()) {
             $md5 = md5_file($file);
-            $caminho = 'certificados/' . $request['prestador_id'];
+            $caminho = 'certificados/' . $request["prestador_id"];
             $nome = $md5 . '.' . $file->extension();
             $upload = $file->storeAs($caminho, $nome);
             $nomeOriginal = $file->getClientOriginalName();
             if ($upload) {
                 DB::transaction(function () use ($request, $caminho, $nome, $nomeOriginal) {
-                    $prestador_formacao = PrestadorFormacao::updateOrCreate([
-                        'prestador_id' => $request->prestador_id,
-                        'formacao_id'  => $request->formacao_id,
-                        'caminho'      => $caminho . '/' . $nome,
-                        'nome'         => $nomeOriginal,
-                    ],
-                    [
-                        'ativo' => true
-                    ]
-                );
+                    $prestador_formacao = PrestadorFormacao::updateOrCreate(
+                        [
+                            'prestador_id' => $request['prestador_id'],
+                            'formacao_id'  => $request['formacao_id'],
+                            'caminho'      => $caminho . '/' . $nome,
+                            'nome'         => $nomeOriginal,
+                        ],
+                        [
+                            'ativo' => true
+                        ]
+                    );
                 });
                 return response()->json('Upload de arquivo bem sucedido!', 200)->header('Content-Type', 'text/plain');
             } else {
@@ -180,6 +205,7 @@ class PrestadorFormacaoController extends Controller
      */
     public function update(Request $request, PrestadorFormacao $prestadorFormacao)
     {
+        return 'UpDate';
         DB::transaction(function () use ($request, $prestadorFormacao) {
             $prestadorFormacao->prestador_id = $request->prestador_id;
             $prestadorFormacao->formacao_id  = $request->formacao_id;

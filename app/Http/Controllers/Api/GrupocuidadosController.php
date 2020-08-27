@@ -18,7 +18,28 @@ class GrupocuidadosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = Grupocuidado::where('ativo', true);
+        $with = [];
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adicional) {
+                if (is_string($adicional)) {
+                    array_push($with, $adicional);
+                } else {
+                    $filho = '';
+                    foreach ($adicional as $key => $a) {
+                        if ($key == 0) {
+                            $filho = $a;
+                        } else {
+                            $filho = $filho . '.' . $a;
+                        }
+                    }
+                    array_push($with, $filho);
+                }
+            }
+            $itens = Grupocuidado::with($with)->where('ativo', true);
+        } else {
+            $itens = Grupocuidado::where('ativo', true);
+        }
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);

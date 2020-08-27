@@ -15,6 +15,7 @@ use App\PessoaEmail;
 use App\PessoaTelefone;
 use App\PessoaEndereco;
 use App\Http\Controllers\Controller;
+use App\Tipopessoa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -27,7 +28,28 @@ class ClientesController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = Cliente::where('ativo', true);
+        $with = [];
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adicional) {
+                if (is_string($adicional)) {
+                    array_push($with, $adicional);
+                } else {
+                    $filho = '';
+                    foreach ($adicional as $key => $a) {
+                        if ($key == 0) {
+                            $filho = $a;
+                        } else {
+                            $filho = $filho . '.' . $a;
+                        }
+                    }
+                    array_push($with, $filho);
+                }
+            }
+            $itens = Cliente::with($with)->where('ativo', true);
+        } else {
+            $itens = Cliente::where('ativo', true);
+        }
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -103,9 +125,6 @@ class ClientesController extends Controller
         $pessoa = Pessoa::where(
             'cpfcnpj',
             $request['pessoa']['cpfcnpj']
-        )->where(
-            'empresa_id',
-            $request['pessoa']['empresa_id']
         )->first();
 
         $cliente = null;
@@ -130,10 +149,9 @@ class ClientesController extends Controller
                         'id' => ($request['pessoa']['id'] != '') ? $request['id'] : null,
                     ],
                     [
-                        'empresa_id'  => $request['pessoa']['empresa_id'],
                         'nome'        => $request['pessoa']['nome'],
                         'nascimento'  => $request['pessoa']['nascimento'],
-                        'tipo'        =>                    'Cliente',
+
                         'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
                         'rgie'        => $request['pessoa']['rgie'],
                         'observacoes' => $request['pessoa']['observacoes'],
@@ -141,6 +159,11 @@ class ClientesController extends Controller
                         'status'      => $request['pessoa']['status'],
                     ]
                 )->id,
+            ]);
+            $tipopessoa = Tipopessoa::create([
+                'tipo'      => 'Cliente',
+                'pessoa_id' => $cliente->pessoa_id,
+                'ativo'     => 1
             ]);
 
             if ($request['pessoa']['telefones']) {
@@ -299,7 +322,6 @@ class ClientesController extends Controller
             $pessoa = Pessoa::find($request['pessoa']['id']);
             if ($pessoa) {
                 $pessoa->update([
-                    'empresa_id'  => $request['pessoa']['empresa_id'],
                     'nome'        => $request['pessoa']['nome'],
                     'nascimento'  => $request['pessoa']['nascimento'],
                     'tipo'        => $request['pessoa']['tipo'],
@@ -365,51 +387,6 @@ class ClientesController extends Controller
                             'descricao' => $email['pivot']['descricao'],
                         ]
                     );
-                }
-            }
-            if ($request['pessoa']['user']) {
-                if (
-                    $request['pessoa']['user']['email'] !== '' &&
-                    $request['pessoa']['user']['email'] !== null
-                ) {
-                    $user = new User();
-                    if (
-                        $request['pessoa']['user']['password'] !== '' &&
-                        $request['pessoa']['user']['password'] !== null
-                    ) {
-                        $user = User::updateOrCreate(
-                            [
-                                'email'      => $request['pessoa']['user']['email'],
-                            ],
-                            [
-                                'cpfcnpj'    => $request['pessoa']['user']['cpfcnpj'],
-                                'email'      => $request['pessoa']['user']['email'],
-                                'password'   => bcrypt($request['pessoa']['user']['password']),
-                                'pessoa_id'  => $pessoa->id,
-                                // 'empresa_id' => 1,
-                            ]
-                        );
-                    } else {
-                        $user = User::firstOrCreate(
-                            [
-                                'email'      =>        $request['pessoa']['user']['email'],
-                            ],
-                            [
-                                // 'empresa_id' =>        1,
-                                'cpfcnpj'    =>        $request['pessoa']['user']['cpfcnpj'],
-                                'password'   => bcrypt($request['pessoa']['user']['password']),
-                                'pessoa_id'  =>        $pessoa->id,
-                            ]
-                        );
-                    }
-                    if ($request['pessoa']['user']['acessos']) {
-                        foreach ($request['pessoa']['user']['acessos'] as $key => $acesso) {
-                            $user_acesso = UserAcesso::firstOrCreate([
-                                'user_id'   => $user->id,
-                                'acesso_id' => Acesso::firstWhere('id', $acesso)->id,
-                            ]);
-                        }
-                    }
                 }
             }
         });

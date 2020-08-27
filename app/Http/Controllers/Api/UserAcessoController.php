@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\UserAcesso;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UserAcessoController extends Controller
 {
@@ -26,7 +27,12 @@ class UserAcessoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        DB::transaction(function () use ($request) {
+            $user_acesso = UserAcesso::firstOrCreate([
+                'user_id'   => $request['user_id'],
+                'acesso_id' => $request['acesso_id'],
+            ]);
+        });
     }
 
     /**

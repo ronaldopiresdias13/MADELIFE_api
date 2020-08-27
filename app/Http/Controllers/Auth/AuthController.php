@@ -15,6 +15,8 @@ use App\Mail\ResetPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Tipopessoa;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -24,6 +26,99 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
+        // // $request->validate([
+        // //     'email'       => 'string|email',
+        // //     'password'    => 'required|string',
+        // //     'remember_me' => 'boolean'
+        // // ]);
+
+        // // $user = User::firstWhere('email', $request['email']);
+
+        // // $user->acessos;
+        // // $user->pessoa;
+        // // // if ($user->pessoa['tipo'] == 'Prestador') {
+        // // $user->pessoa->prestador;
+        // // // }
+        // // // if ($user->pessoa['tipo'] == 'Cliente') {
+        // // $user->pessoa->cliente;
+        // // // }
+        // // // if ($user->pessoa['tipo'] == 'Profissional') {
+        // // $user->pessoa->profissional;
+        // // // }
+
+
+
+        // $user = User::with([
+        //     'acessos',
+        //     'pessoa' => function (BelongsTo $query) {
+        //         $query->with(['prestador']);
+        //         $query->with(['cliente']);
+        //         $query->with(['profissional']);
+        //     }
+        // ])
+        //     ->where('email', $request['email'])
+        //     ->first();
+
+        // return $user;
+
+
+
+
+
+
+
+
+        // if (!Hash::check($request['password'], $user->password)) {
+        //     return response()->json([
+        //         'message' => 'Email ou Senha Inválidos!'
+        //     ], 401);
+        // }
+
+        // // if ($user && password_verify($request->password, $user->password)) {
+        // //     // authenticated user,
+        // //     // do something...
+        // // }
+
+        // // $user->acessos;
+        // // $user->pessoa;
+        // // // if ($user->pessoa['tipo'] == 'Prestador') {
+        // // $user->pessoa->prestador;
+        // // // }
+        // // // if ($user->pessoa['tipo'] == 'Cliente') {
+        // // $user->pessoa->cliente;
+        // // // }
+        // // // if ($user->pessoa['tipo'] == 'Profissional') {
+        // // $user->pessoa->profissional;
+        // // // }
+
+
+
+        // // return $user;
+
+
+
+
+
+        // $tokenResult = $user->createToken('Personal Access Token');
+        // $token       = $tokenResult->token;
+        // if ($request->remember_me) {
+        //     $token->expires_at = Carbon::now()->addWeeks(1);
+        // }
+        // $token->save();
+
+        // return response()->json([
+        //     'access_token' => $tokenResult->accessToken,
+        //     'token_type'   => 'Bearer',
+        //     'expires_at'   => Carbon::parse(
+        //         $tokenResult->token->expires_at
+        //     )->toDateTimeString(),
+        //     'user' => $user
+        // ]);
+
+
+
+
+
         $request->validate([
             // 'cpfcnpj'  => 'string',
             'email'       => 'string|email',
@@ -62,24 +157,6 @@ class AuthController extends Controller
             )->toDateTimeString(),
             'user' => $user
         ]);
-
-        // $loginData = $request->validate([
-        //     'email' => 'email|required',
-        //     'password' => 'required'
-        // ]);
-
-        // $user = User::where('email', $request->email)->first();
-
-        // if (!$user || !Hash::check($loginData)) {
-        //     throw ValidationException::withMessages([
-        //         message
-        //     ])
-        //     return response()->json(['message' => 'Email ou Senha Inválidos!']);
-        // }
-
-        // $accessToken = auth()->user()->createToken('authToken')->accessToken;
-
-        // return response(['user' => auth()->user(), 'access_token' => $accessToken]);
     }
 
     public function register(Request $request)
@@ -88,13 +165,55 @@ class AuthController extends Controller
 
         $email = User::firstWhere('email', $request['user']['email']);
 
-        if ($cpfcnpj || $email) {
-            return response()->json('Usuário já existe!', 400)->header('Content-Type', 'text/plain');
+        $user = null;
+
+        if ($cpfcnpj) {
+            $user = $cpfcnpj;
+        } elseif ($email) {
+            $user = $email;
+        }
+
+        if ($user) {
+            $prestador = Prestador::firstWhere('pessoa_id', $user->pessoa->id);
+            if ($prestador) {
+                return response()->json('Você já possui cadastro!', 400)->header('Content-Type', 'text/plain');
+            } else {
+                DB::transaction(function () use ($request, $user) {
+                    $pessoa_email = PessoaEmail::firstOrCreate([
+                        'pessoa_id' => $user->pessoa_id,
+                        'email_id'  => Email::firstOrCreate(
+                            [
+                                'email' => $user->email,
+                            ]
+                        )->id,
+                        'tipo'      => 'Pessoal',
+                    ]);
+
+                    $conselho = Conselho::create(
+                        [
+                            'instituicao' => $request['conselho']['instituicao'],
+                            'numero'      => $request['conselho']['numero'],
+                            'pessoa_id'   => $user->pessoa_id
+                        ]
+                    );
+
+                    $formacao = PrestadorFormacao::create(
+                        [
+                            'prestador_id' => Prestador::create(
+                                [
+                                    'pessoa_id' => $user->pessoa_id,
+                                    'sexo'      => $request['prestador']['sexo']
+                                ]
+                            )->id,
+                            'formacao_id'  => $request['prestador']['formacao_id']
+                        ]
+                    );
+                });
+            }
         } else {
             DB::transaction(function () use ($request) {
                 $user = User::create(
                     [
-                        // 'empresa_id' => 1,
                         'cpfcnpj'    => $request['cpfcnpj'],
                         'email'      => $request['user']['email'],
                         'password'   =>  bcrypt($request['user']['password']),
@@ -102,14 +221,17 @@ class AuthController extends Controller
                             [
                                 'nome'       => $request['nome'],
                                 // 'nascimento' => $request['nascimento'],
-                                'tipo'       => 'Prestador',
                                 'cpfcnpj'    => $request['cpfcnpj'],
                                 'status'     => $request['status']
                             ]
                         )->id
                     ]
                 );
-
+                $tipopessoa = Tipopessoa::create([
+                    'tipo'      => 'Prestador',
+                    'pessoa_id' => $user->pessoa_id,
+                    'ativo'     => 1
+                ]);
                 $pessoa_email = PessoaEmail::firstOrCreate([
                     'pessoa_id' => $user->pessoa_id,
                     'email_id'  => Email::firstOrCreate(
@@ -141,23 +263,6 @@ class AuthController extends Controller
                 );
             });
         }
-        // DB::transaction(function () use ($request) {
-        //     $request->validate([
-        //         'cpfcnpj'  => 'string|unique:users',
-        //         'email'    => 'string|email|unique:users',
-        //         'password' => 'required|string'
-        //     ]);
-
-        //     $user = new User();
-        //     $user->cpfcnpj   =        $request->cpfcnpj;
-        //     $user->email     =        $request->email;
-        //     $user->password  = bcrypt($request->password);
-        //     $user->save();
-
-        //     return response()->json([
-        //         'message' => 'Usuario criado com Sucesso!'
-        //     ], 201);
-        // });
     }
 
     public function reset(Request $request)
@@ -214,5 +319,39 @@ class AuthController extends Controller
         $user->pessoa;
         return response()->json($user);
         // return response()->json($request->user());
+    }
+
+    public function loginApp(Request $request)
+    {
+        $request->validate([
+            'email'       => 'string|email',
+            'password'    => 'required|string',
+            'remember_me' => 'boolean'
+        ]);
+
+        $credentials = request(['email', 'password']);
+
+        if (!Auth::attempt($credentials)) {
+            return response()->json([
+                'message' => 'Email ou Senha Inválidos!'
+            ], 401);
+        }
+
+        $user = $request->user();
+        $tokenResult = $user->createToken('Personal Access Token');
+        $token       = $tokenResult->token;
+
+        if ($request->remember_me) {
+            $token->expires_at = Carbon::now()->addMonths(1);
+        }
+
+        $token->save();
+        return response()->json([
+            'access_token' => $tokenResult->accessToken,
+            'token_type'   => 'Bearer',
+            'expires_at'   => Carbon::parse(
+                $tokenResult->token->expires_at
+            )->toDateTimeString()
+        ]);
     }
 }

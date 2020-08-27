@@ -3,8 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Pessoa;
 use App\Produto;
+use App\Profissional;
+use App\Requisicao;
 use App\RequisicaoProduto;
+use App\Saida;
+use App\SaidaProduto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -18,7 +23,28 @@ class RequisicaoProdutosController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = RequisicaoProduto::where('ativo', true);
+        $with = [];
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adicional) {
+                if (is_string($adicional)) {
+                    array_push($with, $adicional);
+                } else {
+                    $filho = '';
+                    foreach ($adicional as $key => $a) {
+                        if ($key == 0) {
+                            $filho = $a;
+                        } else {
+                            $filho = $filho . '.' . $a;
+                        }
+                    }
+                    array_push($with, $filho);
+                }
+            }
+            $itens = RequisicaoProduto::with($with)->where('ativo', true);
+        } else {
+            $itens = RequisicaoProduto::where('ativo', true);
+        }
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -157,8 +183,29 @@ class RequisicaoProdutosController extends Controller
     public function update(Request $request, RequisicaoProduto $requisicaoProduto)
     {
         $produto = Produto::find($request["produto_id"]);
-        $requisicaoProduto->update($request->all());
+        $requisicaoProduto->update([
+            'requisicao_id' => $request['requisicao_id'],
+            'produto_id'    => $request['produto_id'],
+            'quantidade'    => $request['quantidade'],
+            'observacao'    => $request['observacao'],
+            'status'        => $request['status']
+        ]);
         if ($request["status"] === "Aprovado") {
+            $profissional = Profissional::firstWhere('pessoa_id', Pessoa::find(Requisicao::find($request['requisicao_id'])->pessoa_id)->id);
+            $saidaproduto = SaidaProduto::create([
+                'saida_id' => Saida::create([
+                    'empresa_id'      => $profissional->empresa_id,
+                    'data'            => $request['data'],
+                    'descricao'       => "Requisição de Material",
+                    'profissional_id' => $profissional->id
+                ])->id,
+                'produto_id'    => $request['produto_id'],
+                'quantidade'    => $request['quantidade'],
+                'lote'          => "",
+                'valor'         => $produto->valorcusto,
+                'ativo'         => 1
+            ]);
+
             $produto->quantidadeestoque = $produto->quantidadeestoque - $request["quantidade"];
             $produto->update();
         }

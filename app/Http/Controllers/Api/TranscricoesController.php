@@ -7,6 +7,7 @@ use App\TranscricaoProduto;
 use App\Horariomedicamento;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class TranscricoesController extends Controller
 {
@@ -17,7 +18,28 @@ class TranscricoesController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = Transcricao::where('ativo', true);
+        $with = [];
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adicional) {
+                if (is_string($adicional)) {
+                    array_push($with, $adicional);
+                } else {
+                    $filho = '';
+                    foreach ($adicional as $key => $a) {
+                        if ($key == 0) {
+                            $filho = $a;
+                        } else {
+                            $filho = $filho . '.' . $a;
+                        }
+                    }
+                    array_push($with, $filho);
+                }
+            }
+            $itens = Transcricao::with($with)->where('ativo', true);
+        } else {
+            $itens = Transcricao::where('ativo', true);
+        }
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -96,34 +118,36 @@ class TranscricoesController extends Controller
      */
     public function store(Request $request)
     {
-        $transcricao = Transcricao::create([
-            'empresa_id'      => $request->empresa_id,
-            'ordemservico_id' => $request->ordemservico_id,
-            'profissional_id' => $request->profissional_id,
-            'medico'          => $request->medico,
-            'receita'         => $request->receita,
-            'crm'             => $request->crm,
-        ]);
-
-        foreach ($request->itensTranscricao as $key => $iten) {
-            $transcricao_produto = TranscricaoProduto::firstOrCreate([
-                'transcricao_id' => $transcricao->id,
-                'produto_id'     => $iten['produto_id'],
-                'quantidade'     => $iten['quantidade'],
-                'apresentacao'   => $iten['apresentacao'],
-                'via'            => $iten['via'],
-                'frequencia'     => $iten['frequencia'],
-                'tempo'          => $iten['tempo'],
-                'status'         => $iten['status'],
-                'observacao'     => $iten['observacao'],
+        DB::transaction(function () use ($request) {
+            $transcricao = Transcricao::create([
+                'empresa_id'      => $request->empresa_id,
+                'ordemservico_id' => $request->ordemservico_id,
+                'profissional_id' => $request->profissional_id,
+                'medico'          => $request->medico,
+                'receita'         => $request->receita,
+                'crm'             => $request->crm,
             ]);
-            foreach ($iten['horarios'] as $key => $horario) {
-                $horario_medicamento = Horariomedicamento::create([
-                    'transcricao_produto_id' => $transcricao_produto->id,
-                    'horario'                => $horario['horario']
+
+            foreach ($request->itensTranscricao as $key => $iten) {
+                $transcricao_produto = TranscricaoProduto::firstOrCreate([
+                    'transcricao_id' => $transcricao->id,
+                    'produto_id'     => $iten['produto_id'],
+                    'quantidade'     => $iten['quantidade'],
+                    'apresentacao'   => $iten['apresentacao'],
+                    'via'            => $iten['via'],
+                    'frequencia'     => $iten['frequencia'],
+                    'tempo'          => $iten['tempo'],
+                    'status'         => $iten['status'],
+                    'observacao'     => $iten['observacao'],
                 ]);
+                foreach ($iten['horarios'] as $key => $horario) {
+                    $horario_medicamento = Horariomedicamento::create([
+                        'transcricao_produto_id' => $transcricao_produto->id,
+                        'horario'                => $horario['horario']
+                    ]);
+                }
             }
-        }
+        });
     }
 
     /**

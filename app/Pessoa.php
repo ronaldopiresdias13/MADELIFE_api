@@ -16,8 +16,8 @@ class Pessoa extends Model
     public function enderecos()
     {
         return $this->belongsToMany('App\Endereco', 'pessoa_endereco')
-        ->withPivot('id')
-        ->wherePivot('ativo', true);
+            ->withPivot('id')
+            ->wherePivot('ativo', true);
     }
 
     public function telefones()
@@ -62,5 +62,15 @@ class Pessoa extends Model
     public function conselhos()
     {
         return $this->hasMany('App\Conselho')->where('ativo', true);
+    }
+
+    public function responsavel()
+    {
+        return $this->hasOne('App\Responsavel');
+    }
+
+    public function tipopessoas()
+    {
+        return $this->hasMany('App\Tipopessoa')->where('ativo', true);
     }
 }
