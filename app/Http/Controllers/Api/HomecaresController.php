@@ -17,7 +17,28 @@ class HomecaresController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = Homecare::where('ativo', true);
+        $with = [];
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adicional) {
+                if (is_string($adicional)) {
+                    array_push($with, $adicional);
+                } else {
+                    $filho = '';
+                    foreach ($adicional as $key => $a) {
+                        if ($key == 0) {
+                            $filho = $a;
+                        } else {
+                            $filho = $filho . '.' . $a;
+                        }
+                    }
+                    array_push($with, $filho);
+                }
+            }
+            $itens = Homecare::with($with)->where('ativo', true);
+        } else {
+            $itens = Homecare::where('ativo', true);
+        }
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -97,14 +118,14 @@ class HomecaresController extends Controller
     public function store(Request $request)
     {
         $homecare = Homecare::create([
-            // 'empresa_id'           => $request->empresa_id,
-            'nome'               => $request->nome,
-            'sexo'             => $request->sexo,
-            'nascimento'                 => $request->nascimento,
-            'cpfcnpj'               => $request->cpf,
-            'rgie'               => $request->rg,
-            'observacao'               => $request->observacao,
-            // 'status'               => $request->status,
+            // 'empresa_id' => $request->empresa_id,
+            'nome'         => $request->nome,
+            'sexo'         => $request->sexo,
+            'nascimento'   => $request->nascimento,
+            'cpfcnpj'      => $request->cpfcnpj,
+            'rgie'         => $request->rgie,
+            'observacao'   => $request->observacao,
+            // 'status'    => $request->status,
             'orcamento_id' => $request->orcamento_id,
         ]);
     }

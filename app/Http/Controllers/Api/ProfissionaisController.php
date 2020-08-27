@@ -20,6 +20,7 @@ use App\ProfissionalFormacao;
 use App\ProfissionalConvenio;
 use App\ProfissionalBeneficio;
 use App\Http\Controllers\Controller;
+use App\Tipopessoa;
 use Illuminate\Support\Facades\DB;
 
 class ProfissionaisController extends Controller
@@ -31,7 +32,28 @@ class ProfissionaisController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = Profissional::where('ativo', true);
+        $with = [];
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adicional) {
+                if (is_string($adicional)) {
+                    array_push($with, $adicional);
+                } else {
+                    $filho = '';
+                    foreach ($adicional as $key => $a) {
+                        if ($key == 0) {
+                            $filho = $a;
+                        } else {
+                            $filho = $filho . '.' . $a;
+                        }
+                    }
+                    array_push($with, $filho);
+                }
+            }
+            $itens = Profissional::with($with)->where('ativo', true);
+        } else {
+            $itens = Profissional::where('ativo', true);
+        }
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -137,7 +159,6 @@ class ProfissionaisController extends Controller
                     [
                         'nome'        => $request['pessoa']['nome'],
                         'nascimento'  => $request['pessoa']['nascimento'],
-                        'tipo'        =>                    'profissional',
                         'rgie'        => $request['pessoa']['rgie'],
                         'observacoes' => $request['pessoa']['observacoes'],
                         'perfil'      => $request['pessoa']['perfil'],
@@ -165,6 +186,11 @@ class ProfissionaisController extends Controller
                     'admissao'                => $request['dadoscontratuais']['admissao'],
                     'demissao'                => $request['dadoscontratuais']['demissao'],
                 ])->id,
+            ]);
+            $tipopessoa = Tipopessoa::create([
+                'tipo'      => 'Profissional',
+                'pessoa_id' => $profissional->pessoa_id,
+                'ativo'     => 1
             ]);
             if ($request['formacoes']) {
                 foreach ($request['formacoes'] as $key => $formacao) {
@@ -293,7 +319,7 @@ class ProfissionaisController extends Controller
             //     }
             // }
         });
-        
+
         return response()->json('Profissional cadastrado com sucesso!', 200)->header('Content-Type', 'text/plain');
     }
 
@@ -373,7 +399,6 @@ class ProfissionaisController extends Controller
                             // 'empresa_id'  => $request['pessoa']['empresa_id'],
                             'nome'        => $request['pessoa']['nome'],
                             'nascimento'  => $request['pessoa']['nascimento'],
-                            'tipo'        =>                    'profissional',
                             'rgie'        => $request['pessoa']['rgie'],
                             'observacoes' => $request['pessoa']['observacoes'],
                             'perfil'      => $request['pessoa']['perfil'],

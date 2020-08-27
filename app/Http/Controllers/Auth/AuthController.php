@@ -15,6 +15,7 @@ use App\Mail\ResetPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Tipopessoa;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -178,7 +179,6 @@ class AuthController extends Controller
                 return response()->json('Você já possui cadastro!', 400)->header('Content-Type', 'text/plain');
             } else {
                 DB::transaction(function () use ($request, $user) {
-
                     $pessoa_email = PessoaEmail::firstOrCreate([
                         'pessoa_id' => $user->pessoa_id,
                         'email_id'  => Email::firstOrCreate(
@@ -221,14 +221,17 @@ class AuthController extends Controller
                             [
                                 'nome'       => $request['nome'],
                                 // 'nascimento' => $request['nascimento'],
-                                'tipo'       => 'Prestador',
                                 'cpfcnpj'    => $request['cpfcnpj'],
                                 'status'     => $request['status']
                             ]
                         )->id
                     ]
                 );
-
+                $tipopessoa = Tipopessoa::create([
+                    'tipo'      => 'Prestador',
+                    'pessoa_id' => $user->pessoa_id,
+                    'ativo'     => 1
+                ]);
                 $pessoa_email = PessoaEmail::firstOrCreate([
                     'pessoa_id' => $user->pessoa_id,
                     'email_id'  => Email::firstOrCreate(
@@ -316,5 +319,39 @@ class AuthController extends Controller
         $user->pessoa;
         return response()->json($user);
         // return response()->json($request->user());
+    }
+
+    public function loginApp(Request $request)
+    {
+        $request->validate([
+            'email'       => 'string|email',
+            'password'    => 'required|string',
+            'remember_me' => 'boolean'
+        ]);
+
+        $credentials = request(['email', 'password']);
+
+        if (!Auth::attempt($credentials)) {
+            return response()->json([
+                'message' => 'Email ou Senha Inválidos!'
+            ], 401);
+        }
+
+        $user = $request->user();
+        $tokenResult = $user->createToken('Personal Access Token');
+        $token       = $tokenResult->token;
+
+        if ($request->remember_me) {
+            $token->expires_at = Carbon::now()->addMonths(1);
+        }
+
+        $token->save();
+        return response()->json([
+            'access_token' => $tokenResult->accessToken,
+            'token_type'   => 'Bearer',
+            'expires_at'   => Carbon::parse(
+                $tokenResult->token->expires_at
+            )->toDateTimeString()
+        ]);
     }
 }

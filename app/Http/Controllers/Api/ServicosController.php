@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Servico;
+use App\Empresa;
 use Illuminate\Http\Request;
 
 class ServicosController extends Controller
@@ -160,5 +161,12 @@ class ServicosController extends Controller
     {
         $servico->ativo = false;
         $servico->save();
+    }
+    public function indexbyempresa(Empresa $empresa)
+    {
+        return Servico::Where('empresa_id',$empresa['id'])
+        ->where('ativo',1)
+        ->get();
+        
     }
 }

@@ -12,6 +12,7 @@ use App\PessoaEndereco;
 use App\PessoaTelefone;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Tipopessoa;
 use Illuminate\Support\Facades\DB;
 
 class FornecedoresController extends Controller
@@ -23,7 +24,28 @@ class FornecedoresController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = Fornecedor::where('ativo', true);
+        $with = [];
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adicional) {
+                if (is_string($adicional)) {
+                    array_push($with, $adicional);
+                } else {
+                    $filho = '';
+                    foreach ($adicional as $key => $a) {
+                        if ($key == 0) {
+                            $filho = $a;
+                        } else {
+                            $filho = $filho . '.' . $a;
+                        }
+                    }
+                    array_push($with, $filho);
+                }
+            }
+            $itens = Fornecedor::with($with)->where('ativo', true);
+        } else {
+            $itens = Fornecedor::where('ativo', true);
+        }
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -112,7 +134,6 @@ class FornecedoresController extends Controller
                 [
                     'nome'        => $request['pessoa']['nome'],
                     'nascimento'  => $request['pessoa']['nascimento'],
-                    'tipo'        =>                    'Fornecedor',
                     'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
                     'rgie'        => $request['pessoa']['rgie'],
                     'observacoes' => $request['pessoa']['observacoes'],
@@ -121,7 +142,11 @@ class FornecedoresController extends Controller
                 ]
             )->id,
         ]);
-
+        $tipopessoa = Tipopessoa::create([
+            'tipo'      => 'Fornecedor',
+            'pessoa_id' => $fornecedor->pessoa_id,
+            'ativo'     => 1
+        ]);
         foreach ($request['pessoa']['telefones'] as $key => $telefone) {
             $pessoa_telefone = PessoaTelefone::firstOrCreate([
                 'pessoa_id'   => $fornecedor->pessoa_id,

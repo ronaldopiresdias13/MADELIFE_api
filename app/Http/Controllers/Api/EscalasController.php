@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Escala;
+use App\Empresa;
 use App\Cuidado;
 use App\CuidadoEscala;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\OrdemservicoServico;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\DB;
 
 class EscalasController extends Controller
 {
@@ -18,7 +22,29 @@ class EscalasController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = Escala::where('ativo', true);
+        $with = [];
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adicional) {
+                if (is_string($adicional)) {
+                    array_push($with, $adicional);
+                } else {
+                    $filho = '';
+                    foreach ($adicional as $key => $a) {
+                        if ($key == 0) {
+                            $filho = $a;
+                        } else {
+                            $filho = $filho . '.' . $a;
+                        }
+                    }
+                    array_push($with, $filho);
+                }
+            }
+            $itens = Escala::with($with)->where('ativo', true);
+        } else {
+            $itens = Escala::where('ativo', true);
+        }
+
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -42,6 +68,14 @@ class EscalasController extends Controller
                 );
             }
         }
+
+        // if ($request['take']) {
+        //     $itens->take($request['take']);
+        // }
+
+        // if ($request['limit']) {
+        //     $itens->limit($request['limit']);
+        // }
 
         $itens = $itens->get();
 
@@ -76,7 +110,9 @@ class EscalasController extends Controller
             }
         }
 
+        // return $itens->paginate(5);
         return $itens;
+        // return '$itens';
     }
 
     /**
@@ -214,5 +250,121 @@ class EscalasController extends Controller
     {
         $escala->ativo = false;
         $escala->save();
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getEscalasHoje(Request $request)
+    {
+        // $user = $request->user();
+        // $prestador = $user->pessoa->prestador;
+
+        // $hoje = getdate();
+
+        // $escalasHoje = Escala::where('prestador_id', $prestador->id)
+        //     ->where(
+        //         'dataentrada',
+        //         $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $hoje['mday']
+        //     )->select(
+        //         'escalas.id',
+        //         'escalas.periodo',
+        //         'escalas.dataentrada',
+        //         'escalas.datasaida',
+        //         'escalas.horaentrada',
+        //         'escalas.horasaida',
+        //         'escalas.status'
+        //     )
+        //     ->orderBy('dataentrada', 'asc')
+        //     ->get();
+
+        // return $escalasHoje;
+
+        $user = $request->user();
+        $prestador = $user->pessoa->prestador;
+
+        $hoje = getdate();
+
+        $escalas = Escala::with(['ordemservico' => function (BelongsTo $query) {
+            $query->select('id', 'orcamento_id');
+            $query->with(['orcamento' => function (BelongsTo $query) {
+                $query->select('id');
+                $query->with(['homecare' => function ($query) {
+                    $query->select('id', 'orcamento_id', 'nome');
+                }]);
+            }]);
+        }])
+            ->where('prestador_id', $prestador->id)
+            ->where(
+                'dataentrada',
+                $hoje['year'] . '-' . ($hoje['mon'] <= 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $hoje['mday']
+            )
+            ->get([
+                'id',
+                'ordemservico_id',
+                'periodo',
+                'dataentrada',
+                'datasaida',
+                'horaentrada',
+                'horasaida',
+                'status'
+            ]);
+
+        return $escalas;
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getEscalasMes(Request $request)
+    {
+        $user = $request->user();
+        $prestador = $user->pessoa->prestador;
+
+        $hoje = getdate();
+        $dias = cal_days_in_month(CAL_GREGORIAN, $hoje['mon'], $hoje['year']); // 31
+
+        $escalas = Escala::with(['ordemservico' => function (BelongsTo $query) {
+            $query->select('id', 'orcamento_id');
+            $query->with(['orcamento' => function (BelongsTo $query) {
+                $query->select('id');
+                $query->with(['homecare' => function (HasOne $query) {
+                    $query->select('id', 'orcamento_id', 'nome');
+                }]);
+            }]);
+        }])
+            ->where('prestador_id', $prestador->id)
+            ->where(
+                'dataentrada',
+                '>=',
+                $hoje['year'] . '-' . ($hoje['mon'] <= 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . 1
+            )
+            ->where(
+                'dataentrada',
+                '<=',
+                $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $dias
+            )
+            ->get([
+                'id',
+                'ordemservico_id',
+                'periodo',
+                'dataentrada',
+                'datasaida',
+                'horaentrada',
+                'horasaida',
+                'status'
+            ]);
+
+        return $escalas;
+    }
+    public function buscaescalasdodia(Empresa $empresa){
+        // return DB::select('select * from escalas e inner join pontos p on p.escala_id = e.id limit 3');
+        // return Escala::all();
+        return Escala::With(['cuidados', 'monitoramentos','pontos', 'relatorios', 'servico',  'prestador.formacoes','prestador.pessoa.conselhos','ordemservico.orcamento.homecare'])->where('ativo', true)->where('dataentrada', date('Y-m-d'))->get();
+        // return DB::table('escalas')->join('pontos', 'pontos.escala_id', '=', 'escalas.id')->where('ativo', true)->limit(1)->get();
     }
 }

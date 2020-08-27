@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\EmpresaPrestador;
+use App\Empresa;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +19,28 @@ class EmpresaPrestadorController extends Controller
      */
     public function index(Request $request)
     {
-        $itens = EmpresaPrestador::where('ativo', true);
+        $with = [];
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adicional) {
+                if (is_string($adicional)) {
+                    array_push($with, $adicional);
+                } else {
+                    $filho = '';
+                    foreach ($adicional as $key => $a) {
+                        if ($key == 0) {
+                            $filho = $a;
+                        } else {
+                            $filho = $filho . '.' . $a;
+                        }
+                    }
+                    array_push($with, $filho);
+                }
+            }
+            $itens = EmpresaPrestador::with($with)->where('ativo', true);
+        } else {
+            $itens = EmpresaPrestador::where('ativo', true);
+        }
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -277,5 +299,8 @@ class EmpresaPrestadorController extends Controller
         );
 
         return response()->json($response);
+    }
+    public function quantidadeempresaprestador(Empresa $empresa){
+        return EmpresaPrestador::where('empresa_id',$empresa['id'])->where('ativo', 1)->count();
     }
 }
