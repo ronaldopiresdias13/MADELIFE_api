@@ -143,7 +143,7 @@ class OrcamentosController extends Controller
                     'cliente_id'        => $request['cliente_id'],
                     'numero'            => $request['numero'],
                     'processo'          => $request['processo'],
-                    'cidade_id'         => $request['cidade_id'],
+                    'cidade_id'         => $request['cidade']['id'],
                     'tipo'              => $request['tipo'],
                     'data'              => $request['data'],
                     'unidade'           => $request['unidade'],
@@ -485,7 +485,7 @@ class OrcamentosController extends Controller
                     'cliente_id'        => $request['cliente_id'],
                     'numero'            => $request['numero'],
                     'processo'          => $request['processo'],
-                    'cidade_id'         => $request['cidade_id'],
+                    'cidade_id'         => $request['cidade']['id'],
                     'tipo'              => $request['tipo'],
                     'data'              => $request['data'],
                     'unidade'           => $request['unidade'],
@@ -565,59 +565,59 @@ class OrcamentosController extends Controller
             }
 
             if ($request['homecare']) {
-                $homecare = Homecare::updateOrCreate(
-                    [
-                        'orcamento_id' => $orcamento->id,
-                    ],
-                    [
-                        'nome'       => $request['homecare']['nome'],
-                        'sexo'       => $request['homecare']['sexo'],
-                        'nascimento' => $request['homecare']['nascimento'],
-                        'cpfcnpj'    => $request['homecare']['cpfcnpj'],
-                        'rgie'       => $request['homecare']['rgie'],
-                        'endereco'   => $request['homecare']['endereco'],
-                        'cidade_id'  => $request['homecare']['cidade_id'],
-                        'observacao' => $request['homecare']['observacao'],
-                    ]
-                );
+                // $homecare = Homecare::updateOrCreate(
+                //     [
+                //         'orcamento_id' => $orcamento->id,
+                //     ],
+                //     [
+                //         'nome'       => $request['homecare']['nome'],
+                //         'sexo'       => $request['homecare']['sexo'],
+                //         'nascimento' => $request['homecare']['nascimento'],
+                //         'cpfcnpj'    => $request['homecare']['cpfcnpj'],
+                //         'rgie'       => $request['homecare']['rgie'],
+                //         'endereco'   => $request['homecare']['endereco'],
+                //         'cidade_id'  => $request['homecare']['cidade_id'],
+                //         'observacao' => $request['homecare']['observacao'],
+                //     ]
+                // );
 
-                if ($request['homecare']['telefones']) {
-                    foreach ($request['homecare']['telefones'] as $key => $telefone) {
-                        $homecare_telefone = HomecareTelefone::updateOrCreate(
-                            [
-                                'homecare_id' => $homecare->id,
-                                'telefone_id' => Telefone::firstOrCreate(
-                                    [
-                                        'telefone'  => $telefone['telefone'],
-                                    ]
-                                )->id,
-                            ],
-                            [
-                                'tipo'      => $telefone['pivot']['tipo'],
-                                'descricao' => $telefone['pivot']['descricao'],
-                            ]
-                        );
-                    }
-                }
+                // if ($request['homecare']['telefones']) {
+                //     foreach ($request['homecare']['telefones'] as $key => $telefone) {
+                //         $homecare_telefone = HomecareTelefone::updateOrCreate(
+                //             [
+                //                 'homecare_id' => $homecare->id,
+                //                 'telefone_id' => Telefone::firstOrCreate(
+                //                     [
+                //                         'telefone'  => $telefone['telefone'],
+                //                     ]
+                //                 )->id,
+                //             ],
+                //             [
+                //                 'tipo'      => $telefone['pivot']['tipo'],
+                //                 'descricao' => $telefone['pivot']['descricao'],
+                //             ]
+                //         );
+                //     }
+                // }
 
-                if ($request['homecare']['emails']) {
-                    foreach ($request['homecare']['emails'] as $key => $email) {
-                        $homecare_email = HomecareEmail::updateOrCreate(
-                            [
-                                'homecare_id' => $homecare->id,
-                                'email_id'    => Email::firstOrCreate(
-                                    [
-                                        'email'     => $email['email'],
-                                    ]
-                                )->id,
-                            ],
-                            [
-                                'tipo'      => $email['pivot']['tipo'],
-                                'descricao' => $email['pivot']['descricao'],
-                            ]
-                        );
-                    }
-                }
+                // if ($request['homecare']['emails']) {
+                //     foreach ($request['homecare']['emails'] as $key => $email) {
+                //         $homecare_email = HomecareEmail::updateOrCreate(
+                //             [
+                //                 'homecare_id' => $homecare->id,
+                //                 'email_id'    => Email::firstOrCreate(
+                //                     [
+                //                         'email'     => $email['email'],
+                //                     ]
+                //                 )->id,
+                //             ],
+                //             [
+                //                 'tipo'      => $email['pivot']['tipo'],
+                //                 'descricao' => $email['pivot']['descricao'],
+                //             ]
+                //         );
+                //     }
+                // }
             }
 
             if ($request['remocao']) {
