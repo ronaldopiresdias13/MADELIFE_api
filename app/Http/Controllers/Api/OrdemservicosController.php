@@ -270,4 +270,16 @@ class OrdemservicosController extends Controller
         ->where('status',1)
         ->get()->where('orcamento.tipo', 'Home Care')->count();
     }
+
+    public function groupbyservicos(Empresa $empresa){
+        return Ordemservico::where('ordemservicos.empresa_id', $empresa['id'])->where('ordemservicos.ativo', 1)->where('ordemservicos.status', 1)
+        ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
+        ->join('orcamento_servico', 'orcamento_servico.orcamento_id', '=', 'orcamentos.id')
+        ->join('servicos', 'servicos.id', '=', 'orcamento_servico.servico_id')
+        ->select('servicos.descricao', DB::raw('count(servicos.id) as count'))
+        ->groupBy('servicos.descricao')
+        ->orderBy('count', 'desc')
+        ->get();
+    }
+
 }
