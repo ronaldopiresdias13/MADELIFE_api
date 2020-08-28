@@ -3,27 +3,25 @@
 namespace App\Http\Controllers\Api;
 
 use App\Aph;
-use App\AphEmail;
-use App\AphTelefone;
 use App\Email;
 use App\Evento;
 use App\Remocao;
+use App\AphEmail;
 use App\Telefone;
 use App\Homecare;
 use App\Orcamento;
+use App\AphTelefone;
 use App\EventoEmail;
 use App\RemocaoEmail;
-use App\HomecareEmail;
 use App\EventoTelefone;
 use App\Orcamentocusto;
 use App\RemocaoTelefone;
 use App\OrcamentoServico;
 use App\OrcamentoProduto;
-use App\HomecareTelefone;
 use App\Historicoorcamento;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class OrcamentosController extends Controller
 {
@@ -63,22 +61,12 @@ class OrcamentosController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                // if ($key == 0) {
-                //     $itens = Orcamento::where(
-                //         ($where['coluna']) ? $where['coluna'] : 'id',
-                //         ($where['expressao']) ? $where['expressao'] : 'like',
-                //         ($where['valor']) ? $where['valor'] : '%'
-                //     );
-                // } else {
                 $itens->where(
                     ($where['coluna']) ? $where['coluna'] : 'id',
                     ($where['expressao']) ? $where['expressao'] : 'like',
                     ($where['valor']) ? $where['valor'] : '%'
                 );
-                // }
             }
-            // } else {
-            //     $itens = Orcamento::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -225,9 +213,16 @@ class OrcamentosController extends Controller
             }
 
             if ($request['homecare']) {
-                $homecare = Homecare::find($request['homecare']);
-                $homecare->orcamento_id = $orcamento->id;
-                $homecare->update();
+                $homecare = Homecare::create(
+                    [
+                        'orcamento_id' => $orcamento->id,
+                        'paciente_id' => $request['homecare']
+                    ]
+                );
+
+                // $homecare = Homecare::find($request['homecare']);
+                // $homecare->orcamento_id = $orcamento->id;
+                // $homecare->update();
                 // $homecare = Homecare::updateOrCreate(
                 //     [
                 //         'orcamento_id' => $orcamento->id,
