@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Prescricaob;
+use App\Tipopessoa;
 use Illuminate\Http\Request;
 
-class PrescricoesbsController extends Controller
+class TipopessoasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -33,9 +33,9 @@ class PrescricoesbsController extends Controller
                     array_push($with, $filho);
                 }
             }
-            $itens = Prescricaob::with($with)->where('ativo', true);
+            $itens = Tipopessoa::with($with)->where('ativo', true);
         } else {
-            $itens = Prescricaob::where('ativo', true);
+            $itens = Tipopessoa::where('ativo', true);
         }
 
         if ($request->commands) {
@@ -109,85 +109,40 @@ class PrescricoesbsController extends Controller
      */
     public function store(Request $request)
     {
-        $prescricaob = new Prescricaob();
-        $prescricaob->descricao = $request->descricao;
-        $prescricaob->descricao = $request->descricao;
-        $prescricaob->descricao = $request->descricao;
-        $prescricaob->descricao = $request->descricao;
-        $prescricaob->save();
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Prescricaob  $prescricaob
+     * @param  \App\Tipopessoa  $tipopessoa
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Prescricaob $prescricaob)
+    public function show(Tipopessoa $tipopessoa)
     {
-        $iten = $prescricaob;
-
-        if ($request->commands) {
-            $request = json_decode($request->commands, true);
-        }
-
-        if ($request['adicionais']) {
-            foreach ($request['adicionais'] as $key => $adicional) {
-                if (is_string($adicional)) {
-                    $iten[$adicional];
-                } else {
-                    $iten2 = $iten;
-                    foreach ($adicional as $key => $a) {
-                        if ($key == 0) {
-                            if ($iten[0] == null) {
-                                $iten2 = $iten[$a];
-                            } else {
-                                foreach ($iten as $key => $i) {
-                                    $i[$a];
-                                }
-                            }
-                        } else {
-                            if ($iten2 != null) {
-                                if ($iten2->count() > 0) {
-                                    if ($iten2[0] == null) {
-                                        $iten2 = $iten2[$a];
-                                    } else {
-                                        foreach ($iten2 as $key => $i) {
-                                            $i[$a];
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return $iten;
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Prescricaob  $prescricaob
+     * @param  \App\Tipopessoa  $tipopessoa
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Prescricaob $prescricaob)
+    public function update(Request $request, Tipopessoa $tipopessoa)
     {
-        $prescricaob->update($request->all());
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Prescricaob  $prescricaob
+     * @param  \App\Tipopessoa  $tipopessoa
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Prescricaob $prescricaob)
+    public function destroy(Tipopessoa $tipopessoa)
     {
-        $prescricaob->ativo = false;
-        $prescricaob->save();
+        //
     }
 }

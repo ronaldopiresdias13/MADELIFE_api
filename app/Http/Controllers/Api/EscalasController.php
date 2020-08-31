@@ -96,11 +96,15 @@ class EscalasController extends Controller
                                     }
                                 }
                             } else {
-                                if ($iten2[0] == null) {
-                                    $iten2 = $iten2[$a];
-                                } else {
-                                    foreach ($iten2 as $key => $i) {
-                                        $i[$a];
+                                if ($iten2 != null) {
+                                    if ($iten2->count() > 0) {
+                                        if ($iten2[0] == null) {
+                                            $iten2 = $iten2[$a];
+                                        } else {
+                                            foreach ($iten2 as $key => $i) {
+                                                $i[$a];
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -192,11 +196,15 @@ class EscalasController extends Controller
                                 }
                             }
                         } else {
-                            if ($iten2[0] == null) {
-                                $iten2 = $iten2[$a];
-                            } else {
-                                foreach ($iten2 as $key => $i) {
-                                    $i[$a];
+                            if ($iten2 != null) {
+                                if ($iten2->count() > 0) {
+                                    if ($iten2[0] == null) {
+                                        $iten2 = $iten2[$a];
+                                    } else {
+                                        foreach ($iten2 as $key => $i) {
+                                            $i[$a];
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -361,10 +369,11 @@ class EscalasController extends Controller
 
         return $escalas;
     }
-    public function buscaescalasdodia(Empresa $empresa){
+    public function buscaescalasdodia(Empresa $empresa)
+    {
         // return DB::select('select * from escalas e inner join pontos p on p.escala_id = e.id limit 3');
         // return Escala::all();
-        return Escala::With(['cuidados', 'monitoramentos','pontos', 'relatorios', 'servico',  'prestador.formacoes','prestador.pessoa.conselhos','ordemservico.orcamento.homecare'])->where('ativo', true)->where('dataentrada', date('Y-m-d'))->get();
+        return Escala::With(['cuidados', 'monitoramentos', 'pontos', 'relatorios', 'servico',  'prestador.formacoes', 'prestador.pessoa.conselhos', 'ordemservico.orcamento.homecare'])->where('ativo', true)->where('dataentrada', date('Y-m-d'))->get();
         // return DB::table('escalas')->join('pontos', 'pontos.escala_id', '=', 'escalas.id')->where('ativo', true)->limit(1)->get();
     }
 }
