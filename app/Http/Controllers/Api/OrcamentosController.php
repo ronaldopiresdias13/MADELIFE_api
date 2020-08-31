@@ -125,7 +125,7 @@ class OrcamentosController extends Controller
         // $teste = (String)$request->all();
         // return gettype(json_encode($request->all()));
         DB::transaction(function () use ($request) {
-            $orcamento = Orcamento::updateOrCreate(
+            $orcamento = Orcamento::create(
                 [
                     'empresa_id'        => $request['empresa_id'],
                     'cliente_id'        => $request['cliente_id'],
@@ -148,12 +148,10 @@ class OrcamentosController extends Controller
 
             if ($request['servicos']) {
                 foreach ($request['servicos'] as $key => $servico) {
-                    $orcamento_servico = OrcamentoServico::updateOrCreate(
+                    $orcamento_servico = OrcamentoServico::create(
                         [
                             'orcamento_id' => $orcamento->id,
                             'servico_id'   => $servico['servico_id']['id'],
-                        ],
-                        [
                             'quantidade'           => $servico['quantidade'],
                             'frequencia'           => $servico['frequencia'],
                             'basecobranca'         => $servico['basecobranca'],
@@ -176,12 +174,10 @@ class OrcamentosController extends Controller
 
             if ($request['produtos']) {
                 foreach ($request['produtos'] as $key => $produto) {
-                    $orcamento_produto = OrcamentoProduto::updateOrCreate(
+                    $orcamento_produto = OrcamentoProduto::create(
                         [
                             'orcamento_id' => $orcamento->id,
                             'produto_id'   => $produto['produto_id'],
-                        ],
-                        [
                             'quantidade'           => $produto['quantidade'],
                             'valorunitario'        => $produto['valorunitario'],
                             'custo'                => $produto['custo'],
@@ -197,12 +193,10 @@ class OrcamentosController extends Controller
 
             if ($request['custos']) {
                 foreach ($request['custos'] as $key => $custo) {
-                    $orcamentocusto = Orcamentocusto::updateOrCreate(
+                    $orcamentocusto = Orcamentocusto::create(
                         [
                             'orcamento_id' => $orcamento->id,
                             'descricao'    => $custo['descricao'],
-                        ],
-                        [
                             'quantidade'    => $custo['quantidade'],
                             'unidade'       => $custo['unidade'],
                             'valorunitario' => $custo['valorunitario'],
@@ -271,7 +265,7 @@ class OrcamentosController extends Controller
             }
 
             if ($request['remocao']) {
-                $remocao = Remocao::updateOrCreate(
+                $remocao = Remocao::create(
                     [
                         'orcamento_id'    => $orcamento->id,
                     ],
@@ -321,11 +315,9 @@ class OrcamentosController extends Controller
             }
 
             if ($request['evento']) {
-                $evento = Evento::updateOrCreate(
+                $evento = Evento::create(
                     [
                         'orcamento_id' => $orcamento->id,
-                    ],
-                    [
                         'nome'     => $request['evento']['nome'],
                         'endereco' => $request['evento']['endereco'],
                         'cep'      => $request['evento']['cep'],
@@ -365,11 +357,9 @@ class OrcamentosController extends Controller
             }
 
             if ($request['aph']) {
-                $aph = Aph::updateOrCreate(
+                $aph = Aph::create(
                     [
                         'orcamento_id' => $orcamento->id,
-                    ],
-                    [
                         'nome'     => $request['aph']['nome'],
                         'endereco' => $request['aph']['endereco'],
                         'cep'      => $request['aph']['cep'],
@@ -495,14 +485,16 @@ class OrcamentosController extends Controller
                 ]
             );
 
+            foreach ($orcamento->servicos as $key => $servico) {
+                $servico->delete();
+            }
+
             if ($request['servicos']) {
                 foreach ($request['servicos'] as $key => $servico) {
-                    $orcamento_servico = OrcamentoServico::updateOrCreate(
+                    $orcamento_servico = OrcamentoServico::create(
                         [
-                            'orcamento_id' => $orcamento->id,
-                            'servico_id'   => $servico['servico_id'],
-                        ],
-                        [
+                            'orcamento_id'         => $orcamento->id,
+                            'servico_id'           => $servico['servico_id'],
                             'quantidade'           => $servico['quantidade'],
                             'frequencia'           => $servico['frequencia'],
                             'basecobranca'         => $servico['basecobranca'],
@@ -522,14 +514,16 @@ class OrcamentosController extends Controller
                 }
             }
 
+            foreach ($orcamento->produtos as $key => $produto) {
+                $produto->delete();
+            }
+
             if ($request['produtos']) {
                 foreach ($request['produtos'] as $key => $produto) {
-                    $orcamento_produto = OrcamentoProduto::updateOrCreate(
+                    $orcamento_produto = OrcamentoProduto::create(
                         [
-                            'orcamento_id' => $orcamento->id,
-                            'produto_id'   => $produto['produto_id'],
-                        ],
-                        [
+                            'orcamento_id'         => $orcamento->id,
+                            'produto_id'           => $produto['produto_id'],
                             'quantidade'           => $produto['quantidade'],
                             'valorunitario'        => $produto['valorunitario'],
                             'custo'                => $produto['custo'],
@@ -542,14 +536,16 @@ class OrcamentosController extends Controller
                 }
             }
 
+            foreach ($orcamento->custos as $key => $custo) {
+                $custo->delete();
+            }
+
             if ($request['custos']) {
                 foreach ($request['custos'] as $key => $custo) {
-                    $orcamentocusto = Orcamentocusto::updateOrCreate(
+                    $orcamentocusto = Orcamentocusto::create(
                         [
-                            'orcamento_id' => $orcamento->id,
-                            'descricao'    => $custo['descricao'],
-                        ],
-                        [
+                            'orcamento_id'  => $orcamento->id,
+                            'descricao'     => $custo['descricao'],
                             'quantidade'    => $custo['quantidade'],
                             'unidade'       => $custo['unidade'],
                             'valorunitario' => $custo['valorunitario'],
@@ -559,7 +555,18 @@ class OrcamentosController extends Controller
                 }
             }
 
+            // $orcamento->homecare->delete();
+
             if ($request['homecare']) {
+                $homecare = Homecare::updateOrCreate(
+                    [
+                        'orcamento_id' => $orcamento->id,
+                    ],
+                    [
+                        'paciente_id'       => $request['homecare'],
+                    ]
+                );
+
                 // $homecare = Homecare::updateOrCreate(
                 //     [
                 //         'orcamento_id' => $orcamento->id,
@@ -652,6 +659,7 @@ class OrcamentosController extends Controller
                         );
                     }
                 }
+
                 if ($request['remocao']['emails']) {
                     foreach ($request['remocao']['emails'] as $key => $email) {
                         $remocao_email = RemocaoEmail::updateOrCreate(
