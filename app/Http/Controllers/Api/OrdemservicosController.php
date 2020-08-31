@@ -147,8 +147,8 @@ class OrdemservicosController extends Controller
                             'ordemservico_id'  => $ordemservico->id,
                             'servico_id'       => $servico->id,
                             'descricao'        => $servico['pivot']['basecobranca'],
-                            'valor'            => ($servico['pivot']['custo'] / 2),
-                            'adicionalnoturno' => $servico['pivot']['adicionalnoturno'],
+                            'valordiurno'      => ($servico['pivot']['custo'] / 2),
+                            'valornoturno'     => ($servico['pivot']['custo'] / 2) + $servico['pivot']['adicionalnoturno'],
                         ]
                     );
                 } else {
@@ -157,8 +157,8 @@ class OrdemservicosController extends Controller
                             'ordemservico_id'  => $ordemservico->id,
                             'servico_id'       => $servico->id,
                             'descricao'        => $servico['pivot']['basecobranca'],
-                            'valor'            => ($servico['pivot']['custo']),
-                            'adicionalnoturno' => $servico['pivot']['adicionalnoturno'],
+                            'valordiurno'      => ($servico['pivot']['custo']),
+                            'valornoturno'     => ($servico['pivot']['custo']) + $servico['pivot']['adicionalnoturno'],
                         ]
                     );
                 }
@@ -254,7 +254,8 @@ class OrdemservicosController extends Controller
         }
         return $iten;
     }
-    public function quantidadeordemservicos(Empresa $empresa){
+    public function quantidadeordemservicos(Empresa $empresa)
+    {
         //return Ordemservico::where('empresa_id',$empresa['id'])->count();
         // return DB::select("SELECT count(os.id) FROM ordemservicos os inner join orcamentos o on o.id = os.orcamento_id
         // where o.tipo = 'Home Care'");
@@ -266,8 +267,20 @@ class OrdemservicosController extends Controller
 
         // dd($count);
         return Ordemservico::with('orcamento')
-        ->where('empresa_id',$empresa['id'])
-        ->where('status',1)
-        ->get()->where('orcamento.tipo', 'Home Care')->count();
+            ->where('empresa_id', $empresa['id'])
+            ->where('status', 1)
+            ->get()->where('orcamento.tipo', 'Home Care')->count();
     }
+
+    public function groupbyservicos(Empresa $empresa){
+        return Ordemservico::where('ordemservicos.empresa_id', $empresa['id'])->where('ordemservicos.ativo', 1)->where('ordemservicos.status', 1)
+        ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
+        ->join('orcamento_servico', 'orcamento_servico.orcamento_id', '=', 'orcamentos.id')
+        ->join('servicos', 'servicos.id', '=', 'orcamento_servico.servico_id')
+        ->select('servicos.descricao', DB::raw('count(servicos.id) as count'))
+        ->groupBy('servicos.descricao')
+        ->orderBy('count', 'desc')
+        ->get();
+    }
+
 }
