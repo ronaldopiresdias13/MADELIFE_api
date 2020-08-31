@@ -223,7 +223,21 @@ class OrdemservicosController extends Controller
      */
     public function update(Request $request, Ordemservico $ordemservico)
     {
-        $ordemservico->update($request->all());
+        // return $request->all();
+        $ordemservico->codigo                 = $request['codigo'];
+        $ordemservico->orcamento_id           = $request['orcamento_id'];
+        $ordemservico->responsavel_id         = $request['responsavel_id'];
+        $ordemservico->inicio                 = $request['inicio'];
+        $ordemservico->fim                    = $request['fim'];
+        $ordemservico->status                 = $request['status'];
+        $ordemservico->montagemequipe         = $request['montagemequipe'];
+        $ordemservico->realizacaoprocedimento = $request['realizacaoprocedimento'];
+        $ordemservico->descricaomotivo        = $request['descricaomotivo'];
+        $ordemservico->dataencerramento       = $request['dataencerramento'];
+        $ordemservico->motivo                 = $request['motivo'];
+        $ordemservico->profissional_id        = $request['profissional_id'];
+        $ordemservico->ativo                  = $request['ativo'];
+        $ordemservico->update();
     }
 
     /**
@@ -272,15 +286,15 @@ class OrdemservicosController extends Controller
             ->get()->where('orcamento.tipo', 'Home Care')->count();
     }
 
-    public function groupbyservicos(Empresa $empresa){
+    public function groupbyservicos(Empresa $empresa)
+    {
         return Ordemservico::where('ordemservicos.empresa_id', $empresa['id'])->where('ordemservicos.ativo', 1)->where('ordemservicos.status', 1)
-        ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
-        ->join('orcamento_servico', 'orcamento_servico.orcamento_id', '=', 'orcamentos.id')
-        ->join('servicos', 'servicos.id', '=', 'orcamento_servico.servico_id')
-        ->select('servicos.descricao', DB::raw('count(servicos.id) as count'))
-        ->groupBy('servicos.descricao')
-        ->orderBy('count', 'desc')
-        ->get();
+            ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
+            ->join('orcamento_servico', 'orcamento_servico.orcamento_id', '=', 'orcamentos.id')
+            ->join('servicos', 'servicos.id', '=', 'orcamento_servico.servico_id')
+            ->select('servicos.descricao', DB::raw('count(servicos.id) as count'))
+            ->groupBy('servicos.descricao')
+            ->orderBy('count', 'desc')
+            ->get();
     }
-
 }
