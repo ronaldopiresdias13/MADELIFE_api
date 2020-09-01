@@ -58,9 +58,9 @@ class TranscricaoProdutoController extends Controller
      * @param  \App\TranscricaoProduto  $transcricao_produto
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Transcricao $transcricao_produto)
+    public function destroy(TranscricaoProduto $transcricao_produto)
     {
-        $transcricao->ativo = false;
-        $transcricao->save();
+        $transcricao_produto->ativo = false;
+        $transcricao_produto->save();
     }
 }

@@ -525,6 +525,8 @@ Route::get('transcricoes/{transcricao}', 'Api\TranscricoesController@show');
 Route::put('transcricoes/{transcricao}', 'Api\TranscricoesController@update');
 Route::delete('transcricoes/{transcricao}', 'Api\TranscricoesController@destroy');
 
+Route::delete('transcricaoprodutos/{transcricao_produto}', 'Api\TranscricaoProdutoController@destroy');
+
 Route::get('unidademedidas', 'Api\UnidademedidasController@index');
 Route::post('unidademedidas', 'Api\UnidademedidasController@store');
 Route::get('unidademedidas/{unidademedida}', 'Api\UnidademedidasController@show');
