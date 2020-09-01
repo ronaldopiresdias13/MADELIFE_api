@@ -263,9 +263,10 @@ class EscalasController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function getEscalasHoje(Request $request)
+    public function getEscalasHojeApp(Request $request)
     {
         // $user = $request->user();
         // $prestador = $user->pessoa->prestador;
@@ -326,9 +327,10 @@ class EscalasController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function getEscalasMes(Request $request)
+    public function getEscalasMesApp(Request $request)
     {
         $user = $request->user();
         $prestador = $user->pessoa->prestador;
@@ -369,6 +371,19 @@ class EscalasController extends Controller
 
         return $escalas;
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Escala  $escala
+     * @return \Illuminate\Http\Response
+     */
+    public function getEscalaIdApp(Request $request, Escala $escala)
+    {
+        return $escala;
+    }
+
     public function buscaescalasdodia(Empresa $empresa)
     {
         // return DB::select('select * from escalas e inner join pontos p on p.escala_id = e.id limit 3');

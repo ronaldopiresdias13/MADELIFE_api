@@ -35,12 +35,14 @@ Route::group([
 });
 
 Route::get("/teste", "Teste@teste");
+Route::get("/sendMailLogApp", "LogsController@sendMailLogApp");
 
 /* ------------- Rotas Utilizando Token ------------- */
 Route::group(['middleware' => 'auth:api'], function () {
     /*--------------------App--------------------*/
-    Route::get('getEscalasHoje', 'Api\EscalasController@getEscalasHoje');
-    Route::get('getEscalasMes', 'Api\EscalasController@getEscalasMes');
+    Route::get('getEscalasHojeApp', 'Api\EscalasController@getEscalasHojeApp');
+    Route::get('getEscalasMesApp', 'Api\EscalasController@getEscalasMesApp');
+    Route::get('getEscalaIdApp/{escala}', 'Api\EscalasController@getEscalaIdApp');
 });
 
 // Route::get('getEscalasHoje', 'Api\EscalasController@getEscalasHoje')->middleware('auth:api');
