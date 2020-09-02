@@ -125,7 +125,7 @@ class TranscricoesController extends Controller
             foreach ($request->itensTranscricao as $key => $iten) {
                 $transcricao_produto = TranscricaoProduto::firstOrCreate([
                     'transcricao_id' => $transcricao->id,
-                    'produto_id'     => $iten['produto_id'],
+                    'produto_id'     => $iten['produto']['id'],
                     'quantidade'     => $iten['quantidade'],
                     'apresentacao'   => $iten['apresentacao'],
                     'via'            => $iten['via'],
@@ -134,7 +134,7 @@ class TranscricoesController extends Controller
                     'status'         => $iten['status'],
                     'observacao'     => $iten['observacao'],
                 ]);
-                foreach ($iten['horarios'] as $key => $horario) {
+                foreach ($iten['horariomedicamentos'] as $key => $horario) {
                     $horario_medicamento = Horariomedicamento::create([
                         'transcricao_produto_id' => $transcricao_produto->id,
                         'horario'                => $horario['horario']
@@ -203,7 +203,41 @@ class TranscricoesController extends Controller
      */
     public function update(Request $request, Transcricao $transcricao)
     {
-        $transcricao->update($request->all());
+        // $transcricao->update($request->all());
+        DB::transaction(function () use ($request, $transcricao) {
+            $transcricao::update([
+                'empresa_id'      => $request->empresa_id,
+                'ordemservico_id' => $request->ordemservico_id,
+                'profissional_id' => $request->profissional_id,
+                'medico'          => $request->medico,
+                'receita'         => $request->receita,
+                'crm'             => $request->crm,
+            ]);
+
+            foreach ($request->itensTranscricao as $key => $iten) {
+                $transcricao_produto = TranscricaoProduto::updateOrCreate(
+                    [
+                        'id' => $iten->id,
+                    ],
+                    [
+                    'produto_id'     => $iten['produto']['id'],
+                    'quantidade'     => $iten['quantidade'],
+                    'apresentacao'   => $iten['apresentacao'],
+                    'via'            => $iten['via'],
+                    'frequencia'     => $iten['frequencia'],
+                    'tempo'          => $iten['tempo'],
+                    'status'         => $iten['status'],
+                    'observacao'     => $iten['observacao'],
+                ]);
+                $transcricao_produto->horariomedicamentos->delete();
+                foreach ($iten['horariomedicamentos'] as $key => $horario) {
+                    $horario_medicamento = Horariomedicamento::create([
+                        'transcricao_produto_id' => $transcricao_produto->id,
+                        'horario'                => $horario['horario']
+                    ]);
+                }
+            }
+        });
     }
 
     /**
