@@ -394,10 +394,12 @@ class PrestadoresController extends Controller
             ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
             ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
             ->join('homecares', 'homecares.orcamento_id', '=', 'orcamentos.id')
-            ->select('homecares.nome')
+            ->join('pacientes', 'homecares.paciente_id', '=', 'pacientes.id')
+            ->join('pessoas', 'pacientes.pessoa_id', '=', 'pessoas.id')
+            ->select('pessoas.nome')
             ->where('homecares.ativo', true)
-            ->groupBy('homecares.nome')
-            ->orderBy('homecares.nome')
+            ->groupBy('pessoas.nome')
+            ->orderBy('pessoas.nome')
             ->get();
         return $escalas;
     }
