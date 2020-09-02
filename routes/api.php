@@ -150,11 +150,11 @@ Route::get('cotacoes/{cotacao}', 'Api\CotacoesController@show');
 Route::put('cotacoes/{cotacao}', 'Api\CotacoesController@update');
 Route::delete('cotacoes/{cotacao}', 'Api\CotacoesController@destroy');
 
-Route::get('cotacaoproduto', 'Api\CotacaoprodutoController@index');
-Route::post('cotacaoproduto', 'Api\CotacaoprodutoController@store');
-Route::get('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoprodutoController@show');
-Route::put('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoprodutoController@update');
-Route::delete('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoprodutoController@destroy');
+Route::get('cotacaoproduto', 'Api\CotacaoProdutoController@index');
+Route::post('cotacaoproduto', 'Api\CotacaoProdutoController@store');
+Route::get('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoProdutoController@show');
+Route::put('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoProdutoController@update');
+Route::delete('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoProdutoController@destroy');
 
 Route::get('cuidados', 'Api\CuidadosController@index');
 Route::post('cuidados', 'Api\CuidadosController@store');
@@ -169,6 +169,12 @@ Route::post('cuidadoEscalas', 'Api\CuidadoEscalasController@store');
 Route::get('cuidadoEscalas/{cuidadoEscala}', 'Api\CuidadoEscalasController@show');
 Route::put('cuidadoEscalas/{cuidadoEscala}', 'Api\CuidadoEscalasController@update');
 Route::delete('cuidadoEscalas/{cuidadoEscala}', 'Api\CuidadoEscalasController@destroy');
+
+Route::get('cuidadoPacientes', 'Api\CuidadoPacienteController@index');
+Route::post('cuidadoPacientes', 'Api\CuidadoPacienteController@store');
+Route::get('cuidadoPacientes/{cuidadoPaciente}', 'Api\CuidadoPacienteController@show');
+Route::put('cuidadoPacientes/{cuidadoPaciente}', 'Api\CuidadoPacienteController@update');
+Route::delete('cuidadoPacientes/{cuidadoPaciente}', 'Api\CuidadoPacienteController@destroy');
 
 Route::get('dadosbancarios', 'Api\DadosbancariosController@index');
 Route::post('dadosbancarios', 'Api\DadosbancariosController@store');
