@@ -380,6 +380,7 @@ class EscalasController extends Controller
                 '<=',
                 $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $dias
             )
+            ->orderBy('dataentrada')
             // ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
             // ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
             // ->join('homecares', 'homecares.orcamento_id', '=', 'orcamentos.id')
@@ -416,7 +417,8 @@ class EscalasController extends Controller
     {
         // return DB::select('select * from escalas e inner join pontos p on p.escala_id = e.id limit 3');
         // return Escala::all();
-        return Escala::With(['cuidados', 'monitoramentos', 'pontos', 'relatorios', 'servico',  'prestador.formacoes', 'prestador.pessoa.conselhos', 'ordemservico.orcamento.homecare'])->where('ativo', true)->where('dataentrada', date('Y-m-d'))->get();
+        // return Escala::With(['servico', 'prestador.formacoes', 'pontos', 'prestador.pessoa.conselhos', 'ordemservico.orcamento.homecare.paciente.pessoa'])->where('ativo', true)->where('dataentrada', date('Y-m-d'))->get();
+        return Escala::With(['cuidados', 'monitoramentos', 'relatorios', 'servico', 'prestador.formacoes', 'pontos', 'prestador.pessoa.conselhos', 'ordemservico.orcamento.homecare.paciente.pessoa'])->where('ativo', true)->where('dataentrada', date('Y-m-d'))->get();
         // return DB::table('escalas')->join('pontos', 'pontos.escala_id', '=', 'escalas.id')->where('ativo', true)->limit(1)->get();
     }
 }
