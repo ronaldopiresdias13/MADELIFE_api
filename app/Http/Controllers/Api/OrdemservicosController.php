@@ -50,12 +50,22 @@ class OrdemservicosController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
+                // if ($key == 0) {
+                //     $itens = Ordemservico::where(
+                //         ($where['coluna']) ? $where['coluna'] : 'id',
+                //         ($where['expressao']) ? $where['expressao'] : 'like',
+                //         ($where['valor']) ? $where['valor'] : '%'
+                //     );
+                // } else {
                 $itens->where(
                     ($where['coluna']) ? $where['coluna'] : 'id',
                     ($where['expressao']) ? $where['expressao'] : 'like',
                     ($where['valor']) ? $where['valor'] : '%'
                 );
+                // }
             }
+            // } else {
+            //     $itens = Ordemservico::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -192,15 +202,11 @@ class OrdemservicosController extends Controller
                                 }
                             }
                         } else {
-                            if ($iten2 != null) {
-                                if ($iten2->count() > 0) {
-                                    if ($iten2[0] == null) {
-                                        $iten2 = $iten2[$a];
-                                    } else {
-                                        foreach ($iten2 as $key => $i) {
-                                            $i[$a];
-                                        }
-                                    }
+                            if ($iten2[0] == null) {
+                                $iten2 = $iten2[$a];
+                            } else {
+                                foreach ($iten2 as $key => $i) {
+                                    $i[$a];
                                 }
                             }
                         }
@@ -221,21 +227,7 @@ class OrdemservicosController extends Controller
      */
     public function update(Request $request, Ordemservico $ordemservico)
     {
-        // return $request->all();
-        $ordemservico->codigo                 = $request['codigo'];
-        $ordemservico->orcamento_id           = $request['orcamento_id'];
-        $ordemservico->responsavel_id         = $request['responsavel_id'];
-        $ordemservico->inicio                 = $request['inicio'];
-        $ordemservico->fim                    = $request['fim'];
-        $ordemservico->status                 = $request['status'];
-        $ordemservico->montagemequipe         = $request['montagemequipe'];
-        $ordemservico->realizacaoprocedimento = $request['realizacaoprocedimento'];
-        $ordemservico->descricaomotivo        = $request['descricaomotivo'];
-        $ordemservico->dataencerramento       = $request['dataencerramento'];
-        $ordemservico->motivo                 = $request['motivo'];
-        $ordemservico->profissional_id        = $request['profissional_id'];
-        $ordemservico->ativo                  = $request['ativo'];
-        $ordemservico->update();
+        $ordemservico->update($request->all());
     }
 
     /**
