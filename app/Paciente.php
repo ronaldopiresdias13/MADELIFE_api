@@ -15,6 +15,6 @@ class Paciente extends Model
 
     public function cuidados()
     {
-        return $this->belongsToMany('App\Cuidado', 'cuidado_paciente')->withPivot('formacao_id');
+        return $this->belongsToMany('App\Cuidado', 'cuidado_paciente')->withPivot('id', 'formacao_id');
     }
 }
