@@ -205,19 +205,18 @@ class TranscricoesController extends Controller
     {
         // $transcricao->update($request->all());
         DB::transaction(function () use ($request, $transcricao) {
-            $transcricao::update([
-                'empresa_id'      => $request->empresa_id,
-                'ordemservico_id' => $request->ordemservico_id,
-                'profissional_id' => $request->profissional_id,
-                'medico'          => $request->medico,
-                'receita'         => $request->receita,
-                'crm'             => $request->crm,
-            ]);
+            $transcricao->empresa_id      = $request->empresa_id;
+            $transcricao->ordemservico_id = $request->ordemservico_id;
+            $transcricao->profissional_id = $request->profissional_id;
+            $transcricao->medico          = $request->medico;
+            $transcricao->receita         = $request->receita;
+            $transcricao->crm             = $request->crm;
+            $transcricao->save();
 
             foreach ($request->itensTranscricao as $key => $iten) {
                 $transcricao_produto = TranscricaoProduto::updateOrCreate(
                     [
-                        'id' => $iten->id,
+                        'id' => $iten['id'],
                     ],
                     [
                     'produto_id'     => $iten['produto']['id'],
@@ -229,7 +228,10 @@ class TranscricoesController extends Controller
                     'status'         => $iten['status'],
                     'observacao'     => $iten['observacao'],
                 ]);
-                $transcricao_produto->horariomedicamentos->delete();
+                foreach ($transcricao_produto->horariomedicamentos as $key => $horario){
+                    $horario->delete();
+                }
+                // $transcricao_produto->horariomedicamentos->delete();
                 foreach ($iten['horariomedicamentos'] as $key => $horario) {
                     $horario_medicamento = Horariomedicamento::create([
                         'transcricao_produto_id' => $transcricao_produto->id,
