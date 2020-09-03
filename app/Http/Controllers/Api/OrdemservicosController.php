@@ -296,51 +296,31 @@ class OrdemservicosController extends Controller
     public function listaOrdemServicosEscalas(Request $request)
     {
         $user = $request->user();
-        $prestador = $user->pessoa->prestador;
+        $profissional = $user->pessoa->profissional;
 
-        return $user;
+        $escalas = Ordemservico::with([
+            'orcamento' => function ($query) {
+                $query->select('id', 'cliente_id');
+                $query->with(['homecare' => function ($query) {
+                    $query->select('id', 'orcamento_id', 'paciente_id');
+                    $query->with(['paciente' => function ($query) {
+                        $query->select('id', 'pessoa_id');
+                        $query->with(['pessoa' => function ($query) {
+                            $query->select('id', 'nome');
+                        }]);
+                    }]);
+                }]);
+                $query->with(['cliente' => function ($query) {
+                    $query->select('id', 'pessoa_id');
+                    $query->with(['pessoa' => function ($query) {
+                        $query->select('id', 'nome');
+                    }]);
+                }]);
+            }
+        ])
+            ->where('empresa_id', $profissional->empresa_id)
+            ->get(['id', 'orcamento_id']);
 
-        // $escalas = Escala::with('ordemservico.orcamento.homecare.paciente.pessoa')
-        // $escalas = Escala::with([
-        //     'ordemservico' => function ($query) {
-        //         $query->select('id', 'orcamento_id');
-        //         $query->with(['orcamento' => function ($query) {
-        //             $query->select('id');
-        //             $query->with(['homecare' => function ($query) {
-        //                 $query->select('id', 'orcamento_id', 'paciente_id');
-        //                 $query->with(['paciente' => function ($query) {
-        //                     $query->select('id', 'pessoa_id');
-        //                     $query->with(['pessoa' => function ($query) {
-        //                         $query->select('id', 'nome');
-        //                     }]);
-        //                 }]);
-        //             }]);
-        //         }]);
-        //     }
-        // ])
-        //     ->where('prestador_id', $prestador->id)
-        //     ->where(
-        //         'datasaida',
-        //         '>=',
-        //         $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-01'
-        //     )
-        //     ->where(
-        //         'dataentrada',
-        //         '<=',
-        //         $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $dias
-        //     )
-        //     ->orderBy('dataentrada')
-        //     ->get([
-        //         'id',
-        //         'ordemservico_id',
-        //         'periodo',
-        //         'dataentrada',
-        //         'datasaida',
-        //         'horaentrada',
-        //         'horasaida',
-        //         'status',
-        //     ]);
-
-        // return $escalas;
+        return $escalas;
     }
 }

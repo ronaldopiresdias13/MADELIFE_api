@@ -37,12 +37,15 @@ Route::group([
 Route::get("/teste", "Teste@teste");
 Route::get("/sendMailLogApp", "LogsController@sendMailLogApp");
 
+
 /* ------------- Rotas Utilizando Token ------------- */
 Route::group(['middleware' => 'auth:api'], function () {
     /*--------------------App--------------------*/
     Route::get('getEscalasHojeApp', 'Api\EscalasController@getEscalasHojeApp');
     Route::get('getEscalasMesApp', 'Api\EscalasController@getEscalasMesApp');
     Route::get('getEscalaIdApp/{escala}', 'Api\EscalasController@getEscalaIdApp');
+
+    Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\OrdemservicosController@listaOrdemServicosEscalas');
 });
 
 // Route::get('getEscalasHoje', 'Api\EscalasController@getEscalasHoje')->middleware('auth:api');
@@ -336,7 +339,6 @@ Route::get(
 ); // Custon
 Route::get('ordemservicos/count/{empresa}', 'Api\OrdemservicosController@quantidadeordemservicos');
 Route::get('ordemservicos/groupbyservico/{empresa}', 'Api\OrdemservicosController@groupbyservicos');
-Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\OrdemservicosController@listaOrdemServicosEscalas');
 
 Route::get('ordemservicoServicos', 'Api\OrdemservicoServicoController@index');
 Route::post('ordemservicoServicos', 'Api\OrdemservicoServicoController@store');
