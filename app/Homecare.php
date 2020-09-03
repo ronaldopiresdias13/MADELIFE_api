@@ -17,4 +17,9 @@ class Homecare extends Model
     {
         return $this->belongsToMany('App\Email', 'homecare_email')->withPivot('id', 'tipo', 'descricao');
     }
+
+    public function paciente()
+    {
+        return $this->belongsTo('App\Paciente');
+    }
 }

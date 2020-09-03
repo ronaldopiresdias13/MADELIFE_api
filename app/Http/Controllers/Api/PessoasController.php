@@ -181,7 +181,14 @@ class PessoasController extends Controller
      */
     public function update(Request $request, Pessoa $pessoa)
     {
-        $pessoa->update($request->all());
+        $pessoa->nome = $request['nome'];
+        $pessoa->nascimento = $request['nascimento'];
+        $pessoa->cpfcnpj = $request['cpfcnpj'];
+        $pessoa->rgie = $request['rgie'];
+        $pessoa->observacoes = $request['observacoes'];
+        $pessoa->perfil = $request['perfil'];
+        $pessoa->status = $request['status'];
+        $pessoa->update();
     }
 
     /**

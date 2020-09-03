@@ -50,22 +50,12 @@ class OrdemservicosController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                // if ($key == 0) {
-                //     $itens = Ordemservico::where(
-                //         ($where['coluna']) ? $where['coluna'] : 'id',
-                //         ($where['expressao']) ? $where['expressao'] : 'like',
-                //         ($where['valor']) ? $where['valor'] : '%'
-                //     );
-                // } else {
                 $itens->where(
                     ($where['coluna']) ? $where['coluna'] : 'id',
                     ($where['expressao']) ? $where['expressao'] : 'like',
                     ($where['valor']) ? $where['valor'] : '%'
                 );
-                // }
             }
-            // } else {
-            //     $itens = Ordemservico::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -96,11 +86,15 @@ class OrdemservicosController extends Controller
                                     }
                                 }
                             } else {
-                                if ($iten2[0] == null) {
-                                    $iten2 = $iten2[$a];
-                                } else {
-                                    foreach ($iten2 as $key => $i) {
-                                        $i[$a];
+                                if ($iten2 != null) {
+                                    if ($iten2->count() > 0) {
+                                        if ($iten2[0] == null) {
+                                            $iten2 = $iten2[$a];
+                                        } else {
+                                            foreach ($iten2 as $key => $i) {
+                                                $i[$a];
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -147,8 +141,8 @@ class OrdemservicosController extends Controller
                             'ordemservico_id'  => $ordemservico->id,
                             'servico_id'       => $servico->id,
                             'descricao'        => $servico['pivot']['basecobranca'],
-                            'valor'            => ($servico['pivot']['custo'] / 2),
-                            'adicionalnoturno' => $servico['pivot']['adicionalnoturno'],
+                            'valordiurno'      => ($servico['pivot']['custo'] / 2),
+                            'valornoturno'     => ($servico['pivot']['custo'] / 2) + $servico['pivot']['adicionalnoturno'],
                         ]
                     );
                 } else {
@@ -157,8 +151,8 @@ class OrdemservicosController extends Controller
                             'ordemservico_id'  => $ordemservico->id,
                             'servico_id'       => $servico->id,
                             'descricao'        => $servico['pivot']['basecobranca'],
-                            'valor'            => ($servico['pivot']['custo']),
-                            'adicionalnoturno' => $servico['pivot']['adicionalnoturno'],
+                            'valordiurno'      => ($servico['pivot']['custo']),
+                            'valornoturno'     => ($servico['pivot']['custo']) + $servico['pivot']['adicionalnoturno'],
                         ]
                     );
                 }
@@ -198,11 +192,15 @@ class OrdemservicosController extends Controller
                                 }
                             }
                         } else {
-                            if ($iten2[0] == null) {
-                                $iten2 = $iten2[$a];
-                            } else {
-                                foreach ($iten2 as $key => $i) {
-                                    $i[$a];
+                            if ($iten2 != null) {
+                                if ($iten2->count() > 0) {
+                                    if ($iten2[0] == null) {
+                                        $iten2 = $iten2[$a];
+                                    } else {
+                                        foreach ($iten2 as $key => $i) {
+                                            $i[$a];
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -223,7 +221,21 @@ class OrdemservicosController extends Controller
      */
     public function update(Request $request, Ordemservico $ordemservico)
     {
-        $ordemservico->update($request->all());
+        // return $request->all();
+        $ordemservico->codigo                 = $request['codigo'];
+        $ordemservico->orcamento_id           = $request['orcamento_id'];
+        $ordemservico->responsavel_id         = $request['responsavel_id'];
+        $ordemservico->inicio                 = $request['inicio'];
+        $ordemservico->fim                    = $request['fim'];
+        $ordemservico->status                 = $request['status'];
+        $ordemservico->montagemequipe         = $request['montagemequipe'];
+        $ordemservico->realizacaoprocedimento = $request['realizacaoprocedimento'];
+        $ordemservico->descricaomotivo        = $request['descricaomotivo'];
+        $ordemservico->dataencerramento       = $request['dataencerramento'];
+        $ordemservico->motivo                 = $request['motivo'];
+        $ordemservico->profissional_id        = $request['profissional_id'];
+        $ordemservico->ativo                  = $request['ativo'];
+        $ordemservico->update();
     }
 
     /**
@@ -254,7 +266,8 @@ class OrdemservicosController extends Controller
         }
         return $iten;
     }
-    public function quantidadeordemservicos(Empresa $empresa){
+    public function quantidadeordemservicos(Empresa $empresa)
+    {
         //return Ordemservico::where('empresa_id',$empresa['id'])->count();
         // return DB::select("SELECT count(os.id) FROM ordemservicos os inner join orcamentos o on o.id = os.orcamento_id
         // where o.tipo = 'Home Care'");
@@ -266,8 +279,20 @@ class OrdemservicosController extends Controller
 
         // dd($count);
         return Ordemservico::with('orcamento')
-        ->where('empresa_id',$empresa['id'])
-        ->where('status',1)
-        ->get()->where('orcamento.tipo', 'Home Care')->count();
+            ->where('empresa_id', $empresa['id'])
+            ->where('status', 1)
+            ->get()->where('orcamento.tipo', 'Home Care')->count();
+    }
+
+    public function groupbyservicos(Empresa $empresa)
+    {
+        return Ordemservico::where('ordemservicos.empresa_id', $empresa['id'])->where('ordemservicos.ativo', 1)->where('ordemservicos.status', 1)
+            ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
+            ->join('orcamento_servico', 'orcamento_servico.orcamento_id', '=', 'orcamentos.id')
+            ->join('servicos', 'servicos.id', '=', 'orcamento_servico.servico_id')
+            ->select('servicos.descricao', DB::raw('count(servicos.id) as count'))
+            ->groupBy('servicos.descricao')
+            ->orderBy('count', 'desc')
+            ->get();
     }
 }

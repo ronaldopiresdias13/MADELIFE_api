@@ -35,12 +35,14 @@ Route::group([
 });
 
 Route::get("/teste", "Teste@teste");
+Route::get("/sendMailLogApp", "LogsController@sendMailLogApp");
 
 /* ------------- Rotas Utilizando Token ------------- */
 Route::group(['middleware' => 'auth:api'], function () {
     /*--------------------App--------------------*/
-    Route::get('getEscalasHoje', 'Api\EscalasController@getEscalasHoje');
-    Route::get('getEscalasMes', 'Api\EscalasController@getEscalasMes');
+    Route::get('getEscalasHojeApp', 'Api\EscalasController@getEscalasHojeApp');
+    Route::get('getEscalasMesApp', 'Api\EscalasController@getEscalasMesApp');
+    Route::get('getEscalaIdApp/{escala}', 'Api\EscalasController@getEscalaIdApp');
 });
 
 // Route::get('getEscalasHoje', 'Api\EscalasController@getEscalasHoje')->middleware('auth:api');
@@ -148,11 +150,11 @@ Route::get('cotacoes/{cotacao}', 'Api\CotacoesController@show');
 Route::put('cotacoes/{cotacao}', 'Api\CotacoesController@update');
 Route::delete('cotacoes/{cotacao}', 'Api\CotacoesController@destroy');
 
-Route::get('cotacaoproduto', 'Api\CotacaoprodutoController@index');
-Route::post('cotacaoproduto', 'Api\CotacaoprodutoController@store');
-Route::get('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoprodutoController@show');
-Route::put('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoprodutoController@update');
-Route::delete('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoprodutoController@destroy');
+Route::get('cotacaoproduto', 'Api\CotacaoProdutoController@index');
+Route::post('cotacaoproduto', 'Api\CotacaoProdutoController@store');
+Route::get('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoProdutoController@show');
+Route::put('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoProdutoController@update');
+Route::delete('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoProdutoController@destroy');
 
 Route::get('cuidados', 'Api\CuidadosController@index');
 Route::post('cuidados', 'Api\CuidadosController@store');
@@ -167,6 +169,12 @@ Route::post('cuidadoEscalas', 'Api\CuidadoEscalasController@store');
 Route::get('cuidadoEscalas/{cuidadoEscala}', 'Api\CuidadoEscalasController@show');
 Route::put('cuidadoEscalas/{cuidadoEscala}', 'Api\CuidadoEscalasController@update');
 Route::delete('cuidadoEscalas/{cuidadoEscala}', 'Api\CuidadoEscalasController@destroy');
+
+Route::get('cuidadoPacientes', 'Api\CuidadoPacienteController@index');
+Route::post('cuidadoPacientes', 'Api\CuidadoPacienteController@store');
+Route::get('cuidadoPacientes/{cuidadoPaciente}', 'Api\CuidadoPacienteController@show');
+Route::put('cuidadoPacientes/{cuidadoPaciente}', 'Api\CuidadoPacienteController@update');
+Route::delete('cuidadoPacientes/{cuidadoPaciente}', 'Api\CuidadoPacienteController@destroy');
 
 Route::get('dadosbancarios', 'Api\DadosbancariosController@index');
 Route::post('dadosbancarios', 'Api\DadosbancariosController@store');
@@ -327,6 +335,7 @@ Route::get(
     'Api\OrdemservicosController@horariomedicamentos'
 ); // Custon
 Route::get('ordemservicos/count/{empresa}', 'Api\OrdemservicosController@quantidadeordemservicos');
+Route::get('ordemservicos/groupbyservico/{empresa}', 'Api\OrdemservicosController@groupbyservicos');
 
 Route::get('ordemservicoServicos', 'Api\OrdemservicoServicoController@index');
 Route::post('ordemservicoServicos', 'Api\OrdemservicoServicoController@store');
@@ -506,6 +515,12 @@ Route::get('telefones/{telefone}', 'Api\TelefonesController@show');
 Route::put('telefones/{telefone}', 'Api\TelefonesController@update');
 Route::delete('telefones/{telefone}', 'Api\TelefonesController@destroy');
 
+Route::get('tipopessoas', 'Api\TipopessoasController@index');
+Route::post('tipopessoas', 'Api\TipopessoasController@store');
+Route::get('tipopessoas/{tipopessoa}', 'Api\TipopessoasController@show');
+Route::put('tipopessoas/{tipopessoa}', 'Api\TipopessoasController@update');
+Route::delete('tipopessoas/{tipopessoa}', 'Api\TipopessoasController@destroy');
+
 Route::get('tipoprodutos', 'Api\TipoprodutosController@index');
 Route::post('tipoprodutos', 'Api\TipoprodutosController@store');
 Route::get('tipoprodutos/{tipoproduto}', 'Api\TipoprodutosController@show');
@@ -517,6 +532,8 @@ Route::post('transcricoes', 'Api\TranscricoesController@store');
 Route::get('transcricoes/{transcricao}', 'Api\TranscricoesController@show');
 Route::put('transcricoes/{transcricao}', 'Api\TranscricoesController@update');
 Route::delete('transcricoes/{transcricao}', 'Api\TranscricoesController@destroy');
+
+Route::delete('transcricaoprodutos/{transcricao_produto}', 'Api\TranscricaoProdutoController@destroy');
 
 Route::get('unidademedidas', 'Api\UnidademedidasController@index');
 Route::post('unidademedidas', 'Api\UnidademedidasController@store');
