@@ -380,6 +380,7 @@ class EscalasController extends Controller
                 '<=',
                 $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $dias
             )
+            ->orderBy('dataentrada')
             // ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
             // ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
             // ->join('homecares', 'homecares.orcamento_id', '=', 'orcamentos.id')
