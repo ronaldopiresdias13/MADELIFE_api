@@ -276,7 +276,7 @@ class EscalasController extends Controller
         // $escalasHoje = Escala::where('prestador_id', $prestador->id)
         //     ->where(
         //         'dataentrada',
-        //         $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $hoje['mday']
+        //         $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . ($hoje['mday'] < 10 ? '0' . $hoje['mday'] : $hoje['mday'])
         //     )->select(
         //         'escalas.id',
         //         'escalas.periodo',
@@ -291,25 +291,39 @@ class EscalasController extends Controller
 
         // return $escalasHoje;
 
+        ///////////////////////////////////////////////////////
+
         $user = $request->user();
         $prestador = $user->pessoa->prestador;
 
         $hoje = getdate();
+        $dataAtual =
+            $hoje['year']
+            . '-' .
+            ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon'])
+            . '-' .
+            ($hoje['mday'] < 10 ? '0' . $hoje['mday'] : $hoje['mday']);
 
-        $escalas = Escala::with(['ordemservico' => function (BelongsTo $query) {
-            $query->select('id', 'orcamento_id');
-            $query->with(['orcamento' => function (BelongsTo $query) {
-                $query->select('id');
-                $query->with(['homecare' => function ($query) {
-                    $query->select('id', 'orcamento_id', 'nome');
+        $escalas = Escala::with([
+            'ordemservico' => function ($query) {
+                $query->select('id', 'orcamento_id');
+                $query->with(['orcamento' => function ($query) {
+                    $query->select('id');
+                    $query->with(['homecare' => function ($query) {
+                        $query->select('id', 'orcamento_id', 'paciente_id');
+                        $query->with(['paciente' => function ($query) {
+                            $query->select('id', 'pessoa_id');
+                            $query->with(['pessoa' => function ($query) {
+                                $query->select('id', 'nome');
+                            }]);
+                        }]);
+                    }]);
                 }]);
-            }]);
-        }])
+            }
+        ])
             ->where('prestador_id', $prestador->id)
-            ->where(
-                'dataentrada',
-                $hoje['year'] . '-' . ($hoje['mon'] <= 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $hoje['mday']
-            )
+            ->where('dataentrada', $dataAtual)
+            ->where('datasaida', $dataAtual)
             ->get([
                 'id',
                 'ordemservico_id',
@@ -332,48 +346,34 @@ class EscalasController extends Controller
      */
     public function getEscalasMesApp(Request $request)
     {
-        // return $request;
         $user = $request->user();
         $prestador = $user->pessoa->prestador;
         $hoje = getdate();
         $dias = cal_days_in_month(CAL_GREGORIAN, $hoje['mon'], $hoje['year']); // 31
 
-        // $escalas = Escala::with(['ordemservico' => function (BelongsTo $query) {
-        //     $query->select('id', 'orcamento_id');
-        //     $query->with(['orcamento' => function (BelongsTo $query) {
-        //         $query->select('id');
-        //         $query->with(['homecare' => function (HasOne $query) {
-        //             $query->select('id', 'orcamento_id', 'nome');
-        //         }]);
-        //     }]);
-        // }])
-        // ->where('prestador_id', $prestador->id)
-        // ->where(
-        //     'dataentrada',
-        //     '>=',
-        //     $hoje['year'] . '-' . ($hoje['mon'] <= 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . 1
-        // )
-        // ->where(
-        //     'dataentrada',
-        //     '<=',
-        //     $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $dias
-        // )
-        // ->get([
-        //     'id',
-        //     'ordemservico_id',
-        //     'periodo',
-        //     'dataentrada',
-        //     'datasaida',
-        //     'horaentrada',
-        //     'horasaida',
-        //     'status'
-        // ]);
-        $escalas = Escala::with('ordemservico.orcamento.homecare.paciente.pessoa')
+        // $escalas = Escala::with('ordemservico.orcamento.homecare.paciente.pessoa')
+        $escalas = Escala::with([
+            'ordemservico' => function ($query) {
+                $query->select('id', 'orcamento_id');
+                $query->with(['orcamento' => function ($query) {
+                    $query->select('id');
+                    $query->with(['homecare' => function ($query) {
+                        $query->select('id', 'orcamento_id', 'paciente_id');
+                        $query->with(['paciente' => function ($query) {
+                            $query->select('id', 'pessoa_id');
+                            $query->with(['pessoa' => function ($query) {
+                                $query->select('id', 'nome');
+                            }]);
+                        }]);
+                    }]);
+                }]);
+            }
+        ])
             ->where('prestador_id', $prestador->id)
             ->where(
-                'dataentrada',
+                'datasaida',
                 '>=',
-                $hoje['year'] . '-' . ($hoje['mon'] <= 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-0' . 1
+                $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-01'
             )
             ->where(
                 'dataentrada',
@@ -381,12 +381,6 @@ class EscalasController extends Controller
                 $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $dias
             )
             ->orderBy('dataentrada')
-            // ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
-            // ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
-            // ->join('homecares', 'homecares.orcamento_id', '=', 'orcamentos.id')
-            // ->join('pacientes', 'homecares.paciente_id', '=', 'pacientes.id')
-            // ->join('pessoas', 'pacientes.pessoa_id', '=', 'pessoas.id')
-            // ->select('escalas.id', 'escalas.ordemservico_id', 'escalas.periodo', 'escalas.dataentrada', 'escalas.datasaida', 'ordemservico.orcamento.homecare.paciente.pessoa.nome')
             ->get([
                 'id',
                 'ordemservico_id',
@@ -397,7 +391,7 @@ class EscalasController extends Controller
                 'horasaida',
                 'status',
             ]);
-        // $dat = $hoje['year'] . '-' . ($hoje['mon'] <= 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-0' . 1;
+
         return $escalas;
     }
 

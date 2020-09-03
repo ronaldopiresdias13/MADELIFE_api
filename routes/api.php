@@ -336,6 +336,7 @@ Route::get(
 ); // Custon
 Route::get('ordemservicos/count/{empresa}', 'Api\OrdemservicosController@quantidadeordemservicos');
 Route::get('ordemservicos/groupbyservico/{empresa}', 'Api\OrdemservicosController@groupbyservicos');
+Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\OrdemservicosController@listaOrdemServicosEscalas');
 
 Route::get('ordemservicoServicos', 'Api\OrdemservicoServicoController@index');
 Route::post('ordemservicoServicos', 'Api\OrdemservicoServicoController@store');

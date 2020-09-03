@@ -295,4 +295,60 @@ class OrdemservicosController extends Controller
             ->orderBy('count', 'desc')
             ->get();
     }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function listaOrdemServicosEscalas(Request $request)
+    {
+        $user = $request->user();
+        $prestador = $user->pessoa->prestador;
+
+        return $user;
+
+        // $escalas = Escala::with('ordemservico.orcamento.homecare.paciente.pessoa')
+        // $escalas = Escala::with([
+        //     'ordemservico' => function ($query) {
+        //         $query->select('id', 'orcamento_id');
+        //         $query->with(['orcamento' => function ($query) {
+        //             $query->select('id');
+        //             $query->with(['homecare' => function ($query) {
+        //                 $query->select('id', 'orcamento_id', 'paciente_id');
+        //                 $query->with(['paciente' => function ($query) {
+        //                     $query->select('id', 'pessoa_id');
+        //                     $query->with(['pessoa' => function ($query) {
+        //                         $query->select('id', 'nome');
+        //                     }]);
+        //                 }]);
+        //             }]);
+        //         }]);
+        //     }
+        // ])
+        //     ->where('prestador_id', $prestador->id)
+        //     ->where(
+        //         'datasaida',
+        //         '>=',
+        //         $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-01'
+        //     )
+        //     ->where(
+        //         'dataentrada',
+        //         '<=',
+        //         $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $dias
+        //     )
+        //     ->orderBy('dataentrada')
+        //     ->get([
+        //         'id',
+        //         'ordemservico_id',
+        //         'periodo',
+        //         'dataentrada',
+        //         'datasaida',
+        //         'horaentrada',
+        //         'horasaida',
+        //         'status',
+        //     ]);
+
+        // return $escalas;
+    }
 }
