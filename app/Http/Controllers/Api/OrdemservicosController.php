@@ -319,6 +319,7 @@ class OrdemservicosController extends Controller
             }
         ])
             ->where('empresa_id', $profissional->empresa_id)
+            ->where('ativo', true)
             ->get(['id', 'orcamento_id']);
 
         return $escalas;
