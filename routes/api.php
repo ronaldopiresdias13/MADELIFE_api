@@ -46,6 +46,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('getEscalaIdApp/{escala}', 'Api\EscalasController@getEscalaIdApp');
 
     Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\OrdemservicosController@listaOrdemServicosEscalas');
+    Route::get('transcricoes/listaTranscricoes', 'Api\TranscricoesController@listaTranscricoes');
 });
 
 // Route::get('getEscalasHoje', 'Api\EscalasController@getEscalasHoje')->middleware('auth:api');
