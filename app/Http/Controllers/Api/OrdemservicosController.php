@@ -276,15 +276,51 @@ class OrdemservicosController extends Controller
             ->get()->where('orcamento.tipo', 'Home Care')->count();
     }
 
-    public function groupbyservicos(Empresa $empresa){
+    public function groupbyservicos(Empresa $empresa)
+    {
         return Ordemservico::where('ordemservicos.empresa_id', $empresa['id'])->where('ordemservicos.ativo', 1)->where('ordemservicos.status', 1)
-        ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
-        ->join('orcamento_servico', 'orcamento_servico.orcamento_id', '=', 'orcamentos.id')
-        ->join('servicos', 'servicos.id', '=', 'orcamento_servico.servico_id')
-        ->select('servicos.descricao', DB::raw('count(servicos.id) as count'))
-        ->groupBy('servicos.descricao')
-        ->orderBy('count', 'desc')
-        ->get();
+            ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
+            ->join('orcamento_servico', 'orcamento_servico.orcamento_id', '=', 'orcamentos.id')
+            ->join('servicos', 'servicos.id', '=', 'orcamento_servico.servico_id')
+            ->select('servicos.descricao', DB::raw('count(servicos.id) as count'))
+            ->groupBy('servicos.descricao')
+            ->orderBy('count', 'desc')
+            ->get();
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function listaOrdemServicosEscalas(Request $request)
+    {
+        $user = $request->user();
+        $profissional = $user->pessoa->profissional;
+
+        $escalas = Ordemservico::with([
+            'orcamento' => function ($query) {
+                $query->select('id', 'cliente_id');
+                $query->with(['homecare' => function ($query) {
+                    $query->select('id', 'orcamento_id', 'paciente_id');
+                    $query->with(['paciente' => function ($query) {
+                        $query->select('id', 'pessoa_id');
+                        $query->with(['pessoa' => function ($query) {
+                            $query->select('id', 'nome');
+                        }]);
+                    }]);
+                }]);
+                $query->with(['cliente' => function ($query) {
+                    $query->select('id', 'pessoa_id');
+                    $query->with(['pessoa' => function ($query) {
+                        $query->select('id', 'nome');
+                    }]);
+                }]);
+            }
+        ])
+            ->where('empresa_id', $profissional->empresa_id)
+            ->get(['id', 'orcamento_id']);
+
+        return $escalas;
+    }
 }
