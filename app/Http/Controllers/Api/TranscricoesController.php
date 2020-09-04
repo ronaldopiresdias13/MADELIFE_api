@@ -219,16 +219,17 @@ class TranscricoesController extends Controller
                         'id' => $iten['id'],
                     ],
                     [
-                    'produto_id'     => $iten['produto']['id'],
-                    'quantidade'     => $iten['quantidade'],
-                    'apresentacao'   => $iten['apresentacao'],
-                    'via'            => $iten['via'],
-                    'frequencia'     => $iten['frequencia'],
-                    'tempo'          => $iten['tempo'],
-                    'status'         => $iten['status'],
-                    'observacao'     => $iten['observacao'],
-                ]);
-                foreach ($transcricao_produto->horariomedicamentos as $key => $horario){
+                        'produto_id'     => $iten['produto']['id'],
+                        'quantidade'     => $iten['quantidade'],
+                        'apresentacao'   => $iten['apresentacao'],
+                        'via'            => $iten['via'],
+                        'frequencia'     => $iten['frequencia'],
+                        'tempo'          => $iten['tempo'],
+                        'status'         => $iten['status'],
+                        'observacao'     => $iten['observacao'],
+                    ]
+                );
+                foreach ($transcricao_produto->horariomedicamentos as $key => $horario) {
                     $horario->delete();
                 }
                 // $transcricao_produto->horariomedicamentos->delete();
@@ -252,5 +253,46 @@ class TranscricoesController extends Controller
     {
         $transcricao->ativo = false;
         $transcricao->save();
+    }
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function listaTranscricoes(Request $request)
+    {
+        $user = $request->user();
+        $profissional = $user->pessoa->profissional;
+
+        $transcricoes = Transcricao::with([
+            'ordemservico' => function ($query) {
+                $query->select('id', 'orcamento_id');
+                $query->with(['orcamento' => function ($query) {
+                    $query->select('id');
+                    $query->with(['homecare' => function ($query) {
+                        $query->select('id', 'orcamento_id', 'paciente_id');
+                        $query->with(['paciente' => function ($query) {
+                            $query->select('id', 'pessoa_id');
+                            $query->with(['pessoa' => function ($query) {
+                                $query->select('id', 'nome');
+                            }]);
+                        }]);
+                    }]);
+                }]);
+            }, 'profissional' => function ($query) {
+                $query->select('id', 'pessoa_id');
+                $query->with(['pessoa' => function ($query) {
+                    $query->select('id', 'nome');
+                }]);
+            }
+        ])
+            ->where('empresa_id', $profissional->empresa_id)
+            ->where('ativo', true)
+            ->get(['id', 'ordemservico_id', 'profissional_id']);
+
+        return $transcricoes;
     }
 }

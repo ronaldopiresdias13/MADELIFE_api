@@ -32,7 +32,13 @@ class Transcricao extends Model
         return $this->hasMany('App\TranscricaoProduto')->where('ativo', true);
     }
 
-    public function acoesTrascricao(){
+    public function acoesTrascricao()
+    {
         return $this->hasMany('App\Horariomedicamento')->where('ativo', true);
+    }
+
+    public function profissional()
+    {
+        return $this->belongsTo('App\Profissional');
     }
 }
