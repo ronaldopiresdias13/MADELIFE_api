@@ -13,4 +13,13 @@ class CuidadoPaciente extends Model
 
     protected $table = 'cuidado_paciente';
     protected $guarded = [];
+
+    public function formacao()
+    {
+        return $this->belongsTo('App\Formacao');
+    }
+    public function cuidado()
+    {
+        return $this->belongsTo('App\Cuidado');
+    }
 }
