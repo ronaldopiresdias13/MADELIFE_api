@@ -153,7 +153,7 @@ class MigrateHomecaresToPacientesTable extends Migration
             $homecare->endereco    = (count($homecare->paciente->pessoa->enderecos) > 0) ? $homecare->paciente->pessoa->enderecos[0]->descricao : null;
             $homecare->cidade_id   = (count($homecare->paciente->pessoa->enderecos) > 0) ? $homecare->paciente->pessoa->enderecos[0]->cidade_id ? $homecare->paciente->pessoa->enderecos[0]->cidade_id : null : null;
             $homecare->observacao  = $homecare->paciente->pessoa->observacao;
-            $homecare->save();
+            $homecare->update();
 
             foreach ($homecare->paciente->pessoa->emails as $key => $email) {
                 HomecareEmail::create([
