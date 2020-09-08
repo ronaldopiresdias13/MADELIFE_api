@@ -155,7 +155,7 @@ class OrcamentosController extends Controller
                     $orcamento_servico = OrcamentoServico::create(
                         [
                             'orcamento_id' => $orcamento->id,
-                            'servico_id'   => $servico['servico_id']['id'],
+                            'servico_id'   => $servico['servico_id'],
                             'quantidade'           => $servico['quantidade'],
                             'frequencia'           => $servico['frequencia'],
                             'basecobranca'         => $servico['basecobranca'],
@@ -515,6 +515,7 @@ class OrcamentosController extends Controller
                             'icms'                 => $servico['icms'],
                             'inss'                 => $servico['inss'],
                             'iss'                  => $servico['iss'],
+                            'descricao'            => $servico['descricao'],
                             'valorcustomensal'     => $servico['valorcustomensal'],
                             'valorresultadomensal' => $servico['valorresultadomensal'],
                         ]

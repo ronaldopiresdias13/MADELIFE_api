@@ -180,6 +180,7 @@ Route::get('cuidadoPacientes/{cuidadoPaciente}', 'Api\CuidadoPacienteController@
 Route::put('cuidadoPacientes/{cuidadoPaciente}', 'Api\CuidadoPacienteController@update');
 Route::delete('cuidadoPacientes/{cuidadoPaciente}', 'Api\CuidadoPacienteController@destroy');
 Route::get('cuidadoPacientes/paciente/{paciente}', 'Api\CuidadoPacienteController@buscacuidadosdopaciente');
+Route::get('cuidadoPacientes/groupby/{paciente}', 'Api\CuidadoPacienteController@groupbycuidadosdopaciente');
 
 Route::get('dadosbancarios', 'Api\DadosbancariosController@index');
 Route::post('dadosbancarios', 'Api\DadosbancariosController@store');
@@ -353,6 +354,7 @@ Route::post('ordemservicoPrestadores', 'Api\OrdemservicoPrestadoresController@st
 Route::get('ordemservicoPrestadores/{ordemservicoPrestador}', 'Api\OrdemservicoPrestadoresController@show');
 Route::put('ordemservicoPrestadores/{ordemservicoPrestador}', 'Api\OrdemservicoPrestadoresController@update');
 Route::delete('ordemservicoPrestadores/{ordemservicoPrestador}', 'Api\OrdemservicoPrestadoresController@destroy');
+Route::get('ordemservicoPrestadores/ordemservico/{ordemservico}', 'Api\OrdemservicoPrestadoresController@profissionaisatribuidosaopaciente');
 
 Route::get('outros', 'Api\OutrosController@index');
 Route::post('outros', 'Api\OutrosController@store');
