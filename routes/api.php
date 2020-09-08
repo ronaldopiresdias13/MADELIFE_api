@@ -179,6 +179,7 @@ Route::post('cuidadoPacientes', 'Api\CuidadoPacienteController@store');
 Route::get('cuidadoPacientes/{cuidadoPaciente}', 'Api\CuidadoPacienteController@show');
 Route::put('cuidadoPacientes/{cuidadoPaciente}', 'Api\CuidadoPacienteController@update');
 Route::delete('cuidadoPacientes/{cuidadoPaciente}', 'Api\CuidadoPacienteController@destroy');
+Route::get('cuidadoPacientes/paciente/{paciente}', 'Api\CuidadoPacienteController@buscacuidadosdopaciente');
 
 Route::get('dadosbancarios', 'Api\DadosbancariosController@index');
 Route::post('dadosbancarios', 'Api\DadosbancariosController@store');
