@@ -492,12 +492,10 @@ class OrcamentosController extends Controller
                     'status'            => 1
                 ]
             );
-            if ($request['servicos']) {
-                foreach ($orcamento->servicos as $key => $servico) {
-                    $servico->delete();
-                }
-            }
 
+            foreach ($orcamento->orcamento_servicos as $key => $servico) {
+                $servico->delete();
+            }
 
             if ($request['servicos']) {
                 foreach ($request['servicos'] as $key => $servico) {
@@ -523,11 +521,11 @@ class OrcamentosController extends Controller
                     );
                 }
             }
-            if ($request['produtos']) {
-                foreach ($orcamento->produtos as $key => $produto) {
-                    $produto->delete();
-                }
+
+            foreach ($orcamento->orcamento_produtos as $key => $produto) {
+                $produto->delete();
             }
+
 
             if ($request['produtos']) {
                 foreach ($request['produtos'] as $key => $produto) {
@@ -546,10 +544,9 @@ class OrcamentosController extends Controller
                     );
                 }
             }
-            if ($request['custos']) {
-                foreach ($orcamento->custos as $key => $custo) {
-                    $custo->delete();
-                }
+
+            foreach ($orcamento->orcamentocustos as $key => $custo) {
+                $custo->delete();
             }
 
             if ($request['custos']) {
