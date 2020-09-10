@@ -7,5 +7,8 @@
 
 <body>
     <p>Olá, Acabou de occorer um erro no App ML</p>
-    <p>Aqui está o Erro: {{ $log }} </p>
+    <p>Aqui está o Erro:</p>
+    <code>
+        <pre>{{$log}}</pre>
+    </code>
 </body>

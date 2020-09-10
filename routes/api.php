@@ -35,16 +35,20 @@ Route::group([
 });
 
 Route::get("/teste", "Teste@teste");
-Route::get("/sendMailLogApp", "LogsController@sendMailLogApp");
-
+Route::post("/sendMailLogApp", "LogsController@sendMailLogApp");
 
 /* ------------- Rotas Utilizando Token ------------- */
 Route::group(['middleware' => 'auth:api'], function () {
-    /*--------------------App--------------------*/
-    Route::get('getEscalasHojeApp', 'Api\EscalasController@getEscalasHojeApp');
-    Route::get('getEscalasMesApp', 'Api\EscalasController@getEscalasMesApp');
+    /*----------------------App----------------------*/
+    Route::get('getEscalasMesApp', 'Api\EscalasController@getEscalasMesApp');    // Mudar App e Apagar essa rota
+
+    Route::get('listEscalasHojeApp', 'Api\EscalasController@listEscalasHojeApp');
+    Route::get('listEscalasMesApp', 'Api\EscalasController@listEscalasMesApp');
     Route::get('getEscalaIdApp/{escala}', 'Api\EscalasController@getEscalaIdApp');
 
+    Route::get('getPessoaPelfilApp', 'Api\PessoasController@getPessoaPelfilApp');
+
+    /*----------------------Web----------------------*/
     Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\OrdemservicosController@listaOrdemServicosEscalas');
     Route::get('transcricoes/listaTranscricoes', 'Api\TranscricoesController@listaTranscricoes');
 });
@@ -68,12 +72,6 @@ Route::post('agendamentos', 'Api\AgendamentosController@store');
 Route::get('agendamentos/{agendamento}', 'Api\AgendamentosController@show');
 Route::put('agendamentos/{agendamento}', 'Api\AgendamentosController@update');
 Route::delete('agendamentos/{agendamento}', 'Api\AgendamentosController@destroy');
-
-// Route::get('atribuicoes', 'Api\AtribuicoesController@index');
-// Route::post('atribuicoes', 'Api\AtribuicoesController@store');
-// Route::get('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@show');
-// Route::put('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@update');
-// Route::delete('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@destroy');
 
 Route::get('bancos', 'Api\BancosController@index');
 Route::post('bancos', 'Api\BancosController@store');

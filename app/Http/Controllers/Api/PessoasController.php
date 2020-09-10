@@ -202,4 +202,38 @@ class PessoasController extends Controller
         $pessoa->ativo = false;
         $pessoa->save();
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getPessoaPelfilApp(Request $request)
+    {
+        $user = $request->user();
+        return $user;
+
+        // $escalas = Escala::with([
+        //     'ordemservico' => function ($query) {
+        //         $query->select('id', 'orcamento_id');
+        //         $query->with(['orcamento' => function ($query) {
+        //             $query->select('id');
+        //             $query->with(['homecare' => function ($query) {
+        //                 $query->select('id', 'orcamento_id', 'paciente_id');
+        //                 $query->with(['paciente' => function ($query) {
+        //                     $query->select('id', 'pessoa_id');
+        //                     $query->with(['pessoa' => function ($query) {
+        //                         $query->select('id', 'nome');
+        //                     }]);
+        //                 }]);
+        //             }]);
+        //         }]);
+        //     }
+        // ])
+        //     ->where('id', $escala->id)
+        //     ->first();
+
+        // return $escalas;
+    }
 }
