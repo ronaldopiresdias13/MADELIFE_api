@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\CuidadoPaciente;
-use App\Paciente;
 use App\Http\Controllers\Controller;
+use App\Pedidocompra;
+use App\PedidocompraProduto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class CuidadoPacienteController extends Controller
+class PedidocomprasController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -36,9 +35,9 @@ class CuidadoPacienteController extends Controller
                     array_push($with, $filho);
                 }
             }
-            $itens = CuidadoPaciente::with($with)->where('ativo', true);
+            $itens = Pedidocompra::with($with)->where('ativo', true);
         } else {
-            $itens = CuidadoPaciente::where('ativo', true);
+            $itens = Pedidocompra::where('ativo', true);
         }
 
         if ($request->commands) {
@@ -112,28 +111,38 @@ class CuidadoPacienteController extends Controller
      */
     public function store(Request $request)
     {
-        $cuidado = CuidadoPaciente::updateOrCreate(
-            [
-                'cuidado_id' => $request->cuidado_id,
-                'paciente_id' => $request->paciente_id,
-                'formacao_id' => $request->formacao_id
-            ],
-            [
-                'ativo' => true
-            ]
-        );
+        DB::transaction(function () use ($request) {
+            $pedidocompra = Pedidocompra::create([
+                'empresa_id'   => $request['empresa_id'],
+                'pessoa_id'    => $request['pessoa_id'],
+                'data'         => $request['data'],
+                'numeropedido' => $request['numeropedido'],
+                'observacao'   => $request['observacao'],
+                'status'       => $request['status'],
+            ]);
+            if ($request['produtos']) {
+                foreach ($request['produtos'] as $key => $produto) {
+                    $requisicao_produto = PedidocompraProduto::create([
+                        'pedidocompra_id' => $pedidocompra->id,
+                        'produto_id'      => $produto['pivot']['produto_id'],
+                        'quantidade'      => $produto['pivot']['quantidade'],
+                        'observacao'      => $produto['pivot']['observacao'],
+                        'status'          => $produto['pivot']['status'],
+                    ]);
+                }
+            }
+        });
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\CuidadoPaciente  $cuidadoPaciente
+     * @param  \App\Pedidocompra  $pedidocompra
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, CuidadoPaciente $cuidadoPaciente)
+    public function show(Request $request, Pedidocompra $pedidocompra)
     {
-        $iten = $cuidadoPaciente;
+        $iten = $pedidocompra;
 
         if ($request->commands) {
             $request = json_decode($request->commands, true);
@@ -179,33 +188,45 @@ class CuidadoPacienteController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\CuidadoPaciente  $cuidadoPaciente
+     * @param  \App\Pedidocompra  $pedidocompra
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CuidadoPaciente $cuidadoPaciente)
+    public function update(Request $request, Pedidocompra $pedidocompra)
     {
-        DB::transaction(function () use ($request, $cuidadoPaciente) {
-            $cuidadoPaciente->update($request->all());
+        DB::transaction(function () use ($request, $pedidocompra) {
+            $pedidocompra->update([
+                'empresa_id'   => $request['empresa_id'],
+                'pessoa_id'    => $request['pessoa_id'],
+                'data'         => $request['data'],
+                'numeropedido' => $request['numeropedido'],
+                'observacao'   => $request['observacao'],
+                'status'       => $request['status'],
+            ]);
+            if ($request['produtos']) {
+                foreach ($request['produtos'] as $key => $produto) {
+                    $requisicao_produto = PedidocompraProduto::updateOrCreate(
+                        [
+                            'pedidocompra_id' => $pedidocompra->id,
+                            'produto_id'      => $produto['pivot']['produto_id'],
+                            'quantidade'      => $produto['pivot']['quantidade'],
+                            'observacao'      => $produto['pivot']['observacao'],
+                            'status'          => $produto['pivot']['status']
+                        ]
+                    );
+                }
+            }
         });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\CuidadoPaciente  $cuidadoPaciente
+     * @param  \App\Pedidocompra  $pedidocompra
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CuidadoPaciente $cuidadoPaciente)
+    public function destroy(Pedidocompra $pedidocompra)
     {
-        $cuidadoPaciente->ativo = false;
-        $cuidadoPaciente->save();
-    }
-    public function buscacuidadosdopaciente(Paciente $paciente)
-    {
-        return CuidadoPaciente::With(['cuidado', 'formacao'])->where('paciente_id', $paciente->id)->get();
-    }
-    public function groupbycuidadosdopaciente(Paciente $paciente)
-    {
-        return CuidadoPaciente::With(['cuidado', 'formacao'])->where('paciente_id', $paciente->id)->get()->groupBy('formacao.descricao');
+        $pedidocompra->ativo = false;
+        $pedidocompra->save();
     }
 }

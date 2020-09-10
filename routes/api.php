@@ -178,6 +178,7 @@ Route::get('cuidadoPacientes/{cuidadoPaciente}', 'Api\CuidadoPacienteController@
 Route::put('cuidadoPacientes/{cuidadoPaciente}', 'Api\CuidadoPacienteController@update');
 Route::delete('cuidadoPacientes/{cuidadoPaciente}', 'Api\CuidadoPacienteController@destroy');
 Route::get('cuidadoPacientes/paciente/{paciente}', 'Api\CuidadoPacienteController@buscacuidadosdopaciente');
+Route::get('cuidadoPacientes/groupby/{paciente}', 'Api\CuidadoPacienteController@groupbycuidadosdopaciente');
 
 Route::get('dadosbancarios', 'Api\DadosbancariosController@index');
 Route::post('dadosbancarios', 'Api\DadosbancariosController@store');
@@ -351,6 +352,7 @@ Route::post('ordemservicoPrestadores', 'Api\OrdemservicoPrestadoresController@st
 Route::get('ordemservicoPrestadores/{ordemservicoPrestador}', 'Api\OrdemservicoPrestadoresController@show');
 Route::put('ordemservicoPrestadores/{ordemservicoPrestador}', 'Api\OrdemservicoPrestadoresController@update');
 Route::delete('ordemservicoPrestadores/{ordemservicoPrestador}', 'Api\OrdemservicoPrestadoresController@destroy');
+Route::get('ordemservicoPrestadores/ordemservico/{ordemservico}', 'Api\OrdemservicoPrestadoresController@profissionaisatribuidosaopaciente');
 
 Route::get('outros', 'Api\OutrosController@index');
 Route::post('outros', 'Api\OutrosController@store');
@@ -382,6 +384,12 @@ Route::post('patrimonios', 'Api\PatrimoniosController@store');
 Route::get('patrimonios/{patrimonio}', 'Api\PatrimoniosController@show');
 Route::put('patrimonios/{patrimonio}', 'Api\PatrimoniosController@update');
 Route::delete('patrimonios/{patrimonio}', 'Api\PatrimoniosController@destroy');
+
+Route::get('pedidocompras', 'Api\PedidocomprasController@index');
+Route::post('pedidocompras', 'Api\PedidocomprasController@store');
+Route::get('pedidocompras/{pedidocompra}', 'Api\PedidocomprasController@show');
+Route::put('pedidocompras/{pedidocompra}', 'Api\PedidocomprasController@update');
+Route::delete('pedidocompras/{pedidocompra}', 'Api\PedidocomprasController@destroy');
 
 Route::get('pessoas', 'Api\PessoasController@index');
 Route::post('pessoas', 'Api\PessoasController@store');
