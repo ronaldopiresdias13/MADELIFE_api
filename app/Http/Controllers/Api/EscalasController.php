@@ -474,6 +474,7 @@ class EscalasController extends Controller
             'ordemservico.orcamento.homecare.paciente.pessoa'
         ])
             ->where('ativo', true)
+            ->where('empresa_id', $empresa->id)
             ->where('dataentrada', date('Y-m-d'))
             ->get();
         // return DB::table('escalas')->join('pontos', 'pontos.escala_id', '=', 'escalas.id')->where('ativo', true)->limit(1)->get();
