@@ -18,6 +18,7 @@ class CreateAssinaturasTable extends Migration
             $table->unsignedBigInteger('pessoa_id');
             $table->foreign('pessoa_id')->references('id')->on('pessoas')->onDelete('cascade');
             $table->longText('assinatura')->nullable();
+            $table->boolean('ativo')->default(true);
             $table->timestamps();
         });
     }
