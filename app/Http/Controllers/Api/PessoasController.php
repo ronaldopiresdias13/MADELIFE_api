@@ -209,31 +209,18 @@ class PessoasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function getPessoaPelfilApp(Request $request)
+    public function getPessoaPerfilApp(Request $request)
     {
         $user = $request->user();
-        return $user;
-
-        // $escalas = Escala::with([
-        //     'ordemservico' => function ($query) {
-        //         $query->select('id', 'orcamento_id');
-        //         $query->with(['orcamento' => function ($query) {
-        //             $query->select('id');
-        //             $query->with(['homecare' => function ($query) {
-        //                 $query->select('id', 'orcamento_id', 'paciente_id');
-        //                 $query->with(['paciente' => function ($query) {
-        //                     $query->select('id', 'pessoa_id');
-        //                     $query->with(['pessoa' => function ($query) {
-        //                         $query->select('id', 'nome');
-        //                     }]);
-        //                 }]);
-        //             }]);
-        //         }]);
-        //     }
-        // ])
-        //     ->where('id', $escala->id)
-        //     ->first();
-
-        // return $escalas;
+        $pessoa = Pessoa::with([
+            'conselhos',
+            'telefones',
+            'emails',
+            'enderecos.cidade',
+            'dadosbancario.banco',
+            'prestador.formacoes'
+        ])
+            ->find($user->pessoa_id);
+        return $pessoa;
     }
 }

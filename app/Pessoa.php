@@ -49,6 +49,12 @@ class Pessoa extends Model
             ->wherePivot('ativo', true);
     }
 
+    public function assinaturas()
+    {
+        return $this->belongsTo('App\Assinatura')
+            ->where('ativo', true);
+    }
+
     public function user()
     {
         return $this->hasOne('App\User')->where('ativo', true);
