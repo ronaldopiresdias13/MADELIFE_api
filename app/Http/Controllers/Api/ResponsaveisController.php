@@ -252,7 +252,6 @@ class ResponsaveisController extends Controller
                 $pessoa->update([
                     'nome'        => $request['pessoa']['nome'],
                     'nascimento'  => $request['pessoa']['nascimento'],
-                    'tipo'        => $request['pessoa']['tipo'],
                     'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
                     'rgie'        => $request['pessoa']['rgie'],
                     'observacoes' => $request['pessoa']['observacoes'],
