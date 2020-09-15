@@ -479,4 +479,34 @@ class EscalasController extends Controller
             ->get();
         // return DB::table('escalas')->join('pontos', 'pontos.escala_id', '=', 'escalas.id')->where('ativo', true)->limit(1)->get();
     }
+
+    public function buscaPontosPorPeriodoEPaciente(string $paciente, string $data1, string $data2 ){
+        return Escala::With([
+            'ordemservico' => function ($query) {
+                $query->select('id', 'orcamento_id');
+                $query->with(['orcamento' => function ($query) {
+                    $query->select('id');
+                    $query->with(['homecare' => function ($query) {
+                        $query->select('id', 'orcamento_id', 'paciente_id');
+                        $query->with(['paciente' => function ($query) {
+                            $query->select('id', 'pessoa_id');
+                            $query->with(['pessoa' => function ($query) {
+                                $query->select('id', 'nome');
+                            }]);
+                        }]);
+                    }]);
+                }]);
+            },
+            'servico',
+            'prestador.formacoes',
+            'pontos',
+            'prestador.pessoa.conselhos',
+        ])->where('ativo', true)
+        ->where('ordemservico_id', $paciente)
+        ->where('dataentrada', '>=', $data1)
+        ->where('dataentrada', '<=', $data2)
+        ->get([
+            'id', 'dataentrada','datasaida', 'servico_id','periodo','tipo', 'valorhoradiurno','valorhoranoturno','valoradicional', 'motivoadicional', 'prestador_id',
+        ])->groupBy('dataentrada');
+    }
 }
