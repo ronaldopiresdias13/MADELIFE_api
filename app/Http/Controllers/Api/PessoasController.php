@@ -202,4 +202,25 @@ class PessoasController extends Controller
         $pessoa->ativo = false;
         $pessoa->save();
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getPessoaPerfilApp(Request $request)
+    {
+        $user = $request->user();
+        $pessoa = Pessoa::with([
+            'conselhos',
+            'telefones',
+            'emails',
+            'enderecos.cidade',
+            'dadosbancario.banco',
+            'prestador.formacoes'
+        ])
+            ->find($user->pessoa_id);
+        return $pessoa;
+    }
 }

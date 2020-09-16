@@ -33,7 +33,7 @@ class LogApp extends Mailable
      */
     public function build()
     {
-        $this->subject('Recuperação de senha MadeLife');
+        $this->subject('Erro no App ML');
         $this->to($this->email, $this->log);
         return $this->view('mail.LogApp', [
             'log' => $this->log

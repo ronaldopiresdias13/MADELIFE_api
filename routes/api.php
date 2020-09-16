@@ -35,16 +35,22 @@ Route::group([
 });
 
 Route::get("/teste", "Teste@teste");
-Route::get("/sendMailLogApp", "LogsController@sendMailLogApp");
-
+Route::post("/sendMailLogApp", "LogsController@sendMailLogApp");
 
 /* ------------- Rotas Utilizando Token ------------- */
 Route::group(['middleware' => 'auth:api'], function () {
-    /*--------------------App--------------------*/
-    Route::get('getEscalasHojeApp', 'Api\EscalasController@getEscalasHojeApp');
-    Route::get('getEscalasMesApp', 'Api\EscalasController@getEscalasMesApp');
+    /*----------------------App----------------------*/
+    Route::get('getEscalasMesApp', 'Api\EscalasController@getEscalasMesApp');    // Mudar App e Apagar essa rota
+
+    Route::get('listEscalasHojeApp', 'Api\EscalasController@listEscalasHojeApp');
+    Route::get('listEscalasMesApp', 'Api\EscalasController@listEscalasMesApp');
     Route::get('getEscalaIdApp/{escala}', 'Api\EscalasController@getEscalaIdApp');
 
+    Route::get('formacoes/listFormacoesApp', 'Api\FormacoesController@listFormacoesApp');
+
+    Route::get('getPessoaPerfilApp', 'Api\PessoasController@getPessoaPerfilApp');
+
+    /*----------------------Web----------------------*/
     Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\OrdemservicosController@listaOrdemServicosEscalas');
     Route::get('transcricoes/listaTranscricoes', 'Api\TranscricoesController@listaTranscricoes');
 });
@@ -68,12 +74,6 @@ Route::post('agendamentos', 'Api\AgendamentosController@store');
 Route::get('agendamentos/{agendamento}', 'Api\AgendamentosController@show');
 Route::put('agendamentos/{agendamento}', 'Api\AgendamentosController@update');
 Route::delete('agendamentos/{agendamento}', 'Api\AgendamentosController@destroy');
-
-// Route::get('atribuicoes', 'Api\AtribuicoesController@index');
-// Route::post('atribuicoes', 'Api\AtribuicoesController@store');
-// Route::get('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@show');
-// Route::put('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@update');
-// Route::delete('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@destroy');
 
 Route::get('bancos', 'Api\BancosController@index');
 Route::post('bancos', 'Api\BancosController@store');
@@ -239,6 +239,7 @@ Route::get('escalas/{escala}', 'Api\EscalasController@show');
 Route::put('escalas/{escala}', 'Api\EscalasController@update');
 Route::delete('escalas/{escala}', 'Api\EscalasController@destroy');
 Route::get('escalas/empresa/{empresa}/dia', 'Api\EscalasController@buscaescalasdodia');
+Route::get('escalas/paciente/{paciente}/data1/{data1}/data2/{data2}', 'Api\EscalasController@buscaPontosPorPeriodoEPaciente');
 
 Route::get('formacoes', 'Api\FormacoesController@index');
 Route::post('formacoes', 'Api\FormacoesController@store');
