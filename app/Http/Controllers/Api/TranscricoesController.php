@@ -220,6 +220,7 @@ class TranscricoesController extends Controller
                     ],
                     [
                         'produto_id'     => $iten['produto']['id'],
+                        'transcricao_id' => $transcricao['id'],
                         'quantidade'     => $iten['quantidade'],
                         'apresentacao'   => $iten['apresentacao'],
                         'via'            => $iten['via'],
