@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Mail;
 
 class LogsController extends Controller
 {
-    public function sendMailLogApp(Request $request)
+    public function sendMailLog(Request $request)
     {
         Mail::send(new LogApp($request));
     }
