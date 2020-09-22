@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Relatorio;
 use App\Ordemservico;
+use App\Escala;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -213,5 +214,8 @@ class RelatoriosController extends Controller
             ->limit(20)
             ->get();
         return $relatorios;
+    }
+    public function buscaRelatoriosDaEscala(Escala $escala){
+        return Relatorio::Where('escala_id', $escala->id)->get();
     }
 }

@@ -324,8 +324,8 @@ class EscalasController extends Controller
         // return Escala::With(['servico', 'prestador.formacoes', 'pontos', 'prestador.pessoa.conselhos', 'ordemservico.orcamento.homecare.paciente.pessoa'])->where('ativo', true)->where('dataentrada', date('Y-m-d'))->get();
         return Escala::With([
             'cuidados',
-            'monitoramentos',
-            'relatorios',
+            // 'monitoramentos',
+            // 'relatorios',
             'servico',
             'prestador.formacoes',
             'pontos',
@@ -356,16 +356,30 @@ class EscalasController extends Controller
                     }]);
                 }]);
             },
-            'servico',
-            'prestador.formacoes',
+            'servico' => function ($query){
+                $query->select('id', 'descricao');
+            },
+            'prestador' => function ($query){
+                $query->select('id', 'pessoa_id');
+                $query->with(['formacoes' => function ($query){
+                    $query->select('prestador_id', 'descricao');
+                }]);
+                $query->with(['pessoa' => function ($query){
+                    $query->select('id', 'nome');
+                    $query->with(['conselhos' => function ($query){
+                        $query->select('pessoa_id', 'instituicao', 'uf', 'numero');
+                    }]);
+                }]);
+            },
             'pontos',
-            'prestador.pessoa.conselhos',
+            'cuidados',
         ])->where('ativo', true)
         ->where('ordemservico_id', $paciente)
+        ->where('empresa_id', 1)
         ->where('dataentrada', '>=', $data1)
         ->where('dataentrada', '<=', $data2)
         ->get([
-            'id', 'dataentrada','datasaida', 'servico_id','periodo','tipo', 'valorhoradiurno','valorhoranoturno','valoradicional', 'motivoadicional', 'prestador_id',
-        ])->groupBy('dataentrada');
+            'id', 'dataentrada', 'servico_id','periodo','tipo', 'prestador_id', 'status'
+        ]);
     }
 }

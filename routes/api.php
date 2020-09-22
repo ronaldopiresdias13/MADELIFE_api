@@ -41,11 +41,11 @@ Route::group([
 ], function () {
     Route::post('login', 'Api\App\Auth\AuthController@login');
     // Route::post('register', 'Auth\AuthController@register');
-    // Route::post('reset', 'Auth\AuthController@reset');
-    // Route::post('change', 'Auth\AuthController@change');
-
+    Route::post('reset', 'Api\App\Auth\AuthController@reset');
+    
     /* ------------- Rotas Utilizando Token -------------*/
     Route::group(['middleware' => 'auth:api'], function () {
+        Route::post('change', 'Api\App\Auth\AuthController@change');
         Route::get('logout', 'Api\App\Auth\AuthController@logout');
         // Route::get('user', 'Auth\AuthController@user');
     });
@@ -449,6 +449,7 @@ Route::put('pontos/{ponto}', 'Api\PontosController@update');
 Route::delete('pontos/{ponto}', 'Api\PontosController@destroy');
 Route::post('pontos/checkin/{escala}', 'Api\PontosController@checkin'); // Custon
 Route::post('pontos/checkout/{escala}', 'Api\PontosController@checkout'); // Custon
+Route::get('pontos/escala/{escala}', 'Api\PontosController@buscaPontosPorIdEscala');
 
 Route::get('prescricoesbs', 'Api\PrescricoesbsController@index');
 Route::post('prescricoesbs', 'Api\PrescricoesbsController@store');
@@ -491,6 +492,7 @@ Route::get('relatorios/{relatorio}', 'Api\RelatoriosController@show');
 Route::put('relatorios/{relatorio}', 'Api\RelatoriosController@update');
 Route::delete('relatorios/{relatorio}', 'Api\RelatoriosController@destroy');
 Route::get('relatoriosOfOrdemservico/{ordemservico}', 'Api\RelatoriosController@relatoriosOfOrdemservico');
+Route::get('relatorios/escala/{escala}', 'Api\RelatoriosController@buscaRelatoriosDaEscala');
 
 Route::get('relatorioescalas', 'Api\RelatorioescalasController@index');
 Route::post('relatorioescalas/{escala}', 'Api\RelatorioescalasController@store');
