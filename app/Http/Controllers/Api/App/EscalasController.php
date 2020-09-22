@@ -27,7 +27,7 @@ class EscalasController extends Controller
             ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon'])
             . '-' .
             ($hoje['mday'] < 10 ? '0' . $hoje['mday'] : $hoje['mday']);
-
+        // return $dataAtual;
         $escalas = Escala::with([
             'ordemservico' => function ($query) {
                 $query->select('id', 'orcamento_id');
@@ -47,7 +47,7 @@ class EscalasController extends Controller
         ])
             ->where('prestador_id', $prestador->id)
             ->where('dataentrada', $dataAtual)
-            ->where('datasaida', $dataAtual)
+            ->orWhere('datasaida', $dataAtual)
             ->get([
                 'id',
                 'ordemservico_id',
