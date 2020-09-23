@@ -75,6 +75,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         Route::get('pessoas/getPessoaPerfil', 'Api\App\PessoasController@getPessoaPerfil');
 
+        Route::get('relatorios/{escala}', 'Api\App\RelatoriosController@index');
         Route::get('transcricoes/{ordemservico}', 'Api\App\TranscricoesController@listTranscricoesByEscalaId');
     });
 
