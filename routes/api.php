@@ -40,7 +40,7 @@ Route::group([
     'prefix' => 'app/auth'
 ], function () {
     Route::post('login', 'Api\App\Auth\AuthController@login');
-    // Route::post('register', 'Auth\AuthController@register');
+    Route::post('register', 'Api\App\Auth\AuthController@register');
     Route::post('reset', 'Api\App\Auth\AuthController@reset');
     
     /* ------------- Rotas Utilizando Token -------------*/
