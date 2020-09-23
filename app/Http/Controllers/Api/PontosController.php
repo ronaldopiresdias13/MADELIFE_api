@@ -274,4 +274,7 @@ class PontosController extends Controller
                 ->header('Content-Type', 'text/plain');
         }
     }
+    public function buscaPontosPorIdEscala(Escala $escala){
+        return Ponto::Where('escala_id', $escala->id)->get();
+    }
 }

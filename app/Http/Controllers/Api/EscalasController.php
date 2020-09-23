@@ -317,147 +317,6 @@ class EscalasController extends Controller
         return $escalas;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function listEscalasHojeApp(Request $request)
-    {
-        $user = $request->user();
-        $prestador = $user->pessoa->prestador;
-
-        $hoje = getdate();
-        $dataAtual =
-            $hoje['year']
-            . '-' .
-            ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon'])
-            . '-' .
-            ($hoje['mday'] < 10 ? '0' . $hoje['mday'] : $hoje['mday']);
-
-        $escalas = Escala::with([
-            'ordemservico' => function ($query) {
-                $query->select('id', 'orcamento_id');
-                $query->with(['orcamento' => function ($query) {
-                    $query->select('id');
-                    $query->with(['homecare' => function ($query) {
-                        $query->select('id', 'orcamento_id', 'paciente_id');
-                        $query->with(['paciente' => function ($query) {
-                            $query->select('id', 'pessoa_id');
-                            $query->with(['pessoa' => function ($query) {
-                                $query->select('id', 'nome');
-                            }]);
-                        }]);
-                    }]);
-                }]);
-            }
-        ])
-            ->where('prestador_id', $prestador->id)
-            ->where('dataentrada', $dataAtual)
-            ->where('datasaida', $dataAtual)
-            ->get([
-                'id',
-                'ordemservico_id',
-                'periodo',
-                'dataentrada',
-                'datasaida',
-                'horaentrada',
-                'horasaida',
-                'status'
-            ]);
-
-        return $escalas;
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function listEscalasMesApp(Request $request)
-    {
-        $user = $request->user();
-        $prestador = $user->pessoa->prestador;
-        $hoje = getdate();
-        $dias = cal_days_in_month(CAL_GREGORIAN, $hoje['mon'], $hoje['year']); // 31
-
-        // $escalas = Escala::with('ordemservico.orcamento.homecare.paciente.pessoa')
-        $escalas = Escala::with([
-            'ordemservico' => function ($query) {
-                $query->select('id', 'orcamento_id');
-                $query->with(['orcamento' => function ($query) {
-                    $query->select('id');
-                    $query->with(['homecare' => function ($query) {
-                        $query->select('id', 'orcamento_id', 'paciente_id');
-                        $query->with(['paciente' => function ($query) {
-                            $query->select('id', 'pessoa_id');
-                            $query->with(['pessoa' => function ($query) {
-                                $query->select('id', 'nome');
-                            }]);
-                        }]);
-                    }]);
-                }]);
-            }
-        ])
-            ->where('prestador_id', $prestador->id)
-            ->where(
-                'datasaida',
-                '>=',
-                $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-01'
-            )
-            ->where(
-                'dataentrada',
-                '<=',
-                $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $dias
-            )
-            ->orderBy('dataentrada')
-            ->get([
-                'id',
-                'ordemservico_id',
-                'periodo',
-                'dataentrada',
-                'datasaida',
-                'horaentrada',
-                'horasaida',
-                'status',
-            ]);
-
-        return $escalas;
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Escala  $escala
-     * @return \Illuminate\Http\Response
-     */
-    public function getEscalaIdApp(Escala $escala)
-    {
-        $escalas = Escala::with([
-            'ordemservico' => function ($query) {
-                $query->select('id', 'orcamento_id');
-                $query->with(['orcamento' => function ($query) {
-                    $query->select('id');
-                    $query->with(['homecare' => function ($query) {
-                        $query->select('id', 'orcamento_id', 'paciente_id');
-                        $query->with(['paciente' => function ($query) {
-                            $query->select('id', 'pessoa_id');
-                            $query->with(['pessoa' => function ($query) {
-                                $query->select('id', 'nome');
-                            }]);
-                        }]);
-                    }]);
-                }]);
-            }
-        ])
-            ->where('id', $escala->id)
-            ->first();
-
-        return $escalas;
-    }
-
     public function buscaescalasdodia(Empresa $empresa)
     {
         // return DB::select('select * from escalas e inner join pontos p on p.escala_id = e.id limit 3');
@@ -465,8 +324,8 @@ class EscalasController extends Controller
         // return Escala::With(['servico', 'prestador.formacoes', 'pontos', 'prestador.pessoa.conselhos', 'ordemservico.orcamento.homecare.paciente.pessoa'])->where('ativo', true)->where('dataentrada', date('Y-m-d'))->get();
         return Escala::With([
             'cuidados',
-            'monitoramentos',
-            'relatorios',
+            // 'monitoramentos',
+            // 'relatorios',
             'servico',
             'prestador.formacoes',
             'pontos',
@@ -497,16 +356,30 @@ class EscalasController extends Controller
                     }]);
                 }]);
             },
-            'servico',
-            'prestador.formacoes',
+            'servico' => function ($query){
+                $query->select('id', 'descricao');
+            },
+            'prestador' => function ($query){
+                $query->select('id', 'pessoa_id');
+                $query->with(['formacoes' => function ($query){
+                    $query->select('prestador_id', 'descricao');
+                }]);
+                $query->with(['pessoa' => function ($query){
+                    $query->select('id', 'nome');
+                    $query->with(['conselhos' => function ($query){
+                        $query->select('pessoa_id', 'instituicao', 'uf', 'numero');
+                    }]);
+                }]);
+            },
             'pontos',
-            'prestador.pessoa.conselhos',
+            'cuidados',
         ])->where('ativo', true)
         ->where('ordemservico_id', $paciente)
+        ->where('empresa_id', 1)
         ->where('dataentrada', '>=', $data1)
         ->where('dataentrada', '<=', $data2)
         ->get([
-            'id', 'dataentrada','datasaida', 'servico_id','periodo','tipo', 'valorhoradiurno','valorhoranoturno','valoradicional', 'motivoadicional', 'prestador_id',
-        ])->groupBy('dataentrada');
+            'id', 'dataentrada', 'servico_id','periodo','tipo', 'prestador_id', 'status'
+        ]);
     }
 }

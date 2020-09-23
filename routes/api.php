@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,43 +13,62 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+//-------------- Rota de Testes --------------//
+Route::get("/teste", "Teste@teste");
 
+/*-------------- Rota de Logs por email --------------*/
+Route::post("sendMailLog", "LogsController@sendMailLog");
+
+/*-------------- Auth Web --------------*/
 Route::group([
     'prefix' => 'auth'
 ], function () {
-    Route::post('loginApp', 'Auth\AuthController@loginApp');
-
     Route::post('login', 'Auth\AuthController@login')->name('login');
     Route::post('register', 'Auth\AuthController@register');
     Route::post('reset', 'Auth\AuthController@reset');
     Route::post('change', 'Auth\AuthController@change');
 
+    /*------------- Rotas Utilizando Token -------------*/
     Route::group(['middleware' => 'auth:api'], function () {
         Route::get('logout', 'Auth\AuthController@logout');
         Route::get('user', 'Auth\AuthController@user');
     });
 });
 
-Route::get("/teste", "Teste@teste");
-Route::post("/sendMailLogApp", "LogsController@sendMailLogApp");
+/*-------------- Auth App --------------*/
+Route::group([
+    'prefix' => 'app/auth'
+], function () {
+    Route::post('login', 'Api\App\Auth\AuthController@login');
+    // Route::post('register', 'Auth\AuthController@register');
+    Route::post('reset', 'Api\App\Auth\AuthController@reset');
+    
+    /* ------------- Rotas Utilizando Token -------------*/
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::post('change', 'Api\App\Auth\AuthController@change');
+        Route::get('logout', 'Api\App\Auth\AuthController@logout');
+        // Route::get('user', 'Auth\AuthController@user');
+    });
+});
 
-/* ------------- Rotas Utilizando Token ------------- */
+/*------------- Rotas Utilizando Token -------------*/
 Route::group(['middleware' => 'auth:api'], function () {
-    /*----------------------App----------------------*/
     Route::get('getEscalasMesApp', 'Api\EscalasController@getEscalasMesApp');    // Mudar App e Apagar essa rota
 
-    Route::get('listEscalasHojeApp', 'Api\EscalasController@listEscalasHojeApp');
-    Route::get('listEscalasMesApp', 'Api\EscalasController@listEscalasMesApp');
-    Route::get('getEscalaIdApp/{escala}', 'Api\EscalasController@getEscalaIdApp');
+    /*----------------- App -----------------*/
+    Route::prefix('app')->group(function () {
+        Route::get('escalas/listEscalasHoje', 'Api\App\EscalasController@listEscalasHoje');
+        Route::get('escalas/listEscalasMes', 'Api\App\EscalasController@listEscalasMes');
+        Route::get('escalas/getEscalaId/{escala}', 'Api\App\EscalasController@getEscalaId');
 
-    Route::get('formacoes/listFormacoesApp', 'Api\FormacoesController@listFormacoesApp');
+        Route::get('formacoes/listFormacoes', 'Api\App\FormacoesController@listFormacoes');
 
-    Route::get('getPessoaPerfilApp', 'Api\PessoasController@getPessoaPerfilApp');
+        Route::post('prestadorFormacao/newPrestadorFormacao', 'Api\App\PrestadorFormacaoController@newPrestadorFormacao');
 
-    /*----------------------Web----------------------*/
+        Route::get('pessoas/getPessoaPerfil', 'Api\App\PessoasController@getPessoaPerfil');
+    });
+
+    /*----------------- Web -----------------*/
     Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\OrdemservicosController@listaOrdemServicosEscalas');
     Route::get('transcricoes/listaTranscricoes', 'Api\TranscricoesController@listaTranscricoes');
 });
@@ -431,6 +449,7 @@ Route::put('pontos/{ponto}', 'Api\PontosController@update');
 Route::delete('pontos/{ponto}', 'Api\PontosController@destroy');
 Route::post('pontos/checkin/{escala}', 'Api\PontosController@checkin'); // Custon
 Route::post('pontos/checkout/{escala}', 'Api\PontosController@checkout'); // Custon
+Route::get('pontos/escala/{escala}', 'Api\PontosController@buscaPontosPorIdEscala');
 
 Route::get('prescricoesbs', 'Api\PrescricoesbsController@index');
 Route::post('prescricoesbs', 'Api\PrescricoesbsController@store');
@@ -473,6 +492,7 @@ Route::get('relatorios/{relatorio}', 'Api\RelatoriosController@show');
 Route::put('relatorios/{relatorio}', 'Api\RelatoriosController@update');
 Route::delete('relatorios/{relatorio}', 'Api\RelatoriosController@destroy');
 Route::get('relatoriosOfOrdemservico/{ordemservico}', 'Api\RelatoriosController@relatoriosOfOrdemservico');
+Route::get('relatorios/escala/{escala}', 'Api\RelatoriosController@buscaRelatoriosDaEscala');
 
 Route::get('relatorioescalas', 'Api\RelatorioescalasController@index');
 Route::post('relatorioescalas/{escala}', 'Api\RelatorioescalasController@store');

@@ -188,15 +188,4 @@ class FormacoesController extends Controller
         $formacao->ativo = false;
         $formacao->save();
     }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function listFormacoesApp()
-    {
-        return Formacao::where('ativo', true)->orderBy('descricao')->get(['id', 'descricao']);
-        // return 'teste';
-    }
 }
