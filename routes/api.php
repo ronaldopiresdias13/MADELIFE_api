@@ -42,7 +42,7 @@ Route::group([
     Route::post('login', 'Api\App\Auth\AuthController@login');
     Route::post('register', 'Api\App\Auth\AuthController@register');
     Route::post('reset', 'Api\App\Auth\AuthController@reset');
-    
+
     /* ------------- Rotas Utilizando Token -------------*/
     Route::group(['middleware' => 'auth:api'], function () {
         Route::post('change', 'Api\App\Auth\AuthController@change');
@@ -57,15 +57,26 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     /*----------------- App -----------------*/
     Route::prefix('app')->group(function () {
+        Route::post('acaomedicamentos', 'Api\App\AcaomedicamentosController@store');
+
         Route::get('escalas/listEscalasHoje', 'Api\App\EscalasController@listEscalasHoje');
         Route::get('escalas/listEscalasMes', 'Api\App\EscalasController@listEscalasMes');
         Route::get('escalas/getEscalaId/{escala}', 'Api\App\EscalasController@getEscalaId');
+        Route::get('escalas/getEscalaId/{escala}/cuidados', 'Api\App\EscalasController@getCuidadosByEscalaId');
+
+        Route::put('cuidadoEscalas/{cuidadoEscala}', 'Api\App\CuidadoEscalasController@updateCuidado');
 
         Route::get('formacoes/listFormacoes', 'Api\App\FormacoesController@listFormacoes');
+
+        Route::get('monitoramentoescalas/{escala}', 'Api\App\MonitoramentoescalasController@listaMonitoramento');
+        Route::post('monitoramentoescalas', 'Api\App\MonitoramentoescalasController@salvarMonitoramento');
 
         Route::post('prestadorFormacao/newPrestadorFormacao', 'Api\App\PrestadorFormacaoController@newPrestadorFormacao');
 
         Route::get('pessoas/getPessoaPerfil', 'Api\App\PessoasController@getPessoaPerfil');
+
+        Route::get('relatorios/{escala}', 'Api\App\RelatoriosController@index');
+        Route::get('transcricoes/{ordemservico}', 'Api\App\TranscricoesController@listTranscricoesByEscalaId');
     });
 
     /*----------------- Web -----------------*/
