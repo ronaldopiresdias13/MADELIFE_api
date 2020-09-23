@@ -96,11 +96,15 @@ class OrdemservicosController extends Controller
                                     }
                                 }
                             } else {
-                                if ($iten2[0] == null) {
-                                    $iten2 = $iten2[$a];
-                                } else {
-                                    foreach ($iten2 as $key => $i) {
-                                        $i[$a];
+                                if ($iten2 != null) {
+                                    if ($iten2->count() > 0) {
+                                        if ($iten2[0] == null) {
+                                            $iten2 = $iten2[$a];
+                                        } else {
+                                            foreach ($iten2 as $key => $i) {
+                                                $i[$a];
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -223,7 +227,7 @@ class OrdemservicosController extends Controller
      */
     public function update(Request $request, Ordemservico $ordemservico)
     {
-        // return $request->all();
+        $ordemservico->empresa_id             = $request['empresa_id'];
         $ordemservico->codigo                 = $request['codigo'];
         $ordemservico->orcamento_id           = $request['orcamento_id'];
         $ordemservico->responsavel_id         = $request['responsavel_id'];
@@ -296,5 +300,42 @@ class OrdemservicosController extends Controller
             ->groupBy('servicos.descricao')
             ->orderBy('count', 'desc')
             ->get();
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function listaOrdemServicosEscalas(Request $request)
+    {
+        $user = $request->user();
+        $profissional = $user->pessoa->profissional;
+
+        $escalas = Ordemservico::with([
+            'orcamento' => function ($query) {
+                $query->select('id', 'cliente_id');
+                $query->with(['homecare' => function ($query) {
+                    $query->select('id', 'orcamento_id', 'paciente_id');
+                    $query->with(['paciente' => function ($query) {
+                        $query->select('id', 'pessoa_id');
+                        $query->with(['pessoa' => function ($query) {
+                            $query->select('id', 'nome');
+                        }]);
+                    }]);
+                }]);
+                $query->with(['cliente' => function ($query) {
+                    $query->select('id', 'pessoa_id');
+                    $query->with(['pessoa' => function ($query) {
+                        $query->select('id', 'nome');
+                    }]);
+                }]);
+            }
+        ])
+            ->where('empresa_id', $profissional->empresa_id)
+            ->where('ativo', true)
+            ->get(['id', 'orcamento_id']);
+
+        return $escalas;
     }
 }

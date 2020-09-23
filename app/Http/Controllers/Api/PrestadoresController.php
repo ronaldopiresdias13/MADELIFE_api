@@ -59,22 +59,12 @@ class PrestadoresController extends Controller
 
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                // if ($key == 0) {
-                //     $itens = Prestador::where(
-                //         ($where['coluna']) ? $where['coluna'] : 'id',
-                //         ($where['expressao']) ? $where['expressao'] : 'like',
-                //         ($where['valor']) ? $where['valor'] : '%'
-                //     );
-                // } else {
                 $itens->where(
                     ($where['coluna']) ? $where['coluna'] : 'id',
                     ($where['expressao']) ? $where['expressao'] : 'like',
                     ($where['valor']) ? $where['valor'] : '%'
                 );
-                // }
             }
-            // } else {
-            //     $itens = Prestador::where('id', 'like', '%');
         }
 
         if ($request['order']) {
@@ -105,11 +95,15 @@ class PrestadoresController extends Controller
                                     }
                                 }
                             } else {
-                                if ($iten2[0] == null) {
-                                    $iten2 = $iten2[$a];
-                                } else {
-                                    foreach ($iten2 as $key => $i) {
-                                        $i[$a];
+                                if ($iten2 != null) {
+                                    if ($iten2->count() > 0) {
+                                        if ($iten2[0] == null) {
+                                            $iten2 = $iten2[$a];
+                                        } else {
+                                            foreach ($iten2 as $key => $i) {
+                                                $i[$a];
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -185,7 +179,7 @@ class PrestadoresController extends Controller
                 ]
             );
         }
-        
+
         // $prestador = new Prestador();
         // $prestador->pessoa             = $request->pessoa;
         // $prestador->fantasia           = $request->fantasia;
@@ -230,11 +224,15 @@ class PrestadoresController extends Controller
                                 }
                             }
                         } else {
-                            if ($iten2[0] == null) {
-                                $iten2 = $iten2[$a];
-                            } else {
-                                foreach ($iten2 as $key => $i) {
-                                    $i[$a];
+                            if ($iten2 != null) {
+                                if ($iten2->count() > 0) {
+                                    if ($iten2[0] == null) {
+                                        $iten2 = $iten2[$a];
+                                    } else {
+                                        foreach ($iten2 as $key => $i) {
+                                            $i[$a];
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -396,10 +394,12 @@ class PrestadoresController extends Controller
             ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
             ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
             ->join('homecares', 'homecares.orcamento_id', '=', 'orcamentos.id')
-            ->select('homecares.nome')
+            ->join('pacientes', 'homecares.paciente_id', '=', 'pacientes.id')
+            ->join('pessoas', 'pacientes.pessoa_id', '=', 'pessoas.id')
+            ->select('pessoas.nome')
             ->where('homecares.ativo', true)
-            ->groupBy('homecares.nome')
-            ->orderBy('homecares.nome')
+            ->groupBy('pessoas.nome')
+            ->orderBy('pessoas.nome')
             ->get();
         return $escalas;
     }

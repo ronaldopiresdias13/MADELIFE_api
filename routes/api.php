@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,33 +13,64 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+//-------------- Rota de Testes --------------//
+Route::get("/teste", "Teste@teste");
 
+/*-------------- Rota de Logs por email --------------*/
+Route::post("sendMailLog", "LogsController@sendMailLog");
+
+/*-------------- Auth Web --------------*/
 Route::group([
     'prefix' => 'auth'
 ], function () {
-    Route::post('loginApp', 'Auth\AuthController@loginApp');
-
     Route::post('login', 'Auth\AuthController@login')->name('login');
     Route::post('register', 'Auth\AuthController@register');
     Route::post('reset', 'Auth\AuthController@reset');
     Route::post('change', 'Auth\AuthController@change');
 
+    /*------------- Rotas Utilizando Token -------------*/
     Route::group(['middleware' => 'auth:api'], function () {
         Route::get('logout', 'Auth\AuthController@logout');
         Route::get('user', 'Auth\AuthController@user');
     });
 });
 
-Route::get("/teste", "Teste@teste");
+/*-------------- Auth App --------------*/
+Route::group([
+    'prefix' => 'app/auth'
+], function () {
+    Route::post('login', 'Api\App\Auth\AuthController@login');
+    // Route::post('register', 'Auth\AuthController@register');
+    Route::post('reset', 'Api\App\Auth\AuthController@reset');
+    
+    /* ------------- Rotas Utilizando Token -------------*/
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::post('change', 'Api\App\Auth\AuthController@change');
+        Route::get('logout', 'Api\App\Auth\AuthController@logout');
+        // Route::get('user', 'Auth\AuthController@user');
+    });
+});
 
-/* ------------- Rotas Utilizando Token ------------- */
+/*------------- Rotas Utilizando Token -------------*/
 Route::group(['middleware' => 'auth:api'], function () {
-    /*--------------------App--------------------*/
-    Route::get('getEscalasHoje', 'Api\EscalasController@getEscalasHoje');
-    Route::get('getEscalasMes', 'Api\EscalasController@getEscalasMes');
+    Route::get('getEscalasMesApp', 'Api\EscalasController@getEscalasMesApp');    // Mudar App e Apagar essa rota
+
+    /*----------------- App -----------------*/
+    Route::prefix('app')->group(function () {
+        Route::get('escalas/listEscalasHoje', 'Api\App\EscalasController@listEscalasHoje');
+        Route::get('escalas/listEscalasMes', 'Api\App\EscalasController@listEscalasMes');
+        Route::get('escalas/getEscalaId/{escala}', 'Api\App\EscalasController@getEscalaId');
+
+        Route::get('formacoes/listFormacoes', 'Api\App\FormacoesController@listFormacoes');
+
+        Route::post('prestadorFormacao/newPrestadorFormacao', 'Api\App\PrestadorFormacaoController@newPrestadorFormacao');
+
+        Route::get('pessoas/getPessoaPerfil', 'Api\App\PessoasController@getPessoaPerfil');
+    });
+
+    /*----------------- Web -----------------*/
+    Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\OrdemservicosController@listaOrdemServicosEscalas');
+    Route::get('transcricoes/listaTranscricoes', 'Api\TranscricoesController@listaTranscricoes');
 });
 
 // Route::get('getEscalasHoje', 'Api\EscalasController@getEscalasHoje')->middleware('auth:api');
@@ -62,12 +92,6 @@ Route::post('agendamentos', 'Api\AgendamentosController@store');
 Route::get('agendamentos/{agendamento}', 'Api\AgendamentosController@show');
 Route::put('agendamentos/{agendamento}', 'Api\AgendamentosController@update');
 Route::delete('agendamentos/{agendamento}', 'Api\AgendamentosController@destroy');
-
-// Route::get('atribuicoes', 'Api\AtribuicoesController@index');
-// Route::post('atribuicoes', 'Api\AtribuicoesController@store');
-// Route::get('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@show');
-// Route::put('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@update');
-// Route::delete('atribuicoes/{atribuicao}', 'Api\AtribuicoesController@destroy');
 
 Route::get('bancos', 'Api\BancosController@index');
 Route::post('bancos', 'Api\BancosController@store');
@@ -148,11 +172,11 @@ Route::get('cotacoes/{cotacao}', 'Api\CotacoesController@show');
 Route::put('cotacoes/{cotacao}', 'Api\CotacoesController@update');
 Route::delete('cotacoes/{cotacao}', 'Api\CotacoesController@destroy');
 
-Route::get('cotacaoproduto', 'Api\CotacaoprodutoController@index');
-Route::post('cotacaoproduto', 'Api\CotacaoprodutoController@store');
-Route::get('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoprodutoController@show');
-Route::put('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoprodutoController@update');
-Route::delete('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoprodutoController@destroy');
+Route::get('cotacaoproduto', 'Api\CotacaoProdutoController@index');
+Route::post('cotacaoproduto', 'Api\CotacaoProdutoController@store');
+Route::get('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoProdutoController@show');
+Route::put('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoProdutoController@update');
+Route::delete('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoProdutoController@destroy');
 
 Route::get('cuidados', 'Api\CuidadosController@index');
 Route::post('cuidados', 'Api\CuidadosController@store');
@@ -167,6 +191,14 @@ Route::post('cuidadoEscalas', 'Api\CuidadoEscalasController@store');
 Route::get('cuidadoEscalas/{cuidadoEscala}', 'Api\CuidadoEscalasController@show');
 Route::put('cuidadoEscalas/{cuidadoEscala}', 'Api\CuidadoEscalasController@update');
 Route::delete('cuidadoEscalas/{cuidadoEscala}', 'Api\CuidadoEscalasController@destroy');
+
+Route::get('cuidadoPacientes', 'Api\CuidadoPacienteController@index');
+Route::post('cuidadoPacientes', 'Api\CuidadoPacienteController@store');
+Route::get('cuidadoPacientes/{cuidadoPaciente}', 'Api\CuidadoPacienteController@show');
+Route::put('cuidadoPacientes/{cuidadoPaciente}', 'Api\CuidadoPacienteController@update');
+Route::delete('cuidadoPacientes/{cuidadoPaciente}', 'Api\CuidadoPacienteController@destroy');
+Route::get('cuidadoPacientes/paciente/{paciente}', 'Api\CuidadoPacienteController@buscacuidadosdopaciente');
+Route::get('cuidadoPacientes/groupby/{paciente}', 'Api\CuidadoPacienteController@groupbycuidadosdopaciente');
 
 Route::get('dadosbancarios', 'Api\DadosbancariosController@index');
 Route::post('dadosbancarios', 'Api\DadosbancariosController@store');
@@ -225,6 +257,7 @@ Route::get('escalas/{escala}', 'Api\EscalasController@show');
 Route::put('escalas/{escala}', 'Api\EscalasController@update');
 Route::delete('escalas/{escala}', 'Api\EscalasController@destroy');
 Route::get('escalas/empresa/{empresa}/dia', 'Api\EscalasController@buscaescalasdodia');
+Route::get('escalas/paciente/{paciente}/data1/{data1}/data2/{data2}', 'Api\EscalasController@buscaPontosPorPeriodoEPaciente');
 
 Route::get('formacoes', 'Api\FormacoesController@index');
 Route::post('formacoes', 'Api\FormacoesController@store');
@@ -340,6 +373,7 @@ Route::post('ordemservicoPrestadores', 'Api\OrdemservicoPrestadoresController@st
 Route::get('ordemservicoPrestadores/{ordemservicoPrestador}', 'Api\OrdemservicoPrestadoresController@show');
 Route::put('ordemservicoPrestadores/{ordemservicoPrestador}', 'Api\OrdemservicoPrestadoresController@update');
 Route::delete('ordemservicoPrestadores/{ordemservicoPrestador}', 'Api\OrdemservicoPrestadoresController@destroy');
+Route::get('ordemservicoPrestadores/ordemservico/{ordemservico}', 'Api\OrdemservicoPrestadoresController@profissionaisatribuidosaopaciente');
 
 Route::get('outros', 'Api\OutrosController@index');
 Route::post('outros', 'Api\OutrosController@store');
@@ -371,6 +405,12 @@ Route::post('patrimonios', 'Api\PatrimoniosController@store');
 Route::get('patrimonios/{patrimonio}', 'Api\PatrimoniosController@show');
 Route::put('patrimonios/{patrimonio}', 'Api\PatrimoniosController@update');
 Route::delete('patrimonios/{patrimonio}', 'Api\PatrimoniosController@destroy');
+
+Route::get('pedidocompras', 'Api\PedidocomprasController@index');
+Route::post('pedidocompras', 'Api\PedidocomprasController@store');
+Route::get('pedidocompras/{pedidocompra}', 'Api\PedidocomprasController@show');
+Route::put('pedidocompras/{pedidocompra}', 'Api\PedidocomprasController@update');
+Route::delete('pedidocompras/{pedidocompra}', 'Api\PedidocomprasController@destroy');
 
 Route::get('pessoas', 'Api\PessoasController@index');
 Route::post('pessoas', 'Api\PessoasController@store');
@@ -409,6 +449,7 @@ Route::put('pontos/{ponto}', 'Api\PontosController@update');
 Route::delete('pontos/{ponto}', 'Api\PontosController@destroy');
 Route::post('pontos/checkin/{escala}', 'Api\PontosController@checkin'); // Custon
 Route::post('pontos/checkout/{escala}', 'Api\PontosController@checkout'); // Custon
+Route::get('pontos/escala/{escala}', 'Api\PontosController@buscaPontosPorIdEscala');
 
 Route::get('prescricoesbs', 'Api\PrescricoesbsController@index');
 Route::post('prescricoesbs', 'Api\PrescricoesbsController@store');
@@ -451,6 +492,7 @@ Route::get('relatorios/{relatorio}', 'Api\RelatoriosController@show');
 Route::put('relatorios/{relatorio}', 'Api\RelatoriosController@update');
 Route::delete('relatorios/{relatorio}', 'Api\RelatoriosController@destroy');
 Route::get('relatoriosOfOrdemservico/{ordemservico}', 'Api\RelatoriosController@relatoriosOfOrdemservico');
+Route::get('relatorios/escala/{escala}', 'Api\RelatoriosController@buscaRelatoriosDaEscala');
 
 Route::get('relatorioescalas', 'Api\RelatorioescalasController@index');
 Route::post('relatorioescalas/{escala}', 'Api\RelatorioescalasController@store');
@@ -524,6 +566,8 @@ Route::post('transcricoes', 'Api\TranscricoesController@store');
 Route::get('transcricoes/{transcricao}', 'Api\TranscricoesController@show');
 Route::put('transcricoes/{transcricao}', 'Api\TranscricoesController@update');
 Route::delete('transcricoes/{transcricao}', 'Api\TranscricoesController@destroy');
+
+Route::delete('transcricaoprodutos/{transcricao_produto}', 'Api\TranscricaoProdutoController@destroy');
 
 Route::get('unidademedidas', 'Api\UnidademedidasController@index');
 Route::post('unidademedidas', 'Api\UnidademedidasController@store');

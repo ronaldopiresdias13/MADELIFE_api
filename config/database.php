@@ -46,11 +46,11 @@ return [
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
+            'host' => env('DB_HOST', 'sqlbancomadelife.mysql.database.azure.com'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'madelife'),
-            'username' => env('DB_USERNAME', 'madelife'),
-            'password' => env('DB_PASSWORD', '8JvBlIqsOObf'),
+            'username' => env('DB_USERNAME', 'usermadelife@sqlbancomadelife'),
+            'password' => env('DB_PASSWORD', '&*S2b-z9'),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
@@ -59,7 +59,7 @@ return [
             'strict' => true,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA', 'C:\ssl\BaltimoreCyberTrustRoot.crt.pem'),
             ]) : [],
             'modes'  => [
                 'ONLY_FULL_GROUP_BY',

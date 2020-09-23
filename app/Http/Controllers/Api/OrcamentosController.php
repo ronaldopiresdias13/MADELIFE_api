@@ -97,11 +97,15 @@ class OrcamentosController extends Controller
                                     }
                                 }
                             } else {
-                                if ($iten2[0] == null) {
-                                    $iten2 = $iten2[$a];
-                                } else {
-                                    foreach ($iten2 as $key => $i) {
-                                        $i[$a];
+                                if ($iten2 != null) {
+                                    if ($iten2->count() > 0) {
+                                        if ($iten2[0] == null) {
+                                            $iten2 = $iten2[$a];
+                                        } else {
+                                            foreach ($iten2 as $key => $i) {
+                                                $i[$a];
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -151,7 +155,7 @@ class OrcamentosController extends Controller
                     $orcamento_servico = OrcamentoServico::create(
                         [
                             'orcamento_id' => $orcamento->id,
-                            'servico_id'   => $servico['servico_id']['id'],
+                            'servico_id'   => $servico['servico_id'],
                             'quantidade'           => $servico['quantidade'],
                             'frequencia'           => $servico['frequencia'],
                             'basecobranca'         => $servico['basecobranca'],
@@ -435,11 +439,15 @@ class OrcamentosController extends Controller
                                 }
                             }
                         } else {
-                            if ($iten2[0] == null) {
-                                $iten2 = $iten2[$a];
-                            } else {
-                                foreach ($iten2 as $key => $i) {
-                                    $i[$a];
+                            if ($iten2 != null) {
+                                if ($iten2->count() > 0) {
+                                    if ($iten2[0] == null) {
+                                        $iten2 = $iten2[$a];
+                                    } else {
+                                        foreach ($iten2 as $key => $i) {
+                                            $i[$a];
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -485,7 +493,7 @@ class OrcamentosController extends Controller
                 ]
             );
 
-            foreach ($orcamento->servicos as $key => $servico) {
+            foreach ($orcamento->orcamento_servicos as $key => $servico) {
                 $servico->delete();
             }
 
@@ -507,6 +515,7 @@ class OrcamentosController extends Controller
                             'icms'                 => $servico['icms'],
                             'inss'                 => $servico['inss'],
                             'iss'                  => $servico['iss'],
+                            'descricao'            => $servico['descricao'],
                             'valorcustomensal'     => $servico['valorcustomensal'],
                             'valorresultadomensal' => $servico['valorresultadomensal'],
                         ]
@@ -514,9 +523,10 @@ class OrcamentosController extends Controller
                 }
             }
 
-            foreach ($orcamento->produtos as $key => $produto) {
+            foreach ($orcamento->orcamento_produtos as $key => $produto) {
                 $produto->delete();
             }
+
 
             if ($request['produtos']) {
                 foreach ($request['produtos'] as $key => $produto) {
@@ -536,7 +546,7 @@ class OrcamentosController extends Controller
                 }
             }
 
-            foreach ($orcamento->custos as $key => $custo) {
+            foreach ($orcamento->orcamentocustos as $key => $custo) {
                 $custo->delete();
             }
 

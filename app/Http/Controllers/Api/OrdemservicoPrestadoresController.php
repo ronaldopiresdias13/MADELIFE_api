@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\OrdemservicoPrestador;
+use App\Ordemservico;
 use App\Prestador;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -192,5 +193,16 @@ class OrdemservicoPrestadoresController extends Controller
     {
         $ordemservicoPrestador->ativo = false;
         $ordemservicoPrestador->save();
+    }
+    public function profissionaisatribuidosaopaciente(Ordemservico $ordemservico)
+    {
+        return OrdemservicoPrestador::With([
+            'prestador.pessoa.conselhos',
+            'prestador.formacoes'
+        ])
+        ->where(
+            'ordemservico_id',
+            $ordemservico->id
+        )->get();
     }
 }

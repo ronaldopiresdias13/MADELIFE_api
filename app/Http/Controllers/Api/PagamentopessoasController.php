@@ -42,22 +42,12 @@ class PagamentopessoasController extends Controller
         }
         if ($request['where']) {
             foreach ($request['where'] as $key => $where) {
-                // if ($key == 0) {
-                //     $itens = Pagamentopessoa::where(
-                //         ($where['coluna']) ? $where['coluna'] : 'id',
-                //         ($where['expressao']) ? $where['expressao'] : 'like',
-                //         ($where['valor']) ? $where['valor'] : '%'
-                //     );
-                // } else {
                 $itens->where(
                     ($where['coluna']) ? $where['coluna'] : 'id',
                     ($where['expressao']) ? $where['expressao'] : 'like',
                     ($where['valor']) ? $where['valor'] : '%'
                 );
-                // }
             }
-            // } else {
-            //     $itens = Pagamentopessoa::where('id', 'like', '%');
         }
         if ($request['order']) {
             foreach ($request['order'] as $key => $order) {
@@ -114,18 +104,18 @@ class PagamentopessoasController extends Controller
      */
     public function store(Request $request)
     {
-        Pagamentopessoa::create($request->all());
-        // $pagamentopessoa = new Pagamentopessoa();
-        // $pagamentopessoa->pessoa_id = $request->pessoa_id;
-        // $pagamentopessoa->empresa_id = $request->empresa_id;
-        // $pagamentopessoa->ordemservico_id = $request->ordemservico_id;
-        // $pagamentopessoa->periodo1 = $request->periodo1;
-        // $pagamentopessoa->periodo2 = $request->periodo2;
-        // $pagamentopessoa->valor = $request->valor;
-        // $pagamentopessoa->observacao = $request->observacao;
-        // $pagamentopessoa->status     = $request->status;
-        // $pagamentopessoa->situacao   = $request->situacao;
-        // $pagamentopessoa->save();
+        // Pagamentopessoa::create($request->all());
+        $pagamentopessoa = new Pagamentopessoa();
+        $pagamentopessoa->pessoa_id = $request->pessoa_id;
+        $pagamentopessoa->empresa_id = $request->empresa_id;
+        $pagamentopessoa->ordemservico_id = $request->ordemservico_id;
+        $pagamentopessoa->periodo1 = $request->periodo1;
+        $pagamentopessoa->periodo2 = $request->periodo2;
+        $pagamentopessoa->valor = $request->valor;
+        $pagamentopessoa->observacao = $request->observacao;
+        $pagamentopessoa->status     = $request->status;
+        $pagamentopessoa->situacao   = $request->situacao;
+        $pagamentopessoa->save();
     }
 
     /**

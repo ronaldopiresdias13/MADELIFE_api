@@ -10,9 +10,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class ResetPassword extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
-    private $user ;
+    private $user;
     private $senha;
 
     /**
@@ -22,7 +23,7 @@ class ResetPassword extends Mailable
      */
     public function __construct(User $user, $senha)
     {
-        $this->user  = $user ;
+        $this->user  = $user;
         $this->senha = $senha;
     }
 
