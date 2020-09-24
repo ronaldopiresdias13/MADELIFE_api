@@ -75,6 +75,10 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         Route::get('pessoas/getPessoaPerfil', 'Api\App\PessoasController@getPessoaPerfil');
 
+        Route::post('pontos', 'Api\PontosController@store');
+        Route::post('pontos/checkin/{escala}', 'Api\App\PontosController@checkin'); // Custon
+        Route::post('pontos/checkout/{escala}', 'Api\App\PontosController@checkout'); // Custon
+
         Route::get('relatorios/{escala}', 'Api\App\RelatoriosController@listRelatoriosByEscalaId');
         Route::post('relatorios', 'Api\App\RelatoriosController@store');
         Route::delete('relatorios/{relatorio}', 'Api\App\RelatoriosController@destroy');
