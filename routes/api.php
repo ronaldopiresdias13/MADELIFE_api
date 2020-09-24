@@ -42,7 +42,7 @@ Route::group([
     Route::post('login', 'Api\App\Auth\AuthController@login');
     // Route::post('register', 'Auth\AuthController@register');
     Route::post('reset', 'Api\App\Auth\AuthController@reset');
-    
+
     /* ------------- Rotas Utilizando Token -------------*/
     Route::group(['middleware' => 'auth:api'], function () {
         Route::post('change', 'Api\App\Auth\AuthController@change');
@@ -69,6 +69,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     });
 
     /*----------------- Web -----------------*/
+    Route::prefix('web')->group(function () {
+        Route::get('escalas/dashboard', 'Api\Web\EscalasController@dashboard');
+    });
+
     Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\OrdemservicosController@listaOrdemServicosEscalas');
     Route::get('transcricoes/listaTranscricoes', 'Api\TranscricoesController@listaTranscricoes');
 });
