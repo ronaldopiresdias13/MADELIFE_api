@@ -16,7 +16,8 @@ class MonitoramentoescalasController extends Controller
      */
     public function listaMonitoramento(Escala $escala)
     {
-        return Monitoramentoescala::where('escala_id', $escala['id'])->get();
+        return Monitoramentoescala::where('escala_id', $escala['id'])
+            ->where('ativo', true)->get();
     }
 
     /**

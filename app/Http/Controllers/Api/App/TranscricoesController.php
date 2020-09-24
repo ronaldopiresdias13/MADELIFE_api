@@ -16,8 +16,10 @@ class TranscricoesController extends Controller
      */
     public function listTranscricoesByEscalaId(Ordemservico $ordemservico)
     {
-        $medicacao = Transcricao::with(['itensTranscricao.produto', 'itensTranscricao.horariomedicamentos'])->where('ordemservico_id', $ordemservico['id'])->get();
-        return $medicacao;
+        return Transcricao::with(['itensTranscricao.produto', 'itensTranscricao.horariomedicamentos'])
+            ->where('ordemservico_id', $ordemservico['id'])
+            ->where('ativo', true)
+            ->get();
     }
 
     /**

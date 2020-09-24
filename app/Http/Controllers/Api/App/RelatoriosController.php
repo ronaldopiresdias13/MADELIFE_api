@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\App;
 
+use App\Escala;
 use App\Http\Controllers\Controller;
 use App\Relatorio;
 use Illuminate\Http\Request;
@@ -13,9 +14,10 @@ class RelatoriosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function listRelatoriosByEscalaId(Escala $escala)
     {
-        //
+        return Relatorio::where('escala_id', $escala['id'])
+            ->where('ativo', true)->get();
     }
 
     /**
@@ -26,7 +28,7 @@ class RelatoriosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Relatorio::create($request->all());
     }
 
     /**
@@ -60,6 +62,7 @@ class RelatoriosController extends Controller
      */
     public function destroy(Relatorio $relatorio)
     {
-        //
+        $relatorio->ativo = false;
+        $relatorio->save();
     }
 }
