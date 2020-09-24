@@ -28,7 +28,17 @@ class AcaomedicamentosController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            Acaomedicamento::create($request->all());
+            $user = $request->user();
+            $prestador = $user->pessoa->prestador->id;
+            Acaomedicamento::create([
+                'transcricao_produto_id' => $request['transcricao_produto_id'],
+                'prestador_id' => $prestador,
+                'data' => $request['data'],
+                'hora' => $request['hora'],
+                'observacao' => $request['observacao'],
+                'status' => $request['status'],
+                'escala_id' => $request['escala_id'],
+            ]);
         });
     }
 
