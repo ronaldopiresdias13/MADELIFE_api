@@ -15,7 +15,6 @@ class EscalasController extends Controller
      */
     public function dashboard(Request $request)
     {
-        $this->request = $request;
         $hoje = getdate();
         $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $hoje['mday'];
 
@@ -54,7 +53,7 @@ class EscalasController extends Controller
             'cuidados',
         ])
             ->where('ativo', true)
-            ->where('empresa_id', 1)
+            ->where('empresa_id', 1) // Pegar empresa do user()
             ->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%')
             ->where('dataentrada', '>=', $request->data_ini ? $request->data_ini : $data)
             ->where('dataentrada', '<=', $request->data_fim ? $request->data_fim : $data)
