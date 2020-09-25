@@ -89,6 +89,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     /*----------------- Web -----------------*/
     Route::prefix('web')->group(function () {
         Route::get('escalas/dashboard', 'Api\Web\EscalasController@dashboard');
+
+        Route::get('prestadores/listNomePrestadores', 'Api\Web\PrestadoresController@listNomePrestadores');
     });
 
     Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\OrdemservicosController@listaOrdemServicosEscalas');
