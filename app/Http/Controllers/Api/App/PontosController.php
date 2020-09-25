@@ -150,4 +150,48 @@ class PontosController extends Controller
                 ->header('Content-Type', 'text/plain');
         }
     }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \App\Escala  $escala
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function assinaturacheckout(Escala $escala, Request $request)
+    {
+        $ponto = Ponto::where('escala_id', $request->escala_id)
+            ->where('tipo', 'Check-in')->first();
+        if ($ponto) {
+            $ponto = Ponto::where('escala_id', $request->escala_id)
+                ->where('tipo', 'Check-out')->first();
+            if ($ponto) {
+                return response()->json('Você já possui Check-out nessa escala!', 400)
+                    ->header('Content-Type', 'text/plain');
+            } else {
+                DB::transaction(function () use ($request) {
+                    Ponto::create(
+                        [
+                            'empresa_id' => $request->empresa_id,
+                            'escala_id'  => $request->escala_id,
+                            'latitude'   => $request->latitude,
+                            'longitude'  => $request->longitude,
+                            'data'       => $request->data,
+                            'hora'       => $request->hora,
+                            'tipo'       => 'Check-out',
+                            'observacao' => $request->observacao,
+                            'status'     => $request->status,
+                        ]
+                    );
+                });
+                $escala->status              = true;
+                $escala->assinaturaprestador = $request->assinaturaprestador;
+                $escala->save();
+                return response()->json('Check-out realizado com Sucesso!', 200)
+                    ->header('Content-Type', 'text/plain');
+            }
+        } else {
+            return response()->json('Você não realizou Check-in nessa escala!', 400)
+                ->header('Content-Type', 'text/plain');
+        }
+    }
 }
