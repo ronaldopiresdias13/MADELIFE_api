@@ -161,6 +161,11 @@ class EscalasController extends Controller
         return $escalas;
     }
 
+    public function getCuidadosByEscalaId(Escala $escala)
+    {
+        return $escala->cuidados;
+    }
+
     /**
      * Update the specified resource in storage.
      *
