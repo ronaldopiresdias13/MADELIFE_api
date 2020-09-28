@@ -71,6 +71,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::delete('dadosbancarios/{dadosbancario}', 'Api\App\DadosbancariosController@destroy');
 
         Route::get('empresaPrestador/meusContratos', 'Api\App\EmpresaPrestadorController@index');
+        Route::put('empresaPrestador/meusContratos/{empresaPrestador}', 'Api\App\EmpresaPrestadorController@update');
 
 
         Route::get('escalas/listEscalasHoje', 'Api\App\EscalasController@listEscalasHoje');

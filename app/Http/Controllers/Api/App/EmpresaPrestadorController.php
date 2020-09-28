@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\App;
 use App\EmpresaPrestador;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EmpresaPrestadorController extends Controller
 {
@@ -52,7 +53,10 @@ class EmpresaPrestadorController extends Controller
      */
     public function update(Request $request, EmpresaPrestador $empresaPrestador)
     {
-        //
+        return $request['status'];
+        DB::transaction(function () use ($request, $empresaPrestador) {
+            $empresaPrestador->status = $request['status'];
+        });
     }
 
     /**
