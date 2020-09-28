@@ -70,6 +70,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::put('dadosbancarios/{dadosbancario}', 'Api\App\DadosbancariosController@update');
         Route::delete('dadosbancarios/{dadosbancario}', 'Api\App\DadosbancariosController@destroy');
 
+        Route::get('empresaPrestador/meusContratos', 'Api\App\EmpresaPrestadorController@index');
+
+
         Route::get('escalas/listEscalasHoje', 'Api\App\EscalasController@listEscalasHoje');
         Route::get('escalas/listEscalasMes', 'Api\App\EscalasController@listEscalasMes');
         Route::get('escalas/getEscalaId/{escala}', 'Api\App\EscalasController@getEscalaId');
