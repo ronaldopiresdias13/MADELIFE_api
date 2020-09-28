@@ -114,6 +114,9 @@ Route::group(['middleware' => 'auth:api'], function () {
     });
     /*----------------- Web -----------------*/
     Route::prefix('web')->group(function () {
+        Route::get('categoriadocumentos/listCategorias', 'Api\Web\CategoriadocumentosController@listCategorias');
+        Route::get('categoriadocumentos/newCategorias', 'Api\Web\CategoriadocumentosController@newCategoria');
+
         Route::get('escalas/dashboard', 'Api\Web\EscalasController@dashboard');
 
         Route::get('prestadores/listNomePrestadores', 'Api\Web\PrestadoresController@listNomePrestadores');

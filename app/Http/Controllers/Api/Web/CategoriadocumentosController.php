@@ -16,6 +16,8 @@ class CategoriadocumentosController extends Controller
     public function listCategorias()
     {
         $categorias = Categoriadocumento::with('categorias')->get();
+
+        return $categorias;
     }
 
     /**
@@ -24,7 +26,7 @@ class CategoriadocumentosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function newCategoria(Request $request)
     {
         Categoriadocumento::updateOrCreate(
             [
