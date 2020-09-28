@@ -28,6 +28,7 @@ class PacientesController extends Controller
             ->where('ordemservicos.ativo', true)
             ->where('ordemservicos.empresa_id', $profissional->empresa_id)
             ->select('ordemservicos.id as value', 'pessoas.nome as label')
+            ->orderBy('pessoas.nome')
             ->get();
         return $pacientes;
 
