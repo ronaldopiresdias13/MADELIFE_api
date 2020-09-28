@@ -58,6 +58,17 @@ Route::group(['middleware' => 'auth:api'], function () {
     /*----------------- App -----------------*/
     Route::prefix('app')->group(function () {
         Route::post('acaomedicamentos', 'Api\App\AcaomedicamentosController@store');
+        Route::get('bancos', 'Api\App\BancosController@index');
+
+        Route::get('cidades/{uf}', 'Api\App\CidadeController@index');
+
+        Route::post('conselhos', 'Api\App\ConselhosController@store');
+        Route::put('conselhos/{conselho}', 'Api\App\ConselhosController@update');
+        Route::delete('conselhos/{conselho}', 'Api\App\ConselhosController@destroy');
+
+        Route::post('dadosbancarios', 'Api\App\DadosbancariosController@store');
+        Route::put('dadosbancarios/{dadosbancario}', 'Api\App\DadosbancariosController@update');
+        Route::delete('dadosbancarios/{dadosbancario}', 'Api\App\DadosbancariosController@destroy');
 
         Route::get('escalas/listEscalasHoje', 'Api\App\EscalasController@listEscalasHoje');
         Route::get('escalas/listEscalasMes', 'Api\App\EscalasController@listEscalasMes');
@@ -74,10 +85,22 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('prestadorFormacao/newPrestadorFormacao', 'Api\App\PrestadorFormacaoController@newPrestadorFormacao');
 
         Route::get('pessoas/getPessoaPerfil', 'Api\App\PessoasController@getPessoaPerfil');
+        Route::put('pessoas/atualizaDadosPessoais/{pessoa}', 'Api\App\PessoasController@atualizaDadosPessoais');
+
+        Route::post('pessoaTelefones', 'Api\App\PessoaTelefoneController@store');
+        Route::delete('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@destroy');
+
+        Route::post('pessoaEmails', 'Api\App\PessoaEmailController@store');
+        Route::delete('pessoaEmails/{pessoaEmail}', 'Api\App\PessoaEmailController@destroy');
+
+        Route::post('pessoaEnderecos', 'Api\App\PessoaEnderecoController@store');
+        Route::put('pessoaEnderecos/{pessoaEndereco}', 'Api\App\PessoaEnderecoController@update');
+        Route::delete('pessoaEnderecos/{pessoaEndereco}', 'Api\App\PessoaEnderecoController@destroy');
 
         Route::post('pontos', 'Api\PontosController@store');
         Route::post('pontos/checkin/{escala}', 'Api\App\PontosController@checkin'); // Custon
         Route::post('pontos/checkout/{escala}', 'Api\App\PontosController@checkout'); // Custon
+        Route::post('pontos/assinaturacheckout/{escala}', 'Api\App\PontosController@assinaturacheckout'); // Custon
 
         Route::get('relatorios/{escala}', 'Api\App\RelatoriosController@listRelatoriosByEscalaId');
         Route::post('relatorios', 'Api\App\RelatoriosController@store');
@@ -85,7 +108,6 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         Route::get('transcricoes/{ordemservico}', 'Api\App\TranscricoesController@listTranscricoesByEscalaId');
     });
-
     /*----------------- Web -----------------*/
     Route::prefix('web')->group(function () {
         Route::get('escalas/dashboard', 'Api\Web\EscalasController@dashboard');

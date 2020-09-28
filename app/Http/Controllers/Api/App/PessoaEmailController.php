@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api\App;
 
+use App\Email;
 use App\Http\Controllers\Controller;
-use App\PessoaTelefone;
-use App\Telefone;
+use App\PessoaEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class PessoaTelefoneController extends Controller
+class PessoaEmailController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -29,11 +29,11 @@ class PessoaTelefoneController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            PessoaTelefone::updateOrCreate(
+            PessoaEmail::updateOrCreate(
                 [
                     'pessoa_id' => $request->pessoa_id,
-                    'telefone_id'  => Telefone::firstOrCreate(
-                        ['telefone' => $request['telefone']['telefone']]
+                    'email_id'  => Email::firstOrCreate(
+                        ['email' => $request['email']['email']]
                     )->id,
                 ],
                 [
@@ -48,10 +48,10 @@ class PessoaTelefoneController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\PessoaTelefone  $pessoaTelefone
+     * @param  \App\PessoaEmail  $pessoaEmail
      * @return \Illuminate\Http\Response
      */
-    public function show(PessoaTelefone $pessoaTelefone)
+    public function show(PessoaEmail $pessoaEmail)
     {
         //
     }
@@ -60,10 +60,10 @@ class PessoaTelefoneController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\PessoaTelefone  $pessoaTelefone
+     * @param  \App\PessoaEmail  $pessoaEmail
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PessoaTelefone $pessoaTelefone)
+    public function update(Request $request, PessoaEmail $pessoaEmail)
     {
         //
     }
@@ -71,12 +71,12 @@ class PessoaTelefoneController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\PessoaTelefone  $pessoaTelefone
+     * @param  \App\PessoaEmail  $pessoaEmail
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PessoaTelefone $pessoaTelefone)
+    public function destroy(PessoaEmail $pessoaEmail)
     {
-        $pessoaTelefone->ativo = false;
-        $pessoaTelefone->save();
+        $pessoaEmail->ativo = false;
+        $pessoaEmail->save();
     }
 }
