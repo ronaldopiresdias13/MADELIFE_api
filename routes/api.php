@@ -58,6 +58,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     /*----------------- App -----------------*/
     Route::prefix('app')->group(function () {
         Route::post('acaomedicamentos', 'Api\App\AcaomedicamentosController@store');
+        Route::get('cidades/{uf}', 'Api\App\CidadeController@index');
 
         Route::get('escalas/listEscalasHoje', 'Api\App\EscalasController@listEscalasHoje');
         Route::get('escalas/listEscalasMes', 'Api\App\EscalasController@listEscalasMes');
@@ -75,9 +76,20 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         Route::get('pessoas/getPessoaPerfil', 'Api\App\PessoasController@getPessoaPerfil');
 
+        Route::post('pessoaTelefones', 'Api\App\PessoaTelefoneController@store');
+        Route::delete('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@destroy');
+
+        Route::post('pessoaEmails', 'Api\App\PessoaEmailController@store');
+        Route::delete('pessoaEmails/{pessoaEmail}', 'Api\App\PessoaEmailController@destroy');
+
+        Route::post('pessoaEnderecos', 'Api\App\PessoaEnderecoController@store');
+        Route::put('pessoaEnderecos/{pessoaEndereco}', 'Api\App\PessoaEnderecoController@update');
+        Route::delete('pessoaEnderecos/{pessoaEndereco}', 'Api\App\PessoaEnderecoController@destroy');
+
         Route::post('pontos', 'Api\PontosController@store');
         Route::post('pontos/checkin/{escala}', 'Api\App\PontosController@checkin'); // Custon
         Route::post('pontos/checkout/{escala}', 'Api\App\PontosController@checkout'); // Custon
+        Route::post('pontos/assinaturacheckout/{escala}', 'Api\App\PontosController@assinaturacheckout'); // Custon
 
         Route::get('relatorios/{escala}', 'Api\App\RelatoriosController@listRelatoriosByEscalaId');
         Route::post('relatorios', 'Api\App\RelatoriosController@store');
