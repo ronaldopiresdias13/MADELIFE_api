@@ -72,6 +72,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         Route::get('empresaPrestador/meusContratos', 'Api\App\EmpresaPrestadorController@index');
         Route::put('empresaPrestador/meusContratos/{empresaPrestador}', 'Api\App\EmpresaPrestadorController@update');
+        Route::get('empresaPrestador/{empresaPrestador}/downloadFile', 'Api\App\EmpresaPrestadorController@downloadFile');
 
 
         Route::get('escalas/listEscalasHoje', 'Api\App\EscalasController@listEscalasHoje');
