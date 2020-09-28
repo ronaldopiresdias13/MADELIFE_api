@@ -85,6 +85,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('prestadorFormacao/newPrestadorFormacao', 'Api\App\PrestadorFormacaoController@newPrestadorFormacao');
 
         Route::get('pessoas/getPessoaPerfil', 'Api\App\PessoasController@getPessoaPerfil');
+        Route::put('pessoas/atualizaDadosPessoais/{pessoa}', 'Api\App\PessoasController@atualizaDadosPessoais');
 
         Route::post('pessoaTelefones', 'Api\App\PessoaTelefoneController@store');
         Route::delete('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@destroy');
@@ -107,7 +108,6 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         Route::get('transcricoes/{ordemservico}', 'Api\App\TranscricoesController@listTranscricoesByEscalaId');
     });
-
     /*----------------- Web -----------------*/
     Route::prefix('web')->group(function () {
         Route::get('escalas/dashboard', 'Api\Web\EscalasController@dashboard');
