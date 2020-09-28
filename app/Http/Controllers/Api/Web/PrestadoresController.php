@@ -29,9 +29,15 @@ class PrestadoresController extends Controller
 
         $prestadores = DB::table('prestadores')
             ->join('pessoas', 'pessoas.id', '=', 'prestadores.pessoa_id')
-            ->select('prestadores.id', 'pessoas.nome')
+            ->select('prestadores.id as value', 'pessoas.nome as label')
+            ->where('prestadores.ativo', true)
             ->orderBy('pessoas.nome')
             ->get();
+        // $prestadores = Prestador::where('ativo', true)
+        //     ->join('pessoas', 'pessoas.id', '=', 'prestadores.pessoa_id')
+        //     ->select('prestadores.id', 'pessoas.nome')
+        //     ->orderBy('pessoas.nome');
+        // // ->get();
 
         return $prestadores;
     }
