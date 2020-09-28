@@ -53,9 +53,10 @@ class EmpresaPrestadorController extends Controller
      */
     public function update(Request $request, EmpresaPrestador $empresaPrestador)
     {
-        return $request['status'];
+        // return $request['status'];
         DB::transaction(function () use ($request, $empresaPrestador) {
             $empresaPrestador->status = $request['status'];
+            $empresaPrestador->save();
         });
     }
 
