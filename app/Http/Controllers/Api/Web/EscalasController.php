@@ -62,7 +62,7 @@ class EscalasController extends Controller
             // ->limit(5)
             // ->get();
             ->get([
-                'id', 'dataentrada', 'servico_id', 'periodo', 'tipo', 'prestador_id', 'ordemservico_id', 'status'
+                'id', 'dataentrada', 'datasaida', 'horaentrada', 'horasaida', 'servico_id', 'periodo', 'tipo', 'prestador_id', 'ordemservico_id', 'status'
             ]);
         return $escalas;
     }
