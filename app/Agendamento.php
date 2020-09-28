@@ -15,7 +15,7 @@ class Agendamento extends Model
     // protected $hidden = [
     //     'id'
     // ];
-    
+
     public function sala()
     {
         return $this->belongsTo('App\Sala');

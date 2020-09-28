@@ -91,6 +91,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('escalas/dashboard', 'Api\Web\EscalasController@dashboard');
 
         Route::get('prestadores/listNomePrestadores', 'Api\Web\PrestadoresController@listNomePrestadores');
+        Route::get('prestadores/listPrestadoresComFormacoes', 'Api\Web\PrestadoresController@listPrestadoresComFormacoes');
 
         Route::get('pacientes/listNomePacientes', 'Api\Web\PacientesController@listNomePacientes');
     });
