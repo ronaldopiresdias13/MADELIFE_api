@@ -58,7 +58,17 @@ Route::group(['middleware' => 'auth:api'], function () {
     /*----------------- App -----------------*/
     Route::prefix('app')->group(function () {
         Route::post('acaomedicamentos', 'Api\App\AcaomedicamentosController@store');
+        Route::get('bancos', 'Api\App\BancosController@index');
+
         Route::get('cidades/{uf}', 'Api\App\CidadeController@index');
+
+        Route::post('conselhos', 'Api\App\ConselhosController@store');
+        Route::put('conselhos/{conselho}', 'Api\App\ConselhosController@update');
+        Route::delete('conselhos/{conselho}', 'Api\App\ConselhosController@destroy');
+
+        Route::post('dadosbancarios', 'Api\App\DadosbancariosController@store');
+        Route::put('dadosbancarios/{dadosbancario}', 'Api\App\DadosbancariosController@update');
+        Route::delete('dadosbancarios/{dadosbancario}', 'Api\App\DadosbancariosController@destroy');
 
         Route::get('escalas/listEscalasHoje', 'Api\App\EscalasController@listEscalasHoje');
         Route::get('escalas/listEscalasMes', 'Api\App\EscalasController@listEscalasMes');
