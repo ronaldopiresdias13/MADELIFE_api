@@ -289,7 +289,13 @@ class EmpresaPrestadorController extends Controller
     public function downloadFile(EmpresaPrestador $empresaPrestador)
     {
         // return $empresaPrestador;
-        $file = Storage::get($empresaPrestador['contrato']);
+        if (!Storage::exists($empresaPrestador['contrato'])) {
+            return response()
+                ->json('Não foi possivel encontrar o arquivo desejado!', 404)
+                ->header('Content-Type', 'text/plain');
+        } else {
+            $file = Storage::get($empresaPrestador['contrato']);
+        }
 
         $response =  array(
             'nome' => $empresaPrestador['nome'],
@@ -298,6 +304,7 @@ class EmpresaPrestadorController extends Controller
 
         return response()->json($response);
     }
+
     public function quantidadeempresaprestador(Empresa $empresa)
     {
         return EmpresaPrestador::where('empresa_id', $empresa['id'])->where('ativo', 1)->count();

@@ -70,6 +70,11 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::put('dadosbancarios/{dadosbancario}', 'Api\App\DadosbancariosController@update');
         Route::delete('dadosbancarios/{dadosbancario}', 'Api\App\DadosbancariosController@destroy');
 
+        Route::get('empresaPrestador/meusContratos', 'Api\App\EmpresaPrestadorController@index');
+        Route::put('empresaPrestador/meusContratos/{empresaPrestador}', 'Api\App\EmpresaPrestadorController@update');
+        Route::get('empresaPrestador/{empresaPrestador}/downloadFile', 'Api\App\EmpresaPrestadorController@downloadFile');
+
+
         Route::get('escalas/listEscalasHoje', 'Api\App\EscalasController@listEscalasHoje');
         Route::get('escalas/listEscalasMes', 'Api\App\EscalasController@listEscalasMes');
         Route::get('escalas/getEscalaId/{escala}', 'Api\App\EscalasController@getEscalaId');
@@ -110,9 +115,13 @@ Route::group(['middleware' => 'auth:api'], function () {
     });
     /*----------------- Web -----------------*/
     Route::prefix('web')->group(function () {
+        Route::get('categoriadocumentos/listCategorias', 'Api\Web\CategoriadocumentosController@listCategorias');
+        Route::get('categoriadocumentos/newCategorias', 'Api\Web\CategoriadocumentosController@newCategoria');
+
         Route::get('escalas/dashboard', 'Api\Web\EscalasController@dashboard');
 
         Route::get('prestadores/listNomePrestadores', 'Api\Web\PrestadoresController@listNomePrestadores');
+        Route::get('prestadores/listPrestadoresComFormacoes', 'Api\Web\PrestadoresController@listPrestadoresComFormacoes');
 
         Route::get('pacientes/listNomePacientes', 'Api\Web\PacientesController@listNomePacientes');
     });

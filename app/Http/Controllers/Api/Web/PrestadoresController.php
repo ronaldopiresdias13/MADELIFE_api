@@ -43,6 +43,36 @@ class PrestadoresController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function listPrestadoresComFormacoes(Request $request)
+    {
+        // $user = $request->user();
+
+        // $prestadores = Prestador::with([
+        //     'pessoa' => function ($query) {
+        //         $query->select('id', 'nome');
+        //     }
+        // ])->get(['id', 'pessoa_id']);
+
+
+        // Alterar para trazer somente os prestadores da minha empresa atravez do ususario autenticado
+
+        $prestadores = Prestador::with('pessoa', 'formacoes')
+            ->where('ativo', true)
+            ->get();
+        // $prestadores = Prestador::where('ativo', true)
+        //     ->join('pessoas', 'pessoas.id', '=', 'prestadores.pessoa_id')
+        //     ->select('prestadores.id', 'pessoas.nome')
+        //     ->orderBy('pessoas.nome');
+        // // ->get();
+
+        return $prestadores;
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
