@@ -57,9 +57,20 @@ class PessoasController extends Controller
      * @param  \App\Pessoa  $pessoa
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Pessoa $pessoa)
+    public function atualizaDadosPessoais(Request $request, Pessoa $pessoa)
     {
-        //
+        $pessoa->nome = $request['nome'];
+        $pessoa->nascimento = $request['nascimento'];
+        $pessoa->cpfcnpj = $request['cpfcnpj'];
+        $pessoa->rgie = $request['rgie'];
+        $pessoa->observacoes = $request['observacoes'];
+        $pessoa->perfil = $request['perfil'];
+        $pessoa->status = $request['status'];
+        $pessoa->save();
+
+        $prestador = $pessoa->prestador;
+        $prestador->sexo = $request['prestador']['sexo'];
+        $prestador->save();
     }
 
     /**

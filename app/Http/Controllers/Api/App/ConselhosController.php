@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Api\App;
 
+use App\Conselho;
 use App\Http\Controllers\Controller;
-use App\PessoaTelefone;
-use App\Telefone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class PessoaTelefoneController extends Controller
+class ConselhosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -29,29 +28,22 @@ class PessoaTelefoneController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            PessoaTelefone::updateOrCreate(
-                [
-                    'pessoa_id' => $request->pessoa_id,
-                    'telefone_id'  => Telefone::firstOrCreate(
-                        ['telefone' => $request['telefone']['telefone']]
-                    )->id,
-                ],
-                [
-                    'tipo'      => $request['tipo'],
-                    'descricao' => $request['descricao'],
-                    'ativo'     => true
-                ]
-            );
+            $conselho = new Conselho();
+            $conselho->instituicao = $request->instituicao;
+            $conselho->uf          = $request->uf;
+            $conselho->numero      = $request->numero;
+            $conselho->pessoa_id   = $request->pessoa_id;
+            $conselho->save();
         });
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\PessoaTelefone  $pessoaTelefone
+     * @param  \App\Conselho  $conselho
      * @return \Illuminate\Http\Response
      */
-    public function show(PessoaTelefone $pessoaTelefone)
+    public function show(Conselho $conselho)
     {
         //
     }
@@ -60,23 +52,25 @@ class PessoaTelefoneController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\PessoaTelefone  $pessoaTelefone
+     * @param  \App\Conselho  $conselho
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PessoaTelefone $pessoaTelefone)
+    public function update(Request $request, Conselho $conselho)
     {
-        //
+        DB::transaction(function () use ($request, $conselho) {
+            $conselho->update($request->all());
+        });
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\PessoaTelefone  $pessoaTelefone
+     * @param  \App\Conselho  $conselho
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PessoaTelefone $pessoaTelefone)
+    public function destroy(Conselho $conselho)
     {
-        $pessoaTelefone->ativo = false;
-        $pessoaTelefone->save();
+        $conselho->ativo = false;
+        $conselho->save();
     }
 }
