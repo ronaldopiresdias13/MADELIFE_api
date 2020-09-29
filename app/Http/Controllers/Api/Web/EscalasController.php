@@ -51,6 +51,8 @@ class EscalasController extends Controller
             },
             'pontos',
             'cuidados',
+            'relatorios',
+            'monitoramentos'
         ])
             ->where('ativo', true)
             ->where('empresa_id', 1) // Pegar empresa do user()
@@ -61,7 +63,7 @@ class EscalasController extends Controller
             ->where('servico_id', 'like', $request->servico_id ? $request->servico_id : '%')
             ->where('empresa_id', 'like', $request->empresa_id ? $request->empresa_id : '%')
             // ->limit(5)
-            // ->get();
+            ->orderBy('dataentrada')
             ->get([
                 'id', 'dataentrada', 'datasaida', 'horaentrada', 'horasaida', 'valorhoradiurno', 'valorhoranoturno', 'valoradicional','motivoadicional', 'servico_id', 'periodo', 'tipo', 'prestador_id', 'ordemservico_id', 'status'
             ]);

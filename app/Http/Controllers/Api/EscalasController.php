@@ -324,8 +324,8 @@ class EscalasController extends Controller
         // return Escala::With(['servico', 'prestador.formacoes', 'pontos', 'prestador.pessoa.conselhos', 'ordemservico.orcamento.homecare.paciente.pessoa'])->where('ativo', true)->where('dataentrada', date('Y-m-d'))->get();
         return Escala::With([
             'cuidados',
-            // 'monitoramentos',
-            // 'relatorios',
+            'monitoramentos',
+            'relatorios',
             'servico',
             'prestador.formacoes',
             'pontos',
