@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'MadeLife - Gestão Dedicada a Vida'),
+    'name' => env('APP_NAME', 'MadeLife Gestão em Saúde'),
 
     /*
     |--------------------------------------------------------------------------
@@ -119,7 +119,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY', 'base64:ktahXK/uIO+3dvMp9s6sxNJKT3GF/N8wUj0mCiJe+EA='),
+    'key' => env('APP_KEY'),
 
     'cipher' => 'AES-256-CBC',
 
