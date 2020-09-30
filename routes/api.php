@@ -107,6 +107,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('pontos/checkout/{escala}', 'Api\App\PontosController@checkout'); // Custon
         Route::post('pontos/assinaturacheckout/{escala}', 'Api\App\PontosController@assinaturacheckout'); // Custon
 
+        Route::get('prestadores/meuspacientes', 'Api\App\PrestadoresController@meuspacientes'); // Custon
+
         Route::get('relatorios/{escala}', 'Api\App\RelatoriosController@listRelatoriosByEscalaId');
         Route::post('relatorios', 'Api\App\RelatoriosController@store');
         Route::delete('relatorios/{relatorio}', 'Api\App\RelatoriosController@destroy');
