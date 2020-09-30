@@ -59,9 +59,9 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
-            'options' => array(
-		PDO::MYSQL_ATTR_SSL_CA => storage_path() . '/BaltimoreCyberTrustRoot.crt.pem'
-	    ),
+	    'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA', storage_path() . '/BaltimoreCyberTrustRoot.crt.pem'),
+            ]) : [],
             'modes'  => [
                 'ONLY_FULL_GROUP_BY',
                 'STRICT_TRANS_TABLES',
