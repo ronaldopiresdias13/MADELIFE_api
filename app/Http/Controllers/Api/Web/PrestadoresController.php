@@ -60,14 +60,14 @@ class PrestadoresController extends Controller
 
         // Alterar para trazer somente os prestadores da minha empresa atravez do ususario autenticado
 
-        $prestadores = Prestador::with('pessoa', 'formacoes')
-            ->where('ativo', true)
-            ->get();
-        // $prestadores = Prestador::where('ativo', true)
-        //     ->join('pessoas', 'pessoas.id', '=', 'prestadores.pessoa_id')
-        //     ->select('prestadores.id', 'pessoas.nome')
-        //     ->orderBy('pessoas.nome');
-        // // ->get();
+        // $prestadores = Prestador::with('pessoa', 'formacoes')
+        //     ->where('ativo', true)
+        //     ->get();
+        $prestadores = Prestador::where('ativo', true)
+            ->join('pessoas', 'pessoas.id', '=', 'prestadores.pessoa_id')
+            ->select('prestadores.id', 'pessoas.nome')
+            ->orderBy('pessoas.nome');
+        // ->get();
 
         return $prestadores;
     }
