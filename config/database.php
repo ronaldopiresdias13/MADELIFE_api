@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Support\Str;
@@ -46,11 +47,11 @@ return [
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', 'sqlbancomadelife.mysql.database.azure.com'),
+            'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'madelife'),
-            'username' => env('DB_USERNAME', 'usermadelife@sqlbancomadelife'),
-            'password' => env('DB_PASSWORD', '&*S2b-z9'),
+            'database' => env('DB_DATABASE', 'forget'),
+            'username' => env('DB_USERNAME', 'forget'),
+            'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
@@ -58,9 +59,9 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA', 'C:\ssl\BaltimoreCyberTrustRoot.crt.pem'),
-            ]) : [],
+            'options' => array(
+		PDO::MYSQL_ATTR_SSL_CA => storage_path() . '/BaltimoreCyberTrustRoot.crt.pem'
+	    ),
             'modes'  => [
                 'ONLY_FULL_GROUP_BY',
                 'STRICT_TRANS_TABLES',
