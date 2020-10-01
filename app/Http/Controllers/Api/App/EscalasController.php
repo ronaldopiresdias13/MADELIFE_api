@@ -29,6 +29,7 @@ class EscalasController extends Controller
             ($hoje['mday'] < 10 ? '0' . $hoje['mday'] : $hoje['mday']);
         // return $dataAtual;
         $escalas = Escala::with([
+            'pontos',
             'ordemservico' => function ($query) {
                 $query->select('id', 'orcamento_id');
                 $query->with(['orcamento' => function ($query) {
@@ -80,6 +81,7 @@ class EscalasController extends Controller
 
         // $escalas = Escala::with('ordemservico.orcamento.homecare.paciente.pessoa')
         $escalas = Escala::with([
+            'pontos',
             'ordemservico' => function ($query) {
                 $query->select('id', 'orcamento_id');
                 $query->with(['orcamento' => function ($query) {
