@@ -46,7 +46,7 @@ class DocumentosController extends Controller
                 DB::transaction(function () use ($request, $nomeOriginal, $caminho, $nome) {
                     Documento::create(
                         [
-                            'peciente_id'  => $request['paciente_id'],
+                            'paciente_id'  => $request['paciente_id'],
                             'mes'          => $request['mes'],
                             'ano'          => $request['ano'],
                             'nome'         => $nomeOriginal,
