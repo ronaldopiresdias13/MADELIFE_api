@@ -6,6 +6,7 @@ use App\Documento;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class DocumentosController extends Controller
 {
@@ -103,9 +104,16 @@ class DocumentosController extends Controller
      * @param  \App\Documento  $documento
      * @return \Illuminate\Http\Response
      */
-    public function show(Documento $documento)
+    public function download(Documento $documento)
     {
-        //
+        $file = Storage::get($documento['caminho']);
+
+        $response =  array(
+            'nome' => $documento['nome'],
+            'file' => base64_encode($file)
+        );
+
+        return response()->json($response);
     }
 
     /**
@@ -126,8 +134,9 @@ class DocumentosController extends Controller
      * @param  \App\Documento  $documento
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Documento $documento)
+    public function delete(Documento $documento)
     {
-        //
+        $documento->ativo = false;
+        $documento->save();
     }
 }

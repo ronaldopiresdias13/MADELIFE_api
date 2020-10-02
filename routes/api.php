@@ -120,7 +120,10 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('categoriadocumentos/listCategorias', 'Api\Web\CategoriadocumentosController@listCategorias');
         Route::post('categoriadocumentos/newCategoria', 'Api\Web\CategoriadocumentosController@newCategoria');
 
+        Route::get('documentos/listDocumentos', 'Api\Web\DocumentosController@listDocumentos');
         Route::post('documentos/newDocumento', 'Api\Web\DocumentosController@newDocumento');
+        Route::get('documentos/download/{documento}', 'Api\Web\DocumentosController@download');
+        Route::delete('documentos/delete/{documento}', 'Api\Web\DocumentosController@delete');
 
         Route::get('escalas/dashboard', 'Api\Web\EscalasController@dashboard');
 
