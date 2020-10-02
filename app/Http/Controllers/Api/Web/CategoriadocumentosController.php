@@ -15,7 +15,8 @@ class CategoriadocumentosController extends Controller
      */
     public function listCategorias()
     {
-        $categorias = Categoriadocumento::with('categorias')->get();
+        // $categorias = Categoriadocumento::with('categorias')->get();
+        $categorias = Categoriadocumento::all();
 
         return $categorias;
     }
@@ -30,7 +31,7 @@ class CategoriadocumentosController extends Controller
     {
         Categoriadocumento::updateOrCreate(
             [
-                'nome' => $request['nome']
+                'categoria' => $request['categoria']
             ],
             [
                 'ativo' => true
