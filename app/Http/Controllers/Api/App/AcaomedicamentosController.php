@@ -40,6 +40,8 @@ class AcaomedicamentosController extends Controller
                 'escala_id' => $request['escala_id'],
             ]);
         });
+
+        return response()->json('Salvo com sucesso!', 200)->header('Content-Type', 'text/plain');
     }
 
     /**

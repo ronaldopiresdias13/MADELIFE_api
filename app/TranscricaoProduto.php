@@ -17,4 +17,8 @@ class TranscricaoProduto extends Model
     {
         return $this->belongsTo('App\Produto');
     }
+    public function acoesmedicamentos()
+    {
+        return $this->hasMany('App\Acaomedicamento')->where('ativo', true);
+    }
 }
