@@ -21,7 +21,8 @@ class DocumentosController extends Controller
         $pacientes = Paciente::with([
             'pessoa',
             'documentos' => function ($query) use ($request, $hoje) {
-                $query->where('mes', $request->mes ? $request->mes : $hoje['mon'])
+                $query->where('categoria_id', 'like', $request->categoria_id ? $request->categoria_id : '%')
+                    ->where('mes', $request->mes ? $request->mes : $hoje['mon'])
                     ->where('ano', $request->ano ? $request->ano : $hoje['year']);
             }
         ])

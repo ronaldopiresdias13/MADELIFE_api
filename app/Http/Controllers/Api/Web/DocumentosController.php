@@ -21,6 +21,7 @@ class DocumentosController extends Controller
 
         $documentos = Documento::where('ativo', true)
             ->where('paciente_id', 'like', $request->paciente_id ? $request->paciente_id : '%')
+            ->where('categoria_id', 'like', $request->categoria_id ? $request->categoria_id : '%')
             ->where('mes', $request->mes ? $request->mes : $hoje['mon'])
             ->where('ano', $request->ano ? $request->ano : $hoje['year'])
             ->get();
