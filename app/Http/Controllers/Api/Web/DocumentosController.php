@@ -36,7 +36,6 @@ class DocumentosController extends Controller
      */
     public function newDocumento(Request $request)
     {
-        return $request->paciente_id;
         $file = $request->file('file');
         if ($file->isValid()) {
             $md5 = md5_file($file);
