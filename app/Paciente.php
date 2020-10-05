@@ -17,4 +17,9 @@ class Paciente extends Model
     {
         return $this->belongsToMany('App\Cuidado', 'cuidado_paciente')->withPivot('id', 'formacao_id');
     }
+
+    public function documentos()
+    {
+        return $this->hasMany('App\Documento')->where('ativo', true);
+    }
 }
