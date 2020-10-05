@@ -36,6 +36,7 @@ class DocumentosController extends Controller
      */
     public function newDocumento(Request $request)
     {
+        return $request->paciente_id;
         $file = $request->file('file');
         if ($file->isValid()) {
             $md5 = md5_file($file);
@@ -47,7 +48,7 @@ class DocumentosController extends Controller
                 DB::transaction(function () use ($request, $nomeOriginal, $caminho, $nome) {
                     Documento::create(
                         [
-                            'peciente_id'  => $request['paciente_id'],
+                            'paciente_id'  => $request['paciente_id'],
                             'mes'          => $request['mes'],
                             'ano'          => $request['ano'],
                             'nome'         => $nomeOriginal,
