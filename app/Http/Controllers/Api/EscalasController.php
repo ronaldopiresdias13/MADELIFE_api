@@ -291,6 +291,7 @@ class EscalasController extends Controller
                 }]);
             }
         ])
+            ->where('ativo', true)
             ->where('prestador_id', $prestador->id)
             ->where(
                 'datasaida',
@@ -339,7 +340,8 @@ class EscalasController extends Controller
         // return DB::table('escalas')->join('pontos', 'pontos.escala_id', '=', 'escalas.id')->where('ativo', true)->limit(1)->get();
     }
 
-    public function buscaPontosPorPeriodoEPaciente(string $paciente, string $data1, string $data2 ){
+    public function buscaPontosPorPeriodoEPaciente(string $paciente, string $data1, string $data2)
+    {
         return Escala::With([
             'ordemservico' => function ($query) {
                 $query->select('id', 'orcamento_id');
@@ -356,17 +358,17 @@ class EscalasController extends Controller
                     }]);
                 }]);
             },
-            'servico' => function ($query){
+            'servico' => function ($query) {
                 $query->select('id', 'descricao');
             },
-            'prestador' => function ($query){
+            'prestador' => function ($query) {
                 $query->select('id', 'pessoa_id');
-                $query->with(['formacoes' => function ($query){
+                $query->with(['formacoes' => function ($query) {
                     $query->select('prestador_id', 'descricao');
                 }]);
-                $query->with(['pessoa' => function ($query){
+                $query->with(['pessoa' => function ($query) {
                     $query->select('id', 'nome');
-                    $query->with(['conselhos' => function ($query){
+                    $query->with(['conselhos' => function ($query) {
                         $query->select('pessoa_id', 'instituicao', 'uf', 'numero');
                     }]);
                 }]);
@@ -374,12 +376,12 @@ class EscalasController extends Controller
             'pontos',
             'cuidados',
         ])->where('ativo', true)
-        ->where('ordemservico_id', $paciente)
-        ->where('empresa_id', 1)
-        ->where('dataentrada', '>=', $data1)
-        ->where('dataentrada', '<=', $data2)
-        ->get([
-            'id', 'dataentrada', 'servico_id','periodo','tipo', 'prestador_id', 'status'
-        ]);
+            ->where('ordemservico_id', $paciente)
+            ->where('empresa_id', 1)
+            ->where('dataentrada', '>=', $data1)
+            ->where('dataentrada', '<=', $data2)
+            ->get([
+                'id', 'dataentrada', 'servico_id', 'periodo', 'tipo', 'prestador_id', 'status'
+            ]);
     }
 }

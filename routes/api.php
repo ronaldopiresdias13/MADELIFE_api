@@ -117,8 +117,17 @@ Route::group(['middleware' => 'auth:api'], function () {
     });
     /*----------------- Web -----------------*/
     Route::prefix('web')->group(function () {
+        Route::prefix('areaClinica')->group(function () {
+            Route::get('documentos/listDocumentos', 'Api\Web\AreaClinica\DocumentosController@listDocumentos');
+        });
+
         Route::get('categoriadocumentos/listCategorias', 'Api\Web\CategoriadocumentosController@listCategorias');
-        Route::get('categoriadocumentos/newCategorias', 'Api\Web\CategoriadocumentosController@newCategoria');
+        Route::post('categoriadocumentos/newCategoria', 'Api\Web\CategoriadocumentosController@newCategoria');
+
+        Route::get('documentos/listDocumentos', 'Api\Web\DocumentosController@listDocumentos');
+        Route::post('documentos/newDocumento', 'Api\Web\DocumentosController@newDocumento');
+        Route::get('documentos/download/{documento}', 'Api\Web\DocumentosController@download');
+        Route::delete('documentos/delete/{documento}', 'Api\Web\DocumentosController@delete');
 
         Route::get('escalas/dashboard', 'Api\Web\EscalasController@dashboard');
 

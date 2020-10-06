@@ -35,9 +35,12 @@ trait Uuid
     public static function bootUuid(): void
     {
         static::creating(function (self $model): void {
-            if (! $model->uuid && empty($model->uuid)) {
-                $model->uuid = $model->generateUuid();
+            if (!$model->id && empty($model->id)) {
+                $model->id = $model->generateUuid();
             }
+            // if (! $model->uuid && empty($model->uuid)) {
+            //     $model->uuid = $model->generateUuid();
+            // }
         });
     }
 
