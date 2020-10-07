@@ -12,4 +12,9 @@ class Documento extends Model
     protected $guarded = [];
     protected $keyType = 'string';
     public $incrementing = false;
+
+    public function categoria()
+    {
+        return $this->belongsTo('App\Categoriadocumento');
+    }
 }

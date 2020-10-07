@@ -19,7 +19,8 @@ class DocumentosController extends Controller
     {
         $hoje = getdate();
 
-        $documentos = Documento::where('ativo', true)
+        $documentos = Documento::with('categoria')
+            ->where('ativo', true)
             ->where('paciente_id', 'like', $request->paciente_id ? $request->paciente_id : '%')
             ->where('categoria_id', 'like', $request->categoria_id ? $request->categoria_id : '%')
             ->where('mes', $request->mes ? $request->mes : $hoje['mon'])
