@@ -25,9 +25,4 @@ class Sala extends Model
     {
         return $this->belongsTo('App\Empresa');
     }
-
-    public function comments()
-    {
-        return $this->hasMany('App\Comment', 'foreign_key', 'local_key');
-    }
 }

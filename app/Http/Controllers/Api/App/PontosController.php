@@ -165,8 +165,12 @@ class PontosController extends Controller
             $ponto = Ponto::where('escala_id', $request->escala_id)
                 ->where('tipo', 'Check-out')->first();
             if ($ponto) {
-                return response()->json('Você já possui Check-out nessa escala!', 400)
-                    ->header('Content-Type', 'text/plain');
+                return response()->json([
+                    'alert' => [
+                        'title' => 'Ops!',
+                        'text' => 'Você já possui Check-out nessa escala!'
+                    ]
+                ], 202)->header('Content-Type', 'application/json');
             } else {
                 DB::transaction(function () use ($request) {
                     Ponto::create(
@@ -186,12 +190,22 @@ class PontosController extends Controller
                 $escala->status              = true;
                 $escala->assinaturaprestador = $request->assinaturaprestador;
                 $escala->save();
-                return response()->json('Check-out realizado com Sucesso!', 200)
-                    ->header('Content-Type', 'text/plain');
+                return response()->json([
+                    'alert' => [
+                        'title' => 'Parabéns!',
+                        'text' => 'Check-out realizado com Sucesso!'
+                    ]
+                ], 200)
+                    ->header('Content-Type', 'application/json');
             }
         } else {
-            return response()->json('Você não realizou Check-in nessa escala!', 400)
-                ->header('Content-Type', 'text/plain');
+            return response()->json([
+                'alert' => [
+                    'title' => 'Ops!',
+                    'text' => 'Você não realizou Check-in nessa escala!'
+                ]
+            ], 202)
+                ->header('Content-Type', 'application/json');
         }
     }
 }
