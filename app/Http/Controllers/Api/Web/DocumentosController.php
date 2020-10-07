@@ -31,6 +31,37 @@ class DocumentosController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function listDocumentosByEmpresa(Request $request)
+    {
+        return Documento::with('categoria', 'paciente', 'pessoa')
+        ->where('ativo', true)
+        ->where('paciente.empresa_id',1)
+        // ->where('categoria_id', 'like', $request->categoria_id ? $request->categoria_id : '%')
+        // ->where('mes', $request->mes ? $request->mes : $hoje['mon'])
+        // ->where('ano', $request->ano ? $request->ano : $hoje['year'])
+        ->get();
+
+        // $hoje = getdate();
+
+        // $pacientes = Paciente::with([
+        //     'pessoa',
+        //     'documentos' => function ($query) use ($request, $hoje) {
+        //         $query->where('categoria_id', 'like', $request->categoria_id ? $request->categoria_id : '%')
+        //             ->where('mes', $request->mes ? $request->mes : $hoje['mon'])
+        //             ->where('ano', $request->ano ? $request->ano : $hoje['year']);
+        //     }
+        // ])
+        //     ->where('ativo', true)
+        //     ->where('id', 'like', $request->paciente_id ? $request->paciente_id : '%')
+        //     ->get();
+
+        // return $pacientes;
+    }
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
