@@ -17,4 +17,8 @@ class Documento extends Model
     {
         return $this->belongsTo('App\Categoriadocumento');
     }
+    public function paciente()
+    {
+        return $this->belongsTo('App\Paciente');
+    }
 }
