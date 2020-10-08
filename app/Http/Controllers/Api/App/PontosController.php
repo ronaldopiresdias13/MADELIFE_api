@@ -182,7 +182,7 @@ class PontosController extends Controller
                 return response()->json([
                     'alert' => [
                         'title' => 'Ops!',
-                        'text' => 'Você já possui Check-out nessa escala!'
+                        'text' => 'Esta escala já foi finalizada!'
                     ]
                 ], 202)->header('Content-Type', 'application/json');
             } else {

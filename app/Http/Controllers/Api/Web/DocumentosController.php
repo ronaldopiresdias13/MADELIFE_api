@@ -38,12 +38,12 @@ class DocumentosController extends Controller
     public function listDocumentosByEmpresa(Request $request)
     {
         return Documento::with('categoria', 'paciente', 'pessoa')
-        ->where('ativo', true)
-        ->where('paciente.empresa_id',1)
-        // ->where('categoria_id', 'like', $request->categoria_id ? $request->categoria_id : '%')
-        // ->where('mes', $request->mes ? $request->mes : $hoje['mon'])
-        // ->where('ano', $request->ano ? $request->ano : $hoje['year'])
-        ->get();
+            ->where('ativo', true)
+            ->where('paciente.empresa_id', 1)
+            // ->where('categoria_id', 'like', $request->categoria_id ? $request->categoria_id : '%')
+            // ->where('mes', $request->mes ? $request->mes : $hoje['mon'])
+            // ->where('ano', $request->ano ? $request->ano : $hoje['year'])
+            ->get();
 
         // $hoje = getdate();
 
