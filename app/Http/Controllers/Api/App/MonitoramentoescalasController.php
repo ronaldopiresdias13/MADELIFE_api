@@ -58,6 +58,14 @@ class MonitoramentoescalasController extends Controller
         $monitoramentoescala->o2         = $request->o2 ? $request->o2 : false;
         $monitoramentoescala->observacao = $request->observacao;
         $monitoramentoescala->save();
+
+        return response()->json([
+            'alert' => [
+                'title' => 'Parabéns!',
+                'text' => 'Monitoramento realizado com sucesso!'
+            ]
+        ], 200)
+            ->header('Content-Type', 'application/json');
     }
 
     /**
