@@ -110,6 +110,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('prestadores/meuspacientes', 'Api\App\PrestadoresController@meuspacientes'); // Custon
 
         Route::get('relatorios/{escala}', 'Api\App\RelatoriosController@listRelatoriosByEscalaId');
+        Route::get('relatorios/{escala}/list', 'Api\App\RelatoriosController@getAllRelatoriosByEscalaId');
         Route::post('relatorios', 'Api\App\RelatoriosController@store');
         Route::delete('relatorios/{relatorio}', 'Api\App\RelatoriosController@destroy');
 
