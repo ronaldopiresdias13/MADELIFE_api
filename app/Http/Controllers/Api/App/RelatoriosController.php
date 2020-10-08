@@ -6,6 +6,7 @@ use App\Escala;
 use App\Http\Controllers\Controller;
 use App\Relatorio;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RelatoriosController extends Controller
 {
@@ -19,6 +20,26 @@ class RelatoriosController extends Controller
         return Relatorio::where('escala_id', $escala['id'])
             ->where('ativo', true)->get();
     }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllRelatoriosByEscalaId(Escala $escala)
+    {
+        // return $escala->ordemservico_id;
+        return DB::table('relatorios')
+            ->join('escalas', 'escalas.id', '=', 'relatorios.escala_id')
+            ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
+            ->select('relatorios.*')
+            ->where('ordemservicos.id', $escala->ordemservico_id)
+            // ->groupBy('relatorios.nome')
+            ->orderBy('relatorios.data', 'desc')
+            ->limit(20)
+            ->get();
+    }
+
 
     /**
      * Store a newly created resource in storage.
