@@ -87,7 +87,13 @@ class PontosController extends Controller
         $ponto = Ponto::where('escala_id', $request->escala_id)
             ->where('tipo', 'Check-in')->first();
         if ($ponto) {
-            return response()->json('Você já possui Check-in nessa escala!', 400)->header('Content-Type', 'text/plain');
+            return response()->json([
+                'alert' => [
+                    'title' => 'Ops!',
+                    'text' => 'Você já possui Check-in nessa escala!'
+                ]
+            ], 202)
+                ->header('Content-Type', 'application/json');
         } else {
             DB::transaction(function () use ($request) {
                 Ponto::create(
@@ -104,9 +110,16 @@ class PontosController extends Controller
                     ]
                 );
             });
-            return response()->json('Check-in realizado com Sucesso!', 200)->header('Content-Type', 'text/plain');
+            return response()->json([
+                'alert' => [
+                    'title' => 'Parabéns!',
+                    'text' => 'Check-in realizado com Sucesso!'
+                ]
+            ], 200)
+                ->header('Content-Type', 'application/json');
         }
     }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -150,6 +163,7 @@ class PontosController extends Controller
                 ->header('Content-Type', 'text/plain');
         }
     }
+
     /**
      * Store a newly created resource in storage.
      *

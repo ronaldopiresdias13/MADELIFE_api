@@ -79,11 +79,13 @@ class AuthController extends Controller
 
         if ($user == null) {
             return response()->json([
-                'message' => 'Email não cadastrado!'
-            ], 404);
+                'alert' => [
+                    'title' => 'Ops!',
+                    'text' => 'Email não cadastrado!'
+                ]
+            ], 202)
+                ->header('Content-Type', 'application/json');
         }
-
-        // $senha = Str::random(8);
 
         $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
         $charactersLength = strlen($characters);
@@ -95,7 +97,14 @@ class AuthController extends Controller
         $user->password = bcrypt($senha);
         $user->save();
         Mail::send(new ResetPassword($user, $senha));
-        // return $senha;
+
+        return response()->json([
+            'alert' => [
+                'title' => 'Parabéns!',
+                'text' => 'Se informou os dados corretos, você receberá um email contendo uma nova senha para acessar o aplicativo!'
+            ]
+        ], 200)
+            ->header('Content-Type', 'application/json');
     }
 
     public function change(Request $request)
