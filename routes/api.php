@@ -120,6 +120,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('web')->group(function () {
         Route::prefix('areaClinica')->group(function () {
             Route::get('documentos/listDocumentos', 'Api\Web\AreaClinica\DocumentosController@listDocumentos');
+            // Route::get('documentos/listDocumentosByEmpresa', 'Api\Web\DocumentosController@listDocumentosByEmpresa');
         });
 
         Route::get('categoriadocumentos/listCategorias', 'Api\Web\CategoriadocumentosController@listCategorias');
@@ -286,6 +287,7 @@ Route::post('diagnosticossecundarios', 'Api\DiagnosticossecundariosController@st
 Route::get('diagnosticossecundarios/{diagnosticossecundario}', 'Api\DiagnosticossecundariosController@show');
 Route::put('diagnosticossecundarios/{diagnosticossecundario}', 'Api\DiagnosticossecundariosController@update');
 Route::delete('diagnosticossecundarios/{diagnosticossecundario}', 'Api\DiagnosticossecundariosController@destroy');
+
 
 Route::get('emails', 'Api\EmailsController@index');
 Route::post('emails', 'Api\EmailsController@store');

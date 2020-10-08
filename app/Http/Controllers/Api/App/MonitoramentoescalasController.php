@@ -29,14 +29,14 @@ class MonitoramentoescalasController extends Controller
     public function salvarMonitoramento(Request $request)
     {
         $monitoramentoescala = new Monitoramentoescala();
-        $monitoramentoescala->escala_id = $request->escala_id;
-        $monitoramentoescala->data = $request->data;
-        $monitoramentoescala->hora = $request->hora;
-        $monitoramentoescala->pa = $request->pa;
-        $monitoramentoescala->p = $request->p;
-        $monitoramentoescala->t = $request->t;
-        $monitoramentoescala->fr = $request->fr;
-        $monitoramentoescala->sat = $request->sat;
+        $monitoramentoescala->escala_id  = $request->escala_id;
+        $monitoramentoescala->data       = $request->data;
+        $monitoramentoescala->hora       = $request->hora;
+        $monitoramentoescala->pa         = $request->pa;
+        $monitoramentoescala->p          = $request->p;
+        $monitoramentoescala->t          = $request->t;
+        $monitoramentoescala->fr         = $request->fr;
+        $monitoramentoescala->sat        = $request->sat;
         $monitoramentoescala->criev      = $request->criev;
         $monitoramentoescala->ev         = $request->ev;
         $monitoramentoescala->dieta      = $request->dieta;
@@ -49,15 +49,23 @@ class MonitoramentoescalasController extends Controller
         $monitoramentoescala->crievac    = $request->crievac;
         $monitoramentoescala->vomito     = $request->vomito;
         $monitoramentoescala->crivomito  = $request->crivomito;
-        $monitoramentoescala->asp        = $request->asp;
-        $monitoramentoescala->decub      = $request->decub;
-        $monitoramentoescala->curativo   = $request->curativo;
-        $monitoramentoescala->fraldas    = $request->fraldas;
-        $monitoramentoescala->sondas     = $request->sondas;
-        $monitoramentoescala->dextro     = $request->dextro;
-        $monitoramentoescala->o2         = $request->o2;
+        $monitoramentoescala->asp        = $request->asp ? $request->asp : false;
+        $monitoramentoescala->decub      = $request->decub ? $request->decub : false;
+        $monitoramentoescala->curativo   = $request->curativo ? $request->curativo : false;
+        $monitoramentoescala->fraldas    = $request->fraldas ? $request->fraldas : false;
+        $monitoramentoescala->sondas     = $request->sondas ? $request->sondas : false;
+        $monitoramentoescala->dextro     = $request->dextro ? $request->dextro : false;
+        $monitoramentoescala->o2         = $request->o2 ? $request->o2 : false;
         $monitoramentoescala->observacao = $request->observacao;
         $monitoramentoescala->save();
+
+        return response()->json([
+            'alert' => [
+                'title' => 'Parabéns!',
+                'text' => 'Monitoramento realizado com sucesso!'
+            ]
+        ], 200)
+            ->header('Content-Type', 'application/json');
     }
 
     /**
