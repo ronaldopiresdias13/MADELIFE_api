@@ -46,6 +46,7 @@ class EscalasController extends Controller
                 }]);
             }
         ])
+            ->where('ativo', true)
             ->where('prestador_id', $prestador->id)
             ->where('dataentrada', $dataAtual)
             ->orWhere(function ($query) use ($prestador, $dataAtual) {
