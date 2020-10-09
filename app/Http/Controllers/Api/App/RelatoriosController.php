@@ -50,6 +50,13 @@ class RelatoriosController extends Controller
     public function store(Request $request)
     {
         Relatorio::create($request->all());
+        return response()->json([
+            'alert' => [
+                'title' => 'Salvo!',
+                'text' => $request['tipo'] . ' realizado com sucesso!'
+            ]
+        ], 200)
+            ->header('Content-Type', 'application/json');
     }
 
     /**
@@ -85,5 +92,12 @@ class RelatoriosController extends Controller
     {
         $relatorio->ativo = false;
         $relatorio->save();
+        return response()->json([
+            'alert' => [
+                'title' => 'Parabéns!',
+                'text' => 'Excluído com sucesso!'
+            ]
+        ], 200)
+            ->header('Content-Type', 'application/json');
     }
 }
