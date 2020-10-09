@@ -29,14 +29,14 @@ class MonitoramentoescalasController extends Controller
     public function salvarMonitoramento(Request $request)
     {
         $monitoramentoescala = new Monitoramentoescala();
-        $monitoramentoescala->escala_id = $request->escala_id;
-        $monitoramentoescala->data = $request->data;
-        $monitoramentoescala->hora = $request->hora;
-        $monitoramentoescala->pa = $request->pa;
-        $monitoramentoescala->p = $request->p;
-        $monitoramentoescala->t = $request->t;
-        $monitoramentoescala->fr = $request->fr;
-        $monitoramentoescala->sat = $request->sat;
+        $monitoramentoescala->escala_id  = $request->escala_id;
+        $monitoramentoescala->data       = $request->data;
+        $monitoramentoescala->hora       = $request->hora;
+        $monitoramentoescala->pa         = $request->pa;
+        $monitoramentoescala->p          = $request->p;
+        $monitoramentoescala->t          = $request->t;
+        $monitoramentoescala->fr         = $request->fr;
+        $monitoramentoescala->sat        = $request->sat;
         $monitoramentoescala->criev      = $request->criev;
         $monitoramentoescala->ev         = $request->ev;
         $monitoramentoescala->dieta      = $request->dieta;
@@ -56,8 +56,16 @@ class MonitoramentoescalasController extends Controller
         $monitoramentoescala->sondas     = $request->sondas ? $request->sondas : false;
         $monitoramentoescala->dextro     = $request->dextro ? $request->dextro : false;
         $monitoramentoescala->o2         = $request->o2 ? $request->o2 : false;
-        $monitoramentoescala->observacao = $request->observacao ? $request->observacao : false;
+        $monitoramentoescala->observacao = $request->observacao;
         $monitoramentoescala->save();
+
+        return response()->json([
+            'alert' => [
+                'title' => 'Parabéns!',
+                'text' => 'Monitoramento realizado com sucesso!'
+            ]
+        ], 200)
+            ->header('Content-Type', 'application/json');
     }
 
     /**

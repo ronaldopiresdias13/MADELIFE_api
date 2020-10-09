@@ -41,7 +41,13 @@ class AcaomedicamentosController extends Controller
             ]);
         });
 
-        return response()->json('Salvo com sucesso!', 200)->header('Content-Type', 'text/plain');
+        return response()->json([
+            'alert' => [
+                'title' => 'Parabéns!',
+                'text' => 'Salvo com sucesso!'
+            ]
+        ], 200)
+            ->header('Content-Type', 'application/json');
     }
 
     /**
