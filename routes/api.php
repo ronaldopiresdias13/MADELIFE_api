@@ -657,3 +657,9 @@ Route::post('userAcessos', 'Api\UserAcessoController@store');
 Route::get('userAcessos/{userAcesso}', 'Api\UserAcessoController@show');
 Route::put('userAcessos/{userAcesso}', 'Api\UserAcessoController@update');
 Route::delete('userAcessos/{userAcesso}', 'Api\UserAcessoController@destroy');
+
+Route::get('vendas', 'Api\VendasController@index');
+Route::post('vendas', 'Api\VendasController@store');
+Route::get('vendas/{venda}', 'Api\VendasController@show');
+Route::put('vendas/{venda}', 'Api\VendasController@update');
+Route::delete('vendas/{venda}', 'Api\VendasController@destroy');
