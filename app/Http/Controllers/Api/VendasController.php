@@ -48,9 +48,9 @@ class VendasController extends Controller
                 'quantidade'        => $request['orcamento']['quantidade'],
                 'situacao'          => $request['orcamento']['situacao'],
                 'descricao'         => $request['orcamento']['descricao'],
-                'valortotalservico' => $request['orcamento']['valortotalservico'],
-                'valortotalcusto'   => $request['orcamento']['valortotalcusto'],
-                'valortotalproduto' => $request['orcamento']['valortotalproduto'],
+                'valortotalservico' => $request['orcamento']['valortotalservico'] ? $request['orcamento']['valortotalservico'] : 0,
+                'valortotalcusto'   => $request['orcamento']['valortotalcusto'] ? $request['orcamento']['valortotalcusto'] : 0,
+                'valortotalproduto' => $request['orcamento']['valortotalproduto'] ? $request['orcamento']['valortotalproduto'] : 0,
                 'observacao'        => $request['orcamento']['observacao'],
                 'status'            => 1
             ]);
@@ -61,7 +61,7 @@ class VendasController extends Controller
                             'orcamento_id'         => $orcamento->id,
                             'produto_id'           => $produto['produto_id'],
                             'quantidade'           => $produto['quantidade'],
-                            'valorunitario'        => $produto['valorunitario'],
+                            'valorunitario'        => $produto['valor'],
                             'custo'                => $produto['custo'],
                             'subtotal'             => $produto['subtotal'],
                             'subtotalcusto'        => $produto['subtotalcusto'],
@@ -112,16 +112,17 @@ class VendasController extends Controller
                     $prod->update();
                 }
             }
-            $venda_saida = VendaSaida::create([
-                'venda_id' => Venda::create([
-                    'orcamento_id' => $orcamento->id,
-                    'realizada' => 1,
-                    'data' => $request['saida']['data'],
-                    'ativo' => 1
-                ])->id,
-                'saida_id' => $saida->id,
-                'ativo' => 1
-            ]);
+            // $venda = Venda::create([
+            //     'orcamento_id' => $orcamento->id,
+            //     'realizada' => 1,
+            //     'data' => $request['saida']['data'],
+            //     'ativo' => 1
+            // ]);
+            // $venda_saida = VendaSaida::create([
+            //     'venda_id' => $venda->id,
+            //     'saida_id' => $saida->id,
+            //     'ativo' => 1
+            // ]);
         });
     }
 
