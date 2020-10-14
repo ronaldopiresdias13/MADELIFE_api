@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class VendaSaida extends Model
 {
-    use Uuid;
+    // use Uuid;
 
-    protected $keyType = 'string';
-    protected $primaryKey = 'uuid';
+    // protected $keyType = 'string';
+    // protected $primaryKey = 'uuid';
     protected $table = 'venda_saida';
     protected $guarded = [];
 }

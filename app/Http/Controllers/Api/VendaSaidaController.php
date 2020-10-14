@@ -111,6 +111,7 @@ class VendaSaidaController extends Controller
      */
     public function store(Request $request)
     {
+        return $request;
         DB::transaction(function () use ($request) {
             VendaSaida::create($request->all());
         });
