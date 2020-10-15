@@ -19,6 +19,12 @@ class DeleteUuidOfSaidasSaidaProdutoAndVendaSaida extends Migration
         Schema::table('saidas', function (Blueprint $table) {
             $table->dropColumn('uuid');
         });
+        Schema::table('entradas', function (Blueprint $table) {
+            $table->dropColumn('uuid');
+        });
+        Schema::table('entrada_produto', function (Blueprint $table) {
+            $table->dropColumn('uuid');
+        });
         Schema::table('saida_produto', function (Blueprint $table) {
             $table->dropColumn('uuid');
         });
@@ -40,10 +46,16 @@ class DeleteUuidOfSaidasSaidaProdutoAndVendaSaida extends Migration
         Schema::table('locacoes', function (Blueprint $table) {
             $table->uuid('uuid')->after('id')->unique();
         });
+        Schema::table('entradas', function (Blueprint $table) {
+            $table->uuid('uuid')->after('id')->unique();
+        });
         Schema::table('saidas', function (Blueprint $table) {
             $table->uuid('uuid')->after('id')->unique();
         });
         Schema::table('saida_produto', function (Blueprint $table) {
+            $table->uuid('uuid')->after('id')->unique();
+        });
+        Schema::table('entrada_produto', function (Blueprint $table) {
             $table->uuid('uuid')->after('id')->unique();
         });
         Schema::table('vendas', function (Blueprint $table) {

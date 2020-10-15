@@ -13,22 +13,30 @@ class ChangeIdToUuidOfSaidasAndSaidaProduto extends Migration
      */
     public function up()
     {
+        // Apagar Foreign Keys
         Schema::table('locacoes', function (Blueprint $table) {
             $table->dropForeign(['venda_id']);
         });
+        Schema::table('saida_produto', function (Blueprint $table) {
+            $table->dropForeign(['saida_id']);
+        });
+        Schema::table('entrada_produto', function (Blueprint $table) {
+            $table->dropForeign(['entrada_id']);
+        });
+        Schema::table('venda_saida', function (Blueprint $table) {
+            $table->dropForeign(['saida_id']);
+            $table->dropForeign(['venda_id']);
+        });
+
+        // Trocar Foreign para UUID
         Schema::table('locacoes', function (Blueprint $table) {
             $table->uuid('venda_id')->change();
         });
         Schema::table('saida_produto', function (Blueprint $table) {
-            $table->dropForeign(['saida_id']);
-        });
-        Schema::table('saida_produto', function (Blueprint $table) {
             $table->uuid('saida_id')->change();
         });
-
-        Schema::table('venda_saida', function (Blueprint $table) {
-            $table->dropForeign(['saida_id']);
-            $table->dropForeign(['venda_id']);
+        Schema::table('entrada_produto', function (Blueprint $table) {
+            $table->uuid('entrada_id')->change();
         });
         Schema::table('venda_saida', function (Blueprint $table) {
             $table->uuid('saida_id')->change();
@@ -40,6 +48,9 @@ class ChangeIdToUuidOfSaidasAndSaidaProduto extends Migration
         Schema::table('saidas', function (Blueprint $table) {
             $table->uuid('id')->change();
         });
+        Schema::table('entradas', function (Blueprint $table) {
+            $table->uuid('id')->change();
+        });
         Schema::table('vendas', function (Blueprint $table) {
             $table->uuid('id')->change();
         });
@@ -48,15 +59,18 @@ class ChangeIdToUuidOfSaidasAndSaidaProduto extends Migration
         });
 
 
+        Schema::table('entrada_produto', function (Blueprint $table) {
+            $table->foreign('entrada_id')->references('id')->on('entradas')->onDelete('cascade');
+        });
         Schema::table('saida_produto', function (Blueprint $table) {
             $table->foreign('saida_id')->references('id')->on('saidas')->onDelete('cascade');
         });
         Schema::table('venda_saida', function (Blueprint $table) {
             $table->foreign('saida_id')->references('id')->on('saidas')->onDelete('cascade');
-            $table->foreign('venda_id')->references('id')->on('saidas')->onDelete('cascade');
+            $table->foreign('venda_id')->references('id')->on('vendas')->onDelete('cascade');
         });
         Schema::table('locacoes', function (Blueprint $table) {
-            $table->foreign('venda_id')->references('id')->on('saidas')->onDelete('cascade');
+            $table->foreign('venda_id')->references('id')->on('vendas')->onDelete('cascade');
         });
     }
 
@@ -73,12 +87,18 @@ class ChangeIdToUuidOfSaidasAndSaidaProduto extends Migration
         Schema::table('saida_produto', function (Blueprint $table) {
             $table->dropForeign(['saida_id']);
         });
+        Schema::table('entrada_produto', function (Blueprint $table) {
+            $table->dropForeign(['entrada_id']);
+        });
         Schema::table('venda_saida', function (Blueprint $table) {
             $table->dropForeign(['saida_id']);
             $table->dropForeign(['venda_id']);
         });
 
         Schema::table('locacoes', function (Blueprint $table) {
+            $table->bigIncrements('id')->change();
+        });
+        Schema::table('entradas', function (Blueprint $table) {
             $table->bigIncrements('id')->change();
         });
         Schema::table('saidas', function (Blueprint $table) {
@@ -92,6 +112,9 @@ class ChangeIdToUuidOfSaidasAndSaidaProduto extends Migration
         Schema::table('locacoes', function (Blueprint $table) {
             $table->unsignedBigInteger('venda_id')->change();
         });
+        Schema::table('entrada_produto', function (Blueprint $table) {
+            $table->unsignedBigInteger('entrada_id')->change();
+        });
         Schema::table('saida_produto', function (Blueprint $table) {
             $table->unsignedBigInteger('saida_id')->change();
         });
@@ -103,14 +126,17 @@ class ChangeIdToUuidOfSaidasAndSaidaProduto extends Migration
 
 
         Schema::table('locacoes', function (Blueprint $table) {
-            $table->foreign('venda_id')->references('id')->on('saidas')->onDelete('cascade');
+            $table->foreign('venda_id')->references('id')->on('vendas')->onDelete('cascade');
         });
         Schema::table('saida_produto', function (Blueprint $table) {
             $table->foreign('saida_id')->references('id')->on('saidas')->onDelete('cascade');
         });
+        Schema::table('entrada_produto', function (Blueprint $table) {
+            $table->foreign('saida_id')->references('id')->on('saidas')->onDelete('cascade');
+        });
         Schema::table('venda_saida', function (Blueprint $table) {
             $table->foreign('saida_id')->references('id')->on('saidas')->onDelete('cascade');
-            $table->foreign('venda_id')->references('id')->on('saidas')->onDelete('cascade');
+            $table->foreign('venda_id')->references('id')->on('vendas')->onDelete('cascade');
         });
     }
 }
