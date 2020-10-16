@@ -637,6 +637,7 @@ Route::post('transcricoes', 'Api\TranscricoesController@store');
 Route::get('transcricoes/{transcricao}', 'Api\TranscricoesController@show');
 Route::put('transcricoes/{transcricao}', 'Api\TranscricoesController@update');
 Route::delete('transcricoes/{transcricao}', 'Api\TranscricoesController@destroy');
+Route::get('transcricoes/count/{empresa}', 'Api\TranscricoesController@quantidadetranscricoes');
 
 Route::delete('transcricaoprodutos/{transcricao_produto}', 'Api\TranscricaoProdutoController@destroy');
 

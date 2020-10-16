@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Transcricao;
+use App\Empresa;
 use App\TranscricaoProduto;
 use App\Horariomedicamento;
 use Illuminate\Http\Request;
@@ -295,5 +296,9 @@ class TranscricoesController extends Controller
             ->get(['id', 'ordemservico_id', 'profissional_id']);
 
         return $transcricoes;
+    }
+    public function quantidadeTranscricoes(Empresa $empresa)
+    {
+        return Transcricao::where('empresa_id', $empresa['id'])->where('ativo', 1)->count();
     }
 }
