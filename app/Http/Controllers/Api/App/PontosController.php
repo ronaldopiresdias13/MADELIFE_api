@@ -189,7 +189,7 @@ class PontosController extends Controller
                 DB::transaction(function () use ($request) {
                     Ponto::create(
                         [
-                            'empresa_id' => $request->empresa_id,
+                            'empresa_id' => $request->empresa_id ? $request->empresa_id : 1,
                             'escala_id'  => $request->escala_id,
                             'latitude'   => $request->latitude,
                             'longitude'  => $request->longitude,
