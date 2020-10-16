@@ -490,7 +490,7 @@ class CnabsController extends Controller
     {
         $caminho = '\\cnabs\\' . $cnab->id . '\\' . $tipo . '.txt';
 
-        $cnabsantander = Cnabsantander::firstWhere('tipo', $tipo);
+        $cnabsantander = Cnabsantander::where('tipo', $tipo)->where('cnab_id', $cnab->id)->first();
 
         $header = $cnabsantander->cnabheaderarquivo->codigobanco .
             $cnabsantander->cnabheaderarquivo->loteservico .
@@ -663,7 +663,6 @@ class CnabsController extends Controller
 
         return response()->json($response);
     }
-
     /**
      * Update the specified resource in storage.
      *
