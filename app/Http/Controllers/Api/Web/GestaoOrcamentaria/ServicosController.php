@@ -17,8 +17,7 @@ class ServicosController extends Controller
      */
     public function index(Empresa $empresa)
     {
-        return Servico::select(['id', 'codigo', 'descricao', 'valor', 'empresa_id'])
-            ->where('empresa_id', $empresa->id)
+        return Servico::where('empresa_id', $empresa->id)
             ->where('ativo', true)
             ->orderBy('descricao')
             ->get();
