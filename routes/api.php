@@ -122,6 +122,12 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('documentos/listDocumentos', 'Api\Web\AreaClinica\DocumentosController@listDocumentos');
         });
         Route::prefix('gestaoOrcamentaria')->group(function () {
+            Route::get('clientes/list/{empresa}', 'Api\Web\GestaoOrcamentaria\ClientesController@index');
+            Route::get('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@show');
+            Route::post('clientes', 'Api\Web\GestaoOrcamentaria\ClientesController@store');
+            Route::put('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@update');
+            Route::delete('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@destroy');
+
             Route::get('servicos/list/{empresa}', 'Api\Web\GestaoOrcamentaria\ServicosController@index');
             Route::post('servicos', 'Api\Web\GestaoOrcamentaria\ServicosController@store');
             Route::put('servicos/{servico}', 'Api\Web\GestaoOrcamentaria\ServicosController@update');
