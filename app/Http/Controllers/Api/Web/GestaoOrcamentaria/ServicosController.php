@@ -6,6 +6,7 @@ use App\Empresa;
 use App\Http\Controllers\Controller;
 use App\Servico;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ServicosController extends Controller
 {
@@ -31,7 +32,14 @@ class ServicosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        DB::transaction(function () use ($request) {
+            $servico = new Servico();
+            $servico->descricao  = $request->descricao;
+            $servico->codigo     = $request->codigo;
+            $servico->valor      = $request->valor;
+            $servico->empresa_id = $request->empresa_id;
+            $servico->save();
+        });
     }
 
     /**
@@ -54,7 +62,13 @@ class ServicosController extends Controller
      */
     public function update(Request $request, Servico $servico)
     {
-        //
+        DB::transaction(function () use ($request, $servico) {
+            $servico->descricao  = $request->descricao;
+            $servico->codigo     = $request->codigo;
+            $servico->valor      = $request->valor;
+            $servico->empresa_id = $request->empresa_id;
+            $servico->save();
+        });
     }
 
     /**
@@ -65,6 +79,7 @@ class ServicosController extends Controller
      */
     public function destroy(Servico $servico)
     {
-        //
+        $servico->ativo = false;
+        $servico->save();
     }
 }
