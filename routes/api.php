@@ -121,10 +121,12 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::prefix('areaClinica')->group(function () {
             Route::get('documentos/listDocumentos', 'Api\Web\AreaClinica\DocumentosController@listDocumentos');
         });
-        
+        Route::prefix('gestaoOrcamentaria')->group(function () {
+            Route::get('servicos/list/{empresa}', 'Api\Web\GestaoOrcamentaria\ServicosController@index');
+        });
         Route::get('categoriadocumentos/listCategorias', 'Api\Web\CategoriadocumentosController@listCategorias');
         Route::post('categoriadocumentos/newCategoria', 'Api\Web\CategoriadocumentosController@newCategoria');
-        
+
         Route::get('documentos/listDocumentosByEmpresa', 'Api\Web\DocumentosController@listDocumentosByEmpresa');
         Route::get('documentos/listDocumentos', 'Api\Web\DocumentosController@listDocumentos');
         Route::post('documentos/newDocumento', 'Api\Web\DocumentosController@newDocumento');
