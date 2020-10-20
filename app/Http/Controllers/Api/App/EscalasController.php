@@ -50,7 +50,8 @@ class EscalasController extends Controller
             ->where('prestador_id', $prestador->id)
             ->where('dataentrada', $dataAtual)
             ->orWhere(function ($query) use ($prestador, $dataAtual) {
-                $query->where('prestador_id', $prestador->id)
+                $query->where('ativo', true)
+		    ->where('prestador_id', $prestador->id)
                     ->where('datasaida', $dataAtual);
             })
             ->get([
