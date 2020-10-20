@@ -128,6 +128,12 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::put('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@update');
             Route::delete('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@destroy');
 
+            Route::get('responsaveis/list/{empresa}', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@index');
+            Route::get('responsaveis/{responsavel}', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@show');
+            Route::post('responsaveis', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@store');
+            Route::put('responsaveis/{responsavel}', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@update');
+            Route::delete('responsaveis/{responsavel}', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@destroy');
+
             Route::get('servicos/list/{empresa}', 'Api\Web\GestaoOrcamentaria\ServicosController@index');
             Route::post('servicos', 'Api\Web\GestaoOrcamentaria\ServicosController@store');
             Route::put('servicos/{servico}', 'Api\Web\GestaoOrcamentaria\ServicosController@update');
