@@ -121,10 +121,33 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::prefix('areaClinica')->group(function () {
             Route::get('documentos/listDocumentos', 'Api\Web\AreaClinica\DocumentosController@listDocumentos');
         });
-        
+        Route::prefix('gestaoOrcamentaria')->group(function () {
+            Route::get('clientes/list/{empresa}', 'Api\Web\GestaoOrcamentaria\ClientesController@index');
+            Route::get('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@show');
+            Route::post('clientes', 'Api\Web\GestaoOrcamentaria\ClientesController@store');
+            Route::put('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@update');
+            Route::delete('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@destroy');
+
+            Route::get('pacientes/list/{empresa}', 'Api\Web\PacientesController@index');
+            Route::get('pacientes/{paciente}', 'Api\Web\PacientesController@show');
+            Route::post('pacientes', 'Api\Web\PacientesController@store');
+            Route::put('pacientes/{paciente}', 'Api\Web\PacientesController@update');
+            Route::delete('pacientes/{paciente}', 'Api\Web\PacientesController@destroy');
+
+            Route::get('responsaveis/list/{empresa}', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@index');
+            Route::get('responsaveis/{responsavel}', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@show');
+            Route::post('responsaveis', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@store');
+            Route::put('responsaveis/{responsavel}', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@update');
+            Route::delete('responsaveis/{responsavel}', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@destroy');
+
+            Route::get('servicos/list/{empresa}', 'Api\Web\GestaoOrcamentaria\ServicosController@index');
+            Route::post('servicos', 'Api\Web\GestaoOrcamentaria\ServicosController@store');
+            Route::put('servicos/{servico}', 'Api\Web\GestaoOrcamentaria\ServicosController@update');
+            Route::delete('servicos/{servico}', 'Api\Web\GestaoOrcamentaria\ServicosController@destroy');
+        });
         Route::get('categoriadocumentos/listCategorias', 'Api\Web\CategoriadocumentosController@listCategorias');
         Route::post('categoriadocumentos/newCategoria', 'Api\Web\CategoriadocumentosController@newCategoria');
-        
+
         Route::get('documentos/listDocumentosByEmpresa', 'Api\Web\DocumentosController@listDocumentosByEmpresa');
         Route::get('documentos/listDocumentos', 'Api\Web\DocumentosController@listDocumentos');
         Route::post('documentos/newDocumento', 'Api\Web\DocumentosController@newDocumento');

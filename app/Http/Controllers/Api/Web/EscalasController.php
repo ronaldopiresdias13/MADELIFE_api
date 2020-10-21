@@ -52,7 +52,8 @@ class EscalasController extends Controller
             'pontos',
             'cuidados',
             'relatorios',
-            'monitoramentos'
+            'monitoramentos',
+            'acaomedicamentos'
         ])
             ->where('ativo', true)
             ->where('empresa_id', 1) // Pegar empresa do user()

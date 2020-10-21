@@ -13,6 +13,11 @@ class Paciente extends Model
         return $this->belongsTo('App\Pessoa');
     }
 
+    public function responsavel()
+    {
+        return $this->belongsTo('App\Responsavel');
+    }
+
     public function cuidados()
     {
         return $this->belongsToMany('App\Cuidado', 'cuidado_paciente')->withPivot('id', 'formacao_id');
