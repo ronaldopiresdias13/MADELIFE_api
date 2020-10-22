@@ -12,4 +12,8 @@ class Acaomedicamento extends Model
      * @var array
      */
     protected $guarded = [];
+    public function transcricaoProduto()
+    {
+        return $this->belongsTo('App\TranscricaoProduto');
+    }
 }
