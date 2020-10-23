@@ -104,6 +104,6 @@ class Orcamento extends Model
 
     public function ordemServico()
     {
-        return $this->hasOne('App\OrdemServico');
+        return $this->hasOne('App\Ordemservico');
     }
 }
