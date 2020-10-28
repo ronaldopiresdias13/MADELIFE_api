@@ -49,13 +49,13 @@ class MonitoramentoescalasController extends Controller
         $monitoramentoescala->crievac    = $request->crievac;
         $monitoramentoescala->vomito     = $request->vomito;
         $monitoramentoescala->crivomito  = $request->crivomito;
-        $monitoramentoescala->asp        = $request->asp ? $request->asp : false;
-        $monitoramentoescala->decub      = $request->decub ? $request->decub : false;
+        $monitoramentoescala->asp        = $request->asp      ? $request->asp      : false;
+        $monitoramentoescala->decub      = $request->decub    ? $request->decub    : false;
         $monitoramentoescala->curativo   = $request->curativo ? $request->curativo : false;
-        $monitoramentoescala->fraldas    = $request->fraldas ? $request->fraldas : false;
-        $monitoramentoescala->sondas     = $request->sondas ? $request->sondas : false;
-        $monitoramentoescala->dextro     = $request->dextro ? $request->dextro : false;
-        $monitoramentoescala->o2         = $request->o2 ? $request->o2 : false;
+        $monitoramentoescala->fraldas    = $request->fraldas  ? $request->fraldas  : false;
+        $monitoramentoescala->sondas     = $request->sondas   ? $request->sondas   : false;
+        $monitoramentoescala->dextro     = $request->dextro   ? $request->dextro   : false;
+        $monitoramentoescala->o2         = $request->o2       ? $request->o2       : false;
         $monitoramentoescala->observacao = $request->observacao;
         $monitoramentoescala->save();
 
