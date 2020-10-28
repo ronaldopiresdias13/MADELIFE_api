@@ -96,15 +96,17 @@ class PontosController extends Controller
                 ->header('Content-Type', 'application/json');
         } else {
             DB::transaction(function () use ($request) {
-                Ponto::create(
+                Ponto::firstOrCreate(
+                    [
+                        'escala_id'  => $request->escala_id,
+                        'tipo'       => 'Check-in',
+                    ],
                     [
                         'empresa_id' => $request->empresa_id,
-                        'escala_id'  => $request->escala_id,
                         'latitude'   => $request->latitude,
                         'longitude'  => $request->longitude,
                         'data'       => $request->data,
                         'hora'       => $request->hora,
-                        'tipo'       => 'Check-in',
                         'observacao' => $request->observacao,
                         'status'     => $request->status,
                     ]
@@ -139,15 +141,17 @@ class PontosController extends Controller
                     ->header('Content-Type', 'text/plain');
             } else {
                 DB::transaction(function () use ($request) {
-                    Ponto::create(
+                    Ponto::firstOrCreate(
+                        [
+                            'escala_id'  => $request->escala_id,
+                            'tipo'       => 'Check-out',
+                        ],
                         [
                             'empresa_id' => $request->empresa_id,
-                            'escala_id'  => $request->escala_id,
                             'latitude'   => $request->latitude,
                             'longitude'  => $request->longitude,
                             'data'       => $request->data,
                             'hora'       => $request->hora,
-                            'tipo'       => 'Check-out',
                             'observacao' => $request->observacao,
                             'status'     => $request->status,
                         ]
@@ -187,15 +191,17 @@ class PontosController extends Controller
                 ], 202)->header('Content-Type', 'application/json');
             } else {
                 DB::transaction(function () use ($request) {
-                    Ponto::create(
+                    Ponto::firstOrCreate(
+                        [
+                            'escala_id'  => $request->escala_id,
+                            'tipo'       => 'Check-out',
+                        ],
                         [
                             'empresa_id' => $request->empresa_id ? $request->empresa_id : 1,
-                            'escala_id'  => $request->escala_id,
                             'latitude'   => $request->latitude,
                             'longitude'  => $request->longitude,
                             'data'       => $request->data,
                             'hora'       => $request->hora,
-                            'tipo'       => 'Check-out',
                             'observacao' => $request->observacao,
                             'status'     => $request->status,
                         ]

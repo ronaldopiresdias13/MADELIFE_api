@@ -28,4 +28,9 @@ class Prestador extends Model
     {
         return $this->belongsToMany('App\Servico', 'prestador_servico')->withPivot('id')->wherePivot('ativo', true);
     }
+
+    public function empresas()
+    {
+        return $this->belongsToMany('App\Empresa', 'empresa_prestador')->withPivot('id')->wherePivot('ativo', true);
+    }
 }
