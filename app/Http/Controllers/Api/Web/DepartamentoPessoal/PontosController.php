@@ -158,10 +158,14 @@ class PontosController extends Controller
         }
         $escala['valoradicional'] = (float)$dado->valoradicional;
         $escala['status'] = $dado->status;
-        if ($mult) {
-            $escala['valortotal'] = $escala['valorhora'] + (float)$dado->valoradicional;
+        if ($dado->status) {
+            if ($mult) {
+                $escala['valortotal'] = $escala['valorhora'] + (float)$dado->valoradicional;
+            } else {
+                $escala['valortotal'] = ($escala['valorhora'] * $escala['totalhoras']) + (float)$dado->valoradicional;
+            }
         } else {
-            $escala['valortotal'] = ($escala['valorhora'] * $escala['totalhoras']) + (float)$dado->valoradicional;
+            $escala['valortotal'] = 0;
         }
 
         return $escala;
