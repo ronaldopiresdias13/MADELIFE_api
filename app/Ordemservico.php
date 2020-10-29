@@ -28,6 +28,11 @@ class Ordemservico extends Model
         return $this->hasMany('App\Transcricao')->where('ativo', true);
     }
 
+    public function escalas()
+    {
+        return $this->hasMany('App\Escala')->where('ativo', true);
+    }
+
     public function servicos()
     {
         return $this->belongsToMany('App\Servico', 'ordemservico_servico')

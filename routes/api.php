@@ -156,6 +156,10 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('pontos/pontosPrestadores', 'Api\Web\DepartamentoPessoal\PontosController@pontosPrestadores');
         });
 
+        Route::prefix('responsavel')->group(function () {
+            Route::get('list/escalas', 'Api\Web\EscalasController@getEscalasByIdResponsavel');
+        });
+
         Route::get('categoriadocumentos/listCategorias', 'Api\Web\CategoriadocumentosController@listCategorias');
         Route::post('categoriadocumentos/newCategoria', 'Api\Web\CategoriadocumentosController@newCategoria');
 
