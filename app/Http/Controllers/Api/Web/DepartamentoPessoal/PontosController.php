@@ -96,8 +96,12 @@ class PontosController extends Controller
         $escala['prestador_id'] = $dado->prestador_id;
         $escala['prestador'] = $dado->prestador->pessoa->nome;
         $escala['periodo'] = $dado->periodo;
-        $escala['servico_id'] = $dado->servico ? $dado->servico->id : null;
-        $escala['servico'] = $dado->servico ? $dado->servico->descricao : null;
+
+        $escala['servico']['id']        = $dado->servico ? $dado->servico->id : null;
+        $escala['servico']['descricao'] = $dado->servico ? $dado->servico->descricao : null;
+
+        // $escala['servico_id'] = $dado->servico ? $dado->servico->id : null;
+        // $escala['servico'] = $dado->servico ? $dado->servico->descricao : null;
         $escala['valorhora'] = (float)($dado->periodo == 'DIURNO' ?
             ($dado->valorhoradiurno ? $dado->valorhoradiurno : 0)
             : ($dado->valorhoranoturno ? $dado->valorhoranoturno : 0));
