@@ -109,6 +109,7 @@ class PontosController extends Controller
             $dataPonto  = $ponto->data;
             $horaPonto  = $ponto->hora;
             if ($ponto->tipo == "Check-in") {
+                $escala['checkin']['id'] = $ponto->id;
                 $dataEscala = $dado->dataentrada;
                 $horaEscala = $dado->horaentrada;
                 if ($dataEscala == $dataPonto && $horaEscala == $horaPonto) {
@@ -127,6 +128,7 @@ class PontosController extends Controller
                 }
                 $escala['checkin']['alterado'] = $ponto->status;
             } else {
+                $escala['checkout']['id'] = $ponto->id;
                 $dataEscala = $dado->datasaida;
                 $horaEscala = $dado->horasaida;
                 if ($dataEscala == $dataPonto && $horaEscala == $horaPonto) {
