@@ -29,6 +29,7 @@ class OrcamentosController extends Controller
             // }
         ])
             ->where('empresa_id', $empresa->id)
+            ->where('ativo', true)
             ->orderBy('id', 'desc')
             ->get();
     }
