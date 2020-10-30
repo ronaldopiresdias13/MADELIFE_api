@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api\Web;
 
 use App\Escala;
+use App\Homecare;
 use App\Http\Controllers\Controller;
+use App\Paciente;
 use Illuminate\Http\Request;
 
 class EscalasController extends Controller
@@ -66,7 +68,7 @@ class EscalasController extends Controller
             // ->limit(5)
             ->orderBy('dataentrada')
             ->get([
-                'id', 'dataentrada', 'datasaida', 'horaentrada', 'horasaida', 'valorhoradiurno', 'valorhoranoturno', 'valoradicional','motivoadicional', 'servico_id', 'periodo', 'tipo', 'prestador_id', 'ordemservico_id', 'status'
+                'id', 'dataentrada', 'datasaida', 'horaentrada', 'horasaida', 'valorhoradiurno', 'valorhoranoturno', 'valoradicional', 'motivoadicional', 'servico_id', 'periodo', 'tipo', 'prestador_id', 'ordemservico_id', 'status'
             ]);
         return $escalas;
     }

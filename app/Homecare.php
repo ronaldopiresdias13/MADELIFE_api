@@ -22,4 +22,9 @@ class Homecare extends Model
     {
         return $this->belongsTo('App\Paciente');
     }
+
+    public function orcamento()
+    {
+        return $this->belongsTo('App\Orcamento');
+    }
 }
