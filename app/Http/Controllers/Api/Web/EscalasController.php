@@ -72,24 +72,6 @@ class EscalasController extends Controller
             ]);
         return $escalas;
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getEscalasByIdResponsavel(Request $request)
-    {
-        $user = $request->user();
-        $responsavel = $user->pessoa->responsavel;
-
-        $pacientes = Paciente::with(['homecares.orcamento.ordemservico.escalas' => function ($query) {
-            $query->with('prestador.pessoa')->where('assinaturaresponsavel', '');
-        }])
-            ->where('responsavel_id', $responsavel->id)
-            ->get();
-
-        return $pacientes;
-    }
 
     /**
      * Store a newly created resource in storage.
