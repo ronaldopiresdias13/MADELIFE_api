@@ -457,9 +457,9 @@ Route::delete('orcamentoprodutos/{orcamentoproduto}', 'Api\OrcamentoProdutosCont
 
 Route::get('orcamentoservicos', 'Api\OrcamentoServicosController@index');
 Route::post('orcamentoservicos', 'Api\OrcamentoServicosController@store');
-Route::get('orcamentoservicos/{orcamentoservico}', 'Api\OrcamentoServicosController@show');
-Route::put('orcamentoservicos/{orcamentoservico}', 'Api\OrcamentoServicosController@update');
-Route::delete('orcamentoservicos/{orcamentoservico}', 'Api\OrcamentoServicosController@destroy');
+Route::get('orcamentoservicos/{orcamentoServico}', 'Api\OrcamentoServicosController@show');
+Route::put('orcamentoservicos/{orcamentoServico}', 'Api\OrcamentoServicosController@update');
+Route::delete('orcamentoservicos/{orcamentoServico}', 'Api\OrcamentoServicosController@destroy');
 
 Route::get('ordemservicos', 'Api\OrdemservicosController@index');
 Route::post('ordemservicos', 'Api\OrdemservicosController@store');
