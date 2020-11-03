@@ -159,6 +159,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         Route::prefix('responsavel')->group(function () {
             Route::get('escalas/listEscalasByIdResponsavel', 'Api\Web\Responsavel\EscalasController@listEscalasByIdResponsavel');
+            Route::post('escalas/assinar', 'Api\Web\Responsavel\EscalasController@assinar');
         });
 
         Route::get('categoriadocumentos/listCategorias', 'Api\Web\CategoriadocumentosController@listCategorias');
