@@ -159,6 +159,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         Route::prefix('responsavel')->group(function () {
             Route::get('escalas/listEscalasByIdResponsavel', 'Api\Web\Responsavel\EscalasController@listEscalasByIdResponsavel');
+            Route::post('escalas/assinar', 'Api\Web\Responsavel\EscalasController@assinar');
         });
 
         Route::get('categoriadocumentos/listCategorias', 'Api\Web\CategoriadocumentosController@listCategorias');
@@ -456,9 +457,9 @@ Route::delete('orcamentoprodutos/{orcamentoproduto}', 'Api\OrcamentoProdutosCont
 
 Route::get('orcamentoservicos', 'Api\OrcamentoServicosController@index');
 Route::post('orcamentoservicos', 'Api\OrcamentoServicosController@store');
-Route::get('orcamentoservicos/{orcamentoservico}', 'Api\OrcamentoServicosController@show');
-Route::put('orcamentoservicos/{orcamentoservico}', 'Api\OrcamentoServicosController@update');
-Route::delete('orcamentoservicos/{orcamentoservico}', 'Api\OrcamentoServicosController@destroy');
+Route::get('orcamentoservicos/{orcamentoServico}', 'Api\OrcamentoServicosController@show');
+Route::put('orcamentoservicos/{orcamentoServico}', 'Api\OrcamentoServicosController@update');
+Route::delete('orcamentoservicos/{orcamentoServico}', 'Api\OrcamentoServicosController@destroy');
 
 Route::get('ordemservicos', 'Api\OrdemservicosController@index');
 Route::post('ordemservicos', 'Api\OrdemservicosController@store');

@@ -16,8 +16,8 @@ class EscalasController extends Controller
      */
     public function listEscalasByIdResponsavel(Request $request)
     {
-        // $user = $request->user();
-        // $responsavel = $user->pessoa->responsavel;
+        $user = $request->user();
+        $responsavel = $user->pessoa->responsavel;
 
         // $pacientes = Paciente::with(['homecares.orcamento.ordemservico.escalas' => function ($query) {
         //     $query->with('prestador.pessoa')->where('assinaturaresponsavel', '');
@@ -40,9 +40,14 @@ class EscalasController extends Controller
             ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
             ->join('homecares', 'homecares.orcamento_id', '=', 'orcamentos.id')
             ->join('pacientes', 'pacientes.id', '=', 'homecares.paciente_id')
+            ->join('prestadores', 'prestadores.id', '=', 'escalas.prestador_id')
+            ->join('pessoas', 'pessoas.id', '=', 'prestadores.pessoa_id')
+            ->where('pacientes.responsavel_id', "=", $responsavel->id)
+            ->where('escalas.assinaturaresponsavel', "=", '')
             // ->join('ordenservico', '', '=', '')
-            // ->select('escalas.*')
-            ->limit(10)
+            ->orderBy('escalas.dataentrada')
+            ->select('escalas.*', 'pessoas.nome')
+            // ->limit(10)
             ->get();
 
         return $pacientes;
@@ -54,9 +59,13 @@ class EscalasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function assinar(Request $request)
     {
-        //
+        foreach ($request['escalas'] as $key => $escala) {
+            $e = Escala::find($escala['id']);
+            $e->assinaturaresponsavel = $request['assinatura'];
+            $e->update();
+        }
     }
 
     /**
