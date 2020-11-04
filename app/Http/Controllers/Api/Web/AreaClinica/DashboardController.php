@@ -1,21 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Api\Web;
+namespace App\Http\Controllers\Api\Web\AreaClinica;
 
 use App\Escala;
-use App\Homecare;
 use App\Http\Controllers\Controller;
-use App\Paciente;
 use Illuminate\Http\Request;
 
-class EscalasController extends Controller
+class DashboardController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function dashboard(Request $request)
+    public function relatorioDiario(Request $request)
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa->id;
@@ -25,32 +24,32 @@ class EscalasController extends Controller
 
         $escalas = Escala::with([
             'ordemservico' => function ($query) {
-                $query->select('id', 'orcamento_id', 'profissional_id');
+                // $query->select('id', 'orcamento_id', 'profissional_id');
                 $query->with(['orcamento' => function ($query) {
-                    $query->select('id');
+                    // $query->select('id');
                     $query->with(['homecare' => function ($query) {
-                        $query->select('id', 'orcamento_id', 'paciente_id');
+                        // $query->select('id', 'orcamento_id', 'paciente_id');
                         $query->with(['paciente' => function ($query) {
-                            $query->select('id', 'pessoa_id');
+                            // $query->select('id', 'pessoa_id');
                             $query->with(['pessoa' => function ($query) {
-                                $query->select('id', 'nome');
+                                // $query->select('id', 'nome');
                             }]);
                         }]);
                     }]);
                 }]);
             },
             'servico' => function ($query) {
-                $query->select('id', 'descricao');
+                // $query->select('id', 'descricao');
             },
             'prestador' => function ($query) {
-                $query->select('id', 'pessoa_id');
+                // $query->select('id', 'pessoa_id');
                 $query->with(['formacoes' => function ($query) {
-                    $query->select('prestador_id', 'descricao');
+                    // $query->select('prestador_id', 'descricao');
                 }]);
                 $query->with(['pessoa' => function ($query) {
-                    $query->select('id', 'nome');
+                    // $query->select('id', 'nome');
                     $query->with(['conselhos' => function ($query) {
-                        $query->select('pessoa_id', 'instituicao', 'uf', 'numero');
+                        // $query->select('pessoa_id', 'instituicao', 'uf', 'numero');
                     }]);
                 }]);
             },
@@ -71,9 +70,47 @@ class EscalasController extends Controller
             // ->limit(5)
             ->orderBy('dataentrada')
             ->get([
-                'id', 'dataentrada', 'datasaida', 'horaentrada', 'horasaida', 'valorhoradiurno', 'valorhoranoturno', 'valoradicional', 'motivoadicional', 'servico_id', 'periodo', 'tipo', 'prestador_id', 'ordemservico_id', 'status'
+                'id',
+                'dataentrada',
+                'datasaida',
+                'horaentrada',
+                'horasaida',
+                'valorhoradiurno',
+                'valorhoranoturno',
+                'valoradicional',
+                'motivoadicional',
+                'servico_id',
+                'periodo',
+                'tipo',
+                'prestador_id',
+                'ordemservico_id',
+                'status'
             ]);
+
+        $relatorio = [];
+
+        // foreach ($escalas as $key => $escala) {
+        //     switch ($escala->prestador->) {
+        //         case 'value':
+        //             case 'value':
+        //             # code...
+        //             break;
+
+        //         default:
+        //             # code...
+        //             break;
+        //     }
+        //     if ($escala) {
+        //         # code...
+        //     }
+        // }
+
+        // return $relatorio;
         return $escalas;
+    }
+
+    private function push()
+    {
     }
 
     /**
