@@ -78,10 +78,10 @@ class PagamentopessoasController extends Controller
      */
     public function atualizarSituacaoPagamentoDiretoria(Request $request)
     {
-        return $request;
+        // return $request;
         DB::transaction(function () use ($request) {
             foreach ($request['pagamentos'] as $key => $pag) {
-                $pagamento = Pagamentopessoa::find($pag->id);
+                $pagamento = Pagamentopessoa::find($pag['id']);
                 $pagamento->situacao = $request['situacao'];
                 $pagamento->update();
             }

@@ -126,6 +126,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::prefix('diretoria')->group(function () {
             Route::get('listPagamentosByEmpresaId', 'Api\Web\Financeiro\PagamentopessoasController@listPagamentosByEmpresaId');
             Route::get('groupByPagamentoByMesAndEmpresaId', 'Api\Web\Financeiro\PagamentopessoasController@groupByPagamentoByMesAndEmpresaId');
+            Route::post('atualizarSituacaoPagamentoDiretoria', 'Api\Web\Financeiro\PagamentopessoasController@atualizarSituacaoPagamentoDiretoria');
         });
         Route::prefix('gestaoOrcamentaria')->group(function () {
             Route::get('clientes/list/{empresa}', 'Api\Web\GestaoOrcamentaria\ClientesController@index');
