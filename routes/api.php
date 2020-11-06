@@ -121,6 +121,10 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::prefix('areaClinica')->group(function () {
             Route::get('documentos/listDocumentos', 'Api\Web\AreaClinica\DocumentosController@listDocumentos');
         });
+        Route::prefix('diretoria')->group(function () {
+            Route::get('listPagamentosByEmpresaId', 'Api\Web\Financeiro\PagamentopessoasController@listPagamentosByEmpresaId');
+            Route::get('groupByPagamentoByMesAndEmpresaId', 'Api\Web\Financeiro\PagamentopessoasController@groupByPagamentoByMesAndEmpresaId');
+        });
         Route::prefix('gestaoOrcamentaria')->group(function () {
             Route::get('clientes/list/{empresa}', 'Api\Web\GestaoOrcamentaria\ClientesController@index');
             Route::get('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@show');
