@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Web\AreaClinica;
 use App\Escala;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use phpDocumentor\Reflection\Types\Boolean;
 
 class DashboardController extends Controller
 {
@@ -19,37 +20,41 @@ class DashboardController extends Controller
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa->id;
 
+        $request->data_ini = '2020-10-01';
+        $request->data_fim = '2020-10-05';
+
         $hoje = getdate();
         $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $hoje['mday'];
 
         $escalas = Escala::with([
             'ordemservico' => function ($query) {
-                // $query->select('id', 'orcamento_id', 'profissional_id');
+                $query->select('id', 'orcamento_id', 'profissional_id');
                 $query->with(['orcamento' => function ($query) {
-                    // $query->select('id');
+                    $query->select('id');
                     $query->with(['homecare' => function ($query) {
-                        // $query->select('id', 'orcamento_id', 'paciente_id');
+                        $query->select('id', 'orcamento_id', 'paciente_id');
                         $query->with(['paciente' => function ($query) {
-                            // $query->select('id', 'pessoa_id');
+                            $query->select('id', 'pessoa_id');
                             $query->with(['pessoa' => function ($query) {
-                                // $query->select('id', 'nome');
+                                $query->select('id', 'nome');
                             }]);
                         }]);
                     }]);
                 }]);
             },
             'servico' => function ($query) {
-                // $query->select('id', 'descricao');
+                $query->select('id', 'descricao');
             },
+            'formacao',
             'prestador' => function ($query) {
-                // $query->select('id', 'pessoa_id');
+                $query->select('id', 'pessoa_id');
                 $query->with(['formacoes' => function ($query) {
-                    // $query->select('prestador_id', 'descricao');
+                    $query->select('prestador_id', 'descricao');
                 }]);
                 $query->with(['pessoa' => function ($query) {
-                    // $query->select('id', 'nome');
+                    $query->select('id', 'nome');
                     $query->with(['conselhos' => function ($query) {
-                        // $query->select('pessoa_id', 'instituicao', 'uf', 'numero');
+                        $query->select('pessoa_id', 'instituicao', 'uf', 'numero');
                     }]);
                 }]);
             },
@@ -80,6 +85,7 @@ class DashboardController extends Controller
                 'valoradicional',
                 'motivoadicional',
                 'servico_id',
+                'formacao_id',
                 'periodo',
                 'tipo',
                 'prestador_id',
@@ -89,28 +95,44 @@ class DashboardController extends Controller
 
         $relatorio = [];
 
-        // foreach ($escalas as $key => $escala) {
-        //     switch ($escala->prestador->) {
-        //         case 'value':
-        //             case 'value':
-        //             # code...
-        //             break;
+        foreach ($escalas as $key => $escala) {
+            switch ($escala->formacao->descricao) {
+                case 'Cuidador':
+                case 'Técnico de Enfermagem':
+                case 'Auxiliar de Enfermagem':
+                case 'Enfermagem':
+                    $relatorio = $this->push($relatorio, $escala, true);
+                    break;
+                default:
+                    $relatorio = $this->push($relatorio, $escala, false);
+                    break;
+            }
+        }
 
-        //         default:
-        //             # code...
-        //             break;
-        //     }
-        //     if ($escala) {
-        //         # code...
-        //     }
-        // }
-
-        // return $relatorio;
-        return $escalas;
+        return $relatorio;
+        // return $escalas;
     }
 
-    private function push()
+    private function push($array, $item, $enfermagem)
     {
+        if ($enfermagem) {
+            if (!key_exists('Enfermagem', $array)) {
+                $array['Enfermagem'] = [];
+            }
+            if (!key_exists($item->dataentrada, $array['Enfermagem'])) {
+                $array['Enfermagem'][$item->dataentrada] = [];
+            }
+            array_push($array['Enfermagem'][$item->dataentrada], $item);
+        } else {
+            if (!key_exists($item->formacao->descricao, $array)) {
+                $array[$item->formacao->descricao] = [];
+            }
+            if (!key_exists($item->dataentrada, $array[$item->formacao->descricao])) {
+                $array[$item->formacao->descricao][$item->dataentrada] = [];
+            }
+            array_push($array[$item->formacao->descricao][$item->dataentrada], $item);
+        }
+        return $array;
     }
 
     /**

@@ -10,6 +10,18 @@ class Teste extends Controller
 {
     public function teste(Request $request)
     {
+        $escalas = Escala::with('prestador.formacoes')
+            ->limit(10)
+            ->get();
+
+        return $escalas[0]->prestador->formacoes[0]->id;
+        return $escalas;
+        // return 'tesste';
+
+        foreach ($escalas as $key => $escala) {
+            $escala->formacao_id = $escala->prestador->formacoes[0]->id;
+            $escala->save();
+        }
         // $with = [];
 
         // if ($request['adicionais']) {
