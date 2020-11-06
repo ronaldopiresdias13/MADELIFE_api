@@ -38,6 +38,17 @@ class PagamentopessoasController extends Controller
         //     array_push($result[substr($pagamento->periodo1, 0, 7)], $pagamento);
         // }
         // return $result;
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        $pagamentos = Pagamentopessoa::with('pessoa')
+            ->where('empresa_id', $empresa_id)
+            ->where('status', false)
+            ->where('ativo', true)
+            ->get()
+            ->groupBy(function ($val) {
+                return Carbon::parse($val->periodo1)->format('Y-m');
+            }, 'pessoa_id');
+        return $pagamentos;
     }
     /**
      * Display a listing of the resource.
