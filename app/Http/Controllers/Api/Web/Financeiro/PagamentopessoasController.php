@@ -76,9 +76,16 @@ class PagamentopessoasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function atualizarSituacaoPagamentoDiretoria(Request $request)
     {
-        //
+        return $request;
+        DB::transaction(function () use ($request) {
+            foreach ($request['pagamentos'] as $key => $pag) {
+                $pagamento = Pagamentopessoa::find($pag->id);
+                $pagamento->situacao = $request['situacao'];
+                $pagamento->update();
+            }
+        });
     }
 
     /**
