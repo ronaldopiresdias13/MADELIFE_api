@@ -120,6 +120,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('web')->group(function () {
         Route::prefix('areaClinica')->group(function () {
             Route::get('documentos/listDocumentos', 'Api\Web\AreaClinica\DocumentosController@listDocumentos');
+            Route::get('dashboard/relatorioDiario', 'Api\Web\AreaClinica\DashboardController@relatorioDiario');
         });
         Route::prefix('diretoria')->group(function () {
             Route::get('listPagamentosByEmpresaId', 'Api\Web\Financeiro\PagamentopessoasController@listPagamentosByEmpresaId');
@@ -150,7 +151,9 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::put('responsaveis/{responsavel}', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@update');
             Route::delete('responsaveis/{responsavel}', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@destroy');
 
+
             Route::get('servicos/list/{empresa}', 'Api\Web\GestaoOrcamentaria\ServicosController@index');
+            Route::get('servicos/listServicosFormacoes', 'Api\Web\GestaoOrcamentaria\ServicosController@listServicosFormacoes');
             Route::post('servicos', 'Api\Web\GestaoOrcamentaria\ServicosController@store');
             Route::put('servicos/{servico}', 'Api\Web\GestaoOrcamentaria\ServicosController@update');
             Route::delete('servicos/{servico}', 'Api\Web\GestaoOrcamentaria\ServicosController@destroy');
@@ -461,9 +464,9 @@ Route::delete('orcamentoprodutos/{orcamentoproduto}', 'Api\OrcamentoProdutosCont
 
 Route::get('orcamentoservicos', 'Api\OrcamentoServicosController@index');
 Route::post('orcamentoservicos', 'Api\OrcamentoServicosController@store');
-Route::get('orcamentoservicos/{orcamentoservico}', 'Api\OrcamentoServicosController@show');
-Route::put('orcamentoservicos/{orcamentoservico}', 'Api\OrcamentoServicosController@update');
-Route::delete('orcamentoservicos/{orcamentoservico}', 'Api\OrcamentoServicosController@destroy');
+Route::get('orcamentoservicos/{orcamentoServico}', 'Api\OrcamentoServicosController@show');
+Route::put('orcamentoservicos/{orcamentoServico}', 'Api\OrcamentoServicosController@update');
+Route::delete('orcamentoservicos/{orcamentoServico}', 'Api\OrcamentoServicosController@destroy');
 
 Route::get('ordemservicos', 'Api\OrdemservicosController@index');
 Route::post('ordemservicos', 'Api\OrdemservicosController@store');

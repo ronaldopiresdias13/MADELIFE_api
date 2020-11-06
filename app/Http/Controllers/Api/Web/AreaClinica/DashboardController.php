@@ -1,24 +1,27 @@
 <?php
 
-namespace App\Http\Controllers\Api\Web;
+namespace App\Http\Controllers\Api\Web\AreaClinica;
 
 use App\Escala;
-use App\Homecare;
 use App\Http\Controllers\Controller;
-use App\Paciente;
 use Illuminate\Http\Request;
+use phpDocumentor\Reflection\Types\Boolean;
 
-class EscalasController extends Controller
+class DashboardController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function dashboard(Request $request)
+    public function relatorioDiario(Request $request)
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa->id;
+
+        $request->data_ini = '2020-10-01';
+        $request->data_fim = '2020-10-05';
 
         $hoje = getdate();
         $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $hoje['mday'];
@@ -42,6 +45,7 @@ class EscalasController extends Controller
             'servico' => function ($query) {
                 $query->select('id', 'descricao');
             },
+            'formacao',
             'prestador' => function ($query) {
                 $query->select('id', 'pessoa_id');
                 $query->with(['formacoes' => function ($query) {
@@ -71,9 +75,64 @@ class EscalasController extends Controller
             // ->limit(5)
             ->orderBy('dataentrada')
             ->get([
-                'id', 'dataentrada', 'datasaida', 'horaentrada', 'horasaida', 'valorhoradiurno', 'valorhoranoturno', 'valoradicional', 'motivoadicional', 'servico_id', 'periodo', 'tipo', 'prestador_id', 'ordemservico_id', 'status'
+                'id',
+                'dataentrada',
+                'datasaida',
+                'horaentrada',
+                'horasaida',
+                'valorhoradiurno',
+                'valorhoranoturno',
+                'valoradicional',
+                'motivoadicional',
+                'servico_id',
+                'formacao_id',
+                'periodo',
+                'tipo',
+                'prestador_id',
+                'ordemservico_id',
+                'status'
             ]);
-        return $escalas;
+
+        $relatorio = [];
+
+        foreach ($escalas as $key => $escala) {
+            switch ($escala->formacao->descricao) {
+                case 'Cuidador':
+                case 'Técnico de Enfermagem':
+                case 'Auxiliar de Enfermagem':
+                case 'Enfermagem':
+                    $relatorio = $this->push($relatorio, $escala, true);
+                    break;
+                default:
+                    $relatorio = $this->push($relatorio, $escala, false);
+                    break;
+            }
+        }
+
+        return $relatorio;
+        // return $escalas;
+    }
+
+    private function push($array, $item, $enfermagem)
+    {
+        if ($enfermagem) {
+            if (!key_exists('Enfermagem', $array)) {
+                $array['Enfermagem'] = [];
+            }
+            if (!key_exists($item->dataentrada, $array['Enfermagem'])) {
+                $array['Enfermagem'][$item->dataentrada] = [];
+            }
+            array_push($array['Enfermagem'][$item->dataentrada], $item);
+        } else {
+            if (!key_exists($item->formacao->descricao, $array)) {
+                $array[$item->formacao->descricao] = [];
+            }
+            if (!key_exists($item->dataentrada, $array[$item->formacao->descricao])) {
+                $array[$item->formacao->descricao][$item->dataentrada] = [];
+            }
+            array_push($array[$item->formacao->descricao][$item->dataentrada], $item);
+        }
+        return $array;
     }
 
     /**

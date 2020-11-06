@@ -12,8 +12,14 @@ class Servico extends Model
     {
         return $this->belongsTo('App\Empresa');
     }
+
     public function orcamentoservicos()
     {
         return $this->hasMany('App\Orcamentoservico')->where('ativo', true);
+    }
+
+    public function formacoes()
+    {
+        return $this->belongsToMany('App\Formacao', 'servico_formacao')->wherePivot('ativo', true);
     }
 }

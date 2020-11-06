@@ -48,8 +48,14 @@ class Escala extends Model
     {
         return $this->belongsTo('App\Servico', 'servico_id');
     }
+
     public function acaoMedicamentos()
     {
         return $this->hasMany('App\Acaomedicamento')->where('ativo', true);
+    }
+
+    public function formacao()
+    {
+        return $this->belongsTo('App\Formacao');
     }
 }
