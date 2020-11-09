@@ -17,6 +17,9 @@ class EscalasController extends Controller
      */
     public function dashboard(Request $request)
     {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa->id;
+
         $hoje = getdate();
         $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $hoje['mday'];
 
@@ -58,7 +61,7 @@ class EscalasController extends Controller
             'acaomedicamentos.transcricaoProduto.produto'
         ])
             ->where('ativo', true)
-            ->where('empresa_id', 1) // Pegar empresa do user()
+            ->where('empresa_id', $empresa_id)
             ->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%')
             ->where('dataentrada', '>=', $request->data_ini ? $request->data_ini : $data)
             ->where('dataentrada', '<=', $request->data_fim ? $request->data_fim : $data)

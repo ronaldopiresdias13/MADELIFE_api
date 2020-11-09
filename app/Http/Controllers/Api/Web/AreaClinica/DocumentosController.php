@@ -22,6 +22,7 @@ class DocumentosController extends Controller
             'pessoa',
             'documentos' => function ($query) use ($request, $hoje) {
                 $query->with('categoria')
+                    ->where('ativo', true)
                     ->where('categoria_id', 'like', $request->categoria_id ? $request->categoria_id : '%')
                     ->where('mes', $request->mes ? $request->mes : $hoje['mon'])
                     ->where('ano', $request->ano ? $request->ano : $hoje['year']);
