@@ -40,14 +40,16 @@ class PagamentopessoasController extends Controller
         // return $result;
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-        $pagamentos = Pagamentopessoa::with('pessoa')
+        $pagamentos = Pagamentopessoa::with(['pessoa.dadosbancario'])
             ->where('empresa_id', $empresa_id)
             ->where('status', false)
             ->where('ativo', true)
             ->get()
-            ->groupBy(function ($val) {
+
+            // ->keyBy('pessoa.nome')
+            ->groupBy([function ($val) {
                 return Carbon::parse($val->periodo1)->format('Y-m');
-            }, 'pessoa_id');
+            }, "pessoa_id"]);
         return $pagamentos;
     }
     /**
