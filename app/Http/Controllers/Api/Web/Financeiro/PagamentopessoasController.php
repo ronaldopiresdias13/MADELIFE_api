@@ -28,28 +28,42 @@ class PagamentopessoasController extends Controller
      */
     public function listPagamentosByEmpresaId(Request $request)
     {
+        $result = [];
 
-        // $result = [];
-
-        // foreach ($pagamentos as $key => $pagamento) {
-        //     if (!key_exists(substr($pagamento->periodo1, 0, 7), $result)) {
-        //         $result[substr($pagamento->periodo1, 0, 7)] = [];
-        //     }
-        //     array_push($result[substr($pagamento->periodo1, 0, 7)], $pagamento);
-        // }
-        // return $result;
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
         $pagamentos = Pagamentopessoa::with(['pessoa.dadosbancario'])
             ->where('empresa_id', $empresa_id)
             ->where('status', false)
             ->where('ativo', true)
-            ->get()
+            ->where(DB::raw("date_format(str_to_date(pagamentopessoas.periodo1, '%Y-%m-%d'), '%Y-%m')"), "=", $request['mes'])
+            ->get();
+        // ->groupBy("pessoa_id");
+        // ->keyBy("pessoa_id")
 
-            // ->keyBy('pessoa.nome')
-            ->groupBy([function ($val) {
-                return Carbon::parse($val->periodo1)->format('Y-m');
-            }, "pessoa_id"]);
+
+        foreach ($pagamentos as $key => $pagamento) {
+            $tem = false;
+            foreach ($result as $key => $r) {
+                // echo ($r['profissional'] == $pagamento->pessoa->nome);
+                if ($r['profissional'] == $pagamento->pessoa->nome) {
+                    array_push($r['pagamentos'], $pagamento);
+                    $tem = true;
+                    break;
+                }
+            }
+            // echo ($tem);
+            if (!$tem) {
+                $array = ['profissional' => $pagamento->pessoa->nome, 'pagamentos' => [$pagamento]];
+                array_push($result, $array);
+            }
+            // if (!key_exists($pagamento->pessoa->nome, $result)) {
+            //     $result[$pagamento->pessoa->nome] = [];
+            // }
+            // array_push($result[($pagamento->pessoa->nome)], $pagamento); array("name" => "my name");
+            // array_push($result[$pagamento->pessoa->nome], $pagamento);
+        }
+        return $result;
         return $pagamentos;
     }
     /**
