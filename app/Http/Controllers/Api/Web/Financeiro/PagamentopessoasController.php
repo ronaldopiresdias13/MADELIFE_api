@@ -28,30 +28,42 @@ class PagamentopessoasController extends Controller
      */
     public function listPagamentosByEmpresaId(Request $request)
     {
+        $result = [];
 
-        // $result = [];
-
-        // foreach ($pagamentos as $key => $pagamento) {
-        //     if (!key_exists(substr($pagamento->periodo1, 0, 7), $result)) {
-        //         $result[substr($pagamento->periodo1, 0, 7)] = [];
-        //     }
-        //     array_push($result[substr($pagamento->periodo1, 0, 7)], $pagamento);
-        // }
-        // return $result;
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
+
         $pagamentos = Pagamentopessoa::with(['pessoa.dadosbancario'])
             ->where('empresa_id', $empresa_id)
             ->where('status', false)
             ->where('ativo', true)
-            ->get()
+            ->where(DB::raw("date_format(str_to_date(pagamentopessoas.periodo1, '%Y-%m-%d'), '%Y-%m')"), "=", $request['mes'])
+            ->get();
+        // ->groupBy("pessoa_id");
+        // ->keyBy("pessoa_id")
 
-            // ->keyBy('pessoa.nome')
-            ->groupBy([function ($val) {
-                return Carbon::parse($val->periodo1)->format('Y-m');
-            }, "pessoa_id"]);
-        return $pagamentos;
+        foreach ($pagamentos as $key => $pagamento) {
+            $tem = false;
+            foreach ($result as $key => $r) {
+                if ($r['profissional'] == $pagamento->pessoa_id) {
+                    array_push($result[$key]['pagamentos'], $pagamento);
+                    $tem = true;
+                    break;
+                }
+            }
+            if (!$tem) {
+                $array = [
+                    'profissional' => $pagamento->pessoa_id,
+                    'nome'         => $pagamento->pessoa->nome,
+                    'pagamentos'   => [$pagamento]
+                ];
+                array_push($result, $array);
+            }
+        }
+        return $result;
+        // return $pagamentos;
     }
+
     /**
      * Display a listing of the resource.
      *

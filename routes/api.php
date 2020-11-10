@@ -124,9 +124,11 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('dashboard/relatorioProdutividade', 'Api\Web\AreaClinica\DashboardController@relatorioProdutividade');
         });
         Route::prefix('diretoria')->group(function () {
-            Route::get('listPagamentosByEmpresaId', 'Api\Web\Financeiro\PagamentopessoasController@listPagamentosByEmpresaId');
             Route::get('groupByPagamentoByMesAndEmpresaId', 'Api\Web\Financeiro\PagamentopessoasController@groupByPagamentoByMesAndEmpresaId');
             Route::post('atualizarSituacaoPagamentoDiretoria', 'Api\Web\Financeiro\PagamentopessoasController@atualizarSituacaoPagamentoDiretoria');
+        });
+        Route::prefix('financeiro')->group(function () {
+            Route::get('listPagamentosByEmpresaId', 'Api\Web\Financeiro\PagamentopessoasController@listPagamentosByEmpresaId');
         });
         Route::prefix('gestaoOrcamentaria')->group(function () {
             Route::get('clientes/list/{empresa}', 'Api\Web\GestaoOrcamentaria\ClientesController@index');
@@ -713,3 +715,4 @@ Route::post('vendas', 'Api\VendasController@store');
 Route::get('vendas/{venda}', 'Api\VendasController@show');
 Route::put('vendas/{venda}', 'Api\VendasController@update');
 Route::delete('vendas/{venda}', 'Api\VendasController@destroy');
+Route::post('vendas/cadastrarCliente', 'Api\VendasController@cadastrarCliente');
