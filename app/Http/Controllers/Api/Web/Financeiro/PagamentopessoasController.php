@@ -32,6 +32,7 @@ class PagamentopessoasController extends Controller
 
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
+
         $pagamentos = Pagamentopessoa::with(['pessoa.dadosbancario'])
             ->where('empresa_id', $empresa_id)
             ->where('status', false)
@@ -41,31 +42,28 @@ class PagamentopessoasController extends Controller
         // ->groupBy("pessoa_id");
         // ->keyBy("pessoa_id")
 
-
         foreach ($pagamentos as $key => $pagamento) {
             $tem = false;
             foreach ($result as $key => $r) {
-                // echo ($r['profissional'] == $pagamento->pessoa->nome);
-                if ($r['profissional'] == $pagamento->pessoa->nome) {
-                    array_push($r['pagamentos'], $pagamento);
+                if ($r['profissional'] == $pagamento->pessoa_id) {
+                    array_push($result[$key]['pagamentos'], $pagamento);
                     $tem = true;
                     break;
                 }
             }
-            // echo ($tem);
             if (!$tem) {
-                $array = ['profissional' => $pagamento->pessoa->nome, 'pagamentos' => [$pagamento]];
+                $array = [
+                    'profissional' => $pagamento->pessoa_id,
+                    'nome'         => $pagamento->pessoa->nome,
+                    'pagamentos'   => [$pagamento]
+                ];
                 array_push($result, $array);
             }
-            // if (!key_exists($pagamento->pessoa->nome, $result)) {
-            //     $result[$pagamento->pessoa->nome] = [];
-            // }
-            // array_push($result[($pagamento->pessoa->nome)], $pagamento); array("name" => "my name");
-            // array_push($result[$pagamento->pessoa->nome], $pagamento);
         }
         return $result;
-        return $pagamentos;
+        // return $pagamentos;
     }
+
     /**
      * Display a listing of the resource.
      *
