@@ -9,7 +9,8 @@ class Entrada extends Model
 {
     use Uuid;
 
-    // protected $keyType = 'string';
+    protected $keyType = 'string';
+    public $incrementing = false;
     // protected $primaryKey = 'uuid';
     protected $guarded = [];
 
