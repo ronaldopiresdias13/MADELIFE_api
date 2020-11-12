@@ -124,9 +124,6 @@ class EscalasController extends Controller
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->responsavel->empresa_id;
-        // $hoje = getdate();
-        // $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $hoje['mday'];
-
         $escalas = Escala::with([
             'ordemservico' => function ($query) {
                 $query->select('id', 'orcamento_id', 'profissional_id');
@@ -168,12 +165,6 @@ class EscalasController extends Controller
             ->where('empresa_id', $empresa_id)
             ->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%')
             ->where(DB::raw("date_format(str_to_date(escalas.dataentrada, '%Y-%m-%d'), '%Y-%m')"), "=", $request['periodo'])
-            // ->where('dataentrada', '>=', $request->data_ini ? $request->data_ini : $data)
-            // ->where('dataentrada', '<=', $request->data_fim ? $request->data_fim : $data)
-            // ->where('prestador_id', 'like', $request->prestador_id ? $request->prestador_id : '%')
-            // ->where('servico_id', 'like', $request->servico_id ? $request->servico_id : '%')
-            // ->where('empresa_id', 'like', $request->empresa_id ? $request->empresa_id : '%')
-            // ->limit(5)
             ->orderBy('dataentrada')
             ->get([
                 'id', 'dataentrada', 'datasaida', 'horaentrada', 'horasaida', 'valorhoradiurno', 'valorhoranoturno', 'valoradicional', 'motivoadicional', 'servico_id', 'periodo', 'tipo', 'prestador_id', 'ordemservico_id', 'status'
