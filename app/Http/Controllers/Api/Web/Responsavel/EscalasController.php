@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api\Web\Responsavel;
 
 use App\Escala;
 use App\Http\Controllers\Controller;
+use App\Ordemservico;
 use App\Paciente;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EscalasController extends Controller
 {
@@ -54,6 +56,18 @@ class EscalasController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function listEscalasByIdOrdemServico(Ordemservico $ordemservico)
+    {
+        return Escala::with('prestador.pessoa')
+            ->where('ativo', true)
+            ->where('ordemservico_id', $ordemservico->id)
+            ->get();
+    }
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -100,5 +114,61 @@ class EscalasController extends Controller
     public function destroy(Escala $escala)
     {
         //
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dashboard(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->responsavel->empresa_id;
+        $escalas = Escala::with([
+            'ordemservico' => function ($query) {
+                $query->select('id', 'orcamento_id', 'profissional_id');
+                $query->with(['orcamento' => function ($query) {
+                    $query->select('id');
+                    $query->with(['homecare' => function ($query) {
+                        $query->select('id', 'orcamento_id', 'paciente_id');
+                        $query->with(['paciente' => function ($query) {
+                            $query->select('id', 'pessoa_id');
+                            $query->with(['pessoa' => function ($query) {
+                                $query->select('id', 'nome');
+                            }]);
+                        }]);
+                    }]);
+                }]);
+            },
+            'servico' => function ($query) {
+                $query->select('id', 'descricao');
+            },
+            'prestador' => function ($query) {
+                $query->select('id', 'pessoa_id');
+                $query->with(['formacoes' => function ($query) {
+                    $query->select('prestador_id', 'descricao');
+                }]);
+                $query->with(['pessoa' => function ($query) {
+                    $query->select('id', 'nome');
+                    $query->with(['conselhos' => function ($query) {
+                        $query->select('pessoa_id', 'instituicao', 'uf', 'numero');
+                    }]);
+                }]);
+            },
+            'pontos',
+            'cuidados',
+            'relatorios',
+            'monitoramentos',
+            'acaomedicamentos.transcricaoProduto.produto'
+        ])
+            ->where('ativo', true)
+            ->where('empresa_id', $empresa_id)
+            ->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%')
+            ->where(DB::raw("date_format(str_to_date(escalas.dataentrada, '%Y-%m-%d'), '%Y-%m')"), "=", $request['periodo'])
+            ->orderBy('dataentrada')
+            ->get([
+                'id', 'dataentrada', 'datasaida', 'horaentrada', 'horasaida', 'valorhoradiurno', 'valorhoranoturno', 'valoradicional', 'motivoadicional', 'servico_id', 'periodo', 'tipo', 'prestador_id', 'ordemservico_id', 'status'
+            ]);
+        return $escalas;
     }
 }
