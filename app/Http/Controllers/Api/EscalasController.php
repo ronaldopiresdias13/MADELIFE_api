@@ -142,6 +142,7 @@ class EscalasController extends Controller
         $escala->ordemservico_id       = $request->ordemservico_id;
         $escala->prestador_id          = $request->prestador_id;
         $escala->servico_id            = $request->servico_id;
+        $escala->formacao_id           = $request->formacao_id ? $request->formacao_id : null;
         $escala->horaentrada           = $request->horaentrada;
         $escala->horasaida             = $request->horasaida;
         $escala->dataentrada           = $request->dataentrada;
