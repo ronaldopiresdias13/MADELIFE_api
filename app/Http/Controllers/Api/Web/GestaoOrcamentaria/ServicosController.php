@@ -97,7 +97,8 @@ class ServicosController extends Controller
      */
     public function show(Servico $servico)
     {
-        //
+        $servico->formacoes;
+        return $servico;
     }
 
     /**
@@ -115,6 +116,23 @@ class ServicosController extends Controller
             $servico->valor      = $request->valor;
             $servico->empresa_id = $request->empresa_id;
             $servico->save();
+
+            foreach ($servico->servicoFormacao as $key => $servicoFormacao) {
+                $servicoFormacao->ativo = false;
+                $servicoFormacao->save();
+            }
+
+            foreach ($request['formacoes'] as $key => $formacao) {
+                ServicoFormacao::updateOrCreate(
+                    [
+                        'servico_id' => $servico->id,
+                        'formacao_id' => $formacao['id']
+                    ],
+                    [
+                        'ativo' => true
+                    ]
+                );
+            }
         });
     }
 
