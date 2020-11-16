@@ -2,13 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Cliente;
+use App\Email;
+use App\Endereco;
 use App\Estoque;
 use App\Http\Controllers\Controller;
 use App\Orcamento;
 use App\OrcamentoProduto;
+use App\Pessoa;
+use App\PessoaEmail;
+use App\PessoaEndereco;
+use App\PessoaTelefone;
 use App\Produto;
 use App\Saida;
 use App\SaidaProduto;
+use App\Telefone;
+use App\Tipopessoa;
 use App\Venda;
 use App\VendaSaida;
 use Illuminate\Http\Request;
@@ -214,7 +223,98 @@ class VendasController extends Controller
         ], 200)
             ->header('Content-Type', 'application/json');
     }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function cadastrarCliente(Request $request)
+    {
+        // return $request;
+        DB::transaction(function () use ($request) {
+            $cliente = Cliente::create([
+                'tipo'       => $request['tipo'],
+                'empresa_id' => $request['empresa_id'],
+                'pessoa_id'  => Pessoa::updateOrCreate(
+                    [
+                        'id' => ($request['pessoa']['id'] != '') ? $request['id'] : null,
+                    ],
+                    [
+                        'nome'        => $request['pessoa']['nome'],
+                        'nascimento'  => $request['pessoa']['nascimento'],
 
+                        'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
+                        'rgie'        => $request['pessoa']['rgie'],
+                        'observacoes' => $request['pessoa']['observacoes'],
+                        'perfil'      => $request['pessoa']['perfil'],
+                        'status'      => true,
+                    ]
+                )->id,
+            ]);
+            Tipopessoa::create([
+                'tipo'      => 'Cliente',
+                'pessoa_id' => $cliente->pessoa_id,
+                'ativo'     => 1
+            ]);
+
+            if ($request['pessoa']['telefone']) {
+                // foreach ($request['pessoa']['telefones'] as $key => $telefone) {
+                PessoaTelefone::firstOrCreate([
+                    'pessoa_id'   => $cliente->pessoa_id,
+                    'telefone_id' => Telefone::firstOrCreate(
+                        [
+                            'telefone'  => $request['pessoa']['telefone'],
+                        ]
+                    )->id,
+                ]);
+                // }
+            }
+
+            if (
+                $request['pessoa']['endereco']['cep'] || $request['pessoa']['endereco']['cidade_id']
+                || $request['pessoa']['endereco']['rua'] || $request['pessoa']['endereco']['bairro']
+            ) {
+                // foreach ($request['pessoa']['enderecos'] as $key => $endereco) {
+                PessoaEndereco::firstOrCreate([
+                    'pessoa_id'   => $cliente->pessoa_id,
+                    'endereco_id' => Endereco::firstOrCreate(
+                        [
+                            'cep'         => $request['pessoa']['endereco']['cep'],
+                            'cidade_id'   => $request['pessoa']['endereco']['cidade_id'],
+                            'rua'         => $request['pessoa']['endereco']['rua'],
+                            'bairro'      => $request['pessoa']['endereco']['bairro'],
+                            'numero'      => $request['pessoa']['endereco']['numero'],
+                            'complemento' => $request['pessoa']['endereco']['complemento'],
+                            'tipo'        => $request['pessoa']['endereco']['tipo'],
+                            'descricao'   => $request['pessoa']['endereco']['descricao'],
+                        ]
+                    )->id,
+                ]);
+                // }
+            }
+
+            if ($request['pessoa']['email']) {
+                // foreach ($request['pessoa']['emails'] as $key => $email) {
+                PessoaEmail::firstOrCreate([
+                    'pessoa_id' => $cliente->pessoa_id,
+                    'email_id'  => Email::firstOrCreate(
+                        [
+                            'email'     => $request['pessoa']['email'],
+                        ]
+                    )->id,
+                ]);
+                // }
+            }
+        });
+        return response()->json([
+            'alert' => [
+                'title' => 'Salvo!',
+                'text' => 'Salvo com sucesso!'
+            ]
+        ], 200)
+            ->header('Content-Type', 'application/json');
+    }
     /**
      * Display the specified resource.
      *

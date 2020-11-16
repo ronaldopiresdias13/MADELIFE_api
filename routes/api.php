@@ -123,6 +123,10 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('dashboard/relatorioDiario', 'Api\Web\AreaClinica\DashboardController@relatorioDiario');
             Route::get('dashboard/relatorioProdutividade', 'Api\Web\AreaClinica\DashboardController@relatorioProdutividade');
         });
+        Route::prefix('convenio')->group(function () {
+            Route::get('escalas/dashboard', 'Api\Web\Convenio\EscalasController@dashboardConvenio');
+            Route::get('escalas/listEscalasByIdCliente', 'Api\Web\Convenio\EscalasController@listEscalasByIdCliente');
+        });
         Route::prefix('diretoria')->group(function () {
             Route::get('groupByPagamentoByMesAndEmpresaId', 'Api\Web\Financeiro\PagamentopessoasController@groupByPagamentoByMesAndEmpresaId');
             Route::post('atualizarSituacaoPagamentoDiretoria', 'Api\Web\Financeiro\PagamentopessoasController@atualizarSituacaoPagamentoDiretoria');
@@ -171,7 +175,9 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         Route::prefix('responsavel')->group(function () {
             Route::get('escalas/listEscalasByIdResponsavel', 'Api\Web\Responsavel\EscalasController@listEscalasByIdResponsavel');
+            Route::get('escalas/listEscalasByIdOrdemServico/{ordemservico}', 'Api\Web\Responsavel\EscalasController@listEscalasByIdOrdemServico');
             Route::post('escalas/assinar', 'Api\Web\Responsavel\EscalasController@assinar');
+            Route::get('escalas/dashboard', 'Api\Web\Responsavel\EscalasController@dashboard');
         });
 
         Route::get('categoriadocumentos/listCategorias', 'Api\Web\CategoriadocumentosController@listCategorias');
@@ -716,3 +722,4 @@ Route::post('vendas', 'Api\VendasController@store');
 Route::get('vendas/{venda}', 'Api\VendasController@show');
 Route::put('vendas/{venda}', 'Api\VendasController@update');
 Route::delete('vendas/{venda}', 'Api\VendasController@destroy');
+Route::post('vendas/cadastrarCliente', 'Api\VendasController@cadastrarCliente');
