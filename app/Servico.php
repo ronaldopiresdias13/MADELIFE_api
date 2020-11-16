@@ -22,4 +22,9 @@ class Servico extends Model
     {
         return $this->belongsToMany('App\Formacao', 'servico_formacao')->wherePivot('ativo', true);
     }
+
+    public function servicoFormacao()
+    {
+        return $this->hasMany('App\ServicoFormacao')->where('ativo', true);
+    }
 }

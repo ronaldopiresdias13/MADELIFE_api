@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sala extends Model
 {
-    use Uuid;
+    // use Uuid;
 
-    protected $keyType = 'string';
-    protected $primaryKey = 'uuid';
+    // protected $keyType = 'string';
+    // protected $primaryKey = 'uuid';
     protected $guarded = [];
     // protected $hidden = [
     //     'id'

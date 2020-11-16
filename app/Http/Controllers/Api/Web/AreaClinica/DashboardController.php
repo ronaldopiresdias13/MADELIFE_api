@@ -106,16 +106,18 @@ class DashboardController extends Controller
         $relatorio = [];
 
         foreach ($escalas as $key => $escala) {
-            switch ($escala->formacao->descricao) {
-                case 'Cuidador':
-                case 'Técnico de Enfermagem':
-                case 'Auxiliar de Enfermagem':
-                case 'Enfermagem':
-                    $relatorio = $this->pushDiario($relatorio, $escala, true);
-                    break;
-                default:
-                    $relatorio = $this->pushDiario($relatorio, $escala, false);
-                    break;
+            if ($escala->formacao) {
+                switch ($escala->formacao->descricao) {
+                    case 'Cuidador':
+                    case 'Técnico de Enfermagem':
+                    case 'Auxiliar de Enfermagem':
+                    case 'Enfermagem':
+                        $relatorio = $this->pushDiario($relatorio, $escala, true);
+                        break;
+                    default:
+                        $relatorio = $this->pushDiario($relatorio, $escala, false);
+                        break;
+                }
             }
         }
 
