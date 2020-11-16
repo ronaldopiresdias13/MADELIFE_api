@@ -20,4 +20,8 @@ class Entrada extends Model
             ->withPivot('id', 'quantidade', 'valor', 'lote', 'validade')
             ->wherePivot('ativo', true);
     }
+    public function fornecedor()
+    {
+        return $this->belongsTo('App\Fornecedor');
+    }
 }
