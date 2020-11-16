@@ -123,6 +123,10 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('dashboard/relatorioDiario', 'Api\Web\AreaClinica\DashboardController@relatorioDiario');
             Route::get('dashboard/relatorioProdutividade', 'Api\Web\AreaClinica\DashboardController@relatorioProdutividade');
         });
+        Route::prefix('convenio')->group(function () {
+            Route::get('escalas/dashboard', 'Api\Web\Convenio\EscalasController@dashboardConvenio');
+            Route::get('escalas/listEscalasByIdCliente', 'Api\Web\Convenio\EscalasController@listEscalasByIdCliente');
+        });
         Route::prefix('diretoria')->group(function () {
             Route::get('groupByPagamentoByMesAndEmpresaId', 'Api\Web\Financeiro\PagamentopessoasController@groupByPagamentoByMesAndEmpresaId');
             Route::post('atualizarSituacaoPagamentoDiretoria', 'Api\Web\Financeiro\PagamentopessoasController@atualizarSituacaoPagamentoDiretoria');
@@ -159,6 +163,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('servicos/list/{empresa}', 'Api\Web\GestaoOrcamentaria\ServicosController@index');
             Route::get('servicos/listServicosFormacoes', 'Api\Web\GestaoOrcamentaria\ServicosController@listServicosFormacoes');
             Route::post('servicos', 'Api\Web\GestaoOrcamentaria\ServicosController@store');
+            Route::get('servicos/{servico}', 'Api\Web\GestaoOrcamentaria\ServicosController@show');
             Route::put('servicos/{servico}', 'Api\Web\GestaoOrcamentaria\ServicosController@update');
             Route::delete('servicos/{servico}', 'Api\Web\GestaoOrcamentaria\ServicosController@destroy');
         });
