@@ -131,6 +131,7 @@ class OrdemservicosController extends Controller
                     'orcamento_id' => $request['orcamento_id'],
                 ],
                 [
+                    'empresa_id'             => $request['empresa_id'],
                     'responsavel_id'         => null,
                     'profissional_id'        => $request['profissional_id'],
                     'codigo'                 => $request['codigo'],
