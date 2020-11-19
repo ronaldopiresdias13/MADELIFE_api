@@ -39,11 +39,36 @@ class ResponsaveisController extends Controller
      */
     public function store(Request $request)
     {
-        DB::transaction(function () use ($request) {
+
+        $pessoa = null;
+
+        if ($request['pessoa']) {
+            $pessoa = Pessoa::where(
+                'cpfcnpj',
+                $request['pessoa']['cpfcnpj']
+            )->first();
+        } elseif ($request['pessoa_id']) {
+            $pessoa = Pessoa::find($request['pessoa_id']);
+        }
+
+        $responsavel = null;
+
+        if ($pessoa) {
+            $responsavel = Responsavel::firstWhere(
+                'pessoa_id',
+                $pessoa->id,
+            );
+        }
+
+        if ($responsavel) {
+            return response()->json('Responsável já existe!', 400)->header('Content-Type', 'text/plain');
+        }
+
+        DB::transaction(function () use ($request, $pessoa) {
             $responsavel = Responsavel::create([
                 'empresa_id' => $request['empresa_id'],
                 'parentesco' => $request['parentesco'],
-                'pessoa_id'  => Pessoa::create([
+                'pessoa_id'  => $pessoa ? $pessoa->id : Pessoa::create([
                     'nome'        => $request['pessoa']['nome'],
                     'nascimento'  => $request['pessoa']['nascimento'],
                     'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
@@ -53,11 +78,13 @@ class ResponsaveisController extends Controller
                     'status'      => $request['pessoa']['status'],
                 ])->id
             ]);
+
             Tipopessoa::create([
                 'tipo'      => 'Responsável',
                 'pessoa_id' => $responsavel->pessoa_id,
                 'ativo'     => 1
             ]);
+
             if ($request['pessoa']['telefones']) {
                 foreach ($request['pessoa']['telefones'] as $key => $telefone) {
                     PessoaTelefone::firstOrCreate([
@@ -70,6 +97,7 @@ class ResponsaveisController extends Controller
                     ]);
                 }
             }
+
             if ($request['pessoa']['enderecos']) {
                 foreach ($request['pessoa']['enderecos'] as $key => $endereco) {
                     PessoaEndereco::firstOrCreate([
@@ -89,6 +117,7 @@ class ResponsaveisController extends Controller
                     ]);
                 }
             }
+
             if ($request['pessoa']['emails']) {
                 foreach ($request['pessoa']['emails'] as $key => $email) {
                     PessoaEmail::firstOrCreate([
@@ -102,6 +131,91 @@ class ResponsaveisController extends Controller
                 }
             }
         });
+
+        return response()->json([
+            'alert' => [
+                'title' => 'Ok!',
+                'text' => 'Responsável cadastrado com sucesso!'
+            ]
+        ], 200)
+            ->header('Content-Type', 'application/json');
+
+        // return response()->json('Responsável cadastrado com sucesso!', 200)->header('Content-Type', 'text/plain');
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // $responsavel = Responsavel::create([
+        //     'empresa_id' => $request['empresa_id'],
+        //     'parentesco' => $request['parentesco'],
+        //     'pessoa_id'  => Pessoa::create([
+        //         'nome'        => $request['pessoa']['nome'],
+        //         'nascimento'  => $request['pessoa']['nascimento'],
+        //         'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
+        //         'rgie'        => $request['pessoa']['rgie'],
+        //         'observacoes' => $request['pessoa']['observacoes'],
+        //         'perfil'      => $request['pessoa']['perfil'],
+        //         'status'      => $request['pessoa']['status'],
+        //     ])->id
+        // ]);
+        // Tipopessoa::create([
+        //     'tipo'      => 'Responsável',
+        //     'pessoa_id' => $responsavel->pessoa_id,
+        //     'ativo'     => 1
+        // ]);
+        // if ($request['pessoa']['telefones']) {
+        //     foreach ($request['pessoa']['telefones'] as $key => $telefone) {
+        //         PessoaTelefone::firstOrCreate([
+        //             'pessoa_id'   => $responsavel->pessoa_id,
+        //             'telefone_id' => Telefone::firstOrCreate(
+        //                 [
+        //                     'telefone'  => $telefone['telefone'],
+        //                 ]
+        //             )->id,
+        //         ]);
+        //     }
+        // }
+        // if ($request['pessoa']['enderecos']) {
+        //     foreach ($request['pessoa']['enderecos'] as $key => $endereco) {
+        //         PessoaEndereco::firstOrCreate([
+        //             'pessoa_id'   => $responsavel->pessoa_id,
+        //             'endereco_id' => Endereco::firstOrCreate(
+        //                 [
+        //                     'cep'         => $endereco['cep'],
+        //                     'cidade_id'   => $endereco['cidade_id'],
+        //                     'rua'         => $endereco['rua'],
+        //                     'bairro'      => $endereco['bairro'],
+        //                     'numero'      => $endereco['numero'],
+        //                     'complemento' => $endereco['complemento'],
+        //                     'tipo'        => $endereco['tipo'],
+        //                     'descricao'   => $endereco['descricao'],
+        //                 ]
+        //             )->id,
+        //         ]);
+        //     }
+        // }
+        // if ($request['pessoa']['emails']) {
+        //     foreach ($request['pessoa']['emails'] as $key => $email) {
+        //         PessoaEmail::firstOrCreate([
+        //             'pessoa_id' => $responsavel->pessoa_id,
+        //             'email_id'  => Email::firstOrCreate(
+        //                 [
+        //                     'email'     => $email['email'],
+        //                 ]
+        //             )->id,
+        //         ]);
+        //     }
+        // }
+        // });
     }
 
     /**
