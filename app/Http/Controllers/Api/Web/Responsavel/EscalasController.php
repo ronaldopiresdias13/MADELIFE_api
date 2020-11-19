@@ -46,10 +46,9 @@ class EscalasController extends Controller
             ->join('pessoas', 'pessoas.id', '=', 'prestadores.pessoa_id')
             ->where('pacientes.responsavel_id', "=", $responsavel->id)
             ->where('escalas.assinaturaresponsavel', "=", '')
-            // ->join('ordenservico', '', '=', '')
+            ->orWhere('escalas.assinaturaresponsavel', "=", null)
             ->orderBy('escalas.dataentrada')
             ->select('escalas.*', 'pessoas.nome')
-            // ->limit(10)
             ->get();
 
         return $pacientes;
