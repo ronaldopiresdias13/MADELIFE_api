@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class AphTelefone extends Model
 {
-    //
+    protected $guarded = [];
 }

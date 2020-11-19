@@ -19,12 +19,12 @@ class Cliente extends Model
     // }
     public function pessoa()
     {
-        return $this->belongsTo('App\Pessoa');
+        return $this->belongsTo(Pessoa::class);
     }
 
     public function empresa()
     {
-        return $this->belongsTo('App\Empresa');
+        return $this->belongsTo(Empresa::class);
     }
 
     // public function telefones()

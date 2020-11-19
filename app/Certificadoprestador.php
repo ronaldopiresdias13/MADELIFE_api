@@ -11,6 +11,6 @@ class Certificadoprestador extends Model
 
     public function prestador()
     {
-        return $this->belongsTo('App\Prestador');
+        return $this->belongsTo(Prestador::class);
     }
 }

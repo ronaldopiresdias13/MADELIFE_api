@@ -10,11 +10,11 @@ class Cnabsantander extends Model
 
     public function cnabheaderarquivo()
     {
-        return $this->belongsTo('App\Cnabheaderarquivo');
+        return $this->belongsTo(Cnabheaderarquivo::class);
     }
 
     public function cnabtrailerarquivo()
     {
-        return $this->belongsTo('App\Cnabtrailerarquivo');
+        return $this->belongsTo(Cnabtrailerarquivo::class);
     }
 }

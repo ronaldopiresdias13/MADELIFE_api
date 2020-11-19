@@ -10,10 +10,10 @@ class Conta extends Model
 
     public function pagamentos()
     {
-        return $this->hasMany('App\Pagamento')->where('ativo', true);
+        return $this->hasMany(Pagamento::class)->where('ativo', true);
     }
     public function pessoa()
     {
-        return $this->belongsTo('App\Pessoa');
+        return $this->belongsTo(Pessoa::class);
     }
 }

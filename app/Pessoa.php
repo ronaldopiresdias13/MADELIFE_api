@@ -6,81 +6,83 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pessoa extends Model
 {
+    // use FiltroEmpresaProfissional;
+
     protected $guarded = [];
 
     public function cliente()
     {
-        return $this->hasOne('App\Cliente')->where('ativo', true);
+        return $this->hasOne(Cliente::class)->where('ativo', true);
     }
 
     public function enderecos()
     {
-        return $this->belongsToMany('App\Endereco', 'pessoa_endereco')
+        return $this->belongsToMany(Endereco::class, 'pessoa_endereco')
             ->withPivot('id')
             ->wherePivot('ativo', true);
     }
 
     public function telefones()
     {
-        return $this->belongsToMany('App\Telefone', 'pessoa_telefone')
+        return $this->belongsToMany(Telefone::class, 'pessoa_telefone')
             ->withPivot('id', 'tipo', 'descricao')
             ->wherePivot('ativo', true);
     }
 
     public function prestador()
     {
-        return $this->hasOne('App\Prestador')->where('ativo', true);
+        return $this->hasOne(Prestador::class)->where('ativo', true);
     }
 
     public function profissional()
     {
-        return $this->hasOne('App\Profissional')->where('ativo', true);
+        return $this->hasOne(Profissional::class)->where('ativo', true);
     }
 
     public function fornecedor()
     {
-        return $this->hasOne('App\Fornecedor')->where('ativo', true);
+        return $this->hasOne(Fornecedor::class)->where('ativo', true);
     }
 
     public function emails()
     {
-        return $this->belongsToMany('App\Email', 'pessoa_email')
+        return $this->belongsToMany(Email::class, 'pessoa_email')
             ->withPivot('id', 'tipo', 'descricao')
             ->wherePivot('ativo', true);
     }
 
     public function assinaturas()
     {
-        return $this->belongsTo('App\Assinatura')
+        return $this->belongsTo(Assinatura::class)
             ->where('ativo', true);
     }
 
     public function user()
     {
-        return $this->hasOne('App\User')->where('ativo', true);
+        return $this->hasOne(User::class)->where('ativo', true);
     }
 
     public function dadosbancario()
     {
-        return $this->hasMany('App\Dadosbancario')->where('ativo', true);
+        return $this->hasMany(Dadosbancario::class)->where('ativo', true);
     }
 
     public function conselhos()
     {
-        return $this->hasMany('App\Conselho')->where('ativo', true);
+        return $this->hasMany(Conselho::class)->where('ativo', true);
     }
 
     public function responsavel()
     {
-        return $this->hasOne('App\Responsavel');
+        return $this->hasOne(Responsavel::class);
     }
 
     public function tipopessoas()
     {
-        return $this->hasMany('App\Tipopessoa')->where('ativo', true);
+        return $this->hasMany(Tipopessoa::class)->where('ativo', true);
     }
     public function pagamentopessoas()
     {
-        return $this->hasMany('App\Pagamentopessoa')->where('ativo', true);
+        return $this->hasMany(Pagamentopessoa::class)->where('ativo', true);
     }
 }

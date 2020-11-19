@@ -10,6 +10,6 @@ class Empresa extends Model
 
     public function clientes()
     {
-        return $this->hasMany('App\Cliente')->where('ativo', true);
+        return $this->hasMany(Cliente::class)->where('ativo', true);
     }
 }

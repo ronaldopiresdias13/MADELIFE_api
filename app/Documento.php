@@ -15,10 +15,10 @@ class Documento extends Model
 
     public function categoria()
     {
-        return $this->belongsTo('App\Categoriadocumento');
+        return $this->belongsTo(Categoriadocumento::class);
     }
     public function paciente()
     {
-        return $this->belongsTo('App\Paciente');
+        return $this->belongsTo(Paciente::class);
     }
 }

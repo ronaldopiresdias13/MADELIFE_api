@@ -18,11 +18,11 @@ class Agendamento extends Model
 
     public function sala()
     {
-        return $this->belongsTo('App\Sala');
+        return $this->belongsTo(Sala::class);
     }
 
     public function profissional()
     {
-        return $this->belongsTo('App\Profissional');
+        return $this->belongsTo(Profissional::class);
     }
 }
