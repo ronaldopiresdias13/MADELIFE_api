@@ -34,9 +34,9 @@ class CategorianaturezasController extends Controller
                     array_push($with, $filho);
                 }
             }
-            $itens = Categorianatureza::with($with)->where('ativo', true);
+            $itens = Categorianatureza::with($with); //->where('ativo', true);
         } else {
-            $itens = Categorianatureza::where('ativo', true);
+            $itens = Categorianatureza::all(); //where('ativo', true);
         }
 
         if ($request->commands) {
@@ -191,7 +191,8 @@ class CategorianaturezasController extends Controller
      */
     public function destroy(Categorianatureza $categorianatureza)
     {
-        $categorianatureza->ativo = false;
-        $categorianatureza->save();
+        $categorianatureza->delete();
+        // $categorianatureza->ativo = false;
+        // $categorianatureza->save();
     }
 }

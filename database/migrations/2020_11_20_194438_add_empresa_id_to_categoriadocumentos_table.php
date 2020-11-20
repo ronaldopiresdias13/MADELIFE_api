@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddEmpresaIdToAgendamentosTable extends Migration
+class AddEmpresaIdToCategoriadocumentosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,7 @@ class AddEmpresaIdToAgendamentosTable extends Migration
      */
     public function up()
     {
-        Schema::table('agendamentos', function (Blueprint $table) {
-            $table->dropColumn('uuid');
+        Schema::table('categoriadocumentos', function (Blueprint $table) {
             $table->unsignedBigInteger('empresa_id')->nullable()->after('id');
             $table->foreign('empresa_id')->references('id')->on('empresas');
             $table->dropColumn('ativo');
@@ -29,11 +28,10 @@ class AddEmpresaIdToAgendamentosTable extends Migration
      */
     public function down()
     {
-        Schema::table('agendamentos', function (Blueprint $table) {
-            $table->uuid('uuid')->after('id')->unique()->nullable();
+        Schema::table('categoriadocumentos', function (Blueprint $table) {
             $table->dropForeign(['empresa_id']);
             $table->dropColumn('empresa_id');
-            $table->boolean('ativo')->default(true)->after('horafim');
+            $table->boolean('ativo')->default(true)->after('categoria');
             $table->dropSoftDeletes();
         });
     }
