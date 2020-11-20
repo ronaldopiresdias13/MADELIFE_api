@@ -111,7 +111,7 @@ class UnidademedidasController extends Controller
     {
         $unidademedida = new Unidademedida();
         // $unidademedida->empresa_id = $request->empresa_id;
-        $unidademedida->empresa_id = 1;
+        $unidademedida->empresa_id = $request->empresa_id;
         $unidademedida->descricao = $request->descricao;
         $unidademedida->sigla = $request->sigla;
         $unidademedida->grupo = $request->grupo;

@@ -113,7 +113,7 @@ class ProdutosController extends Controller
         DB::transaction(function () use ($request) {
             $produto = new Produto();
             $produto->descricao         = $request->descricao;
-            $produto->empresa_id        = 1;
+            $produto->empresa_id        = $request->empresa_id;
             $produto->tipoproduto_id    = $request->tipoproduto_id;
             $produto->codigo            = $request->codigo;
             $produto->unidademedida_id  = $request->unidademedida_id;
@@ -199,7 +199,7 @@ class ProdutosController extends Controller
     public function update(Request $request, Produto $produto)
     {
         $produto->descricao         = $request->descricao;
-        $produto->empresa_id        = 1;
+        $produto->empresa_id        = $request->empresa_id;
         $produto->tipoproduto_id    = $request->tipoproduto_id;
         $produto->codigo            = $request->codigo;
         $produto->unidademedida_id  = $request->unidademedida_id;
