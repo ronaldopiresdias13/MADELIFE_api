@@ -10,6 +10,6 @@ class Cnab extends Model
 
     public function cnabsantanders()
     {
-        return $this->hasMany('App\Cnabsantander')->where('ativo', true);
+        return $this->hasMany(Cnabsantander::class)->where('ativo', true);
     }
 }

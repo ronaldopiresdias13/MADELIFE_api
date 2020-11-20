@@ -11,11 +11,11 @@ class Cotacao extends Model
 
     public function profissional()
     {
-        return $this->belongsTo('App\Profissional');
+        return $this->belongsTo(Profissional::class);
     }
     public function produtos()
     {
-        return $this->belongsToMany('App\Produto', 'cotacao_produto')
+        return $this->belongsToMany(Produto::class, 'cotacao_produto')
             ->withPivot(
                 'id',
                 'produto_id',
