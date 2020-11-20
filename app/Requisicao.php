@@ -11,11 +11,11 @@ class Requisicao extends Model
 
     public function pessoa()
     {
-        return $this->belongsTo('App\Pessoa');
+        return $this->belongsTo(Pessoa::class);
     }
     public function produtos()
     {
-        return $this->belongsToMany('App\Produto', 'requisicao_produto')
+        return $this->belongsToMany(Produto::class, 'requisicao_produto')
             ->withPivot('id', 'quantidade', 'observacao', 'status')
             ->wherePivot('ativo', true);
     }

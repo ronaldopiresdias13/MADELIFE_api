@@ -15,6 +15,6 @@ class Venda extends Model
 
     public function orcamento()
     {
-        return $this->belongsTo('App\Orcamento');
+        return $this->belongsTo(Orcamento::class);
     }
 }

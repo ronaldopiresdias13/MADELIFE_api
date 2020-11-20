@@ -10,21 +10,21 @@ class Servico extends Model
 
     public function empresa()
     {
-        return $this->belongsTo('App\Empresa');
+        return $this->belongsTo(Empresa::class);
     }
 
     public function orcamentoservicos()
     {
-        return $this->hasMany('App\Orcamentoservico')->where('ativo', true);
+        return $this->hasMany(Orcamentoservico::class)->where('ativo', true);
     }
 
     public function formacoes()
     {
-        return $this->belongsToMany('App\Formacao', 'servico_formacao')->wherePivot('ativo', true);
+        return $this->belongsToMany(Formacao::class, 'servico_formacao')->wherePivot('ativo', true);
     }
 
     public function servicoFormacao()
     {
-        return $this->hasMany('App\ServicoFormacao')->where('ativo', true);
+        return $this->hasMany(ServicoFormacao::class)->where('ativo', true);
     }
 }

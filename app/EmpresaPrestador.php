@@ -11,11 +11,11 @@ class EmpresaPrestador extends Model
 
     public function prestador()
     {
-        return $this->belongsTo("App\Prestador");
+        return $this->belongsTo(Prestador::class);
     }
 
     public function empresa()
     {
-        return $this->belongsTo("App\Empresa");
+        return $this->belongsTo(Empresa::class);
     }
 }

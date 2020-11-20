@@ -10,7 +10,7 @@ class Escala extends Model
 
     public function cuidados()
     {
-        return $this->belongsToMany('App\Cuidado', 'cuidado_escalas')
+        return $this->belongsToMany(Cuidado::class, 'cuidado_escalas')
             ->withPivot(
                 'id',
                 'data',
@@ -21,41 +21,41 @@ class Escala extends Model
 
     public function pontos()
     {
-        return $this->hasMany('App\Ponto')->where('ativo', true);
+        return $this->hasMany(Ponto::class)->where('ativo', true);
     }
 
     public function relatorios()
     {
-        return $this->hasMany('App\Relatorio')->where('ativo', true);
+        return $this->hasMany(Relatorio::class)->where('ativo', true);
     }
 
     public function monitoramentos()
     {
-        return $this->hasMany('App\Monitoramentoescala')->where('ativo', true);
+        return $this->hasMany(Monitoramentoescala::class)->where('ativo', true);
     }
 
     public function ordemservico()
     {
-        return $this->belongsTo('App\Ordemservico');
+        return $this->belongsTo(Ordemservico::class);
     }
 
     public function prestador()
     {
-        return $this->belongsTo('App\Prestador', 'prestador_id');
+        return $this->belongsTo(Prestador::class, 'prestador_id');
     }
 
     public function servico()
     {
-        return $this->belongsTo('App\Servico', 'servico_id');
+        return $this->belongsTo(Servico::class, 'servico_id');
     }
 
     public function acaoMedicamentos()
     {
-        return $this->hasMany('App\Acaomedicamento')->where('ativo', true);
+        return $this->hasMany(Acaomedicamento::class)->where('ativo', true);
     }
 
     public function formacao()
     {
-        return $this->belongsTo('App\Formacao');
+        return $this->belongsTo(Formacao::class);
     }
 }

@@ -15,7 +15,7 @@ class Saida extends Model
     protected $guarded = [];
     public function produtos()
     {
-        return $this->belongsToMany('App\Produto', 'saida_produto')
+        return $this->belongsToMany(Produto::class, 'saida_produto')
             ->withPivot('id', 'quantidade', 'valor', 'lote')
             ->wherePivot('ativo', true);
     }

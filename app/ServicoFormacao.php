@@ -11,6 +11,6 @@ class ServicoFormacao extends Model
 
     public function servico()
     {
-        return $this->belongsTo('App\Servico');
+        return $this->belongsTo(Servico::class);
     }
 }

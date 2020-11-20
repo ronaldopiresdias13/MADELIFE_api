@@ -10,21 +10,21 @@ class Homecare extends Model
 
     public function telefones()
     {
-        return $this->belongsToMany('App\Telefone', 'homecare_telefone')->withPivot('id', 'tipo', 'descricao');
+        return $this->belongsToMany(Telefone::class, 'homecare_telefone')->withPivot('id', 'tipo', 'descricao');
     }
 
     public function emails()
     {
-        return $this->belongsToMany('App\Email', 'homecare_email')->withPivot('id', 'tipo', 'descricao');
+        return $this->belongsToMany(Email::class, 'homecare_email')->withPivot('id', 'tipo', 'descricao');
     }
 
     public function paciente()
     {
-        return $this->belongsTo('App\Paciente');
+        return $this->belongsTo(Paciente::class);
     }
 
     public function orcamento()
     {
-        return $this->belongsTo('App\Orcamento');
+        return $this->belongsTo(Orcamento::class);
     }
 }

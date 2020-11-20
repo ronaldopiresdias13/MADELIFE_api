@@ -11,12 +11,12 @@ class Transcricao extends Model
 
     public function ordemservico()
     {
-        return $this->belongsTo('App\Ordemservico');
+        return $this->belongsTo(Ordemservico::class);
     }
 
     public function produtos()
     {
-        return $this->belongsToMany('App\Produto', 'transcricao_produto')
+        return $this->belongsToMany(Produto::class, 'transcricao_produto')
             ->withpivot(
                 "id",
                 "quantidade",
@@ -29,16 +29,16 @@ class Transcricao extends Model
     }
     public function itensTranscricao()
     {
-        return $this->hasMany('App\TranscricaoProduto')->where('ativo', true);
+        return $this->hasMany(TranscricaoProduto::class)->where('ativo', true);
     }
 
     public function acoesTrascricao()
     {
-        return $this->hasMany('App\Horariomedicamento')->where('ativo', true);
+        return $this->hasMany(Horariomedicamento::class)->where('ativo', true);
     }
 
     public function profissional()
     {
-        return $this->belongsTo('App\Profissional');
+        return $this->belongsTo(Profissional::class);
     }
 }

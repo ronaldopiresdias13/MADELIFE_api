@@ -8,6 +8,6 @@ class Produto extends Model
 {
     public function transcricao_produto()
     {
-        return $this->hasOne('App\TranscricaoProduto')->where('ativo', true);
+        return $this->hasOne(TranscricaoProduto::class)->where('ativo', true);
     }
 }

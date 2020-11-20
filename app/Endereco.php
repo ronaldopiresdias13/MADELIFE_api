@@ -10,6 +10,6 @@ class Endereco extends Model
 
     public function cidade()
     {
-        return $this->belongsTo('App\Cidade');
+        return $this->belongsTo(Cidade::class);
     }
 }

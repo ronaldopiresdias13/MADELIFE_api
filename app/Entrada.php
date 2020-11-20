@@ -16,12 +16,12 @@ class Entrada extends Model
 
     public function produtos()
     {
-        return $this->belongsToMany('App\Produto', 'entrada_produto')
+        return $this->belongsToMany(Produto::class, 'entrada_produto')
             ->withPivot('id', 'quantidade', 'valor', 'lote', 'validade')
             ->wherePivot('ativo', true);
     }
     public function fornecedor()
     {
-        return $this->belongsTo('App\Fornecedor');
+        return $this->belongsTo(Fornecedor::class);
     }
 }

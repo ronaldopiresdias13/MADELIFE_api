@@ -11,14 +11,14 @@ class TranscricaoProduto extends Model
 
     public function horariomedicamentos()
     {
-        return $this->hasMany('App\Horariomedicamento')->where('ativo', true);
+        return $this->hasMany(Horariomedicamento::class)->where('ativo', true);
     }
     public function produto()
     {
-        return $this->belongsTo('App\Produto');
+        return $this->belongsTo(Produto::class);
     }
     public function acoesmedicamentos()
     {
-        return $this->hasMany('App\Acaomedicamento')->where('ativo', true);
+        return $this->hasMany(Acaomedicamento::class)->where('ativo', true);
     }
 }

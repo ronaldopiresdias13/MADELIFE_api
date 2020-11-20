@@ -10,26 +10,26 @@ class Paciente extends Model
 
     public function pessoa()
     {
-        return $this->belongsTo('App\Pessoa');
+        return $this->belongsTo(Pessoa::class);
     }
 
     public function responsavel()
     {
-        return $this->belongsTo('App\Responsavel');
+        return $this->belongsTo(Responsavel::class);
     }
 
     public function cuidados()
     {
-        return $this->belongsToMany('App\Cuidado', 'cuidado_paciente')->withPivot('id', 'formacao_id');
+        return $this->belongsToMany(Cuidado::class, 'cuidado_paciente')->withPivot('id', 'formacao_id');
     }
 
     public function documentos()
     {
-        return $this->hasMany('App\Documento')->where('ativo', true);
+        return $this->hasMany(Documento::class)->where('ativo', true);
     }
 
     public function homecares()
     {
-        return $this->hasMany('App\Homecare')->where('ativo', true);
+        return $this->hasMany(Homecare::class)->where('ativo', true);
     }
 }

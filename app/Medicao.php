@@ -11,14 +11,14 @@ class Medicao extends Model
 
     public function cliente()
     {
-        return $this->belongsTo('App\Cliente');
+        return $this->belongsTo(Cliente::class);
     }
     public function ordemservico()
     {
-        return $this->belongsTo('App\Ordemservico');
+        return $this->belongsTo(Ordemservico::class);
     }
     public function medicao_servicos()
     {
-        return $this->hasMany('App\ServicoMedicao', 'medicoes_id')->where('ativo', true);
+        return $this->hasMany(ServicoMedicao::class, 'medicoes_id')->where('ativo', true);
     }
 }

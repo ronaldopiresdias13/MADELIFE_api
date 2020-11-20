@@ -11,41 +11,41 @@ class Profissional extends Model
 
     public function empresa()
     {
-        return $this->belongsTo('App\Empresa');
+        return $this->belongsTo(Empresa::class);
     }
 
     public function pessoa()
     {
-        return $this->belongsTo('App\Pessoa');
+        return $this->belongsTo(Pessoa::class);
     }
 
     public function setor()
     {
-        return $this->belongsTo('App\Setor');
+        return $this->belongsTo(Setor::class);
     }
 
     public function cargo()
     {
-        return $this->belongsTo('App\Cargo');
+        return $this->belongsTo(Cargo::class);
     }
 
     public function dadoscontratual()
     {
-        return $this->belongsTo('App\Dadoscontratual', 'dadoscontratuais_id');
+        return $this->belongsTo(Dadoscontratual::class, 'dadoscontratuais_id');
     }
 
     public function formacoes()
     {
-        return $this->belongsToMany('App\Formacao', 'profissional_formacao')->wherePivot('ativo', true);
+        return $this->belongsToMany(Formacao::class, 'profissional_formacao')->wherePivot('ativo', true);
     }
 
     public function beneficios()
     {
-        return $this->belongsToMany('App\Beneficio', 'profissional_beneficio')->wherePivot('ativo', true);
+        return $this->belongsToMany(Beneficio::class, 'profissional_beneficio')->wherePivot('ativo', true);
     }
 
     public function convenios()
     {
-        return $this->belongsToMany('App\Convenio', 'profissional_convenio')->wherePivot('ativo', true);
+        return $this->belongsToMany(Convenio::class, 'profissional_convenio')->wherePivot('ativo', true);
     }
 }

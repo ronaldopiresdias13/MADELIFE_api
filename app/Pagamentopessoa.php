@@ -10,10 +10,10 @@ class Pagamentopessoa extends Model
 
     public function pessoa()
     {
-        return $this->belongsTo('App\Pessoa');
+        return $this->belongsTo(Pessoa::class);
     }
     public function ordemservico()
     {
-        return $this->belongsTo('App\Ordemservico');
+        return $this->belongsTo(Ordemservico::class);
     }
 }

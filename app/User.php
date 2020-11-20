@@ -56,11 +56,11 @@ class User extends Authenticatable
 
     public function pessoa()
     {
-        return $this->belongsTo('App\Pessoa');
+        return $this->belongsTo(Pessoa::class);
     }
 
     public function acessos()
     {
-        return $this->belongsToMany('App\Acesso', 'user_acesso')->withPivot('id')->wherePivot('ativo', true);
+        return $this->belongsToMany(Acesso::class, 'user_acesso')->withPivot('id')->wherePivot('ativo', true);
     }
 }

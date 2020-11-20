@@ -18,11 +18,11 @@ class Sala extends Model
 
     public function agendamentos()
     {
-        return $this->hasMany('App\Agendamento', 'sala_id', 'id')->where('ativo', true);
+        return $this->hasMany(Agendamento::class, 'sala_id', 'id')->where('ativo', true);
     }
 
     public function empresa()
     {
-        return $this->belongsTo('App\Empresa');
+        return $this->belongsTo(Empresa::class);
     }
 }

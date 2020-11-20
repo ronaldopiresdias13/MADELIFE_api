@@ -10,32 +10,32 @@ class Ordemservico extends Model
 
     public function orcamento()
     {
-        return $this->belongsTo('App\Orcamento');
+        return $this->belongsTo(Orcamento::class);
     }
 
     public function responsavel()
     {
-        return $this->belongsTo('App\Responsavel');
+        return $this->belongsTo(Responsavel::class);
     }
 
     public function profissional()
     {
-        return $this->belongsTo('App\Profissional');
+        return $this->belongsTo(Profissional::class);
     }
 
     public function transcricoes()
     {
-        return $this->hasMany('App\Transcricao')->where('ativo', true);
+        return $this->hasMany(Transcricao::class)->where('ativo', true);
     }
 
     public function escalas()
     {
-        return $this->hasMany('App\Escala')->where('ativo', true);
+        return $this->hasMany(Escala::class)->where('ativo', true);
     }
 
     public function servicos()
     {
-        return $this->belongsToMany('App\Servico', 'ordemservico_servico')
+        return $this->belongsToMany(Servico::class, 'ordemservico_servico')
             ->withPivot(
                 'id',
                 'descricao',
@@ -46,7 +46,7 @@ class Ordemservico extends Model
 
     public function prestadores()
     {
-        return $this->belongsToMany('App\Prestador', 'ordemservico_prestador')
+        return $this->belongsToMany(Prestador::class, 'ordemservico_prestador')
             ->wherePivot('ativo', true);
     }
 }
