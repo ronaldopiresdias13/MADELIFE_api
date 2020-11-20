@@ -10,6 +10,6 @@ class Cidade extends Model
 
     public function endereco()
     {
-        return $this->hasMany('App\Endereco', 'cidadade_id')->where('ativo', true);
+        return $this->hasMany(Endereco::class, 'cidadade_id')->where('ativo', true);
     }
 }

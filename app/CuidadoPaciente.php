@@ -16,10 +16,10 @@ class CuidadoPaciente extends Model
 
     public function formacao()
     {
-        return $this->belongsTo('App\Formacao');
+        return $this->belongsTo(Formacao::class);
     }
     public function cuidado()
     {
-        return $this->belongsTo('App\Cuidado');
+        return $this->belongsTo(Cuidado::class);
     }
 }

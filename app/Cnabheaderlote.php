@@ -10,11 +10,11 @@ class Cnabheaderlote extends Model
 
     public function cnabdetalheas()
     {
-        return $this->belongsToMany('App\Cnabdetalhea', 'cnabheaderlotedetalheas')->wherePivot('ativo', true);
+        return $this->belongsToMany(Cnabdetalhea::class, 'cnabheaderlotedetalheas')->wherePivot('ativo', true);
     }
 
     public function cnabdetalhebs()
     {
-        return $this->belongsToMany('App\Cnabdetalheb', 'cnabheaderlotedetalhebs')->wherePivot('ativo', true);
+        return $this->belongsToMany(Cnabdetalheb::class, 'cnabheaderlotedetalhebs')->wherePivot('ativo', true);
     }
 }

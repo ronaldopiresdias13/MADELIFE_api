@@ -10,6 +10,6 @@ class Contasbancaria extends Model
 
     public function banco()
     {
-        return $this->belongsTo('App\Banco');
+        return $this->belongsTo(Banco::class);
     }
 }
