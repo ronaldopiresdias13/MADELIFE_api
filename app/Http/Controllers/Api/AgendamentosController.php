@@ -35,9 +35,9 @@ class AgendamentosController extends Controller
                     array_push($with, $filho);
                 }
             }
-            $itens = Agendamento::with($with)->where('ativo', true);
+            $itens = Agendamento::with($with); //->where('ativo', true);
         } else {
-            $itens = Agendamento::where('ativo', true);
+            $itens = Agendamento::all(); //where('ativo', true);
         }
 
         if ($request->commands) {
@@ -189,7 +189,8 @@ class AgendamentosController extends Controller
      */
     public function destroy(Agendamento $agendamento)
     {
-        $agendamento->ativo = false;
-        $agendamento->save();
+        $agendamento->delete();
+        // $agendamento->ativo = false;
+        // $agendamento->save();
     }
 }
