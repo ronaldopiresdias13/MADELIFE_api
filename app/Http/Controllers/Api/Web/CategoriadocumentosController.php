@@ -29,12 +29,9 @@ class CategoriadocumentosController extends Controller
      */
     public function newCategoria(Request $request)
     {
-        Categoriadocumento::updateOrCreate(
+        Categoriadocumento::firstOrCreate(
             [
                 'categoria' => $request['categoria']
-            ],
-            [
-                'ativo' => true
             ]
         );
     }

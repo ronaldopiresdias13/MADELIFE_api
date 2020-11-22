@@ -25,7 +25,7 @@ class Paciente extends Model
 
     public function documentos()
     {
-        return $this->hasMany(Documento::class)->where('ativo', true);
+        return $this->hasMany(Documento::class); //->where('ativo', true);
     }
 
     public function homecares()

@@ -35,9 +35,9 @@ class AgendamentosController extends Controller
                     array_push($with, $filho);
                 }
             }
-            $itens = Agendamento::with($with); //->where('ativo', true);
+            $itens = Agendamento::with($with)->where('id', 'like', '%');
         } else {
-            $itens = Agendamento::all(); //where('ativo', true);
+            $itens = Agendamento::where('id', 'like', '%');
         }
 
         if ($request->commands) {
