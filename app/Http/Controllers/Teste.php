@@ -21,7 +21,7 @@ class Teste extends Controller
             $categoriadocumento->documentos;
         }
 
-        return $categoriadocumentos[0]->documentos[0];
+        return $categoriadocumentos[0]['documentos'][0];
 
         return Pessoa::with('cliente')->get();
 
