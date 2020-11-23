@@ -208,7 +208,8 @@ class VendasController extends Controller
                 'venda_id' => Venda::create([
                     'orcamento_id' => $orcamento->id,
                     'realizada' => 1,
-                    'data' => $request['saida']['data']
+                    'data' => $request['saida']['data'],
+                    'empresa_id' => $request['empresa_id']
                     // 'ativo' => 1
                 ])->id,
                 'saida_id' => $saida->id
