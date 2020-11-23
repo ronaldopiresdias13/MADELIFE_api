@@ -13,12 +13,11 @@ class CategoriadocumentosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function listCategorias()
+    public function listCategorias(Request $request)
     {
-        // $categorias = Categoriadocumento::with('categorias')->get();
-        $categorias = Categoriadocumento::all();
-
-        return $categorias;
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return Categoriadocumento::where('empresa_id', $empresa_id)->get();
     }
 
     /**
@@ -31,7 +30,8 @@ class CategoriadocumentosController extends Controller
     {
         Categoriadocumento::firstOrCreate(
             [
-                'categoria' => $request['categoria']
+                'categoria' => $request['categoria'],
+                'empresa_id' => $request['empresa_id']
             ]
         );
     }
