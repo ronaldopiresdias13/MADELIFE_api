@@ -37,9 +37,11 @@ class DocumentosController extends Controller
      */
     public function listDocumentosByEmpresa(Request $request)
     {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
         return Documento::with('categoria', 'paciente.pessoa')
             // ->where('ativo', true)
-            // ->where('paciente.empresa_id', 1)
+            ->where('empresa_id', $empresa_id)
 
             // ->groupBy('mes')
             ->get();
