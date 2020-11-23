@@ -15,7 +15,13 @@ class Teste extends Controller
 
         // Categoriadocumento::withTrashed()->find(1)->restore();
 
-        return Categoriadocumento::all();
+        $categoriadocumentos = Categoriadocumento::all();
+
+        foreach ($categoriadocumentos as $key => $categoriadocumento) {
+            $categoriadocumento->documentos;
+        }
+
+        return $categoriadocumentos[0]->documentos[0];
 
         return Pessoa::with('cliente')->get();
 
