@@ -1,5 +1,6 @@
 <?php
 
+use App\Agendamento;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,8 +18,21 @@ class AddEmpresaIdToAgendamentosTable extends Migration
             $table->dropColumn('uuid');
             $table->unsignedBigInteger('empresa_id')->nullable()->after('id');
             $table->foreign('empresa_id')->references('id')->on('empresas');
-            $table->dropColumn('ativo');
             $table->softDeletes();
+        });
+
+        $agendamentos = Agendamento::all();
+
+        foreach ($agendamentos as $key => $agendamento) {
+            $agendamento->empresa_id = $agendamento->sala->empresa_id;
+            $agendamento->save();
+            if (!$agendamento->ativo) {
+                $agendamento->delete();
+            }
+        }
+
+        Schema::table('agendamentos', function (Blueprint $table) {
+            $table->dropColumn('ativo');
         });
     }
 
@@ -34,6 +48,18 @@ class AddEmpresaIdToAgendamentosTable extends Migration
             $table->dropForeign(['empresa_id']);
             $table->dropColumn('empresa_id');
             $table->boolean('ativo')->default(true)->after('horafim');
+        });
+
+        $agendamentos = Agendamento::all();
+
+        foreach ($agendamentos as $key => $agendamento) {
+            if ($agendamento->deleted_at != null) {
+                $agendamento->ativo = false;
+                $agendamento->save();
+            }
+        }
+
+        Schema::table('agendamentos', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
     }
