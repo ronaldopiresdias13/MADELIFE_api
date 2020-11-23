@@ -20,7 +20,7 @@ class DocumentosController extends Controller
         $hoje = getdate();
 
         $documentos = Documento::with('categoria')
-            ->where('ativo', true)
+            // ->where('ativo', true)
             ->where('paciente_id', 'like', $request->paciente_id ? $request->paciente_id : '%')
             ->where('categoria_id', 'like', $request->categoria_id ? $request->categoria_id : '%')
             ->where('mes', $request->mes ? $request->mes : $hoje['mon'])
@@ -38,7 +38,7 @@ class DocumentosController extends Controller
     public function listDocumentosByEmpresa(Request $request)
     {
         return Documento::with('categoria', 'paciente.pessoa')
-            ->where('ativo', true)
+            // ->where('ativo', true)
             // ->where('paciente.empresa_id', 1)
 
             // ->groupBy('mes')
@@ -168,7 +168,8 @@ class DocumentosController extends Controller
      */
     public function delete(Documento $documento)
     {
-        $documento->ativo = false;
-        $documento->save();
+        $documento->delete();
+        // $documento->ativo = false;
+        // $documento->save();
     }
 }
