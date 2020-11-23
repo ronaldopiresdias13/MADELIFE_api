@@ -11,26 +11,26 @@ class Prestador extends Model
 
     public function formacoes()
     {
-        return $this->belongsToMany('App\Formacao', 'prestador_formacao')->withPivot('id')->wherePivot('ativo', true);
+        return $this->belongsToMany(Formacao::class, 'prestador_formacao')->withPivot('id')->wherePivot('ativo', true);
     }
 
     public function pessoa()
     {
-        return $this->belongsTo('App\Pessoa');
+        return $this->belongsTo(Pessoa::class);
     }
 
     public function ordemservicoPrestadores()
     {
-        return $this->hasMany('App\OrdemservicoPrestador')->where('ativo', true);
+        return $this->hasMany(OrdemservicoPrestador::class)->where('ativo', true);
     }
 
     public function servicos()
     {
-        return $this->belongsToMany('App\Servico', 'prestador_servico')->withPivot('id')->wherePivot('ativo', true);
+        return $this->belongsToMany(Servico::class, 'prestador_servico')->withPivot('id')->wherePivot('ativo', true);
     }
 
     public function empresas()
     {
-        return $this->belongsToMany('App\Empresa', 'empresa_prestador')->withPivot('id')->wherePivot('ativo', true);
+        return $this->belongsToMany(Empresa::class, 'empresa_prestador')->withPivot('id')->wherePivot('ativo', true);
     }
 }

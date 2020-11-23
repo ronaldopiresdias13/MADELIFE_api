@@ -11,6 +11,6 @@ class Fornecedor extends Model
 
     public function pessoa()
     {
-        return $this->belongsTo('App\Pessoa');
+        return $this->belongsTo(Pessoa::class);
     }
 }

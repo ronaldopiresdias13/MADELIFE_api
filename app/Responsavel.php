@@ -11,10 +11,10 @@ class Responsavel extends Model
 
     public function pessoa()
     {
-        return $this->belongsTo('App\Pessoa');
+        return $this->belongsTo(Pessoa::class);
     }
     public function pacientes()
     {
-        return $this->hasMany('App\Paciente')->where('ativo', true);
+        return $this->hasMany(Paciente::class)->where('ativo', true);
     }
 }

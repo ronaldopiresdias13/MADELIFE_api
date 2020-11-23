@@ -11,16 +11,16 @@ class OrdemservicoPrestador extends Model
 
     public function prestador()
     {
-        return $this->belongsTo('App\Prestador');
+        return $this->belongsTo(Prestador::class);
     }
 
     public function ordemservico()
     {
-        return $this->belongsTo('App\Ordemservico');
+        return $this->belongsTo(Ordemservico::class);
     }
 
     public function servico()
     {
-        return $this->belongsTo('App\Servico');
+        return $this->belongsTo(Servico::class);
     }
 }

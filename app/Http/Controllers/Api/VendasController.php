@@ -50,9 +50,9 @@ class VendasController extends Controller
                     array_push($with, $filho);
                 }
             }
-            $itens = Venda::with($with)->where('ativo', true);
+            $itens = Venda::with($with)->where('id', 'like', '%');
         } else {
-            $itens = Venda::where('ativo', true);
+            $itens = Venda::where('id', 'like', '%');
         }
 
         if ($request->commands) {
@@ -185,8 +185,8 @@ class VendasController extends Controller
                                     'unidade'    => $prod->unidademedida_id,
                                     'quantidade' => $produto['quantidade'],
                                     'lote'       => $produto['lote'],
-                                    'validade'   => $produto['validade'],
-                                    'ativo'      => 1
+                                    'validade'   => $produto['validade']
+                                    // 'ativo'      => 1
                                 ]);
                             }
                             // return $estoque;
@@ -197,8 +197,8 @@ class VendasController extends Controller
                         'produto_id'    => $produto['produto_id'],
                         'quantidade'    => $produto['quantidade'],
                         'lote'          => $produto['lote'],
-                        'valor'         => $produto['valor'],
-                        'ativo'         => 1
+                        'valor'         => $produto['valor']
+                        // 'ativo'         => 1
                     ]);
                     $prod->quantidadeestoque = $prod->quantidadeestoque - $produto["quantidade"];
                     $prod->update();
@@ -209,10 +209,11 @@ class VendasController extends Controller
                     'orcamento_id' => $orcamento->id,
                     'realizada' => 1,
                     'data' => $request['saida']['data'],
-                    'ativo' => 1
+                    'empresa_id' => $request['empresa_id']
+                    // 'ativo' => 1
                 ])->id,
-                'saida_id' => $saida->id,
-                'ativo' => 1
+                'saida_id' => $saida->id
+                // 'ativo' => 1
             ]);
         });
         return response()->json([
@@ -254,8 +255,8 @@ class VendasController extends Controller
             ]);
             Tipopessoa::create([
                 'tipo'      => 'Cliente',
-                'pessoa_id' => $cliente->pessoa_id,
-                'ativo'     => 1
+                'pessoa_id' => $cliente->pessoa_id
+                // 'ativo'     => 1
             ]);
 
             if ($request['pessoa']['telefone']) {

@@ -4,17 +4,38 @@ namespace App;
 
 use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Agendamento extends Model
 {
-    use Uuid;
+    // use Uuid;
+    use SoftDeletes;
 
-    protected $keyType = 'string';
-    protected $primaryKey = 'uuid';
-    protected $guarded = [];
-    // protected $hidden = [
-    //     'id'
-    // ];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
+
+    protected $fillable = [
+        'empresa_id',
+        'profissional_id',
+        'sala_id',
+        'nome',
+        'descricao',
+        'cor',
+        'datainicio',
+        'datafim',
+        'horainicio',
+        'horafim',
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
+
+    // protected $keyType = 'string';
+    // protected $primaryKey = 'uuid';
+    // protected $guarded = [];
 
     public function sala()
     {

@@ -9,11 +9,11 @@ class Pedidocompra extends Model
     protected $guarded = [];
     public function pessoa()
     {
-        return $this->belongsTo('App\Pessoa');
+        return $this->belongsTo(Pessoa::class);
     }
     public function produtos()
     {
-        return $this->belongsToMany('App\Produto', 'pedidocompra_produto')
+        return $this->belongsToMany(Produto::class, 'pedidocompra_produto')
             ->withPivot('id', 'quantidade', 'observacao', 'status');
     }
 }

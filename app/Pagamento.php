@@ -10,10 +10,10 @@ class Pagamento extends Model
 
     public function conta()
     {
-        return $this->belongsTo('App\Conta');
+        return $this->belongsTo(Conta::class);
     }
     public function contasbancaria()
     {
-        return $this->belongsTo('App\Contasbancaria');
+        return $this->belongsTo(Contasbancaria::class);
     }
 }

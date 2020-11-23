@@ -10,6 +10,6 @@ class Natureza extends Model
 
     public function categorianatureza()
     {
-        return $this->belongsTo('App\Categorianatureza');
+        return $this->belongsTo(Categorianatureza::class);
     }
 }
