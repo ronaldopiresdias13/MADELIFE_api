@@ -24,4 +24,9 @@ class Categoriadocumento extends Model
     ];
 
     // protected $guarded = [];
+
+    public function documentos()
+    {
+        return $this->hasMany(Documento::class, 'categoria_id');
+    }
 }

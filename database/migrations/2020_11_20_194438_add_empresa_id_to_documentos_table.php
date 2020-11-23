@@ -23,6 +23,8 @@ class AddEmpresaIdToDocumentosTable extends Migration
         $documentos = Documento::all();
 
         foreach ($documentos as $key => $documento) {
+            $documento->empresa_id = $documento->paciente->empresa_id;
+            $documento->save();
             if (!$documento->ativo) {
                 $documento->delete();
             }

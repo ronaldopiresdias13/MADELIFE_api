@@ -23,6 +23,10 @@ class AddEmpresaIdToCategoriadocumentosTable extends Migration
         $categoriadocumentos = Categoriadocumento::all();
 
         foreach ($categoriadocumentos as $key => $categoriadocumento) {
+            if ($categoriadocumento->documentos) {
+                $categoriadocumento->empresa_id = $categoriadocumento->documentos[0]->paciente->empresa_id;
+                $categoriadocumento->save();
+            }
             if (!$categoriadocumento->ativo) {
                 $categoriadocumento->delete();
             }
