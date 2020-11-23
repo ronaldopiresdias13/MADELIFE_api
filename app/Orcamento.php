@@ -102,8 +102,8 @@ class Orcamento extends Model
         return $this->hasOne(Evento::class);
     }
 
-    public function ordemServico()
+    public function ordemservico()
     {
-        return $this->hasOne(OrdemServico::class);
+        return $this->hasOne(Ordemservico::class);
     }
 }
