@@ -63,7 +63,7 @@ class AgendamentosController extends Controller
             }
         }
 
-        // $itens = $itens->get();
+        $itens = $itens->get();
 
         if ($request['adicionais']) {
             foreach ($itens as $key => $iten) {

@@ -30,7 +30,8 @@ class CategoriadocumentosController extends Controller
     {
         Categoriadocumento::firstOrCreate(
             [
-                'categoria' => $request['categoria']
+                'categoria' => $request['categoria'],
+                'empresa_id' => $request['empresa_id']
             ]
         );
     }
