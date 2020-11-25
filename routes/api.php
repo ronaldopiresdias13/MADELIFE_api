@@ -126,6 +126,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('dashboard/relatorioProdutividade', 'Api\Web\AreaClinica\DashboardController@relatorioProdutividade');
         });
         Route::prefix('convenio')->group(function () {
+            Route::get('categoriadocumentos/listCategorias', 'Api\Web\Convenio\CategoriadocumentosController@listCategorias');
             Route::get('escalas/dashboard', 'Api\Web\Convenio\EscalasController@dashboardConvenio');
             Route::get('escalas/listEscalasByIdCliente', 'Api\Web\Convenio\EscalasController@listEscalasByIdCliente');
         });
