@@ -257,4 +257,16 @@ class UsersController extends Controller
         $user->ativo = false;
         $user->save();
     }
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\user  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function updateEmail(Request $request, user $user)
+    {
+        $user->email = $request['email'];
+        $user->update();
+    }
 }
