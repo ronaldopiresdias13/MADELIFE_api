@@ -176,6 +176,12 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::post('escalas/updateServicoOfEscala/{escala}', 'Api\Web\DepartamentoPessoal\EscalasController@updateServicoOfEscala');
         });
 
+        Route::prefix('recursosHumanos')->group(function () {
+            Route::post('profissionais/novoProfissional', 'Api\Web\RecursosHumanos\ProfissionaisController@novoProfissional');
+        });
+
+        // novoProfissional
+
         Route::prefix('responsavel')->group(function () {
             Route::get('escalas/listEscalasByIdResponsavel', 'Api\Web\Responsavel\EscalasController@listEscalasByIdResponsavel');
             Route::get('escalas/listEscalasByIdOrdemServico/{ordemservico}', 'Api\Web\Responsavel\EscalasController@listEscalasByIdOrdemServico');
