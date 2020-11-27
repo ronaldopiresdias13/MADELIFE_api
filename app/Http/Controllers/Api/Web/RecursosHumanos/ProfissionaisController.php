@@ -208,7 +208,7 @@ class ProfissionaisController extends Controller
             }
         });
 
-        return response()->json('Profissional cadastrado com sucesso!', 200)->header('Content-Type', 'text/plain');
+        // return response()->json('Profissional cadastrado com sucesso!', 200)->header('Content-Type', 'text/plain');
 
         return response()->json([
             'toast' => [
