@@ -219,7 +219,7 @@ class ProfissionaisController extends Controller
             if ($request['dadosBancario']) {
                 foreach ($request['dadosBancario'] as $key => $dadosbancario) {
                     $dados_bancario = Dadosbancario::firstOrCreate([
-                        'empresa_id'  => $request["pessoa"]['empresa_id'],
+                        'empresa_id'  => $profissional['empresa_id'],
                         'banco_id'    => $dadosbancario['banco_id'],
                         'agencia'     => $dadosbancario['agencia'],
                         'conta'       => $dadosbancario['conta'],
