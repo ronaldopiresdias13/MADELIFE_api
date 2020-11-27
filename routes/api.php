@@ -150,6 +150,9 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::put('orcamentos/{orcamento}', 'Api\Web\GestaoOrcamentaria\OrcamentosController@update');
             Route::delete('orcamentos/{orcamento}', 'Api\Web\GestaoOrcamentaria\OrcamentosController@destroy');
 
+            Route::get('contratos/dashboardGroupByMotivoDesativados', 'Api\Web\OrdemservicosController@dashboardGroupByMotivoDesativados');
+            Route::get('contratos/dashboardGroupByStatusAtivadosDesativados', 'Api\Web\OrdemservicosController@dashboardGroupByStatusAtivadosDesativados');
+
             Route::get('pacientes/list/{empresa}', 'Api\Web\PacientesController@index');
             Route::get('pacientes/{paciente}', 'Api\Web\PacientesController@show');
             Route::post('pacientes', 'Api\Web\PacientesController@store');
@@ -719,6 +722,7 @@ Route::get('users', 'Api\UsersController@index');
 Route::post('users', 'Api\UsersController@store');
 Route::get('users/{user}', 'Api\UsersController@show');
 Route::put('users/{user}', 'Api\UsersController@update');
+Route::put('users/{user}/updateEmail', 'Api\UsersController@updateEmail');
 Route::delete('users/{user}', 'Api\UsersController@destroy');
 
 Route::get('userAcessos', 'Api\UserAcessoController@index');
