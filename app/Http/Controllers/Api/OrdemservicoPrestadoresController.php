@@ -198,11 +198,11 @@ class OrdemservicoPrestadoresController extends Controller
     {
         return OrdemservicoPrestador::With([
             'prestador.pessoa.conselhos',
-            'prestador.formacoes'
+            'prestador.formacoes', 'servico'
         ])
-        ->where(
-            'ordemservico_id',
-            $ordemservico->id
-        )->get();
+            ->where(
+                'ordemservico_id',
+                $ordemservico->id
+            )->get();
     }
 }
