@@ -129,6 +129,8 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('categoriadocumentos/listCategorias', 'Api\Web\Convenio\CategoriadocumentosController@listCategorias');
             Route::get('escalas/dashboard', 'Api\Web\Convenio\EscalasController@dashboardConvenio');
             Route::get('escalas/listEscalasByIdCliente', 'Api\Web\Convenio\EscalasController@listEscalasByIdCliente');
+            Route::get('dashboard/relatorioDiario', 'Api\Web\Convenio\EscalasController@relatorioDiario');
+            Route::get('dashboard/relatorioProdutividade', 'Api\Web\Convenio\EscalasController@relatorioProdutividade');
         });
         Route::prefix('diretoria')->group(function () {
             Route::get('groupByPagamentoByMesAndEmpresaId', 'Api\Web\Financeiro\PagamentopessoasController@groupByPagamentoByMesAndEmpresaId');
