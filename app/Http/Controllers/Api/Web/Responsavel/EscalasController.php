@@ -183,8 +183,6 @@ class EscalasController extends Controller
     public function dashboardPegarTodosOsRegistrosPorIdDaEmpresa(Request $request)
     {
         $user = $request->user();
-        $empresa_id = $user->pessoa->responsavel->empresa->id;
-
         $hoje = getdate();
         $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $hoje['mday'];
 
@@ -225,19 +223,27 @@ class EscalasController extends Controller
             'monitoramentos',
             'acaomedicamentos.transcricaoProduto.produto'
         ])
-            ->where('ativo', true)
-            ->where('empresa_id', $empresa_id)
-            ->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%')
-            ->where('dataentrada', '>=', $request->data_ini ? $request->data_ini : $data)
-            ->where('dataentrada', '<=', $request->data_fim ? $request->data_fim : $data)
-            ->where('prestador_id', 'like', $request->prestador_id ? $request->prestador_id : '%')
-            ->where('servico_id', 'like', $request->servico_id ? $request->servico_id : '%')
-            ->where('empresa_id', 'like', $request->empresa_id ? $request->empresa_id : '%')
+            ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
+            ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
+            ->join('homecares', 'homecares.orcamento_id', '=', 'orcamentos.id')
+            ->join('pacientes', 'pacientes.id', '=', 'homecares.paciente_id')
+            ->join('prestadores', 'prestadores.id', '=', 'escalas.prestador_id')
+            ->join('pessoas', 'pessoas.id', '=', 'prestadores.pessoa_id')
+            ->where('pacientes.responsavel_id', "=", $user->pessoa->responsavel->id)
+            ->where('escalas.ativo', true)
+            // ->whereIn('ordemservico_id', [2, 131])
+            // ->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%')
+            ->where('escalas.dataentrada', '>=', $request->data_ini ? $request->data_ini : $data)
+            ->where('escalas.dataentrada', '<=', $request->data_fim ? $request->data_fim : $data)
+            // ->where('prestador_id', 'like', $request->prestador_id ? $request->prestador_id : '%')
+            ->where('escalas.servico_id', 'like', $request->servico_id ? $request->servico_id : '%')
+            // ->where('empresa_id', 'like', $request->empresa_id ? $request->empresa_id : '%')
             // ->limit(5)
-            ->orderBy('dataentrada')
-            ->get([
-                'id', 'dataentrada', 'datasaida', 'horaentrada', 'horasaida', 'valorhoradiurno', 'valorhoranoturno', 'valoradicional', 'motivoadicional', 'servico_id', 'periodo', 'tipo', 'prestador_id', 'ordemservico_id', 'status'
-            ]);
+            ->orderBy('escalas.dataentrada')
+            ->get();
+        // ->get([
+        //     'id', 'dataentrada', 'datasaida', 'horaentrada', 'horasaida', 'valorhoradiurno', 'valorhoranoturno', 'valoradicional', 'motivoadicional', 'servico_id', 'periodo', 'tipo', 'prestador_id', 'ordemservico_id', 'status'
+        // ]);
         return $escalas;
     }
 }
