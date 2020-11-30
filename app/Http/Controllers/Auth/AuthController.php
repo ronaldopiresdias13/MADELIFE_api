@@ -24,13 +24,14 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email'       => 'string|email',
+            // 'email'       => 'string|email',
             'password'    => 'required|string',
             'remember_me' => 'boolean'
         ]);
 
         $user = User::with(['acessos', 'pessoa.prestador', 'pessoa.cliente', 'pessoa.profissional', 'pessoa.responsavel'])
             ->where('email', $request['email'])
+            ->orWhere('cpfcnpj', $request['email'])
             ->first();
 
         if (!$user) {

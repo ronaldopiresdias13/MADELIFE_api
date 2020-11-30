@@ -54,6 +54,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Find the user instance for the given username.
+     *
+     * @param  string  $identifier
+     * @return \App\Models\User
+     */
+    public function findForPassport($identifier)
+    {
+        // return $this->where('identifier', $identifier)->first();
+        return $this->orWhere('email', $identifier)->orWhere('cpfcnpj', $identifier)->first();
+    }
+
     public function pessoa()
     {
         return $this->belongsTo(Pessoa::class);
