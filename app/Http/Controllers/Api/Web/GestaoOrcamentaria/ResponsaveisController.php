@@ -276,8 +276,8 @@ class ResponsaveisController extends Controller
                             )->id,
                         ],
                         [
-                            'tipo'      => $telefone['pivot']['tipo'],
-                            'descricao' => $telefone['pivot']['descricao'],
+                            // 'tipo'      => $telefone['tipo'],
+                            // 'descricao' => $telefone['descricao'],
                         ]
                     );
                 }
@@ -315,8 +315,8 @@ class ResponsaveisController extends Controller
                             )->id,
                         ],
                         [
-                            'tipo'      => $email['pivot']['tipo'],
-                            'descricao' => $email['pivot']['descricao'],
+                            // 'tipo'      => $email['pivot']['tipo'],
+                            // 'descricao' => $email['pivot']['descricao'],
                         ]
                     );
                 }
