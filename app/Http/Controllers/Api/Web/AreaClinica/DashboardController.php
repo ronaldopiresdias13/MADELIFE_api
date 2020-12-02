@@ -333,18 +333,16 @@ class DashboardController extends Controller
                 }]);
             },
             'acaomedicamentos.transcricaoProduto.produto',
-            'acaomedicamentos' => function ($query) {
-                $query->select('id', 'pessoa_id');
-                $query->with(['formacoes' => function ($query) {
-                    $query->select('prestador_id', 'descricao');
-                }]);
-                $query->with(['pessoa' => function ($query) {
-                    $query->select('id', 'nome');
-                    $query->with(['conselhos' => function ($query) {
-                        $query->select('pessoa_id', 'instituicao', 'uf', 'numero');
-                    }]);
-                }]);
-            },
+            'acaomedicamentos'
+            // => function ($query) {
+            //     $query->select('id');
+            //     $query->with(['pessoa' => function ($query) {
+            //         $query->select('id', 'nome');
+            //         $query->with(['conselhos' => function ($query) {
+            //             $query->select('pessoa_id', 'instituicao', 'uf', 'numero');
+            //         }]);
+            //     }]);
+            // },
         ])
             ->where('ativo', true)
             ->where('empresa_id', $empresa_id)
