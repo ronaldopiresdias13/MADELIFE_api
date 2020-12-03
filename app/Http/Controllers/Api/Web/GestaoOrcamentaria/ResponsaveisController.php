@@ -127,6 +127,8 @@ class ResponsaveisController extends Controller
                                 'email'     => $email['email'],
                             ]
                         )->id,
+                        'tipo'       => $email['pivot']['tipo'],
+                        'descricao'  => $email['pivot']['descricao']
                     ]);
                 }
             }
