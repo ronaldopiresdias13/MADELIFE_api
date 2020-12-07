@@ -25,11 +25,11 @@ class ClientesController extends Controller
      */
     public function index(Empresa $empresa)
     {
-        return Cliente::with('pessoa')
+        return Cliente::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade'])
             ->where('empresa_id', $empresa->id)
             ->where('ativo', true)
             ->get();
-        // ->orderBy('pessoas.nome', 'DESC')
+        // ->orderBy('pessoas.nome', 'DESC');
     }
 
     /**
