@@ -72,6 +72,8 @@ class EscalasController extends Controller
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->cliente->empresa_id;
+        $hoje = getdate();
+        $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $hoje['mday'];
         $escalas = Escala::with([
             'ordemservico' => function ($query) {
                 $query->select('id', 'orcamento_id', 'profissional_id');
@@ -110,13 +112,35 @@ class EscalasController extends Controller
             'acaomedicamentos.transcricaoProduto.produto'
         ])
             ->where('ativo', true)
-            ->where('empresa_id', $empresa_id)
-            ->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%')
-            ->where(DB::raw("date_format(str_to_date(escalas.dataentrada, '%Y-%m-%d'), '%Y-%m')"), "=", $request['periodo'])
+            ->where('ordemservico_id', $request->ordemservico_id)
+            // ->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%')
+            // ->where(DB::raw("date_format(str_to_date(escalas.dataentrada, '%Y-%m-%d'), '%Y-%m')"), "=", $request['periodo'])
+            ->where('dataentrada', '>=', $request->data_ini ? $request->data_ini : $data)
+            ->where('dataentrada', '<=', $request->data_fim ? $request->data_fim : $data)
+            ->where('servico_id', 'like', $request->servico_id ? $request->servico_id : '%')
             ->orderBy('dataentrada')
             ->get([
                 'id', 'dataentrada', 'datasaida', 'horaentrada', 'horasaida', 'valorhoradiurno', 'valorhoranoturno', 'valoradicional', 'motivoadicional', 'servico_id', 'periodo', 'tipo', 'prestador_id', 'ordemservico_id', 'status'
             ]);
+        // $relatorio = [];
+
+        // foreach ($escalas as $key => $escala) {
+        //     if ($escala->formacao) {
+        //         switch ($escala->formacao->descricao) {
+        //             case 'Cuidador':
+        //             case 'Técnico de Enfermagem':
+        //             case 'Auxiliar de Enfermagem':
+        //             case 'Enfermagem':
+        //                 $relatorio = $this->pushDiario($relatorio, $escala, true);
+        //                 break;
+        //             default:
+        //                 $relatorio = $this->pushDiario($relatorio, $escala, false);
+        //                 break;
+        //         }
+        //     }
+        // }
+
+        // return $relatorio;
         return $escalas;
     }
     /**
