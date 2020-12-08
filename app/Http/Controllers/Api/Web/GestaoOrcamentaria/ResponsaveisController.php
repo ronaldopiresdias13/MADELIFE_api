@@ -25,7 +25,7 @@ class ResponsaveisController extends Controller
      */
     public function index(Empresa $empresa)
     {
-        return Responsavel::with('pessoa')
+        return Responsavel::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade'])
             ->where('empresa_id', $empresa->id)
             ->where('ativo', true)
             ->get();
