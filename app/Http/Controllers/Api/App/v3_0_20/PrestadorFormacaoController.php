@@ -76,7 +76,9 @@ class PrestadorFormacaoController extends Controller
 
         return response()->json([
             'toast' => [
-                'text' => 'Excluido com sucesso!'
+                'text' => 'Excluido com sucesso!',
+                'color' => 'success',
+                'duration' => 2000
             ]
         ], 200)
             ->header('Content-Type', 'application/json');

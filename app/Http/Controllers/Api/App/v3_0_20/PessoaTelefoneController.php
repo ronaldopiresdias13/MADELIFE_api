@@ -67,7 +67,9 @@ class PessoaTelefoneController extends Controller
 
         return response()->json([
             'toast' => [
-                'text' => 'Telefone salvo com sucesso!'
+                'text' => 'Telefone salvo com sucesso!',
+                'color' => 'success',
+                'duration' => 2000
             ]
         ], 200)
             ->header('Content-Type', 'application/json');
