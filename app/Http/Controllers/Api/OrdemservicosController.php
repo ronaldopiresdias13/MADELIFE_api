@@ -147,7 +147,7 @@ class OrdemservicosController extends Controller
 
             foreach ($orcamento->servicos as $key => $servico) {
                 if ($servico['pivot']['basecobranca'] == 'Plantão') {
-                    $ordemservico_servico = OrdemservicoServico::create(
+                    OrdemservicoServico::create(
                         [
                             'ordemservico_id'  => $ordemservico->id,
                             'servico_id'       => $servico->id,
@@ -157,7 +157,7 @@ class OrdemservicosController extends Controller
                         ]
                     );
                 } else {
-                    $ordemservico_servico = OrdemservicoServico::create(
+                    OrdemservicoServico::create(
                         [
                             'ordemservico_id'  => $ordemservico->id,
                             'servico_id'       => $servico->id,

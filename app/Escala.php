@@ -58,4 +58,9 @@ class Escala extends Model
     {
         return $this->belongsTo(Formacao::class);
     }
+
+    public function relatorioescalas()
+    {
+        return $this->hasMany(Relatorioescala::class)->where('ativo', true);
+    }
 }
