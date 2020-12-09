@@ -75,6 +75,8 @@ class ClientesController extends Controller
                                 'telefone'  => $telefone['telefone'],
                             ]
                         )->id,
+                        'tipo'       => $telefone['pivot']['tipo'],
+                        'descricao'  => $telefone['pivot']['descricao']
                     ]);
                 }
             }
@@ -108,6 +110,8 @@ class ClientesController extends Controller
                                 'email'     => $email['email'],
                             ]
                         )->id,
+                        'tipo'       => $telefone['pivot']['tipo'],
+                        'descricao'  => $telefone['pivot']['descricao']
                     ]);
                 }
             }

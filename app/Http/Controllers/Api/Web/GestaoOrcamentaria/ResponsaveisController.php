@@ -94,6 +94,8 @@ class ResponsaveisController extends Controller
                                 'telefone'  => $telefone['telefone'],
                             ]
                         )->id,
+                        'tipo'       => $telefone['pivot']['tipo'],
+                        'descricao'  => $telefone['pivot']['descricao']
                     ]);
                 }
             }
@@ -278,8 +280,8 @@ class ResponsaveisController extends Controller
                             )->id,
                         ],
                         [
-                            // 'tipo'      => $telefone['tipo'],
-                            // 'descricao' => $telefone['descricao'],
+                            'tipo'      => $telefone['pivot']['tipo'],
+                            'descricao' => $telefone['pivot']['descricao'],
                         ]
                     );
                 }
@@ -317,8 +319,8 @@ class ResponsaveisController extends Controller
                             )->id,
                         ],
                         [
-                            // 'tipo'      => $email['pivot']['tipo'],
-                            // 'descricao' => $email['pivot']['descricao'],
+                            'tipo'      => $email['pivot']['tipo'],
+                            'descricao' => $email['pivot']['descricao'],
                         ]
                     );
                 }

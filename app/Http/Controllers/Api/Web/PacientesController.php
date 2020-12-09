@@ -124,6 +124,8 @@ class PacientesController extends Controller
                                 'telefone'  => $telefone['telefone'],
                             ]
                         )->id,
+                        'tipo'      => $telefone['pivot']['tipo'],
+                        'descricao' => $telefone['pivot']['descricao'],
                     ]);
                 }
             }
