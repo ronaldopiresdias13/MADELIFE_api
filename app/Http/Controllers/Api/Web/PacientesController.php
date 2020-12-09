@@ -26,7 +26,7 @@ class PacientesController extends Controller
      */
     public function index(Empresa $empresa)
     {
-        return Paciente::with(['pessoa:id,nome', 'responsavel.pessoa:id,nome'])
+        return Paciente::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade', 'responsavel.pessoa:id,nome'])
             ->where('empresa_id', $empresa->id)
             ->where('ativo', true)
             ->get();
