@@ -162,8 +162,7 @@ class EscalasController extends Controller
                         }]);
                     }]);
                 }]);
-            },
-            'pontos'
+            }
         ])
             ->where('id', $escala->id)
             ->first();
