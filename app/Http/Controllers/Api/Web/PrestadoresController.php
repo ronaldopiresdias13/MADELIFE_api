@@ -116,4 +116,23 @@ class PrestadoresController extends Controller
     {
         //
     }
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function buscaprestadoresporfiltro(Request $request)
+    {
+        return Prestador::with(['formacoes', 'pessoa.conselhos'])
+            // ->join('formacoes', 'pessoas.id', '=', 'prestadores.pessoa_id')
+            ->join('pessoas', 'pessoas.id', '=', 'prestadores.pessoa_id')
+            ->join('conselhos', 'pessoas.id', '=', 'conselhos.pessoa_id')
+            ->where('pessoas.nome', 'like', $request->nome ? '%' . $request->nome . '%' : '')
+            ->where('prestadores.ativo', 1)
+            ->orWhere('pessoas.cpfcnpj', 'like', $request->cpf ? $request->cpf : '')
+            ->orWhere('conselhos.numero', 'like', $request->conselho ? $request->conselho : '')
+            ->select('prestadores.*')
+            ->get();
+    }
 }

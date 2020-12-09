@@ -70,7 +70,7 @@ class DashboardController extends Controller
             // 'cuidados',
             'relatorios',
             'monitoramentos',
-            'acaomedicamentos.transcricaoProduto.produto'
+            // 'acaomedicamentos.transcricaoProduto.produto'
         ])
             ->where('ativo', true)
             ->where('empresa_id', $empresa_id)
@@ -333,18 +333,16 @@ class DashboardController extends Controller
                 }]);
             },
             'acaomedicamentos.transcricaoProduto.produto',
-            'acaomedicamentos' => function ($query) {
-                $query->select('id', 'pessoa_id');
-                $query->with(['formacoes' => function ($query) {
-                    $query->select('prestador_id', 'descricao');
-                }]);
-                $query->with(['pessoa' => function ($query) {
-                    $query->select('id', 'nome');
-                    $query->with(['conselhos' => function ($query) {
-                        $query->select('pessoa_id', 'instituicao', 'uf', 'numero');
-                    }]);
-                }]);
-            },
+            'acaomedicamentos'
+            // => function ($query) {
+            //     $query->select('id');
+            //     $query->with(['pessoa' => function ($query) {
+            //         $query->select('id', 'nome');
+            //         $query->with(['conselhos' => function ($query) {
+            //             $query->select('pessoa_id', 'instituicao', 'uf', 'numero');
+            //         }]);
+            //     }]);
+            // },
         ])
             ->where('ativo', true)
             ->where('empresa_id', $empresa_id)
@@ -401,12 +399,18 @@ class DashboardController extends Controller
             if (!key_exists('Enfermagem', $array)) {
                 $array['Enfermagem'] = [];
             }
-            array_push($array['Enfermagem'], $item);
+            if (!key_exists($item->dataentrada, $array['Enfermagem'])) {
+                $array['Enfermagem'][$item->dataentrada] = [];
+            }
+            array_push($array['Enfermagem'][$item->dataentrada], $item);
         } else {
             if (!key_exists($item->formacao->descricao, $array)) {
                 $array[$item->formacao->descricao] = [];
             }
-            array_push($array[$item->formacao->descricao], $item);
+            if (!key_exists($item->dataentrada, $array[$item->formacao->descricao])) {
+                $array[$item->formacao->descricao][$item->dataentrada] = [];
+            }
+            array_push($array[$item->formacao->descricao][$item->dataentrada], $item);
         }
         return $array;
     }

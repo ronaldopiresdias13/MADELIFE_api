@@ -215,7 +215,8 @@ class RelatoriosController extends Controller
             ->get();
         return $relatorios;
     }
-    public function buscaRelatoriosDaEscala(Escala $escala){
+    public function buscaRelatoriosDaEscala(Escala $escala)
+    {
         return Relatorio::where('ativo', true)->where('escala_id', $escala->id)->get();
     }
 }

@@ -190,11 +190,15 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('documentos/listDocumentos', 'Api\Web\AreaClinica\DocumentosController@listDocumentos');
             Route::get('dashboard/relatorioDiario', 'Api\Web\AreaClinica\DashboardController@relatorioDiario');
             Route::get('dashboard/relatorioProdutividade', 'Api\Web\AreaClinica\DashboardController@relatorioProdutividade');
+            Route::get('dashboard/relatorioMedicamento', 'Api\Web\AreaClinica\DashboardController@relatorioMedicamentos');
         });
         Route::prefix('convenio')->group(function () {
             Route::get('categoriadocumentos/listCategorias', 'Api\Web\Convenio\CategoriadocumentosController@listCategorias');
             Route::get('escalas/dashboard', 'Api\Web\Convenio\EscalasController@dashboardConvenio');
             Route::get('escalas/listEscalasByIdCliente', 'Api\Web\Convenio\EscalasController@listEscalasByIdCliente');
+            Route::get('dashboard/relatorioDiario', 'Api\Web\Convenio\EscalasController@relatorioDiario');
+            Route::get('dashboard/relatorioProdutividade', 'Api\Web\Convenio\EscalasController@relatorioProdutividade');
+            Route::get('escalas/dashboardPegarTodosOsRegistrosPorIdDaEmpresa', 'Api\Web\Convenio\EscalasController@dashboardConvenio');
         });
         Route::prefix('diretoria')->group(function () {
             Route::get('groupByPagamentoByMesAndEmpresaId', 'Api\Web\Financeiro\PagamentopessoasController@groupByPagamentoByMesAndEmpresaId');
@@ -278,11 +282,13 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('pacientes/listNomePacientes', 'Api\Web\PacientesController@listNomePacientes');
     });
 
+
     Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\OrdemservicosController@listaOrdemServicosEscalas');
     Route::get('transcricoes/listaTranscricoes', 'Api\TranscricoesController@listaTranscricoes');
 });
 
 // Route::get('getEscalasHoje', 'Api\EscalasController@getEscalasHoje')->middleware('auth:api');
+Route::get('prestadores/atribuicao', 'Api\Web\PrestadoresController@buscaprestadoresporfiltro'); // MUDAR AQUII DEPOIS
 
 Route::get('acaomedicamentos', 'Api\AcaomedicamentosController@index');
 Route::post('acaomedicamentos', 'Api\AcaomedicamentosController@store');

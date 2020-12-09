@@ -25,7 +25,7 @@ class ResponsaveisController extends Controller
      */
     public function index(Empresa $empresa)
     {
-        return Responsavel::with('pessoa')
+        return Responsavel::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade'])
             ->where('empresa_id', $empresa->id)
             ->where('ativo', true)
             ->get();
@@ -127,6 +127,8 @@ class ResponsaveisController extends Controller
                                 'email'     => $email['email'],
                             ]
                         )->id,
+                        'tipo'       => $email['pivot']['tipo'],
+                        'descricao'  => $email['pivot']['descricao']
                     ]);
                 }
             }
@@ -276,8 +278,8 @@ class ResponsaveisController extends Controller
                             )->id,
                         ],
                         [
-                            'tipo'      => $telefone['pivot']['tipo'],
-                            'descricao' => $telefone['pivot']['descricao'],
+                            // 'tipo'      => $telefone['tipo'],
+                            // 'descricao' => $telefone['descricao'],
                         ]
                     );
                 }
@@ -315,8 +317,8 @@ class ResponsaveisController extends Controller
                             )->id,
                         ],
                         [
-                            'tipo'      => $email['pivot']['tipo'],
-                            'descricao' => $email['pivot']['descricao'],
+                            // 'tipo'      => $email['pivot']['tipo'],
+                            // 'descricao' => $email['pivot']['descricao'],
                         ]
                     );
                 }
