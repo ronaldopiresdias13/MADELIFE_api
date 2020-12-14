@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Api\Web\AreaClinica;
 
 use App\Escala;
 use App\Http\Controllers\Controller;
+use App\Relatorio;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use phpDocumentor\Reflection\Types\Boolean;
 
 class DashboardController extends Controller
@@ -457,5 +460,105 @@ class DashboardController extends Controller
     public function destroy(Escala $escala)
     {
         //
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function dashboardTotalProfissionaisEscalasPorPeriodo(Request $request)
+    {
+        $empresa_id = Auth::user()->pessoa->profissional->empresa->id;
+        return DB::table('escalas')
+            ->select(DB::raw('pessoas.nome, count(escalas.id) as total'))
+            ->join('prestadores', 'prestadores.id', '=', 'escalas.prestador_id')
+            ->join('pessoas', 'pessoas.id', '=', 'prestadores.pessoa_id')
+            ->where('escalas.ativo', 1)
+            ->where('escalas.empresa_id', $empresa_id)
+            ->where('escalas.dataentrada', '>=', $request->data_ini)
+            ->where('escalas.dataentrada', '<=', $request->data_fim)
+            ->groupBy('escalas.prestador_id', 'pessoas.nome')
+            ->get();
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function dashboardTotalPacientesAtivosPorPeriodo(Request $request)
+    {
+        $empresa_id = Auth::user()->pessoa->profissional->empresa->id;
+        return DB::table('escalas')
+            ->select(DB::raw('pessoas.nome, count(escalas.id) as total'))
+            ->join('prestadores', 'prestadores.id', '=', 'escalas.prestador_id')
+            ->join('pessoas', 'pessoas.id', '=', 'prestadores.pessoa_id')
+            ->where('escalas.ativo', 1)
+            ->where('escalas.empresa_id', $empresa_id)
+            ->where('escalas.dataentrada', '>=', $request->data_ini)
+            ->where('escalas.dataentrada', '<=', $request->data_fim)
+            ->groupBy('escalas.prestador_id', 'pessoas.nome')
+            ->get();
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function dashboardTotalPacientesServicosPorPeriodo(Request $request)
+    {
+        $empresa_id = Auth::user()->pessoa->profissional->empresa_id;
+        return DB::table('escalas')
+            ->select(DB::raw('servicos.descricao, count(escalas.id) as total'))
+            ->join('servicos', 'servicos.id', '=', 'escalas.servico_id')
+            ->where('escalas.ativo', 1)
+            ->where('escalas.empresa_id', $empresa_id)
+            ->where('escalas.dataentrada', '>=', $request->data_ini)
+            ->where('escalas.dataentrada', '<=', $request->data_fim)
+            ->groupBy('escalas.servico_id', 'servicos.descricao')
+            ->orderByDesc('total')
+            ->get();
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function dashboardTotalRelatoriosPorPeriodo(Request $request)
+    {
+        $empresa_id = Auth::user()->pessoa->profissional->empresa_id;
+        return DB::table('relatorios')
+            ->select(DB::raw('count(relatorios.id) as total'))
+            ->join('escalas', 'escalas.id', '=', 'relatorios.escala_id')
+            ->where('relatorios.ativo', 1)
+            ->where('escalas.empresa_id', $empresa_id)
+            ->where('relatorios.data', '>=', $request->data_ini)
+            ->where('relatorios.data', '<=', $request->data_fim)
+            ->get();
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function dashboardTotalProfissionaisCategoriaPorPeriodo(Request $request)
+    {
+        $empresa_id = Auth::user()->pessoa->profissional->empresa_id;
+        return DB::table('escalas')
+            ->select(DB::raw('formacoes.descricao,count(formacoes.id) as total'))
+            ->join('prestadores', 'prestadores.id', '=', 'escalas.prestador_id')
+            ->join('prestador_formacao', 'prestadores.id', '=', 'prestador_formacao.prestador_id')
+            ->join('formacoes', 'formacoes.id', '=', 'escalas.formacao_id')
+            ->where('escalas.ativo', 1)
+            ->where('escalas.empresa_id', $empresa_id)
+            ->where('escalas.dataentrada', '>=', $request->data_ini)
+            ->where('escalas.dataentrada', '<=', $request->data_fim)
+            ->groupBy('formacoes.id', 'formacoes.descricao')
+            ->orderByDesc('total')
+            ->get();
     }
 }
