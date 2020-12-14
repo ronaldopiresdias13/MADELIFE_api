@@ -324,6 +324,10 @@ class OrdemservicosController extends Controller
                         $query->with(['pessoa' => function ($query) {
                             $query->select('id', 'nome');
                         }]);
+                        // $query->select('id', 'responsavel_id');
+                        // $query->with(['responsavel' => function ($query) {
+                        //     $query->select('id', 'nome');
+                        // }]);
                     }]);
                 }]);
                 $query->with(['cliente' => function ($query) {
