@@ -539,4 +539,26 @@ class DashboardController extends Controller
             ->where('relatorios.data', '<=', $request->data_fim)
             ->get();
     }
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function dashboardTotalProfissionaisCategoriaPorPeriodo(Request $request)
+    {
+        $empresa_id = Auth::user()->pessoa->profissional->empresa_id;
+        return DB::table('escalas')
+            ->select(DB::raw('formacoes.descricao,count(formacoes.id) as total'))
+            ->join('prestadores', 'prestadores.id', '=', 'escalas.prestador_id')
+            ->join('prestador_formacao', 'prestadores.id', '=', 'prestador_formacao.prestador_id')
+            ->join('formacoes', 'formacoes.id', '=', 'escalas.formacao_id')
+            ->where('escalas.ativo', 1)
+            ->where('escalas.empresa_id', $empresa_id)
+            ->where('escalas.dataentrada', '>=', $request->data_ini)
+            ->where('escalas.dataentrada', '<=', $request->data_fim)
+            ->groupBy('formacoes.id', 'formacoes.descricao')
+            ->orderByDesc('total')
+            ->get();
+    }
 }
