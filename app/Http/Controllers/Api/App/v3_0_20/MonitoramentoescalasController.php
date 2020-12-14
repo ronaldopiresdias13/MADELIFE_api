@@ -64,7 +64,9 @@ class MonitoramentoescalasController extends Controller
 
         return response()->json([
             'toast' => [
-                'text' => 'Monitoramento realizado com sucesso!'
+                'text' => 'Monitoramento realizado com sucesso!',
+                'color' => 'success',
+                'duration' => 2000
             ]
         ], 200)
             ->header('Content-Type', 'application/json');

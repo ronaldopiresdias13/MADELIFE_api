@@ -46,7 +46,9 @@ class PessoaEmailController extends Controller
 
         return response()->json([
             'toast' => [
-                'text' => 'Email adicionado com sucesso!'
+                'text' => 'Email adicionado com sucesso!',
+                'color' => 'success',
+                'duration' => 2000
             ]
         ], 200)
             ->header('Content-Type', 'application/json');
@@ -90,7 +92,9 @@ class PessoaEmailController extends Controller
 
         return response()->json([
             'toast' => [
-                'text' => 'Excluido com sucesso!'
+                'text' => 'Excluido com sucesso!',
+                'color' => 'success',
+                'duration' => 2000
             ]
         ], 200)
             ->header('Content-Type', 'application/json');

@@ -212,7 +212,9 @@ class ProfissionaisController extends Controller
 
         return response()->json([
             'toast' => [
-                'text'  => 'Profissional cadastrado com sucesso!'
+                'text'  => 'Profissional cadastrado com sucesso!',
+                'color' => 'success',
+                'duration' => 2000
             ]
         ], 200)
             ->header('Content-Type', 'application/json');

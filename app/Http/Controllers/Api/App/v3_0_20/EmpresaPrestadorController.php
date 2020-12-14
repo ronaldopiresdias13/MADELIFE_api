@@ -62,7 +62,9 @@ class EmpresaPrestadorController extends Controller
 
         return response()->json([
             'toast' => [
-                'text' => 'Atualizado com sucesso!'
+                'text' => 'Atualizado com sucesso!',
+                'color' => 'success',
+                'duration' => 2000
             ]
         ], 200)
             ->header('Content-Type', 'application/json');
