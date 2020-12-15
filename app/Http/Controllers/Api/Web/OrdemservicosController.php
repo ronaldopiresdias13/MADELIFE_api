@@ -94,4 +94,37 @@ class OrdemservicosController extends Controller
             ->orderByDesc('total')
             ->get();
     }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function listaOrdemServicosEscalas(Request $request)
+    {
+        $user = $request->user();
+        $profissional = $user->pessoa->profissional;
+
+        $escalas = Ordemservico::with([
+            'servicos',
+            'orcamento.cidade', 'orcamento' => function ($query) {
+                $query->with(['homecare' => function ($query) {
+                    $query->with(['paciente.pessoa', 'paciente.responsavel.pessoa']);
+                }]);
+                $query->with(['cliente' => function ($query) {
+                    $query->select('id', 'pessoa_id');
+                    $query->with(['pessoa' => function ($query) {
+                        $query->select('id', 'nome');
+                    }]);
+                }]);
+            }
+        ])
+            ->withCount('prestadores')
+            ->withCount('escalas')
+            ->where('empresa_id', $profissional->empresa_id)
+            ->where('ativo', true)
+            ->get(['id', 'orcamento_id']);
+
+        return $escalas;
+    }
 }
