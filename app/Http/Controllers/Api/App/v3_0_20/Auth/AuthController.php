@@ -31,11 +31,7 @@ class AuthController extends Controller
 
         $user = User::firstWhere('email', $request['email']);
 
-        if (!$user) {
-            // return response()->json([
-            //     'message' => 'Email não cadastrado!'
-            // ], 404);
-
+        if (!$user || !$user->pessoa->prestador) {
             return response()->json([
                 'alert' => [
                     'title' => 'Ops!',
