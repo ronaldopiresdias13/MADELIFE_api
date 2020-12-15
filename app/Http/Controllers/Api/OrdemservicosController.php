@@ -315,23 +315,11 @@ class OrdemservicosController extends Controller
 
         $escalas = Ordemservico::with([
             'servicos',
-            // 'prestadores' => function ($query) {
-            //     $query->select(DB::raw('id, count(prestadores.id) as total'));
-            // },
-            'orcamento' => function ($query) {
-                $query->select('id', 'cliente_id');
+            'orcamento.cidade', 'orcamento' => function ($query) {
+                // $query->select('id', 'cliente_id');
                 $query->with(['homecare' => function ($query) {
-                    $query->select('id', 'orcamento_id', 'paciente_id');
-                    $query->with(['paciente' => function ($query) {
-                        $query->select('id', 'pessoa_id');
-                        $query->with(['pessoa' => function ($query) {
-                            $query->select('id', 'nome');
-                        }]);
-                        // $query->select('id', 'responsavel_id');
-                        // $query->with(['responsavel' => function ($query) {
-                        //     $query->select('id', 'nome');
-                        // }]);
-                    }]);
+                    // $query->select('id', 'orcamento_id', 'paciente_id');
+                    $query->with(['paciente.pessoa.enderecos.cidade', 'paciente.responsavel.pessoa']);
                 }]);
                 $query->with(['cliente' => function ($query) {
                     $query->select('id', 'pessoa_id');
