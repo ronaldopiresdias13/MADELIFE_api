@@ -33,11 +33,11 @@ class AcaomedicamentosController extends Controller
             Acaomedicamento::create([
                 'transcricao_produto_id' => $request['transcricao_produto_id'],
                 'prestador_id' => $prestador,
-                'data' => $request['data'],
-                'hora' => $request['hora'],
-                'observacao' => $request['observacao'],
-                'status' => $request['status'],
-                'escala_id' => $request['escala_id'],
+                'data'         => $request['data'],
+                'hora'         => $request['hora'],
+                'observacao'   => $request['observacao'],
+                'status'       => $request['status'],
+                'escala_id'    => $request['escala_id'],
             ]);
         });
 

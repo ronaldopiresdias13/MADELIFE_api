@@ -5,12 +5,46 @@ namespace App\Http\Controllers;
 use App\Agendamento;
 use App\Categoriadocumento;
 use App\Pessoa;
+use App\User;
 use Illuminate\Http\Request;
 
 class Teste extends Controller
 {
     public function teste(Request $request)
     {
+        $user = User::firstWhere('email', $request['email']);
+
+        if (!$user || !$user->pessoa->prestador) {
+            return response()->json([
+                'alert' => [
+                    'title' => 'Ops!',
+                    'text' => 'Email não cadastrado!'
+                ]
+            ], 400)
+                ->header('Content-Type', 'application/json');
+        }
+
+        // if (!$user->pessoa->prestador) {
+        //     return response()->json([
+        //         'alert' => [
+        //             'title' => 'Ops!',
+        //             'text' => 'Email não cadastrado!'
+        //         ]
+        //     ], 400)
+        //         ->header('Content-Type', 'application/json');
+        // } else {
+        //     return response()->json([
+        //         'toast' => [
+        //             'text' => 'Não tem!'
+        //         ]
+        //     ], 200)
+        //         ->header('Content-Type', 'application/json');
+        // }
+
+
+
+        return 'teste';
+
         // Categoriadocumento::find(1)->delete();
 
         // Categoriadocumento::withTrashed()->find(1)->restore();
