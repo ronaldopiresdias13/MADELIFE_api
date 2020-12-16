@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 //-------------- Rota de Testes --------------//
-// Route::group(['middleware' => 'auth:api'], function () {
-Route::get("/teste", "Teste@teste");
-// });
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::get("/teste", "Teste@teste");
+});
 
 /*-------------- Rota de Logs por email --------------*/
 Route::post("sendMailLog", "LogsController@sendMailLog");
@@ -298,6 +298,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('prestadores/listPrestadoresComFormacoes', 'Api\Web\PrestadoresController@listPrestadoresComFormacoes');
 
         Route::get('pacientes/listNomePacientes', 'Api\Web\PacientesController@listNomePacientes');
+
+        Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\Web\OrdemservicosController@listaOrdemServicosEscalas');
     });
 
 
