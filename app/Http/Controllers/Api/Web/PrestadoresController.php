@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Web;
 
+use App\Escala;
 use App\Http\Controllers\Controller;
 use App\Prestador;
 use Illuminate\Http\Request;
@@ -134,5 +135,28 @@ class PrestadoresController extends Controller
             ->orWhere('conselhos.numero', 'like', $request->conselho ? $request->conselho : '')
             ->select('prestadores.*')
             ->get();
+    }
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Prestador  $prestador
+     * @return \Illuminate\Http\Response
+     */
+    public function historicopacientesprestador(Prestador $prestador)
+    {
+        // $user = $request->user();
+        // $prestador = $request->pessoa->prestador;
+        $escalas = Escala::where('prestador_id', $prestador->id)
+            ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
+            ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
+            ->join('homecares', 'homecares.orcamento_id', '=', 'orcamentos.id')
+            ->join('pacientes', 'homecares.paciente_id', '=', 'pacientes.id')
+            ->join('pessoas', 'pacientes.pessoa_id', '=', 'pessoas.id')
+            ->select('pessoas.nome')
+            ->where('homecares.ativo', true)
+            ->groupBy('pessoas.nome')
+            ->orderBy('pessoas.nome')
+            ->get();
+        return $escalas;
     }
 }
