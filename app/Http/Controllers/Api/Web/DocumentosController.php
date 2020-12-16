@@ -82,6 +82,7 @@ class DocumentosController extends Controller
                     Documento::create(
                         [
                             'paciente_id'  => $request['paciente_id'],
+                            'empresa_id'  => $request['empresa_id'],
                             'mes'          => $request['mes'],
                             'ano'          => $request['ano'],
                             'nome'         => $nomeOriginal,

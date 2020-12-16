@@ -112,11 +112,20 @@ class GrupocuidadosController extends Controller
      */
     public function store(Request $request)
     {
+        $total = Grupocuidado::where('empresa_id', $request->empresa_id)->count();
         $grupocuidado = new Grupocuidado();
         $grupocuidado->descricao = $request->descricao;
-        $grupocuidado->empresa = $request->empresa;
-        $grupocuidado->status = $request->staus;
+        $grupocuidado->codigo = $total + 1;
+        $grupocuidado->empresa_id = $request->empresa_id;
+        $grupocuidado->status = $request->status;
         $grupocuidado->save();
+
+        foreach ($request['cuidado'] as $key => $cuidado) {
+            $cuidado = CuidadoGrupocuidado::firstOrCreate([
+                'grupocuidado_id' => $grupocuidado->id,
+                'cuidado_id'    => $cuidado['id']
+            ]);
+        }
     }
 
     /**
