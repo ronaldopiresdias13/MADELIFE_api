@@ -77,6 +77,6 @@ class DocumentosController extends Controller
      */
     public function destroy(Documento $documento)
     {
-        //
+        $documento->delete();
     }
 }
