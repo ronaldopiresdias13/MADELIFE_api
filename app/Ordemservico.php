@@ -8,6 +8,11 @@ class Ordemservico extends Model
 {
     protected $guarded = [];
 
+    public function empresa()
+    {
+        return $this->belongsTo(Empresa::class);
+    }
+
     public function orcamento()
     {
         return $this->belongsTo(Orcamento::class);
