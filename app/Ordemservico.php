@@ -59,4 +59,9 @@ class Ordemservico extends Model
     {
         return $this->hasMany(OrdemservicoPrestador::class)->where('ativo', true);
     }
+
+    public function avisos()
+    {
+        return $this->hasMany(OrdemservicoAcesso::class);
+    }
 }

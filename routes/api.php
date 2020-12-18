@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Novo\Web\OrdemservicoAcessoController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -833,3 +834,38 @@ Route::get('vendas/{venda}', 'Api\VendasController@show');
 Route::put('vendas/{venda}', 'Api\VendasController@update');
 Route::delete('vendas/{venda}', 'Api\VendasController@destroy');
 Route::post('vendas/cadastrarCliente', 'Api\VendasController@cadastrarCliente');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Route::get($uri, $callback);
+// Route::post($uri, $callback);
+// Route::put($uri, $callback);
+// Route::patch($uri, $callback);
+// Route::delete($uri, $callback);
+// Route::options($uri, $callback);
+
+/*------------------------------------------- Novas Rotas -------------------------------------------*/
+
+/*------------- Rotas Utilizando Token -------------*/
+Route::group(['middleware' => 'auth:api'], function () {
+    /*----------------- Web -----------------*/
+    Route::prefix('web')->group(function () {
+        Route::prefix('ordemservicoAcesso')->group(function () {
+            Route::get('listaPorOrdemservico', [OrdemservicoAcessoController::class, 'listaDeAcessosPorOrdemservico']);
+            Route::put('check/{ordemservicoAcesso}', [OrdemservicoAcessoController::class, 'listaDeAcessosPorOrdemservico']);
+        });
+    });
+});
