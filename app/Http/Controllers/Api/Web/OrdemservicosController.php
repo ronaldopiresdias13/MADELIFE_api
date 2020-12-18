@@ -107,6 +107,7 @@ class OrdemservicosController extends Controller
 
         $escalas = Ordemservico::with([
             'servicos',
+            'acessos',
             'orcamento.cidade', 'orcamento' => function ($query) {
                 $query->with(['homecare' => function ($query) {
                     $query->with(['paciente.pessoa', 'paciente.responsavel.pessoa']);
