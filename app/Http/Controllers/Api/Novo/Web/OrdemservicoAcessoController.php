@@ -83,7 +83,7 @@ class OrdemservicoAcessoController extends Controller
      * @param  \App\OrdemservicoAcesso  $ordemservicoAcesso
      * @return \Illuminate\Http\Response
      */
-    public function checkAviso(OrdemservicoAcesso $ordemservicoAcesso)
+    public function checkOrdemservicoAcesso(OrdemservicoAcesso $ordemservicoAcesso)
     {
         $ordemservicoAcesso->update(
             [
