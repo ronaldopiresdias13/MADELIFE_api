@@ -20,13 +20,11 @@ class OrdemservicoObserver
 
         foreach ($acessos as $key => $acesso) {
             DB::transaction(function () use ($ordemservico, $acesso) {
-                OrdemservicoAcesso::create(
-                    [
-                        'empresa_id'      => $ordemservico->empresa_id,
-                        'ordemservico_id' => $ordemservico->id,
-                        'acesso_id'       => $acesso->id
-                    ]
-                );
+                $ordemservicoAcesso = new OrdemservicoAcesso();
+                $ordemservicoAcesso->empresa_id      = $ordemservico->empresa_id;
+                $ordemservicoAcesso->ordemservico_id = $ordemservico->id;
+                $ordemservicoAcesso->acesso_id       = $acesso->id;
+                $ordemservicoAcesso->save();
             });
         }
     }

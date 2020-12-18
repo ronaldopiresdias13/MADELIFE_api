@@ -22,13 +22,7 @@ class OrdemservicoAcesso extends Model
 
     protected $fillable = [
         'id',
-        // 'empresa_id',
-        // 'ordemservico_id',
-        // 'acesso_id',
         'check'
-        // 'created_at',
-        // 'updated_at',
-        // 'deleted_at'
     ];
 
     // protected $guarded = [];
