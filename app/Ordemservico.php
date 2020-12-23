@@ -61,6 +61,6 @@ class Ordemservico extends Model
     }
     public function acessos()
     {
-        return $this->belongsToMany(Acesso::class, 'ordemservico_acessos')->withPivot('check');
+        return $this->belongsToMany(Acesso::class, 'ordemservico_acessos')->withPivot('id', 'check');
     }
 }
