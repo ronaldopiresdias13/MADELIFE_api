@@ -10,35 +10,21 @@ use Illuminate\Support\Facades\DB;
 
 class Teste extends Controller
 {
-    public function teste(Ordemservico $ordemservico)
+    public function teste()
     {
+        return response()->json([
+            'success' => [
+                'text' => 'Apagado com sucesso!',
+                'duration' => 1500
+            ]
+        ], 200)
+            ->header('Content-Type', 'application/json');
 
-        // return OrdemservicoAcesso::all();
-
-        // return 'teste';
-        // return $ordemservico;
-        // return $ordemservico->empresa;
-        // return $ordemservico->empresa->acessos;
-
-        $acessos = $ordemservico->empresa->acessos;
-
-        // return $acessos;
-
-        foreach ($acessos as $key => $acesso) {
-            DB::transaction(function () use ($ordemservico, $acesso) {
-                // OrdemservicoAcesso::create(
-                //     [
-                //         'empresa_id'      => $ordemservico->empresa_id,
-                //         'ordemservico_id' => $ordemservico->id,
-                //         'acesso_id'       => $acesso->id
-                //     ]
-                // );
-                $ordemservicoAcesso = new OrdemservicoAcesso();
-                $ordemservicoAcesso->empresa_id      = $ordemservico->empresa_id;
-                $ordemservicoAcesso->ordemservico_id = $ordemservico->id;
-                $ordemservicoAcesso->acesso_id       = $acesso->id;
-                $ordemservicoAcesso->save();
-            });
-        }
+        return response()->json([
+            'error' => [
+                'text' => 'Cliente já cadastrado!'
+            ]
+        ], 400)
+            ->header('Content-Type', 'application/json');
     }
 }

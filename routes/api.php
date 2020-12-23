@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 //-------------- Rota de Testes --------------//
-Route::group(['middleware' => 'auth:api'], function () {
-    Route::get("/teste/{ordemservico}", "Teste@teste");
-});
+// Route::group(['middleware' => 'auth:api'], function () {
+Route::get("/teste", "Teste@teste");
+// });
 
 /*-------------- Rota de Logs por email --------------*/
 Route::post("sendMailLog", "LogsController@sendMailLog");
