@@ -511,7 +511,7 @@ class DashboardController extends Controller
     {
         $empresa_id = Auth::user()->pessoa->profissional->empresa_id;
         return DB::table('escalas')
-            ->select(DB::raw('servicos.descricao, count(escalas.id) as total'))
+            ->select(DB::raw('escalas.servico_id, servicos.descricao, count(escalas.id) as total'))
             ->join('servicos', 'servicos.id', '=', 'escalas.servico_id')
             ->where('escalas.ativo', 1)
             ->where('escalas.empresa_id', $empresa_id)
