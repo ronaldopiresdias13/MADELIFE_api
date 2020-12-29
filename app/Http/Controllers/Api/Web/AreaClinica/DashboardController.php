@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Web\AreaClinica;
 
 use App\Escala;
 use App\Http\Controllers\Controller;
+use App\Ordemservico;
 use App\Relatorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -489,17 +490,21 @@ class DashboardController extends Controller
      */
     public function dashboardTotalPacientesAtivosPorPeriodo(Request $request)
     {
-        $empresa_id = Auth::user()->pessoa->profissional->empresa->id;
-        return DB::table('escalas')
-            ->select(DB::raw('pessoas.nome, count(escalas.id) as total'))
-            ->join('prestadores', 'prestadores.id', '=', 'escalas.prestador_id')
-            ->join('pessoas', 'pessoas.id', '=', 'prestadores.pessoa_id')
-            ->where('escalas.ativo', 1)
-            ->where('escalas.empresa_id', $empresa_id)
-            ->where('escalas.dataentrada', '>=', $request->data_ini)
-            ->where('escalas.dataentrada', '<=', $request->data_fim)
-            ->groupBy('escalas.prestador_id', 'pessoas.nome')
+        $empresa_id = Auth::user()->pessoa->profissional->empresa_id;
+        return Ordemservico::where('empresa_id', $empresa_id)
+            ->where('inicio', '>=', $request->data_ini)
+            ->where('inicio', '<=', $request->data_fim)
             ->get();
+        // return DB::table('escalas')
+        //     ->select(DB::raw('pessoas.nome, count(escalas.id) as total'))
+        //     ->join('prestadores', 'prestadores.id', '=', 'escalas.prestador_id')
+        //     ->join('pessoas', 'pessoas.id', '=', 'prestadores.pessoa_id')
+        //     ->where('escalas.ativo', 1)
+        //     ->where('escalas.empresa_id', $empresa_id)
+        //     ->where('escalas.dataentrada', '>=', $request->data_ini)
+        //     ->where('escalas.dataentrada', '<=', $request->data_fim)
+        //     ->groupBy('escalas.prestador_id', 'pessoas.nome')
+        //     ->get();
     }
     /**
      * Display a listing of the resource.
@@ -560,5 +565,28 @@ class DashboardController extends Controller
             ->groupBy('formacoes.id', 'formacoes.descricao')
             ->orderByDesc('total')
             ->get();
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dashboarTotalContratosDesativadosPorPeriodo(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return Ordemservico::select(DB::raw('motivo, count(motivo) AS total'))
+            ->where('empresa_id', $empresa_id)
+            ->where('dataencerramento', '>=', $request->data_ini)
+            ->where('dataencerramento', '<=', $request->data_fim)
+            ->groupBy('motivo')
+            ->orderByDesc('total')
+            ->get();
+        // return Ordemservico::select(DB::raw('motivo, count(motivo) AS total'))
+        // ->where('status', 0)
+        // ->where('empresa_id', $empresa_id)
+        //     ->groupBy('motivo')
+        //     ->orderByDesc('total')
+        //     ->get();
     }
 }
