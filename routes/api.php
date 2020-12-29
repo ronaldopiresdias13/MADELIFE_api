@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Novo\Web\OrdemservicoAcessoController;
 use App\Http\Controllers\Api\Novo\Web\PrestadoresController;
+use App\Http\Controllers\Api\Novo\Web\TranscricaoProdutoController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -870,6 +871,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
         Route::prefix('prestadores')->group(function () {
             Route::get('listaComFiltro', [PrestadoresController::class, 'listaDePrestadoresComFiltro']);
+        });
+        Route::prefix('transcricaoProduto')->group(function () {
+            Route::get('listaNaoRealizadosComFiltro', [TranscricaoProdutoController::class, 'listaDeMedicamentosNaoRealizadosComFiltro']);
         });
     });
 });
