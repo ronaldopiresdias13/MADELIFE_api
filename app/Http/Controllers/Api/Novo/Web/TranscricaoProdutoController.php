@@ -78,7 +78,7 @@ class TranscricaoProdutoController extends Controller
         $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $hoje['mday'];
 
         return DB::select(
-            'SELECT p.descricao, pes.nome, e.dataentrada FROM transcricao_produto tp
+            'SELECT p.descricao, pes.nome, e.dataentrada, hm.horario FROM transcricao_produto tp
             INNER JOIN produtos p ON p.id = tp.produto_id
             INNER JOIN transcricoes t ON t.id = tp.transcricao_id
             INNER JOIN ordemservicos os ON os.id = t.ordemservico_id
@@ -87,6 +87,7 @@ class TranscricaoProdutoController extends Controller
             INNER JOIN pacientes pac ON pac.id = h.paciente_id
             INNER JOIN pessoas pes ON pes.id = pac.pessoa_id
             INNER JOIN escalas e ON e.ordemservico_id = os.id
+            INNER JOIN horariomedicamentos hm ON hm.transcricao_produto_id = tp.id
             WHERE NOT EXISTS (SELECT * FROM acaomedicamentos am WHERE tp.id = am.transcricao_produto_id)
             AND os.id LIKE ?
             AND e.dataentrada BETWEEN ? AND ?',
