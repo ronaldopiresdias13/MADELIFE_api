@@ -878,7 +878,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::prefix('transcricaoProduto')->group(function () {
             Route::get('listaNaoRealizadosComFiltro', [TranscricaoProdutoController::class, 'listaDeMedicamentosNaoRealizadosComFiltro']);
         });
-        Route::prefix('escalas')->group(function () {
+        Route::prefix('escalas{escala}')->group(function () {
             Route::get('substituirPrestador', [EscalasController::class, 'substituirPrestador']);
         });
     });
