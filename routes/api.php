@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Novo\Web\EscalasController;
 use App\Http\Controllers\Api\Novo\Web\OrdemservicoAcessoController;
 use App\Http\Controllers\Api\Novo\Web\PrestadoresController;
 use App\Http\Controllers\Api\Novo\Web\TranscricaoProdutoController;
@@ -876,6 +877,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
         Route::prefix('transcricaoProduto')->group(function () {
             Route::get('listaNaoRealizadosComFiltro', [TranscricaoProdutoController::class, 'listaDeMedicamentosNaoRealizadosComFiltro']);
+        });
+        Route::prefix('escalas')->group(function () {
+            Route::get('substituirPrestador', [EscalasController::class, 'substituirPrestador']);
         });
     });
 });
