@@ -125,7 +125,9 @@ class PrestadoresController extends Controller
      */
     public function buscaprestadoresporfiltro(Request $request)
     {
-        return Prestador::with(['formacoes', 'pessoa.conselhos'])
+        return Prestador::with(['formacoes', 'pessoa.conselhos', 'pessoa.enderecos' => function ($query) {
+            $query->with('cidade');
+        }])
             // ->join('formacoes', 'pessoas.id', '=', 'prestadores.pessoa_id')
             ->join('pessoas', 'pessoas.id', '=', 'prestadores.pessoa_id')
             ->join('conselhos', 'pessoas.id', '=', 'conselhos.pessoa_id')
