@@ -66,7 +66,7 @@ class EscalasController extends Controller
      */
     public function listEscalasByIdOrdemServico(Ordemservico $ordemservico)
     {
-        return Escala::with('prestador.pessoa')
+        return Escala::with(['prestador.pessoa.conselhos', 'prestador.formacoes'])
             ->where('ativo', true)
             ->where('ordemservico_id', $ordemservico->id)
             ->get();
