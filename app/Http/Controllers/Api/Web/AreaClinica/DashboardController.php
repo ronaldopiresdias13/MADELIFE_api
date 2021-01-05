@@ -45,7 +45,7 @@ class DashboardController extends Controller
                         'homecare' => function ($query) {
                             $query->select('id', 'orcamento_id', 'paciente_id');
                             $query->with(['paciente' => function ($query) {
-                                $query->select('id', 'pessoa_id');
+                                $query->select('id', 'pessoa_id', 'sexo');
                                 $query->with(['pessoa' => function ($query) {
                                     $query->select('id', 'nome', 'nascimento', 'cpfcnpj', 'rgie');
                                 }]);
