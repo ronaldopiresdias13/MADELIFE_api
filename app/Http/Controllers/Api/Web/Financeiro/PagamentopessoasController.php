@@ -29,10 +29,8 @@ class PagamentopessoasController extends Controller
     public function listPagamentosByEmpresaId(Request $request)
     {
         $result = [];
-
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-
         $pagamentos = Pagamentopessoa::with(['pessoa.dadosbancario.banco'])
             ->where('empresa_id', $empresa_id)
             ->where('status', false)
@@ -61,7 +59,6 @@ class PagamentopessoasController extends Controller
             }
         }
         return $result;
-        // return $pagamentos;
     }
 
     /**
