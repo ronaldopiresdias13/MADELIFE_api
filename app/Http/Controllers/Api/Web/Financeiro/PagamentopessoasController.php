@@ -33,7 +33,7 @@ class PagamentopessoasController extends Controller
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
 
-        $pagamentos = Pagamentopessoa::with(['pessoa.dadosbancario'])
+        $pagamentos = Pagamentopessoa::with(['pessoa.dadosbancario.banco'])
             ->where('empresa_id', $empresa_id)
             ->where('status', false)
             ->where('ativo', true)
