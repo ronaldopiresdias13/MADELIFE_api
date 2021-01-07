@@ -294,6 +294,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('categoriadocumentos/newCategoria', 'Api\Web\CategoriadocumentosController@newCategoria');
 
         Route::get('documentos/listDocumentosByEmpresa', 'Api\Web\DocumentosController@listDocumentosByEmpresa');
+        Route::get('documentos/listDocumentosByConvenio', 'Api\Web\DocumentosController@listDocumentosByConvenio');
         Route::get('documentos/listDocumentos', 'Api\Web\DocumentosController@listDocumentos');
         Route::post('documentos/newDocumento', 'Api\Web\DocumentosController@newDocumento');
         Route::get('documentos/download/{documento}', 'Api\Web\DocumentosController@download');
@@ -878,8 +879,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::prefix('transcricaoProduto')->group(function () {
             Route::get('listaNaoRealizadosComFiltro', [TranscricaoProdutoController::class, 'listaDeMedicamentosNaoRealizadosComFiltro']);
         });
-        Route::prefix('escalas{escala}')->group(function () {
-            Route::get('substituirPrestador', [EscalasController::class, 'substituirPrestador']);
+        Route::prefix('escalas/{escala}')->group(function () {
+            Route::put('substituirPrestador', [EscalasController::class, 'substituirPrestador']);
         });
     });
 });
