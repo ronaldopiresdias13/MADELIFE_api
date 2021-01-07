@@ -5,11 +5,10 @@ namespace App\Http\Controllers\Api\Web\AreaClinica;
 use App\Escala;
 use App\Http\Controllers\Controller;
 use App\Ordemservico;
-use App\Relatorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use phpDocumentor\Reflection\Types\Boolean;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
@@ -74,6 +73,7 @@ class DashboardController extends Controller
             // 'cuidados',
             'relatorios',
             'monitoramentos',
+            'relatorioescalas',
             // 'acaomedicamentos.transcricaoProduto.produto'
         ])
             ->where('ativo', true)
@@ -109,7 +109,17 @@ class DashboardController extends Controller
 
         $relatorio = [];
 
-        foreach ($escalas as $key => $escala) {
+        foreach ($escalas as $key1 => $escala) {
+            if (isset($escala['relatorioescalas'][0])) {
+                foreach ($escala->relatorioescalas as $key2 => $relatorioescala) {
+                    $file = '';
+                    if (Storage::exists($relatorioescala['caminho'])) {
+                        $file = Storage::get($relatorioescala['caminho']);
+                    }
+                    $escalas[$key1]['relatorioescalas'][$key2]['file'] = base64_encode($file);
+                }
+            }
+
             if ($escala->formacao) {
                 switch ($escala->formacao->descricao) {
                     case 'Cuidador':
