@@ -608,13 +608,13 @@ class DashboardController extends Controller
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-        return Ordemservico::select(DB::raw('motivo, count(motivo) AS total'))
-            ->where('empresa_id', $empresa_id)
-            ->where('status', 1)
-            // ->where('dataencerramento', '<=', $request->data_fim)
-            ->groupBy('profissional_id')
-            ->orderByDesc('total')
-            ->get();
+        // return Ordemservico::select(DB::raw('motivo, count(motivo) AS total'))
+        //     ->where('empresa_id', $empresa_id)
+        //     ->where('status', 1)
+        //     // ->where('dataencerramento', '<=', $request->data_fim)
+        //     ->groupBy('profissional_id')
+        //     ->orderByDesc('total')
+        //     ->get();
         // return Ordemservico::select(DB::raw('motivo, count(motivo) AS total'))
         // ->where('status', 0)
         // ->where('empresa_id', $empresa_id)
