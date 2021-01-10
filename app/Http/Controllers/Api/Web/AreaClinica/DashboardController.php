@@ -599,4 +599,41 @@ class DashboardController extends Controller
         //     ->orderByDesc('total')
         //     ->get();
     }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dashboarTotalPacientesPorSupervisor(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return Ordemservico::select(DB::raw('motivo, count(motivo) AS total'))
+            ->where('empresa_id', $empresa_id)
+            ->where('status', 1)
+            // ->where('dataencerramento', '<=', $request->data_fim)
+            ->groupBy('profissional_id')
+            ->orderByDesc('total')
+            ->get();
+        // return Ordemservico::select(DB::raw('motivo, count(motivo) AS total'))
+        // ->where('status', 0)
+        // ->where('empresa_id', $empresa_id)
+        //     ->groupBy('motivo')
+        //     ->orderByDesc('total')
+        //     ->get();
+        return DB::select(
+            'SELECT
+                ifnull(p.nome, "vazio") as profissional_id,count(os.id) as total
+            FROM ordemservicos AS os
+            LEFT JOIN profissionais AS prof
+            ON prof.id = os.profissional_id
+            LEFT JOIN pessoas AS p
+            ON p.id = prof.pessoa_id
+            WHERE os.empresa_id =' . $empresa_id .
+                'AND os.status = 1
+            GROUP BY os.profissional_id
+            ORDER BY total desc
+            '
+        );
+    }
 }
