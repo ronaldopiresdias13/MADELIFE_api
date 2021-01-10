@@ -623,7 +623,7 @@ class DashboardController extends Controller
         //     ->get();
         return DB::select(
             'SELECT
-                ifnull(p.nome, "vazio") as profissional_id,count(os.id) as total
+                ifnull(p.nome, "vazio") as nome,count(os.id) as total
             FROM ordemservicos AS os
             LEFT JOIN profissionais AS prof
             ON prof.id = os.profissional_id
