@@ -608,20 +608,30 @@ class DashboardController extends Controller
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-        return DB::select(
-            'SELECT
-                ifnull(p.nome, "vazio") as nome,count(os.id) as total
-            FROM ordemservicos AS os
-            LEFT JOIN profissionais AS prof
-            ON prof.id = os.profissional_id
-            LEFT JOIN pessoas AS p
-            ON p.id = prof.pessoa_id
-            WHERE os.empresa_id =' . $empresa_id .
-                'AND os.status = 1
-            GROUP BY os.profissional_id
-            ORDER BY total desc
-            '
-        );
+
+        return DB::table('ordemservicos')
+            ->select(DB::raw('ifnull(pessoas.nome, "vazio") as nome,count(ordemservicos.id) as total'))
+            ->leftJoin('profissionais', 'profissionais.id', '=', 'ordemservicos.profissional_id')
+            ->leftJoin('pessoas', 'pessoas.id', '=', 'profissionais.pessoa_id')
+            ->where('ordemservicos.status', 1)
+            ->where('ordemservicos.empresa_id', $empresa_id)
+            ->groupBy('ordemservicos.profissional_id', 'pessoas.nome')
+            ->orderByDesc('total')
+            ->get();
+        // return DB::select(
+        //     'SELECT
+        //         ifnull(p.nome, "vazio") as nome,count(os.id) as total
+        //     FROM ordemservicos AS os
+        //     LEFT JOIN profissionais AS prof
+        //     ON prof.id = os.profissional_id
+        //     LEFT JOIN pessoas AS p
+        //     ON p.id = prof.pessoa_id
+        //     WHERE os.empresa_id =' . $empresa_id .
+        //         'AND os.status = 1
+        //     GROUP BY os.profissional_id
+        //     ORDER BY total desc
+        //     '
+        // );
     }
     /**
      * Display a listing of the resource.
