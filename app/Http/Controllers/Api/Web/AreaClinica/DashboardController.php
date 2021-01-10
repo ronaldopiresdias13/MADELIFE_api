@@ -643,18 +643,15 @@ class DashboardController extends Controller
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
         return DB::select(
-            'SELECT ifnull(p.nome, "vazio") as nome, COUNT(os.id) AS total FROM ordemservicos AS os
-            left JOIN orcamentos AS o
-            ON o.id = os.orcamento_id
-            left JOIN clientes AS c
+            "SELECT ifnull(p.nome, 'vazio') as nome, COUNT(os.id) AS total FROM ordemservicos AS os LEFT JOIN orcamentos AS o ON o.id = os.orcamento_id
+            LEFT JOIN clientes AS c
             ON c.id = o.cliente_id
-            left JOIN pessoas AS p
+            LEFT JOIN pessoas AS p
             ON p.id =c.pessoa_id
-            WHERE os.empresa_id =' . $empresa_id .
-                'AND os.status = 1
-            GROUP BY o.cliente_id
+            WHERE os.empresa_id = " . $empresa_id . " AND os.status = 1
+            GROUP BY o.cliente_id, p.nome
             ORDER BY total desc
-            '
+            "
         );
     }
 }
