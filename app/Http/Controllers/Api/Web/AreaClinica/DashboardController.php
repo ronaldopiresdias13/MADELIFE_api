@@ -654,4 +654,26 @@ class DashboardController extends Controller
             "
         );
     }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dashboarPorIdadePacientes(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return DB::select(
+            "SELECT p.nome, ifnull(TIMESTAMPDIFF(YEAR,p.nascimento,CURDATE()), 0) AS Idade FROM ordemservicos AS os
+             INNER JOIN orcamentos AS o
+             ON o.id = os.orcamento_id
+             INNER JOIN homecares AS hc
+             ON hc.orcamento_id = o.id
+             INNER JOIN pacientes AS pac
+             ON pac.id = hc.paciente_id
+             INNER JOIN pessoas AS p
+             ON p.id = pac.pessoa_id
+             WHERE os.empresa_id =" . $empresa_id
+        );
+    }
 }
