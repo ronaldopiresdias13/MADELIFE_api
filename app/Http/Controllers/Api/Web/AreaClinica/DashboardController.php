@@ -676,4 +676,23 @@ class DashboardController extends Controller
              WHERE os.empresa_id =" . $empresa_id
         );
     }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dashboarCidadesMaisAtendidas(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return DB::select(
+            "SELECT c.nome AS cidade, c.uf, COUNT(os.id) AS total FROM ordemservicos AS os
+                INNER JOIN orcamentos AS o
+                ON o.id = os.orcamento_id
+                INNER JOIN cidades AS c
+                ON c.id = o.cidade_id
+                WHERE os.empresa_id = " . $empresa_id .
+                " GROUP BY c.id, c.nome, c.uf ORDER BY total desc"
+        );
+    }
 }
