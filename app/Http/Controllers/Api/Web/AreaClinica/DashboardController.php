@@ -695,4 +695,32 @@ class DashboardController extends Controller
                 " GROUP BY c.id, c.nome, c.uf ORDER BY total desc"
         );
     }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dashboarFaltasdeProfissionaisPorOperadora(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return DB::select(
+            "SELECT p.nome, COUNT(e.id) AS total FROM escalas AS e
+             INNER JOIN ordemservicos AS os
+             ON os.id = e.ordemservico_id
+             INNER JOIN orcamentos AS o
+             ON os.orcamento_id = o.id
+             INNER JOIN clientes AS c
+             ON c.id = o.cliente_id
+             INNER JOIN pessoas AS p
+             ON p.id = c.pessoa_id
+             WHERE e.status = 0
+             AND e.ativo = 1
+             AND e.empresa_id = " . $empresa_id .
+                " AND e.dataentrada >= " . $request->data_ini .
+                " AND e.dataentrada <= " . $request->data_fim .
+                " GROUP BY o.cliente_id
+             ORDER BY total desc"
+        );
+    }
 }
