@@ -718,9 +718,34 @@ class DashboardController extends Controller
                 WHERE e.status = 0
                 AND e.ativo = 1
                 AND e.empresa_id = ?
-                AND e.dataentrada >= ?
-                 AND e.dataentrada <= ?
+                AND e.dataentrada BETWEEN ? AND ?
                 GROUP BY o.cliente_id, p.nome ORDER BY total desc',
+            [
+                $empresa_id,
+                $request->data_ini,
+                $request->data_fim
+            ]
+        );
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dashboarFaltasdeProfissionaisPorEspecialidade(Request $request)
+    {
+        // return $request->data_fim;
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return DB::select(
+            'SELECT ifnull(s.descricao, "Vazio") AS servico, COUNT(e.id) AS total FROM escalas AS e
+                left JOIN servicos AS s
+                ON s.id = e.servico_id
+                WHERE e.status = 0
+                AND e.ativo = 1
+                AND e.empresa_id = ?
+                AND e.dataentrada BETWEEN ? AND ?
+                GROUP BY e.servico_id, servico ORDER BY total desc',
             [
                 $empresa_id,
                 $request->data_ini,
