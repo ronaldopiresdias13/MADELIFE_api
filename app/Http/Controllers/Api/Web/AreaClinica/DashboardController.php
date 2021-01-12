@@ -706,7 +706,7 @@ class DashboardController extends Controller
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
         return DB::select(
-            "SELECT p.nome, COUNT(e.id) AS total FROM escalas AS e
+            'SELECT p.nome, COUNT(e.id) AS total FROM escalas AS e
                 INNER JOIN ordemservicos AS os
                 ON os.id = e.ordemservico_id
                 INNER JOIN orcamentos AS o
@@ -717,10 +717,15 @@ class DashboardController extends Controller
                 ON p.id = c.pessoa_id
                 WHERE e.status = 0
                 AND e.ativo = 1
-                AND e.empresa_id = " . $empresa_id .
-                // " AND e.dataentrada >= " . $request->data_ini .
-                " AND e.dataentrada <= " . $request->data_fim .
-                " GROUP BY o.cliente_id, p.nome ORDER BY total desc"
+                AND e.empresa_id = ?
+                AND e.dataentrada >= ?
+                 AND e.dataentrada <= ?
+                GROUP BY o.cliente_id, p.nome ORDER BY total desc',
+            [
+                $empresa_id,
+                $request->data_ini,
+                $request->data_fim
+            ]
         );
     }
 }
