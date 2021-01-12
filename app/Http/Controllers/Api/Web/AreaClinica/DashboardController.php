@@ -753,4 +753,31 @@ class DashboardController extends Controller
             ]
         );
     }
+    public function dashboarFaltasdeProfissionaisPorCidades(Request $request)
+    {
+        // return $request->data_fim;
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return DB::select(
+            'SELECT c.nome, COUNT(e.id) AS total FROM escalas AS e
+                INNER JOIN ordemservicos AS os
+                ON os.id = e.ordemservico_id
+                INNER JOIN orcamentos AS o
+                ON os.orcamento_id = o.id
+                INNER JOIN cidades AS c
+                ON c.id = o.cidade_id
+                WHERE e.status = 0
+                AND e.ativo = 1
+                AND e.empresa_id = ?
+                AND e.dataentrada between ?
+                AND ?
+                GROUP BY o.cidade_id
+                ORDER BY total desc',
+            [
+                $empresa_id,
+                $request->data_ini,
+                $request->data_fim
+            ]
+        );
+    }
 }
