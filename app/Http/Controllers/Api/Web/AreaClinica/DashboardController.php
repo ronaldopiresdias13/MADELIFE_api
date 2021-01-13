@@ -120,16 +120,27 @@ class DashboardController extends Controller
                 }
             }
 
-            if ($escala->formacao) {
-                switch ($escala->formacao->descricao) {
-                    case 'Cuidador':
-                    case 'Técnico de Enfermagem':
-                    case 'Auxiliar de Enfermagem':
-                    case 'Enfermagem':
-                        $relatorio = $this->pushDiario($relatorio, $escala, true);
+            // if ($escala->formacao) {
+            //     switch ($escala->formacao->descricao) {
+            //         case 'Cuidador':
+            //         case 'Técnico de Enfermagem':
+            //         case 'Auxiliar de Enfermagem':
+            //         case 'Enfermagem':
+            //             $relatorio = $this->pushDiario($relatorio, $escala, true);
+            //             break;
+            //         default:
+            //             $relatorio = $this->pushDiario($relatorio, $escala, false);
+            //             break;
+            //     }
+            // }
+
+            if ($escala->tipo) {
+                switch ($escala->tipo) {
+                    case 'Plantão':
+                        $relatorio = $this->pushDiario($relatorio, $escala, false);
                         break;
                     default:
-                        $relatorio = $this->pushDiario($relatorio, $escala, false);
+                        $relatorio = $this->pushDiario($relatorio, $escala, true);
                         break;
                 }
             }
@@ -258,15 +269,24 @@ class DashboardController extends Controller
         $relatorio = [];
 
         foreach ($escalas as $key => $escala) {
-            switch ($escala->formacao->descricao) {
-                case 'Cuidador':
-                case 'Técnico de Enfermagem':
-                case 'Auxiliar de Enfermagem':
-                case 'Enfermagem':
-                    $relatorio = $this->pushProdutividade($relatorio, $escala, true);
+            // switch ($escala->formacao->descricao) {
+            //     case 'Cuidador':
+            //     case 'Técnico de Enfermagem':
+            //     case 'Auxiliar de Enfermagem':
+            //     case 'Enfermagem':
+            //         $relatorio = $this->pushProdutividade($relatorio, $escala, true);
+            //         break;
+            //     default:
+            //         $relatorio = $this->pushProdutividade($relatorio, $escala, false);
+            //         break;
+            // }
+
+            switch ($escala->tipo) {
+                case 'Plantão':
+                    $relatorio = $this->pushProdutividade($relatorio, $escala, false);
                     break;
                 default:
-                    $relatorio = $this->pushProdutividade($relatorio, $escala, false);
+                    $relatorio = $this->pushProdutividade($relatorio, $escala, true);
                     break;
             }
         }
