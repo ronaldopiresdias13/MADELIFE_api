@@ -619,4 +619,185 @@ class DashboardController extends Controller
         //     ->orderByDesc('total')
         //     ->get();
     }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dashboarTotalPacientesPorSupervisor(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+
+        return DB::table('ordemservicos')
+            ->select(DB::raw('ifnull(pessoas.nome, "vazio") as nome,count(ordemservicos.id) as total'))
+            ->leftJoin('profissionais', 'profissionais.id', '=', 'ordemservicos.profissional_id')
+            ->leftJoin('pessoas', 'pessoas.id', '=', 'profissionais.pessoa_id')
+            ->where('ordemservicos.status', 1)
+            ->where('ordemservicos.empresa_id', $empresa_id)
+            ->groupBy('ordemservicos.profissional_id', 'pessoas.nome')
+            ->orderByDesc('total')
+            ->get();
+        // return DB::select(
+        //     'SELECT
+        //         ifnull(p.nome, "vazio") as nome,count(os.id) as total
+        //     FROM ordemservicos AS os
+        //     LEFT JOIN profissionais AS prof
+        //     ON prof.id = os.profissional_id
+        //     LEFT JOIN pessoas AS p
+        //     ON p.id = prof.pessoa_id
+        //     WHERE os.empresa_id =' . $empresa_id .
+        //         'AND os.status = 1
+        //     GROUP BY os.profissional_id
+        //     ORDER BY total desc
+        //     '
+        // );
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dashboarTotalPacientesPorConvenio(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return DB::select(
+            "SELECT ifnull(p.nome, 'vazio') as nome, COUNT(os.id) AS total FROM ordemservicos AS os LEFT JOIN orcamentos AS o ON o.id = os.orcamento_id
+            LEFT JOIN clientes AS c
+            ON c.id = o.cliente_id
+            LEFT JOIN pessoas AS p
+            ON p.id =c.pessoa_id
+            WHERE os.empresa_id = " . $empresa_id . " AND os.status = 1
+            GROUP BY o.cliente_id, p.nome
+            ORDER BY total desc
+            "
+        );
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dashboarPorIdadePacientes(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return DB::select(
+            "SELECT p.nome, ifnull(TIMESTAMPDIFF(YEAR,p.nascimento,CURDATE()), 0) AS Idade FROM ordemservicos AS os
+             INNER JOIN orcamentos AS o
+             ON o.id = os.orcamento_id
+             INNER JOIN homecares AS hc
+             ON hc.orcamento_id = o.id
+             INNER JOIN pacientes AS pac
+             ON pac.id = hc.paciente_id
+             INNER JOIN pessoas AS p
+             ON p.id = pac.pessoa_id
+             WHERE os.empresa_id =" . $empresa_id
+        );
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dashboarCidadesMaisAtendidas(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return DB::select(
+            "SELECT c.nome AS cidade, c.uf, COUNT(os.id) AS total FROM ordemservicos AS os
+                INNER JOIN orcamentos AS o
+                ON o.id = os.orcamento_id
+                INNER JOIN cidades AS c
+                ON c.id = o.cidade_id
+                WHERE os.empresa_id = " . $empresa_id .
+                " GROUP BY c.id, c.nome, c.uf ORDER BY total desc"
+        );
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dashboarFaltasdeProfissionaisPorOperadora(Request $request)
+    {
+        // return $request->data_fim;
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return DB::select(
+            'SELECT p.nome, COUNT(e.id) AS total FROM escalas AS e
+                INNER JOIN ordemservicos AS os
+                ON os.id = e.ordemservico_id
+                INNER JOIN orcamentos AS o
+                ON os.orcamento_id = o.id
+                INNER JOIN clientes AS c
+                ON c.id = o.cliente_id
+                INNER JOIN pessoas AS p
+                ON p.id = c.pessoa_id
+                WHERE e.status = 0
+                AND e.ativo = 1
+                AND e.empresa_id = ?
+                AND e.dataentrada BETWEEN ? AND ?
+                GROUP BY o.cliente_id, p.nome ORDER BY total desc',
+            [
+                $empresa_id,
+                $request->data_ini,
+                $request->data_fim
+            ]
+        );
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dashboarFaltasdeProfissionaisPorEspecialidade(Request $request)
+    {
+        // return $request->data_fim;
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return DB::select(
+            'SELECT ifnull(s.descricao, "Vazio") AS servico, COUNT(e.id) AS total FROM escalas AS e
+                left JOIN servicos AS s
+                ON s.id = e.servico_id
+                WHERE e.status = 0
+                AND e.ativo = 1
+                AND e.empresa_id = ?
+                AND e.dataentrada BETWEEN ? AND ?
+                GROUP BY e.servico_id, servico ORDER BY total desc',
+            [
+                $empresa_id,
+                $request->data_ini,
+                $request->data_fim
+            ]
+        );
+    }
+    public function dashboarFaltasdeProfissionaisPorCidades(Request $request)
+    {
+        // return $request->data_fim;
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return DB::select(
+            'SELECT c.nome, COUNT(e.id) AS total FROM escalas AS e
+                INNER JOIN ordemservicos AS os
+                ON os.id = e.ordemservico_id
+                INNER JOIN orcamentos AS o
+                ON os.orcamento_id = o.id
+                INNER JOIN cidades AS c
+                ON c.id = o.cidade_id
+                WHERE e.status = 0
+                AND e.ativo = 1
+                AND e.empresa_id = ?
+                AND e.dataentrada between ?
+                AND ?
+                GROUP BY o.cidade_id
+                ORDER BY total desc',
+            [
+                $empresa_id,
+                $request->data_ini,
+                $request->data_fim
+            ]
+        );
+    }
 }
