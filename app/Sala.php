@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Model;
 
 class Sala extends Model

@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Traits\Uuid;
+use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 
 class Locacao extends Model
