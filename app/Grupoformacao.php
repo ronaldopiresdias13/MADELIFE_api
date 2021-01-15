@@ -5,11 +5,9 @@ namespace App;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Model;
 
-class Estoque extends Model
+class Grupoformacao extends Model
 {
     use Uuid;
 
-    protected $keyType = 'string';
-    protected $primaryKey = 'uuid';
-    protected $guarded = [];
+    protected $table = 'grupoformacoes';
 }
