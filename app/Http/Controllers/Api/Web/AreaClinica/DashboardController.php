@@ -788,10 +788,10 @@ class DashboardController extends Controller
                 ON c.id = o.cidade_id
                 WHERE e.status = 0
                 AND e.ativo = 1
-                AND e.empresa_id = ? 
-                AND e.dataentrada between ? 
-                AND ? 
-                GROUP BY o.cidade_id, c.nome, c.uf 
+                AND e.empresa_id = ?
+                AND e.dataentrada between ?
+                AND ?
+                GROUP BY o.cidade_id, c.nome, c.uf
                 ORDER BY total desc",
             [
                 $empresa_id,
@@ -822,6 +822,34 @@ class DashboardController extends Controller
             WHERE e.empresa_id = ? AND e.dataentrada BETWEEN ? AND ?
              AND e.ativo = 1
              GROUP BY e.id, pe.nome, s.id",
+            [
+                $empresa_id,
+                $request->data_ini,
+                $request->data_fim,
+            ]
+        );
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dashboardTotalMedicamentos(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return DB::select(
+            "SELECT IFNULL(pe.nome,'Outros') AS nome, e.dataentrada, p.descricao, hm.horario, ac.*
+            from transcricao_produto tp
+            LEFT JOIN acaomedicamentos ac ON ac.transcricao_produto_id = tp.id
+            INNER JOIN produtos p ON p.id = tp.produto_id
+            LEFT JOIN horariomedicamentos hm ON tp.id = hm.transcricao_produto_id
+            RIGHT JOIN escalas e ON e.id = ac.escala_id
+            LEFT JOIN ordemservicos os ON os.id = e.ordemservico_id
+            LEFT  JOIN profissionais prof ON prof.id  = os.profissional_id
+            left  JOIN pessoas pe ON pe.id = prof.pessoa_id
+            WHERE e.dataentrada BETWEEN ? AND ?
+            AND e.ativo = ? AND e.empresa_id = ?",
             [
                 $empresa_id,
                 $request->data_ini,
