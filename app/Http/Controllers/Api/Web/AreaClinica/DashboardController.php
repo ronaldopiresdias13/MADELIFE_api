@@ -779,7 +779,7 @@ class DashboardController extends Controller
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
         return DB::select(
-            'SELECT c.nome, COUNT(e.id) AS total FROM escalas AS e
+            "SELECT c.nome, c.uf, COUNT(e.id) AS total FROM escalas AS e
                 INNER JOIN ordemservicos AS os
                 ON os.id = e.ordemservico_id
                 INNER JOIN orcamentos AS o
@@ -788,15 +788,44 @@ class DashboardController extends Controller
                 ON c.id = o.cidade_id
                 WHERE e.status = 0
                 AND e.ativo = 1
-                AND e.empresa_id = ?
-                AND e.dataentrada between ?
-                AND ?
-                GROUP BY o.cidade_id
-                ORDER BY total desc',
+                AND e.empresa_id = ? 
+                AND e.dataentrada between ? 
+                AND ? 
+                GROUP BY o.cidade_id, c.nome, c.uf 
+                ORDER BY total desc",
             [
                 $empresa_id,
                 $request->data_ini,
                 $request->data_fim
+            ]
+        );
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dashboarTotalCheckinCheckout(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return DB::select(
+            "SELECT IFNULL(pe.nome,'Outro') AS nome, s.id AS 'servico_id',
+            (SELECT COUNT(p.id) FROM pontos p WHERE p.escala_id = e.id AND p.tipo = 'Check-in') AS 'totalcheckin',
+            (SELECT COUNT(p.id) FROM pontos p WHERE p.escala_id = e.id AND p.tipo = 'Check-out') AS 'totalcheckout',
+            COUNT(e.id) AS 'total'
+            FROM escalas e
+            LEFT JOIN ordemservicos os ON os.id = e.ordemservico_id
+            LEFT  JOIN profissionais prof ON prof.id  = os.profissional_id
+            left  JOIN pessoas pe ON pe.id = prof.pessoa_id
+            left JOIN servicos s ON s.id = e.servico_id
+            WHERE e.empresa_id = ? AND e.dataentrada BETWEEN ? AND ?
+             AND e.ativo = 1
+             GROUP BY e.id, pe.nome, s.id",
+            [
+                $empresa_id,
+                $request->data_ini,
+                $request->data_fim,
             ]
         );
     }

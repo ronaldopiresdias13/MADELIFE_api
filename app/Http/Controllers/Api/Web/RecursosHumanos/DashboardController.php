@@ -77,4 +77,20 @@ class DashboardController extends Controller
             ]
         );
     }
+    public function dashboardMapaPacientesPorEspecialidade(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return DB::select(
+            "SELECT s.descricao, COUNT(oss.id) AS total FROM ordemservico_servico AS oss
+                INNER JOIN servicos AS s
+                ON s.id = oss.servico_id
+                WHERE s.empresa_id = ?
+                GROUP BY oss.servico_id, s.descricao  
+                ORDER BY total desc",
+            [
+                $empresa_id,
+            ]
+        );
+    }
 }
