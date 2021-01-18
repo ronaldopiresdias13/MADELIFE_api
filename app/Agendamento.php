@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Agendamento extends Model
 {
-    // use Uuid;
     use SoftDeletes;
 
     protected $dates = [
