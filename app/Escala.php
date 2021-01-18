@@ -31,7 +31,7 @@ class Escala extends Model
 
     public function monitoramentos()
     {
-        return $this->hasMany(Monitoramentoescala::class)->where('ativo', true);
+        return $this->hasMany(Monitoramentoescala::class); //->where('ativo', true);
     }
 
     public function ordemservico()
