@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api\Web\GestaoOrcamentaria;
 
 use App\Empresa;
 use App\Http\Controllers\Controller;
+use App\Mail\SendOrcamento;
 use App\Orcamento;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class OrcamentosController extends Controller
 {
@@ -77,5 +79,26 @@ class OrcamentosController extends Controller
     public function destroy(Orcamento $orcamento)
     {
         //
+    }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function enviarOrcamentoPorEmail(Request $request)
+    {
+        $file = $request->file('file');
+        $request = json_decode($request->emails, true);
+        // return $request;
+
+        if ($file && $file->isValid()) {
+            // $md5 = md5_file($file);
+            // $caminho = 'orcamentos/teste';
+            // $nome = $md5 . '.' . $file->extension();
+            // $upload = $file->storeAs($caminho, $nome);
+            // $nomeOriginal = $file->getClientOriginalName();
+            Mail::send(new SendOrcamento($request, $file));
+        }
     }
 }
