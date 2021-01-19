@@ -14,7 +14,7 @@ class SendOrcamento extends Mailable
     use SerializesModels;
 
 
-    private $emails;
+    private $email;
     private $anexo;
 
     /**
@@ -22,9 +22,9 @@ class SendOrcamento extends Mailable
      *
      * @return void
      */
-    public function __construct($emails, $anexo)
+    public function __construct($email, $anexo)
     {
-        $this->emails  = $emails;
+        $this->email = $email;
         $this->anexo = $anexo;
     }
 
@@ -36,9 +36,8 @@ class SendOrcamento extends Mailable
     public function build()
     {
         $this->subject('Envio de Orçamento');
-        $this->to('romario.pires@grupolife.med.br');
+        $this->to($this->email, 'Madelife');
         // $this->attach($this->anexo);
         return $this->view('mail.SendOrcamento');
-        // return $this->view('view.name');
     }
 }
