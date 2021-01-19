@@ -77,6 +77,7 @@ class DashboardController extends Controller
                 'orcamentos.cidade_id',
                 'orcamentos.tipo as tipoorcamento',
                 'orcamentos.data',
+                'orcamentos.situacao as situacaoorcamento',
             )
             ->get();
     }
