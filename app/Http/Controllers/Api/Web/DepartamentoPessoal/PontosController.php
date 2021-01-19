@@ -61,6 +61,7 @@ class PontosController extends Controller
                 "valorhoradiurno",
                 "valorhoranoturno",
                 "valoradicional",
+                "valordesconto",
                 // "motivoadicional"
             ]);
 
@@ -164,12 +165,13 @@ class PontosController extends Controller
             $escala['totalhoras'] = 0;
         }
         $escala['valoradicional'] = (float)$dado->valoradicional;
+        $escala['valordesconto'] = (float)$dado->valordesconto;
         $escala['status'] = $dado->status;
         if ($dado->status) {
             if ($mult) {
-                $escala['valortotal'] = $escala['valorhora'] + (float)$dado->valoradicional;
+                $escala['valortotal'] = ($escala['valorhora'] + (float)$dado->valoradicional) - (float)$dado->valordesconto;
             } else {
-                $escala['valortotal'] = ($escala['valorhora'] * $escala['totalhoras']) + (float)$dado->valoradicional;
+                $escala['valortotal'] = (($escala['valorhora'] * $escala['totalhoras']) + (float)$dado->valoradicional) - (float)$dado->valordesconto;
             }
         } else {
             $escala['valortotal'] = 0;

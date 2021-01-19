@@ -246,6 +246,8 @@ class EscalasController extends Controller
         $escala->valorhoranoturno      = $request->valorhoranoturno;
         $escala->valoradicional        = $request->valoradicional;
         $escala->motivoadicional       = $request->motivoadicional;
+        $escala->valordesconto        = $request->valordesconto;
+        $escala->motivodesconto       = $request->motivodesconto;
         $escala->save();
     }
 
