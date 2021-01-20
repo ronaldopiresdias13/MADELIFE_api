@@ -14,18 +14,18 @@ class SendOrcamento extends Mailable
     use SerializesModels;
 
 
-    private $email;
-    private $anexo;
+    private $file;
+    private $name;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($email, $anexo)
+    public function __construct($file, $name)
     {
-        $this->email = $email;
-        $this->anexo = $anexo;
+        $this->name = $name;
+        $this->file = $file;
     }
 
     /**
@@ -35,9 +35,17 @@ class SendOrcamento extends Mailable
      */
     public function build()
     {
-        $this->subject('Envio de Orçamento');
-        $this->to($this->email, 'Madelife');
-        $this->attach($this->anexo);
-        return $this->view('mail.SendOrcamento');
+        return $this
+            ->from('comercial@madelife.med.br', 'MadeLife Gestão em Saúde')
+            // ->from('teste@madelife.med.br')
+            // ->to($this->email)
+            ->view('mail.SendOrcamento')
+            ->attachData($this->file, 'orcamento.pdf', ['mime' => 'application/pdf',]);
+
+
+        // $this->subject('Envio de Orçamento');
+        // $this->to($this->email, 'Madelife');
+        // $this->attach($this->anexo);
+        // return $this->view('mail.SendOrcamento');
     }
 }

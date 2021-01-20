@@ -88,23 +88,16 @@ class OrcamentosController extends Controller
      */
     public function enviarOrcamentoPorEmail(Request $request)
     {
-        // $teste1 = $request->emails;
-        // $teste2 = json_decode($teste1, true);
-        // // return $teste2;
-        // return gettype($teste2);
-
-        $file = null;
         $file = $request->file('file');
         $emails = json_decode($request->emails, true);
 
-        // return gettype($emails);
-
-        // if ($file && $file->isValid()) {
-        foreach ($emails as $key => $email) {
-            Mail::send(new SendOrcamento($email, $file));
+        if ($file && $file->isValid()) {
+            $name = $file->getClientOriginalName();
+            foreach ($emails as $key => $email) {
+                Mail::to($email)->send(new SendOrcamento($file, $name));
+            }
+        } else {
+            return "Invalid file!";
         }
-        // } else {
-        //     return "Not is File";
-        // }
     }
 }
