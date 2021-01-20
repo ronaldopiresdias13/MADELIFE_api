@@ -37,7 +37,7 @@ class SendOrcamento extends Mailable
     {
         $this->subject('Envio de Orçamento');
         $this->to($this->email, 'Madelife');
-        // $this->attach($this->anexo);
+        $this->attach($this->anexo);
         return $this->view('mail.SendOrcamento');
     }
 }

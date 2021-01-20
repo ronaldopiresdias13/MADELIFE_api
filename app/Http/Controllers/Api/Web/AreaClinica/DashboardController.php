@@ -857,4 +857,32 @@ class DashboardController extends Controller
             ]
         );
     }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dashboardTotalAtividades(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return DB::select(
+            "SELECT IFNULL(pe.nome,'Outros') AS nome,
+            count(CASE ce.status WHEN 1 THEN ce.escala_id ELSE NULL END) realizado,
+            count(CASE ce.status WHEN 0 THEN ce.escala_id ELSE NULL END) notrealizado,
+            COUNT(ce.id) as total
+            FROM escalas e
+            LEFT JOIN cuidado_escalas ce ON ce.escala_id = e.id
+            LEFT JOIN ordemservicos os ON os.id = e.ordemservico_id
+            LEFT  JOIN profissionais prof ON prof.id  = os.profissional_id
+            left  JOIN pessoas pe ON pe.id = prof.pessoa_id
+            WHERE e.dataentrada BETWEEN ? AND ?
+            AND e.ativo = 1 AND e.empresa_id = ?",
+            [
+                $request->data_ini,
+                $request->data_fim,
+                $empresa_id,
+            ]
+        );
+    }
 }
