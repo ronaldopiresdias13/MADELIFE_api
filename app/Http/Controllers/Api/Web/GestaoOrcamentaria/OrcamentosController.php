@@ -94,7 +94,7 @@ class OrcamentosController extends Controller
         // return gettype($teste2);
 
         $file = null;
-        // $file = $request->file('file');
+        $file = $request->file('file');
         $emails = json_decode($request->emails, true);
 
         // return gettype($emails);
