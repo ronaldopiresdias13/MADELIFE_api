@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Aph;
+use App\Models\Aph;
 use App\Email;
 use App\Evento;
 use App\Remocao;
-use App\AphEmail;
+use App\Models\AphEmail;
 use App\Telefone;
 use App\Homecare;
 use App\Orcamento;
-use App\AphTelefone;
+use App\Models\AphTelefone;
 use App\EventoEmail;
 use App\RemocaoEmail;
 use App\EventoTelefone;

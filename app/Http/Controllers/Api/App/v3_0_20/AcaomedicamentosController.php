@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\App\v3_0_20;
 
-use App\Acaomedicamento;
+use App\Models\Acaomedicamento;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

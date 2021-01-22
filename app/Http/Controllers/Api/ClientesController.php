@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\User;
 use App\Email;
-use App\Acesso;
+use App\Models\Acesso;
 use App\Cidade;
 use App\Pessoa;
 use App\Cliente;

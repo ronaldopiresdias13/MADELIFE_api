@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Cargo;
+use App\Models\Cargo;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

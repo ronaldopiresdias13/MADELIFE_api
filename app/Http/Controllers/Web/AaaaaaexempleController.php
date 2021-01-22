@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Web;
 
-use App\Models\Assinatura;
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Http\Request;
 
-class AssinaturasController extends Controller
+class AaaaaaexempleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -32,10 +32,10 @@ class AssinaturasController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Assinatura  $assinatura
+     * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(Assinatura $assinatura)
+    public function show(User $user)
     {
         //
     }
@@ -44,10 +44,10 @@ class AssinaturasController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Assinatura  $assinatura
+     * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Assinatura $assinatura)
+    public function update(Request $request, User $user)
     {
         //
     }
@@ -55,12 +55,11 @@ class AssinaturasController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Assinatura  $assinatura
+     * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Assinatura $assinatura)
+    public function destroy(User $user)
     {
-        $assinatura->ativo = false;
-        $assinatura->save();
+        //
     }
 }

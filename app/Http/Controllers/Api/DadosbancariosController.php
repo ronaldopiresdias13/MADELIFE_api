@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Banco;
+use App\Models\Banco;
 use App\Pessoa;
 use App\Dadosbancario;
 use App\Http\Controllers\Controller;

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Beneficio;
+use App\Models\Beneficio;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 

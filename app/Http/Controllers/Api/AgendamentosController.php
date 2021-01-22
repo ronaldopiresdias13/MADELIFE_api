@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Agendamento;
+use App\Models\Agendamento;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
