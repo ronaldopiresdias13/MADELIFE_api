@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Observers\OrdemservicoObserver;
-use App\Ordemservico;
+use App\Models\Ordemservico;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;

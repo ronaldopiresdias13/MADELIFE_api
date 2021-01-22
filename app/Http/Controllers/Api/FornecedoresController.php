@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Email;
-use App\Pessoa;
-use App\Endereco;
-use App\Telefone;
-use App\Fornecedor;
-use App\PessoaEmail;
-use App\PessoaEndereco;
-use App\PessoaTelefone;
+use App\Models\Email;
+use App\Models\Pessoa;
+use App\Models\Endereco;
+use App\Models\Telefone;
+use App\Models\Fornecedor;
+use App\Models\PessoaEmail;
+use App\Models\PessoaEndereco;
+use App\Models\PessoaTelefone;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Tipopessoa;
+use App\Models\Tipopessoa;
 use Illuminate\Support\Facades\DB;
 
 class FornecedoresController extends Controller

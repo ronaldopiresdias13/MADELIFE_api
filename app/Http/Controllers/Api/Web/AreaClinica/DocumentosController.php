@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\Web\AreaClinica;
 
-use App\Documento;
+use App\Models\Documento;
 use App\Http\Controllers\Controller;
-use App\Paciente;
+use App\Models\Paciente;
 use Illuminate\Http\Request;
 
 class DocumentosController extends Controller

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\OrdemservicoServico;
+use App\Models\OrdemservicoServico;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

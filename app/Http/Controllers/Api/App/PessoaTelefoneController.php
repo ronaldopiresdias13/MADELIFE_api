@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\App;
 
 use App\Http\Controllers\Controller;
-use App\PessoaTelefone;
-use App\Telefone;
+use App\Models\PessoaTelefone;
+use App\Models\Telefone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

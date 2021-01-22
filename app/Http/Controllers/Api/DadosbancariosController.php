@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Banco;
-use App\Pessoa;
-use App\Dadosbancario;
+use App\Models\Pessoa;
+use App\Models\Dadosbancario;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 

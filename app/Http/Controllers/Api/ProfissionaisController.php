@@ -2,25 +2,25 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\User;
-use App\Email;
-use App\Pessoa;
+use App\Models\User;
+use App\Models\Email;
+use App\Models\Pessoa;
 use App\Models\Acesso;
-use App\Telefone;
-use App\Endereco;
-use App\UserAcesso;
-use App\PessoaEmail;
-use App\Profissional;
-use App\Dadosbancario;
-use App\PessoaTelefone;
-use App\PessoaEndereco;
-use App\Dadoscontratual;
+use App\Models\Telefone;
+use App\Models\Endereco;
+use App\Models\UserAcesso;
+use App\Models\PessoaEmail;
+use App\Models\Profissional;
+use App\Models\Dadosbancario;
+use App\Models\PessoaTelefone;
+use App\Models\PessoaEndereco;
+use App\Models\Dadoscontratual;
 use Illuminate\Http\Request;
-use App\ProfissionalFormacao;
-use App\ProfissionalConvenio;
-use App\ProfissionalBeneficio;
+use App\Models\ProfissionalFormacao;
+use App\Models\ProfissionalConvenio;
+use App\Models\ProfissionalBeneficio;
 use App\Http\Controllers\Controller;
-use App\Tipopessoa;
+use App\Models\Tipopessoa;
 use Illuminate\Support\Facades\DB;
 
 class ProfissionaisController extends Controller

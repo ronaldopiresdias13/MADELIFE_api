@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Medicao;
-use App\ServicoMedicao;
+use App\Models\Medicao;
+use App\Models\ServicoMedicao;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

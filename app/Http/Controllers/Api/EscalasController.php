@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Escala;
-use App\Empresa;
-use App\Cuidado;
-use App\CuidadoEscala;
+use App\Models\Escala;
+use App\Models\Empresa;
+use App\Models\Cuidado;
+use App\Models\CuidadoEscala;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\OrdemservicoServico;
+use App\Models\OrdemservicoServico;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\DB;

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Natureza;
+use App\Models\Natureza;
 use Illuminate\Http\Request;
 
 class NaturezasController extends Controller

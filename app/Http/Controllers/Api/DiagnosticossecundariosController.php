@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Diagnosticosecundario;
+use App\Models\Diagnosticosecundario;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 

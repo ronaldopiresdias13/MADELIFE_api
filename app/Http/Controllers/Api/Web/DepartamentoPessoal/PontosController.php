@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\Web\DepartamentoPessoal;
 
-use App\Escala;
+use App\Models\Escala;
 use App\Http\Controllers\Controller;
-use App\Ponto;
+use App\Models\Ponto;
 use Illuminate\Http\Request;
 
 class PontosController extends Controller

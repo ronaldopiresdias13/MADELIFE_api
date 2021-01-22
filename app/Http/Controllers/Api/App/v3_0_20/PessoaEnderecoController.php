@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\App\v3_0_20;
 
-use App\Endereco;
+use App\Models\Endereco;
 use App\Http\Controllers\Controller;
-use App\PessoaEndereco;
+use App\Models\PessoaEndereco;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Conselho;
-use App\Dadosbancario;
-use App\Email;
-use App\Endereco;
+use App\Models\Conselho;
+use App\Models\Dadosbancario;
+use App\Models\Email;
+use App\Models\Endereco;
 use App\Http\Controllers\Controller;
-use App\Escala;
-use App\Pessoa;
-use App\PessoaEmail;
-use App\PessoaEndereco;
-use App\PessoaTelefone;
-use App\Prestador;
-use App\PrestadorFormacao;
-use App\Telefone;
-use App\User;
+use App\Models\Escala;
+use App\Models\Pessoa;
+use App\Models\PessoaEmail;
+use App\Models\PessoaEndereco;
+use App\Models\PessoaTelefone;
+use App\Models\Prestador;
+use App\Models\PrestadorFormacao;
+use App\Models\Telefone;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

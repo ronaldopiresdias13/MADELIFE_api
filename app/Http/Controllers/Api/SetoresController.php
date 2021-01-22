@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Setor;
+use App\Models\Setor;
 use Illuminate\Http\Request;
 
 class SetoresController extends Controller

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\Web\GestaoOrcamentaria;
 
-use App\Empresa;
+use App\Models\Empresa;
 use App\Http\Controllers\Controller;
 use App\Mail\SendOrcamento;
-use App\Orcamento;
+use App\Models\Orcamento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 

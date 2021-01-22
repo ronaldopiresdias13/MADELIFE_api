@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Grupocuidado;
-use App\Cuidado;
-use App\CuidadoGrupocuidado;
+use App\Models\Grupocuidado;
+use App\Models\Cuidado;
+use App\Models\CuidadoGrupocuidado;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

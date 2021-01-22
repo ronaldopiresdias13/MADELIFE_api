@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\App;
 
 use App\Http\Controllers\Controller;
-use App\Pessoa;
+use App\Models\Pessoa;
 use Illuminate\Http\Request;
 
 class PessoasController extends Controller

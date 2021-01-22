@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\Web\Responsavel;
 
-use App\Escala;
+use App\Models\Escala;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 

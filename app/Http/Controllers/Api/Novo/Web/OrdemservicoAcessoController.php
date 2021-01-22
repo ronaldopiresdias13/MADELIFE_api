@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\Novo\Web;
 
 use App\Http\Controllers\Controller;
-use App\Ordemservico;
-use App\OrdemservicoAcesso;
+use App\Models\Ordemservico;
+use App\Models\OrdemservicoAcesso;
 use Illuminate\Http\Request;
 
 class OrdemservicoAcessoController extends Controller

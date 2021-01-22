@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\App;
 
 use App\Http\Controllers\Controller;
-use App\PrestadorFormacao;
+use App\Models\PrestadorFormacao;
 use Illuminate\Http\Request;
 
 class PrestadorFormacaoController extends Controller

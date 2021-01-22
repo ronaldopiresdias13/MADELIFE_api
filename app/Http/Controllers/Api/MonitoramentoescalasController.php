@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Monitoramentoescala;
+use App\Models\Monitoramentoescala;
 use Illuminate\Http\Request;
 
 class MonitoramentoescalasController extends Controller

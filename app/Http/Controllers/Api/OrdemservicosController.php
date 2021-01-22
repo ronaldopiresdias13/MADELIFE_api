@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Pessoa;
-use App\Empresa;
-use App\Responsavel;
-use App\Ordemservico;
+use App\Models\Pessoa;
+use App\Models\Empresa;
+use App\Models\Responsavel;
+use App\Models\Ordemservico;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Orcamento;
-use App\OrdemservicoServico;
+use App\Models\Orcamento;
+use App\Models\OrdemservicoServico;
 use Illuminate\Support\Facades\DB;
 
 class OrdemservicosController extends Controller

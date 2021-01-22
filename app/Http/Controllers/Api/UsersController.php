@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\User;
-use App\Email;
+use App\Models\User;
+use App\Models\Email;
 use App\Models\Acesso;
-use App\Pessoa;
-use App\Conselho;
-use App\Prestador;
-use App\UserAcesso;
-use App\PessoaEmail;
-use App\PrestadorFormacao;
+use App\Models\Pessoa;
+use App\Models\Conselho;
+use App\Models\Prestador;
+use App\Models\UserAcesso;
+use App\Models\PessoaEmail;
+use App\Models\PrestadorFormacao;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;

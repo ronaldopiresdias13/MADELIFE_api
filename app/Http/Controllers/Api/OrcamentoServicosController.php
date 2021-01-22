@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\OrcamentoServico;
+use App\Models\OrcamentoServico;
 use Illuminate\Http\Request;
 
 class OrcamentoServicosController extends Controller

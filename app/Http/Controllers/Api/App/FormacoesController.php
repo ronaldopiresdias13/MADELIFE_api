@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\App;
 
-use App\Formacao;
+use App\Models\Formacao;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 

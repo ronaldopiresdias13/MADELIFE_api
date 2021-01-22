@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Web\DepartamentoPessoal;
 
 use App\Http\Controllers\Controller;
-use App\Pagamentopessoa;
+use App\Models\Pagamentopessoa;
 use Illuminate\Http\Request;
 
 class PagamentopessoasController extends Controller

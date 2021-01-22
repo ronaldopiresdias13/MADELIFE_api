@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\Web\Financeiro;
 
-use App\Empresa;
+use App\Models\Empresa;
 use App\Http\Controllers\Controller;
-use App\Pagamentopessoa;
+use App\Models\Pagamentopessoa;
 use Carbon\Carbon;
 use Carbon\Traits\Date;
 use Illuminate\Http\Request;

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Estoque;
+use App\Models\Estoque;
 use App\Http\Controllers\Controller;
-use App\Produto;
-use App\Saida;
-use App\SaidaProduto;
+use App\Models\Produto;
+use App\Models\Saida;
+use App\Models\SaidaProduto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

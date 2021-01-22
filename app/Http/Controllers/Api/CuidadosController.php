@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Cuidado;
-use App\Empresa;
+use App\Models\Cuidado;
+use App\Models\Empresa;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 

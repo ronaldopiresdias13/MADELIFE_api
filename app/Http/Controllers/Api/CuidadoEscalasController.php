@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\CuidadoEscala;
+use App\Models\CuidadoEscala;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

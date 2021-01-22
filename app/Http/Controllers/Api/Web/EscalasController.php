@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\Web;
 
-use App\Escala;
-use App\Homecare;
+use App\Models\Escala;
+use App\Models\Homecare;
 use App\Http\Controllers\Controller;
-use App\Paciente;
+use App\Models\Paciente;
 use Illuminate\Http\Request;
 
 class EscalasController extends Controller

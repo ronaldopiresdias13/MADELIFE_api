@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Convenio;
+use App\Models\Convenio;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

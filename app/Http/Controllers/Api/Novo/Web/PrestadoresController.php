@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Novo\Web;
 
 use App\Http\Controllers\Controller;
-use App\Prestador;
+use App\Models\Prestador;
 use Illuminate\Http\Request;
 
 class PrestadoresController extends Controller

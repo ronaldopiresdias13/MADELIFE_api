@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\App\v3_0_20;
 
-use App\Escala;
+use App\Models\Escala;
 use App\Http\Controllers\Controller;
-use App\Prestador;
+use App\Models\Prestador;
 use Illuminate\Http\Request;
 
 class PrestadoresController extends Controller

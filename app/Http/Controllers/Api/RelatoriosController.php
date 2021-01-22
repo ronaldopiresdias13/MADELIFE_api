@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Relatorio;
-use App\Ordemservico;
-use App\Escala;
+use App\Models\Relatorio;
+use App\Models\Ordemservico;
+use App\Models\Escala;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;

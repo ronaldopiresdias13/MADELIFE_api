@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\CuidadoPaciente;
-use App\Paciente;
+use App\Models\CuidadoPaciente;
+use App\Models\Paciente;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

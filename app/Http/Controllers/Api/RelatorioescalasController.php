@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Escala;
+use App\Models\Escala;
 use App\Http\Controllers\Controller;
-use App\Relatorioescala;
+use App\Models\Relatorioescala;
 use Facade\FlareClient\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

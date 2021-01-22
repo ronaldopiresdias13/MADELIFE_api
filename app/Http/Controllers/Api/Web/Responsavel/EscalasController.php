@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\Web\Responsavel;
 
-use App\Escala;
+use App\Models\Escala;
 use App\Http\Controllers\Controller;
-use App\Ordemservico;
-use App\Paciente;
+use App\Models\Ordemservico;
+use App\Models\Paciente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Patrimonio;
+use App\Models\Patrimonio;
 use Illuminate\Http\Request;
 
 class PatrimoniosController extends Controller

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Novo\Web;
 
 use App\Http\Controllers\Controller;
-use App\TranscricaoProduto;
+use App\Models\TranscricaoProduto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Web\GestaoOrcamentaria;
 
 use App\Http\Controllers\Controller;
-use App\Ordemservico;
+use App\Models\Ordemservico;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

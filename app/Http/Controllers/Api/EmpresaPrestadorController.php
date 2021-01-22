@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\EmpresaPrestador;
-use App\Empresa;
+use App\Models\EmpresaPrestador;
+use App\Models\Empresa;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

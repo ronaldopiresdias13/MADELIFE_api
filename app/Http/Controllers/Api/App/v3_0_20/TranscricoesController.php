@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\App\v3_0_20;
 
 use App\Http\Controllers\Controller;
-use App\Ordemservico;
-use App\Transcricao;
+use App\Models\Ordemservico;
+use App\Models\Transcricao;
 use Illuminate\Http\Request;
 
 class TranscricoesController extends Controller

@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Email;
-use App\Endereco;
+use App\Models\Email;
+use App\Models\Endereco;
 use App\Http\Controllers\Controller;
-use App\Paciente;
-use App\Pessoa;
-use App\PessoaEmail;
-use App\PessoaEndereco;
-use App\PessoaTelefone;
-use App\Telefone;
-use App\Tipopessoa;
+use App\Models\Paciente;
+use App\Models\Pessoa;
+use App\Models\PessoaEmail;
+use App\Models\PessoaEndereco;
+use App\Models\PessoaTelefone;
+use App\Models\Telefone;
+use App\Models\Tipopessoa;
 use Facade\Ignition\Support\Packagist\Package;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

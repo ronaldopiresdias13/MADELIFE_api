@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\Web\GestaoOrcamentaria;
 
-use App\Empresa;
+use App\Models\Empresa;
 use App\Http\Controllers\Controller;
-use App\Servico;
-use App\ServicoFormacao;
+use App\Models\Servico;
+use App\Models\ServicoFormacao;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

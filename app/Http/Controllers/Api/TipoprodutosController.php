@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Tipoproduto;
+use App\Models\Tipoproduto;
 use Illuminate\Http\Request;
 
 class TipoprodutosController extends Controller

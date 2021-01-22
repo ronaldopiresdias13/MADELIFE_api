@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Tipopessoa;
+use App\Models\Tipopessoa;
 use Illuminate\Http\Request;
 
 class TipopessoasController extends Controller

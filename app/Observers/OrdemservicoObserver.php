@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
-use App\Ordemservico;
-use App\OrdemservicoAcesso;
+use App\Models\Ordemservico;
+use App\Models\OrdemservicoAcesso;
 use Illuminate\Support\Facades\DB;
 
 class OrdemservicoObserver

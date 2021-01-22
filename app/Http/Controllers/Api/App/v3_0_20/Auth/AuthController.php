@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Api\App\v3_0_20\Auth;
 
-use App\User;
-use App\Email;
-use App\Pessoa;
-use App\Conselho;
-use App\Prestador;
+use App\Models\User;
+use App\Models\Email;
+use App\Models\Pessoa;
+use App\Models\Conselho;
+use App\Models\Prestador;
 use Carbon\Carbon;
-use App\Tipopessoa;
-use App\PessoaEmail;
-use App\PrestadorFormacao;
+use App\Models\Tipopessoa;
+use App\Models\PessoaEmail;
+use App\Models\PrestadorFormacao;
 use App\Mail\ResetPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

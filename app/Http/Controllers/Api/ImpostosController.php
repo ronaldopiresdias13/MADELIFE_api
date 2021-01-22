@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Imposto;
+use App\Models\Imposto;
 use Illuminate\Http\Request;
 
 class ImpostosController extends Controller
