@@ -17,6 +17,7 @@ use App\Models\ProfissionalConvenio;
 use App\Models\ProfissionalFormacao;
 use App\Models\Telefone;
 use App\Models\Tipopessoa;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -28,9 +29,26 @@ class ProfissionaisController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function meuperfil(Request $request)
     {
-        //
+        $user = $request->user();
+        // return $user;
+        return User::with(
+            [
+                'pessoa.telefones',
+                'pessoa.emails',
+                'pessoa.enderecos.cidade',
+                'pessoa.dadosbancario.banco',
+                'pessoa.profissional.dadoscontratual',
+                'pessoa.profissional.beneficios',
+                'pessoa.profissional.convenios',
+                'pessoa.profissional.formacoes',
+                'pessoa.profissional.cargo',
+                'pessoa.profissional.setor',
+                'acessos'
+            ]
+        )->find($user->id);
+        // $empresa_id = $user->pessoa->profissional->empresa_id;
     }
 
     /**
