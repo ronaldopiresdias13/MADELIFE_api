@@ -1,15 +1,15 @@
 <?php
 
-use App\Pessoa;
-use App\Endereco;
-use App\Homecare;
-use App\Paciente;
-use App\Tipopessoa;
-use App\PessoaEmail;
-use App\HomecareEmail;
-use App\PessoaEndereco;
-use App\PessoaTelefone;
-use App\HomecareTelefone;
+use App\Models\Pessoa;
+use App\Models\Endereco;
+use App\Models\Homecare;
+use App\Models\Paciente;
+use App\Models\Tipopessoa;
+use App\Models\PessoaEmail;
+use App\Models\HomecareEmail;
+use App\Models\PessoaEndereco;
+use App\Models\PessoaTelefone;
+use App\Models\HomecareTelefone;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;

@@ -1,7 +1,7 @@
 <?php
 
-use App\Homecare;
-use App\HomecareEmail;
+use App\Models\Homecare;
+use App\Models\HomecareEmail;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

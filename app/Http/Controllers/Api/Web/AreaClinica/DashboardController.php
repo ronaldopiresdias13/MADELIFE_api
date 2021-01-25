@@ -135,12 +135,17 @@ class DashboardController extends Controller
             // }
 
             if ($escala->tipo) {
+                // if ($escala->tipo == 'Plantão') {
+                //     $relatorio = $this->pushDiario($relatorio, $escala, true);
+                // } else {
+                //     $relatorio = $this->pushDiario($relatorio, $escala, false);
+                // }
                 switch ($escala->tipo) {
                     case 'Plantão':
-                        $relatorio = $this->pushDiario($relatorio, $escala, false);
+                        $relatorio = $this->pushDiario($relatorio, $escala, true);
                         break;
                     default:
-                        $relatorio = $this->pushDiario($relatorio, $escala, true);
+                        $relatorio = $this->pushDiario($relatorio, $escala, false);
                         break;
                 }
             }
@@ -283,10 +288,10 @@ class DashboardController extends Controller
 
             switch ($escala->tipo) {
                 case 'Plantão':
-                    $relatorio = $this->pushProdutividade($relatorio, $escala, false);
+                    $relatorio = $this->pushProdutividade($relatorio, $escala, true);
                     break;
                 default:
-                    $relatorio = $this->pushProdutividade($relatorio, $escala, true);
+                    $relatorio = $this->pushProdutividade($relatorio, $escala, false);
                     break;
             }
         }
