@@ -1,6 +1,6 @@
 <?php
 
-use App\OrdemservicoServico;
+use App\Models\OrdemservicoServico;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

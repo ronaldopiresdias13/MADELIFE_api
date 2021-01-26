@@ -1,6 +1,6 @@
 <?php
 
-use App\Categoriadocumento;
+use App\Models\Categoriadocumento;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -23,10 +23,10 @@ class AddEmpresaIdToCategoriadocumentosTable extends Migration
         $categoriadocumentos = Categoriadocumento::all();
 
         foreach ($categoriadocumentos as $key => $categoriadocumento) {
-//            if ($categoriadocumento->documentos) {
-//                $categoriadocumento->empresa_id = $categoriadocumento->documentos[0]->paciente->empresa_id;
-//                $categoriadocumento->save();
-//            }
+            //            if ($categoriadocumento->documentos) {
+            //                $categoriadocumento->empresa_id = $categoriadocumento->documentos[0]->paciente->empresa_id;
+            //                $categoriadocumento->save();
+            //            }
             if (!$categoriadocumento->ativo) {
                 $categoriadocumento->delete();
             }
