@@ -256,9 +256,12 @@ class ProfissionaisController extends Controller
      * @param  \App\Profissional  $profissional
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Profissional $profissional)
+    public function atualizarFotoPerfil(Request $request, Pessoa $pessoa)
     {
-        //
+        // return $pessoa;
+        // return $request;
+        $pessoa->perfil = $request['pessoa']['perfil'];
+        $pessoa->save();
     }
 
     /**
