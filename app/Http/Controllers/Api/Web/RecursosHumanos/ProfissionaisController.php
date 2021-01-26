@@ -21,6 +21,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ProfissionaisController extends Controller
 {
@@ -260,8 +261,31 @@ class ProfissionaisController extends Controller
     {
         // return $pessoa;
         // return $request;
-        $pessoa->perfil = $request['pessoa']['perfil'];
+        // $image = base64_decode($request['pessoa']['perfil']);
+        $image = base64_decode($request['pessoa']['perfil']);
+        $imageInfo = explode(";base64,", $image);
+        $imgExt = str_replace('data:image/', '', $imageInfo[0]);
+        // $image = str_replace(' ', '+', $imageInfo[1]);
+        $md5 = md5_file($image);
+        $caminho = 'perfil/profissional/' . $pessoa->id;
+        $nome = $md5 . '.' . $imgExt;
+        // $imageName = "post-" . time() . "." . $imgExt;
+        Storage::disk('public/' . $caminho)->put($nome, $image);
+
+        // $upload = $file->storeAs($caminho, $nome);
+        // $nomeOriginal = $file->getClientOriginalName();
+        // if ($upload) {
+        // DB::transaction(function () use ($pessoa, $caminho, $nome) {
+        $pessoa->perfil = $caminho . '/' . $nome;
         $pessoa->save();
+        // });
+        // return response()->json('Upload de arquivo bem sucedido!', 200)->header('Content-Type', 'text/plain');
+        // } else {
+        //     return response()->json('Erro, Upload não realizado!', 400)->header('Content-Type', 'text/plain');
+        // }
+        // } else {
+        //     return response()->json('Arquivo inválido ou corrompido!', 400)->header('Content-Type', 'text/plain');
+        // }
     }
 
     /**
