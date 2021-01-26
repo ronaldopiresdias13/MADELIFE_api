@@ -293,6 +293,9 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('dashboard/dashboardProfissionaisExternos', 'Api\Web\RecursosHumanos\DashboardController@dashboardProfissionaisExternos');
             Route::get('dashboard/dashboardMapaPacientesPorEspecialidade', 'Api\Web\RecursosHumanos\DashboardController@dashboardMapaPacientesPorEspecialidade');
         });
+        Route::prefix('estoque')->group(function () {
+            Route::get('movimentacaoEstoque', 'Api\Web\Estoque\ProdutosController@movimentacaoEstoque');
+        });
 
         // novoProfissional
 
