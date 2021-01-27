@@ -263,12 +263,13 @@ class ProfissionaisController extends Controller
         // return $request;
         // $image = base64_decode($request['pessoa']['perfil']);
         $image = base64_decode($request['pessoa']['perfil']);
+        // if ($image && $image->isValid()) {
         $imageInfo = explode(";base64,", $image);
         $imgExt = str_replace('data:image/', '', $imageInfo[0]);
         // $image = str_replace(' ', '+', $imageInfo[1]);
-        $md5 = md5_file($image);
+        // $md5 = md5_file($image);
         $caminho = 'perfil/profissional/' . $pessoa->id;
-        $nome = $md5 . '.' . $imgExt;
+        $nome = $pessoa->id . '.' . $imgExt;
         // $imageName = "post-" . time() . "." . $imgExt;
         Storage::disk('public/' . $caminho)->put($nome, $image);
 
@@ -278,6 +279,9 @@ class ProfissionaisController extends Controller
         // DB::transaction(function () use ($pessoa, $caminho, $nome) {
         $pessoa->perfil = $caminho . '/' . $nome;
         $pessoa->save();
+        // }
+
+
         // });
         // return response()->json('Upload de arquivo bem sucedido!', 200)->header('Content-Type', 'text/plain');
         // } else {
