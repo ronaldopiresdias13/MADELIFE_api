@@ -257,39 +257,50 @@ class ProfissionaisController extends Controller
      * @param  \App\Profissional  $profissional
      * @return \Illuminate\Http\Response
      */
-    public function atualizarFotoPerfil(Request $request, Pessoa $pessoa)
+    public function atualizarFotoPerfil(Request $request)
     {
-        // return $pessoa;
-        // return $request;
-        // $image = base64_decode($request['pessoa']['perfil']);
-        $image = base64_decode($request['pessoa']['perfil']);
-        // if ($image && $image->isValid()) {
-        $imageInfo = explode(";base64,", $image);
-        $imgExt = str_replace('data:image/', '', $imageInfo[0]);
-        // $image = str_replace(' ', '+', $imageInfo[1]);
-        // $md5 = md5_file($image);
-        $caminho = 'perfil/profissional/' . $pessoa->id;
-        $nome = $pessoa->id . '.' . $imgExt;
-        // $imageName = "post-" . time() . "." . $imgExt;
-        Storage::disk('public/' . $caminho)->put($nome, $image);
+        $user = null;
+        if (Auth::check()) {
+            $user = Auth::user();
+        }
+        // $base64_code = $request['pessoa']['perfil'];
+        // $nome = md5_file($base64_code);
+        // $extension = explode('/', mime_content_type($base64_code))[1];
+        // $caminho = 'perfil/' . $pessoa_id . '/' . $nome . '.' . $extension;
 
-        // $upload = $file->storeAs($caminho, $nome);
-        // $nomeOriginal = $file->getClientOriginalName();
-        // if ($upload) {
-        // DB::transaction(function () use ($pessoa, $caminho, $nome) {
-        $pessoa->perfil = $caminho . '/' . $nome;
-        $pessoa->save();
-        // }
+        // $file = fopen(storage_path('app') . '/' . $caminho, "w");
+        // fwrite($file, base64_decode($base64_code));
+        // fclose($file);
 
+        // return $file;
 
-        // });
-        // return response()->json('Upload de arquivo bem sucedido!', 200)->header('Content-Type', 'text/plain');
-        // } else {
-        //     return response()->json('Erro, Upload não realizado!', 400)->header('Content-Type', 'text/plain');
-        // }
-        // } else {
-        //     return response()->json('Arquivo inválido ou corrompido!', 400)->header('Content-Type', 'text/plain');
-        // }
+        // return 'Fim';
+
+        $file = $request['pessoa']['perfil'];
+        $nome = md5_file($file);
+        $extension = explode('/', mime_content_type($file))[1];
+        $caminho = 'perfil/' . $user->pessoa->id . '/' . $nome . '.' . $extension;
+        $upload = Storage::disk('local')->put($caminho, $file);
+        if ($upload) {
+            $user->pessoa->perfil = $caminho;
+            $user->pessoa->save();
+
+            return response()->json([
+                'toast' => [
+                    'text' => 'Imagem de perfil salvo com sucesso!',
+                    'color' => 'success',
+                    'duration' => 2000
+                ]
+            ], 200)
+                ->header('Content-Type', 'application/json');
+        } else {
+            return response()->json([
+                'alert' => [
+                    'title' => 'Ops!',
+                    'text' => 'Não foi possivel salvar a imagem de perfil!'
+                ]
+            ], 202)->header('Content-Type', 'application/json');
+        }
     }
 
     /**

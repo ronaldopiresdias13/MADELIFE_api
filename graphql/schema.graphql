@@ -5,14 +5,90 @@ scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
 
 type Query {
-    users: [User!]! @paginate(defaultCount: 10)
-    user(id: ID @eq): User @find
+    # me: User! @auth
+    # users: [User!]! @paginate(defaultCount: 10)
+    # acessos: [Acesso!]! @all
+    # user(id: ID @eq): User @find
+    produtos: [Produto!]! @paginate(defaultCount: 10)
+    empresa(id: ID @eq): Empresa @find
+}
+
+type Produto {
+    id: ID!
+    empresa: Empresa @belongsTo
+    tipoproduto: Tipoproduto @belongsTo
+    codigo: String
+    descricao: String
+    unidademedida: Unidademedida @belongsTo
+    codigobarra: String
+    validade: String
+    grupo: String
+    observacoes: String
+    valorcusto: String
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type Empresa {
+    id: ID!
+    razao: String!
+    cnpj: String!
+    ie: String!
+    logo: String!
+    situacao: Boolean!
+
+    produtos: [Produto!]! @paginate(defaultCount: 10)
+}
+
+type Tipoproduto {
+    id: ID!
+    descricao: String!
+}
+
+type Unidademedida {
+    id: ID!
+    descricao: String!
+    sigla: String!
+    grupo: String!
 }
 
 type User {
     id: ID!
-    name: String!
+    cpfcnpj: String!
     email: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+
+    pessoa: Pessoa! @belongsTo
+    acessos: [Acesso!]! @hasMany
+}
+
+type Pessoa {
+    id: ID!
+    nome: String!
+    nascimento: String!
+    cpfcnpj: String!
+    rgie: String!
+    observacoes: String!
+    perfil: String!
+    status: String!
+    ativo: Boolean!
+    created_at: DateTime!
+    updated_at: DateTime!
+
+    tipos: [Tipopessoa!]! @hasMany
+}
+
+type Acesso {
+    id: ID!
+    nome: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type Tipopessoa {
+    id: ID!
+    tipo: String!
     created_at: DateTime!
     updated_at: DateTime!
 }

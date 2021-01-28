@@ -85,4 +85,9 @@ class Pessoa extends Model
     {
         return $this->hasMany(Pagamentopessoa::class)->where('ativo', true);
     }
+
+    public function tipos()
+    {
+        return $this->hasMany(Tipopessoa::class);
+    }
 }
