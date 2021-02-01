@@ -71,7 +71,7 @@ class ProfissionaisController extends Controller
                 'pessoa.profissional.setor',
                 // 'acessos'
             ]
-        )->get();
+        )->where('empresa_id', $user->pessoa->profissional->empresa_id)->get();
         // $empresa_id = $user->pessoa->profissional->empresa_id;
     }
     /**
