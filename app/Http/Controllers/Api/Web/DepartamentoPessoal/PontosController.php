@@ -38,6 +38,7 @@ class PontosController extends Controller
         ])
             ->where('empresa_id', $empresa_id)
             ->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%')
+            ->where('servico_id', 'like', $request->servico_id ? $request->servico_id : '%')
             ->where('dataentrada', '>=', $request->data_ini ? $request->data_ini : $data)
             ->where('dataentrada', '<=', $request->data_fim ? $request->data_fim : $data)
             ->where('ativo', true)
