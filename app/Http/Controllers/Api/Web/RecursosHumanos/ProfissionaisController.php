@@ -259,6 +259,9 @@ class ProfissionaisController extends Controller
      */
     public function atualizarFotoPerfil(Request $request)
     {
+
+        // return $request;
+
         $user = null;
         if (Auth::check()) {
             $user = Auth::user();
@@ -286,20 +289,18 @@ class ProfissionaisController extends Controller
             $user->pessoa->save();
 
             return response()->json([
-                'toast' => [
+                'success' => [
                     'text' => 'Imagem de perfil salvo com sucesso!',
-                    'color' => 'success',
                     'duration' => 2000
                 ]
             ], 200)
                 ->header('Content-Type', 'application/json');
         } else {
             return response()->json([
-                'alert' => [
-                    'title' => 'Ops!',
+                'error' => [
                     'text' => 'Não foi possivel salvar a imagem de perfil!'
                 ]
-            ], 202)->header('Content-Type', 'application/json');
+            ], 400)->header('Content-Type', 'application/json');
         }
     }
 

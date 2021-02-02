@@ -135,11 +135,6 @@ class DashboardController extends Controller
             // }
 
             if ($escala->tipo) {
-                // if ($escala->tipo == 'Plantão') {
-                //     $relatorio = $this->pushDiario($relatorio, $escala, true);
-                // } else {
-                //     $relatorio = $this->pushDiario($relatorio, $escala, false);
-                // }
                 switch ($escala->tipo) {
                     case 'Plantão':
                         $relatorio = $this->pushDiario($relatorio, $escala, true);

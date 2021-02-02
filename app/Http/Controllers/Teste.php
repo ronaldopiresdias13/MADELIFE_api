@@ -10,6 +10,22 @@ class Teste extends Controller
 {
     public function teste(Request $request)
     {
+        // return response()->json([
+        //     'success' => [
+        //         'text' => 'Salvo com sucesso!',
+        //         'duration' => 2000
+        //     ]
+        // ], 200)
+        //     ->header('Content-Type', 'application/json');
+
+        return response()->json([
+            'error' => [
+                'text' => 'Erro ao salvar!'
+            ]
+        ], 400)
+            ->header('Content-Type', 'application/json');
+
+        return "Teste Back";
         // DB::select('select * from users where active = ?', [1])
 
         $hoje = getdate();

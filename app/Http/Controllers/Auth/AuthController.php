@@ -18,11 +18,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
+
         $request->validate([
             // 'email'       => 'string|email',
             'password'    => 'required|string',
@@ -33,6 +35,23 @@ class AuthController extends Controller
             ->where('email', $request['email'])
             ->orWhere('cpfcnpj', $request['email'])
             ->first();
+
+        // return Storage::disk('local')->get('perfil/728/58c21109b8fa38e7fdf18d56a6fd58ef.png');
+
+
+
+        // return storage_path('app');
+
+        // return Storage::get(storage_path('app') . '/' . $user->pessoa->perfil);
+
+        // if (Storage::exists($user->pessoa->perfil)) {
+        //     return "Tem";
+        // } else {
+        //     return "Não tem";
+        // }
+
+        // return "Stop";
+        // return Storage::exists($user->pessoa->perfil);
 
         if (!$user) {
             return response()->json([
@@ -52,6 +71,13 @@ class AuthController extends Controller
             $token->expires_at = Carbon::now()->addWeeks(1);
         }
         $token->save();
+
+        if (Storage::disk('local')->exists($user->pessoa->perfil)) {
+            $user->pessoa->perfil = Storage::disk('local')->get($user->pessoa->perfil);
+        } else {
+            $user->pessoa->perfil = null;
+        }
+
         return response()->json([
             'access_token' => $tokenResult->accessToken,
             'token_type'   => 'Bearer',
