@@ -51,7 +51,29 @@ class ProfissionaisController extends Controller
         )->find($user->id);
         // $empresa_id = $user->pessoa->profissional->empresa_id;
     }
-
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function buscaProfissionaisInternosPagamento(Request $request)
+    {
+        $user = $request->user();
+        // return $user;
+        return Profissional::with(
+            [
+                'pessoa.dadosbancario.banco',
+                'dadoscontratual',
+                // 'pessoa.profissional.beneficios',
+                // 'pessoa.profissional.convenios',
+                'formacoes',
+                // 'pessoa.profissional.cargo',
+                'setor',
+                // 'acessos'
+            ]
+        )->where('empresa_id', $user->pessoa->profissional->empresa_id)->get();
+        // $empresa_id = $user->pessoa->profissional->empresa_id;
+    }
     /**
      * Store a newly created resource in storage.
      *
