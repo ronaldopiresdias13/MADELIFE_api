@@ -281,26 +281,10 @@ class ProfissionaisController extends Controller
      */
     public function atualizarFotoPerfil(Request $request)
     {
-
-        // return $request;
-
         $user = null;
         if (Auth::check()) {
             $user = Auth::user();
         }
-        // $base64_code = $request['pessoa']['perfil'];
-        // $nome = md5_file($base64_code);
-        // $extension = explode('/', mime_content_type($base64_code))[1];
-        // $caminho = 'perfil/' . $pessoa_id . '/' . $nome . '.' . $extension;
-
-        // $file = fopen(storage_path('app') . '/' . $caminho, "w");
-        // fwrite($file, base64_decode($base64_code));
-        // fclose($file);
-
-        // return $file;
-
-        // return 'Fim';
-
         $file = $request['pessoa']['perfil'];
         $nome = md5_file($file);
         $extension = explode('/', mime_content_type($file))[1];
