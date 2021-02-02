@@ -63,12 +63,12 @@ class ProfissionaisController extends Controller
         return Profissional::with(
             [
                 'pessoa.dadosbancario.banco',
-                'pessoa.profissional.dadoscontratual',
+                'dadoscontratual',
                 // 'pessoa.profissional.beneficios',
                 // 'pessoa.profissional.convenios',
-                'pessoa.profissional.formacoes',
+                'formacoes',
                 // 'pessoa.profissional.cargo',
-                'pessoa.profissional.setor',
+                'setor',
                 // 'acessos'
             ]
         )->where('empresa_id', $user->pessoa->profissional->empresa_id)->get();
