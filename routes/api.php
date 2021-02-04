@@ -913,6 +913,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::prefix('pagamentointerno')->group(function () {
             Route::get('list', [PagamentointernosController::class, 'list']);
             Route::post('create', [PagamentointernosController::class, 'create']);
+            Route::post('createlist', [PagamentointernosController::class, 'createlist']);
         });
     });
 });

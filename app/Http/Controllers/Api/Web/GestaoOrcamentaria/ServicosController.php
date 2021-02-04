@@ -57,10 +57,10 @@ class ServicosController extends Controller
             $servico = Servico::updateOrCreate(
                 [
                     'codigo'     => $request->codigo,
-                    'empresa_id' => $empresa_id
+                    'empresa_id' => $empresa_id,
+                    'descricao' => $request->descricao,
                 ],
                 [
-                    'descricao' => $request->descricao,
                     'valor'     => $request->valor,
                     'ativo'     => true
                 ]
