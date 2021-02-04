@@ -42,7 +42,7 @@ class PontosController extends Controller
             ->where('dataentrada', '>=', $request->data_ini ? $request->data_ini : $data)
             ->where('dataentrada', '<=', $request->data_fim ? $request->data_fim : $data)
             ->where('ativo', true)
-            ->orderBy("dataentrada")
+            ->orderBy("dataentrada")->orderBy("periodo")
             ->get([
                 "id",
                 "empresa_id",
