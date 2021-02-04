@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Novo\Web\EscalasController;
 use App\Http\Controllers\Api\Novo\Web\OrdemservicoAcessoController;
 use App\Http\Controllers\Api\Novo\Web\PrestadoresController;
 use App\Http\Controllers\Api\Novo\Web\TranscricaoProdutoController;
+use App\Http\Controllers\Web\PagamentointernosController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -903,6 +904,15 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
         Route::prefix('escalas/{escala}')->group(function () {
             Route::put('substituirPrestador', [EscalasController::class, 'substituirPrestador']);
+        });
+    });
+});
+
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::prefix('web')->group(function () {
+        Route::prefix('pagamentointerno')->group(function () {
+            Route::get('list', [PagamentointernosController::class, 'list']);
+            Route::post('create', [PagamentointernosController::class, 'create']);
         });
     });
 });
