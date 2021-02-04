@@ -85,7 +85,7 @@ class DashboardController extends Controller
             ->where('servico_id', 'like', $request->servico_id ? $request->servico_id : '%')
             // ->where('empresa_id', 'like', $request->empresa_id ? $request->empresa_id : '%')
             // ->limit(5)
-            ->orderBy('dataentrada')
+            ->orderBy('dataentrada')->orderBy('periodo')
             ->get([
                 'id',
                 'dataentrada',
@@ -244,7 +244,7 @@ class DashboardController extends Controller
             ->where('servico_id', 'like', $request->servico_id ? $request->servico_id : '%')
             // ->where('empresa_id', 'like', $request->empresa_id ? $request->empresa_id : '%')
             // ->limit(5)
-            ->orderBy('dataentrada')
+            ->orderBy('dataentrada')->orderBy('periodo')
             ->get([
                 'id',
                 'dataentrada',
