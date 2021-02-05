@@ -27,7 +27,7 @@ class DashboardController extends Controller
         // $request->data_fim = '2020-10-02';
 
         $hoje = getdate();
-        $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $hoje['mday'];
+        $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . ($hoje['mday'] < 10 ? '0' . $hoje['mday'] : $hoje['mday']);
 
         $escalas = Escala::with([
             'ordemservico' => function ($query) {

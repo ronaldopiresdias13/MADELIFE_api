@@ -26,8 +26,10 @@ class PagamentointernosController extends Controller
             }
         }
 
-        $datainicio = $request['datainicio'] ? $request['datainicio'] : '2021-01-01';
-        $datafim    = $request['datafim']    ? $request['datafim']    : '2021-02-01';
+        $hoje = getdate();
+        $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . ($hoje['mday'] < 10 ? '0' . $hoje['mday'] : $hoje['mday']);
+        $datainicio = $request['datainicio'] ? $request['datainicio'] : date("Y-m-01", strtotime($data));
+        $datafim    = $request['datafim']    ? $request['datafim']    : date("Y-m-t", strtotime($data));
 
         return Pagamentointerno::with('pessoa')->where('empresa_id', $empresa_id)
         ->whereBetween('datainicio', [$datainicio, $datafim])

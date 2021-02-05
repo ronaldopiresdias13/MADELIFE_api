@@ -10,7 +10,22 @@ class Teste extends Controller
 {
     public function teste(Request $request)
     {
-        return getdate();
+        $hoje = getdate();
+        $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . ($hoje['mday'] < 10 ? '0' . $hoje['mday'] : $hoje['mday']);
+
+        $datainicio = $request['datainicio'] ? $request['datainicio'] : date("Y-m-01", strtotime($data));
+        $datafim    = $request['datafim']    ? $request['datafim']    : date("Y-m-t", strtotime($data));
+
+        return $datainicio;
+        return $datafim;
+
+
+        $hoje = getdate();
+        $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . ($hoje['mday'] < 10 ? '0' . $hoje['mday'] : $hoje['mday']);
+
+        return 'First day : '. date("Y-m-01", strtotime($data)).' - Last day : '. date("Y-m-t", strtotime($data));
+
+        return $data;
 
         // return response()->json([
         //     'success' => [
