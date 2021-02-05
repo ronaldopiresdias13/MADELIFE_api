@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 //-------------- Rota de Testes --------------//
 // Route::group(['middleware' => 'auth:api'], function () {
-Route::post("/teste", "Teste@teste");
+Route::get("/teste", "Teste@teste");
 // });
 
 /*-------------- Rota de Logs por email --------------*/

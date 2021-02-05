@@ -13,9 +13,10 @@ class PagamentointernosController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function list()
+    public function list(Request $request)
     {
         $empresa_id = null;
 
@@ -25,8 +26,12 @@ class PagamentointernosController extends Controller
             }
         }
 
+        $datainicio = $request['datainicio'] ? $request['datainicio'] : '2021-01-01';
+        $datafim    = $request['datafim']    ? $request['datafim']    : '2021-02-01';
+
         return Pagamentointerno::where('empresa_id', $empresa_id)
-            ->paginate();
+        ->whereBetween('datainicio', [$datainicio, $datafim])
+            ->paginate(10);
     }
 
     /**

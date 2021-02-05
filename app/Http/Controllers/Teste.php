@@ -10,6 +10,8 @@ class Teste extends Controller
 {
     public function teste(Request $request)
     {
+        return getdate();
+
         // return response()->json([
         //     'success' => [
         //         'text' => 'Salvo com sucesso!',
