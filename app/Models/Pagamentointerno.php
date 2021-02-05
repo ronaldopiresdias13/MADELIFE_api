@@ -35,4 +35,8 @@ class Pagamentointerno extends Model
         'updated_at',
         'deleted_at'
     ];
+    public function pessoa()
+    {
+        return $this->belongsTo(Pessoa::class);
+    }
 }
