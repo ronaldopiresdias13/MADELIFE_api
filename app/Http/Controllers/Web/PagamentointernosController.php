@@ -25,7 +25,7 @@ class PagamentointernosController extends Controller
             }
         }
 
-        return Pagamentointerno::where('empresa_id', $empresa_id)
+        return Pagamentointerno::with('pessoa')->where('empresa_id', $empresa_id)
             ->paginate();
     }
 
