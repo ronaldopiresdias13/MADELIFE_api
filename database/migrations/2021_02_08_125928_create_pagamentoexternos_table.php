@@ -30,6 +30,8 @@ class CreatePagamentoexternosTable extends Migration
             $table->boolean('status')->default(false);
             $table->string('observacao')->nullable();
             $table->string('situacao')->nullable();
+            $table->float('proventos')->nullable();
+            $table->float('descontos')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
