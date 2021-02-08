@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Novo\Web\EscalasController;
 use App\Http\Controllers\Api\Novo\Web\OrdemservicoAcessoController;
 use App\Http\Controllers\Api\Novo\Web\PrestadoresController;
 use App\Http\Controllers\Api\Novo\Web\TranscricaoProdutoController;
+use App\Http\Controllers\Api\Web\DepartamentoPessoal\PagamentoexternosController;
 use App\Http\Controllers\Web\PagamentointernosController;
 use Illuminate\Support\Facades\Route;
 
@@ -914,6 +915,11 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('list', [PagamentointernosController::class, 'list']);
             Route::post('create', [PagamentointernosController::class, 'create']);
             Route::post('createlist', [PagamentointernosController::class, 'createlist']);
+        });
+        Route::prefix('pagamentoexterno')->group(function () {
+            Route::get('list', [PagamentoexternosController::class, 'list']);
+            Route::post('create', [PagamentoexternosController::class, 'create']);
+            Route::post('createlist', [PagamentoexternosController::class, 'createlist']);
         });
     });
 });
