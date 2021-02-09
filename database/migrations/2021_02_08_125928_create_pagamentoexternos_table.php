@@ -26,12 +26,12 @@ class CreatePagamentoexternosTable extends Migration
             $table->float('quantidade')->nullable();
             $table->string('turno')->nullable();
             $table->float('valorunitario')->nullable();
-            $table->float('subtotal')->nullable();
             $table->boolean('status')->default(false);
             $table->string('observacao')->nullable();
             $table->string('situacao')->nullable();
             $table->float('proventos')->nullable();
             $table->float('descontos')->nullable();
+            $table->float('subtotal')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
