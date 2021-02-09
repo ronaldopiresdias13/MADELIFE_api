@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api\Web\DepartamentoPessoal;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pagamentoexterno;
+use App\Models\Pagamentointerno;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PagamentoexternosController extends Controller
 {
@@ -47,7 +49,47 @@ class PagamentoexternosController extends Controller
     {
         //
     }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function createlist(Request $request)
+    {
+        return $request;
 
+        $empresa_id = null;
+
+        if (Auth::check()) {
+            if (Auth::user()->pessoa->profissional) {
+                $empresa_id = Auth::user()->pessoa->profissional->empresa_id;
+            }
+        }
+
+        DB::transaction(function () use ($request, $empresa_id) {
+            foreach ($request['pagamentos'] as $key => $item) {
+                Pagamentointerno::create(
+                    [
+                        'empresa_id'       => $empresa_id,
+                        'pessoa_id'        => $item['pessoa_id'],
+                        'datainicio'       => $item['datainicio'],
+                        'datafim'          => $item['datafim'],
+                        'ordemservico_id'  => $item['ordemservico_id'],
+                        'quantidade'       => $item['quantidade'],
+                        'turno'            => $item['periodo'],
+                        'valorunitario'    => $item['valorunitario'],
+                        'subtotal'         => $item['subtotal'],
+                        'status'           => $item['status'],
+                        'observacao'       => $item['observacao'],
+                        'situacao'         => $item['situacao'],
+                        'proventos'        => $item['proventos'],
+                        'descontos'        => $item['descontos']
+                    ]
+                );
+            }
+        });
+    }
     /**
      * Display the specified resource.
      *
