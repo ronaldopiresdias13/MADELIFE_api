@@ -34,6 +34,8 @@ class Pagamentoexterno extends Model
         'status',
         'observacao',
         'situacao',
+        'proventos',
+        'descontos',
         'created_at',
         'updated_at',
         'deleted_at'
