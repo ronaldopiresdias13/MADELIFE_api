@@ -143,7 +143,7 @@ class OrdemservicosController extends Controller
                 ]
             );
 
-            $orcamento = Orcamento::Where('id', $request['orcamento_id'])->first();
+            $orcamento = Orcamento::where('id', $request['orcamento_id'])->first();
 
             foreach ($orcamento->servicos as $key => $servico) {
                 if ($servico['pivot']['basecobranca'] == 'Plantão') {
