@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Orcamento;
 use App\Observers\OrdemservicoObserver;
 use App\Models\Ordemservico;
 use App\Observers\OrcamentoObserver;
@@ -33,6 +34,6 @@ class EventServiceProvider extends ServiceProvider
         parent::boot();
 
         Ordemservico::observe(OrdemservicoObserver::class);
-        Ordemservico::observe(OrcamentoObserver::class);
+        Orcamento::observe(OrcamentoObserver::class);
     }
 }
