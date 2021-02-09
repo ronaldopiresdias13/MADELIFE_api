@@ -448,10 +448,10 @@ class OrcamentosController extends Controller
                 ]
             );
 
-            $this->deleteRelation($orcamento->orcamento_servicos);
-            // foreach ($orcamento->orcamento_servicos as $key => $servico) {
-            //     $servico->delete();
-            // }
+            // $this->deleteRelation($orcamento->orcamento_servicos);
+            foreach ($orcamento->orcamento_servicos as $key => $servico) {
+                $servico->delete();
+            }
 
             if ($request['servicos']) {
                 foreach ($request['servicos'] as $key => $servico) {
@@ -479,10 +479,10 @@ class OrcamentosController extends Controller
                 }
             }
 
-            $this->deleteRelation($orcamento->orcamento_produtos);
-            // foreach ($orcamento->orcamento_produtos as $key => $produto) {
-            //     $produto->delete();
-            // }
+            // $this->deleteRelation($orcamento->orcamento_produtos);
+            foreach ($orcamento->orcamento_produtos as $key => $produto) {
+                $produto->delete();
+            }
 
             if ($request['produtos']) {
                 foreach ($request['produtos'] as $key => $produto) {
@@ -502,10 +502,10 @@ class OrcamentosController extends Controller
                 }
             }
 
-            $this->deleteRelation($orcamento->orcamentocustos);
-            // foreach ($orcamento->orcamentocustos as $key => $custo) {
-            //     $custo->delete();
-            // }
+            // $this->deleteRelation($orcamento->orcamentocustos);
+            foreach ($orcamento->orcamentocustos as $key => $custo) {
+                $custo->delete();
+            }
 
             if ($request['custos']) {
                 foreach ($request['custos'] as $key => $custo) {
@@ -695,7 +695,7 @@ class OrcamentosController extends Controller
                 }
             }
 
-            $historicoorcamento = Historicoorcamento::create([
+            Historicoorcamento::create([
                 'orcamento_id' => $orcamento->id,
                 'historico'    => json_encode($request->all()),
             ]);
@@ -725,18 +725,5 @@ class OrcamentosController extends Controller
     {
         $orcamento->ativo = false;
         $orcamento->save();
-    }
-
-    /**
-     * Apagar relacionamentos.
-     *
-     * @param  array  $itens
-     * @return \Illuminate\Http\Response
-     */
-    private function deleteRelation(array $itens)
-    {
-        foreach ($itens as $key => $iten) {
-            $iten->delete();
-        }
     }
 }
