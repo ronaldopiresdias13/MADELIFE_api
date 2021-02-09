@@ -37,9 +37,11 @@ class PagamentoexternosController extends Controller
         $datainicio = $request['datainicio'] ? $request['datainicio'] : date("Y-m-01", strtotime($data));
         $datafim    = $request['datafim']    ? $request['datafim']    : date("Y-m-t", strtotime($data));
 
-        return Pagamentoexterno::with('pessoa')->where('empresa_id', $empresa_id)
+        return Pagamentoexterno::with('pessoa')
+            ->where('empresa_id', $empresa_id)
+            ->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%')
             ->whereBetween('datainicio', [$datainicio, $datafim])
-            ->paginate(10);
+            ->get();
     }
     /**
      * Store a newly created resource in storage.
@@ -59,7 +61,7 @@ class PagamentoexternosController extends Controller
      */
     public function createlist(Request $request)
     {
-        return $request->pagamentos;
+        // return $request->pagamentos;
 
         $empresa_id = null;
 
