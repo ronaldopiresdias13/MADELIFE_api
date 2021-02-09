@@ -27,26 +27,26 @@ class OrcamentoObserver
      */
     public function updated(Orcamento $orcamento)
     {
-        $ordemservico = Ordemservico::where('orcamento_id', $orcamento->id)->first();
+        // $ordemservico = Ordemservico::where('orcamento_id', $orcamento->id)->first();
 
-        if ($ordemservico) {
-            // $this->deleteArray($ordemservico->servicos);
-            foreach ($ordemservico->servicos as $key => $servico) {
-                $servico->delete();
-            }
+        // // if ($ordemservico) {
+        //     foreach ($ordemservico->servicos as $key => $servico) {
+        //         OrdemservicoServico::find($servico->pivot->id)->delete();
+        //         // $servico->delete();
+        //     }
 
-            foreach ($orcamento->servicos as $key => $servico) {
-                OrdemservicoServico::create(
-                    [
-                        'ordemservico_id'  => $ordemservico->id,
-                        'servico_id'       => $servico->id,
-                        'descricao'        => $servico['pivot']['basecobranca'],
-                        'valordiurno'      => $servico['pivot']['custodiurno'],
-                        'valornoturno'     => $servico['pivot']['custonoturno'],
-                    ]
-                );
-            }
-        }
+        //     foreach ($orcamento->servicos as $key => $servico) {
+        //         OrdemservicoServico::create(
+        //             [
+        //                 'ordemservico_id'  => $ordemservico->id,
+        //                 'servico_id'       => $servico->id,
+        //                 'descricao'        => $servico['pivot']['basecobranca'],
+        //                 'valordiurno'      => $servico['pivot']['custodiurno'] ? $servico['pivot']['custodiurno'] : 0,
+        //                 'valornoturno'     => $servico['pivot']['custonoturno'] ? $servico['pivot']['custonoturno'] : 0,
+        //             ]
+        //         );
+        //     }
+        // // }
     }
 
     /**
@@ -81,11 +81,4 @@ class OrcamentoObserver
     {
         //
     }
-
-    // public function deleteArray(array $itens)
-    // {
-    //     foreach ($itens as $key => $iten) {
-    //         $iten->delete();
-    //     }
-    // }
 }

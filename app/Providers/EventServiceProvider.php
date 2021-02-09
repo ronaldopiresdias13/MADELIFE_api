@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use App\Models\Orcamento;
-use App\Observers\OrdemservicoObserver;
 use App\Models\Ordemservico;
+use App\Observers\OrdemservicoObserver;
 use App\Observers\OrcamentoObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;

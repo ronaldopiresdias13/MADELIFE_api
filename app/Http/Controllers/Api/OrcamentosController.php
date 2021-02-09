@@ -22,6 +22,8 @@ use App\Models\Historicoorcamento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Ordemservico;
+use App\Models\OrdemservicoServico;
 
 class OrcamentosController extends Controller
 {
@@ -154,8 +156,8 @@ class OrcamentosController extends Controller
                 foreach ($request['servicos'] as $key => $servico) {
                     OrcamentoServico::create(
                         [
-                            'orcamento_id' => $orcamento->id,
-                            'servico_id'   => $servico['servico_id'],
+                            'orcamento_id'         => $orcamento->id,
+                            'servico_id'           => $servico['servico_id'],
                             'quantidade'           => $servico['quantidade'],
                             'frequencia'           => $servico['frequencia'],
                             'basecobranca'         => $servico['basecobranca'],
@@ -464,10 +466,14 @@ class OrcamentosController extends Controller
                             'basecobranca'         => $servico['basecobranca'],
                             'valorunitario'        => $servico['valorunitario'],
                             'custo'                => $servico['custo'],
+                            'custodiurno'          => $servico['basecobranca'] == 'Plantão' ? $servico['custo'] / 2 : $servico['custo'], // Alterar
+                            'custonoturno'         => $servico['basecobranca'] == 'Plantão' ? $servico['custo'] / 2 + $servico['adicionalnoturno'] : 0, // Alterar
                             'subtotal'             => $servico['subtotal'],
                             'subtotalcusto'        => $servico['subtotalcusto'],
                             'adicionalnoturno'     => $servico['adicionalnoturno'],
                             'horascuidado'         => $servico['horascuidado'],
+                            'horascuidadodiurno'   => $servico['basecobranca'] == 'Plantão' ? $servico['horascuidado'] / 2 : $servico['horascuidado'], // Alterar
+                            'horascuidadonoturno'  => $servico['basecobranca'] == 'Plantão' ? $servico['horascuidado'] / 2 : 0, // Alterar
                             'icms'                 => $servico['icms'],
                             'inss'                 => $servico['inss'],
                             'iss'                  => $servico['iss'],
@@ -692,6 +698,27 @@ class OrcamentosController extends Controller
                             ]
                         );
                     }
+                }
+            }
+
+            $ordemservico = Ordemservico::where('orcamento_id', $orcamento->id)->first();
+
+            if ($ordemservico) {
+                foreach ($ordemservico->servicos as $key => $servico) {
+                    OrdemservicoServico::find($servico->pivot->id)->delete();
+                    // $servico->delete();
+                }
+
+                foreach ($orcamento->servicos as $key => $servico) {
+                    OrdemservicoServico::create(
+                        [
+                            'ordemservico_id'  => $ordemservico->id,
+                            'servico_id'       => $servico->id,
+                            'descricao'        => $servico['pivot']['basecobranca'],
+                            'valordiurno'      => $servico['pivot']['custodiurno'],
+                            'valornoturno'     => $servico['pivot']['custonoturno'],
+                        ]
+                    );
                 }
             }
 

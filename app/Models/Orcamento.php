@@ -42,9 +42,14 @@ class Orcamento extends Model
                 'basecobranca',
                 'valorunitario',
                 'custo',
+                'custodiurno',
+                'custonoturno',
                 'subtotal',
                 'subtotalcusto',
                 'adicionalnoturno',
+                'horascuidado',
+                'horascuidadodiurno',
+                'horascuidadonoturno',
                 'icms',
                 'inss',
                 'iss',
@@ -106,4 +111,30 @@ class Orcamento extends Model
     {
         return $this->hasOne(Ordemservico::class);
     }
+
+    // protected static function booted()
+    // {
+    //     static::updated(function ($orcamento) {
+    //         $ordemservico = Ordemservico::where('orcamento_id', $orcamento->id)->first();
+
+    //         // if ($ordemservico) {
+    //             foreach ($ordemservico->servicos as $key => $servico) {
+    //                 OrdemservicoServico::find($servico->pivot->id)->delete();
+    //                 // $servico->delete();
+    //             }
+
+    //             foreach ($orcamento->servicos as $key => $servico) {
+    //                 OrdemservicoServico::create(
+    //                     [
+    //                         'ordemservico_id'  => $ordemservico->id,
+    //                         'servico_id'       => $servico->id,
+    //                         'descricao'        => $servico['pivot']['basecobranca'],
+    //                         'valordiurno'      => $servico['pivot']['custodiurno'] ? $servico['pivot']['custodiurno'] : 0,
+    //                         'valornoturno'     => $servico['pivot']['custonoturno'] ? $servico['pivot']['custonoturno'] : 0,
+    //                     ]
+    //                 );
+    //             }
+    //         // }
+    //     });
+    // }
 }
