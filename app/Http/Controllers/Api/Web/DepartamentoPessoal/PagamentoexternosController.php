@@ -59,7 +59,7 @@ class PagamentoexternosController extends Controller
      */
     public function createlist(Request $request)
     {
-        return $request->pagamentos;
+        // return $request->pagamentos;
 
         $empresa_id = null;
 
