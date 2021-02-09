@@ -30,7 +30,10 @@ class OrcamentoObserver
         $ordemservico = Ordemservico::where('orcamento_id', $orcamento->id)->first();
 
         if ($ordemservico) {
-            $this->deleteArray($ordemservico->servicos);
+            // $this->deleteArray($ordemservico->servicos);
+            foreach ($ordemservico->servicos as $key => $servico) {
+                $servico->delete();
+            }
 
             foreach ($orcamento->servicos as $key => $servico) {
                 OrdemservicoServico::create(
@@ -79,10 +82,10 @@ class OrcamentoObserver
         //
     }
 
-    public function deleteArray(array $itens)
-    {
-        foreach ($itens as $key => $iten) {
-            $iten->delete();
-        }
-    }
+    // public function deleteArray(array $itens)
+    // {
+    //     foreach ($itens as $key => $iten) {
+    //         $iten->delete();
+    //     }
+    // }
 }
