@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Web\DepartamentoPessoal;
 use App\Http\Controllers\Controller;
 use App\Models\Pagamentoexterno;
 use App\Models\Pagamentointerno;
+use App\Models\Pessoa;
+use App\Models\Prestador;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -57,7 +59,7 @@ class PagamentoexternosController extends Controller
      */
     public function createlist(Request $request)
     {
-        return $request;
+        return $request->pagamentos;
 
         $empresa_id = null;
 
@@ -68,11 +70,12 @@ class PagamentoexternosController extends Controller
         }
 
         DB::transaction(function () use ($request, $empresa_id) {
-            foreach ($request['pagamentos'] as $key => $item) {
-                Pagamentointerno::create(
+            foreach ($request->pagamentos as $key => $item) {
+                $pessoa = Prestador::find($item['prestador_id']);
+                Pagamentoexterno::create(
                     [
                         'empresa_id'       => $empresa_id,
-                        'pessoa_id'        => $item['pessoa_id'],
+                        'pessoa_id'        => $pessoa->pessoa_id,
                         'datainicio'       => $item['datainicio'],
                         'datafim'          => $item['datafim'],
                         'ordemservico_id'  => $item['ordemservico_id'],
