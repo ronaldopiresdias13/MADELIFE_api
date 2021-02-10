@@ -103,7 +103,6 @@ class PagamentoexternosController extends Controller
      */
     public function show(Pagamentoexterno $pagamentoexterno)
     {
-        //
     }
 
     /**
@@ -113,9 +112,28 @@ class PagamentoexternosController extends Controller
      * @param  \App\Models\Pagamentoexterno  $pagamentoexterno
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Pagamentoexterno $pagamentoexterno)
+    public function atualizarPagamentosExternos(Request $request)
     {
-        //
+        DB::transaction(function () use ($request) {
+            foreach ($request->pagamentos as $key => $item) {
+                $pagamentoexterno = Pagamentoexterno::find($item['id']);
+                $pagamentoexterno->empresa_id       = $item['empresa_id'];
+                $pagamentoexterno->pessoa_id        = $item['pessoa_id'];
+                $pagamentoexterno->datainicio       = $item['datainicio'];
+                $pagamentoexterno->datafim          = $item['datafim'];
+                $pagamentoexterno->ordemservico_id  = $item['ordemservico_id'];
+                $pagamentoexterno->quantidade       = $item['quantidade'];
+                $pagamentoexterno->turno            = $item['periodo'];
+                $pagamentoexterno->valorunitario    = $item['valorunitario'];
+                $pagamentoexterno->subtotal         = $item['subtotal'];
+                $pagamentoexterno->status           = $item['status'];
+                $pagamentoexterno->observacao       = $item['observacao'];
+                $pagamentoexterno->situacao         = $item['situacao'];
+                $pagamentoexterno->proventos        = $item['proventos'];
+                $pagamentoexterno->descontos        = $item['descontos'];
+                $pagamentoexterno->save();
+            }
+        });
     }
 
     /**

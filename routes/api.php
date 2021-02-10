@@ -920,6 +920,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('list', [PagamentoexternosController::class, 'list']);
             Route::post('create', [PagamentoexternosController::class, 'create']);
             Route::post('createlist', [PagamentoexternosController::class, 'createlist']);
+            Route::post('atualizarPagamentosExternos', [PagamentoexternosController::class, 'atualizarPagamentosExternos']);
         });
     });
 });
