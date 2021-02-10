@@ -68,13 +68,13 @@ class MedicoesController extends Controller
 
         if ($request['adicionais']) {
             foreach ($itens as $key => $iten) {
-                foreach ($request['adicionais'] as $key => $adicional) {
-                    if (is_string($adicional)) {
+                foreach ($request['adicionais'] as $key => $adicional) { // Percorrer os adicionais
+                    if (is_string($adicional)) { // Se String, chama o adicional
                         $iten[$adicional];
-                    } else {
+                    } else { // Se Array Percorrer o array
                         $iten2 = $iten;
                         foreach ($adicional as $key => $a) {
-                            if ($key == 0) {
+                            if ($key == 0) { // Se primeiro item
                                 if ($iten[0] == null) {
                                     $iten2 = $iten[$a];
                                 } else {
