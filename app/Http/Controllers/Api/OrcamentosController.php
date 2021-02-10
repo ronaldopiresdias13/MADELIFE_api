@@ -163,14 +163,14 @@ class OrcamentosController extends Controller
                             'basecobranca'         => $servico['basecobranca'],
                             'valorunitario'        => $servico['valorunitario'],
                             'custo'                => $servico['custo'],
-                            'custodiurno'          => $servico['basecobranca'] == 'Plantão' ? $servico['custo'] / 2 : $servico['custo'], // Alterar
-                            'custonoturno'         => $servico['basecobranca'] == 'Plantão' ? $servico['custo'] / 2 + $servico['adicionalnoturno'] : 0, // Alterar
+                            'custodiurno'          => $servico['custodiurno'],
+                            'custonoturno'         => $servico['custonoturno'],
                             'subtotal'             => $servico['subtotal'],
                             'subtotalcusto'        => $servico['subtotalcusto'],
                             'adicionalnoturno'     => $servico['adicionalnoturno'],
                             'horascuidado'         => $servico['horascuidado'],
-                            'horascuidadodiurno'   => $servico['basecobranca'] == 'Plantão' ? $servico['horascuidado'] / 2 : $servico['horascuidado'], // Alterar
-                            'horascuidadonoturno'  => $servico['basecobranca'] == 'Plantão' ? $servico['horascuidado'] / 2 : 0, // Alterar
+                            'horascuidadodiurno'   => $servico['horascuidadodiurno'],
+                            'horascuidadonoturno'  => $servico['horascuidadonoturno'],
                             'icms'                 => $servico['icms'],
                             'inss'                 => $servico['inss'],
                             'iss'                  => $servico['iss'],
@@ -466,14 +466,14 @@ class OrcamentosController extends Controller
                             'basecobranca'         => $servico['basecobranca'],
                             'valorunitario'        => $servico['valorunitario'],
                             'custo'                => $servico['custo'],
-                            'custodiurno'          => $servico['basecobranca'] == 'Plantão' ? $servico['custo'] / 2 : $servico['custo'], // Alterar
-                            'custonoturno'         => $servico['basecobranca'] == 'Plantão' ? $servico['custo'] / 2 + $servico['adicionalnoturno'] : 0, // Alterar
+                            'custodiurno'          => $servico['custodiurno'],
+                            'custonoturno'         => $servico['custonoturno'],
                             'subtotal'             => $servico['subtotal'],
                             'subtotalcusto'        => $servico['subtotalcusto'],
                             'adicionalnoturno'     => $servico['adicionalnoturno'],
                             'horascuidado'         => $servico['horascuidado'],
-                            'horascuidadodiurno'   => $servico['basecobranca'] == 'Plantão' ? $servico['horascuidado'] / 2 : $servico['horascuidado'], // Alterar
-                            'horascuidadonoturno'  => $servico['basecobranca'] == 'Plantão' ? $servico['horascuidado'] / 2 : 0, // Alterar
+                            'horascuidadodiurno'   => $servico['horascuidadodiurno'],
+                            'horascuidadonoturno'  => $servico['horascuidadonoturno'],
                             'icms'                 => $servico['icms'],
                             'inss'                 => $servico['inss'],
                             'iss'                  => $servico['iss'],
