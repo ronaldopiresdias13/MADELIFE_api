@@ -39,6 +39,7 @@ class PagamentoexternosController extends Controller
 
         return Pagamentoexterno::with('pessoa')
             ->where('empresa_id', $empresa_id)
+            ->where('situacao', $request['situacao'])
             ->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%')
             ->whereBetween('datainicio', [$datainicio, $datafim])
             ->get();
@@ -123,12 +124,12 @@ class PagamentoexternosController extends Controller
                 $pagamentoexterno->datafim          = $item['datafim'];
                 $pagamentoexterno->ordemservico_id  = $item['ordemservico_id'];
                 $pagamentoexterno->quantidade       = $item['quantidade'];
-                $pagamentoexterno->turno            = $item['periodo'];
+                $pagamentoexterno->turno            = $item['turno'];
                 $pagamentoexterno->valorunitario    = $item['valorunitario'];
                 $pagamentoexterno->subtotal         = $item['subtotal'];
                 $pagamentoexterno->status           = $item['status'];
                 $pagamentoexterno->observacao       = $item['observacao'];
-                $pagamentoexterno->situacao         = $item['situacao'];
+                $pagamentoexterno->situacao         = "Pendente";
                 $pagamentoexterno->proventos        = $item['proventos'];
                 $pagamentoexterno->descontos        = $item['descontos'];
                 $pagamentoexterno->save();
