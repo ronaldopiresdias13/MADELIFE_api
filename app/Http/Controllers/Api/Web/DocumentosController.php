@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Web;
 use App\Models\Documento;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -62,6 +63,7 @@ class DocumentosController extends Controller
 
         // return $pacientes;
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -78,6 +80,7 @@ class DocumentosController extends Controller
             // ->groupBy('mes')
             ->get();
     }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -94,11 +97,12 @@ class DocumentosController extends Controller
             $upload = $file->storeAs($caminho, $nome);
             $nomeOriginal = $file->getClientOriginalName();
             if ($upload) {
-                DB::transaction(function () use ($request, $nomeOriginal, $caminho, $nome) {
+                $empresa_id = Auth::user()->pessoa->prestador->empresa_id;
+                DB::transaction(function () use ($request, $nomeOriginal, $caminho, $nome, $empresa_id) {
                     Documento::create(
                         [
                             'paciente_id'  => $request['paciente_id'],
-                            'empresa_id'  => $request['empresa_id'],
+                            'empresa_id'   => $empresa_id,
                             'mes'          => $request['mes'],
                             'ano'          => $request['ano'],
                             'nome'         => $nomeOriginal,

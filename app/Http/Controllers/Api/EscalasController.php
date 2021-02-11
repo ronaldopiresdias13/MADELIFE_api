@@ -8,6 +8,7 @@ use App\Models\Cuidado;
 use App\Models\CuidadoEscala;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Ordemservico;
 use App\Models\OrdemservicoServico;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -127,15 +128,27 @@ class EscalasController extends Controller
      */
     public function store(Request $request)
     {
-        $ordemservicoServico = OrdemservicoServico::where('ordemservico_id', $request->ordemservico_id)
-            ->where('servico_id', $request->servico_id)
-            ->first();
+        $ordemservico = Ordemservico::with([
+                // 'servicos' => function($query) use ($request) {
+                //     $query->find($request->servico_id);
+                // },
+                'orcamento.servicos' => function($query) use ($request) {
+                    $query->find($request->servico_id);
+                }
+            ])
+            ->find($request->ordemservico_id);
+
+        $tipo   = $ordemservico->orcamento->servicos[0]->pivot->basecobranca;
+        $horasD = $ordemservico->orcamento->servicos[0]->pivot->horascuidadodiurno;
+        $horasN = $ordemservico->orcamento->servicos[0]->pivot->horascuidadonoturno;
+        $valorD = $ordemservico->orcamento->servicos[0]->pivot->custodiurno;
+        $valorN = $ordemservico->orcamento->servicos[0]->pivot->custonoturno;
 
         $escala = new Escala();
-        if ($ordemservicoServico) {
-            $escala->tipo             = $ordemservicoServico->descricao;
-            $escala->valorhoradiurno  = $ordemservicoServico->valordiurno;
-            $escala->valorhoranoturno = $ordemservicoServico->valornoturno;
+        if ($ordemservico) {
+            $escala->tipo             = $tipo;
+            $escala->valorhoradiurno  = $tipo == 'Plantão' ? $valorD / $horasD : $valorD;
+            $escala->valorhoranoturno = $tipo == 'Plantão' ? $valorN / $horasN : $valorN;
             $escala->valoradicional   = 0;
         }
         $escala->empresa_id            = $request->empresa_id;
@@ -157,7 +170,7 @@ class EscalasController extends Controller
         $escala->save();
 
         foreach ($request->cuidados as $key => $cuidado) {
-            $cuidado_escala = CuidadoEscala::create([
+            CuidadoEscala::create([
                 'escala_id'  => $escala->id,
                 'cuidado_id' => Cuidado::find($cuidado['cuidado']['id'])->id,
                 'data'       => $cuidado['data'],

@@ -13,4 +13,9 @@ class OrdemservicoServico extends Model
     {
         return $this->belongsTo(Servico::class);
     }
+
+    public function ordemservico()
+    {
+        return $this->belongsTo(Ordemservico::class);
+    }
 }
