@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProdutoMedicaosTable extends Migration
+class CreateProdutoMedicaoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateProdutoMedicaosTable extends Migration
      */
     public function up()
     {
-        Schema::create('produto_medicaos', function (Blueprint $table) {
+        Schema::create('produto_medicao', function (Blueprint $table) {
             $table->uuid('id');
             $table->unsignedBigInteger('medicoes_id');
             $table->foreign('medicoes_id')->references('id')->on('medicoes')->onDelete('cascade');
@@ -38,6 +38,6 @@ class CreateProdutoMedicaosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('produto_medicaos');
+        Schema::dropIfExists('produto_medicao');
     }
 }
