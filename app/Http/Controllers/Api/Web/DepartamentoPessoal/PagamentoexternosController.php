@@ -37,8 +37,9 @@ class PagamentoexternosController extends Controller
         $datainicio = $request['datainicio'] ? $request['datainicio'] : date("Y-m-01", strtotime($data));
         $datafim    = $request['datafim']    ? $request['datafim']    : date("Y-m-t", strtotime($data));
 
-        return Pagamentoexterno::with('pessoa')
+        return Pagamentoexterno::with(['pessoa', 'ordemservico.orcamento.homecare.paciente.pessoa'])
             ->where('empresa_id', $empresa_id)
+            ->where('situacao', $request['situacao'])
             ->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%')
             ->whereBetween('datainicio', [$datainicio, $datafim])
             ->get();
@@ -103,7 +104,6 @@ class PagamentoexternosController extends Controller
      */
     public function show(Pagamentoexterno $pagamentoexterno)
     {
-        //
     }
 
     /**
@@ -113,9 +113,28 @@ class PagamentoexternosController extends Controller
      * @param  \App\Models\Pagamentoexterno  $pagamentoexterno
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Pagamentoexterno $pagamentoexterno)
+    public function atualizarPagamentosExternos(Request $request)
     {
-        //
+        DB::transaction(function () use ($request) {
+            foreach ($request->pagamentos as $key => $item) {
+                $pagamentoexterno = Pagamentoexterno::find($item['id']);
+                $pagamentoexterno->empresa_id       = $item['empresa_id'];
+                $pagamentoexterno->pessoa_id        = $item['pessoa_id'];
+                $pagamentoexterno->datainicio       = $item['datainicio'];
+                $pagamentoexterno->datafim          = $item['datafim'];
+                $pagamentoexterno->ordemservico_id  = $item['ordemservico_id'];
+                $pagamentoexterno->quantidade       = $item['quantidade'];
+                $pagamentoexterno->turno            = $item['turno'];
+                $pagamentoexterno->valorunitario    = $item['valorunitario'];
+                $pagamentoexterno->subtotal         = $item['subtotal'];
+                $pagamentoexterno->status           = $item['status'];
+                $pagamentoexterno->observacao       = $item['observacao'];
+                $pagamentoexterno->situacao         = "Pendente";
+                $pagamentoexterno->proventos        = $item['proventos'];
+                $pagamentoexterno->descontos        = $item['descontos'];
+                $pagamentoexterno->save();
+            }
+        });
     }
 
     /**
