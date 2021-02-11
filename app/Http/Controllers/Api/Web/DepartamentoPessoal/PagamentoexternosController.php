@@ -37,7 +37,7 @@ class PagamentoexternosController extends Controller
         $datainicio = $request['datainicio'] ? $request['datainicio'] : date("Y-m-01", strtotime($data));
         $datafim    = $request['datafim']    ? $request['datafim']    : date("Y-m-t", strtotime($data));
 
-        return Pagamentoexterno::with('pessoa')
+        return Pagamentoexterno::with(['pessoa', 'ordemservico.orcamento.homecare.paciente.pessoa'])
             ->where('empresa_id', $empresa_id)
             ->where('situacao', $request['situacao'])
             ->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%')
