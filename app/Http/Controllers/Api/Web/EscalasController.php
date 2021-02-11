@@ -49,7 +49,7 @@ class EscalasController extends Controller
                 }]);
                 $query->with(['pessoa' => function ($query) {
                     $query->select('id', 'nome');
-                    $query->with(['conselhos' => function ($query) {
+                    $query->with(['telefones', 'conselhos' => function ($query) {
                         $query->select('pessoa_id', 'instituicao', 'uf', 'numero');
                     }]);
                 }]);
