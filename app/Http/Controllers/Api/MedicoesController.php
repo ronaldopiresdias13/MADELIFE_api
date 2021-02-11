@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Medicao;
+use App\Models\ProdutoMedicao;
 use App\Models\ServicoMedicao;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -134,6 +135,19 @@ class MedicoesController extends Controller
                 'situacao' => $servico['situacao'],
                 'observacao' => $servico['observacao'],
                 'status' => $servico['status'],
+            ]);
+        }
+        foreach ($request['produtos'] as $key => $produto) {
+            $produto_medicao = ProdutoMedicao::create([
+                'medicoes_id' => $medicao,
+                'produto_id' => $produto['produto_id'],
+                'quantidade' => $produto['quantidade'],
+                'atendido' => $produto['atendido'],
+                'valor' => $produto['valor'],
+                'subtotal' => $produto['subtotal'],
+                'situacao' => $produto['situacao'],
+                'observacao' => $produto['observacao'],
+                'status' => $produto['status'],
             ]);
         }
     }

@@ -14,7 +14,7 @@ class CreateProdutoMedicaosTable extends Migration
     public function up()
     {
         Schema::create('produto_medicaos', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id');
             $table->unsignedBigInteger('medicoes_id');
             $table->foreign('medicoes_id')->references('id')->on('medicoes')->onDelete('cascade');
             $table->unsignedBigInteger('produto_id');
