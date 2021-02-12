@@ -13,6 +13,8 @@ class ProdutoMedicao extends Model
     use Uuid;
     use SoftDeletes;
 
+    protected $table = 'produto_medicao';
+
     protected $dates = [
         'created_at',
         'updated_at',
