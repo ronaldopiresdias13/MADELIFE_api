@@ -40,4 +40,9 @@ class ProdutoMedicao extends Model
     // protected $guarded = [];
     protected $keyType = 'string';
     public $incrementing = false;
+
+    public function produto()
+    {
+        return $this->belongsTo(Produto::class);
+    }
 }
