@@ -200,10 +200,12 @@ class CuidadoPacienteController extends Controller
         $cuidadoPaciente->ativo = false;
         $cuidadoPaciente->save();
     }
+
     public function buscacuidadosdopaciente(Paciente $paciente)
     {
         return CuidadoPaciente::With(['cuidado', 'formacao'])->where('paciente_id', $paciente->id)->get();
     }
+
     public function groupbycuidadosdopaciente(Paciente $paciente)
     {
         return CuidadoPaciente::With(['cuidado', 'formacao'])->where('paciente_id', $paciente->id)->get()->groupBy('formacao.descricao');

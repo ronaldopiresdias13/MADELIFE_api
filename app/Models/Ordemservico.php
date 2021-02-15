@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Ordemservico extends Model
 {
@@ -59,8 +60,26 @@ class Ordemservico extends Model
     {
         return $this->hasMany(OrdemservicoPrestador::class)->where('ativo', true);
     }
+
     public function acessos()
     {
         return $this->belongsToMany(Acesso::class, 'ordemservico_acessos')->withPivot('id', 'check');
+    }
+
+    protected static function booted()
+    {
+        static::created(function ($ordemservico) {
+            $acessos = $ordemservico->empresa->acessos;
+
+            foreach ($acessos as $key => $acesso) {
+                DB::transaction(function () use ($ordemservico, $acesso) {
+                    $ordemservicoAcesso = new OrdemservicoAcesso();
+                    $ordemservicoAcesso->empresa_id      = $ordemservico->empresa_id;
+                    $ordemservicoAcesso->ordemservico_id = $ordemservico->id;
+                    $ordemservicoAcesso->acesso_id       = $acesso->id;
+                    $ordemservicoAcesso->save();
+                });
+            }
+        });
     }
 }
