@@ -24,8 +24,8 @@ class Medicao extends Model
         return $this->hasMany(ServicoMedicao::class, 'medicoes_id')->where('ativo', true);
     }
 
-    public function produtos()
+    public function medicao_produtos()
     {
-        return $this->belongsToMany(Produto::class);
+        return $this->hasMany(ProdutoMedicao::class, 'medicoes_id');
     }
 }

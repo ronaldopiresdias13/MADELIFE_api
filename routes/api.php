@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AgendamentosController;
 use App\Http\Controllers\Api\Novo\Web\EscalasController;
 use App\Http\Controllers\Api\Novo\Web\OrdemservicoAcessoController;
 use App\Http\Controllers\Api\Novo\Web\PrestadoresController;
@@ -353,12 +354,6 @@ Route::post('acessos', 'Api\AcessosController@store');
 Route::get('acessos/{acesso}', 'Api\AcessosController@show');
 Route::put('acessos/{acesso}', 'Api\AcessosController@update');
 Route::delete('acessos/{acesso}', 'Api\AcessosController@destroy');
-
-Route::get('agendamentos', 'Api\AgendamentosController@index');
-Route::post('agendamentos', 'Api\AgendamentosController@store');
-Route::get('agendamentos/{agendamento}', 'Api\AgendamentosController@show');
-Route::put('agendamentos/{agendamento}', 'Api\AgendamentosController@update');
-Route::delete('agendamentos/{agendamento}', 'Api\AgendamentosController@destroy');
 
 Route::get('bancos', 'Api\BancosController@index');
 Route::post('bancos', 'Api\BancosController@store');
@@ -922,5 +917,10 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::post('createlist', [PagamentoexternosController::class, 'createlist']);
             Route::post('atualizarPagamentosExternos', [PagamentoexternosController::class, 'atualizarPagamentosExternos']);
         });
+        Route::get('agendamentos', [AgendamentosController::class, 'index']);
+        Route::post('agendamentos', [AgendamentosController::class, 'store']);
+        Route::get('agendamentos/{agendamento}', [AgendamentosController::class, 'show']);
+        Route::put('agendamentos/{agendamento}', [AgendamentosController::class, 'update']);
+        Route::delete('agendamentos/{agendamento}', [AgendamentosController::class, 'destroy']);
     });
 });

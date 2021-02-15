@@ -111,8 +111,21 @@ class AgendamentosController extends Controller
      */
     public function store(Request $request)
     {
-        DB::transaction(function () use ($request) {
-            Agendamento::create($request->all());
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        DB::transaction(function () use ($request, $empresa_id) {
+            Agendamento::create([
+                'empresa_id'      => $empresa_id,
+                'profissional_id' => $request['profissional_id'],
+                'sala_id'         => $request['sala_id'],
+                'nome'            => $request['nome'],
+                'descricao'       => $request['descricao'],
+                'cor'             => $request['cor'],
+                'datainicio'      => $request['datainicio'],
+                'datafim'         => $request['datafim'],
+                'horainicio'      => $request['horainicio'],
+                'horafim'         => $request['horafim']
+            ]);
         });
     }
 
