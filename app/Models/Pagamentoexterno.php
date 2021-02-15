@@ -24,6 +24,7 @@ class Pagamentoexterno extends Model
         'id',
         'empresa_id',
         'pessoa_id',
+        'servico_id',
         'datainicio',
         'datafim',
         'ordemservico_id',
@@ -47,5 +48,9 @@ class Pagamentoexterno extends Model
     public function ordemservico()
     {
         return $this->belongsTo(Ordemservico::class);
+    }
+    public function servico()
+    {
+        return $this->belongsTo(Servico::class);
     }
 }
