@@ -246,6 +246,26 @@ class MedicoesController extends Controller
                     );
                 }
             }
+            if ($request['medicao_produtos']) {
+                foreach ($request['medicao_produtos'] as $key => $produto) {
+                    $medicao_produto = ServicoMedicao::updateOrCreate(
+                        [
+                            'id' => $produto['id'],
+                        ],
+                        [
+                            'medicoes_id' => $produto['medicoes_id'],
+                            'produto_id'  => $produto['produto_id'],
+                            'quantidade'  => $produto['quantidade'],
+                            'atendido'    => $produto['atendido'],
+                            'valor'       => $produto['valor'],
+                            'subtotal'    => $produto['subtotal'],
+                            'situacao'    => $produto['situacao'],
+                            'observacao'  => $produto['observacao'],
+                            'status'      => $produto['status'],
+                        ]
+                    );
+                }
+            }
         });
 
         return response()->json('Medição atualizada com sucesso!', 200)->header('Content-Type', 'text/plain');
