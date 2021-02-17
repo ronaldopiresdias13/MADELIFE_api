@@ -55,7 +55,7 @@ class ComentariomedicaoController extends Controller
     {
         return Comentariomedicao::with(['pessoa'])
             ->where('medicoes_id', $medicao->id)
-            ->orderBy("id")
+            // ->orderBy("id")
             ->get();
     }
 
