@@ -19,7 +19,18 @@ class Comentariomedicao extends Model
         'updated_at',
         'deleted_at'
     ];
-
+    protected $fillable = [
+        'id',
+        'medicoes_id',
+        'pessoa_id',
+        'comentario',
+        'data',
+        'hora',
+        'situacao',
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
     protected $keyType = 'string';
     public $incrementing = false;
 

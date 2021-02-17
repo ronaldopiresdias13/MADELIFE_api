@@ -36,6 +36,12 @@ class ComentariomedicaoController extends Controller
                 'hora'        => $request['hora'],
                 'situacao'    => "Enviado",
             ]);
+            if ($request['medicao']) {
+                $medicao = Medicao::find($request['medicoes_id']);
+                $medicao->status = $request['medicao']['status'];
+                $medicao->situacao = $request['medicao']['situacao'];
+                $medicao->save();
+            }
         });
     }
 
@@ -48,8 +54,8 @@ class ComentariomedicaoController extends Controller
     public function buscaComentariosPorIdMedicao(Medicao $medicao)
     {
         return Comentariomedicao::with(['pessoa'])
-            ->where('medicoes_id', $medicao)
-            ->orderBy(['data', 'hora'])
+            ->where('medicoes_id', $medicao->id)
+            ->orderBy("id")
             ->get();
     }
 

@@ -405,8 +405,8 @@ Route::put('cnabs/{cnab}', 'Api\CnabsController@update');
 Route::delete('cnabs/{cnab}', 'Api\CnabsController@destroy');
 
 // Route::get('comentariosmedicao', 'Api\Web\ComentariomedicaoController@index');
-Route::post('comentariosmedicao', 'Api\ComentariomedicaoController@store');
-Route::get('comentariosmedicao/buscaComentariosPorIdMedicao/{medicao}', 'Api\ComentariomedicaoController@buscaComentariosPorIdMedicao');
+Route::post('comentariosmedicao', 'Api\Web\ComentariomedicaoController@store');
+Route::get('comentariosmedicao/buscaComentariosPorIdMedicao/{medicao}', 'Api\Web\ComentariomedicaoController@buscaComentariosPorIdMedicao');
 // Route::put('comentariosmedicao/{medicao}', 'Api\ComentariomedicaoController@update');
 //Route::delete('comentariosmedicao/{medicao}', 'Api\ComentariomedicaoController@destroy');
 
