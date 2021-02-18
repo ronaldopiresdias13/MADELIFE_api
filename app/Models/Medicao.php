@@ -28,4 +28,8 @@ class Medicao extends Model
     {
         return $this->hasMany(ProdutoMedicao::class, 'medicoes_id');
     }
+    public function comentarios()
+    {
+        return $this->hasMany(Comentariomedicao::class, 'medicoes_id');
+    }
 }

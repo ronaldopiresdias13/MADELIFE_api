@@ -37,7 +37,7 @@ class PagamentoexternosController extends Controller
         $datainicio = $request['datainicio'] ? $request['datainicio'] : date("Y-m-01", strtotime($data));
         $datafim    = $request['datafim']    ? $request['datafim']    : date("Y-m-t", strtotime($data));
 
-        return Pagamentoexterno::with(['pessoa', 'ordemservico.orcamento.homecare.paciente.pessoa'])
+        return Pagamentoexterno::with(['pessoa', 'servico', 'ordemservico.orcamento.homecare.paciente.pessoa'])
             ->where('empresa_id', $empresa_id)
             ->where('situacao', $request['situacao'])
             ->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%')
@@ -79,6 +79,7 @@ class PagamentoexternosController extends Controller
                     [
                         'empresa_id'       => $empresa_id,
                         'pessoa_id'        => $pessoa->pessoa_id,
+                        'servico_id'        => $item['servico']['id'],
                         'datainicio'       => $item['datainicio'],
                         'datafim'          => $item['datafim'],
                         'ordemservico_id'  => $item['ordemservico_id'],
@@ -120,6 +121,7 @@ class PagamentoexternosController extends Controller
                 $pagamentoexterno = Pagamentoexterno::find($item['id']);
                 $pagamentoexterno->empresa_id       = $item['empresa_id'];
                 $pagamentoexterno->pessoa_id        = $item['pessoa_id'];
+                $pagamentoexterno->servico_id        = $item['servico_id'];
                 $pagamentoexterno->datainicio       = $item['datainicio'];
                 $pagamentoexterno->datafim          = $item['datafim'];
                 $pagamentoexterno->ordemservico_id  = $item['ordemservico_id'];

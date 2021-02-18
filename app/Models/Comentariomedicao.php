@@ -7,14 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Pagamentoexterno extends Model
+class Comentariomedicao extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use Uuid;
+    use SoftDeletes;
 
-    protected $keyType = 'string';
-
+    protected $table = "comentariosmedicao";
     protected $dates = [
         'created_at',
         'updated_at',
@@ -22,35 +21,21 @@ class Pagamentoexterno extends Model
     ];
     protected $fillable = [
         'id',
-        'empresa_id',
+        'medicoes_id',
         'pessoa_id',
-        'servico_id',
-        'datainicio',
-        'datafim',
-        'ordemservico_id',
-        'quantidade',
-        'turno',
-        'valorunitario',
-        'subtotal',
-        'status',
-        'observacao',
+        'comentario',
+        'data',
+        'hora',
         'situacao',
-        'proventos',
-        'descontos',
         'created_at',
         'updated_at',
         'deleted_at'
     ];
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     public function pessoa()
     {
         return $this->belongsTo(Pessoa::class);
-    }
-    public function ordemservico()
-    {
-        return $this->belongsTo(Ordemservico::class);
-    }
-    public function servico()
-    {
-        return $this->belongsTo(Servico::class);
     }
 }
