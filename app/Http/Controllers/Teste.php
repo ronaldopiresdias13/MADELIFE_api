@@ -10,6 +10,8 @@ class Teste extends Controller
 {
     public function teste(Request $request)
     {
+        return $request;
+
         $hoje = getdate();
         $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . ($hoje['mday'] < 10 ? '0' . $hoje['mday'] : $hoje['mday']);
 

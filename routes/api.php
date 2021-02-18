@@ -531,7 +531,7 @@ Route::delete('escalas/{escala}', 'Api\EscalasController@destroy');
 Route::get('escalas/empresa/{empresa}/dia', 'Api\EscalasController@buscaescalasdodia');
 Route::get('escalas/paciente/{paciente}/data1/{data1}/data2/{data2}', 'Api\EscalasController@buscaPontosPorPeriodoEPaciente');
 
-Route::get('formacoes', 'Api\FormacoesController@index');
+// Route::get('formacoes', 'Api\FormacoesController@index');
 Route::post('formacoes', 'Api\FormacoesController@store');
 Route::get('formacoes/{formacao}', 'Api\FormacoesController@show');
 Route::put('formacoes/{formacao}', 'Api\FormacoesController@update');
