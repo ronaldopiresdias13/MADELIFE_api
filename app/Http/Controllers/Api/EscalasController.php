@@ -147,8 +147,8 @@ class EscalasController extends Controller
         $escala = new Escala();
         if ($ordemservico) {
             $escala->tipo             = $tipo;
-            $escala->valorhoradiurno  = $tipo == 'Plantão' ? $valorD / $horasD : $valorD;
-            $escala->valorhoranoturno = $tipo == 'Plantão' ? $valorN / $horasN : $valorN;
+            $escala->valorhoradiurno  = $valorD ? ($tipo == 'Plantão' ? $valorD / $horasD : $valorD) : $valorD;
+            $escala->valorhoranoturno = $valorN ? ($tipo == 'Plantão' ? $valorN / $horasN : $valorN) : $valorN;
             $escala->valoradicional   = 0;
         }
         $escala->empresa_id            = $request->empresa_id;
