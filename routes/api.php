@@ -6,7 +6,9 @@ use App\Http\Controllers\Api\Novo\Web\OrdemservicoAcessoController;
 use App\Http\Controllers\Api\Novo\Web\PrestadoresController;
 use App\Http\Controllers\Api\Novo\Web\TranscricaoProdutoController;
 use App\Http\Controllers\Api\Web\DepartamentoPessoal\PagamentoexternosController;
+use App\Http\Controllers\Web\Formacoes\FormacoesController;
 use App\Http\Controllers\Web\PagamentointernosController;
+use App\Http\Controllers\Web\Prestadores\PrestadoresController as PrestadoresPrestadoresController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -922,5 +924,18 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('agendamentos/{agendamento}', [AgendamentosController::class, 'show']);
         Route::put('agendamentos/{agendamento}', [AgendamentosController::class, 'update']);
         Route::delete('agendamentos/{agendamento}', [AgendamentosController::class, 'destroy']);
+    });
+});
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::prefix('web')->group(function () {
+        Route::prefix('prestadores')->group(function () {
+            Route::get('recrutamento', [PrestadoresPrestadoresController::class, 'listRecrutamento']);
+        });
+        Route::prefix('formacoes')->group(function () {
+            Route::get('', [FormacoesController::class, 'index']);
+        });
     });
 });
