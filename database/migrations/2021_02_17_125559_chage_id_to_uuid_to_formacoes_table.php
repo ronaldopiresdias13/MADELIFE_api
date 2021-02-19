@@ -14,26 +14,26 @@ class ChageIdToUuidToFormacoesTable extends Migration
     public function up()
     {
         /* DROP FOREIGNS */
-        // Schema::table('cuidado_paciente', function (Blueprint $table) {
-        //     $table->dropForeign(['formacao_id']);
-        // });
-        // Schema::table('escalas', function (Blueprint $table) {
-        //     $table->dropForeign(['formacao_id']);
-        // });
-        // Schema::table('prestador_formacao', function (Blueprint $table) {
-        //     $table->dropForeign(['formacao_id']);
-        // });
-        // Schema::table('profissional_formacao', function (Blueprint $table) {
-        //     $table->dropForeign(['formacao_id']);
-        // });
-        // Schema::table('servico_formacao', function (Blueprint $table) {
-        //     $table->dropForeign(['formacao_id']);
-        // });
+        Schema::table('cuidado_paciente', function (Blueprint $table) {
+            $table->dropForeign(['formacao_id']);
+        });
+        Schema::table('escalas', function (Blueprint $table) {
+            $table->dropForeign(['formacao_id']);
+        });
+        Schema::table('prestador_formacao', function (Blueprint $table) {
+            $table->dropForeign(['formacao_id']);
+        });
+        Schema::table('profissional_formacao', function (Blueprint $table) {
+            $table->dropForeign(['formacao_id']);
+        });
+        Schema::table('servico_formacao', function (Blueprint $table) {
+            $table->dropForeign(['formacao_id']);
+        });
 
         /* CHANGE FOREIGN TO UUID */
-        // Schema::table('cuidado_paciente', function (Blueprint $table) {
-        //     $table->uuid('formacao_id')->change();
-        // });
+        Schema::table('cuidado_paciente', function (Blueprint $table) {
+            $table->uuid('formacao_id')->change();
+        });
         Schema::table('escalas', function (Blueprint $table) {
             $table->uuid('formacao_id')->nullable()->change();
         });
