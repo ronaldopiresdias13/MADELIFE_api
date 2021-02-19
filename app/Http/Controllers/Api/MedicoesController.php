@@ -248,7 +248,7 @@ class MedicoesController extends Controller
             }
             if ($request['medicao_produtos']) {
                 foreach ($request['medicao_produtos'] as $key => $produto) {
-                    $medicao_produto = ServicoMedicao::updateOrCreate(
+                    $medicao_produto = ProdutoMedicao::updateOrCreate(
                         [
                             'id' => $produto['id'],
                         ],
