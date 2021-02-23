@@ -35,7 +35,11 @@ class PagamentointernosController extends Controller
             ->whereBetween('datainicio', [$datainicio, $datafim])
             ->paginate(10);
 
-        return $result->withPath(str_replace('http:', 'https:', $result->path()));
+        if (env("APP_ENV", 'production') == 'production') {
+            return $result->withPath(str_replace('http:', 'https:', $result->path()));
+        } else {
+            return $result;
+        }
     }
 
     /**

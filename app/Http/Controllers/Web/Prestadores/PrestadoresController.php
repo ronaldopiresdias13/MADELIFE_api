@@ -65,7 +65,11 @@ class PrestadoresController extends Controller
             ->where('tipo', 'prestador')
             ->paginate(10);
 
-        return $result->withPath(str_replace('http:', 'https:', $result->path()));
+        if (env("APP_ENV", 'production') == 'production') {
+            return $result->withPath(str_replace('http:', 'https:', $result->path()));
+        } else {
+            return $result;
+        }
     }
 
     /**

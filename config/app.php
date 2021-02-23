@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://localhost'),
+    'url' => env('APP_URL', 'https://api.madelife.med.br'),
 
     'asset_url' => env('ASSET_URL', null),
 
