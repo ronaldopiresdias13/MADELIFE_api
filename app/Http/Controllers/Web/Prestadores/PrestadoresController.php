@@ -17,8 +17,9 @@ class PrestadoresController extends Controller
      */
     public function listRecrutamento(Request $request)
     {
-        // $pessoas = Pessoa::join('prestadores', 'pessoas.id', '=', 'prestadores.pessoa_id')
+        // $result = Pessoa::join('prestadores', 'pessoas.id', '=', 'prestadores.pessoa_id')
         // ->join('formacoes', 'formacoes.id', '=', 'prestadores.pessoa_id')
+        // ->join('endereco_prestador', 'prestadores.id', '=', 'endereco_prestador.prestador_id')
         // ->where([
         //     // Where pessoas
         //     ['pessoas.ativo', true]
@@ -49,18 +50,22 @@ class PrestadoresController extends Controller
         //     'prestadores.ativo as prestadores_ativo',
         //     'prestadores.created_at as prestadores_created_at',
         //     'prestadores.updated_at as prestadores_updated_at',
+        //     // Select endereco_prestador
+        //     'endereco_prestador.*'
         // )
         // ->get();
 
-        // return $pessoas;
+        // return $result;
 
-        return Tipopessoa::with([
+        $result = Tipopessoa::with([
             'pessoa.prestador.formacoes',
             'pessoa.enderecos.cidade',
             'pessoa.conselhos'
         ])
-        ->where('tipo', 'prestador')
-        ->paginate(10);
+            ->where('tipo', 'prestador')
+            ->paginate(10);
+
+        return $result->withPath(str_replace('http:', 'https:', $result->path()));
     }
 
     /**
