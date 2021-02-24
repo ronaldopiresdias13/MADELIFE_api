@@ -35,7 +35,7 @@ class ChageIdToUuidToFormacoesTable extends Migration
             $table->uuid('formacao_id')->change();
         });
         Schema::table('escalas', function (Blueprint $table) {
-            $table->uuid('formacao_id')->change();
+            $table->uuid('formacao_id')->nullable()->change();
         });
         Schema::table('prestador_formacao', function (Blueprint $table) {
             $table->uuid('formacao_id')->change();

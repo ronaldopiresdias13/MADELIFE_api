@@ -31,9 +31,11 @@ class PagamentointernosController extends Controller
         $datainicio = $request['datainicio'] ? $request['datainicio'] : date("Y-m-01", strtotime($data));
         $datafim    = $request['datafim']    ? $request['datafim']    : date("Y-m-t", strtotime($data));
 
-        return Pagamentointerno::with('pessoa')->where('empresa_id', $empresa_id)
-        ->whereBetween('datainicio', [$datainicio, $datafim])
+        $result = Pagamentointerno::with('pessoa')->where('empresa_id', $empresa_id)
+            ->whereBetween('datainicio', [$datainicio, $datafim])
             ->paginate(10);
+
+        return $result->withPath(str_replace('http:', 'https:', $result->path()));
     }
 
     /**

@@ -942,6 +942,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
         Route::prefix('formacoes')->group(function () {
             Route::get('', [FormacoesController::class, 'index']);
+            // Route::delete('{formacao}', [FormacoesController::class, 'destroy']);
         });
     });
 });
