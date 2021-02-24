@@ -17,4 +17,8 @@ class Responsavel extends Model
     {
         return $this->hasMany(Paciente::class)->where('ativo', true);
     }
+    public function empresa()
+    {
+        return $this->belongsTo(Empresa::class);
+    }
 }
