@@ -129,13 +129,13 @@ class EscalasController extends Controller
     public function store(Request $request)
     {
         $ordemservico = Ordemservico::with([
-                // 'servicos' => function($query) use ($request) {
-                //     $query->find($request->servico_id);
-                // },
-                'orcamento.servicos' => function($query) use ($request) {
-                    $query->find($request->servico_id);
-                }
-            ])
+            // 'servicos' => function($query) use ($request) {
+            //     $query->find($request->servico_id);
+            // },
+            'orcamento.servicos' => function ($query) use ($request) {
+                $query->find($request->servico_id);
+            }
+        ])
             ->find($request->ordemservico_id);
 
         $tipo   = $ordemservico->orcamento->servicos[0]->pivot->basecobranca;
