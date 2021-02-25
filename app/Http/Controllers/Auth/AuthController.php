@@ -31,7 +31,7 @@ class AuthController extends Controller
             'remember_me' => 'boolean'
         ]);
 
-        $user = User::with(['acessos', 'pessoa.prestador', 'pessoa.cliente', 'pessoa.profissional', 'pessoa.responsavel'])
+        $user = User::with(['acessos', 'pessoa.prestador', 'pessoa.cliente.empresa', 'pessoa.profissional.empresa', 'pessoa.responsavel.empresa'])
             ->where('email', $request['email'])
             ->orWhere('cpfcnpj', $request['email'])
             ->first();
