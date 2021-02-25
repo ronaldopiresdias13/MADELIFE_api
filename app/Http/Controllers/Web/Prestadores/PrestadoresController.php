@@ -131,7 +131,28 @@ class PrestadoresController extends Controller
                 // 'conselhos.created_at as conselhos_created_at',
                 // 'conselhos.updated_at as conselhos_updated_at',
             )
-            ->groupBy('pessoas.id', 'prestadores.id', 'formacoes.id', 'enderecos.id', 'cidades.id', 'conselhos.id')
+            ->groupBy(
+                'prestadores.id',
+                'pessoas.nome',
+                'pessoas.nascimento',
+                'pessoas.cpfcnpj',
+                'pessoas.rgie',
+                'pessoas.observacoes',
+                'pessoas.perfil',
+                'prestadores.sexo',
+                'cidades.nome',
+                'cidades.uf',
+                'enderecos.cep',
+                'enderecos.bairro',
+                'enderecos.rua',
+                'enderecos.numero',
+                'enderecos.complemento',
+                'enderecos.tipo',
+                'formacoes.descricao',
+                'conselhos.instituicao',
+                'conselhos.uf',
+                'conselhos.numero',
+                )
             ->orderBy('nome');
 
         if ($request['formacao_id']) {
@@ -143,6 +164,8 @@ class PrestadoresController extends Controller
         if ($request['uf']) {
             $result->where('cidades.uf', $request['uf']);
         }
+
+        // return 'teste';
 
         $result = $result->paginate(10);
         // $result = $result->get();
