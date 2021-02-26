@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Web\Responsavel;
 use App\Models\Escala;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
@@ -40,9 +41,13 @@ class DashboardController extends Controller
                         'homecare' => function ($query) {
                             $query->select('id', 'orcamento_id', 'paciente_id');
                             $query->with(['paciente' => function ($query) {
-                                $query->select('id', 'pessoa_id');
-                                $query->with(['pessoa' => function ($query) {
-                                    $query->select('id', 'nome', 'nascimento', 'cpfcnpj', 'rgie');
+                                $query->select('id', 'pessoa_id', 'responsavel_id', 'sexo');
+                                $query->with(['pessoa.enderecos']);
+                                $query->with(['responsavel' => function ($query) {
+                                    $query->select('id', 'pessoa_id', 'parentesco');
+                                    $query->with(['pessoa' => function ($query) {
+                                        $query->select('id', 'nome', 'nascimento', 'cpfcnpj', 'rgie');
+                                    }]);
                                 }]);
                             }]);
                         }
@@ -69,7 +74,8 @@ class DashboardController extends Controller
             // 'cuidados',
             'relatorios',
             'monitoramentos',
-            'acaomedicamentos.transcricaoProduto.produto'
+            'relatorioescalas',
+            // 'acaomedicamentos.transcricaoProduto.produto'
         ])
             ->where('ativo', true)
             ->where('empresa_id', $empresa_id)
@@ -80,7 +86,7 @@ class DashboardController extends Controller
             ->where('servico_id', 'like', $request->servico_id ? $request->servico_id : '%')
             // ->where('empresa_id', 'like', $request->empresa_id ? $request->empresa_id : '%')
             // ->limit(5)
-            ->orderBy('dataentrada')
+            ->orderBy('dataentrada')->orderBy('periodo')
             ->get([
                 'id',
                 'dataentrada',
@@ -104,13 +110,34 @@ class DashboardController extends Controller
 
         $relatorio = [];
 
-        foreach ($escalas as $key => $escala) {
-            if ($escala->formacao) {
-                switch ($escala->formacao->descricao) {
-                    case 'Cuidador':
-                    case 'Técnico de Enfermagem':
-                    case 'Auxiliar de Enfermagem':
-                    case 'Enfermagem':
+        foreach ($escalas as $key1 => $escala) {
+            if (isset($escala['relatorioescalas'][0])) {
+                foreach ($escala->relatorioescalas as $key2 => $relatorioescala) {
+                    $file = '';
+                    if (Storage::exists($relatorioescala['caminho'])) {
+                        $file = Storage::get($relatorioescala['caminho']);
+                    }
+                    $escalas[$key1]['relatorioescalas'][$key2]['file'] = base64_encode($file);
+                }
+            }
+
+            // if ($escala->formacao) {
+            //     switch ($escala->formacao->descricao) {
+            //         case 'Cuidador':
+            //         case 'Técnico de Enfermagem':
+            //         case 'Auxiliar de Enfermagem':
+            //         case 'Enfermagem':
+            //             $relatorio = $this->pushDiario($relatorio, $escala, true);
+            //             break;
+            //         default:
+            //             $relatorio = $this->pushDiario($relatorio, $escala, false);
+            //             break;
+            //     }
+            // }
+
+            if ($escala->tipo) {
+                switch ($escala->tipo) {
+                    case 'Plantão':
                         $relatorio = $this->pushDiario($relatorio, $escala, true);
                         break;
                     default:
