@@ -95,14 +95,14 @@ class PontosController extends Controller
             ], 202)
                 ->header('Content-Type', 'application/json');
         } else {
-            DB::transaction(function () use ($request) {
+            DB::transaction(function () use ($request, $escala) {
                 Ponto::firstOrCreate(
                     [
                         'escala_id'  => $request->escala_id,
                         'tipo'       => 'Check-in',
                     ],
                     [
-                        'empresa_id' => $request->empresa_id,
+                        'empresa_id' => $escala->empresa_id,
                         'latitude'   => $request->latitude,
                         'longitude'  => $request->longitude,
                         'data'       => $request->data,
@@ -190,14 +190,14 @@ class PontosController extends Controller
                     ]
                 ], 202)->header('Content-Type', 'application/json');
             } else {
-                DB::transaction(function () use ($request) {
+                DB::transaction(function () use ($request, $escala) {
                     Ponto::firstOrCreate(
                         [
                             'escala_id'  => $request->escala_id,
                             'tipo'       => 'Check-out',
                         ],
                         [
-                            'empresa_id' => $request->empresa_id ? $request->empresa_id : 1,
+                            'empresa_id' => $escala->empresa_id,
                             'latitude'   => $request->latitude,
                             'longitude'  => $request->longitude,
                             'data'       => $request->data,
@@ -206,10 +206,10 @@ class PontosController extends Controller
                             'status'     => $request->status,
                         ]
                     );
+                    $escala->status              = true;
+                    $escala->assinaturaprestador = $request->assinaturaprestador;
+                    $escala->save();
                 });
-                $escala->status              = true;
-                $escala->assinaturaprestador = $request->assinaturaprestador;
-                $escala->save();
                 return response()->json([
                     'alert' => [
                         'title' => 'Parabéns!',
