@@ -7,6 +7,7 @@ use App\Models\Pagamentoexterno;
 use App\Models\Pagamentointerno;
 use App\Models\Pessoa;
 use App\Models\Prestador;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -148,5 +149,41 @@ class PagamentoexternosController extends Controller
     public function destroy(Pagamentoexterno $pagamentoexterno)
     {
         //
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function groupByPagamentoByMesAndEmpresaId(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        $pagamentos = Pagamentoexterno::with('pessoa')
+            ->where('empresa_id', $empresa_id)
+            ->where('status', false)
+            ->get()
+            ->groupBy(function ($val) {
+                return Carbon::parse($val->datainicio)->format('Y-m');
+            });
+        return $pagamentos;
+    }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function atualizarSituacaoPagamentoDiretoria(Request $request)
+    {
+        // return $request;
+        DB::transaction(function () use ($request) {
+            foreach ($request['pagamentos'] as $key => $pag) {
+                $pagamento = Pagamentoexterno::find($pag['id']);
+                $pagamento->situacao = $request['situacao'];
+                $pagamento->update();
+            }
+        });
     }
 }

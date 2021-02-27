@@ -241,8 +241,8 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('escalas/dashboardPegarTodosOsRegistrosPorIdDaEmpresa', 'Api\Web\Convenio\EscalasController@dashboardConvenio');
         });
         Route::prefix('diretoria')->group(function () {
-            Route::get('groupByPagamentoByMesAndEmpresaId', 'Api\Web\Financeiro\PagamentopessoasController@groupByPagamentoByMesAndEmpresaId');
-            Route::post('atualizarSituacaoPagamentoDiretoria', 'Api\Web\Financeiro\PagamentopessoasController@atualizarSituacaoPagamentoDiretoria');
+            Route::get('groupByPagamentoByMesAndEmpresaId', 'Api\Web\DepartamentoPessoal\PagamentoexternosController@groupByPagamentoByMesAndEmpresaId');
+            Route::post('atualizarSituacaoPagamentoDiretoria', 'Api\Web\DepartamentoPessoal\PagamentoexternosController@atualizarSituacaoPagamentoDiretoria');
         });
         Route::prefix('financeiro')->group(function () {
             Route::get('listPagamentosByEmpresaId', 'Api\Web\Financeiro\PagamentopessoasController@listPagamentosByEmpresaId');
@@ -291,6 +291,9 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('pontos/pontosPrestadores', 'Api\Web\DepartamentoPessoal\PontosController@pontosPrestadores');
             Route::post('escalas/updateServicoOfEscala/{escala}', 'Api\Web\DepartamentoPessoal\EscalasController@updateServicoOfEscala');
             Route::get('buscarPagamentosPessoaPorPeriodoEmpresaId', 'Api\Web\DepartamentoPessoal\PagamentopessoasController@buscarPagamentosPessoaPorPeriodoEmpresaId');
+            Route::get('buscalistadeconselhospodidpessoa/{pessoa}', 'Api\Web\PrestadoresController@buscalistadeconselhospodidpessoa');
+            Route::post('salvarconselho', 'Api\Web\PrestadoresController@salvarconselho');
+            Route::delete('deletarconselho/{conselho}', 'Api\Web\PrestadoresController@deletarconselho');
         });
 
         Route::prefix('recursosHumanos')->group(function () {
