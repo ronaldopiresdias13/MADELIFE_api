@@ -17,6 +17,11 @@ class PrestadoresController extends Controller
      */
     public function listRecrutamento(Request $request)
     {
+        // if ($request['nome']) {
+        //     return 'true';
+        // }
+        // return 'false';
+        // return $request;
         $result = DB::table('prestadores')
             ->leftJoin('prestador_formacao', function ($join) {
                 $join->on('prestadores.id', '=', 'prestador_formacao.prestador_id')
@@ -26,9 +31,10 @@ class PrestadoresController extends Controller
                 $join->on('formacoes.id', '=', 'prestador_formacao.formacao_id')
                     ->where('formacoes.deleted_at', null);
             })
-            ->join('pessoas', function ($join) {
+            ->join('pessoas', function ($join) use ($request) {
                 $join->on('prestadores.pessoa_id', '=', 'pessoas.id')
-                    ->where('pessoas.ativo', true);
+                    ->where('pessoas.ativo', true)
+                    ->where('pessoas.nome', 'like', $request['nome'] ? '%' . $request['nome'] . '%' : '%');
             })
             ->leftJoin('pessoa_endereco', function ($join) {
                 $join->on('pessoa_endereco.pessoa_id', '=', 'pessoas.id')
@@ -50,20 +56,20 @@ class PrestadoresController extends Controller
             ->select(
                 'prestadores.id as id',
                 'pessoas.nome as nome',
-                'pessoas.nascimento as nascimento',
-                'pessoas.cpfcnpj as cpfcnpj',
-                'pessoas.rgie as rgie',
-                'pessoas.observacoes as observacoes',
-                'pessoas.perfil as perfil',
-                'prestadores.sexo as sexo',
+                // 'pessoas.nascimento as nascimento',
+                // 'pessoas.cpfcnpj as cpfcnpj',
+                // 'pessoas.rgie as rgie',
+                // 'pessoas.observacoes as observacoes',
+                // 'pessoas.perfil as perfil',
+                // 'prestadores.sexo as sexo',
                 'cidades.nome as cidade',
                 'cidades.uf as uf',
-                'enderecos.cep as cep',
-                'enderecos.bairro as bairro',
-                'enderecos.rua as logradouro',
-                'enderecos.numero as numero',
-                'enderecos.complemento as complemento',
-                'enderecos.tipo as tipo',
+                // 'enderecos.cep as cep',
+                // 'enderecos.bairro as bairro',
+                // 'enderecos.rua as logradouro',
+                // 'enderecos.numero as numero',
+                // 'enderecos.complemento as complemento',
+                // 'enderecos.tipo as tipo',
                 'formacoes.descricao as formacao',
                 'conselhos.instituicao as conselho',
                 'conselhos.uf as conselho_uf',
@@ -134,25 +140,25 @@ class PrestadoresController extends Controller
             ->groupBy(
                 'prestadores.id',
                 'pessoas.nome',
-                'pessoas.nascimento',
-                'pessoas.cpfcnpj',
-                'pessoas.rgie',
-                'pessoas.observacoes',
+                // 'pessoas.nascimento',
+                // 'pessoas.cpfcnpj',
+                // 'pessoas.rgie',
+                // 'pessoas.observacoes',
                 'pessoas.perfil',
-                'prestadores.sexo',
+                // 'prestadores.sexo',
                 'cidades.nome',
                 'cidades.uf',
-                'enderecos.cep',
-                'enderecos.bairro',
-                'enderecos.rua',
-                'enderecos.numero',
-                'enderecos.complemento',
-                'enderecos.tipo',
+                // 'enderecos.cep',
+                // 'enderecos.bairro',
+                // 'enderecos.rua',
+                // 'enderecos.numero',
+                // 'enderecos.complemento',
+                // 'enderecos.tipo',
                 'formacoes.descricao',
                 'conselhos.instituicao',
                 'conselhos.uf',
                 'conselhos.numero',
-                )
+            )
             ->orderBy('nome');
 
         if ($request['formacao_id']) {
