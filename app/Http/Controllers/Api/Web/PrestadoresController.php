@@ -153,7 +153,7 @@ class PrestadoresController extends Controller
      */
     public function buscalistadeconselhospodidpessoa(Pessoa $pessoa)
     {
-        return Conselho::where('pessoa_id', $pessoa->id)->get();
+        return Conselho::where('ativo', true)->where('pessoa_id', $pessoa->id)->get();
     }
     /**
      * Store a newly created resource in storage.
