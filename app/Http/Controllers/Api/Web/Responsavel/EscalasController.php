@@ -20,24 +20,7 @@ class EscalasController extends Controller
     {
         $user = $request->user();
         $responsavel = $user->pessoa->responsavel;
-
-        // $pacientes = Paciente::with(['homecares.orcamento.ordemservico.escalas' => function ($query) {
-        //     $query->with('prestador.pessoa')->where('assinaturaresponsavel', '');
-        // }])
-        //     ->where('responsavel_id', $responsavel->id)
-        //     ->get();
-
-        // return Ordemservico::where('ordemservicos.empresa_id', $empresa['id'])->where('ordemservicos.ativo', 1)->where('ordemservicos.status', 1)
-        //     ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
-        //     ->join('orcamento_servico', 'orcamento_servico.orcamento_id', '=', 'orcamentos.id')
-        //     ->join('servicos', 'servicos.id', '=', 'orcamento_servico.servico_id')
-        //     ->select('servicos.descricao', DB::raw('count(servicos.id) as count'))
-        //     ->groupBy('servicos.descricao')
-        //     ->orderBy('count', 'desc')
-        //     ->get();
-
-        // $pacientes = Escala::where('responsavel_id', '%')
-        $pacientes = Escala::where('escalas.id', 'like', '%')
+        $pacientes = Escala::whereBetween('dataentrada', [$request->datainicio, $request->datafim])
             ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
             ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
             ->join('homecares', 'homecares.orcamento_id', '=', 'orcamentos.id')
@@ -46,14 +29,15 @@ class EscalasController extends Controller
             ->join('pessoas', 'pessoas.id', '=', 'prestadores.pessoa_id')
             ->where('pacientes.responsavel_id', "=", $responsavel->id)
             ->where('escalas.assinaturaresponsavel', "=", '')
-            // ->orWhere('escalas.assinaturaresponsavel', "=", null)
-            ->orWhere(function ($query) use ($responsavel) {
+            // // ->orWhere('escalas.assinaturaresponsavel', "=", null)
+            ->orWhere(function ($query) use ($request, $responsavel) {
                 $query
                     ->where('pacientes.responsavel_id', "=", $responsavel->id)
+                    ->whereBetween('dataentrada', [$request->datainicio, $request->datafim])
                     ->where('escalas.assinaturaresponsavel', "=", null);
             })
-            ->orderBy('escalas.dataentrada')
-            ->select('escalas.*', 'pessoas.nome')
+            ->orderBy('dataentrada')
+            // ->select('escalas.*', 'pessoas.nome')
             ->get();
 
         return $pacientes;
