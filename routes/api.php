@@ -942,6 +942,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('web')->group(function () {
         Route::prefix('prestadores')->group(function () {
             Route::get('recrutamento', [PrestadoresPrestadoresController::class, 'listRecrutamento']);
+            Route::get('buscaprestadorexterno/{prestador}', [PrestadoresPrestadoresController::class, 'buscaprestadorexterno']);
         });
         Route::prefix('formacoes')->group(function () {
             Route::get('', [FormacoesController::class, 'index']);

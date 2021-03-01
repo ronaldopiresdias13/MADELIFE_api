@@ -75,19 +75,6 @@ class PrestadoresController extends Controller
         return $prestadores;
     }
 
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Prestador  $prestador
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Prestador $prestador)
-    {
-        //
-    }
-
     /**
      * Update the specified resource in storage.
      *
