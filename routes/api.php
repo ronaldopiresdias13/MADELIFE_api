@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Novo\Web\EscalasController;
 use App\Http\Controllers\Api\Novo\Web\OrdemservicoAcessoController;
 use App\Http\Controllers\Api\Novo\Web\PrestadoresController;
 use App\Http\Controllers\Api\Novo\Web\TranscricaoProdutoController;
+use App\Http\Controllers\Api\Web\Compras\ProdutoController;
 use App\Http\Controllers\Api\Web\DepartamentoPessoal\PagamentoexternosController;
 use App\Http\Controllers\Web\Formacoes\FormacoesController;
 use App\Http\Controllers\Web\PagamentointernosController;
@@ -943,6 +944,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::prefix('prestadores')->group(function () {
             Route::get('recrutamento', [PrestadoresPrestadoresController::class, 'listRecrutamento']);
             Route::get('buscaprestadorexterno/{prestador}', [PrestadoresPrestadoresController::class, 'buscaprestadorexterno']);
+        });
+        Route::prefix('compras')->group(function () {
+            Route::get('produtos/getAllProdutosByIdEmpresa', [ProdutoController::class, 'getAllProdutosByIdEmpresa']);
         });
         Route::prefix('formacoes')->group(function () {
             Route::get('', [FormacoesController::class, 'index']);
