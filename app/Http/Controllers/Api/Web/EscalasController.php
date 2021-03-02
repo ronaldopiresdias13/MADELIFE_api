@@ -58,6 +58,7 @@ class EscalasController extends Controller
             'cuidados',
             'relatorios',
             'monitoramentos',
+            'relatorioescalas',
             'acaomedicamentos.transcricaoProduto.produto'
         ])
             ->where('ativo', true)
