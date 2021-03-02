@@ -247,6 +247,13 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
         Route::prefix('financeiro')->group(function () {
             Route::get('listPagamentosByEmpresaId', 'Api\Web\Financeiro\PagamentopessoasController@listPagamentosByEmpresaId');
+            Route::get('getCategorias', 'Api\Web\Financeiro\CnabsController@getCategorias');
+
+            Route::post('gerarCnab', 'Api\Web\Financeiro\CnabsController@gerarCnab');
+
+            Route::get('downloadCnab/{id}', 'Api\Web\Financeiro\CnabsController@downloadCnab');
+            Route::get('getCnabs', 'Api\Web\Financeiro\CnabsController@getCnabs');
+
         });
         Route::prefix('gestaoOrcamentaria')->group(function () {
             Route::get('clientes/list/{empresa}', 'Api\Web\GestaoOrcamentaria\ClientesController@index');
