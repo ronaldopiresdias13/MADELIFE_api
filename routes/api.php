@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Novo\Web\PrestadoresController;
 use App\Http\Controllers\Api\Novo\Web\TranscricaoProdutoController;
 use App\Http\Controllers\Api\Web\Compras\ProdutoController;
 use App\Http\Controllers\Api\Web\DepartamentoPessoal\PagamentoexternosController;
+use App\Http\Controllers\Web\Escalas\EscalasController as EscalasEscalasController;
 use App\Http\Controllers\Web\Formacoes\FormacoesController;
 use App\Http\Controllers\Web\PagamentointernosController;
 use App\Http\Controllers\Web\Prestadores\PrestadoresController as PrestadoresPrestadoresController;
@@ -959,5 +960,14 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('', [FormacoesController::class, 'index']);
             // Route::delete('{formacao}', [FormacoesController::class, 'destroy']);
         });
+        Route::prefix('escalas')->group(function () {
+            Route::get('medicao', [EscalasEscalasController::class, 'medicao']);
+        });
     });
 });
+
+// Route::prefix('web')->group(function () {
+//     Route::prefix('escalas')->group(function () {
+//         Route::get('medicao', [EscalasEscalasController::class, 'medicao']);
+//     });
+// });

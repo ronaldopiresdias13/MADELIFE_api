@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Escala;
+use App\Models\Tipopessoa;
+use App\Services\PontoService;
 use Dompdf\Dompdf;
 use Illuminate\Http\Request;
 
@@ -348,7 +351,7 @@ class Teste extends Controller
         // return view('teste', ['itens' => $array]);
 
         // $dompdf = new Dompdf(["enable_remote" => true]);
-        $dompdf->loadHtml(view('teste', ['itens' => $array]));
+        $dompdf->loadHtml(view('teste4', ['itens' => $array]));
 
         // ob_start();
         // require __DIR__. "../../../../resources/views/teste.php";

@@ -3,35 +3,35 @@
         <style>
             /** Define the margins of your page **/
             @page {
-                margin: 40px 0 20px 0;
+                margin: 100px 25px;
             }
 
             header {
                 position: fixed;
-                top: -40px;
+                top: -60px;
                 left: 0px;
                 right: 0px;
-                height: 40px;
+                height: 50px;
 
                 /** Extra personal styles **/
                 background-color: #03a9f4;
                 color: white;
                 text-align: center;
-                line-height: 30px;
+                line-height: 35px;
             }
 
             footer {
                 position: fixed;
-                bottom: -20px;
+                bottom: -60px;
                 left: 0px;
                 right: 0px;
-                height: 20px;
+                height: 50px;
 
                 /** Extra personal styles **/
                 background-color: #03a9f4;
                 color: white;
                 text-align: center;
-                line-height: 20px;
+                line-height: 35px;
             }
         </style>
     </head>
@@ -46,8 +46,8 @@
         </footer>
 
         <!-- Wrap the content of your PDF inside a main tag -->
-        <main style="background-color: red">
-            @for ($i = 1; $i < 120; $i++)
+        <main>
+            @for ($i = 1; $i < 20; $i++)
                 <i style="background-color: cadetblue">Teste {{ $i }}</i>
                 <br>
             @endfor
@@ -56,6 +56,9 @@
             </p>
             <p style="page-break-after: never;">
                 Content Page 2
+            </p>
+            <p style="page-break-after: always;">
+                Content Page 3
             </p> --}}
         </main>
     </body>
