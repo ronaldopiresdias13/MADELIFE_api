@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Novo\Web\EscalasController;
 use App\Http\Controllers\Api\Novo\Web\OrdemservicoAcessoController;
 use App\Http\Controllers\Api\Novo\Web\PrestadoresController;
 use App\Http\Controllers\Api\Novo\Web\TranscricaoProdutoController;
+use App\Http\Controllers\Api\Web\Compras\ProdutoController;
 use App\Http\Controllers\Api\Web\DepartamentoPessoal\PagamentoexternosController;
 use App\Http\Controllers\Web\Formacoes\FormacoesController;
 use App\Http\Controllers\Web\PagamentointernosController;
@@ -241,11 +242,18 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('escalas/dashboardPegarTodosOsRegistrosPorIdDaEmpresa', 'Api\Web\Convenio\EscalasController@dashboardConvenio');
         });
         Route::prefix('diretoria')->group(function () {
-            Route::get('groupByPagamentoByMesAndEmpresaId', 'Api\Web\Financeiro\PagamentopessoasController@groupByPagamentoByMesAndEmpresaId');
-            Route::post('atualizarSituacaoPagamentoDiretoria', 'Api\Web\Financeiro\PagamentopessoasController@atualizarSituacaoPagamentoDiretoria');
+            Route::get('groupByPagamentoByMesAndEmpresaId', 'Api\Web\DepartamentoPessoal\PagamentoexternosController@groupByPagamentoByMesAndEmpresaId');
+            Route::post('atualizarSituacaoPagamentoDiretoria', 'Api\Web\DepartamentoPessoal\PagamentoexternosController@atualizarSituacaoPagamentoDiretoria');
         });
         Route::prefix('financeiro')->group(function () {
             Route::get('listPagamentosByEmpresaId', 'Api\Web\Financeiro\PagamentopessoasController@listPagamentosByEmpresaId');
+            Route::get('getCategorias', 'Api\Web\Financeiro\CnabsController@getCategorias');
+
+            Route::post('gerarCnab', 'Api\Web\Financeiro\CnabsController@gerarCnab');
+
+            Route::get('downloadCnab/{id}', 'Api\Web\Financeiro\CnabsController@downloadCnab');
+            Route::get('getCnabs', 'Api\Web\Financeiro\CnabsController@getCnabs');
+
         });
         Route::prefix('gestaoOrcamentaria')->group(function () {
             Route::get('clientes/list/{empresa}', 'Api\Web\GestaoOrcamentaria\ClientesController@index');
@@ -291,6 +299,9 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('pontos/pontosPrestadores', 'Api\Web\DepartamentoPessoal\PontosController@pontosPrestadores');
             Route::post('escalas/updateServicoOfEscala/{escala}', 'Api\Web\DepartamentoPessoal\EscalasController@updateServicoOfEscala');
             Route::get('buscarPagamentosPessoaPorPeriodoEmpresaId', 'Api\Web\DepartamentoPessoal\PagamentopessoasController@buscarPagamentosPessoaPorPeriodoEmpresaId');
+            Route::get('buscalistadeconselhospodidpessoa/{pessoa}', 'Api\Web\PrestadoresController@buscalistadeconselhospodidpessoa');
+            Route::post('salvarconselho', 'Api\Web\PrestadoresController@salvarconselho');
+            Route::delete('deletarconselho/{conselho}', 'Api\Web\PrestadoresController@deletarconselho');
         });
 
         Route::prefix('recursosHumanos')->group(function () {
@@ -939,6 +950,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('web')->group(function () {
         Route::prefix('prestadores')->group(function () {
             Route::get('recrutamento', [PrestadoresPrestadoresController::class, 'listRecrutamento']);
+            Route::get('buscaprestadorexterno/{prestador}', [PrestadoresPrestadoresController::class, 'buscaprestadorexterno']);
+        });
+        Route::prefix('compras')->group(function () {
+            Route::get('produtos/getAllProdutosByIdEmpresa', [ProdutoController::class, 'getAllProdutosByIdEmpresa']);
         });
         Route::prefix('formacoes')->group(function () {
             Route::get('', [FormacoesController::class, 'index']);

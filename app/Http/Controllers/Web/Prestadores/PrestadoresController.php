@@ -343,12 +343,19 @@ class PrestadoresController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Prestador  $prestador
+     * @param  \App\Prestador  $prestador
      * @return \Illuminate\Http\Response
      */
-    public function show(Prestador $prestador)
+    public function buscaprestadorexterno(Prestador $prestador)
     {
-        //
+        return Prestador::with([
+            'pessoa.telefones',
+            'pessoa.enderecos.cidade',
+            'pessoa.conselhos',
+            'pessoa.emails',
+            // 'pessoa.dadobancarios',
+            'formacoes'
+        ])->find($prestador->id);
     }
 
     /**

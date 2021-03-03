@@ -38,6 +38,7 @@ class EscalasController extends Controller
 
         // $pacientes = Escala::where('responsavel_id', '%')
         $pacientes = Escala::where('escalas.id', 'like', '%')
+            ->whereBetween('dataentrada', [$request->datainicio, $request->datafim])
             ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
             ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
             ->join('homecares', 'homecares.orcamento_id', '=', 'orcamentos.id')
@@ -47,9 +48,10 @@ class EscalasController extends Controller
             ->where('pacientes.responsavel_id', "=", $responsavel->id)
             ->where('escalas.assinaturaresponsavel', "=", '')
             // ->orWhere('escalas.assinaturaresponsavel', "=", null)
-            ->orWhere(function ($query) use ($responsavel) {
+            ->orWhere(function ($query) use ($request, $responsavel) {
                 $query
                     ->where('pacientes.responsavel_id', "=", $responsavel->id)
+                    ->whereBetween('dataentrada', [$request->datainicio, $request->datafim])
                     ->where('escalas.assinaturaresponsavel', "=", null);
             })
             ->orderBy('escalas.dataentrada')

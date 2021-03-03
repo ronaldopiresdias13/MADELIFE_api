@@ -701,7 +701,7 @@ class OrcamentosController extends Controller
                 }
             }
 
-            $ordemservico = Ordemservico::where('orcamento_id', $orcamento->id)->first();
+            $ordemservico = Ordemservico::where('orcamento_id', $orcamento->id)->where('ativo', true)->first();
 
             if ($ordemservico) {
                 foreach ($ordemservico->servicos as $key => $servico) {

@@ -80,7 +80,7 @@ class PrestadoresController extends Controller
             ->join('pacientes', 'homecares.paciente_id', '=', 'pacientes.id')
             ->join('pessoas', 'pacientes.pessoa_id', '=', 'pessoas.id')
             ->select('pessoas.nome')
-            ->where('homecares.ativo', true)
+            // ->where('homecares.ativo', true)
             ->groupBy('pessoas.nome')
             ->orderBy('pessoas.nome')
             ->get();
