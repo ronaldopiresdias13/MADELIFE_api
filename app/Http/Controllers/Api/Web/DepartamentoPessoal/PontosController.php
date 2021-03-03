@@ -18,7 +18,7 @@ class PontosController extends Controller
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa->id;
-
+        // return 'teste';
         // $entrada   = gmmktime(19, 30, 00, 10, 01, 2020);
         // $saida     = gmmktime(07, 34, 00, 10, 02, 2020);
         // $intervalo = abs($saida - $entrada);
@@ -33,6 +33,7 @@ class PontosController extends Controller
 
         $dados = Escala::with([
             'pontos',
+            'relatorioescalas',
             'servico',
             'prestador.pessoa'
         ])
@@ -99,7 +100,7 @@ class PontosController extends Controller
         $escala['prestador'] = $dado->prestador->pessoa->nome;
         $escala['pessoa_id'] = $dado->prestador->pessoa->id;
         $escala['periodo'] = $dado->periodo;
-
+        $escala['relatorioescalas'] = $dado->relatorioescalas;
         $escala['servico']['id']        = $dado->servico ? $dado->servico->id : null;
         $escala['servico']['descricao'] = $dado->servico ? $dado->servico->descricao : null;
 
