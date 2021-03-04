@@ -1,43 +1,33 @@
 <?php
 
-namespace App\Http\Controllers\Api\Web\DepartamentoPessoal;
+namespace App\Http\Controllers\Web\Escalas;
 
-use App\Models\Escala;
 use App\Http\Controllers\Controller;
-use App\Models\Ponto;
+use App\Models\Escala;
+use App\Services\PontoService;
 use Illuminate\Http\Request;
 
-class PontosController extends Controller
+class EscalasController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function pontosPrestadores(Request $request)
+    public function medicao(Request $request)
     {
-        $user = $request->user();
-        $empresa_id = $user->pessoa->profissional->empresa->id;
-        // return 'teste';
-        // $entrada   = gmmktime(19, 30, 00, 10, 01, 2020);
-        // $saida     = gmmktime(07, 34, 00, 10, 02, 2020);
-        // $intervalo = abs($saida - $entrada);
-        // $minutos   = round($intervalo / 60, 2);
-        // $horas     = round($minutos / 60, 2);
-
-        // return $horas;
+        // $user = $request->user();
+        // $empresa_id = $user->pessoa->profissional->empresa->id;
 
         $hoje = getdate();
         $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $hoje['mday'];
-        // $data = '2020-10-01';
 
         $dados = Escala::with([
             'pontos',
-            'relatorioescalas',
             'servico',
             'prestador.pessoa'
         ])
-            ->where('empresa_id', $empresa_id)
+            // ->where('empresa_id', $empresa_id)
             ->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%')
             ->where('servico_id', 'like', $request->servico_id ? $request->servico_id : '%')
             ->where('dataentrada', '>=', $request->data_ini ? $request->data_ini : $data)
@@ -85,10 +75,10 @@ class PontosController extends Controller
                     $escala = $this->calcularPontos($dado, true);
                     break;
             }
-            if (!array_key_exists($dado->dataentrada, $escalas)) {
-                $escalas[$dado->dataentrada] = [];
-            }
-            array_push($escalas[$dado->dataentrada], $escala);
+            // if (!array_key_exists($dado->dataentrada, $escalas)) {
+            //     $escalas[$dado->dataentrada] = [];
+            // }
+            array_push($escalas, $escala);
         }
         return $escalas;
     }
@@ -100,7 +90,7 @@ class PontosController extends Controller
         $escala['prestador'] = $dado->prestador->pessoa->nome;
         $escala['pessoa_id'] = $dado->prestador->pessoa->id;
         $escala['periodo'] = $dado->periodo;
-        $escala['relatorioescalas'] = $dado->relatorioescalas;
+
         $escala['servico']['id']        = $dado->servico ? $dado->servico->id : null;
         $escala['servico']['descricao'] = $dado->servico ? $dado->servico->descricao : null;
 
@@ -183,6 +173,16 @@ class PontosController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -196,10 +196,21 @@ class PontosController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Ponto  $ponto
+     * @param  \App\Models\Escala  $escala
      * @return \Illuminate\Http\Response
      */
-    public function show(Ponto $ponto)
+    public function show(Escala $escala)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Escala  $escala
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Escala $escala)
     {
         //
     }
@@ -208,10 +219,10 @@ class PontosController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Ponto  $ponto
+     * @param  \App\Models\Escala  $escala
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Ponto $ponto)
+    public function update(Request $request, Escala $escala)
     {
         //
     }
@@ -219,10 +230,10 @@ class PontosController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Ponto  $ponto
+     * @param  \App\Models\Escala  $escala
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Ponto $ponto)
+    public function destroy(Escala $escala)
     {
         //
     }

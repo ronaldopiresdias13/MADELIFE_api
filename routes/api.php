@@ -5,7 +5,9 @@ use App\Http\Controllers\Api\Novo\Web\EscalasController;
 use App\Http\Controllers\Api\Novo\Web\OrdemservicoAcessoController;
 use App\Http\Controllers\Api\Novo\Web\PrestadoresController;
 use App\Http\Controllers\Api\Novo\Web\TranscricaoProdutoController;
+use App\Http\Controllers\Api\Web\Compras\ProdutoController;
 use App\Http\Controllers\Api\Web\DepartamentoPessoal\PagamentoexternosController;
+use App\Http\Controllers\Web\Escalas\EscalasController as EscalasEscalasController;
 use App\Http\Controllers\Web\Formacoes\FormacoesController;
 use App\Http\Controllers\Web\PagamentointernosController;
 use App\Http\Controllers\Web\Prestadores\PrestadoresController as PrestadoresPrestadoresController;
@@ -246,6 +248,13 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
         Route::prefix('financeiro')->group(function () {
             Route::get('listPagamentosByEmpresaId', 'Api\Web\Financeiro\PagamentopessoasController@listPagamentosByEmpresaId');
+            Route::get('getCategorias', 'Api\Web\Financeiro\CnabsController@getCategorias');
+
+            Route::post('gerarCnab', 'Api\Web\Financeiro\CnabsController@gerarCnab');
+
+            Route::get('downloadCnab/{id}', 'Api\Web\Financeiro\CnabsController@downloadCnab');
+            Route::get('getCnabs', 'Api\Web\Financeiro\CnabsController@getCnabs');
+
         });
         Route::prefix('gestaoOrcamentaria')->group(function () {
             Route::get('clientes/list/{empresa}', 'Api\Web\GestaoOrcamentaria\ClientesController@index');
@@ -944,9 +953,21 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('recrutamento', [PrestadoresPrestadoresController::class, 'listRecrutamento']);
             Route::get('buscaprestadorexterno/{prestador}', [PrestadoresPrestadoresController::class, 'buscaprestadorexterno']);
         });
+        Route::prefix('compras')->group(function () {
+            Route::get('produtos/getAllProdutosByIdEmpresa', [ProdutoController::class, 'getAllProdutosByIdEmpresa']);
+        });
         Route::prefix('formacoes')->group(function () {
             Route::get('', [FormacoesController::class, 'index']);
             // Route::delete('{formacao}', [FormacoesController::class, 'destroy']);
         });
+        Route::prefix('escalas')->group(function () {
+            Route::get('medicao', [EscalasEscalasController::class, 'medicao']);
+        });
     });
 });
+
+// Route::prefix('web')->group(function () {
+//     Route::prefix('escalas')->group(function () {
+//         Route::get('medicao', [EscalasEscalasController::class, 'medicao']);
+//     });
+// });

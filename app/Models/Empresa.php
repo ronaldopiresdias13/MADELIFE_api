@@ -17,4 +17,9 @@ class Empresa extends Model
     {
         return $this->hasMany(Acesso::class)->where('ativo', true);
     }
+
+    public function cnabs()
+    {
+        return $this->hasMany(RegistroCnab::class,'empresa_id','id');
+    }
 }

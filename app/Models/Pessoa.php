@@ -90,4 +90,9 @@ class Pessoa extends Model
     {
         return $this->hasMany(Tipopessoa::class);
     }
+
+    public function cnabpessoas()
+    {
+        return $this->hasMany(CnabPessoa::class,'pessoa_id','id');
+    }
 }
