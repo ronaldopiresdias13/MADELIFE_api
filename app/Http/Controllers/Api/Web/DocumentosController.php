@@ -97,7 +97,7 @@ class DocumentosController extends Controller
             $upload = $file->storeAs($caminho, $nome);
             $nomeOriginal = $file->getClientOriginalName();
             if ($upload) {
-                $empresa_id = Auth::user()->pessoa->prestador->empresa_id;
+                $empresa_id = Auth::user()->pessoa->profissional->empresa_id;
                 DB::transaction(function () use ($request, $nomeOriginal, $caminho, $nome, $empresa_id) {
                     Documento::create(
                         [
