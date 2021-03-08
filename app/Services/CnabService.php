@@ -21,8 +21,7 @@ class CnabService
         'agencia' => '00703',
         'conta' => '74437',
         'digito_conta' => '9',
-
-        'convenio' => '00333800008302521456',
+        'convenio' => '00000000000000074437',
         'nome' => 'SICREDI'
     ];
 
