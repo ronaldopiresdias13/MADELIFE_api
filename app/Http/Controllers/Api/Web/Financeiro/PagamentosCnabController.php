@@ -16,6 +16,7 @@ class PagamentosCnabController extends Controller
      */
     public function listPagamentosByEmpresaId(Request $request)
     {
+        // return $request->tipo;
         $result = [];
         $pagamentos = [];
         $user = $request->user();
@@ -24,20 +25,21 @@ class PagamentosCnabController extends Controller
             $pagamentos = Pagamentoexterno::with(['pessoa.dadosbancario.banco'])
                 ->where('empresa_id', $empresa_id)
                 ->where('status', false)
-                ->where('situacao', "!=", "Criado")
-                ->whereBetween('dataentrada', [$request->data_ini, $request->data_fim])
+                // ->where('situacao', "!=", "Criado")
+                ->whereBetween('datainicio', [$request->data_ini, $request->data_fim])
                 ->get();
         }
         if ($request->tipo == "Profissional") {
             $pagamentos = Pagamentointerno::with(['pessoa.dadosbancario.banco'])
                 ->where('empresa_id', $empresa_id)
                 ->where('status', false)
-                ->where('situacao', "!=", "Criado")
-                ->whereBetween('dataentrada', [$request->data_ini, $request->data_fim])
+                // ->where('situacao', "!=", "Criado")
+                ->whereBetween('datainicio', [$request->data_ini, $request->data_fim])
                 ->get();
-        } else {
-            return $result;
         }
+        // else {
+        //     return $result;
+        // }
 
         // ->groupBy("pessoa_id");
         // ->keyBy("pessoa_id")
