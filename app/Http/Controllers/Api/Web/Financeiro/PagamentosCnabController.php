@@ -57,14 +57,20 @@ class PagamentosCnabController extends Controller
                 $array = [
                     'profissional' => $pagamento->pessoa_id,
                     'nome'         => $pagamento->pessoa->nome,
-                    'pagamentos'   => [$pagamento]
+                    'pagamentos'   => [$pagamento],
+                    'situacao'     => $pagamento->situacao,
+                    // 'valor'        => $request->tipo == "Prestador" ? array_reduce($pagamento->subtotal, "sum") : (($pagamento->salario + $pagamento->proventos) - $pagamento->descontos)
                 ];
                 array_push($result, $array);
             }
         }
         return $result;
     }
-
+    public function sum($carry, $item)
+    {
+        $carry += $item;
+        return $carry;
+    }
     /**
      * Store a newly created resource in storage.
      *
