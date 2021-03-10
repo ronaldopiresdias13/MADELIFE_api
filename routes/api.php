@@ -970,6 +970,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
         Route::prefix('financeiro')->group(function () {
             Route::get('pagamentos/pessoas', [PagamentosCnabController::class, 'listPagamentosByEmpresaId']);
+            Route::get('pagamentos/cnab/groupByPagamentoByMesAndEmpresaId', [PagamentosCnabController::class, 'groupByPagamentoByMesAndEmpresaId']);
         });
     });
 });
