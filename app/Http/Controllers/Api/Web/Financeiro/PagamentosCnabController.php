@@ -124,7 +124,6 @@ class PagamentosCnabController extends Controller
             }
         }
         return $result;
-        # code...
     }
     /**
      * Store a newly created resource in storage.
