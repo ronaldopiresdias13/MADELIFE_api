@@ -66,7 +66,8 @@ class PagamentointernosController extends Controller
                 'datafim'    => $request['datafim'],
                 'salario'    => $request['salario'],
                 'proventos'  => $request['proventos'],
-                'descontos'  => $request['descontos']
+                'descontos'  => $request['descontos'],
+                'situacao'   => 'Pendente'
             ]
         );
     }
@@ -99,7 +100,8 @@ class PagamentointernosController extends Controller
                         'datafim'    => $item['datafim'],
                         'salario'    => $item['salario'],
                         'proventos'  => $item['proventos'],
-                        'descontos'  => $item['descontos']
+                        'descontos'  => $item['descontos'],
+                        'situacao'   => 'Pendente'
                     ]
                 );
             }
