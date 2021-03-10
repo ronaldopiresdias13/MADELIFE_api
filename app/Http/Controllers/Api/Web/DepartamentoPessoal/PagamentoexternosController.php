@@ -160,14 +160,15 @@ class PagamentoexternosController extends Controller
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-        $pagamentos = Pagamentoexterno::with('pessoa')
+        $pagamentosexternos = Pagamentoexterno::with('pessoa')
             ->where('empresa_id', $empresa_id)
             ->where('status', false)
             ->get()
             ->groupBy(function ($val) {
                 return Carbon::parse($val->datainicio)->format('Y-m');
             });
-        return $pagamentos;
+        // $pagamentosternos = Pagamentointerno::with('pessoa')
+        return $pagamentosexternos;
     }
     /**
      * Store a newly created resource in storage.

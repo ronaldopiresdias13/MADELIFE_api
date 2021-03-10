@@ -244,7 +244,8 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('escalas/dashboardPegarTodosOsRegistrosPorIdDaEmpresa', 'Api\Web\Convenio\EscalasController@dashboardConvenio');
         });
         Route::prefix('diretoria')->group(function () {
-            Route::get('groupByPagamentoByMesAndEmpresaId', 'Api\Web\DepartamentoPessoal\PagamentoexternosController@groupByPagamentoByMesAndEmpresaId');
+            Route::get('groupByPagamentoByMesAndEmpresaId/externo', 'Api\Web\DepartamentoPessoal\PagamentoexternosController@groupByPagamentoByMesAndEmpresaId');
+            Route::get('groupByPagamentoByMesAndEmpresaId/interno', 'Web\PagamentointernosController@groupByPagamentoByMesAndEmpresaId');
             Route::post('atualizarSituacaoPagamentoDiretoria', 'Api\Web\DepartamentoPessoal\PagamentoexternosController@atualizarSituacaoPagamentoDiretoria');
         });
         Route::prefix('financeiro')->group(function () {
