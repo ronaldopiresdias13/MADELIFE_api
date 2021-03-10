@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Novo\Web\PrestadoresController;
 use App\Http\Controllers\Api\Novo\Web\TranscricaoProdutoController;
 use App\Http\Controllers\Api\Web\Compras\ProdutoController;
 use App\Http\Controllers\Api\Web\DepartamentoPessoal\PagamentoexternosController;
+use App\Http\Controllers\Api\Web\Financeiro\PagamentosCnabController;
 use App\Http\Controllers\Web\Escalas\EscalasController as EscalasEscalasController;
 use App\Http\Controllers\Web\Formacoes\FormacoesController;
 use App\Http\Controllers\Web\Ordemservicos\OrdemservicosController;
@@ -255,7 +256,6 @@ Route::group(['middleware' => 'auth:api'], function () {
 
             Route::get('downloadCnab/{id}', 'Api\Web\Financeiro\CnabsController@downloadCnab');
             Route::get('getCnabs', 'Api\Web\Financeiro\CnabsController@getCnabs');
-
         });
         Route::prefix('gestaoOrcamentaria')->group(function () {
             Route::get('clientes/list/{empresa}', 'Api\Web\GestaoOrcamentaria\ClientesController@index');
@@ -966,6 +966,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
         Route::prefix('ordemservicos')->group(function () {
             Route::get('', [OrdemservicosController::class, 'index']);
+        });
+        Route::prefix('financeiro')->group(function () {
+            Route::get('pagamentos/pessoas', [PagamentosCnabController::class, 'listPagamentosByEmpresaId']);
         });
     });
 });
