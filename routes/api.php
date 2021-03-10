@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Web\Compras\ProdutoController;
 use App\Http\Controllers\Api\Web\DepartamentoPessoal\PagamentoexternosController;
 use App\Http\Controllers\Web\Escalas\EscalasController as EscalasEscalasController;
 use App\Http\Controllers\Web\Formacoes\FormacoesController;
+use App\Http\Controllers\Web\Ordemservicos\OrdemservicosController;
 use App\Http\Controllers\Web\PagamentointernosController;
 use App\Http\Controllers\Web\Prestadores\PrestadoresController as PrestadoresPrestadoresController;
 use Illuminate\Support\Facades\Route;
@@ -962,6 +963,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
         Route::prefix('escalas')->group(function () {
             Route::get('medicao', [EscalasEscalasController::class, 'medicao']);
+        });
+        Route::prefix('ordemservicos')->group(function () {
+            Route::get('', [OrdemservicosController::class, 'index']);
         });
     });
 });
