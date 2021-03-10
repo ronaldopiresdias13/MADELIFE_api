@@ -126,14 +126,28 @@ class PagamentosCnabController extends Controller
         return $result;
     }
     /**
-     * Store a newly created resource in storage.
+     * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Pagamentoexterno  $pagamentoexterno
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function atualizarSituacaoPagamentoDiretoria(Request $request)
     {
-        //
+        // return $request;
+        DB::transaction(function () use ($request) {
+            foreach ($request['pagamentos'] as $key => $pag) {
+                if ($pag['tipo'] == "Prestador Externo") {
+                    $pagamento = Pagamentoexterno::find($pag['id']);
+                    $pagamento->situacao = $request['situacao'];
+                    $pagamento->update();
+                } else {
+                    $pagamento = Pagamentointerno::find($pag['id']);
+                    $pagamento->situacao = $request['situacao'];
+                    $pagamento->update();
+                }
+            }
+        });
     }
 
     /**
