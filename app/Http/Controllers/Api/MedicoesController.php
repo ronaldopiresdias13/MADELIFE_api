@@ -120,6 +120,8 @@ class MedicoesController extends Controller
             'data1' => $request['data1'],
             'data2' => $request['data2'],
             'valor' => $request['valor'],
+            'adicional' => $request['adicional'],
+            'desconto' => $request['desconto'],
             'situacao' => $request['situacao'],
             'observacao' => $request['observacao'],
             'status' => $request['status']
@@ -221,6 +223,8 @@ class MedicoesController extends Controller
                     'data1'           => $request['data1'],
                     'data2'           => $request['data2'],
                     'valor'           => $request['valor'],
+                    'adicional'       => $request['adicional'],
+                    'desconto'        => $request['desconto'],
                     'situacao'        => $request['situacao'],
                     'observacao'      => $request['observacao'],
                     'status'          => $request['status'],
