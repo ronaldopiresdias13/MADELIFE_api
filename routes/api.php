@@ -247,7 +247,6 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::prefix('diretoria')->group(function () {
             Route::get('groupByPagamentoByMesAndEmpresaId/externo', 'Api\Web\DepartamentoPessoal\PagamentoexternosController@groupByPagamentoByMesAndEmpresaId');
             Route::get('groupByPagamentoByMesAndEmpresaId/interno', 'Web\PagamentointernosController@groupByPagamentoByMesAndEmpresaId');
-            Route::post('atualizarSituacaoPagamentoDiretoria', 'Api\Web\DepartamentoPessoal\PagamentoexternosController@atualizarSituacaoPagamentoDiretoria');
         });
         Route::prefix('financeiro')->group(function () {
             Route::get('listPagamentosByEmpresaId', 'Api\Web\Financeiro\PagamentopessoasController@listPagamentosByEmpresaId');
@@ -971,6 +970,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::prefix('financeiro')->group(function () {
             Route::get('pagamentos/pessoas', [PagamentosCnabController::class, 'listPagamentosByEmpresaId']);
             Route::get('pagamentos/cnab/groupByPagamentoByMesAndEmpresaId', [PagamentosCnabController::class, 'groupByPagamentoByMesAndEmpresaId']);
+            Route::post('atualizarSituacaoPagamentoDiretoria', [PagamentosCnabController::class, 'atualizarSituacaoPagamentoDiretoria']);
         });
     });
 });
