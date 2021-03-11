@@ -63,4 +63,17 @@ class CnabsController extends Controller
         return response()->download($file,$name,$headers);
 
     }
+
+
+    public function mudarSituacao(CnabRequest $request){
+        $data=$request->validated();
+
+        // $user = $request->user();
+
+        $registro=RegistroCnab::find($data['cnab_id']);
+        $registro->fill($data)->save();
+
+        return response()->json(['status'=>true]);
+
+    }
 }
