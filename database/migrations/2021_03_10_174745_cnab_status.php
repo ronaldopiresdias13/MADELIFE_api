@@ -12,20 +12,21 @@ class CnabStatus extends Migration
      * @return void
      */
     public function up()
-        {
-    
-            Schema::table('registrocnabs', function (Blueprint $table) {
-                $table->text('justificativa')->nullable();
-            });
-        }
-    
-        /**
-         * Reverse the migrations.
-         *
-         * @return void
-         */
-        public function down()
-        {
-            Schema::dropIfExists('registrocnabs');
-        }
+    {
+        Schema::table('registrocnabs', function (Blueprint $table) {
+            $table->text('justificativa')->nullable();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('registrocnabs', function (Blueprint $table) {
+            $table->dropColumn('justificativa');
+        });
+    }
 }
