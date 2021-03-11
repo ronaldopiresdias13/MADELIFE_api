@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\Novo\Web\TranscricaoProdutoController;
 use App\Http\Controllers\Api\Web\Compras\ProdutoController;
 use App\Http\Controllers\Api\Web\DepartamentoPessoal\PagamentoexternosController;
 use App\Http\Controllers\Api\Web\Financeiro\PagamentosCnabController;
+use App\Http\Controllers\Api\Web\GestaoOrcamentaria\PacotesController;
 use App\Http\Controllers\Web\Escalas\EscalasController as EscalasEscalasController;
 use App\Http\Controllers\Web\Formacoes\FormacoesController;
 use App\Http\Controllers\Web\Ordemservicos\OrdemservicosController;
@@ -972,6 +973,10 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('pagamentos/pessoas', [PagamentosCnabController::class, 'listPagamentosByEmpresaId']);
             Route::get('pagamentos/cnab/groupByPagamentoByMesAndEmpresaId', [PagamentosCnabController::class, 'groupByPagamentoByMesAndEmpresaId']);
             Route::post('atualizarSituacaoPagamentoDiretoria', [PagamentosCnabController::class, 'atualizarSituacaoPagamentoDiretoria']);
+        });
+        Route::prefix('gestaoOrcamentaria')->group(function () {
+            Route::get('pacotes', [PacotesController::class, 'index']);
+            Route::post('pacotes', [PacotesController::class, 'store']);
         });
     });
 });
