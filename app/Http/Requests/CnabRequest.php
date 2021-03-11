@@ -44,22 +44,22 @@ class CnabRequest extends FormRequest
         switch (strtolower($this->route()->getActionMethod())):
             case 'gerarcnab':
                 return [
-                    'dados'=>'required|array',
-                    'dados.*.codigo' => ['required','max:3'],
-                    'dados.*.conta' => ['required','max:12'],
-                    'dados.*.agencia' => ['required','max:5'],
-                    'dados.*.digito' => ['required','size:1'],
+                    'dados' => 'required|array',
+                    'dados.*.codigo' => ['required', 'max:3'],
+                    'dados.*.conta' => ['required', 'max:12'],
+                    'dados.*.agencia' => ['required', 'max:5'],
+                    'dados.*.digito' => ['required', 'size:1'],
                     'dados.*.profissional_id' => ['required'],
-                    'mes'=>'required|date_format:Y-m',
-                    'data'=>'required|date_format:Y-m-d|after:'.Carbon::now()->subDay(),
-                    'banco'=>'required',
-                    'observacao'=>'required',
+                    'mes' => 'required|date_format:Y-m',
+                    'data' => 'required|date_format:Y-m-d|after:' . Carbon::now()->subDay(),
+                    'banco' => 'required',
+                    'observacao' => 'required',
                 ];
-                break;
-          
-            default:
+        break;
+
+        default:
                 return [];
-                break;
+        break;
         endswitch;
     }
 }
