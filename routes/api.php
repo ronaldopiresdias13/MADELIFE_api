@@ -979,7 +979,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
         Route::prefix('gestaoOrcamentaria')->group(function () {
             Route::get('pacotes', [PacotesController::class, 'index']);
+            Route::get('pacotes/{pacote}', [PacotesController::class, 'show']);
             Route::post('pacotes', [PacotesController::class, 'store']);
+            Route::put('pacotes/{pacote}', [PacotesController::class, 'update']);
         });
     });
 });
