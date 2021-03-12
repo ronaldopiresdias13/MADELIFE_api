@@ -15,7 +15,6 @@ use Illuminate\Validation\ValidationException;
 
 class CnabService
 {
-
     protected $sicred = [
         'codigo' => '748',
         'agencia' => '00703',
@@ -44,7 +43,7 @@ class CnabService
 
 
 
-    public function __construct($banco, $dados, $mes,$observacao, $data, User $user)
+    public function __construct($banco, $dados, $mes, $observacao, $data, User $user)
     {
         $this->banco = $banco;
         $this->dados = $dados;
@@ -52,7 +51,6 @@ class CnabService
         $this->data = $data;
         $this->user = $user;
         $this->observacao = $observacao;
-
     }
 
 
@@ -73,8 +71,6 @@ class CnabService
             $quantidade_moeda = 0;
             $dados_pagamento = [];
             foreach ($this->dados as $dado) {
-
-
                 $pagamentos = Pagamentopessoa::with(['pessoa.dadosbancario.banco'])
                     ->where('empresa_id', $empresa_id)
                     ->where('pessoa_id', '=', $dado['profissional_id'])
@@ -84,18 +80,18 @@ class CnabService
                     ->get()->sum('valor');
 
                 array_push($dados_pagamento, [
-                    'user_id' => $dado['profissional_id'], 
+                    'user_id' => $dado['profissional_id'],
                     'valor' => $pagamentos,
-                    'conta'=>$dado['conta'],
-                    'digito'=>$dado['digito'],
-                    'agencia'=>$dado['agencia'],
-                    'codigo'=>$dado['codigo'],
+                    'conta' => $dado['conta'],
+                    'digito' => $dado['digito'],
+                    'agencia' => $dado['agencia'],
+                    'codigo' => $dado['codigo'],
                 ]);
                 Log::info($dado['profissional_id']);
 
-                    Log::info($pagamentos);
+                Log::info($pagamentos);
                 $soma_valor += $pagamentos;
-                $cnab .= "\n" . $this->registro_detalhes_a_santander($dado, 1, 0, number_format($pagamentos,2,'',''));
+                $cnab .= "\n" . $this->registro_detalhes_a_santander($dado, 1, 0, number_format($pagamentos, 2, '', ''));
                 $cnab .= "\n" . $this->registro_detalhes_b_santander($dado, 1);
             }
 
@@ -129,8 +125,8 @@ class CnabService
                 ])->save();
             }
 
-            return ['status'=>true, 'cnab' => $registro_cnab->id];
-        } else if ($this->banco == '748') {
+            return ['status' => true, 'cnab' => $registro_cnab->id];
+        } elseif ($this->banco == '748') {
             $cnab = '';
 
             $cnab .= $this->header_arquivo_sicredi();
@@ -141,8 +137,6 @@ class CnabService
             $dados_pagamento = [];
 
             foreach ($this->dados as $dado) {
-
-
                 $pagamentos = Pagamentopessoa::with(['pessoa.dadosbancario.banco'])
                     ->where('empresa_id', $empresa_id)
                     ->where('pessoa_id', '=', $dado['profissional_id'])
@@ -150,19 +144,19 @@ class CnabService
                     ->where('ativo', true)
                     ->where(DB::raw("date_format(str_to_date(pagamentopessoas.periodo1, '%Y-%m-%d'), '%Y-%m')"), "=", $this->mes)
                     ->get()->sum('valor');
-                    Log::info($dado['profissional_id']);
+                Log::info($dado['profissional_id']);
 
-                    Log::info($pagamentos);
-                    array_push($dados_pagamento, [
-                        'user_id' => $dado['profissional_id'], 
-                        'valor' => $pagamentos,
-                        'conta'=>$dado['conta'],
-                        'digito'=>$dado['digito'],
-                        'agencia'=>$dado['agencia'],
-                        'codigo'=>$dado['codigo'],
-                    ]);
+                Log::info($pagamentos);
+                array_push($dados_pagamento, [
+                    'user_id' => $dado['profissional_id'],
+                    'valor' => $pagamentos,
+                    'conta' => $dado['conta'],
+                    'digito' => $dado['digito'],
+                    'agencia' => $dado['agencia'],
+                    'codigo' => $dado['codigo'],
+                ]);
                 $soma_valor += $pagamentos;
-                $cnab .= "\n" .  $this->registro_detalhes_a_sicred($dado, 1, 0, number_format($pagamentos,2,'',''));
+                $cnab .= "\n" .  $this->registro_detalhes_a_sicred($dado, 1, 0, number_format($pagamentos, 2, '', ''));
                 $cnab .= "\n" . $this->registro_detalhes_b_sicred($dado, 1);
             }
 
@@ -197,11 +191,10 @@ class CnabService
                 ])->save();
             }
 
-            return ['status'=>true, 'cnab' => $registro_cnab->id];
+            return ['status' => true, 'cnab' => $registro_cnab->id];
         }
-        return ['status'=>false];
+        return ['status' => false];
         //trailer de arquivo
-
     }
 
     public function header_arquivo_santander()
@@ -362,7 +355,8 @@ class CnabService
 
         $cod_remessa_retorno = "1"; //143 a 143
 
-        $data_geracao_arquivo = Carbon::now()->format('dmY');; //144 a 151 /DDMMAAAA
+        $data_geracao_arquivo = Carbon::now()->format('dmY');
+        ; //144 a 151 /DDMMAAAA
 
         $hora_geracao_arquivo = Carbon::now()->format('His'); //152 a 157 //HHMMSS
 
@@ -607,11 +601,11 @@ class CnabService
         }
 
 
-        // $cep = "15040"; 
+        // $cep = "15040";
         $cep = "     ";
 
 
-        // $complemento_cep = "644"; 
+        // $complemento_cep = "644";
         $complemento_cep = "   ";
 
 
@@ -752,11 +746,11 @@ class CnabService
         }
 
 
-        // $cep = "15040"; 
+        // $cep = "15040";
         $cep = "     ";
 
 
-        // $complemento_cep = "644"; 
+        // $complemento_cep = "644";
         $complemento_cep = "   ";
 
 
@@ -859,7 +853,7 @@ class CnabService
             $seu_numero = $seu_numero . ' ';
         }
 
-        $data_pagamento = Carbon::createFromFormat('Y-m-d',$this->data)->format('dmY');
+        $data_pagamento = Carbon::createFromFormat('Y-m-d', $this->data)->format('dmY');
 
         $tipo_moeda = 'BRL';
 
@@ -899,7 +893,6 @@ class CnabService
         for ($i = 163; $i <= 177; $i++) {
             $valor_real = "0" . $valor_real;
             // $valor_real = " " . $valor_real;
-
         }
 
 
@@ -1010,7 +1003,7 @@ class CnabService
             $seu_numero = $seu_numero . ' ';
         }
 
-        $data_pagamento = Carbon::createFromFormat('Y-m-d',$this->data)->format('dmY');
+        $data_pagamento = Carbon::createFromFormat('Y-m-d', $this->data)->format('dmY');
 
         $tipo_moeda = 'BRL';
 
@@ -1041,7 +1034,6 @@ class CnabService
         //verificar
         for ($i = 155; $i <= 162; $i++) {
             $data_real_pagamento = "0" . $data_real_pagamento;
-
         }
 
         $valor_real = "";
@@ -1110,7 +1102,7 @@ class CnabService
         $tipo_inscricao = '';
         if (Str::length($pessoa->cpfcnpj) == 11) {
             $tipo_inscricao = '1';
-        } else if (Str::length($pessoa->cpfcnpj) == 14) {
+        } elseif (Str::length($pessoa->cpfcnpj) == 14) {
             $tipo_inscricao = '2';
         }
 
@@ -1270,7 +1262,7 @@ class CnabService
         $tipo_inscricao = '';
         if (Str::length($pessoa->cpfcnpj) == 11) {
             $tipo_inscricao = '1';
-        } else if (Str::length($pessoa->cpfcnpj) == 14) {
+        } elseif (Str::length($pessoa->cpfcnpj) == 14) {
             $tipo_inscricao = '2';
         }
 
@@ -1295,7 +1287,6 @@ class CnabService
         for ($i = 63 + $num; $i <= 67; $i++) {
             $numero = "0" . $numero;
             // $numero = " " . $numero;
-
         }
 
         $complemento = '';

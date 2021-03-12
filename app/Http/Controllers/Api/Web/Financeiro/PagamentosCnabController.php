@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Pagamentoexterno;
 use App\Models\Pagamentointerno;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PagamentosCnabController extends Controller
 {
@@ -59,27 +60,94 @@ class PagamentosCnabController extends Controller
                     'nome'         => $pagamento->pessoa->nome,
                     'pagamentos'   => [$pagamento],
                     'situacao'     => $pagamento->situacao,
-                    // 'valor'        => $request->tipo == "Prestador" ? array_reduce($pagamento->subtotal, "sum") : (($pagamento->salario + $pagamento->proventos) - $pagamento->descontos)
                 ];
                 array_push($result, $array);
             }
         }
         return $result;
     }
-    public function sum($carry, $item)
-    {
-        $carry += $item;
-        return $carry;
-    }
     /**
-     * Store a newly created resource in storage.
+     * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function groupByPagamentoByMesAndEmpresaId(Request $request)
     {
-        //
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        $pagamentosexternos = DB::select(
+            "(
+	            SELECT  DATE_FORMAT(pge.datainicio, '%Y-%m') AS periodo, pge.id, p.nome, pge.subtotal AS valor, pge.situacao, 'Prestador Externo' AS tipo FROM pagamentoexternos AS pge
+	            INNER JOIN pessoas AS p
+	            ON p.id = pge.pessoa_id
+	            WHERE pge.empresa_id = ?
+	            AND pge.`status` = 0
+            )
+            UNION ALL
+            (
+            	SELECT  DATE_FORMAT(pgi.datainicio, '%Y-%m') AS periodo, pgi.id, p.nome, (pgi.salario + pgi.proventos - pgi.descontos ) AS valor, pgi.situacao, 'Profissional Interno' AS tipo FROM pagamentointernos AS pgi
+            	INNER JOIN pessoas AS p
+            	ON p.id = pgi.pessoa_id
+            	WHERE pgi.empresa_id = ?
+            	AND pgi.`status` = 0
+            )",
+            [
+                $empresa_id,
+                $empresa_id,
+            ]
+        );
+        return $this->groupByPagamentos($pagamentosexternos);
+    }
+    public function groupByPagamentos($pagamentos)
+    {
+        $result = [];
+        foreach ($pagamentos as $key => $pagamento) {
+            $tem = false;
+            $array['total'] = 0;
+            foreach ($result as $key => $r) {
+                if ($r['periodo'] == $pagamento->periodo && $r['tipo'] == $pagamento->tipo) {
+                    array_push($result[$key]['pagamentos'], $pagamento);
+                    $result[$key]['total'] += $pagamento->valor;
+                    $tem = true;
+                    break;
+                }
+            }
+            if (!$tem) {
+                $array['total'] += $pagamento->valor;
+                $array = [
+                    'periodo' => $pagamento->periodo,
+                    'tipo'         => $pagamento->tipo,
+                    'pagamentos'   => [$pagamento],
+                    'total'     => $array['total'],
+                ];
+                array_push($result, $array);
+            }
+        }
+        return $result;
+    }
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Pagamentoexterno  $pagamentoexterno
+     * @return \Illuminate\Http\Response
+     */
+    public function atualizarSituacaoPagamentoDiretoria(Request $request)
+    {
+        // return $request;
+        DB::transaction(function () use ($request) {
+            foreach ($request['pagamentos'] as $key => $pag) {
+                if ($pag['tipo'] == "Prestador Externo") {
+                    $pagamento = Pagamentoexterno::find($pag['id']);
+                    $pagamento->situacao = $request['situacao'];
+                    $pagamento->update();
+                } else {
+                    $pagamento = Pagamentointerno::find($pag['id']);
+                    $pagamento->situacao = $request['situacao'];
+                    $pagamento->update();
+                }
+            }
+        });
     }
 
     /**

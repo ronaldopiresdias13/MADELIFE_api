@@ -8,8 +8,10 @@ use App\Http\Controllers\Api\Novo\Web\TranscricaoProdutoController;
 use App\Http\Controllers\Api\Web\Compras\ProdutoController;
 use App\Http\Controllers\Api\Web\DepartamentoPessoal\PagamentoexternosController;
 use App\Http\Controllers\Api\Web\Financeiro\PagamentosCnabController;
+use App\Http\Controllers\Api\Web\GestaoOrcamentaria\PacotesController;
 use App\Http\Controllers\Web\Escalas\EscalasController as EscalasEscalasController;
 use App\Http\Controllers\Web\Formacoes\FormacoesController;
+use App\Http\Controllers\Web\Ordemservicos\OrdemservicosController;
 use App\Http\Controllers\Web\PagamentointernosController;
 use App\Http\Controllers\Web\Prestadores\PrestadoresController as PrestadoresPrestadoresController;
 use Illuminate\Support\Facades\Route;
@@ -244,14 +246,15 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('escalas/dashboardPegarTodosOsRegistrosPorIdDaEmpresa', 'Api\Web\Convenio\EscalasController@dashboardConvenio');
         });
         Route::prefix('diretoria')->group(function () {
-            Route::get('groupByPagamentoByMesAndEmpresaId', 'Api\Web\DepartamentoPessoal\PagamentoexternosController@groupByPagamentoByMesAndEmpresaId');
-            Route::post('atualizarSituacaoPagamentoDiretoria', 'Api\Web\DepartamentoPessoal\PagamentoexternosController@atualizarSituacaoPagamentoDiretoria');
+            Route::get('groupByPagamentoByMesAndEmpresaId/externo', 'Api\Web\DepartamentoPessoal\PagamentoexternosController@groupByPagamentoByMesAndEmpresaId');
+            Route::get('groupByPagamentoByMesAndEmpresaId/interno', 'Web\PagamentointernosController@groupByPagamentoByMesAndEmpresaId');
         });
         Route::prefix('financeiro')->group(function () {
             Route::get('listPagamentosByEmpresaId', 'Api\Web\Financeiro\PagamentopessoasController@listPagamentosByEmpresaId');
             Route::get('getCategorias', 'Api\Web\Financeiro\CnabsController@getCategorias');
 
             Route::post('gerarCnab', 'Api\Web\Financeiro\CnabsController@gerarCnab');
+            Route::post('mudarSituacao', 'Api\Web\Financeiro\CnabsController@mudarSituacao');
 
             Route::get('downloadCnab/{id}', 'Api\Web\Financeiro\CnabsController@downloadCnab');
             Route::get('getCnabs', 'Api\Web\Financeiro\CnabsController@getCnabs');
@@ -301,8 +304,11 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::post('escalas/updateServicoOfEscala/{escala}', 'Api\Web\DepartamentoPessoal\EscalasController@updateServicoOfEscala');
             Route::get('buscarPagamentosPessoaPorPeriodoEmpresaId', 'Api\Web\DepartamentoPessoal\PagamentopessoasController@buscarPagamentosPessoaPorPeriodoEmpresaId');
             Route::get('buscalistadeconselhospodidpessoa/{pessoa}', 'Api\Web\PrestadoresController@buscalistadeconselhospodidpessoa');
+            Route::get('buscalistadebancospodidpessoa/{pessoa}', 'Api\Web\PrestadoresController@buscalistadebancospodidpessoa');
             Route::post('salvarconselho', 'Api\Web\PrestadoresController@salvarconselho');
+            Route::post('salvarbanco', 'Api\Web\PrestadoresController@salvarbanco');
             Route::delete('deletarconselho/{conselho}', 'Api\Web\PrestadoresController@deletarconselho');
+            Route::delete('deletarbanco/{dadosbancario}', 'Api\Web\PrestadoresController@deletarbanco');
         });
 
         Route::prefix('recursosHumanos')->group(function () {
@@ -963,8 +969,17 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::prefix('escalas')->group(function () {
             Route::get('medicao', [EscalasEscalasController::class, 'medicao']);
         });
+        Route::prefix('ordemservicos')->group(function () {
+            Route::get('', [OrdemservicosController::class, 'index']);
+        });
         Route::prefix('financeiro')->group(function () {
             Route::get('pagamentos/pessoas', [PagamentosCnabController::class, 'listPagamentosByEmpresaId']);
+            Route::get('pagamentos/cnab/groupByPagamentoByMesAndEmpresaId', [PagamentosCnabController::class, 'groupByPagamentoByMesAndEmpresaId']);
+            Route::post('atualizarSituacaoPagamentoDiretoria', [PagamentosCnabController::class, 'atualizarSituacaoPagamentoDiretoria']);
+        });
+        Route::prefix('gestaoOrcamentaria')->group(function () {
+            Route::get('pacotes', [PacotesController::class, 'index']);
+            Route::post('pacotes', [PacotesController::class, 'store']);
         });
     });
 });

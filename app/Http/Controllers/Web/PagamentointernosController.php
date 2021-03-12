@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pagamentointerno;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -140,5 +141,25 @@ class PagamentointernosController extends Controller
     public function destroy(Pagamentointerno $pagamentointerno)
     {
         $pagamentointerno->delete();
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function groupByPagamentoByMesAndEmpresaId(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        $pagamentosexternos = Pagamentointerno::with('pessoa')
+            ->where('empresa_id', $empresa_id)
+            ->where('status', false)
+            ->get()
+            ->groupBy(function ($val) {
+                return Carbon::parse($val->datainicio)->format('Y-m');
+            });
+        // $pagamentosternos = Pagamentointerno::with('pessoa')
+        return $pagamentosexternos;
     }
 }
