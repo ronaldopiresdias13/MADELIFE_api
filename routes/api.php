@@ -304,8 +304,11 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::post('escalas/updateServicoOfEscala/{escala}', 'Api\Web\DepartamentoPessoal\EscalasController@updateServicoOfEscala');
             Route::get('buscarPagamentosPessoaPorPeriodoEmpresaId', 'Api\Web\DepartamentoPessoal\PagamentopessoasController@buscarPagamentosPessoaPorPeriodoEmpresaId');
             Route::get('buscalistadeconselhospodidpessoa/{pessoa}', 'Api\Web\PrestadoresController@buscalistadeconselhospodidpessoa');
+            Route::get('buscalistadebancospodidpessoa/{pessoa}', 'Api\Web\PrestadoresController@buscalistadebancospodidpessoa');
             Route::post('salvarconselho', 'Api\Web\PrestadoresController@salvarconselho');
+            Route::post('salvarbanco', 'Api\Web\PrestadoresController@salvarbanco');
             Route::delete('deletarconselho/{conselho}', 'Api\Web\PrestadoresController@deletarconselho');
+            Route::delete('deletarbanco/{dadosbancario}', 'Api\Web\PrestadoresController@deletarbanco');
         });
 
         Route::prefix('recursosHumanos')->group(function () {

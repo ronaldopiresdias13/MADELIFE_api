@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Web;
 use App\Models\Escala;
 use App\Http\Controllers\Controller;
 use App\Models\Conselho;
+use App\Models\Dadosbancario;
 use App\Models\Pessoa;
 use App\Models\Prestador;
 use Illuminate\Http\Request;
@@ -142,6 +143,10 @@ class PrestadoresController extends Controller
     {
         return Conselho::where('ativo', true)->where('pessoa_id', $pessoa->id)->get();
     }
+    public function buscalistadebancospodidpessoa(Pessoa $pessoa)
+    {
+        return Dadosbancario::with('banco')->where('ativo', true)->where('pessoa_id', $pessoa->id)->get();
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -159,6 +164,21 @@ class PrestadoresController extends Controller
             ]
         );
     }
+    public function salvarbanco(Request $request)
+    {
+        Dadosbancario::create(
+            [
+                'empresa_id' => $request['empresa_id'],
+                'banco_id'   => $request['banco']['id'],
+                'pessoa_id'  => $request['pessoa_id'],
+                'agencia'    => $request['agencia'],
+                'conta'      => $request['conta'],
+                'digito'     => $request['digito'],
+                'tipoconta'  => $request['tipoconta'],
+                'ativo'      => 1
+            ]
+        );
+    }
     /**
      * Remove the specified resource from storage.
      *
@@ -169,5 +189,10 @@ class PrestadoresController extends Controller
     {
         $conselho->ativo = false;
         $conselho->save();
+    }
+    public function deletarbanco(Dadosbancario $dadosbancario)
+    {
+        $dadosbancario->ativo = false;
+        $dadosbancario->save();
     }
 }
