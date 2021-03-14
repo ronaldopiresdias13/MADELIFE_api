@@ -20,7 +20,7 @@ class PacotesController extends Controller
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-        return Pacote::with(['produtos.produto', 'servicos.servico'])
+        return Pacote::with(['cliente.pessoa', 'produtos.produto', 'servicos.servico'])
             ->where('empresa_id', $empresa_id)
             ->get();
     }
@@ -41,6 +41,7 @@ class PacotesController extends Controller
                 [
                     'empresa_id' => $empresa_id,
                     'descricao' => $request['descricao'],
+                    'cliente_id' => $request['cliente_id'],
                 ]
             );
 
@@ -79,7 +80,7 @@ class PacotesController extends Controller
      */
     public function show(Pacote $pacote)
     {
-        return Pacote::with(['produtos.produto', 'servicos.servico'])->find($pacote->id);
+        return Pacote::with(['cliente.pessoa', 'produtos.produto', 'servicos.servico'])->find($pacote->id);
     }
 
     /**
@@ -95,6 +96,7 @@ class PacotesController extends Controller
         $empresa_id = $user->pessoa->profissional->empresa_id;
         DB::transaction(function () use ($request, $pacote) {
             $pacote->descricao = $request['descricao'];
+            $pacote->cliente_id = $request['cliente_id'];
             $pacote->save();
 
             if ($request->servicos) {
