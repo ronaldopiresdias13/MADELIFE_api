@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\AgendamentosController;
+use App\Http\Controllers\Api\App\v3_0_20\EmpresaPrestadorController;
+use App\Http\Controllers\Api\EmpresaPrestadorController as ApiEmpresaPrestadorController;
 use App\Http\Controllers\Api\Novo\Web\EscalasController;
 use App\Http\Controllers\Api\Novo\Web\OrdemservicoAcessoController;
 use App\Http\Controllers\Api\Novo\Web\PrestadoresController;
@@ -957,6 +959,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('web')->group(function () {
         Route::prefix('prestadores')->group(function () {
             Route::get('recrutamento', [PrestadoresPrestadoresController::class, 'listRecrutamento']);
+            Route::get('empresaPrestador/listaPrestadoresPorEmpresaIdEStatus', [ApiEmpresaPrestadorController::class, 'listaPrestadoresPorEmpresaIdEStatus']);
             Route::get('buscaprestadorexterno/{prestador}', [PrestadoresPrestadoresController::class, 'buscaprestadorexterno']);
         });
         Route::prefix('compras')->group(function () {
