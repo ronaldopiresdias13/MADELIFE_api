@@ -40,4 +40,8 @@ class Pacote extends Model
     {
         return $this->hasMany(Pacoteproduto::class, 'pacote_id');
     }
+    public function cliente()
+    {
+        return $this->belongsTo(Cliente::class);
+    }
 }

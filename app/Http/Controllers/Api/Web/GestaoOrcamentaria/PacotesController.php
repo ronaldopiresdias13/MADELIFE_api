@@ -19,8 +19,8 @@ class PacotesController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $empresa_id = $user->pessoa->profissional->empresa->id;
-        return Pacote::with(['produtos.produto', 'servicos.servico'])
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return Pacote::with(['cliente.pessoa', 'produtos.produto', 'servicos.servico'])
             ->where('empresa_id', $empresa_id)
             ->get();
     }
@@ -41,6 +41,7 @@ class PacotesController extends Controller
                 [
                     'empresa_id' => $empresa_id,
                     'descricao' => $request['descricao'],
+                    'cliente_id' => $request['cliente_id'],
                 ]
             );
 
@@ -79,7 +80,7 @@ class PacotesController extends Controller
      */
     public function show(Pacote $pacote)
     {
-        //
+        return Pacote::with(['cliente.pessoa', 'produtos.produto', 'servicos.servico'])->find($pacote->id);
     }
 
     /**
@@ -91,7 +92,44 @@ class PacotesController extends Controller
      */
     public function update(Request $request, Pacote $pacote)
     {
-        //
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        DB::transaction(function () use ($request, $pacote) {
+            $pacote->descricao = $request['descricao'];
+            $pacote->cliente_id = $request['cliente_id'];
+            $pacote->save();
+
+            if ($request->servicos) {
+                foreach ($request->servicos as $key => $servico) {
+                    Pacoteservico::updateOrCreate(
+                        [
+                            'id'          => $servico['id'],
+                        ],
+                        [
+                            'id'          => $servico['id'],
+                            'servico_id'  => $servico['servico']['id'],
+                            'pacote_id'   => $pacote->id,
+                            'valor'       => $servico['valor']
+                        ]
+                    );
+                }
+            }
+            if ($request->produtos) {
+                foreach ($request->produtos as $key => $produto) {
+                    Pacoteproduto::updateOrCreate(
+                        [
+                            'id'          => $produto['id'],
+                        ],
+                        [
+                            'id'          => $produto['id'],
+                            'produto_id'  => $produto['produto']['id'],
+                            'pacote_id'   => $pacote->id,
+                            'valor'       => $produto['valor']
+                        ]
+                    );
+                }
+            }
+        });
     }
 
     /**
@@ -103,5 +141,13 @@ class PacotesController extends Controller
     public function destroy(Pacote $pacote)
     {
         //
+    }
+    public function excluirItemPacoteServico(Pacoteservico $pacoteservico)
+    {
+        $pacoteservico->delete();
+    }
+    public function excluirItemPacoteProduto(Pacoteproduto $pacoteproduto)
+    {
+        $pacoteproduto->delete();
     }
 }
