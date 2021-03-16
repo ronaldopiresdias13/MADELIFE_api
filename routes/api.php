@@ -944,6 +944,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::post('create', [PagamentoexternosController::class, 'create']);
             Route::post('createlist', [PagamentoexternosController::class, 'createlist']);
             Route::post('atualizarPagamentosExternos', [PagamentoexternosController::class, 'atualizarPagamentosExternos']);
+            Route::delete('apagarpagamento/{pagamentoexterno}', [PagamentoexternosController::class, 'apagarpagamento']);
         });
         Route::get('agendamentos', [AgendamentosController::class, 'index']);
         Route::post('agendamentos', [AgendamentosController::class, 'store']);
