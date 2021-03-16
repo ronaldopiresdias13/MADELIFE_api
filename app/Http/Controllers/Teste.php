@@ -15,9 +15,287 @@ class Teste extends Controller
 {
     public function teste(Request $request)
     {
+        $array =
+            '[
+            {
+                "codigo_ibge": 5200050,
+                "nome": "Abadia de Goiás",
+                "latitude": -16.7573,
+                "longitude": -49.4412,
+                "capital": false,
+                "codigo_uf": "GO"
+            },
+            {
+                "codigo_ibge": 3100104,
+                "nome": "Abadia dos Dourados",
+                "latitude": -18.4831,
+                "longitude": -47.3916,
+                "capital": false,
+                "codigo_uf": "MG"
+            },
+            {
+                "codigo_ibge": 5200100,
+                "nome": "Abadiânia",
+                "latitude": -16.197,
+                "longitude": -48.7057,
+                "capital": false,
+                "codigo_uf": "GO"
+            },
+            {
+                "codigo_ibge": 3100203,
+                "nome": "Abaeté",
+                "latitude": -19.1551,
+                "longitude": -45.4444,
+                "capital": false,
+                "codigo_uf": "MG"
+            },
+            {
+                "codigo_ibge": 1500107,
+                "nome": "Abaetetuba",
+                "latitude": -1.72183,
+                "longitude": -48.8788,
+                "capital": false,
+                "codigo_uf": "PA"
+            },
+            {
+                "codigo_ibge": 2300101,
+                "nome": "Abaiara",
+                "latitude": -7.34588,
+                "longitude": -39.0416,
+                "capital": false,
+                "codigo_uf": "CE"
+            },
+            {
+                "codigo_ibge": 2900108,
+                "nome": "Abaíra",
+                "latitude": -13.2488,
+                "longitude": -41.6619,
+                "capital": false,
+                "codigo_uf": "BA"
+            },
+            {
+                "codigo_ibge": 2900207,
+                "nome": "Abaré",
+                "latitude": -8.72073,
+                "longitude": -39.1162,
+                "capital": false,
+                "codigo_uf": "BA"
+            },
+            {
+                "codigo_ibge": 4100103,
+                "nome": "Abatiá",
+                "latitude": -23.3049,
+                "longitude": -50.3133,
+                "capital": false,
+                "codigo_uf": "PR"
+            },
+            {
+                "codigo_ibge": 4200051,
+                "nome": "Abdon Batista",
+                "latitude": -27.6126,
+                "longitude": -51.0233,
+                "capital": false,
+                "codigo_uf": "SC"
+            },
+            {
+                "codigo_ibge": 1500131,
+                "nome": "Abel Figueiredo",
+                "latitude": -4.95333,
+                "longitude": -48.3933,
+                "capital": false,
+                "codigo_uf": "PA"
+            },
+            {
+                "codigo_ibge": 4200101,
+                "nome": "Abelardo Luz",
+                "latitude": -26.5716,
+                "longitude": -52.3229,
+                "capital": false,
+                "codigo_uf": "SC"
+            },
+            {
+                "codigo_ibge": 3100302,
+                "nome": "Abre Campo",
+                "latitude": -20.2996,
+                "longitude": -42.4743,
+                "capital": false,
+                "codigo_uf": "MG"
+            },
+            {
+                "codigo_ibge": 2600054,
+                "nome": "Abreu e Lima",
+                "latitude": -7.90072,
+                "longitude": -34.8984,
+                "capital": false,
+                "codigo_uf": "PE"
+            },
+            {
+                "codigo_ibge": 1700251,
+                "nome": "Abreulândia",
+                "latitude": -9.62101,
+                "longitude": -49.1518,
+                "capital": false,
+                "codigo_uf": "TO"
+            },
+            {
+                "codigo_ibge": 3100401,
+                "nome": "Acaiaca",
+                "latitude": -20.359,
+                "longitude": -43.1439,
+                "capital": false,
+                "codigo_uf": "MG"
+            },
+            {
+                "codigo_ibge": 2100055,
+                "nome": "Açailândia",
+                "latitude": -4.94714,
+                "longitude": -47.5004,
+                "capital": false,
+                "codigo_uf": "MA"
+            },
+            {
+                "codigo_ibge": 2900306,
+                "nome": "Acajutiba",
+                "latitude": -11.6575,
+                "longitude": -38.0197,
+                "capital": false,
+                "codigo_uf": "BA"
+            },
+            {
+                "codigo_ibge": 1500206,
+                "nome": "Acará",
+                "latitude": -1.95383,
+                "longitude": -48.1985,
+                "capital": false,
+                "codigo_uf": "PA"
+            },
+            {
+                "codigo_ibge": 2300150,
+                "nome": "Acarape",
+                "latitude": -4.22083,
+                "longitude": -38.7055,
+                "capital": false,
+                "codigo_uf": "CE"
+            },
+            {
+                "codigo_ibge": 2300200,
+                "nome": "Acaraú",
+                "latitude": -2.88769,
+                "longitude": -40.1183,
+                "capital": false,
+                "codigo_uf": "CE"
+            },
+            {
+                "codigo_ibge": 2400109,
+                "nome": "Acari",
+                "latitude": -6.4282,
+                "longitude": -36.6347,
+                "capital": false,
+                "codigo_uf": "RN"
+            },
+            {
+                "codigo_ibge": 2200053,
+                "nome": "Acauã",
+                "latitude": -8.21954,
+                "longitude": -41.0831,
+                "capital": false,
+                "codigo_uf": "PI"
+            },
+            {
+                "codigo_ibge": 4300034,
+                "nome": "Aceguá",
+                "latitude": -31.8665,
+                "longitude": -54.1615,
+                "capital": false,
+                "codigo_uf": "RS"
+            },
+            {
+                "codigo_ibge": 2300309,
+                "nome": "Acopiara",
+                "latitude": -6.08911,
+                "longitude": -39.448,
+                "capital": false,
+                "codigo_uf": "CE"
+            },
+            {
+                "codigo_ibge": 5100102,
+                "nome": "Acorizal",
+                "latitude": -15.194,
+                "longitude": -56.3632,
+                "capital": false,
+                "codigo_uf": "MT"
+            },
+            {
+                "codigo_ibge": 1200013,
+                "nome": "Acrelândia",
+                "latitude": -9.82581,
+                "longitude": -66.8972,
+                "capital": false,
+                "codigo_uf": "AC"
+            },
+            {
+                "codigo_ibge": 5200134,
+                "nome": "Acreúna",
+                "latitude": -17.396,
+                "longitude": -50.3749,
+                "capital": false,
+                "codigo_uf": "GO"
+            },
+            {
+                "codigo_ibge": 2400208,
+                "nome": "Açu",
+                "latitude": -5.58362,
+                "longitude": -36.914,
+                "capital": false,
+                "codigo_uf": "RN"
+            },
+            {
+                "codigo_ibge": 3100500,
+                "nome": "Açucena",
+                "latitude": -19.0671,
+                "longitude": -42.5419,
+                "capital": false,
+                "codigo_uf": "MG"
+            },
+            {
+                "codigo_ibge": 3500105,
+                "nome": "Adamantina",
+                "latitude": -21.682,
+                "longitude": -51.0737,
+                "capital": false,
+                "codigo_uf": "SP"
+            },
+            {
+                "codigo_ibge": 5200159,
+                "nome": "Adelândia",
+                "latitude": -16.4127,
+                "longitude": -50.1657,
+                "capital": false,
+                "codigo_uf": "GO"
+            },
+            {
+                "codigo_ibge": 3500204,
+                "nome": "Adolfo",
+                "latitude": -21.2325,
+                "longitude": -49.6451,
+                "capital": false,
+                "codigo_uf": "SP"
+            },
+            {
+                "codigo_ibge": 4100202,
+                "nome": "Adrianópolis",
+                "latitude": -24.6606,
+                "longitude": -48.9922,
+                "capital": false,
+                "codigo_uf": "PR"
+            }
+            
+        ]';
+        $a = json_decode($array, true);
+        return $a;
         $result = Pessoa::with('enderecos.cidade');
 
-        $result->whereHas('enderecos.cidade', function(Builder $query) {
+        $result->whereHas('enderecos.cidade', function (Builder $query) {
             $query->where('nome', 'Santa Fé do Sul');
         });
 

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\AgendamentosController;
+use App\Http\Controllers\Api\App\v3_0_20\EmpresaPrestadorController;
+use App\Http\Controllers\Api\EmpresaPrestadorController as ApiEmpresaPrestadorController;
 use App\Http\Controllers\Api\Novo\Web\EscalasController;
 use App\Http\Controllers\Api\Novo\Web\OrdemservicoAcessoController;
 use App\Http\Controllers\Api\Novo\Web\PrestadoresController;
@@ -942,6 +944,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::post('create', [PagamentoexternosController::class, 'create']);
             Route::post('createlist', [PagamentoexternosController::class, 'createlist']);
             Route::post('atualizarPagamentosExternos', [PagamentoexternosController::class, 'atualizarPagamentosExternos']);
+            Route::delete('apagarpagamento/{pagamentoexterno}', [PagamentoexternosController::class, 'apagarpagamento']);
         });
         Route::get('agendamentos', [AgendamentosController::class, 'index']);
         Route::post('agendamentos', [AgendamentosController::class, 'store']);
@@ -957,6 +960,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('web')->group(function () {
         Route::prefix('prestadores')->group(function () {
             Route::get('recrutamento', [PrestadoresPrestadoresController::class, 'listRecrutamento']);
+            Route::get('empresaPrestador/listaPrestadoresPorEmpresaIdEStatus', [ApiEmpresaPrestadorController::class, 'listaPrestadoresPorEmpresaIdEStatus']);
             Route::get('buscaprestadorexterno/{prestador}', [PrestadoresPrestadoresController::class, 'buscaprestadorexterno']);
         });
         Route::prefix('compras')->group(function () {
@@ -982,6 +986,8 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('pacotes/{pacote}', [PacotesController::class, 'show']);
             Route::post('pacotes', [PacotesController::class, 'store']);
             Route::put('pacotes/{pacote}', [PacotesController::class, 'update']);
+            Route::delete('pacotes/excluirItemPacoteServico/{pacoteservico}', [PacotesController::class, 'excluirItemPacoteServico']);
+            Route::delete('pacotes/excluirItemPacoteProduto/{pacoteproduto}', [PacotesController::class, 'excluirItemPacoteProduto']);
         });
     });
 });

@@ -142,4 +142,12 @@ class PacotesController extends Controller
     {
         //
     }
+    public function excluirItemPacoteServico(Pacoteservico $pacoteservico)
+    {
+        $pacoteservico->delete();
+    }
+    public function excluirItemPacoteProduto(Pacoteproduto $pacoteproduto)
+    {
+        $pacoteproduto->delete();
+    }
 }
