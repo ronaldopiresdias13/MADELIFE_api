@@ -81,7 +81,7 @@ class PagamentosCnabController extends Controller
 	            INNER JOIN pessoas AS p
 	            ON p.id = pge.pessoa_id
 	            WHERE pge.empresa_id = ?
-	            AND pge.`status` = 0
+	            AND pge.`status` = 0 AND pge.deleted_at IS NULL AND pge.situacao != 'Criado'
             )
             UNION ALL
             (
@@ -89,7 +89,7 @@ class PagamentosCnabController extends Controller
             	INNER JOIN pessoas AS p
             	ON p.id = pgi.pessoa_id
             	WHERE pgi.empresa_id = ?
-            	AND pgi.`status` = 0
+            	AND pgi.`status` = 0 AND pgi.deleted_at IS NULL AND pgi.situacao != 'Criado'
             )",
             [
                 $empresa_id,
