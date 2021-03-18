@@ -111,7 +111,7 @@ class ChageIdToUuidToFormacoesTable extends Migration
             $table->unsignedBigInteger('formacao_id')->change();
         });
 
-        /* CHANGE ID TO UUID */
+        /* CHANGE UUID TO ID */
         Schema::table('formacoes', function (Blueprint $table) {
             $table->bigIncrements('id')->change();
         });
