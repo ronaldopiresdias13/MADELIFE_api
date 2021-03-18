@@ -44577,10 +44577,10 @@ class AddLatitudeAndLongitudeToCidades extends Migration
         }
     ]';
         $cidades = json_decode($array, true);
-        // Schema::table('cidades', function (Blueprint $table) {
-        //     $table->string('latitude')->nullable()->after('uf');
-        //     $table->string('longitude')->nullable()->after('uf');
-        // });
+         Schema::table('cidades', function (Blueprint $table) {
+             $table->string('latitude')->nullable()->after('uf');
+             $table->string('longitude')->nullable()->after('uf');
+         });
         
         foreach ($cidades as $key => $cidade) {
             $city = Cidade::where('nome', $cidade['nome'])->where('uf', $cidade['codigo_uf'])->first();
@@ -44599,9 +44599,9 @@ class AddLatitudeAndLongitudeToCidades extends Migration
      */
     public function down()
     {
-        // Schema::table('cidades', function (Blueprint $table) {
-        //     $table->dropColumn('latitude');
-        //     $table->dropColumn('longitude');
-        // });
+         Schema::table('cidades', function (Blueprint $table) {
+             $table->dropColumn('latitude');
+             $table->dropColumn('longitude');
+         });
     }
 }
