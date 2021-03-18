@@ -72,6 +72,22 @@ class DocumentosController extends Controller
     public function listDocumentosByConvenio(Request $request)
     {
         $user = $request->user();
+        $cliente_id = $user->pessoa->responsavel->id;
+        return Documento::with(['categoria', 'paciente.pessoa', 'paciente.responsavel'])
+            // ->where('ativo', true)
+            // ->where('empresa_id', $empresa_id)
+
+            // ->groupBy('mes')
+            ->get();
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function listDocumentosByResponsavel(Request $request)
+    {
+        $user = $request->user();
         $cliente_id = $user->pessoa->cliente->id;
         return Documento::with(['categoria', 'paciente.pessoa', 'paciente.homecares.orcamento'])
             // ->where('ativo', true)
@@ -80,7 +96,6 @@ class DocumentosController extends Controller
             // ->groupBy('mes')
             ->get();
     }
-
     /**
      * Store a newly created resource in storage.
      *

@@ -14,7 +14,7 @@ class RegistroCnab extends Model
     protected $table = 'registrocnabs';
 
     protected $fillable = [
-        'empresa_id', 'arquivo', 'mes','codigo_banco','data','observacao','situacao'
+        'empresa_id', 'arquivo', 'mes','codigo_banco','data','observacao','situacao','justificativa'
     ];
 
     protected $guarded = [];

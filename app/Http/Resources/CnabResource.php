@@ -15,15 +15,15 @@ class CnabResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'=>$this->id,
-            'arquivo'=>$this->arquivo,
-            'mes'=>$this->mes,
-            'codigo_banco'=>$this->codigo_banco,
-            'data'=>$this->data,
-            'observacao'=>$this->observacao,
-            'situacao'=>$this->situacao,
-            'num_pagamentos'=>$this->pagamentos()->count(),
-            'pagamentos'=>PagamentoResource::collection($this->pagamentos()->get())
+            'id' => $this->id,
+            'arquivo' => $this->arquivo,
+            'mes' => $this->mes,
+            'codigo_banco' => $this->codigo_banco,
+            'data' => $this->data,
+            'observacao' => $this->observacao,
+            'situacao' => $this->situacao,
+            'num_pagamentos' => $this->pagamentos()->count(),
+            'pagamentos' => PagamentoResource::collection($this->pagamentos()->get())
         ];
     }
 }

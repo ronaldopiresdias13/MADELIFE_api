@@ -14,53 +14,67 @@ use Illuminate\Validation\ValidationException;
 
 class CnabsController extends Controller
 {
-    public function getCategorias(){
+    public function getCategorias()
+    {
         $categorias = Tipopessoa::distinct('tipo')->pluck('tipo');
 
         return $categorias;
     }
 
 
-    public function getCnabs(Request $request){
+    public function getCnabs(Request $request)
+    {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
 
-        $cnabs = RegistroCnab::where('empresa_id','=',$empresa_id)->orderBy('created_at','desc')->get();
+        $cnabs = RegistroCnab::where('empresa_id', '=', $empresa_id)->orderBy('created_at', 'desc')->get();
 
-        return response()->json(['cnabs'=>CnabResource::collection($cnabs)]);
+        return response()->json(['cnabs' => CnabResource::collection($cnabs)]);
     }
 
 
-    public function gerarCnab(CnabRequest $request){
-        $data=$request->validated();
+    public function gerarCnab(CnabRequest $request)
+    {
+        $data = $request->validated();
 
         $user = $request->user();
 
-        $cnabService = new CnabService($data['banco'],$data['dados'],$data['mes'],$data['observacao'],$data['data'],$user);
+        $cnabService = new CnabService($data['banco'], $data['dados'], $data['mes'], $data['observacao'], $data['data'], $user);
         $resposta = $cnabService->criar_cnab();
-        $registro=RegistroCnab::find($resposta['cnab']);
-        $name=explode('/',$registro->arquivo)[count(explode('/',$registro->arquivo))-1];
-        $resposta['name']=$name;
-        if($resposta['status']==true){
+        $registro = RegistroCnab::find($resposta['cnab']);
+        $name = explode('/', $registro->arquivo)[count(explode('/', $registro->arquivo)) - 1];
+        $resposta['name'] = $name;
+        if ($resposta['status'] == true) {
             return $resposta;
-        }
-        else{
+        } else {
             throw ValidationException::withMessages([
                 'cnab' => ['Erro ao gerar o Cnab. Verifique se todos os dados estão corretos'],
             ]);
         }
-
     }
 
-    public function downloadCnab($id){
+    public function downloadCnab($id)
+    {
         $registro = RegistroCnab::find($id);
-        $file= public_path().'/'.$registro->arquivo;
-        $name=explode('/',$registro->arquivo)[count(explode('/',$registro->arquivo))-1];
+        $file = public_path() . '/' . $registro->arquivo;
+        $name = explode('/', $registro->arquivo)[count(explode('/', $registro->arquivo)) - 1];
         Log::info($name);
         $headers = [
             'Content-type'        => 'text/txt',
         ];
-        return response()->download($file,$name,$headers);
+        return response()->download($file, $name, $headers);
+    }
+
+
+    public function mudarSituacao(CnabRequest $request){
+        $data=$request->validated();
+
+        // $user = $request->user();
+
+        $registro=RegistroCnab::find($data['cnab_id']);
+        $registro->fill($data)->save();
+
+        return response()->json(['status'=>true]);
 
     }
 }

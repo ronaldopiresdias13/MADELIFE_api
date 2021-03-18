@@ -81,7 +81,7 @@ class PagamentosCnabController extends Controller
 	            INNER JOIN pessoas AS p
 	            ON p.id = pge.pessoa_id
 	            WHERE pge.empresa_id = ?
-	            AND pge.`status` = 0
+	            AND pge.`status` = 0 AND pge.deleted_at IS NULL AND pge.situacao != 'Criado'
             )
             UNION ALL
             (
@@ -89,7 +89,7 @@ class PagamentosCnabController extends Controller
             	INNER JOIN pessoas AS p
             	ON p.id = pgi.pessoa_id
             	WHERE pgi.empresa_id = ?
-            	AND pgi.`status` = 0
+            	AND pgi.`status` = 0 AND pgi.deleted_at IS NULL AND pgi.situacao != 'Criado'
             )",
             [
                 $empresa_id,
@@ -124,17 +124,30 @@ class PagamentosCnabController extends Controller
             }
         }
         return $result;
-        # code...
     }
     /**
-     * Store a newly created resource in storage.
+     * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Pagamentoexterno  $pagamentoexterno
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function atualizarSituacaoPagamentoDiretoria(Request $request)
     {
-        //
+        // return $request;
+        DB::transaction(function () use ($request) {
+            foreach ($request['pagamentos'] as $key => $pag) {
+                if ($pag['tipo'] == "Prestador Externo") {
+                    $pagamento = Pagamentoexterno::find($pag['id']);
+                    $pagamento->situacao = $request['situacao'];
+                    $pagamento->update();
+                } else {
+                    $pagamento = Pagamentointerno::find($pag['id']);
+                    $pagamento->situacao = $request['situacao'];
+                    $pagamento->update();
+                }
+            }
+        });
     }
 
     /**

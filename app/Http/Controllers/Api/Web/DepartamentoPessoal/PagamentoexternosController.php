@@ -146,9 +146,9 @@ class PagamentoexternosController extends Controller
      * @param  \App\Models\Pagamentoexterno  $pagamentoexterno
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Pagamentoexterno $pagamentoexterno)
+    public function apagarpagamento(Pagamentoexterno $pagamentoexterno)
     {
-        //
+        $pagamentoexterno->delete();
     }
 
     /**
