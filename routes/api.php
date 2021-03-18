@@ -289,6 +289,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::delete('relatorios/{relatorio}', 'Api\App\v3_0_21\RelatoriosController@destroy');
 
         Route::get('transcricoes/{ordemservico}', 'Api\App\v3_0_21\TranscricoesController@listTranscricoesByEscalaId');
+        Route::get('pacientes/listMedicamentosByPaciente/{ordemservico}', 'Api\App\v3_0_21\TranscricoesController@listMedicamentosByPaciente');
     });
 
     /*----------------- Web -----------------*/

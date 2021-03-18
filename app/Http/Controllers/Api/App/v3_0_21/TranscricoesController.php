@@ -21,7 +21,18 @@ class TranscricoesController extends Controller
             ->where('ativo', true)
             ->get();
     }
-
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function listMedicamentosByPaciente(Ordemservico $ordemservico)
+    {
+        return Transcricao::with(['itensTranscricao.produto:id,descricao', 'itensTranscricao.horariomedicamentos'])
+            ->where('ordemservico_id', $ordemservico['id'])
+            ->where('ativo', true)
+            ->get();
+    }
     /**
      * Store a newly created resource in storage.
      *
