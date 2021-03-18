@@ -169,16 +169,16 @@ class PrestadoresController extends Controller
             ->orderBy('nome');
 
         if ($request['formacao_id']) {
-            $result->where('f.id', $request['formacao_id']);
+            $result->where('formacoes.id', $request['formacao_id']);
         }
         if ($request['uf'] && $request['km'] && $request['cidade_id']) {
             $result->having('campolatitude', '<=', $request['km']);
         } else {
             if ($request['uf']) {
-                $result->where('ci.uf', $request['uf']);
+                $result->where('cidades.uf', $request['uf']);
             }
             if ($request['cidade_id']) {
-                $result->where('ci.id', $request['cidade_id']);
+                $result->where('cidades.id', $request['cidade_id']);
             }
         }
 
