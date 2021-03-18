@@ -26,7 +26,7 @@ class PagamentosCnabController extends Controller
             $pagamentos = Pagamentoexterno::with(['pessoa.dadosbancario.banco'])
                 ->where('empresa_id', $empresa_id)
                 ->where('status', false)
-                // ->where('situacao', "!=", "Criado")
+                ->where('situacao', "!=", "Criado")
                 ->whereBetween('datainicio', [$request->data_ini, $request->data_fim])
                 ->get();
         }
@@ -34,17 +34,10 @@ class PagamentosCnabController extends Controller
             $pagamentos = Pagamentointerno::with(['pessoa.dadosbancario.banco'])
                 ->where('empresa_id', $empresa_id)
                 ->where('status', false)
-                // ->where('situacao', "!=", "Criado")
+                ->where('situacao', "!=", "Criado")
                 ->whereBetween('datainicio', [$request->data_ini, $request->data_fim])
                 ->get();
         }
-        // else {
-        //     return $result;
-        // }
-
-        // ->groupBy("pessoa_id");
-        // ->keyBy("pessoa_id")
-
         foreach ($pagamentos as $key => $pagamento) {
             $tem = false;
             foreach ($result as $key => $r) {
