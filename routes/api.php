@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\Web\Financeiro\PagamentosCnabController;
 use App\Http\Controllers\Api\Web\GestaoOrcamentaria\PacotesController;
 use App\Http\Controllers\Web\Escalas\EscalasController as EscalasEscalasController;
 use App\Http\Controllers\Web\Formacoes\FormacoesController;
+use App\Http\Controllers\Web\Orcs\OrcsController;
 use App\Http\Controllers\Web\Ordemservicos\OrdemservicosController;
 use App\Http\Controllers\Web\PagamentointernosController;
 use App\Http\Controllers\Web\Prestadores\PrestadoresController as PrestadoresPrestadoresController;
@@ -976,6 +977,10 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
         Route::prefix('ordemservicos')->group(function () {
             Route::get('', [OrdemservicosController::class, 'index']);
+        });
+        Route::prefix('orcs')->group(function () {
+            Route::get('', [OrcsController::class, 'index']);
+            Route::post('', [OrcsController::class, 'store']);
         });
         Route::prefix('financeiro')->group(function () {
             Route::get('pagamentos/pessoas', [PagamentosCnabController::class, 'listPagamentosByEmpresaId']);

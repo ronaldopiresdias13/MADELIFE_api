@@ -16,12 +16,12 @@ class OrdemservicosController extends Controller
     public function index(Request $request)
     {
         $result = Ordemservico::with(
-            ["orcamento.homecare.paciente.pessoa"],
-            ["orcamento.cliente.pessoa"],
-            ["orcamento.evento"],
-            ["orcamento.cidade"],
-            ["orcamento.servicos"],
-            ["profissional.pessoa"]
+            ['orcamento.homecare.paciente.pessoa'],
+            ['orcamento.cliente.pessoa'],
+            ['orcamento.evento'],
+            ['orcamento.cidade'],
+            ['orcamento.servicos'],
+            ['profissional.pessoa']
         )
         ->where('empresa_id', 1)
         ->orderByDesc('id')
