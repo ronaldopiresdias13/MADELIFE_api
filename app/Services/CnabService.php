@@ -75,7 +75,6 @@ class CnabService
                     ->where('empresa_id', $empresa_id)
                     ->where('pessoa_id', '=', $dado['profissional_id'])
                     ->where('status', false)
-                    ->where('ativo', true)
                     ->where(DB::raw("date_format(str_to_date(pagamentopessoas.periodo1, '%Y-%m-%d'), '%Y-%m')"), "=", $this->mes)
                     ->get()->sum('valor');
 
