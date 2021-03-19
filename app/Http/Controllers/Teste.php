@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Escala;
+use App\Models\Pagamentoexterno;
 use App\Models\Pessoa;
 use App\Models\Tipopessoa;
 use App\Services\PontoService;
 use Dompdf\Dompdf;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class Teste extends Controller

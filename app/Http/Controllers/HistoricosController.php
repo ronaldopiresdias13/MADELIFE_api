@@ -1,21 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Api\App\v3_0_20;
+namespace App\Http\Controllers;
 
-use App\Models\Formacao;
-use App\Http\Controllers\Controller;
+use App\Models\Historico;
 use Illuminate\Http\Request;
 
-class FormacoesController extends Controller
+class HistoricosController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function listFormacoes()
+    public function index()
     {
-        return Formacao::orderBy('descricao')->get(['id', 'descricao']);
+        //
     }
 
     /**
@@ -32,10 +31,10 @@ class FormacoesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Formacao  $formacao
+     * @param  \App\Models\Historico  $historico
      * @return \Illuminate\Http\Response
      */
-    public function show(Formacao $formacao)
+    public function show(Historico $historico)
     {
         //
     }
@@ -44,10 +43,10 @@ class FormacoesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Formacao  $formacao
+     * @param  \App\Models\Historico  $historico
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Formacao $formacao)
+    public function update(Request $request, Historico $historico)
     {
         //
     }
@@ -55,10 +54,10 @@ class FormacoesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Formacao  $formacao
+     * @param  \App\Models\Historico  $historico
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Formacao $formacao)
+    public function destroy(Historico $historico)
     {
         //
     }

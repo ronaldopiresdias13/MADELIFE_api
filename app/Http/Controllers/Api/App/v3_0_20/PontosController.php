@@ -190,6 +190,14 @@ class PontosController extends Controller
                     ]
                 ], 202)->header('Content-Type', 'application/json');
             } else {
+                if (!$request->assinaturaprestador) {
+                    return response()->json([
+                        'alert' => [
+                            'title' => 'Ops!',
+                            'text' => 'Assinatura não encontrada!\nPor favor tente novamente.'
+                        ]
+                    ], 202)->header('Content-Type', 'application/json');
+                }
                 DB::transaction(function () use ($request, $escala) {
                     Ponto::firstOrCreate(
                         [
