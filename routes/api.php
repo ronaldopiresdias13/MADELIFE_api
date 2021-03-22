@@ -341,6 +341,12 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('downloadCnab/{id}', 'Api\Web\Financeiro\CnabsController@downloadCnab');
             Route::get('getCnabs', 'Api\Web\Financeiro\CnabsController@getCnabs');
         });
+
+        Route::prefix('chat')->group(function () {
+            Route::get('get_conversas', 'Api\Web\Chat\ChatGeralController@get_conversas');
+            Route::get('get_pessoas', 'Api\Web\Chat\ChatGeralController@get_pessoas');
+            Route::post('enviarArquivos', 'Api\Web\Chat\ChatGeralController@enviarArquivos');
+        });
         Route::prefix('gestaoOrcamentaria')->group(function () {
             Route::get('clientes/list/{empresa}', 'Api\Web\GestaoOrcamentaria\ClientesController@index');
             Route::get('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@show');

@@ -30,7 +30,7 @@ class OrcsController extends Controller
         $result = Orc::with(
             [
                 'cidade',
-                'cliente',
+                'cliente.pessoa',
                 'homecare_paciente.pessoa',
                 'aph_cidade',
                 'evento_cidade',
