@@ -114,6 +114,6 @@ class OrcsController extends Controller
      */
     public function destroy(Orc $orc)
     {
-        //
+        $orc->delete();
     }
 }
