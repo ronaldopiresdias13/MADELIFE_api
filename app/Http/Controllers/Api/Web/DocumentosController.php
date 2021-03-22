@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Web;
 
 use App\Models\Documento;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -72,14 +73,13 @@ class DocumentosController extends Controller
     public function listDocumentosByConvenio(Request $request)
     {
         $user = $request->user();
-        $cliente_id = $user->pessoa->responsavel->id;
-        return Documento::with(['categoria', 'paciente.pessoa', 'paciente.responsavel'])
-            // ->where('ativo', true)
-            // ->where('empresa_id', $empresa_id)
-
-            // ->groupBy('mes')
-            ->get();
+        $cliente_id = $user->pessoa->cliente->id;
+        return Documento::with(['categoria', 'paciente.pessoa'])
+        ->whereHas('paciente.homecares.orcamento', function (Builder $query) use ($cliente_id) {
+            $query->where('cliente_id', $cliente_id);
+        })->get();
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -88,14 +88,13 @@ class DocumentosController extends Controller
     public function listDocumentosByResponsavel(Request $request)
     {
         $user = $request->user();
-        $cliente_id = $user->pessoa->cliente->id;
-        return Documento::with(['categoria', 'paciente.pessoa', 'paciente.homecares.orcamento'])
-            // ->where('ativo', true)
-            // ->where('empresa_id', $empresa_id)
-
-            // ->groupBy('mes')
-            ->get();
+        $responsavel_id = $user->pessoa->responsavel->id;
+        return Documento::with(['categoria', 'paciente.pessoa'])
+        ->whereHas('paciente.responsavel', function (Builder $query) use ($responsavel_id) {
+            $query->where('id', $responsavel_id);
+        })->get();
     }
+
     /**
      * Store a newly created resource in storage.
      *

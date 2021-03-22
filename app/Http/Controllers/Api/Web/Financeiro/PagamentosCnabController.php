@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Web\Financeiro;
 use App\Http\Controllers\Controller;
 use App\Models\Pagamentoexterno;
 use App\Models\Pagamentointerno;
+use App\Models\Pagamentopessoa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -22,20 +23,38 @@ class PagamentosCnabController extends Controller
         $pagamentos = [];
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
+        // if ($request->tipo == "Prestador") {
+        //     $pagamentos = Pagamentoexterno::with(['pessoa.dadosbancario.banco'])
+        //         ->where('empresa_id', $empresa_id)
+        //         ->where('status', false)
+        //         ->where('situacao', "!=", "Criado")
+        //         ->whereBetween('datainicio', [$request->data_ini, $request->data_fim])
+        //         ->get();
+        // }
+        // if ($request->tipo == "Profissional") {
+        //     $pagamentos = Pagamentointerno::with(['pessoa.dadosbancario.banco'])
+        //         ->where('empresa_id', $empresa_id)
+        //         ->where('status', false)
+        //         ->where('situacao', "!=", "Criado")
+        //         ->whereBetween('datainicio', [$request->data_ini, $request->data_fim])
+        //         ->get();
+        // }
         if ($request->tipo == "Prestador") {
-            $pagamentos = Pagamentoexterno::with(['pessoa.dadosbancario.banco'])
+            $pagamentos = Pagamentopessoa::with(['pessoa.dadosbancario.banco'])
                 ->where('empresa_id', $empresa_id)
                 ->where('status', false)
+                ->where('tipopessoa', 'Prestador Externo')
                 ->where('situacao', "!=", "Criado")
-                ->whereBetween('datainicio', [$request->data_ini, $request->data_fim])
+                ->whereBetween('periodo1', [$request->data_ini, $request->data_fim])
                 ->get();
         }
         if ($request->tipo == "Profissional") {
-            $pagamentos = Pagamentointerno::with(['pessoa.dadosbancario.banco'])
+            $pagamentos = Pagamentopessoa::with(['pessoa.dadosbancario.banco'])
                 ->where('empresa_id', $empresa_id)
                 ->where('status', false)
                 ->where('situacao', "!=", "Criado")
-                ->whereBetween('datainicio', [$request->data_ini, $request->data_fim])
+                ->where('tipopessoa', 'Profissional Interno')
+                ->whereBetween('periodo1', [$request->data_ini, $request->data_fim])
                 ->get();
         }
         foreach ($pagamentos as $key => $pagamento) {
