@@ -14,6 +14,7 @@ class OrcService
 {
     protected $request = null;
     protected $orc = null;
+    protected $resposta = ['status' => false, 'orc' => null];
 
     public function __construct(Request $request, Orc $orc = null)
     {
@@ -29,14 +30,14 @@ class OrcService
      */
     public function store()
     {
-        DB::transaction(function() {
+        DB::transaction(function () {
             $empresa_id = $this->request->user()->pessoa->profissional->empresa_id;
             if (!$empresa_id) {
                 return 'Error';
             }
 
-            $orc = new Orc();
-            $orc->fill([
+            $this->orc = new Orc();
+            $this->orc->fill([
                 "empresa_id"               => $empresa_id,
                 "cliente_id"               => $this->request->cliente_id,
                 "numero"                   => $this->request->numero,
@@ -79,7 +80,7 @@ class OrcService
             foreach ($this->request->produtos as $item) {
                 $orcProduto = new OrcProduto();
                 $orcProduto->fill([
-                    "orc_id"               => $orc->id,
+                    "orc_id"               => $this->orc->id,
                     "produto_id"           => $item['produto_id'],
                     "quantidade"           => $item['quantidade'],
                     "valorunitario"        => $item['valorunitario'],
@@ -96,7 +97,7 @@ class OrcService
             foreach ($this->request->servicos as $item) {
                 $orcServico = new OrcServico();
                 $orcServico->fill([
-                    "orc_id"               => $orc->id,
+                    "orc_id"               => $this->orc->id,
                     "servico_id"           => $item['servico_id'],
                     "quantidade"           => $item['quantidade'],
                     "basecobranca"         => $item['basecobranca'],
@@ -119,7 +120,7 @@ class OrcService
             foreach ($this->request->custos as $item) {
                 $custo = new Orccusto();
                 $custo->fill([
-                    "orc_id"        => $orc->id,
+                    "orc_id"        => $this->orc->id,
                     "descricao"     => $item['descricao'],
                     "quantidade"    => $item['quantidade'],
                     "unidade"       => $item['unidade'],
@@ -127,13 +128,13 @@ class OrcService
                     "valortotal"    => $item['valortotal'],
                 ])->save();
             }
-            return ['status' => true, 'orc' => $orc->id];
+            return ['status' => true, 'orc' => $this->orc->id];
         });
     }
 
     public function update()
     {
-        DB::transaction(function() {
+        DB::transaction(function () {
             $this->orc->fill([
                 "cliente_id"               => $this->request->cliente_id,
                 "numero"                   => $this->request->numero,
@@ -173,62 +174,75 @@ class OrcService
                 "remocao_observacao"       => $this->request->remocao_observacao,
             ])->save();
 
-            $produtos = [];
+            $this->orc->produtos()->delete();
 
             foreach ($this->request->produtos as $item) {
-                $orcProduto = new OrcProduto();
-                $orcProduto = [
-                    "orc_id"               => $this->orc->id,
-                    "produto_id"           => $item['produto_id'],
-                    "quantidade"           => $item['quantidade'],
-                    "valorunitario"        => $item['valorunitario'],
-                    "subtotal"             => $item['subtotal'],
-                    "custo"                => $item['custo'],
-                    "subtotalcusto"        => $item['subtotalcusto'],
-                    "valorresultadomensal" => $item['valorresultadomensal'],
-                    "valorcustomensal"     => $item['valorcustomensal'],
-                    "locacao"              => $item['locacao'],
-                    "descricao"            => $item['descricao'],
-                ]; //->save();
-                array_push($orcProduto, $produtos);
+                OrcProduto::withTrashed()->updateOrCreate(
+                    [
+                        "orc_id"               => $this->orc->id,
+                        "produto_id"           => $item['produto_id'],
+                        "quantidade"           => $item['quantidade'],
+                        "valorunitario"        => $item['valorunitario'],
+                        "subtotal"             => $item['subtotal'],
+                        "custo"                => $item['custo'],
+                        "subtotalcusto"        => $item['subtotalcusto'],
+                        "valorresultadomensal" => $item['valorresultadomensal'],
+                        "valorcustomensal"     => $item['valorcustomensal'],
+                        "locacao"              => $item['locacao'],
+                        "descricao"            => $item['descricao'],
+                    ],
+                    [
+                        "deleted_at"           => null,
+                    ]
+                );
             }
 
-            $this->orc->produtos()->sync($produtos);
+            $this->orc->servicos()->delete();
 
-            // foreach ($this->request->servicos as $item) {
-            //     $orcServico = new OrcServico();
-            //     $orcServico->fill([
-            //         "orc_id"               => $this->orc->id,
-            //         "servico_id"           => $item['servico_id'],
-            //         "quantidade"           => $item['quantidade'],
-            //         "basecobranca"         => $item['basecobranca'],
-            //         "frequencia"           => $item['frequencia'],
-            //         "valorunitario"        => $item['valorunitario'],
-            //         "subtotal"             => $item['subtotal'],
-            //         "custo"                => $item['custo'],
-            //         "custodiurno"          => $item['custodiurno'],
-            //         "custonoturno"         => $item['custonoturno'],
-            //         "subtotalcusto"        => $item['subtotalcusto'],
-            //         "valorresultadomensal" => $item['valorresultadomensal'],
-            //         "valorcustomensal"     => $item['valorcustomensal'],
-            //         "icms"                 => $item['icms'],
-            //         "iss"                  => $item['iss'],
-            //         "inss"                 => $item['inss'],
-            //         "descricao"            => $item['descricao'],
-            //     ])->save();
-            // }
+            foreach ($this->request->servicos as $item) {
+                OrcServico::withTrashed()->updateOrCreate(
+                    [
+                        "orc_id"               => $this->orc->id,
+                        "servico_id"           => $item['servico_id'],
+                        "quantidade"           => $item['quantidade'],
+                        "basecobranca"         => $item['basecobranca'],
+                        "frequencia"           => $item['frequencia'],
+                        "valorunitario"        => $item['valorunitario'],
+                        "subtotal"             => $item['subtotal'],
+                        "custo"                => $item['custo'],
+                        "custodiurno"          => $item['custodiurno'],
+                        "custonoturno"         => $item['custonoturno'],
+                        "subtotalcusto"        => $item['subtotalcusto'],
+                        "valorresultadomensal" => $item['valorresultadomensal'],
+                        "valorcustomensal"     => $item['valorcustomensal'],
+                        "icms"                 => $item['icms'],
+                        "iss"                  => $item['iss'],
+                        "inss"                 => $item['inss'],
+                        "descricao"            => $item['descricao'],
+                    ],
+                    [
+                        "deleted_at"           => null,
+                    ]
+                );
+            }
 
-            // foreach ($this->request->custos as $item) {
-            //     $custo = new Orccusto();
-            //     $custo->fill([
-            //         "orc_id"        => $this->orc->id,
-            //         "descricao"     => $item['descricao'],
-            //         "quantidade"    => $item['quantidade'],
-            //         "unidade"       => $item['unidade'],
-            //         "valorunitario" => $item['valorunitario'],
-            //         "valortotal"    => $item['valortotal'],
-            //     ])->save();
-            // }
+            $this->orc->custos()->delete();
+
+            foreach ($this->request->custos as $item) {
+                Orccusto::withTrashed()->updateOrCreate(
+                    [
+                        "orc_id"        => $this->orc->id,
+                        "descricao"     => $item['descricao'],
+                        "quantidade"    => $item['quantidade'],
+                        "unidade"       => $item['unidade'],
+                        "valorunitario" => $item['valorunitario'],
+                        "valortotal"    => $item['valortotal'],
+                    ],
+                    [
+                        "deleted_at"    => null,
+                    ]
+                );
+            }
         });
     }
 }

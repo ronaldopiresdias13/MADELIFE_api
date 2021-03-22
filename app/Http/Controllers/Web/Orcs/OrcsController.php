@@ -3,16 +3,10 @@
 namespace App\Http\Controllers\Web\Orcs;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\OrcResource;
 use App\Models\Orc;
-use App\Models\Orccusto;
-use App\Models\OrcProduto;
 use App\Services\OrcService;
-// use App\Models\OrcServico;
-use App\Services\OrcsService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class OrcsController extends Controller
 {
@@ -76,7 +70,7 @@ class OrcsController extends Controller
         if ($resposta['status']) {
             return $resposta;
         } else {
-            return 'Ocorreu um erro ao salvar orçamento!';
+            return 'Ocorreu um erro ao salvar o orçamento!';
         }
     }
 
@@ -114,12 +108,7 @@ class OrcsController extends Controller
     public function update(Request $request, Orc $orc)
     {
         $orcService = new OrcService($request, $orc);
-        $resposta = $orcService->update();
-        if ($resposta['status']) {
-            return $resposta;
-        } else {
-            return 'Ocorreu um erro ao salvar orçamento!';
-        }
+        return $orcService->update();
     }
 
     /**
