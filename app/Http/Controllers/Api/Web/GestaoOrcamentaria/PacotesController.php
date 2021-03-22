@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Pacote;
 use App\Models\Pacoteproduto;
 use App\Models\Pacoteservico;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -20,9 +21,22 @@ class PacotesController extends Controller
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-        return Pacote::with(['cliente.pessoa', 'produtos.produto', 'servicos.servico'])
-            ->where('empresa_id', $empresa_id)
-            ->get();
+        $pacotes = Pacote::with([
+            'cliente.pessoa',
+            'produtos.produto',
+            'servicos.servico'
+        ])
+            ->where('empresa_id', $empresa_id);
+
+        if ($request->cliente_id) {
+            $pacotes->whereHas('cliente', function (Builder $query) use ($request) {
+                $query->where('id', $request->cliente_id);
+            });
+        }
+
+        $pacotes = $pacotes->get();
+
+        return $pacotes;
     }
 
     /**

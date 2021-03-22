@@ -1068,6 +1068,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('', [OrcsController::class, 'index']);
             Route::get('{orc}', [OrcsController::class, 'show']);
             Route::post('', [OrcsController::class, 'store']);
+            Route::put('{orc}', [OrcsController::class, 'update']);
         });
         Route::prefix('financeiro')->group(function () {
             Route::get('pagamentos/pessoas', [PagamentosCnabController::class, 'listPagamentosByEmpresaId']);
