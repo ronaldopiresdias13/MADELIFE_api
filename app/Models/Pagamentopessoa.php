@@ -15,8 +15,8 @@ class Pagamentopessoa extends Model
     {
         return $this->belongsTo(Pessoa::class);
     }
-    public function ordemservico()
-    {
-        return $this->belongsTo(Ordemservico::class);
-    }
+    // public function ordemservico()
+    // {
+    //     return $this->belongsTo(Ordemservico::class);
+    // }
 }

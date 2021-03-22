@@ -66,12 +66,7 @@ class OrcsController extends Controller
     public function store(Request $request)
     {
         $orcService = new OrcService($request);
-        $resposta = $orcService->store();
-        if ($resposta['status']) {
-            return $resposta;
-        } else {
-            return 'Ocorreu um erro ao salvar o orçamento!';
-        }
+        return $orcService->store();
     }
 
     /**

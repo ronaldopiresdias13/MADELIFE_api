@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api\Web\DepartamentoPessoal;
 use App\Http\Controllers\Controller;
 use App\Models\Pagamentoexterno;
 use App\Models\Pagamentointerno;
+use App\Models\Pagamentopessoa;
 use App\Models\Pessoa;
 use App\Models\Prestador;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +24,29 @@ class PagamentoexternosController extends Controller
     public function index()
     {
         //
+    }
+    public function gerarlist(Request $request)
+    {
+        $empresa_id = null;
+
+        if (Auth::check()) {
+            if (Auth::user()->pessoa->profissional) {
+                $empresa_id = Auth::user()->pessoa->profissional->empresa_id;
+            }
+        }
+
+        $hoje = getdate();
+        $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . ($hoje['mday'] < 10 ? '0' . $hoje['mday'] : $hoje['mday']);
+        $datainicio = $request['datainicio'] ? $request['datainicio'] : date("Y-m-01", strtotime($data));
+        $datafim    = $request['datafim']    ? $request['datafim']    : date("Y-m-t", strtotime($data));
+
+        return Pagamentoexterno::with(['pagamentopessoa.pessoa', 'servico', 'ordemservico.orcamento.homecare.paciente.pessoa'])
+            ->whereHas('pagamentopessoa', function (Builder $query) use ($datainicio, $datafim) {
+                $query->where('situacao', "=", "Criado")->whereBetween('periodo1', [$datainicio, $datafim]);
+            })
+            ->where('empresa_id', $empresa_id)
+            ->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%')
+            ->get();
     }
     public function list(Request $request)
     {
@@ -38,11 +63,12 @@ class PagamentoexternosController extends Controller
         $datainicio = $request['datainicio'] ? $request['datainicio'] : date("Y-m-01", strtotime($data));
         $datafim    = $request['datafim']    ? $request['datafim']    : date("Y-m-t", strtotime($data));
 
-        return Pagamentoexterno::with(['pessoa', 'servico', 'ordemservico.orcamento.homecare.paciente.pessoa'])
+        return Pagamentoexterno::with(['pagamentopessoa.pessoa', 'servico', 'ordemservico.orcamento.homecare.paciente.pessoa'])
+            ->whereHas('pagamentopessoa', function (Builder $query) use ($datainicio, $datafim) {
+                $query->where('situacao', "!=", "Criado")->whereBetween('periodo1', [$datainicio, $datafim]);
+            })
             ->where('empresa_id', $empresa_id)
-            ->where('situacao', $request['situacao'])
             ->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%')
-            ->whereBetween('datainicio', [$datainicio, $datafim])
             ->get();
     }
     /**
@@ -146,9 +172,9 @@ class PagamentoexternosController extends Controller
      * @param  \App\Models\Pagamentoexterno  $pagamentoexterno
      * @return \Illuminate\Http\Response
      */
-    public function apagarpagamento(Pagamentoexterno $pagamentoexterno)
+    public function apagarpagamento(Pagamentopessoa $pagamentopessoa)
     {
-        $pagamentoexterno->delete();
+        $pagamentopessoa->delete();
     }
 
     /**

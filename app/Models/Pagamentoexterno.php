@@ -41,9 +41,9 @@ class Pagamentoexterno extends Model
         'updated_at',
         'deleted_at'
     ];
-    public function pessoa()
+    public function pagamentopessoa()
     {
-        return $this->belongsTo(Pessoa::class);
+        return $this->belongsTo(Pagamentopessoa::class);
     }
     public function ordemservico()
     {
