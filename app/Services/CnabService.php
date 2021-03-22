@@ -63,15 +63,21 @@ class CnabService
         $empresa_id = $this->user->pessoa->profissional->empresa_id;
 
         if ($this->banco == '033') {
+            $cnabs = [];
             $cnab = '';
             $cnab .= $this->header_arquivo_santander();
-
-            $cnab .= "\n" . $this->header_lote_santander(1);
-            $soma_valor = 0;
-            $quantidade_moeda = 0;
+            $quantidade_lotes = 0;
+            //lote apenas usuários com conta santander
+            $lote_1 = "\n" . $this->header_lote_santander(1, '033');
+            $soma_valor_lote_1 = 0;
+            $quantidade_moeda_lote_1 = 0;
             $dados_pagamento = [];
+            $quantidade_registros=0;
             foreach ($this->dados as $dado) {
                 $pagamentos = Pagamentopessoa::with(['pessoa.dadosbancario.banco'])
+                    ->whereHas('pessoa.dadosbancario.banco', function ($q) {
+                        $q->where('codigo', '=', '033');
+                    })
                     ->where('empresa_id', $empresa_id)
                     ->where('pessoa_id', '=', $dado['profissional_id'])
                     ->where('status', false)
@@ -79,119 +85,298 @@ class CnabService
                     ->where(DB::raw("date_format(str_to_date(pagamentopessoas.periodo1, '%Y-%m-%d'), '%Y-%m')"), "=", $this->mes)
                     ->get()->sum('valor');
 
-                array_push($dados_pagamento, [
-                    'user_id' => $dado['profissional_id'],
-                    'valor' => $pagamentos,
-                    'conta' => $dado['conta'],
-                    'digito' => $dado['digito'],
-                    'agencia' => $dado['agencia'],
-                    'codigo' => $dado['codigo'],
-                ]);
-                Log::info($dado['profissional_id']);
+                if ($pagamentos > 0) {
 
-                Log::info($pagamentos);
-                $soma_valor += $pagamentos;
-                $cnab .= "\n" . $this->registro_detalhes_a_santander($dado, 1, 0, number_format($pagamentos, 2, '', ''));
-                $cnab .= "\n" . $this->registro_detalhes_b_santander($dado, 1);
+                    array_push($dados_pagamento, [
+                        'user_id' => $dado['profissional_id'],
+                        'valor' => $pagamentos,
+                        'conta' => $dado['conta'],
+                        'digito' => $dado['digito'],
+                        'agencia' => $dado['agencia'],
+                        'codigo' => $dado['codigo'],
+                    ]);
+                    $quantidade_registros+=1;
+                    Log::info($dado['profissional_id']);
+
+                    Log::info($pagamentos);
+                    $soma_valor_lote_1 += $pagamentos;
+                    $lote_1 .= "\n" . $this->registro_detalhes_a_santander($dado, 1, 0, number_format($pagamentos, 2, '', ''));
+                    $lote_1 .= "\n" . $this->registro_detalhes_b_santander($dado, 1, 1, number_format($pagamentos, 2, '', ''));
+                }
             }
 
+            $lote_1 .= "\n" . $this->trailer_lote_santander($quantidade_registros + 2, number_format($soma_valor_lote_1, 2, '', ''), $quantidade_moeda_lote_1, '033'); //quantidade contando header do lote, registro a e b, trailer do lote
 
-            $cnab .= "\n" . $this->trailer_lote_santander(count($this->dados) + 2, $soma_valor, $quantidade_moeda); //quantidade contando header do lote, registro a e b, trailer do lote
-            $cnab .= "\n" . $this->trailer_arquivo_santander(1);
-            $name = 'cnabs/cnab_' . Carbon::now()->format('Y-m-d_H-i-s') . '.txt';
+            if ($soma_valor_lote_1 > 0) {
+                $cnab .= $lote_1;
+                $quantidade_lotes += 1;
+                $cnab .= "\n" . $this->trailer_arquivo_santander(1);
+                $name = 'cnabs/cnab_santander_folha_' . Carbon::now()->format('Y-m-d_H-i-s') . '.txt';
 
-            Storage::disk('public')->put($name, $cnab);
+                Storage::disk('public')->put($name, $cnab);
 
-            $registro_cnab = new RegistroCnab();
-            $registro_cnab->fill([
-                'empresa_id' => $empresa_id,
-                'arquivo' => 'storage/' . $name,
-                'mes' => $this->mes,
-                'codigo_banco' => $this->santander['codigo'],
-                'data' => $this->data,
-                'observacao' => $this->observacao,
-                'situacao' => 'Aguardando',
-            ])->save();
-            foreach ($dados_pagamento as $dado) {
-                $cnab_pessoa = new CnabPessoa();
-                $cnab_pessoa->fill([
-                    'cnab_id' => $registro_cnab->id,
-                    'pessoa_id' => $dado['user_id'],
-                    'valor' => $dado['valor'],
-                    'conta' => $dado['conta'],
-                    'agencia' => $dado['agencia'],
-                    'banco' => $dado['codigo'],
-                    'digito' => $dado['digito'],
+                $registro_cnab = new RegistroCnab();
+                $registro_cnab->fill([
+                    'empresa_id' => $empresa_id,
+                    'arquivo' => 'storage/' . $name,
+                    'mes' => $this->mes,
+                    'codigo_banco' => $this->santander['codigo'],
+                    'data' => $this->data,
+                    'observacao' => $this->observacao,
+                    'situacao' => 'Aguardando',
                 ])->save();
+                foreach ($dados_pagamento as $dado) {
+                    $cnab_pessoa = new CnabPessoa();
+                    $cnab_pessoa->fill([
+                        'cnab_id' => $registro_cnab->id,
+                        'pessoa_id' => $dado['user_id'],
+                        'valor' => $dado['valor'],
+                        'conta' => $dado['conta'],
+                        'agencia' => $dado['agencia'],
+                        'banco' => $dado['codigo'],
+                        'digito' => $dado['digito'],
+                    ])->save();
+                }
+                $name = explode('/', $registro_cnab->arquivo)[count(explode('/', $registro_cnab->arquivo)) - 1];
+
+                array_push($cnabs, ['cnab' => $registro_cnab->id, 'name' => $name]);
             }
 
-            return ['status' => true, 'cnab' => $registro_cnab->id];
+            $cnab = '';
+            $cnab .= $this->header_arquivo_santander();
+            //lote apenas usuários sem conta santander
+            $lote_2 = "\n" . $this->header_lote_santander(1, '000');
+            $soma_valor_lote_2 = 0;
+            $quantidade_moeda_lote_2 = 0;
+            $dados_pagamento = [];
+            $quantidade_registros=0;
+
+            foreach ($this->dados as $dado) {
+                $pagamentos = Pagamentopessoa::with(['pessoa.dadosbancario.banco'])
+                    ->whereHas('pessoa.dadosbancario.banco', function ($q) {
+                        $q->where('codigo', '<>', '033');
+                    })
+                    ->where('empresa_id', $empresa_id)
+                    ->where('pessoa_id', '=', $dado['profissional_id'])
+                    ->where('status', false)
+                    ->where('ativo', true)
+                    ->where(DB::raw("date_format(str_to_date(pagamentopessoas.periodo1, '%Y-%m-%d'), '%Y-%m')"), "=", $this->mes)
+                    ->get()->sum('valor');
+
+                if ($pagamentos > 0) {
+                    $quantidade_registros+=1;
+
+                    array_push($dados_pagamento, [
+                        'user_id' => $dado['profissional_id'],
+                        'valor' => $pagamentos,
+                        'conta' => $dado['conta'],
+                        'digito' => $dado['digito'],
+                        'agencia' => $dado['agencia'],
+                        'codigo' => $dado['codigo'],
+                    ]);
+
+                    Log::info($dado['profissional_id']);
+
+                    Log::info($pagamentos);
+                    $soma_valor_lote_2 += $pagamentos;
+                    $lote_2 .= "\n" . $this->registro_detalhes_a_santander($dado, 1, 0, number_format($pagamentos, 2, '', ''));
+                    $lote_2 .= "\n" . $this->registro_detalhes_b_santander($dado, 1, 2, number_format($pagamentos, 2, '', ''));
+                }
+            }
+
+            $lote_2 .= "\n" . $this->trailer_lote_santander($quantidade_registros + 2, number_format($soma_valor_lote_2, 2, '', ''), $quantidade_moeda_lote_2, '000'); //quantidade contando header do lote, registro a e b, trailer do lote
+
+            if ($soma_valor_lote_2 > 0) {
+                $cnab .= $lote_2;
+                $quantidade_lotes += 1;
+                $cnab .= "\n" . $this->trailer_arquivo_santander(1);
+                $name = 'cnabs/cnab_santander_fornecedor_' . Carbon::now()->format('Y-m-d_H-i-s') . '.txt';
+
+                Storage::disk('public')->put($name, $cnab);
+
+                $registro_cnab = new RegistroCnab();
+                $registro_cnab->fill([
+                    'empresa_id' => $empresa_id,
+                    'arquivo' => 'storage/' . $name,
+                    'mes' => $this->mes,
+                    'codigo_banco' => $this->santander['codigo'],
+                    'data' => $this->data,
+                    'observacao' => $this->observacao,
+                    'situacao' => 'Aguardando',
+                ])->save();
+                foreach ($dados_pagamento as $dado) {
+                    $cnab_pessoa = new CnabPessoa();
+                    $cnab_pessoa->fill([
+                        'cnab_id' => $registro_cnab->id,
+                        'pessoa_id' => $dado['user_id'],
+                        'valor' => $dado['valor'],
+                        'conta' => $dado['conta'],
+                        'agencia' => $dado['agencia'],
+                        'banco' => $dado['codigo'],
+                        'digito' => $dado['digito'],
+                    ])->save();
+                }
+                $name = explode('/', $registro_cnab->arquivo)[count(explode('/', $registro_cnab->arquivo)) - 1];
+
+                array_push($cnabs, ['cnab' => $registro_cnab->id, 'name' => $name]);
+            }
+
+            return ['status' => true, 'cnabs' => $cnabs];
         } elseif ($this->banco == '748') {
             $cnab = '';
-
+            $cnabs = [];
             $cnab .= $this->header_arquivo_sicredi();
 
-            $cnab .= "\n" . $this->header_lote_sicredi(1);
+            $cnab .= "\n" . $this->header_lote_sicredi(1, '748');
             $soma_valor = 0;
             $quantidade_moeda = 0;
             $dados_pagamento = [];
-
+            $quantidade_registros=0;
             foreach ($this->dados as $dado) {
                 $pagamentos = Pagamentopessoa::with(['pessoa.dadosbancario.banco'])
+                    ->whereHas('pessoa.dadosbancario.banco', function ($q) {
+                        $q->where('codigo', '=', '748');
+                    })
                     ->where('empresa_id', $empresa_id)
                     ->where('pessoa_id', '=', $dado['profissional_id'])
                     ->where('status', false)
                     ->where('ativo', true)
                     ->where(DB::raw("date_format(str_to_date(pagamentopessoas.periodo1, '%Y-%m-%d'), '%Y-%m')"), "=", $this->mes)
                     ->get()->sum('valor');
-                Log::info($dado['profissional_id']);
-
-                Log::info($pagamentos);
-                array_push($dados_pagamento, [
-                    'user_id' => $dado['profissional_id'],
-                    'valor' => $pagamentos,
-                    'conta' => $dado['conta'],
-                    'digito' => $dado['digito'],
-                    'agencia' => $dado['agencia'],
-                    'codigo' => $dado['codigo'],
-                ]);
-                $soma_valor += $pagamentos;
-                $cnab .= "\n" .  $this->registro_detalhes_a_sicred($dado, 1, 0, number_format($pagamentos, 2, '', ''));
-                $cnab .= "\n" . $this->registro_detalhes_b_sicred($dado, 1);
+                if ($pagamentos > 0) {
+                    Log::info($dado['profissional_id']);
+                    $quantidade_registros+=1;
+                    Log::info($pagamentos);
+                    array_push($dados_pagamento, [
+                        'user_id' => $dado['profissional_id'],
+                        'valor' => $pagamentos,
+                        'conta' => $dado['conta'],
+                        'digito' => $dado['digito'],
+                        'agencia' => $dado['agencia'],
+                        'codigo' => $dado['codigo'],
+                    ]);
+                    $soma_valor += $pagamentos;
+                    $cnab .= "\n" .  $this->registro_detalhes_a_sicred($dado, 1, 0, number_format($pagamentos, 2, '', ''));
+                    $cnab .= "\n" . $this->registro_detalhes_b_sicred($dado, 1, 1, number_format($pagamentos, 2, '', ''));
+                }
             }
 
+            if ($soma_valor > 0) {
 
-            $cnab .= "\n" . $this->trailer_lote_sicred(count($this->dados) + 2, $soma_valor, $quantidade_moeda); //quantidade contando header do lote, registro a e b, trailer do lote
-            $cnab .= "\n" . $this->trailer_arquivo_sicred(1);
+                $cnab .= "\n" . $this->trailer_lote_sicred($quantidade_registros + 2, number_format($soma_valor, 2, '', ''), $quantidade_moeda, '748'); //quantidade contando header do lote, registro a e b, trailer do lote
+                $cnab .= "\n" . $this->trailer_arquivo_sicred(1);
 
-            $name = 'cnabs/cnab_' . Carbon::now()->format('Y-m-d_H-i-s') . '.txt';
+                $name = 'cnabs/cnab_sicredi_folha_' . Carbon::now()->format('Y-m-d_H-i-s') . '.txt';
 
-            Storage::disk('public')->put($name, $cnab);
+                Storage::disk('public')->put($name, $cnab);
 
-            $registro_cnab = new RegistroCnab();
-            $registro_cnab->fill([
-                'empresa_id' => $empresa_id,
-                'arquivo' => 'storage/' . $name,
-                'mes' => $this->mes,
-                'codigo_banco' => $this->sicred['codigo'],
-                'data' => $this->data,
-                'observacao' => $this->observacao,
-                'situacao' => 'Aguardando',
-            ])->save();
-            foreach ($dados_pagamento as $dado) {
-                $cnab_pessoa = new CnabPessoa();
-                $cnab_pessoa->fill([
-                    'cnab_id' => $registro_cnab->id,
-                    'pessoa_id' => $dado['user_id'],
-                    'valor' => $dado['valor'],
-                    'conta' => $dado['conta'],
-                    'agencia' => $dado['agencia'],
-                    'banco' => $dado['codigo'],
-                    'digito' => $dado['digito'],
+                $registro_cnab = new RegistroCnab();
+                $registro_cnab->fill([
+                    'empresa_id' => $empresa_id,
+                    'arquivo' => 'storage/' . $name,
+                    'mes' => $this->mes,
+                    'codigo_banco' => $this->sicred['codigo'],
+                    'data' => $this->data,
+                    'observacao' => $this->observacao,
+                    'situacao' => 'Aguardando',
                 ])->save();
+                foreach ($dados_pagamento as $dado) {
+                    $cnab_pessoa = new CnabPessoa();
+                    $cnab_pessoa->fill([
+                        'cnab_id' => $registro_cnab->id,
+                        'pessoa_id' => $dado['user_id'],
+                        'valor' => $dado['valor'],
+                        'conta' => $dado['conta'],
+                        'agencia' => $dado['agencia'],
+                        'banco' => $dado['codigo'],
+                        'digito' => $dado['digito'],
+                    ])->save();
+                }
+                $name = explode('/', $registro_cnab->arquivo)[count(explode('/', $registro_cnab->arquivo)) - 1];
+
+                array_push($cnabs, ['cnab' => $registro_cnab->id, 'name' => $name]);
             }
 
-            return ['status' => true, 'cnab' => $registro_cnab->id];
+
+
+
+            //outros bancos sem ser sicredi
+            $cnab = '';
+            $cnabs = [];
+            $cnab .= $this->header_arquivo_sicredi();
+
+            $cnab .= "\n" . $this->header_lote_sicredi(1, '000');
+            $soma_valor = 0;
+            $quantidade_moeda = 0;
+            $dados_pagamento = [];
+            $quantidade_registros=0;
+
+            foreach ($this->dados as $dado) {
+                $pagamentos = Pagamentopessoa::with(['pessoa.dadosbancario.banco'])
+                    ->whereHas('pessoa.dadosbancario.banco', function ($q) {
+                        $q->where('codigo', '<>', '748');
+                    })
+                    ->where('empresa_id', $empresa_id)
+                    ->where('pessoa_id', '=', $dado['profissional_id'])
+                    ->where('status', false)
+                    ->where('ativo', true)
+                    ->where(DB::raw("date_format(str_to_date(pagamentopessoas.periodo1, '%Y-%m-%d'), '%Y-%m')"), "=", $this->mes)
+                    ->get()->sum('valor');
+                if ($pagamentos > 0) {
+                    Log::info($dado['profissional_id']);
+                    $quantidade_registros+=1;
+
+                    Log::info($pagamentos);
+                    array_push($dados_pagamento, [
+                        'user_id' => $dado['profissional_id'],
+                        'valor' => $pagamentos,
+                        'conta' => $dado['conta'],
+                        'digito' => $dado['digito'],
+                        'agencia' => $dado['agencia'],
+                        'codigo' => $dado['codigo'],
+                    ]);
+                    $soma_valor += $pagamentos;
+                    $cnab .= "\n" .  $this->registro_detalhes_a_sicred($dado, 1, 0, number_format($pagamentos, 2, '', ''));
+                    $cnab .= "\n" . $this->registro_detalhes_b_sicred($dado, 1, 1, number_format($pagamentos, 2, '', ''));
+                }
+            }
+
+            if ($soma_valor > 0) {
+
+                $cnab .= "\n" . $this->trailer_lote_sicred($quantidade_registros + 2, number_format($soma_valor, 2, '', ''), $quantidade_moeda, '000'); //quantidade contando header do lote, registro a e b, trailer do lote
+                $cnab .= "\n" . $this->trailer_arquivo_sicred(1);
+
+                $name = 'cnabs/cnab_sicredi_fornecedor_' . Carbon::now()->format('Y-m-d_H-i-s') . '.txt';
+
+                Storage::disk('public')->put($name, $cnab);
+
+                $registro_cnab = new RegistroCnab();
+                $registro_cnab->fill([
+                    'empresa_id' => $empresa_id,
+                    'arquivo' => 'storage/' . $name,
+                    'mes' => $this->mes,
+                    'codigo_banco' => $this->sicred['codigo'],
+                    'data' => $this->data,
+                    'observacao' => $this->observacao,
+                    'situacao' => 'Aguardando',
+                ])->save();
+                foreach ($dados_pagamento as $dado) {
+                    $cnab_pessoa = new CnabPessoa();
+                    $cnab_pessoa->fill([
+                        'cnab_id' => $registro_cnab->id,
+                        'pessoa_id' => $dado['user_id'],
+                        'valor' => $dado['valor'],
+                        'conta' => $dado['conta'],
+                        'agencia' => $dado['agencia'],
+                        'banco' => $dado['codigo'],
+                        'digito' => $dado['digito'],
+                    ])->save();
+                }
+                $name = explode('/', $registro_cnab->arquivo)[count(explode('/', $registro_cnab->arquivo)) - 1];
+
+                array_push($cnabs, ['cnab' => $registro_cnab->id, 'name' => $name]);
+            }
+            return ['status' => true, 'cnabs' => $cnabs];
         }
         return ['status' => false];
         //trailer de arquivo
@@ -355,8 +540,7 @@ class CnabService
 
         $cod_remessa_retorno = "1"; //143 a 143
 
-        $data_geracao_arquivo = Carbon::now()->format('dmY');
-        ; //144 a 151 /DDMMAAAA
+        $data_geracao_arquivo = Carbon::now()->format('dmY');; //144 a 151 /DDMMAAAA
 
         $hora_geracao_arquivo = Carbon::now()->format('His'); //152 a 157 //HHMMSS
 
@@ -484,7 +668,7 @@ class CnabService
         return $trailer_arquivo;
     }
 
-    public function header_lote_santander($num_lote)
+    public function header_lote_santander($num_lote, $banco_codigo)
     {
         $banco = $this->santander['codigo'];
         $lote_servico = $num_lote . '';
@@ -501,7 +685,7 @@ class CnabService
         '20' = Pagamento Fornecedor
         ‘22’ = Pagamento de Contas,
         '30' = Pagamento Salários*/
-        $tipo_servico = "30";
+        $tipo_servico = $banco_codigo == "033" ? "30" : "20";
         /*
         ‘01’ = Crédito em Conta Corrente
         ‘03’ = DOC
@@ -515,7 +699,7 @@ class CnabService
         ‘41’ = TED – Transferência entre Clientes
 
         */
-        $forma_lancamento = "01";
+        $forma_lancamento = $banco_codigo == "033" ? "01" : "03";
 
         $layout_lote = "031";
 
@@ -629,7 +813,7 @@ class CnabService
         return $header_lote;
     }
 
-    public function header_lote_sicredi($num_lote)
+    public function header_lote_sicredi($num_lote, $codigo)
     {
         $banco = $this->sicred['codigo'];
         $lote_servico = $num_lote . '';
@@ -646,7 +830,7 @@ class CnabService
         '20' = Pagamento Fornecedor
         ‘22’ = Pagamento de Contas,
         '30' = Pagamento Salários*/
-        $tipo_servico = "30";
+        $tipo_servico = $codigo == "748" ? "30" : "20";
         /*
         ‘01’ = Crédito em Conta Corrente
         ‘03’ = DOC
@@ -660,7 +844,7 @@ class CnabService
         ‘41’ = TED – Transferência entre Clientes
 
         */
-        $forma_lancamento = "01";
+        $forma_lancamento = $codigo == "748" ? "01" : "41";
 
         $layout_lote = "042";
 
@@ -806,7 +990,7 @@ class CnabService
         $tipo_movimentacao = '0';
         $codigo_instrucao_movimento = '00';
 
-        $codigo_camera_centralizadora = '000'; //usar tudo zero ou 700 (DOC)
+        $codigo_camera_centralizadora = $user_data['codigo'] == "748" ? '000' : "018"; //usar tudo zero ou 700 (DOC)
 
 
         $codigo_banco_favorecido = $user_data['codigo'];
@@ -845,7 +1029,7 @@ class CnabService
             $nome_favorecido = $nome_favorecido . ' ';
         }
 
-        $seu_numero = $pessoa->cpfcnpj;
+        $seu_numero = $pessoa->cpfcnpj . Carbon::now()->format('dmY');
 
         $num = Str::length($seu_numero . '');
 
@@ -880,17 +1064,20 @@ class CnabService
             $nosso_numero = " " . $nosso_numero;
         }
 
-        $data_real_pagamento = "";
+        $data_real_pagamento = Carbon::now()->format('dmY');
+        $num = Str::length($data_real_pagamento . '');
+
         // $data_real_pagamento = Carbon::now()->addDays(2)->format('dmY');
         //verificar
-        for ($i = 155; $i <= 162; $i++) {
+        for ($i = 155+$num; $i <= 162; $i++) {
             $data_real_pagamento = "0" . $data_real_pagamento;
         }
 
-        $valor_real = "";
+        $valor_real = $user_data['codigo'] == "748" ? "" : $valor_pagamento;
         //verificar
+        $num = Str::length($valor_real . '');
 
-        for ($i = 163; $i <= 177; $i++) {
+        for ($i = 163+$num; $i <= 177; $i++) {
             $valor_real = "0" . $valor_real;
             // $valor_real = " " . $valor_real;
         }
@@ -904,8 +1091,8 @@ class CnabService
             $informacao_2 = " " . $informacao_2;
         }
 
-        $codigo_finalidade_doc = '06';
-        $codigo_finalidade_ted = '     ';
+        $codigo_finalidade_doc = $user_data['codigo'] == "748" ? '06' : '07';
+        $codigo_finalidade_ted = $user_data['codigo'] == "748" ? '     ' : '00005';
 
         $codigo_finalidade_complementar = '  ';
 
@@ -953,7 +1140,7 @@ class CnabService
         $tipo_movimentacao = '0';
         $codigo_instrucao_movimento = '00';
 
-        $codigo_camera_centralizadora = '000'; //usar tudo zero ou 700 (DOC)
+        $codigo_camera_centralizadora = $user_data['codigo'] == "033" ? "000" : '018'; //usar tudo zero ou 700 (DOC)
 
 
         $codigo_banco_favorecido = $user_data['codigo'];
@@ -992,7 +1179,7 @@ class CnabService
             $nome_favorecido = $nome_favorecido . ' ';
         }
 
-        $seu_numero = $pessoa->cpfcnpj;
+        $seu_numero = $pessoa->cpfcnpj . Carbon::now()->format('dmY');
         // if (Str::length($seu_numero . '') == 11) {
         //     $seu_numero .= rand(0,99999);
         // }
@@ -1030,19 +1217,33 @@ class CnabService
             $nosso_numero = " " . $nosso_numero;
         }
 
-        $data_real_pagamento = "";
+        $data_real_pagamento = Carbon::now()->format('dmY') . '';
         //verificar
-        for ($i = 155; $i <= 162; $i++) {
+        $num = Str::length($data_real_pagamento . '');
+
+        for ($i = 155 + $num; $i <= 162; $i++) {
             $data_real_pagamento = "0" . $data_real_pagamento;
         }
 
-        $valor_real = "";
-        //verificar
+        if ($user_data['codigo'] == "033") {
+            $valor_real = "";
+            //verificar
 
-        for ($i = 163; $i <= 177; $i++) {
-            // $valor_real = "0" . $valor_real;
-            $valor_real = " " . $valor_real;
+            for ($i = 163; $i <= 177; $i++) {
+                // $valor_real = "0" . $valor_real;
+                $valor_real = " " . $valor_real;
+            }
+        } else {
+            $valor_real = $valor_pagamento;
+            //verificar
+            $num = Str::length($valor_real . '');
+
+            for ($i = 163 + $num; $i <= 177; $i++) {
+                // $valor_real = "0" . $valor_real;
+                $valor_real = "0" . $valor_real;
+            }
         }
+
 
 
         // Log::info(Str::length($valor_real.$data_real_pagamento));
@@ -1053,10 +1254,10 @@ class CnabService
             $informacao_2 = " " . $informacao_2;
         }
 
-        $codigo_finalidade_doc = '00';
-        $codigo_finalidade_ted = '     ';
+        $codigo_finalidade_doc = $user_data['codigo'] == "033" ? '00' : '07';
+        $codigo_finalidade_ted = $user_data['codigo'] == "033" ? '     ' : "00005";
 
-        $codigo_finalidade_complementar = '  ';
+        $codigo_finalidade_complementar = $user_data['codigo'] == "033" ? '  ' : 'CC';
 
         $uso_exclusivo = '   ';
         $aviso = '0';
@@ -1072,7 +1273,7 @@ class CnabService
     }
 
 
-    public function registro_detalhes_b_santander($user_data, $num_lote)
+    public function registro_detalhes_b_santander($user_data, $num_lote, $num_registro, $valor_pagamento)
     {
         $user = User::where('pessoa_id', '=', $user_data['profissional_id'])->first();
         // Log::info($user->pessoa()->first()->dadosbancario()->first()->agencia);
@@ -1088,7 +1289,7 @@ class CnabService
 
         $tipo_registro = "3";
 
-        $num_registro = $num_lote;
+        $num_registro = $num_registro;
         $num = Str::length($num_registro . '');
 
         for ($i = 9 + $num; $i <= 13; $i++) {
@@ -1157,8 +1358,8 @@ class CnabService
         $complemento_cep = '   ';
 
         $estado = "  ";
-        $vencimento = Carbon::now()->addDays(30)->format('dmY');
-        $valor_documento = '100';
+        $vencimento = Carbon::now()->format('dmY');
+        $valor_documento = $valor_pagamento . '';
         $num = Str::length($valor_documento . '');
 
         for ($i = 136 + $num; $i <= 150; $i++) {
@@ -1175,9 +1376,15 @@ class CnabService
 
         $valor_desconto = '';
         $num = Str::length($valor_desconto . '');
+        if ($user_data['codigo'] == "033") {
 
-        for ($i = 166 + $num; $i <= 180; $i++) {
-            $valor_desconto = "0" . $valor_desconto;
+            for ($i = 166 + $num; $i <= 180; $i++) {
+                $valor_desconto = "0" . $valor_desconto;
+            }
+        } else {
+            for ($i = 166 + $num; $i <= 180; $i++) {
+                $valor_desconto = " " . $valor_desconto;
+            }
         }
 
 
@@ -1191,27 +1398,34 @@ class CnabService
         $valor_multa = '';
         $num = Str::length($valor_multa . '');
 
-        for ($i = 196 + $num; $i <= 210; $i++) {
-            $valor_multa = "0" . $valor_multa;
+        if ($user_data['codigo'] == "033") {
+
+            for ($i = 196 + $num; $i <= 210; $i++) {
+                $valor_multa = "0" . $valor_multa;
+            }
+        } else {
+            for ($i = 196 + $num; $i <= 210; $i++) {
+                $valor_multa = " " . $valor_multa;
+            }
         }
 
-        $cod_documento_favorecido = '';
+        $cod_documento_favorecido = $user_data['codigo'] == "033" ? '' : "0000";
         $num = Str::length($cod_documento_favorecido . '');
 
         for ($i = 211 + $num; $i <= 225; $i++) {
             $cod_documento_favorecido = $cod_documento_favorecido . ' ';
         }
 
-        $historico_credito = '0200';
+        $historico_credito = $user_data['codigo'] == "033" ? '0200' : "0183";
         // $num = Str::length($historico_credito . '');
 
         // for ($i = 226 + $num; $i <= 225; $i++) {
         //     $cod_documento_favorecido = $cod_documento_favorecido.' ';
         // }
 
-        $aviso = '0';
+        $aviso = $user_data['codigo'] == "033" ? '7' : "0";
 
-        $uso_excluviso_siagep = '';
+        $uso_excluviso_siagep = $user_data['codigo'] == "033" ? '' : ' N';
         $num = Str::length($uso_excluviso_siagep . '');
 
         for ($i = 231 + $num; $i <= 231; $i++) {
@@ -1232,7 +1446,7 @@ class CnabService
         return $registro_b;
     }
 
-    public function registro_detalhes_b_sicred($user_data, $num_lote)
+    public function registro_detalhes_b_sicred($user_data, $num_lote, $num_registro, $valor_documento)
     {
         $user = User::where('pessoa_id', '=', $user_data['profissional_id'])->first();
         // Log::info($user->pessoa()->first()->dadosbancario()->first()->agencia);
@@ -1248,7 +1462,7 @@ class CnabService
 
         $tipo_registro = "3";
 
-        $num_registro = $num_lote;
+        $num_registro = $num_registro;
         $num = Str::length($num_registro . '');
 
         for ($i = 9 + $num; $i <= 13; $i++) {
@@ -1318,7 +1532,7 @@ class CnabService
 
         $estado = "  ";
         // $vencimento=Carbon::now()->addDays(3)->format('dmY');
-        $pagamento = '';
+        $pagamento = $user_data['codigo'] == '748' ? '' : $valor_documento;
         $num = Str::length($pagamento . '');
 
         for ($i = 128 + $num; $i <= 210; $i++) {
@@ -1326,7 +1540,7 @@ class CnabService
         }
 
 
-        $cod_documento_favorecido = '';
+        $cod_documento_favorecido = $user_data['codigo'] == "748" ? '' : "0000";;
         $num = Str::length($cod_documento_favorecido . '');
 
         for ($i = 211 + $num; $i <= 225; $i++) {
@@ -1361,7 +1575,7 @@ class CnabService
 
 
 
-    public function trailer_lote_sicred($quantidade_registros, $soma_valor, $soma_quantidade_moeda)
+    public function trailer_lote_sicred($quantidade_registros, $soma_valor, $soma_quantidade_moeda, $codigo)
     {
         $banco = $this->sicred['codigo'];
         $lote = "0001";
@@ -1401,7 +1615,7 @@ class CnabService
         }
 
 
-        $numero_aviso_debito = '';
+        $numero_aviso_debito = $codigo == "748" ? '' : '000000';
 
         $num = Str::length($numero_aviso_debito);
 
@@ -1425,7 +1639,7 @@ class CnabService
     }
 
 
-    public function trailer_lote_santander($quantidade_registros, $soma_valor, $soma_quantidade_moeda)
+    public function trailer_lote_santander($quantidade_registros, $soma_valor, $soma_quantidade_moeda, $codigo)
     {
         $banco = $this->santander['codigo'];
         $lote = "0001";
@@ -1465,7 +1679,7 @@ class CnabService
         }
 
 
-        $numero_aviso_debito = '';
+        $numero_aviso_debito = $codigo == "033" ? '' : '000000';
 
         $num = Str::length($numero_aviso_debito);
 
