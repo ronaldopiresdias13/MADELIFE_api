@@ -89,36 +89,36 @@ class PagamentoexternosController extends Controller
      */
     public function createlist(Request $request)
     {
-        // return $request->pagamentos;
-
         $empresa_id = null;
-
         if (Auth::check()) {
             if (Auth::user()->pessoa->profissional) {
                 $empresa_id = Auth::user()->pessoa->profissional->empresa_id;
             }
         }
-
         DB::transaction(function () use ($request, $empresa_id) {
             foreach ($request->pagamentos as $key => $item) {
                 $pessoa = Prestador::find($item['prestador_id']);
                 Pagamentoexterno::create(
                     [
-                        'empresa_id'       => $empresa_id,
-                        'pessoa_id'        => $pessoa->pessoa_id,
-                        'servico_id'        => $item['servico']['id'],
-                        'datainicio'       => $item['datainicio'],
-                        'datafim'          => $item['datafim'],
-                        'ordemservico_id'  => $item['ordemservico_id'],
-                        'quantidade'       => $item['quantidade'],
-                        'turno'            => $item['periodo'],
-                        'valorunitario'    => $item['valorunitario'],
-                        'subtotal'         => $item['subtotal'],
-                        'status'           => $item['status'],
-                        'observacao'       => $item['observacao'],
-                        'situacao'         => $item['situacao'],
-                        'proventos'        => $item['proventos'],
-                        'descontos'        => $item['descontos']
+                        'empresa_id'         => $empresa_id,
+                        'servico_id'         => $item['servico']['id'],
+                        'ordemservico_id'    => $item['ordemservico_id'],
+                        'turno'              => $item['periodo'],
+                        'valorunitario'      => $item['valorunitario'],
+                        'quantidade'         => $item['quantidade'],
+                        'pagamentopessoa_id' => Pagamentopessoa::create([
+                            'empresa_id'     => $empresa_id,
+                            'pessoa_id'      => $pessoa->pessoa_id,
+                            'periodo1'       => $item['datainicio'],
+                            'periodo2'       => $item['datafim'],
+                            'valor'          => $item['subtotal'],
+                            'status'         => $item['status'],
+                            'observacao'     => $item['observacao'],
+                            'situacao'       => $item['situacao'],
+                            'proventos'      => $item['proventos'],
+                            'descontos'      => $item['descontos'],
+                            'tipopessoa'     => "Prestador Externo"
+                        ])->id,
                     ]
                 );
             }
@@ -145,22 +145,25 @@ class PagamentoexternosController extends Controller
     {
         DB::transaction(function () use ($request) {
             foreach ($request->pagamentos as $key => $item) {
+                $pagamentopessoa  = Pagamentopessoa::find($item['pagamentopessoa_id']);
+                $pagamentopessoa->periodo1         = $item['pagamentopessoa']['periodo1'];
+                $pagamentopessoa->periodo2         = $item['pagamentopessoa']['periodo2'];
+                $pagamentopessoa->valor            = $item['pagamentopessoa']['valor'];
+                $pagamentopessoa->status           = $item['pagamentopessoa']['status'];
+                $pagamentopessoa->pessoa_id        = $item['pagamentopessoa']['pessoa_id'];
+                $pagamentopessoa->observacao       = $item['pagamentopessoa']['observacao'];
+                $pagamentopessoa->situacao         = "Pendente";
+                $pagamentopessoa->proventos        = $item['pagamentopessoa']['proventos'];
+                $pagamentopessoa->descontos        = $item['pagamentopessoa']['descontos'];
+                $pagamentopessoa->save();
+
                 $pagamentoexterno = Pagamentoexterno::find($item['id']);
                 $pagamentoexterno->empresa_id       = $item['empresa_id'];
-                $pagamentoexterno->pessoa_id        = $item['pessoa_id'];
                 $pagamentoexterno->servico_id        = $item['servico_id'];
-                $pagamentoexterno->datainicio       = $item['datainicio'];
-                $pagamentoexterno->datafim          = $item['datafim'];
                 $pagamentoexterno->ordemservico_id  = $item['ordemservico_id'];
                 $pagamentoexterno->quantidade       = $item['quantidade'];
                 $pagamentoexterno->turno            = $item['turno'];
                 $pagamentoexterno->valorunitario    = $item['valorunitario'];
-                $pagamentoexterno->subtotal         = $item['subtotal'];
-                $pagamentoexterno->status           = $item['status'];
-                $pagamentoexterno->observacao       = $item['observacao'];
-                $pagamentoexterno->situacao         = "Pendente";
-                $pagamentoexterno->proventos        = $item['proventos'];
-                $pagamentoexterno->descontos        = $item['descontos'];
                 $pagamentoexterno->save();
             }
         });
