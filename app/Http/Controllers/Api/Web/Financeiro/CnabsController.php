@@ -41,9 +41,7 @@ class CnabsController extends Controller
 
         $cnabService = new CnabService($data['banco'], $data['dados'], $data['mes'], $data['observacao'], $data['data'], $user);
         $resposta = $cnabService->criar_cnab();
-        $registro = RegistroCnab::find($resposta['cnab']);
-        $name = explode('/', $registro->arquivo)[count(explode('/', $registro->arquivo)) - 1];
-        $resposta['name'] = $name;
+        // $registro = RegistroCnab::find($resposta['cnab']);
         if ($resposta['status'] == true) {
             return $resposta;
         } else {

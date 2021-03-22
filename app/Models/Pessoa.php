@@ -95,4 +95,21 @@ class Pessoa extends Model
     {
         return $this->hasMany(CnabPessoa::class,'pessoa_id','id');
     }
+
+
+
+    public function mensagens()
+    {
+        return $this->hasMany(ConversaMensagem::class,'sender_id','id');
+    }
+
+    public function conversas_sender()
+    {
+        return $this->hasMany(Conversa::class,'sender_id','id');
+    }
+
+    public function conversas_receive()
+    {
+        return $this->hasMany(Conversa::class,'receive_id','id');
+    }
 }
