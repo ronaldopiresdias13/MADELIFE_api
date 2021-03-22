@@ -1059,6 +1059,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
         Route::prefix('orcs')->group(function () {
             Route::get('', [OrcsController::class, 'index']);
+            Route::get('{orc}', [OrcsController::class, 'show']);
             Route::post('', [OrcsController::class, 'store']);
         });
         Route::prefix('financeiro')->group(function () {
