@@ -23,7 +23,6 @@ class ApagarAtributosPagamentointernos extends Migration
             $table->dropColumn('pessoa_id');
             $table->dropColumn('datainicio');
             $table->dropColumn('datafim');
-            $table->dropColumn('salario');
             $table->dropColumn('proventos');
             $table->dropColumn('descontos');
             $table->dropColumn('status');
