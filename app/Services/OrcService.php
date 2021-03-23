@@ -40,6 +40,7 @@ class OrcService
             $this->orc->fill([
                 "empresa_id"               => $empresa_id,
                 "cliente_id"               => $this->request->cliente_id,
+                "pacote_id"                => $this->request->pacote_id,
                 "numero"                   => $this->request->numero,
                 "tipo"                     => $this->request->tipo,
                 "data"                     => $this->request->data,
@@ -137,6 +138,7 @@ class OrcService
         DB::transaction(function () {
             $this->orc->fill([
                 "cliente_id"               => $this->request->cliente_id,
+                "pacote_id"                => $this->request->pacote_id,
                 "numero"                   => $this->request->numero,
                 "tipo"                     => $this->request->tipo,
                 "data"                     => $this->request->data,

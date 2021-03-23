@@ -32,6 +32,7 @@ class Orc extends Model
         'id',
         'empresa_id',
         'cliente_id',
+        'pacote_id',
         'numero',
         'tipo',
         'data',
