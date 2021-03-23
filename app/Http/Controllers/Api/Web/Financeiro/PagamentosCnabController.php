@@ -88,23 +88,31 @@ class PagamentosCnabController extends Controller
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
         $pagamentosexternos = DB::select(
-            "(
-	            SELECT  DATE_FORMAT(pge.datainicio, '%Y-%m') AS periodo, pge.id, p.nome, pge.subtotal AS valor, pge.situacao, 'Prestador Externo' AS tipo FROM pagamentoexternos AS pge
-	            INNER JOIN pessoas AS p
-	            ON p.id = pge.pessoa_id
-	            WHERE pge.empresa_id = ?
-	            AND pge.`status` = 0 AND pge.deleted_at IS NULL AND pge.situacao != 'Criado'
-            )
-            UNION ALL
-            (
-            	SELECT  DATE_FORMAT(pgi.datainicio, '%Y-%m') AS periodo, pgi.id, p.nome, (pgi.salario + pgi.proventos - pgi.descontos ) AS valor, pgi.situacao, 'Profissional Interno' AS tipo FROM pagamentointernos AS pgi
-            	INNER JOIN pessoas AS p
-            	ON p.id = pgi.pessoa_id
-            	WHERE pgi.empresa_id = ?
-            	AND pgi.`status` = 0 AND pgi.deleted_at IS NULL AND pgi.situacao != 'Criado'
-            )",
+            // "(
+            //     SELECT  DATE_FORMAT(pge.datainicio, '%Y-%m') AS periodo, pge.id, p.nome, pge.subtotal AS valor, pge.situacao, 'Prestador Externo' AS tipo FROM pagamentoexternos AS pge
+            //     INNER JOIN pessoas AS p
+            //     ON p.id = pge.pessoa_id
+            //     WHERE pge.empresa_id = ?
+            //     AND pge.`status` = 0 AND pge.deleted_at IS NULL AND pge.situacao != 'Criado'
+            // )
+            // UNION ALL
+            // (
+            // 	SELECT  DATE_FORMAT(pgi.datainicio, '%Y-%m') AS periodo, pgi.id, p.nome, (pgi.salario + pgi.proventos - pgi.descontos ) AS valor, pgi.situacao, 'Profissional Interno' AS tipo FROM pagamentointernos AS pgi
+            // 	INNER JOIN pessoas AS p
+            // 	ON p.id = pgi.pessoa_id
+            // 	WHERE pgi.empresa_id = ?
+            // 	AND pgi.`status` = 0 AND pgi.deleted_at IS NULL AND pgi.situacao != 'Criado'
+            // )",
+            "
+                SELECT DATE_FORMAT(pgp.periodo1, '%Y-%m') AS periodo, pgp.id, p.nome, pgp.valor, pgp.situacao, pgp.tipopessoa as tipo FROM pagamentopessoas AS pgp
+                INNER JOIN pessoas AS p
+                ON p.id = pgp.pessoa_id
+                WHERE pgp.empresa_id = ?
+                AND pgp.`status` = 0 
+                AND pgp.deleted_at IS NULL 
+                AND pgp.situacao != 'Criado'
+            ",
             [
-                $empresa_id,
                 $empresa_id,
             ]
         );
@@ -149,15 +157,19 @@ class PagamentosCnabController extends Controller
         // return $request;
         DB::transaction(function () use ($request) {
             foreach ($request['pagamentos'] as $key => $pag) {
-                if ($pag['tipo'] == "Prestador Externo") {
-                    $pagamento = Pagamentoexterno::find($pag['id']);
-                    $pagamento->situacao = $request['situacao'];
-                    $pagamento->update();
-                } else {
-                    $pagamento = Pagamentointerno::find($pag['id']);
-                    $pagamento->situacao = $request['situacao'];
-                    $pagamento->update();
-                }
+                // if ($pag['tipo'] == "Prestador Externo") {
+                //     $pagamento = Pagamentoexterno::find($pag['id']);
+                //     $pagamento->situacao = $request['situacao'];
+                //     $pagamento->update();
+                // }
+                //  else {
+                //     $pagamento = Pagamentointerno::find($pag['id']);
+                //     $pagamento->situacao = $request['situacao'];
+                //     $pagamento->update();
+                // }
+                $pagamento = Pagamentopessoa::find($pag['id']);
+                $pagamento->situacao = $request['situacao'];
+                $pagamento->update();
             }
         });
     }

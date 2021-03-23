@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pagamentointerno;
+use App\Models\Pagamentopessoa;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -97,16 +98,35 @@ class PagamentointernosController extends Controller
 
         DB::transaction(function () use ($request, $empresa_id) {
             foreach ($request['pagamentos'] as $key => $item) {
+                // Pagamentointerno::create(
+                //     [
+                //         'empresa_id' => $empresa_id,
+                //         'pessoa_id'  => $item['pessoa_id'],
+                //         'datainicio' => $item['datainicio'],
+                //         'datafim'    => $item['datafim'],
+                //         'salario'    => $item['salario'],
+                //         'proventos'  => $item['proventos'],
+                //         'descontos'  => $item['descontos'],
+                //         'situacao'   => 'Pendente'
+                //     ]
+                // );
                 Pagamentointerno::create(
                     [
-                        'empresa_id' => $empresa_id,
-                        'pessoa_id'  => $item['pessoa_id'],
-                        'datainicio' => $item['datainicio'],
-                        'datafim'    => $item['datafim'],
-                        'salario'    => $item['salario'],
-                        'proventos'  => $item['proventos'],
-                        'descontos'  => $item['descontos'],
-                        'situacao'   => 'Pendente'
+                        'empresa_id'         => $empresa_id,
+                        'salario'            => $item['salario'],
+                        'pagamentopessoa_id' => Pagamentopessoa::create([
+                            'empresa_id'     => $empresa_id,
+                            'pessoa_id'      => $item['pessoa_id'],
+                            'periodo1'       => $item['datainicio'],
+                            'periodo2'       => $item['datafim'],
+                            'valor'          => $item['salario'] + $item['proventos'] - $item['descontos'],
+                            'status'         => 0,
+                            'observacao'     => "",
+                            'situacao'       => 'Pendente',
+                            'proventos'      => $item['proventos'],
+                            'descontos'      => $item['descontos'],
+                            'tipopessoa'     => "Profissional Interno"
+                        ])->id,
                     ]
                 );
             }

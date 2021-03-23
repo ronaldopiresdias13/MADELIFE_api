@@ -25,6 +25,7 @@ class Pagamentointerno extends Model
         'id',
         'empresa_id',
         'pagamentopessoa_id',
+        'salario',
         'created_at',
         'updated_at',
         'deleted_at'
