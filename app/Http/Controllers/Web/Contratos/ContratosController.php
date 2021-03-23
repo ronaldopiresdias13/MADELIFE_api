@@ -117,4 +117,16 @@ class ContratosController extends Controller
     {
         //
     }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Orcamento  $orcamento
+     * @return \Illuminate\Http\Response
+     */
+    public function prorrogacao(Request $request, Orcamento $orcamento)
+    {
+        $orcamento->ordemservico()->update(['fim' => $request->datafim]);
+    }
 }
