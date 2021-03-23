@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web\Contratos;
 
 use App\Http\Controllers\Controller;
 use App\Models\Orcamento;
+use App\Services\ContratoService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -30,9 +31,9 @@ class ContratosController extends Controller
                 'evento.cidade',
                 'remocao.cidadeorigem',
                 'remocao.cidadedestino',
-                'produtos.produto',
-                'servicos.servico',
-                'orcamentocustos'
+                // 'produtos.produto',
+                // 'servicos.servico',
+                // 'custos'
             ],
         )
             ->where('empresa_id', $empresa_id);
@@ -65,7 +66,8 @@ class ContratosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $contratoService = new ContratoService($request);
+        return $contratoService->store();
     }
 
     /**
@@ -88,7 +90,7 @@ class ContratosController extends Controller
                 'remocao.cidadedestino',
                 'produtos.produto',
                 'servicos.servico',
-                'orcamentocustos'
+                'custos'
             ],
         )->first($orcamento->id);
     }

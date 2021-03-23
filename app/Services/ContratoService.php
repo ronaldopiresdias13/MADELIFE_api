@@ -14,6 +14,7 @@ use App\Models\OrcamentoServico;
 use App\Models\Orccusto;
 use App\Models\OrcProduto;
 use App\Models\OrcServico;
+use App\Models\Ordemservico;
 use App\Models\Remocao;
 use App\Models\User;
 use App\Models\Venda;
@@ -66,11 +67,23 @@ class ContratoService
                 "valortotalservico"        => $this->request->valortotalservico,
                 "observacao"               => $this->request->observacao,
                 "status"                   => $this->request->status,
+            ])->save();
 
-
-
-
-
+            $ordemservico = new Ordemservico();
+            $ordemservico->fill([
+                "empresa_id"             => $this->empresa_id,
+                "produto_id"             => $this->request->ordemservico->codigo,
+                "orcamento_id"           => $this->orcamento->id,
+                "responsavel_id"         => $this->request->ordemservico->responsavel_id,
+                "inicio"                 => $this->request->ordemservico->inicio,
+                "fim"                    => $this->request->ordemservico->fim,
+                "status"                 => $this->request->ordemservico->status,
+                "montagemequipe"         => $this->request->ordemservico->montagemequipe,
+                "realizacaoprocedimento" => $this->request->ordemservico->realizacaoprocedimento,
+                "descricaomotivo"        => $this->request->ordemservico->descricaomotivo,
+                "dataencerramento"       => $this->request->ordemservico->dataencerramento,
+                "motivo"                 => $this->request->ordemservico->motivo,
+                "profissional_id"        => $this->request->ordemservico->profissional_id,
             ])->save();
 
             switch ($this->orcamento->tipo) {

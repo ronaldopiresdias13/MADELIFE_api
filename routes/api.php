@@ -1074,8 +1074,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
         Route::prefix('contratos')->group(function () {
             Route::get('', [ContratosController::class, 'index']);
-            Route::get('{orcamento}', [OrcsController::class, 'show']);
-            // Route::post('', [OrcsController::class, 'store']);
+            Route::get('{orcamento}', [ContratosController::class, 'show']);
+            Route::post('', [ContratosController::class, 'store']);
             // Route::put('{orc}', [OrcsController::class, 'update']);
             // Route::delete('{orc}', [OrcsController::class, 'destroy']);
         });

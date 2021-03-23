@@ -82,39 +82,39 @@ class Orcamento extends Model
     //         )->wherePivot('ativo', true);
     // }
 
-    public function orcamentocustos()
+    public function custos()
     {
         return $this->hasMany(Orcamentocusto::class)->where('ativo', true);
     }
 
     public function homecare()
     {
-        return $this->hasOne(Homecare::class);
+        return $this->hasOne(Homecare::class)->where('ativo', true);
     }
 
     public function remocao()
     {
-        return $this->hasOne(Remocao::class);
+        return $this->hasOne(Remocao::class)->where('ativo', true);
     }
 
     public function aph()
     {
-        return $this->hasOne(Aph::class);
+        return $this->hasOne(Aph::class)->where('ativo', true);
     }
 
     public function evento()
     {
-        return $this->hasOne(Evento::class);
+        return $this->hasOne(Evento::class)->where('ativo', true);
     }
 
     public function ordemservico()
     {
-        return $this->hasOne(Ordemservico::class);
+        return $this->hasOne(Ordemservico::class)->where('ativo', true);
     }
 
     public function venda()
     {
-        return $this->hasOne(Venda::class);
+        return $this->hasOne(Venda::class)->where('ativo', true);
     }
 
     // protected static function booted()
