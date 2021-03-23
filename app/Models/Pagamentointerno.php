@@ -24,19 +24,13 @@ class Pagamentointerno extends Model
     protected $fillable = [
         'id',
         'empresa_id',
-        'pessoa_id',
-        'datainicio',
-        'datafim',
-        'salario',
-        'proventos',
-        'descontos',
-        'status',
+        'pagamentopessoa_id',
         'created_at',
         'updated_at',
         'deleted_at'
     ];
-    public function pessoa()
+    public function pagamentopessoa()
     {
-        return $this->belongsTo(Pessoa::class);
+        return $this->belongsTo(Pagamentopessoa::class);
     }
 }

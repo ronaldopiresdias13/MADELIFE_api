@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Pagamentointerno;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -32,8 +33,11 @@ class PagamentointernosController extends Controller
         $datainicio = $request['datainicio'] ? $request['datainicio'] : date("Y-m-01", strtotime($data));
         $datafim    = $request['datafim']    ? $request['datafim']    : date("Y-m-t", strtotime($data));
 
-        $result = Pagamentointerno::with('pessoa')->where('empresa_id', $empresa_id)
-            ->whereBetween('datainicio', [$datainicio, $datafim])
+        $result = Pagamentointerno::with(['pagamentopessoa.pessoa'])->where('empresa_id', $empresa_id)
+            ->whereHas('pagamentopessoa', function (Builder $query) use ($datainicio, $datafim) {
+                $query->where('situacao', "!=", "Criado")->whereBetween('periodo1', [$datainicio, $datafim]);
+            })
+            ->where('empresa_id', $empresa_id)
             ->paginate(10);
 
         if (env("APP_ENV", 'production') == 'production') {
