@@ -72,18 +72,18 @@ class ContratoService
             $ordemservico = new Ordemservico();
             $ordemservico->fill([
                 "empresa_id"             => $this->empresa_id,
-                "codigo"                 => $this->request->ordemservico->codigo,
+                "codigo"                 => $this->request->ordemservico['codigo'],
                 "orcamento_id"           => $this->orcamento->id,
-                "responsavel_id"         => $this->request->ordemservico->responsavel_id,
-                "inicio"                 => $this->request->ordemservico->inicio,
-                "fim"                    => $this->request->ordemservico->fim,
-                "status"                 => $this->request->ordemservico->status,
-                "montagemequipe"         => $this->request->ordemservico->montagemequipe,
-                "realizacaoprocedimento" => $this->request->ordemservico->realizacaoprocedimento,
-                "descricaomotivo"        => $this->request->ordemservico->descricaomotivo,
-                "dataencerramento"       => $this->request->ordemservico->dataencerramento,
-                "motivo"                 => $this->request->ordemservico->motivo,
-                "profissional_id"        => $this->request->ordemservico->profissional_id,
+                "responsavel_id"         => $this->request->ordemservico['responsavel_id'],
+                "inicio"                 => $this->request->ordemservico['inicio'],
+                "fim"                    => $this->request->ordemservico['fim'],
+                "status"                 => $this->request->ordemservico['status'],
+                "montagemequipe"         => $this->request->ordemservico['montagemequipe'],
+                "realizacaoprocedimento" => $this->request->ordemservico['realizacaoprocedimento'],
+                "descricaomotivo"        => $this->request->ordemservico['descricaomotivo'],
+                "dataencerramento"       => $this->request->ordemservico['dataencerramento'],
+                "motivo"                 => $this->request->ordemservico['motivo'],
+                "profissional_id"        => $this->request->ordemservico['profissional_id'],
             ])->save();
 
             switch ($this->orcamento->tipo) {
