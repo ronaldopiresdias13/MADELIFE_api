@@ -28,59 +28,59 @@ class Orcamento extends Model
         return $this->belongsTo(Empresa::class);
     }
 
-    public function orcamento_servicos()
+    public function servicos()
     {
         return $this->hasMany(OrcamentoServico::class)->where('ativo', true);
     }
 
-    public function servicos()
-    {
-        return $this->belongsToMany(Servico::class, 'orcamento_servico')
-            ->withPivot(
-                'quantidade',
-                'frequencia',
-                'basecobranca',
-                'valorunitario',
-                'custo',
-                'custodiurno',
-                'custonoturno',
-                'subtotal',
-                'subtotalcusto',
-                'adicionalnoturno',
-                'horascuidado',
-                'horascuidadodiurno',
-                'horascuidadonoturno',
-                'icms',
-                'inss',
-                'iss',
-                'valorcustomensal',
-                'valorresultadomensal',
-                'descricao'
-            )->wherePivot('ativo', true);
-    }
+    // public function servicos()
+    // {
+    //     return $this->belongsToMany(Servico::class, 'orcamento_servico')
+    //         ->withPivot(
+    //             'quantidade',
+    //             'frequencia',
+    //             'basecobranca',
+    //             'valorunitario',
+    //             'custo',
+    //             'custodiurno',
+    //             'custonoturno',
+    //             'subtotal',
+    //             'subtotalcusto',
+    //             'adicionalnoturno',
+    //             'horascuidado',
+    //             'horascuidadodiurno',
+    //             'horascuidadonoturno',
+    //             'icms',
+    //             'inss',
+    //             'iss',
+    //             'valorcustomensal',
+    //             'valorresultadomensal',
+    //             'descricao'
+    //         )->wherePivot('ativo', true);
+    // }
 
-    public function orcamento_produtos()
+    public function produtos()
     {
         return $this->hasMany(OrcamentoProduto::class)->where('ativo', true);
     }
 
-    public function produtos()
-    {
-        return $this->belongsToMany(Produto::class, 'orcamento_produto')
-            ->withPivot(
-                "quantidade",
-                "valorunitario",
-                "custo",
-                "subtotal",
-                "subtotalcusto",
-                // "icms",
-                // "inss",
-                // "iss",
-                "valorcustomensal",
-                "valorresultadomensal",
-                "descricao"
-            )->wherePivot('ativo', true);
-    }
+    // public function produtos()
+    // {
+    //     return $this->belongsToMany(Produto::class, 'orcamento_produto')
+    //         ->withPivot(
+    //             "quantidade",
+    //             "valorunitario",
+    //             "custo",
+    //             "subtotal",
+    //             "subtotalcusto",
+    //             // "icms",
+    //             // "inss",
+    //             // "iss",
+    //             "valorcustomensal",
+    //             "valorresultadomensal",
+    //             "descricao"
+    //         )->wherePivot('ativo', true);
+    // }
 
     public function orcamentocustos()
     {
@@ -110,6 +110,11 @@ class Orcamento extends Model
     public function ordemservico()
     {
         return $this->hasOne(Ordemservico::class);
+    }
+
+    public function venda()
+    {
+        return $this->hasOne(Venda::class);
     }
 
     // protected static function booted()

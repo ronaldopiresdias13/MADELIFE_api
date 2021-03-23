@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\Web\Compras\ProdutoController;
 use App\Http\Controllers\Api\Web\DepartamentoPessoal\PagamentoexternosController;
 use App\Http\Controllers\Api\Web\Financeiro\PagamentosCnabController;
 use App\Http\Controllers\Api\Web\GestaoOrcamentaria\PacotesController;
+use App\Http\Controllers\Web\Contratos\ContratosController;
 use App\Http\Controllers\Web\Escalas\EscalasController as EscalasEscalasController;
 use App\Http\Controllers\Web\Formacoes\FormacoesController;
 use App\Http\Controllers\Web\Orcs\OrcsController;
@@ -1070,6 +1071,13 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::post('', [OrcsController::class, 'store']);
             Route::put('{orc}', [OrcsController::class, 'update']);
             Route::delete('{orc}', [OrcsController::class, 'destroy']);
+        });
+        Route::prefix('contratos')->group(function () {
+            Route::get('', [ContratosController::class, 'index']);
+            Route::get('{orcamento}', [OrcsController::class, 'show']);
+            // Route::post('', [OrcsController::class, 'store']);
+            // Route::put('{orc}', [OrcsController::class, 'update']);
+            // Route::delete('{orc}', [OrcsController::class, 'destroy']);
         });
         Route::prefix('financeiro')->group(function () {
             Route::get('pagamentos/pessoas', [PagamentosCnabController::class, 'listPagamentosByEmpresaId']);
