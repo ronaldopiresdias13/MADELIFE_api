@@ -92,7 +92,7 @@ class ContratosController extends Controller
                 'servicos.servico',
                 'custos'
             ],
-        )->first($orcamento->id);
+        )->find($orcamento->id);
     }
 
     /**
