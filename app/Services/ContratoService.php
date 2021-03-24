@@ -13,6 +13,7 @@ use App\Models\Orcamentocusto;
 use App\Models\OrcamentoProduto;
 use App\Models\OrcamentoServico;
 use App\Models\Ordemservico;
+use App\Models\OrdemservicoServico;
 use App\Models\Remocao;
 use App\Models\Venda;
 use Illuminate\Http\Request;
@@ -176,56 +177,16 @@ class ContratoService
                     "inss"                 => $item['inss'],
                     "descricao"            => $item['descricao'],
                 ])->save();
+
+                $ordemservico_servico = new OrdemservicoServico();
+                $ordemservico_servico->fill([
+                    "ordemservico_id" => $ordemservico->id,
+                    "servico_id"      => $item['servico_id'],
+                    "descricao"       => $item['basecobranca'],
+                    "valordiurno"     => $item['custodiurno'],
+                    "valornoturno"    => $item['custonoturno'],
+                ])->save();
             }
-
-            // foreach ($this->request->servicos as $item) {
-            //     $orcamento_servico = new OrcamentoServico();
-            //     $orcamento_servico->fill([
-            //         "orcamento_id"         => $this->orcamento->id,
-            //         "servico_id"           => $item['servico_id'],
-            //         "quantidade"           => $item['quantidade'],
-            //         "basecobranca"         => $item['basecobranca'],
-            //         "frequencia"           => $item['frequencia'],
-            //         "valorunitario"        => $item['valorunitario'],
-            //         "subtotal"             => $item['subtotal'],
-            //         "custo"                => $item['custo'],
-            //         "custodiurno"          => $item['custodiurno'],
-            //         "custonoturno"         => $item['custonoturno'],
-            //         "subtotalcusto"        => $item['subtotalcusto'],
-            //         "valorresultadomensal" => $item['valorresultadomensal'],
-            //         "valorcustomensal"     => $item['valorcustomensal'],
-            //         "horascuidadodiurno"   => $item['horascuidadodiurno'],
-            //         "horascuidadonoturno"  => $item['horascuidadonoturno'],
-            //         "icms"                 => $item['icms'],
-            //         "iss"                  => $item['iss'],
-            //         "inss"                 => $item['inss'],
-            //         "descricao"            => $item['descricao'],
-            //     ])->save();
-            // }
-
-
-            // $ordemservico = Ordemservico::where('orcamento_id', $orcamento->id)->where('ativo', true)->first();
-
-            // if ($ordemservico) {
-            //     foreach ($ordemservico->servicos as $key => $servico) {
-            //         OrdemservicoServico::find($servico->pivot->id)->delete();
-            //         // $servico->delete();
-            //     }
-
-            //     foreach ($orcamento->servicos as $key => $servico) {
-            //         OrdemservicoServico::create(
-            //             [
-            //                 'ordemservico_id'  => $ordemservico->id,
-            //                 'servico_id'       => $servico->id,
-            //                 'descricao'        => $servico['pivot']['basecobranca'],
-            //                 'valordiurno'      => $servico['pivot']['custodiurno'],
-            //                 'valornoturno'     => $servico['pivot']['custonoturno'],
-            //             ]
-            //         );
-            //     }
-            // }
-
-
 
             foreach ($this->request->custos as $item) {
                 $orcamentocusto = new Orcamentocusto();
@@ -388,6 +349,7 @@ class ContratoService
             }
 
             $this->orcamento->servicos()->delete();
+            $this->orcamento->ordemservico->ordemservico_servicos()->delete();
 
             foreach ($this->request->servicos as $item) {
                 OrcamentoServico::updateOrCreate(
@@ -411,6 +373,19 @@ class ContratoService
                         "iss"                  => $item['iss'],
                         "inss"                 => $item['inss'],
                         "descricao"            => $item['descricao'],
+                    ],
+                    [
+                        "ativo"                => true,
+                    ]
+                );
+
+                OrdemservicoServico::updateOrCreate(
+                    [
+                        "ordemservico_id" => $this->orcamento->ordemservico->id,
+                        "servico_id"      => $item['servico_id'],
+                        "descricao"       => $item['basecobranca'],
+                        "valordiurno"     => $item['custodiurno'],
+                        "valornoturno"    => $item['custonoturno'],
                     ],
                     [
                         "ativo"                => true,

@@ -50,6 +50,11 @@ class Ordemservico extends Model
             )->wherePivot('ativo', true);
     }
 
+    public function ordemservico_servicos()
+    {
+        return $this->belongsTo(OrdemservicoServico::class)->where('ativo', true);
+    }
+
     public function prestadores()
     {
         return $this->belongsToMany(Prestador::class, 'ordemservico_prestador')
