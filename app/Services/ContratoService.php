@@ -82,7 +82,7 @@ class ContratoService
             ])->save();
 
             switch ($this->orcamento->tipo) {
-                case 'venda':
+                case 'Venda':
                     $venda = new Venda();
                     $venda->fill([
                         "empresa_id"   => $this->empresa_id,
@@ -91,14 +91,14 @@ class ContratoService
                         "data"         => $this->request->venda['data'],
                     ])->save();
                     break;
-                case 'homecare':
+                case 'Home Care':
                     $homecare = new Homecare();
                     $homecare->fill([
                         "orcamento_id" => $this->orcamento->id,
                         "paciente_id"  => $this->request->homecare['paciente_id'],
                     ])->save();
                     break;
-                case 'aph':
+                case 'APH':
                     $aph = new Aph();
                     $aph->fill([
                         "orcamento_id" => $this->orcamento->id,
@@ -108,7 +108,7 @@ class ContratoService
                         "cidade_id"            => $this->request->aph['cidade_id'],
                     ])->save();
                     break;
-                case 'evento':
+                case 'Evento':
                     $evento = new Evento();
                     $evento->fill([
                         "orcamento_id" => $this->orcamento->id,
@@ -118,7 +118,7 @@ class ContratoService
                         "cidade_id"    => $this->request->evento['cidade_id'],
                     ])->save();
                     break;
-                case 'remocao':
+                case 'Remocao':
                     $remocao = new Remocao();
                     $remocao->fill([
                         "orcamento_id"     => $this->orcamento->id,
