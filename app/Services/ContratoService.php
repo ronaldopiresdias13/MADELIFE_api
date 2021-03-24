@@ -178,6 +178,31 @@ class ContratoService
                 ])->save();
             }
 
+
+
+            // $ordemservico = Ordemservico::where('orcamento_id', $orcamento->id)->where('ativo', true)->first();
+
+            // if ($ordemservico) {
+            //     foreach ($ordemservico->servicos as $key => $servico) {
+            //         OrdemservicoServico::find($servico->pivot->id)->delete();
+            //         // $servico->delete();
+            //     }
+
+            //     foreach ($orcamento->servicos as $key => $servico) {
+            //         OrdemservicoServico::create(
+            //             [
+            //                 'ordemservico_id'  => $ordemservico->id,
+            //                 'servico_id'       => $servico->id,
+            //                 'descricao'        => $servico['pivot']['basecobranca'],
+            //                 'valordiurno'      => $servico['pivot']['custodiurno'],
+            //                 'valornoturno'     => $servico['pivot']['custonoturno'],
+            //             ]
+            //         );
+            //     }
+            // }
+
+
+
             foreach ($this->request->custos as $item) {
                 $orcamentocusto = new Orcamentocusto();
                 $orcamentocusto->fill([
@@ -236,7 +261,7 @@ class ContratoService
             ]);
 
             switch ($this->orcamento->tipo) {
-                case 'venda':
+                case 'Venda':
                     $this->orcamento->venda()->update([
                         "empresa_id"   => $this->empresa_id,
                         "orcamento_id" => $this->orcamento->id,
@@ -244,13 +269,13 @@ class ContratoService
                         "data"         => $this->request->venda['data'],
                     ]);
                     break;
-                case 'homecare':
+                case 'Home Care':
                     $this->orcamento->homecare()->update([
                         "orcamento_id" => $this->orcamento->id,
                         "paciente_id"  => $this->request->homecare['paciente_id'],
                     ]);
                     break;
-                case 'aph':
+                case 'APH':
                     $this->orcamento->aph()->update([
                         "orcamento_id" => $this->orcamento->id,
                         "descricao"            => $this->request->aph['descricao'],
@@ -259,7 +284,7 @@ class ContratoService
                         "cidade_id"            => $this->request->aph['cidade_id'],
                     ]);
                     break;
-                case 'evento':
+                case 'Evento':
                     $this->orcamento->evento()->update([
                         "orcamento_id" => $this->orcamento->id,
                         "nome"         => $this->request->evento['nome'],
@@ -268,7 +293,7 @@ class ContratoService
                         "cidade_id"    => $this->request->evento['cidade_id'],
                     ]);
                     break;
-                case 'remocao':
+                case 'Remocao':
                     $this->orcamento->remocao()->update([
                         "orcamento_id"     => $this->orcamento->id,
                         "nome"             => $this->request->remocao['nome'],
