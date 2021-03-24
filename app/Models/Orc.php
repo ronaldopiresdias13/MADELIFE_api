@@ -20,9 +20,6 @@ class Orc extends Model
     public $incrementing = false;
 
     protected $dates = [
-        'data',
-        'venda_data',
-        'remocao_nascimento',
         'created_at',
         'updated_at',
         'deleted_at'
