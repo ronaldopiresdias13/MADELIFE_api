@@ -104,7 +104,8 @@ class ContratosController extends Controller
      */
     public function update(Request $request, Orcamento $orcamento)
     {
-        //
+        $contratoService = new ContratoService($request, $orcamento);
+        return $contratoService->update();
     }
 
     /**
@@ -115,7 +116,7 @@ class ContratosController extends Controller
      */
     public function destroy(Orcamento $orcamento)
     {
-        //
+        $orcamento->update(['ativo' => false]);
     }
 
     /**
