@@ -178,6 +178,30 @@ class ContratoService
                 ])->save();
             }
 
+            // foreach ($this->request->servicos as $item) {
+            //     $orcamento_servico = new OrcamentoServico();
+            //     $orcamento_servico->fill([
+            //         "orcamento_id"         => $this->orcamento->id,
+            //         "servico_id"           => $item['servico_id'],
+            //         "quantidade"           => $item['quantidade'],
+            //         "basecobranca"         => $item['basecobranca'],
+            //         "frequencia"           => $item['frequencia'],
+            //         "valorunitario"        => $item['valorunitario'],
+            //         "subtotal"             => $item['subtotal'],
+            //         "custo"                => $item['custo'],
+            //         "custodiurno"          => $item['custodiurno'],
+            //         "custonoturno"         => $item['custonoturno'],
+            //         "subtotalcusto"        => $item['subtotalcusto'],
+            //         "valorresultadomensal" => $item['valorresultadomensal'],
+            //         "valorcustomensal"     => $item['valorcustomensal'],
+            //         "horascuidadodiurno"   => $item['horascuidadodiurno'],
+            //         "horascuidadonoturno"  => $item['horascuidadonoturno'],
+            //         "icms"                 => $item['icms'],
+            //         "iss"                  => $item['iss'],
+            //         "inss"                 => $item['inss'],
+            //         "descricao"            => $item['descricao'],
+            //     ])->save();
+            // }
 
 
             // $ordemservico = Ordemservico::where('orcamento_id', $orcamento->id)->where('ativo', true)->first();
@@ -262,51 +286,81 @@ class ContratoService
 
             switch ($this->orcamento->tipo) {
                 case 'Venda':
-                    $this->orcamento->venda()->update([
-                        "empresa_id"   => $this->empresa_id,
-                        "orcamento_id" => $this->orcamento->id,
-                        "realizada"    => $this->request->venda['realizada'],
-                        "data"         => $this->request->venda['data'],
-                    ]);
+                    $this->orcamento->venda()->delete();
+                    $this->orcamento->venda()->updateOrCreate(
+                        [
+                            "empresa_id"   => $this->empresa_id,
+                            "orcamento_id" => $this->orcamento->id,
+                            "realizada"    => $this->request->venda['realizada'],
+                            "data"         => $this->request->venda['data'],
+                        ],
+                        [
+                            "ativo"        => true,
+                        ]
+                    );
                     break;
                 case 'Home Care':
-                    $this->orcamento->homecare()->update([
-                        "orcamento_id" => $this->orcamento->id,
-                        "paciente_id"  => $this->request->homecare['paciente_id'],
-                    ]);
+                    $this->orcamento->homecare()->delete();
+                    $this->orcamento->homecare()->updateOrCreate(
+                        [
+                            "orcamento_id" => $this->orcamento->id,
+                            "paciente_id"  => $this->request->homecare['paciente_id'],
+                        ],
+                        [
+                            "ativo"        => true,
+                        ]
+                    );
                     break;
                 case 'APH':
-                    $this->orcamento->aph()->update([
-                        "orcamento_id" => $this->orcamento->id,
-                        "descricao"            => $this->request->aph['descricao'],
-                        "endereco"             => $this->request->aph['endereco'],
-                        "cep"                  => $this->request->aph['cep'],
-                        "cidade_id"            => $this->request->aph['cidade_id'],
-                    ]);
+                    $this->orcamento->aph()->delete();
+                    $this->orcamento->aph()->updateOrCreate(
+                        [
+                            "orcamento_id" => $this->orcamento->id,
+                            "descricao"    => $this->request->aph['descricao'],
+                            "endereco"     => $this->request->aph['endereco'],
+                            "cep"          => $this->request->aph['cep'],
+                            "cidade_id"    => $this->request->aph['cidade_id'],
+                        ],
+                        [
+                            "ativo"        => true,
+                        ]
+                    );
                     break;
                 case 'Evento':
-                    $this->orcamento->evento()->update([
-                        "orcamento_id" => $this->orcamento->id,
-                        "nome"         => $this->request->evento['nome'],
-                        "endereco"     => $this->request->evento['endereco'],
-                        "cep"          => $this->request->evento['cep'],
-                        "cidade_id"    => $this->request->evento['cidade_id'],
-                    ]);
+                    $this->orcamento->evento()->delete();
+                    $this->orcamento->evento()->updateOrCreate(
+                        [
+                            "orcamento_id" => $this->orcamento->id,
+                            "nome"         => $this->request->evento['nome'],
+                            "endereco"     => $this->request->evento['endereco'],
+                            "cep"          => $this->request->evento['cep'],
+                            "cidade_id"    => $this->request->evento['cidade_id'],
+                        ],
+                        [
+                            "ativo"        => true,
+                        ]
+                    );
                     break;
                 case 'Remocao':
-                    $this->orcamento->remocao()->update([
-                        "orcamento_id"     => $this->orcamento->id,
-                        "nome"             => $this->request->remocao['nome'],
-                        "sexo"             => $this->request->remocao['sexo'],
-                        "nascimento"       => $this->request->remocao['nascimento'],
-                        "cpfcnpj"          => $this->request->remocao['cpfcnpj'],
-                        "rgie"             => $this->request->remocao['rgie'],
-                        "enderecoorigem"   => $this->request->remocao['enderecoorigem'],
-                        "cidadeorigem_id"  => $this->request->remocao['cidadeorigem_id'],
-                        "enderecodestino"  => $this->request->remocao['enderecodestino'],
-                        "cidadedestino_id" => $this->request->remocao['cidadedestino_id'],
-                        "observacao"       => $this->request->remocao['observacao'],
-                    ]);
+                    $this->orcamento->remocao()->delete();
+                    $this->orcamento->remocao()->updateOrCreate(
+                        [
+                            "orcamento_id"     => $this->orcamento->id,
+                            "nome"             => $this->request->remocao['nome'],
+                            "sexo"             => $this->request->remocao['sexo'],
+                            "nascimento"       => $this->request->remocao['nascimento'],
+                            "cpfcnpj"          => $this->request->remocao['cpfcnpj'],
+                            "rgie"             => $this->request->remocao['rgie'],
+                            "enderecoorigem"   => $this->request->remocao['enderecoorigem'],
+                            "cidadeorigem_id"  => $this->request->remocao['cidadeorigem_id'],
+                            "enderecodestino"  => $this->request->remocao['enderecodestino'],
+                            "cidadedestino_id" => $this->request->remocao['cidadedestino_id'],
+                            "observacao"       => $this->request->remocao['observacao'],
+                        ],
+                        [
+                            "ativo"            => true,
+                        ]
+                    );
                     break;
             }
 
