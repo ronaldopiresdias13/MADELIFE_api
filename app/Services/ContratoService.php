@@ -6,17 +6,14 @@ namespace App\Services;
 
 use App\Models\Aph;
 use App\Models\Evento;
+use App\Models\Historicoorcamento;
 use App\Models\Homecare;
 use App\Models\Orcamento;
 use App\Models\Orcamentocusto;
 use App\Models\OrcamentoProduto;
 use App\Models\OrcamentoServico;
-use App\Models\Orccusto;
-use App\Models\OrcProduto;
-use App\Models\OrcServico;
 use App\Models\Ordemservico;
 use App\Models\Remocao;
-use App\Models\User;
 use App\Models\Venda;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -192,6 +189,12 @@ class ContratoService
                     "valortotal"    => $item['valortotal'],
                 ])->save();
             }
+
+            Historicoorcamento::create([
+                'orcamento_id' => $this->orcamento->id,
+                'historico'    => json_encode($this->request->all()),
+            ]);
+
             return ['status' => true, 'orcamento' => $this->orcamento->id];
         });
     }
@@ -215,27 +218,6 @@ class ContratoService
                 "valortotalservico" => $this->request->valortotalservico,
                 "observacao"        => $this->request->observacao,
                 "status"            => $this->request->status,
-                // "venda_realizada"          => $this->request->venda_realizada,
-                // "venda_data"               => $this->request->venda_data,
-                // "homecare_paciente_id"     => $this->request->homecare_paciente_id,
-                // "aph_descricao"            => $this->request->aph_descricao,
-                // "aph_endereco"             => $this->request->aph_endereco,
-                // "aph_cep"                  => $this->request->aph_cep,
-                // "aph_cidade_id"            => $this->request->aph_cidade_id,
-                // "evento_nome"              => $this->request->evento_nome,
-                // "evento_endereco"          => $this->request->evento_endereco,
-                // "evento_cep"               => $this->request->evento_cep,
-                // "evento_cidade_id"         => $this->request->evento_cidade_id,
-                // "remocao_nome"             => $this->request->remocao_nome,
-                // "remocao_sexo"             => $this->request->remocao_sexo,
-                // "remocao_nascimento"       => $this->request->remocao_nascimento,
-                // "remocao_cpfcnpj"          => $this->request->remocao_cpfcnpj,
-                // "remocao_rgie"             => $this->request->remocao_rgie,
-                // "remocao_enderecoorigem"   => $this->request->remocao_enderecoorigem,
-                // "remocao_cidadeorigem_id"  => $this->request->remocao_cidadeorigem_id,
-                // "remocao_enderecodestino"  => $this->request->remocao_enderecodestino,
-                // "remocao_cidadedestino_id" => $this->request->remocao_cidadedestino_id,
-                // "remocao_observacao"       => $this->request->remocao_observacao,
             ])->save();
 
             $this->orcamento->ordemservico()->update([
@@ -374,6 +356,13 @@ class ContratoService
                     ]
                 );
             }
+
+            Historicoorcamento::create([
+                'orcamento_id' => $this->orcamento->id,
+                'historico'    => json_encode($this->request->all()),
+            ]);
+
+            return ['status' => true, 'orcamento' => $this->orcamento->id];
         });
     }
 }
