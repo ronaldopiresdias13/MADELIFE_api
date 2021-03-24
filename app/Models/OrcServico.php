@@ -41,6 +41,8 @@ class OrcServico extends Model
         'subtotalcusto',
         'valorresultadomensal',
         'valorcustomensal',
+        'horascuidadodiurno',
+        'horascuidadonoturno',
         'icms',
         'iss',
         'inss',

@@ -26,7 +26,6 @@ class ContratoService
     protected $request    = null;
     protected $orcamento  = null;
     protected $empresa_id = null;
-    // protected $resposta = ['status' => false, 'orc' => null];
 
     public function __construct(Request $request, Orcamento $orcamento = null)
     {
@@ -173,6 +172,8 @@ class ContratoService
                     "subtotalcusto"        => $item['subtotalcusto'],
                     "valorresultadomensal" => $item['valorresultadomensal'],
                     "valorcustomensal"     => $item['valorcustomensal'],
+                    "horascuidadodiurno"   => $item['horascuidadodiurno'],
+                    "horascuidadonoturno"  => $item['horascuidadonoturno'],
                     "icms"                 => $item['icms'],
                     "iss"                  => $item['iss'],
                     "inss"                 => $item['inss'],
@@ -343,6 +344,8 @@ class ContratoService
                         "subtotalcusto"        => $item['subtotalcusto'],
                         "valorresultadomensal" => $item['valorresultadomensal'],
                         "valorcustomensal"     => $item['valorcustomensal'],
+                        "horascuidadodiurno"   => $item['horascuidadodiurno'],
+                        "horascuidadonoturno"  => $item['horascuidadonoturno'],
                         "icms"                 => $item['icms'],
                         "iss"                  => $item['iss'],
                         "inss"                 => $item['inss'],
