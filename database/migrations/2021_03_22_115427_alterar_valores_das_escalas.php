@@ -16,7 +16,7 @@ class AlterarValoresDasEscalas extends Migration
     public function up()
     {
         // $data = \Carbon\Carbon::parse($suaData)->format('d/m/Y')
-        $escalas = Escala::all();
+        $escalas = Escala::where('dataentrada', '>', '2020-12-31')->get();
         foreach ($escalas as $key => $escala) {
             $os_s = OrdemservicoServico::where('ordemservico_id', $escala['ordemservico_id'])
                 ->where('servico_id', $escala['servico_id'])

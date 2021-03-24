@@ -17,6 +17,8 @@ class Teste extends Controller
 {
     public function teste(Request $request)
     {
+        return Escala::where('dataentrada', '>', '2020-12-31')->get();
+
         $array =
             '[
             {
@@ -291,7 +293,7 @@ class Teste extends Controller
                 "capital": false,
                 "codigo_uf": "PR"
             }
-            
+
         ]';
         $a = json_decode($array, true);
         return $a;
