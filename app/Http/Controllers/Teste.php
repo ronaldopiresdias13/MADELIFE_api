@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Escala;
+use App\Models\Ordemservico;
 use App\Models\Pagamentoexterno;
 use App\Models\Pessoa;
 use App\Models\Tipopessoa;
@@ -17,6 +18,61 @@ class Teste extends Controller
 {
     public function teste(Request $request)
     {
+        // $ordemservico = Ordemservico::with([
+        //     'orcamento.servicos' => function ($query) {
+        //         $query->where('servico_id', 48);
+        //     }
+        // ])
+        //     // ->has('orcamento.servicos')
+
+        //     ->whereHas('orcamento.servicos', function (Builder $query) {
+        //         $query->where('servico_id', 48);
+        //     }, '>', 0)
+
+        //     // ->whereHas('orcamento.servicos', function (Builder $query) {
+        //     //     $query->where('servico_id', 48);
+        //     // })
+
+        //     // ->where('id', 186)
+        //     // ->first();
+        //     ->get();
+
+        // return $ordemservico;
+
+        // return Escala::with('ordemservico.orcamento.servicos')->where('dataentrada', '=', '2020-12-31')->get();
+
+        $escalas = Escala::where('dataentrada', '=', '2020-12-31')->get();
+
+        foreach ($escalas as $key => $escala) {
+            $ordemservico = Ordemservico::with([
+                'orcamento.servicos' => function ($query) use ($escala) {
+                    $query->where('servico_id', $escala->servico_id);
+                }
+            ])
+                ->has('orcamento')
+                ->whereHas('orcamento.servicos', function (Builder $query) use ($escala) {
+                    $query->where('servico_id', $escala->servico_id);
+                })
+                ->where('id', $escala['ordemservico_id'])
+                ->first();
+
+            if ($ordemservico) {
+
+                $tipo   = $ordemservico->orcamento->servicos[0]->basecobranca;
+                $horasD = $ordemservico->orcamento->servicos[0]->horascuidadodiurno;
+                $horasN = $ordemservico->orcamento->servicos[0]->horascuidadonoturno;
+                $valorD = $ordemservico->orcamento->servicos[0]->custodiurno;
+                $valorN = $ordemservico->orcamento->servicos[0]->custonoturno;
+
+                $escala->valorhoradiurno  = $valorD ? ($tipo == 'Plantão' ? $valorD / $horasD : $valorD) : $valorD;
+                $escala->valorhoranoturno = $valorN ? ($tipo == 'Plantão' ? $valorN / $horasN : $valorN) : $valorN;
+
+                $escala->save();
+            }
+        }
+
+        return $escalas;
+
         return Escala::where('dataentrada', '>', '2020-12-31')->get();
 
         $array =
