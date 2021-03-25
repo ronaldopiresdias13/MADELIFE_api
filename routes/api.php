@@ -1067,6 +1067,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
         Route::prefix('orcs')->group(function () {
             Route::get('', [OrcsController::class, 'index']);
+            Route::get('gerarCodigo', [OrcsController::class, 'gerarCodigo']);
             Route::get('{orc}', [OrcsController::class, 'show']);
             Route::post('', [OrcsController::class, 'store']);
             Route::put('{orc}', [OrcsController::class, 'update']);
@@ -1091,6 +1092,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('pacotes/{pacote}', [PacotesController::class, 'show']);
             Route::post('pacotes', [PacotesController::class, 'store']);
             Route::put('pacotes/{pacote}', [PacotesController::class, 'update']);
+            Route::delete('pacotes/{pacote}', [PacotesController::class, 'destroy']);
             Route::delete('pacotes/excluirItemPacoteServico/{pacoteservico}', [PacotesController::class, 'excluirItemPacoteServico']);
             Route::delete('pacotes/excluirItemPacoteProduto/{pacoteproduto}', [PacotesController::class, 'excluirItemPacoteProduto']);
         });
