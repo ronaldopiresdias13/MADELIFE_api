@@ -42,6 +42,7 @@ class Orc extends Model
         'valortotalproduto',
         'valortotalcusto',
         'valortotalservico',
+        'valortotalorcamento',
         'observacao',
         'status',
         'venda_realizada',
