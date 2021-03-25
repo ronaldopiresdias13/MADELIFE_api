@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Ordemservico;
 use App\Models\OrdemservicoServico;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\DB;
@@ -128,21 +129,22 @@ class EscalasController extends Controller
      */
     public function store(Request $request)
     {
-        $ordemservico = Ordemservico::with([
-            // 'servicos' => function($query) use ($request) {
-            //     $query->find($request->servico_id);
-            // },
-            'orcamento.servicos' => function ($query) use ($request) {
-                $query->find($request->servico_id);
-            }
-        ])
+        $ordemservico = Ordemservico::with(
+            [
+                'orcamento.servicos' => function ($query) use ($request) {
+                    $query->with('servico')->whereHas('servico', function (Builder $builder) use ($request) {
+                        $builder->where('id', $request->servico_id);
+                    });
+                }
+            ]
+        )
             ->find($request->ordemservico_id);
 
-        $tipo   = $ordemservico->orcamento->servicos[0]->pivot->basecobranca;
-        $horasD = $ordemservico->orcamento->servicos[0]->pivot->horascuidadodiurno;
-        $horasN = $ordemservico->orcamento->servicos[0]->pivot->horascuidadonoturno;
-        $valorD = $ordemservico->orcamento->servicos[0]->pivot->custodiurno;
-        $valorN = $ordemservico->orcamento->servicos[0]->pivot->custonoturno;
+        $tipo   = $ordemservico->orcamento->servicos[0]->basecobranca;
+        $horasD = $ordemservico->orcamento->servicos[0]->horascuidadodiurno;
+        $horasN = $ordemservico->orcamento->servicos[0]->horascuidadonoturno;
+        $valorD = $ordemservico->orcamento->servicos[0]->custodiurno;
+        $valorN = $ordemservico->orcamento->servicos[0]->custonoturno;
 
         $escala = new Escala();
         if ($ordemservico) {
