@@ -194,6 +194,16 @@ class OrcsController extends Controller
         // $contratoService = new ContratoService($request);
         // return $contratoService->store();
     }
+
+    public function gerarCodigo(Request $request)
+    {
+        // numero: res.length ? `${this.dataAtual}/${Number(res[res.length - 1].numero.substr(5)) + 1}` : `${this.dataAtual}/01`
+
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+        // $orcamento =
+        return Orc::where('empresa_id', $empresa_id)->orderBy('id', 'desc')->first()->pluck('numero');
+        // return $$orcamento;
+    }
 }
 
 

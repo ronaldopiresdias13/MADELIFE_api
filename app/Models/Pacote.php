@@ -27,6 +27,7 @@ class Pacote extends Model
         'id',
         'empresa_id',
         'descricao',
+        'cliente_id',
         'created_at',
         'updated_at',
         'deleted_at'
