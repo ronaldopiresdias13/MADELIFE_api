@@ -1067,6 +1067,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
         Route::prefix('orcs')->group(function () {
             Route::get('', [OrcsController::class, 'index']);
+            Route::get('gerarCodigo', [OrcsController::class, 'gerarCodigo']);
             Route::get('{orc}', [OrcsController::class, 'show']);
             Route::post('', [OrcsController::class, 'store']);
             Route::put('{orc}', [OrcsController::class, 'update']);
