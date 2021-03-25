@@ -154,7 +154,7 @@ class PacotesController extends Controller
      */
     public function destroy(Pacote $pacote)
     {
-        //
+        $pacote->delete();
     }
     public function excluirItemPacoteServico(Pacoteservico $pacoteservico)
     {
