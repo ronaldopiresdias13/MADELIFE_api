@@ -62,7 +62,7 @@ class ContratoService
                 "valortotalcusto"   => $this->request->valortotalcusto,
                 "valortotalservico" => $this->request->valortotalservico,
                 "observacao"        => $this->request->observacao,
-                "status"            => $this->request->status,
+                "status"            => $this->request->status ? $this->request->status : false,
             ])->save();
 
             $ordemservico = new Ordemservico();
