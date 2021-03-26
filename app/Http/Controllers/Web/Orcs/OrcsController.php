@@ -197,12 +197,18 @@ class OrcsController extends Controller
 
     public function gerarCodigo(Request $request)
     {
-        // numero: res.length ? `${this.dataAtual}/${Number(res[res.length - 1].numero.substr(5)) + 1}` : `${this.dataAtual}/01`
-
+        $now = now()->format('Y');
+        $codigo = null;
         $empresa_id = $request->user()->pessoa->profissional->empresa_id;
-        // $orcamento =
-        return Orc::where('empresa_id', $empresa_id)->orderBy('id', 'desc')->first()->pluck('numero');
-        // return $$orcamento;
+        $orcamento = Orc::where('empresa_id', $empresa_id)->orderBy('id', 'desc')->first();
+        if ($orcamento) {
+            $numero = substr($orcamento->numero, 5) + 1;
+            $numero = $numero < 10 ? '0' . $numero : $numero;
+            $codigo = $now . '/' . $numero;
+        } else {
+            $codigo = $now . '/01';
+        }
+        return $codigo;
     }
 }
 
