@@ -208,7 +208,7 @@ class OrcsController extends Controller
         } else {
             $codigo = $now . '/01';
         }
-        return $codigo;
+        return response()->json(['codigo' => $codigo]);
     }
 }
 
