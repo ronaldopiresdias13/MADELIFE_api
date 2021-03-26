@@ -73,7 +73,7 @@ class ContratoService
                 "responsavel_id"         => $this->request->ordemservico['responsavel_id'],
                 "inicio"                 => $this->request->ordemservico['inicio'],
                 "fim"                    => $this->request->ordemservico['fim'],
-                "status"                 => $this->request->ordemservico['status'],
+                "status"                 => $this->request->ordemservico['status'] ? $this->request->ordemservico['status'] : true,
                 "montagemequipe"         => $this->request->ordemservico['montagemequipe'],
                 "realizacaoprocedimento" => $this->request->ordemservico['realizacaoprocedimento'],
                 "descricaomotivo"        => $this->request->ordemservico['descricaomotivo'],
