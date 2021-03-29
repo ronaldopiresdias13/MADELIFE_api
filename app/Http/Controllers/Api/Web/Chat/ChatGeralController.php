@@ -27,7 +27,9 @@ class ChatGeralController extends Controller
     public function get_pessoas(Request $request){
         $user = $request->user();
         $pessoa=$user->pessoa()->first();
-        $pessoas = Pessoa::has('profissional')->whereRaw('lower(nome) LIKE lower(?)',['%'.$request->search.'%'])->with('profissional')->orderBy('nome', 'asc')->get();
+        $pessoas = Pessoa::has('profissional')->whereRaw('lower(nome) LIKE lower(?)',['%'.$request->search.'%'])->with(['profissional'=>function($q){
+            $q->with(['cargo','setor']);
+        }])->orderBy('nome', 'asc')->get();
         // where('id','<>',$pessoa->id)->
         return response()->json([
             'pessoas'=>$pessoas
@@ -39,7 +41,7 @@ class ChatGeralController extends Controller
         $files_path=[];
         if ($arquivos = $request->file('arquivos')) {
             foreach($arquivos as $arquivo){
-                $name = uniqid('arquivo') . '.' . $arquivo->extension();
+                $name = uniqid('arquivo') . '.' . $arquivo->getClientOriginalExtension();
                 $filename = $arquivo->storeAs('arquivos_chat_geral', $name, ['disk' => 'public']);
                 array_push($files_path,$filename);
             }

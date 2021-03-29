@@ -53,7 +53,7 @@ class WebSocketServer extends Command
 
         // $app = new \Ratchet\Http\HttpServer(
         //     new \Ratchet\WebSocket\WsServer(
-        //         new WebSocketController()
+        //         new ChatWebSocketController()
         //     )
         // );
         // $server = new \Ratchet\Server\IoServer($app, $secure_websockets, $loop);
