@@ -99,6 +99,8 @@ Route::group([
         // Route::get('user', 'Auth\AuthController@user');
     });
 });
+Route::post('enviararquivos', 'Api\App\v3_0_21\ChamadosController@enviararquivos');
+
 /*------------- Rotas Utilizando Token -------------*/
 Route::group(['middleware' => 'auth:api'], function () {
     //     Route::get('getEscalasMesApp', 'Api\EscalasController@getEscalasMesApp');    // Mudar App e Apagar essa rota
@@ -292,6 +294,10 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         Route::get('transcricoes/{ordemservico}', 'Api\App\v3_0_21\TranscricoesController@listTranscricoesByEscalaId');
         Route::get('pacientes/listMedicamentosByPaciente/{ordemservico}', 'Api\App\v3_0_21\TranscricoesController@listMedicamentosByPaciente');
+        Route::get('chamados', 'Api\App\v3_0_21\ChamadosController@chamados');
+        Route::post('criarchamado', 'Api\App\v3_0_21\ChamadosController@criarchamado');
+        Route::post('enviarArquivos', 'Api\App\v3_0_21\ChamadosController@enviarArquivos');
+           
     });
 
     /*----------------- Web -----------------*/
@@ -347,6 +353,18 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('get_conversas', 'Api\Web\Chat\ChatGeralController@get_conversas');
             Route::get('get_pessoas', 'Api\Web\Chat\ChatGeralController@get_pessoas');
             Route::post('enviarArquivos', 'Api\Web\Chat\ChatGeralController@enviarArquivos');
+        
+            Route::get('chamados_enfermagem', 'Api\Web\Chat\ChamadosController@chamados_enfermagem');
+            Route::get('chamados_ti', 'Api\Web\Chat\ChamadosController@chamados_ti');
+
+            Route::get('get_pessoas_externo', 'Api\Web\Chat\ChamadosController@get_pessoas_externo');
+            Route::post('criarchamado_atendente_enfermagem', 'Api\Web\Chat\ChamadosController@criarchamado_atendente_enfermagem');
+
+            Route::post('finalizarchamado_enfermagem', 'Api\Web\Chat\ChamadosController@finalizarchamado_enfermagem');
+
+            Route::post('criarchamado_atendente_ti', 'Api\Web\Chat\ChamadosController@criarchamado_atendente_ti');
+
+            Route::post('finalizarchamado_ti', 'Api\Web\Chat\ChamadosController@finalizarchamado_ti');
         });
         Route::prefix('gestaoOrcamentaria')->group(function () {
             Route::get('clientes/list/{empresa}', 'Api\Web\GestaoOrcamentaria\ClientesController@index');

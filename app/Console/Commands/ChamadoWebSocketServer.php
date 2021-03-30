@@ -2,21 +2,17 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Controllers\Api\ChatWebSocketController;
-use App\Http\Controllers\WebSocketController;
+use App\Http\Controllers\Api\ChamadoWebSocketController;
 use Illuminate\Console\Command;
-use Ratchet\Server\IoServer;
-use Ratchet\Http\HttpServer;
-use Ratchet\WebSocket\WsServer;
 
-class WebSocketServer extends Command
+class ChamadoWebSocketServer extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'websocket:init';
+    protected $signature = 'chamado:init';
 
     /**
      * The console command description.
@@ -42,9 +38,9 @@ class WebSocketServer extends Command
      */
     public function handle()
     {
-        // $loop = \React\EventLoop\Factory::create();
+         // $loop = \React\EventLoop\Factory::create();
 
-        // $secure_websockets = new \React\Socket\Server('0.0.0.0:9990', $loop);
+        // $secure_websockets = new \React\Socket\Server('0.0.0.0:10990', $loop);
         // $secure_websockets = new \React\Socket\SecureServer($secure_websockets, $loop, [
         //     'local_cert' => '/etc/letsencrypt/live/madelife.enterscience.com.br/fullchain.pem',
         //     'local_pk' => '/etc/letsencrypt/live/madelife.enterscience.com.br/privkey.pem',
@@ -53,21 +49,20 @@ class WebSocketServer extends Command
 
         // $app = new \Ratchet\Http\HttpServer(
         //     new \Ratchet\WebSocket\WsServer(
-        //         new ChatWebSocketController()
+        //         new ChamadoWebSocketController()
         //     )
         // );
         // $server = new \Ratchet\Server\IoServer($app, $secure_websockets, $loop);
         // $server->run();
 
-
-        $server = IoServer::factory(
-            new HttpServer(
-                new WsServer(
-                    new ChatWebSocketController()
-                )
-            ),
-            9990
+        $loop_ = \React\EventLoop\Factory::create();
+        $socket_ = new \React\Socket\Server('0.0.0.0:10990', $loop_);
+        $app_ = new \Ratchet\Http\HttpServer(
+            new \Ratchet\WebSocket\WsServer(
+                new ChamadoWebSocketController()
+            )
         );
-        $server->run();
+        $server_ = new \Ratchet\Server\IoServer($app_, $socket_, $loop_);
+        $server_->run();
     }
 }
