@@ -163,8 +163,8 @@ class EscalasController extends Controller
         $escala->dataentrada           = $request->dataentrada;
         $escala->datasaida             = $request->datasaida;
         $escala->periodo               = $request->periodo;
-        $escala->assinaturaprestador   = $request->assinaturaprestador;
-        $escala->assinaturaresponsavel = $request->assinaturaresponsavel;
+        $escala->assinaturaprestador   = $request->assinaturaprestador   ?: $escala->assinaturaprestador;
+        $escala->assinaturaresponsavel = $request->assinaturaresponsavel ?: $escala->assinaturaresponsavel;
         $escala->observacao            = $request->observacao;
         $escala->status                = $request->status;
         $escala->folga                 = $request->folga;
@@ -250,8 +250,8 @@ class EscalasController extends Controller
         $escala->dataentrada           = $request->dataentrada;
         $escala->datasaida             = $request->datasaida;
         $escala->periodo               = $request->periodo;
-        $escala->assinaturaprestador   = $request->assinaturaprestador;
-        $escala->assinaturaresponsavel = $request->assinaturaresponsavel;
+        $escala->assinaturaprestador   = $request->assinaturaprestador ?: $escala->assinaturaprestador;
+        $escala->assinaturaresponsavel = $request->assinaturaresponsavel ?: $escala->assinaturaresponsavel;
         $escala->observacao            = $request->observacao;
         $escala->status                = $request->status;
         $escala->folga                 = $request->folga;
@@ -261,8 +261,8 @@ class EscalasController extends Controller
         $escala->valorhoranoturno      = $request->valorhoranoturno;
         $escala->valoradicional        = $request->valoradicional;
         $escala->motivoadicional       = $request->motivoadicional;
-        $escala->valordesconto        = $request->valordesconto;
-        $escala->motivodesconto       = $request->motivodesconto;
+        $escala->valordesconto         = $request->valordesconto;
+        $escala->motivodesconto        = $request->motivodesconto;
         $escala->save();
     }
 

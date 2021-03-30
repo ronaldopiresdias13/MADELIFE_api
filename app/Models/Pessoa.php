@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pessoa extends Model
 {
-    // use FiltroEmpresaProfissional;
-
     protected $guarded = [];
 
     public function cliente()
