@@ -24,7 +24,6 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-
         $request->validate([
             // 'email'       => 'string|email',
             'password'    => 'required|string',
@@ -61,7 +60,7 @@ class AuthController extends Controller
 
         if (!password_verify($request['password'], $user['password'])) {
             return response()->json([
-                'message' => 'Email ou Senha Inválidos!'
+                'message' => 'E-mail e/ou Senha incorretos.'
             ], 401);
         }
 
@@ -103,7 +102,7 @@ class AuthController extends Controller
         // $credentials = request(['email', 'password']);
         // if (!Auth::attempt($credentials)) {
         //     return response()->json([
-        //         'message' => 'Email ou Senha Inválidos!'
+        //         'message' => 'E-mail e/ou Senha incorretos.'
         //     ], 401);
         // }
         // $user = $request->user();
@@ -277,7 +276,7 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
         if (!Auth::attempt($credentials)) {
             return response()->json([
-                'message' => 'Email ou Senha Inválidos!'
+                'message' => 'E-mail e/ou Senha incorretos.'
             ], 401);
         }
         $user        = $request->user();

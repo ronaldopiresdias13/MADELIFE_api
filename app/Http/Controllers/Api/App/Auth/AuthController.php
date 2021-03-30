@@ -33,26 +33,26 @@ class AuthController extends Controller
 
         if (!$user) {
             return response()->json([
-                'message' => 'Email não cadastrado!'
+                'message' => 'E-mail e/ou Senha incorretos.'
             ], 404);
         }
 
         // $credentials = request(['email', 'password']);
         // if (!Auth::attempt($credentials)) {
         //     return response()->json([
-        //         'message' => 'Email ou Senha Inválidos!'
+        //         'message' => 'E-mail e/ou Senha incorretos.'
         //     ], 401);
         // }
 
         if (!password_verify($request['password'], $user['password'])) {
             return response()->json([
-                'message' => 'Email ou Senha Inválidos!'
+                'message' => 'E-mail e/ou Senha incorretos.'
             ], 401);
         }
 
         // if (!Hash::check($request['password'], $user['password'])) {
         //     return response()->json([
-        //         'message' => 'Email ou Senha Inválidos!'
+        //         'message' => 'E-mail e/ou Senha incorretos'
         //     ], 401);
         // }
 
@@ -81,7 +81,7 @@ class AuthController extends Controller
             return response()->json([
                 'alert' => [
                     'title' => 'Ops!',
-                    'text' => 'Email não cadastrado!'
+                    'text' => 'E-mail não cadastrado!'
                 ]
             ], 202)
                 ->header('Content-Type', 'application/json');
@@ -112,7 +112,7 @@ class AuthController extends Controller
         // $credentials = request(['email', 'password']);
         // if (!Auth::attempt($credentials)) {
         //     return response()->json([
-        //         'message' => 'Email ou Senha Inválidos!'
+        //         'message' => 'E-mail e/ou Senha incorretos.'
         //     ], 401);
         // }
         $user = $request->user();
@@ -134,7 +134,7 @@ class AuthController extends Controller
         // $credentials = request(['email', 'password']);
         // if (!Auth::attempt($credentials)) {
         //     return response()->json([
-        //         'message' => 'Email ou Senha Inválidos!'
+        //         'message' => 'E-mail e/ou Senha incorretos.'
         //     ], 401);
         // }
         // $user        = $request->user();
