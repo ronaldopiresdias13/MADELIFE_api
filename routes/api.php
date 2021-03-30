@@ -297,7 +297,6 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('chamados', 'Api\App\v3_0_21\ChamadosController@chamados');
         Route::post('criarchamado', 'Api\App\v3_0_21\ChamadosController@criarchamado');
         Route::post('enviarArquivos', 'Api\App\v3_0_21\ChamadosController@enviarArquivos');
-           
     });
 
     /*----------------- Web -----------------*/
@@ -353,7 +352,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('get_conversas', 'Api\Web\Chat\ChatGeralController@get_conversas');
             Route::get('get_pessoas', 'Api\Web\Chat\ChatGeralController@get_pessoas');
             Route::post('enviarArquivos', 'Api\Web\Chat\ChatGeralController@enviarArquivos');
-        
+
             Route::get('chamados_enfermagem', 'Api\Web\Chat\ChamadosController@chamados_enfermagem');
             Route::get('chamados_ti', 'Api\Web\Chat\ChamadosController@chamados_ti');
 
@@ -650,10 +649,14 @@ Route::put('entradas/{entrada}', 'Api\EntradasController@update');
 Route::delete('entradas/{entrada}', 'Api\EntradasController@destroy');
 
 Route::get('escalas', 'Api\EscalasController@index');
-Route::post('escalas', 'Api\EscalasController@store');
 Route::get('escalas/{escala}', 'Api\EscalasController@show');
-Route::put('escalas/{escala}', 'Api\EscalasController@update');
-Route::delete('escalas/{escala}', 'Api\EscalasController@destroy');
+
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::post('escalas', 'Api\EscalasController@store');
+    Route::put('escalas/{escala}', 'Api\EscalasController@update');
+    Route::delete('escalas/{escala}', 'Api\EscalasController@destroy');
+});
+
 Route::get('escalas/empresa/{empresa}/dia', 'Api\EscalasController@buscaescalasdodia');
 Route::get('escalas/paciente/{paciente}/data1/{data1}/data2/{data2}', 'Api\EscalasController@buscaPontosPorPeriodoEPaciente');
 
