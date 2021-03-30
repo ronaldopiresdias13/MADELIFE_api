@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\TracksHistoryTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class Escala extends Model
 {
+    use TracksHistoryTrait;
+
     protected $guarded = [];
 
     public function cuidados()

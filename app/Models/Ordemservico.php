@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\TracksHistoryTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class Ordemservico extends Model
 {
+    use TracksHistoryTrait;
+
     protected $guarded = [];
 
     public function empresa()
@@ -86,5 +89,11 @@ class Ordemservico extends Model
                 });
             }
         });
+
+        // static::updated(function ($ordemservico) {
+        //     $this->track($ordemservico);
+        // });
     }
+
+
 }

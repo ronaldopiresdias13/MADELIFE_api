@@ -11,6 +11,7 @@ use App\Services\PontoService;
 use Dompdf\Dompdf;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -18,6 +19,17 @@ class Teste extends Controller
 {
     public function teste(Request $request)
     {
+        // return Auth::user();
+        return DB::transaction(function () {
+            $os = Ordemservico::find(297);
+            // return $os;
+
+            $os->codigo = "20";
+            $os->status = 1;
+            $os->save();
+            return $os;
+        });
+
         // $ordemservico = Ordemservico::with([
         //     'orcamento.servicos' => function ($query) {
         //         $query->where('servico_id', 48);
