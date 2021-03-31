@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Escala extends Model
 {
-    use TracksHistoryTrait;
+    //use TracksHistoryTrait;
 
     protected $guarded = [];
 

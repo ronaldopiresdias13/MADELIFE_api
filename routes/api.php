@@ -651,11 +651,11 @@ Route::delete('entradas/{entrada}', 'Api\EntradasController@destroy');
 Route::get('escalas', 'Api\EscalasController@index');
 Route::get('escalas/{escala}', 'Api\EscalasController@show');
 
-Route::group(['middleware' => 'auth:api'], function () {
+//Route::group(['middleware' => 'auth:api'], function () {
     Route::post('escalas', 'Api\EscalasController@store');
     Route::put('escalas/{escala}', 'Api\EscalasController@update');
     Route::delete('escalas/{escala}', 'Api\EscalasController@destroy');
-});
+//});
 
 Route::get('escalas/empresa/{empresa}/dia', 'Api\EscalasController@buscaescalasdodia');
 Route::get('escalas/paciente/{paciente}/data1/{data1}/data2/{data2}', 'Api\EscalasController@buscaPontosPorPeriodoEPaciente');
