@@ -18,18 +18,20 @@ trait TracksHistoryTrait
     public static function bootTracksHistoryTrait(): void
     {
         static::updated(function (self $model): void {
-            $model->getUpdated($model)
-                ->map(function ($value, $field) use ($model) {
-                    return call_user_func_array([$model, 'getHistoryBody'], [$value, $field]);
-                })
-                ->each(function ($fields) use ($model) {
-                    Historico::create([
-                        'tipo'           => 2,
-                        'historico_type' => $model->getTable(),
-                        'historico_id'   => $model->id,
-                        'user_id'        => Auth::user()->id,
-                    ] + $fields);
-                });
+            if (Auth::user()) {
+                $model->getUpdated($model)
+                    ->map(function ($value, $field) use ($model) {
+                        return call_user_func_array([$model, 'getHistoryBody'], [$value, $field]);
+                    })
+                    ->each(function ($fields) use ($model) {
+                        Historico::create([
+                            'tipo'           => 2,
+                            'historico_type' => $model->getTable(),
+                            'historico_id'   => $model->id,
+                            'user_id'        => Auth::user()->id,
+                        ] + $fields);
+                    });
+            }
         });
 
         // static::updated(function (self $model): void {

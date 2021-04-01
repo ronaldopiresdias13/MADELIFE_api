@@ -56,7 +56,7 @@ class ChamadoWebSocketServer extends Command
         // $server->run();
 
         $loop_ = \React\EventLoop\Factory::create();
-        $socket_ = new \React\Socket\Server('0.0.0.0:10990', $loop_);
+        $socket_ = new \React\Socket\Server('0.0.0.0:363', $loop_);
         $app_ = new \Ratchet\Http\HttpServer(
             new \Ratchet\WebSocket\WsServer(
                 new ChamadoWebSocketController()
