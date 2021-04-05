@@ -443,6 +443,8 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         Route::get('categoriadocumentos/listCategorias', 'Api\Web\CategoriadocumentosController@listCategorias');
         Route::post('categoriadocumentos/newCategoria', 'Api\Web\CategoriadocumentosController@newCategoria');
+        Route::put('categoriadocumentos/update/{categoriadocumento}', 'Api\Web\CategoriadocumentosController@update');
+        Route::delete('categoriadocumentos/delete/{categoriadocumento}', 'Api\Web\CategoriadocumentosController@delete');
 
         Route::get('documentos/listDocumentosByEmpresa', 'Api\Web\DocumentosController@listDocumentosByEmpresa');
         Route::get('documentos/listDocumentosByConvenio', 'Api\Web\DocumentosController@listDocumentosByConvenio');
@@ -652,9 +654,9 @@ Route::get('escalas', 'Api\EscalasController@index');
 Route::get('escalas/{escala}', 'Api\EscalasController@show');
 
 //Route::group(['middleware' => 'auth:api'], function () {
-    Route::post('escalas', 'Api\EscalasController@store');
-    Route::put('escalas/{escala}', 'Api\EscalasController@update');
-    Route::delete('escalas/{escala}', 'Api\EscalasController@destroy');
+Route::post('escalas', 'Api\EscalasController@store');
+Route::put('escalas/{escala}', 'Api\EscalasController@update');
+Route::delete('escalas/{escala}', 'Api\EscalasController@destroy');
 //});
 
 Route::get('escalas/empresa/{empresa}/dia', 'Api\EscalasController@buscaescalasdodia');
