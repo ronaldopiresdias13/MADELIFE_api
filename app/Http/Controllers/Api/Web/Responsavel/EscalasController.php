@@ -6,6 +6,7 @@ use App\Models\Escala;
 use App\Http\Controllers\Controller;
 use App\Models\Ordemservico;
 use App\Models\Paciente;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -191,8 +192,7 @@ class EscalasController extends Controller
         $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $hoje['mday'];
         $escalas = Escala::with([
             // 'ordemservico.orcamento.homecare.paciente.pessoa',
-            'ordemservico'
-            => function ($query) {
+            'ordemservico' => function ($query) {
                 $query->select('id', 'orcamento_id', 'profissional_id');
                 $query->with(['profissional.pessoa', 'orcamento' => function ($query) {
                     $query->select('id');
@@ -230,6 +230,13 @@ class EscalasController extends Controller
             'relatorioescalas',
             'acaomedicamentos.transcricaoProduto.produto'
         ])
+
+            // Testar
+            ->whereHas('ordemservico.orcamento.homecare.paciente', function (Builder $query) use ($user) {
+                $query->where('responsavel_id', $user->pessoa->responsavel->id);
+            })
+            // Testar
+
             ->where('ativo', true)
             ->where('empresa_id', $user->pessoa->responsavel->empresa_id)
             ->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%')
