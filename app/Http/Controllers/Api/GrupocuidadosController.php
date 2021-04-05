@@ -187,7 +187,14 @@ class GrupocuidadosController extends Controller
      */
     public function update(Request $request, Grupocuidado $grupocuidado)
     {
-        $grupocuidado->update($request->all());
+        $grupocuidado->descricao = $request['descricao'];
+        $grupocuidado->save();
+        foreach ($request['cuidado'] as $key => $cuidado) {
+            $cuidado = CuidadoGrupocuidado::updateOrCreate([
+                'grupocuidado_id' => $grupocuidado->id,
+                'cuidado_id'    => $cuidado['id']
+            ]);
+        }
     }
 
     /**
