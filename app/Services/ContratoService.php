@@ -339,7 +339,7 @@ class ContratoService
                         "subtotalcusto"        => $item['subtotalcusto'],
                         "valorresultadomensal" => $item['valorresultadomensal'],
                         "valorcustomensal"     => $item['valorcustomensal'],
-                        "locacao"              => $item['locacao'],
+                        "locacao"              => array_key_exists ('locacao' , $item) ? $item['locacao'] : false,
                         "descricao"            => $item['descricao'],
                     ],
                     [
