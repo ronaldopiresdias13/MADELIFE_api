@@ -26,8 +26,8 @@ class Teste extends Controller
 
             $os->codigo = "20";
             $os->status = 1;
-            $os->save();
-            return $os;
+            // $os->save();
+            return $os->save();
         });
 
         // $ordemservico = Ordemservico::with([
