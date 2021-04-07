@@ -56,7 +56,7 @@ class CategoriadocumentosController extends Controller
      */
     public function update(Request $request, Categoriadocumento $categoriadocumento)
     {
-        //
+        $categoriadocumento->update($request->all());
     }
 
     /**
@@ -65,8 +65,8 @@ class CategoriadocumentosController extends Controller
      * @param  \App\Categoriadocumento  $categoriadocumento
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Categoriadocumento $categoriadocumento)
+    public function delete(Categoriadocumento $categoriadocumento)
     {
-        //
+        $categoriadocumento->delete();
     }
 }
