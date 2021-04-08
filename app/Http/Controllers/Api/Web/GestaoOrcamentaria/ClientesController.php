@@ -23,10 +23,12 @@ class ClientesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Empresa $empresa)
+    public function index(Request $request)
     {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
         return Cliente::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade'])
-            ->where('empresa_id', $empresa->id)
+            ->where('empresa_id', $empresa_id)
             ->where('ativo', true)
             ->get();
         // ->orderBy('pessoas.nome', 'DESC');
@@ -41,9 +43,11 @@ class ClientesController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
+            $user = $request->user();
+            $empresa_id = $user->pessoa->profissional->empresa_id;
             $cliente = Cliente::create([
                 'tipo'       => $request['tipo'],
-                'empresa_id' => $request['empresa_id'],
+                'empresa_id' => $empresa_id,
                 'pessoa_id'  => Pessoa::updateOrCreate(
                     [
                         'id' => ($request['pessoa']['id'] != '') ? $request['id'] : null,

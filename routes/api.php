@@ -366,7 +366,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::post('finalizarchamado_ti', 'Api\Web\Chat\ChamadosController@finalizarchamado_ti');
         });
         Route::prefix('gestaoOrcamentaria')->group(function () {
-            Route::get('clientes/list/{empresa}', 'Api\Web\GestaoOrcamentaria\ClientesController@index');
+            Route::get('clientes/list', 'Api\Web\GestaoOrcamentaria\ClientesController@index');
             Route::get('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@show');
             Route::post('clientes', 'Api\Web\GestaoOrcamentaria\ClientesController@store');
             Route::put('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@update');
