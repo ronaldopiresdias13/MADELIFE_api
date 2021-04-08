@@ -31,6 +31,8 @@ class CnabService
         'digito_conta' => '9',
 
         'convenio' => '00333800008302521456',
+        'convenio_externo' => '00333800004905562674',
+
         'nome' => 'BANCO SANTANDER'
     ];
 
@@ -53,6 +55,19 @@ class CnabService
         $this->observacao = $observacao;
     }
 
+    function sanitizeString($str) {
+        $str = preg_replace('/[áàãâä]/ui', 'a', $str);
+        $str = preg_replace('/[éèêë]/ui', 'e', $str);
+        $str = preg_replace('/[íìîï]/ui', 'i', $str);
+        $str = preg_replace('/[óòõôö]/ui', 'o', $str);
+        $str = preg_replace('/[úùûü]/ui', 'u', $str);
+        $str = preg_replace('/[ç]/ui', 'c', $str);
+        // $str = preg_replace('/[,(),;:|!"#$%&/=?~^><ªº-]/', '_', $str);
+        $str = preg_replace('/[^a-z0-9 ]/i', '_', $str);
+        $str = preg_replace('/_+/', '', $str); // ideia do Bacco :)
+        return $str;
+    }
+
 
 
 
@@ -65,7 +80,7 @@ class CnabService
         if ($this->banco == '033') {
             $cnabs = [];
             $cnab = '';
-            $cnab .= $this->header_arquivo_santander();
+            $cnab .= $this->header_arquivo_santander('033');
             $quantidade_lotes = 0;
             //lote apenas usuários com conta santander
             $lote_1 = "\n" . $this->header_lote_santander(1, '033');
@@ -94,7 +109,7 @@ class CnabService
                         'agencia' => $dado['agencia'],
                         'codigo' => $dado['codigo'],
                     ]);
-                    $quantidade_registros+=1;
+                    $quantidade_registros+=2;
                     Log::info($dado['profissional_id']);
 
                     Log::info($pagamentos);
@@ -142,7 +157,7 @@ class CnabService
             }
 
             $cnab = '';
-            $cnab .= $this->header_arquivo_santander();
+            $cnab .= $this->header_arquivo_santander('000');
             //lote apenas usuários sem conta santander
             $lote_2 = "\n" . $this->header_lote_santander(1, '000');
             $soma_valor_lote_2 = 0;
@@ -162,7 +177,7 @@ class CnabService
                     ->get()->sum('valor');
 
                 if ($pagamentos > 0) {
-                    $quantidade_registros+=1;
+                    $quantidade_registros+=2;
 
                     array_push($dados_pagamento, [
                         'user_id' => $dado['profissional_id'],
@@ -242,7 +257,7 @@ class CnabService
                     ->get()->sum('valor');
                 if ($pagamentos > 0) {
                     Log::info($dado['profissional_id']);
-                    $quantidade_registros+=1;
+                    $quantidade_registros+=2;
                     Log::info($pagamentos);
                     array_push($dados_pagamento, [
                         'user_id' => $dado['profissional_id'],
@@ -320,7 +335,7 @@ class CnabService
                     ->get()->sum('valor');
                 if ($pagamentos > 0) {
                     Log::info($dado['profissional_id']);
-                    $quantidade_registros+=1;
+                    $quantidade_registros+=2;
 
                     Log::info($pagamentos);
                     array_push($dados_pagamento, [
@@ -378,7 +393,7 @@ class CnabService
         //trailer de arquivo
     }
 
-    public function header_arquivo_santander()
+    public function header_arquivo_santander($banco_codigo)
     {
         $cod_banco = $this->santander['codigo']; //1 a 3
         $lote = "0000"; //4 a 7
@@ -393,7 +408,7 @@ class CnabService
         for ($i = 19 + $num; $i <= 32; $i++) {
             $numero_inscricao = "0" . $numero_inscricao;
         }
-        $convenio = $this->santander['convenio']; //convenio do banco (numero do contrato com o banco) 33 a 52
+        $convenio = $banco_codigo == "033" ? $this->santander['convenio'] : $this->santander['convenio_externo']; //convenio do banco (numero do contrato com o banco) 33 a 52
         $num = Str::length($convenio);
 
         for ($i = 33 + $num; $i <= 52; $i++) {
@@ -444,7 +459,7 @@ class CnabService
 
         $num_versao_arquivo = "060"; //164 a 166
 
-        $densidade_gravacao_arquivo = "00000"; //167 a 171
+        $densidade_gravacao_arquivo =$banco_codigo == "033" ? "00000":"00000"; //167 a 171
 
         $reservado_banco = ""; //172 a 191
 
@@ -711,7 +726,7 @@ class CnabService
         }
 
         //verificar numero de convenio pra sicred
-        $convenio = $this->santander['convenio']; //convenio do banco (numero do contrato com o banco) 33 a 52
+        $convenio = $banco_codigo == "033" ? $this->santander['convenio'] : $this->santander['convenio_externo']; //convenio do banco (numero do contrato com o banco) 33 a 52
         $num = Str::length($convenio);
 
         for ($i = 33 + $num; $i <= 52; $i++) {
@@ -1018,7 +1033,7 @@ class CnabService
         $digito_verificador_conta = $user_data['digito'];
         $digito_verificador_agencia_conta = ' ';
         Log::info($pessoa->nome);
-        $nome_favorecido = Str::limit($pessoa->nome, 30, '');
+        $nome_favorecido = Str::limit(strtoupper($this->sanitizeString($pessoa->nome)), 30, '');
         $num = Str::length($nome_favorecido . '');
 
         for ($i = 44 + $num; $i <= 73; $i++) {
@@ -1168,7 +1183,7 @@ class CnabService
         $digito_verificador_conta = $user_data['digito'];
         $digito_verificador_agencia_conta = ' ';
         Log::info($pessoa->nome);
-        $nome_favorecido = Str::limit($pessoa->nome, 30, '');
+        $nome_favorecido = Str::limit(strtoupper($this->sanitizeString($pessoa->nome)), 30, '');
         $num = Str::length($nome_favorecido . '');
 
         for ($i = 44 + $num; $i <= 73; $i++) {
