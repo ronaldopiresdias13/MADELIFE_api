@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\App\v3_0_21\Auth;
+namespace App\Http\Controllers\Api\App\v3_0_22\Auth;
 
 use App\Models\User;
 use App\Models\Email;

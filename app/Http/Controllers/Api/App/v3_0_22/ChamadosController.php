@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\App\v3_0_21;
+namespace App\Http\Controllers\Api\App\v3_0_22;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChamadoRequest;
@@ -78,9 +78,9 @@ class ChamadosController extends Controller
         // }
         if ($arquivo = $data['image']) {
             // foreach($arquivos as $arquivo){
-                $name = uniqid('foto_') . '.' . $arquivo->getClientOriginalExtension();
-                $filename = $arquivo->storeAs('arquivos_chamado', $name, ['disk' => 'public']);
-                array_push($files_path,$filename);
+            $name = uniqid('foto_') . '.' . $arquivo->getClientOriginalExtension();
+            $filename = $arquivo->storeAs('arquivos_chamado', $name, ['disk' => 'public']);
+            array_push($files_path, $filename);
             // }
         }
         return response()->json([

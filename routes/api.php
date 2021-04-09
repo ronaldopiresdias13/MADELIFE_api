@@ -101,6 +101,21 @@ Route::group([
 });
 Route::post('enviararquivos', 'Api\App\v3_0_21\ChamadosController@enviararquivos');
 
+Route::group([
+    'prefix' => 'app/v3_0_22/auth'
+], function () {
+    Route::post('login', 'Api\App\v3_0_22\Auth\AuthController@login');
+    Route::post('register', 'Api\App\v3_0_22\Auth\AuthController@register');
+    Route::post('reset', 'Api\App\v3_0_22\Auth\AuthController@reset');
+
+    /* ------------- Rotas Utilizando Token -------------*/
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::post('change', 'Api\App\v3_0_22\Auth\AuthController@change');
+        Route::get('logout', 'Api\App\v3_0_22\Auth\AuthController@logout');
+        // Route::get('user', 'Auth\AuthController@user');
+    });
+});
+Route::post('enviararquivos', 'Api\App\v3_0_22\ChamadosController@enviararquivos');
 /*------------- Rotas Utilizando Token -------------*/
 Route::group(['middleware' => 'auth:api'], function () {
     //     Route::get('getEscalasMesApp', 'Api\EscalasController@getEscalasMesApp');    // Mudar App e Apagar essa rota

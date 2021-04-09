@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\App\v3_0_21;
+namespace App\Http\Controllers\Api\App\v3_0_22;
 
 use App\Models\Conselho;
 use App\Http\Controllers\Controller;
