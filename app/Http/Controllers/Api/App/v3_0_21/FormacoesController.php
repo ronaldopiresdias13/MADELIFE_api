@@ -15,7 +15,7 @@ class FormacoesController extends Controller
      */
     public function listFormacoes()
     {
-        return Formacao::where('ativo', true)->orderBy('descricao')->get(['id', 'descricao']);
+        return Formacao::orderBy('descricao')->get(['id', 'descricao']);
     }
 
     /**
