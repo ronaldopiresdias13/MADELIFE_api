@@ -23,10 +23,12 @@ class ResponsaveisController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Empresa $empresa)
+    public function index(Request $request)
     {
-        return Responsavel::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade'])
-            ->where('empresa_id', $empresa->id)
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return Responsavel::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade', 'pessoa.user.acessos'])
+            ->where('empresa_id', $empresa_id)
             ->where('ativo', true)
             ->get();
     }
@@ -39,7 +41,6 @@ class ResponsaveisController extends Controller
      */
     public function store(Request $request)
     {
-
         $pessoa = null;
 
         if ($request['pessoa']) {

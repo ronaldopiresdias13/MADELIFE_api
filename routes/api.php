@@ -474,7 +474,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::put('pacientes/{paciente}', 'Api\Web\PacientesController@update');
             Route::delete('pacientes/{paciente}', 'Api\Web\PacientesController@destroy');
 
-            Route::get('responsaveis/list/{empresa}', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@index');
+            Route::get('responsaveis/list', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@index');
             Route::get('responsaveis/{responsavel}', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@show');
             Route::post('responsaveis', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@store');
             Route::put('responsaveis/{responsavel}', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@update');
