@@ -455,11 +455,11 @@ class CnabService
 
         $hora_geracao_arquivo = Carbon::now()->format('His'); //152 a 157 //HHMMSS
 
-        $num_sequencial_arquivo = "000001"; //158 a 163
+        $num_sequencial_arquivo = "000011"; //158 a 163
 
         $num_versao_arquivo = "060"; //164 a 166
 
-        $densidade_gravacao_arquivo =$banco_codigo == "033" ? "00000":"00000"; //167 a 171
+        $densidade_gravacao_arquivo =$banco_codigo == "033" ? "00000":"     "; //167 a 171
 
         $reservado_banco = ""; //172 a 191
 
@@ -1040,7 +1040,7 @@ class CnabService
             $nome_favorecido = $nome_favorecido . ' ';
         }
 
-        $seu_numero = $pessoa->cpfcnpj . Carbon::now()->format('dmY');
+        $seu_numero = (int)$pessoa->cpfcnpj . Carbon::now()->format('dmY');
 
         $num = Str::length($seu_numero . '');
 
@@ -1439,7 +1439,7 @@ class CnabService
         $uso_excluviso_siagep = $user_data['codigo'] == "033" ? '' : ' N';
         $num = Str::length($uso_excluviso_siagep . '');
 
-        for ($i = 231 + $num; $i <= 231; $i++) {
+        for ($i = 231 + $num; $i <= 232; $i++) {
             $uso_excluviso_siagep = ' ' . $uso_excluviso_siagep;
         }
 
@@ -1447,7 +1447,7 @@ class CnabService
         $codigo_isbp = '';
         $num = Str::length($codigo_isbp . '');
 
-        for ($i = 232 + $num; $i <= 240; $i++) {
+        for ($i = 233 + $num; $i <= 240; $i++) {
             $codigo_isbp = ' ' . $codigo_isbp;
         }
 
