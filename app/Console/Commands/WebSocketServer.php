@@ -42,32 +42,32 @@ class WebSocketServer extends Command
      */
     public function handle()
     {
-        // $loop = \React\EventLoop\Factory::create();
+         $loop = \React\EventLoop\Factory::create();
 
-        // $secure_websockets = new \React\Socket\Server('0.0.0.0:9990', $loop);
-        // $secure_websockets = new \React\Socket\SecureServer($secure_websockets, $loop, [
-        //     'local_cert' => '/etc/letsencrypt/live/madelife.enterscience.com.br/fullchain.pem',
-        //     'local_pk' => '/etc/letsencrypt/live/madelife.enterscience.com.br/privkey.pem',
-        //     'verify_peer' => false
-        // ]);
+         $secure_websockets = new \React\Socket\Server('0.0.0.0:1123', $loop);
+         $secure_websockets = new \React\Socket\SecureServer($secure_websockets, $loop, [
+             'local_cert' => '/etc/ssl/private/9dfd8ac04f6852d4.crt',
+             'local_pk' => '/etc/ssl/private/server.key',
+             'verify_peer' => false
+         ]);
 
-        // $app = new \Ratchet\Http\HttpServer(
-        //     new \Ratchet\WebSocket\WsServer(
-        //         new ChatWebSocketController()
-        //     )
-        // );
-        // $server = new \Ratchet\Server\IoServer($app, $secure_websockets, $loop);
-        // $server->run();
+         $app = new \Ratchet\Http\HttpServer(
+             new \Ratchet\WebSocket\WsServer(
+                 new ChatWebSocketController()
+             )
+         );
+         $server = new \Ratchet\Server\IoServer($app, $secure_websockets, $loop);
+         $server->run();
 
 
-        $server = IoServer::factory(
-            new HttpServer(
-                new WsServer(
-                    new ChatWebSocketController()
-                )
-            ),
-            1052
-        );
-        $server->run();
+        //$server = IoServer::factory(
+        //    new HttpServer(
+        //        new WsServer(
+        //            new ChatWebSocketController()
+        //        )
+        //    ),
+        //    1123
+        //);
+        //$server->run();
     }
 }
