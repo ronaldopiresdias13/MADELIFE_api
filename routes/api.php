@@ -468,7 +468,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('contratos/dashboardGroupByMotivoDesativados', 'Api\Web\OrdemservicosController@dashboardGroupByMotivoDesativados');
             Route::get('contratos/dashboardGroupByStatusAtivadosDesativados', 'Api\Web\OrdemservicosController@dashboardGroupByStatusAtivadosDesativados');
 
-            Route::get('pacientes/list/{empresa}', 'Api\Web\PacientesController@index');
+            Route::get('pacientes/list', 'Api\Web\PacientesController@index');
             Route::get('pacientes/{paciente}', 'Api\Web\PacientesController@show');
             Route::post('pacientes', 'Api\Web\PacientesController@store');
             Route::put('pacientes/{paciente}', 'Api\Web\PacientesController@update');
