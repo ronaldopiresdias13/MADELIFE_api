@@ -60,7 +60,7 @@ class PagamentosCnabController extends Controller
         foreach ($pagamentos as $key => $pagamento) {
             $tem = false;
             foreach ($result as $key => $r) {
-                if ($r['profissional'] == $pagamento->pessoa_id) {
+                if ($r['profissional'] == $pagamento->pessoa_id && $r['situacao'] == $pagamento->situacao) {
                     array_push($result[$key]['pagamentos'], $pagamento);
                     $tem = true;
                     break;
@@ -88,21 +88,6 @@ class PagamentosCnabController extends Controller
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
         $pagamentosexternos = DB::select(
-            // "(
-            //     SELECT  DATE_FORMAT(pge.datainicio, '%Y-%m') AS periodo, pge.id, p.nome, pge.subtotal AS valor, pge.situacao, 'Prestador Externo' AS tipo FROM pagamentoexternos AS pge
-            //     INNER JOIN pessoas AS p
-            //     ON p.id = pge.pessoa_id
-            //     WHERE pge.empresa_id = ?
-            //     AND pge.`status` = 0 AND pge.deleted_at IS NULL AND pge.situacao != 'Criado'
-            // )
-            // UNION ALL
-            // (
-            // 	SELECT  DATE_FORMAT(pgi.datainicio, '%Y-%m') AS periodo, pgi.id, p.nome, (pgi.salario + pgi.proventos - pgi.descontos ) AS valor, pgi.situacao, 'Profissional Interno' AS tipo FROM pagamentointernos AS pgi
-            // 	INNER JOIN pessoas AS p
-            // 	ON p.id = pgi.pessoa_id
-            // 	WHERE pgi.empresa_id = ?
-            // 	AND pgi.`status` = 0 AND pgi.deleted_at IS NULL AND pgi.situacao != 'Criado'
-            // )",
             "
                 SELECT DATE_FORMAT(pgp.periodo1, '%Y-%m') AS periodo, pgp.id, p.nome, pgp.valor, pgp.situacao, pgp.tipopessoa as tipo FROM pagamentopessoas AS pgp
                 INNER JOIN pessoas AS p
@@ -125,7 +110,7 @@ class PagamentosCnabController extends Controller
             $tem = false;
             $array['total'] = 0;
             foreach ($result as $key => $r) {
-                if ($r['periodo'] == $pagamento->periodo && $r['tipo'] == $pagamento->tipo) {
+                if ($r['periodo'] == $pagamento->periodo && $r['tipo'] == $pagamento->tipo && $r['situacao'] == $pagamento->situacao) {
                     array_push($result[$key]['pagamentos'], $pagamento);
                     $result[$key]['total'] += $pagamento->valor;
                     $tem = true;
@@ -137,6 +122,7 @@ class PagamentosCnabController extends Controller
                 $array = [
                     'periodo' => $pagamento->periodo,
                     'tipo'         => $pagamento->tipo,
+                    'situacao'         => $pagamento->situacao,
                     'pagamentos'   => [$pagamento],
                     'total'     => $array['total'],
                 ];
