@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+Route::post('enviararquivos', 'Api\App\v3_0_21\ChamadosController@enviararquivos');
+Route::post('enviararquivos', 'Api\App\v3_0_22\ChamadosController@enviararquivos');
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix("app/v3_0_20")->group(function () {
