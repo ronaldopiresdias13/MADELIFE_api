@@ -409,6 +409,13 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('dashboard/dashboardTotalAtividades', 'Api\Web\AreaClinica\DashboardController@dashboardTotalAtividades');
             Route::get('profissionais/historicopacientesprestador/{prestador}', 'Api\Web\PrestadoresController@historicopacientesprestador');
         });
+        Route::prefix('compras')->group(function () {
+            Route::get('fornecedores', 'Api\Web\Compras\FornecedoresController@getAllByEmpresaId');
+            Route::post('fornecedores', 'Api\Web\Compras\FornecedoresController@store');
+            Route::get('fornecedores/{fornecedor}', 'Api\Web\Compras\FornecedoresController@show');
+            Route::put('fornecedores/{fornecedor}', 'Api\Web\Compras\FornecedoresController@update');
+            Route::delete('fornecedores/{fornecedor}', 'Api\Web\Compras\FornecedoresController@destroy');
+        });
         Route::prefix('convenio')->group(function () {
             Route::get('categoriadocumentos/listCategorias', 'Api\Web\Convenio\CategoriadocumentosController@listCategorias');
             Route::get('escalas/dashboard', 'Api\Web\Convenio\EscalasController@dashboardConvenio');
@@ -752,11 +759,7 @@ Route::get('formacoes/{formacao}', 'Api\FormacoesController@show');
 Route::put('formacoes/{formacao}', 'Api\FormacoesController@update');
 Route::delete('formacoes/{formacao}', 'Api\FormacoesController@destroy');
 
-Route::get('fornecedores', 'Api\FornecedoresController@index');
-Route::post('fornecedores', 'Api\FornecedoresController@store');
-Route::get('fornecedores/{fornecedor}', 'Api\FornecedoresController@show');
-Route::put('fornecedores/{fornecedor}', 'Api\FornecedoresController@update');
-Route::delete('fornecedores/{fornecedor}', 'Api\FornecedoresController@destroy');
+
 
 Route::get('grupocuidados', 'Api\GrupocuidadosController@index');
 Route::post('grupocuidados', 'Api\GrupocuidadosController@store');
