@@ -481,7 +481,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::delete('responsaveis/{responsavel}', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@destroy');
 
 
-            Route::get('servicos/list/{empresa}', 'Api\Web\GestaoOrcamentaria\ServicosController@index');
+            Route::get('servicos/list', 'Api\Web\GestaoOrcamentaria\ServicosController@index');
             Route::get('servicos/listServicosFormacoes', 'Api\Web\GestaoOrcamentaria\ServicosController@listServicosFormacoes');
             Route::post('servicos', 'Api\Web\GestaoOrcamentaria\ServicosController@store');
             Route::get('servicos/{servico}', 'Api\Web\GestaoOrcamentaria\ServicosController@show');
