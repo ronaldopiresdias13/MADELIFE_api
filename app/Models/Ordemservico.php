@@ -94,6 +94,4 @@ class Ordemservico extends Model
         //     $this->track($ordemservico);
         // });
     }
-
-
 }
