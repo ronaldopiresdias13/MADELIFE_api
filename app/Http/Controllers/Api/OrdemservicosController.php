@@ -314,10 +314,10 @@ class OrdemservicosController extends Controller
         $profissional = $user->pessoa->profissional;
 
         $escalas = Ordemservico::with([
-            'servicos',
+            // 'servicos',
             'orcamento.cidade', 'orcamento' => function ($query) {
                 // $query->select('id', 'cliente_id');
-                $query->with(['homecare' => function ($query) {
+                $query->with(['servicos.servico', 'homecare' => function ($query) {
                     // $query->select('id', 'orcamento_id', 'paciente_id');
                     $query->with(['paciente.pessoa', 'paciente.responsavel.pessoa']);
                 }]);
