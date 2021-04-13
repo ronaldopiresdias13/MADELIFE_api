@@ -60,10 +60,10 @@ class ClientesController extends Controller
                             'status'      => $request['pessoa']['status'],
                         ]
                     )->id,
+                    'empresa_id' => $empresa_id,
                 ],
                 [
                     'tipo'       => $request['tipo'],
-                    'empresa_id' => $empresa_id,
                 ]
             );
 
