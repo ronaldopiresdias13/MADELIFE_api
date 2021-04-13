@@ -55,7 +55,8 @@ class CnabService
         $this->observacao = $observacao;
     }
 
-    function sanitizeString($str) {
+    function sanitizeString($str)
+    {
         $str = preg_replace('/[áàãâä]/ui', 'a', $str);
         $str = preg_replace('/[éèêë]/ui', 'e', $str);
         $str = preg_replace('/[íìîï]/ui', 'i', $str);
@@ -87,7 +88,7 @@ class CnabService
             $soma_valor_lote_1 = 0;
             $quantidade_moeda_lote_1 = 0;
             $dados_pagamento = [];
-            $quantidade_registros=0;
+            $quantidade_registros = 0;
             foreach ($this->dados as $dado) {
                 $pagamentos = Pagamentopessoa::with(['pessoa.dadosbancario.banco'])
                     ->whereHas('pessoa.dadosbancario.banco', function ($q) {
@@ -96,6 +97,8 @@ class CnabService
                     ->where('empresa_id', $empresa_id)
                     ->where('pessoa_id', '=', $dado['profissional_id'])
                     ->where('status', false)
+                    ->where('situacao', 'Aprovado')
+
                     ->where(DB::raw("date_format(str_to_date(pagamentopessoas.periodo1, '%Y-%m-%d'), '%Y-%m')"), "=", $this->mes)
                     ->get()->sum('valor');
 
@@ -109,7 +112,7 @@ class CnabService
                         'agencia' => $dado['agencia'],
                         'codigo' => $dado['codigo'],
                     ]);
-                    $quantidade_registros+=2;
+                    $quantidade_registros += 2;
                     Log::info($dado['profissional_id']);
 
                     Log::info($pagamentos);
@@ -124,7 +127,7 @@ class CnabService
             if ($soma_valor_lote_1 > 0) {
                 $cnab .= $lote_1;
                 $quantidade_lotes += 1;
-                $cnab .= "\n" . $this->trailer_arquivo_santander(1);
+                $cnab .= "\n" . $this->trailer_arquivo_santander(1, $quantidade_registros + 2);
                 $name = 'cnabs/cnab_santander_folha_' . Carbon::now()->format('Y-m-d_H-i-s') . '.txt';
 
                 Storage::disk('public')->put($name, $cnab);
@@ -163,7 +166,7 @@ class CnabService
             $soma_valor_lote_2 = 0;
             $quantidade_moeda_lote_2 = 0;
             $dados_pagamento = [];
-            $quantidade_registros=0;
+            $quantidade_registros = 0;
 
             foreach ($this->dados as $dado) {
                 $pagamentos = Pagamentopessoa::with(['pessoa.dadosbancario.banco'])
@@ -173,11 +176,13 @@ class CnabService
                     ->where('empresa_id', $empresa_id)
                     ->where('pessoa_id', '=', $dado['profissional_id'])
                     ->where('status', false)
+                    ->where('situacao', 'Aprovado')
+
                     ->where(DB::raw("date_format(str_to_date(pagamentopessoas.periodo1, '%Y-%m-%d'), '%Y-%m')"), "=", $this->mes)
                     ->get()->sum('valor');
 
                 if ($pagamentos > 0) {
-                    $quantidade_registros+=2;
+                    $quantidade_registros += 2;
 
                     array_push($dados_pagamento, [
                         'user_id' => $dado['profissional_id'],
@@ -202,7 +207,7 @@ class CnabService
             if ($soma_valor_lote_2 > 0) {
                 $cnab .= $lote_2;
                 $quantidade_lotes += 1;
-                $cnab .= "\n" . $this->trailer_arquivo_santander(1);
+                $cnab .= "\n" . $this->trailer_arquivo_santander(1, $quantidade_registros + 2);
                 $name = 'cnabs/cnab_santander_fornecedor_' . Carbon::now()->format('Y-m-d_H-i-s') . '.txt';
 
                 Storage::disk('public')->put($name, $cnab);
@@ -244,7 +249,7 @@ class CnabService
             $soma_valor = 0;
             $quantidade_moeda = 0;
             $dados_pagamento = [];
-            $quantidade_registros=0;
+            $quantidade_registros = 0;
             foreach ($this->dados as $dado) {
                 $pagamentos = Pagamentopessoa::with(['pessoa.dadosbancario.banco'])
                     ->whereHas('pessoa.dadosbancario.banco', function ($q) {
@@ -253,11 +258,13 @@ class CnabService
                     ->where('empresa_id', $empresa_id)
                     ->where('pessoa_id', '=', $dado['profissional_id'])
                     ->where('status', false)
+                    ->where('situacao', 'Aprovado')
+
                     ->where(DB::raw("date_format(str_to_date(pagamentopessoas.periodo1, '%Y-%m-%d'), '%Y-%m')"), "=", $this->mes)
                     ->get()->sum('valor');
                 if ($pagamentos > 0) {
                     Log::info($dado['profissional_id']);
-                    $quantidade_registros+=2;
+                    $quantidade_registros += 2;
                     Log::info($pagamentos);
                     array_push($dados_pagamento, [
                         'user_id' => $dado['profissional_id'],
@@ -276,7 +283,7 @@ class CnabService
             if ($soma_valor > 0) {
 
                 $cnab .= "\n" . $this->trailer_lote_sicred($quantidade_registros + 2, number_format($soma_valor, 2, '', ''), $quantidade_moeda, '748'); //quantidade contando header do lote, registro a e b, trailer do lote
-                $cnab .= "\n" . $this->trailer_arquivo_sicred(1);
+                $cnab .= "\n" . $this->trailer_arquivo_sicred(1, $quantidade_registros + 2);
 
                 $name = 'cnabs/cnab_sicredi_folha_' . Carbon::now()->format('Y-m-d_H-i-s') . '.txt';
 
@@ -321,7 +328,7 @@ class CnabService
             $soma_valor = 0;
             $quantidade_moeda = 0;
             $dados_pagamento = [];
-            $quantidade_registros=0;
+            $quantidade_registros = 0;
 
             foreach ($this->dados as $dado) {
                 $pagamentos = Pagamentopessoa::with(['pessoa.dadosbancario.banco'])
@@ -331,11 +338,12 @@ class CnabService
                     ->where('empresa_id', $empresa_id)
                     ->where('pessoa_id', '=', $dado['profissional_id'])
                     ->where('status', false)
+                    ->where('situacao', 'Aprovado')
                     ->where(DB::raw("date_format(str_to_date(pagamentopessoas.periodo1, '%Y-%m-%d'), '%Y-%m')"), "=", $this->mes)
                     ->get()->sum('valor');
                 if ($pagamentos > 0) {
                     Log::info($dado['profissional_id']);
-                    $quantidade_registros+=2;
+                    $quantidade_registros += 2;
 
                     Log::info($pagamentos);
                     array_push($dados_pagamento, [
@@ -355,7 +363,7 @@ class CnabService
             if ($soma_valor > 0) {
 
                 $cnab .= "\n" . $this->trailer_lote_sicred($quantidade_registros + 2, number_format($soma_valor, 2, '', ''), $quantidade_moeda, '000'); //quantidade contando header do lote, registro a e b, trailer do lote
-                $cnab .= "\n" . $this->trailer_arquivo_sicred(1);
+                $cnab .= "\n" . $this->trailer_arquivo_sicred(1, $quantidade_registros + 2);
 
                 $name = 'cnabs/cnab_sicredi_fornecedor_' . Carbon::now()->format('Y-m-d_H-i-s') . '.txt';
 
@@ -459,7 +467,7 @@ class CnabService
 
         $num_versao_arquivo = "060"; //164 a 166
 
-        $densidade_gravacao_arquivo =$banco_codigo == "033" ? "00000":"     "; //167 a 171
+        $densidade_gravacao_arquivo = $banco_codigo == "033" ? "00000" : "     "; //167 a 171
 
         $reservado_banco = ""; //172 a 191
 
@@ -593,7 +601,7 @@ class CnabService
         return $header_arquivo;
     }
 
-    public function trailer_arquivo_sicred($quantidade_lotes)
+    public function trailer_arquivo_sicred($quantidade_lotes, $quantidade_registros)
     {
         $banco_t = $this->sicred['codigo'];
         $lote_t = "9999";
@@ -612,7 +620,7 @@ class CnabService
             $quant_lotes_t = "0" . $quant_lotes_t;
         }
 
-        $registros = $quantidade_lotes * 4 + 2; //numero total de registros (header arquivo, header lote, regi detalhe, trailer lote, trailer arquivo)
+        $registros = $quantidade_registros + 2; //numero total de registros (header arquivo, header lote, regi detalhe, trailer lote, trailer arquivo)
         //verificar
 
 
@@ -638,7 +646,7 @@ class CnabService
     }
 
 
-    public function trailer_arquivo_santander($quantidade_lotes)
+    public function trailer_arquivo_santander($quantidade_lotes, $quantidade_registros)
     {
         $banco_t = $this->santander['codigo'];
         $lote_t = "9999";
@@ -657,7 +665,7 @@ class CnabService
             $quant_lotes_t = "0" . $quant_lotes_t;
         }
 
-        $registros = $quantidade_lotes * 4 + 2; //numero total de registros (header arquivo, header lote, regi detalhe, trailer lote, trailer arquivo)
+        $registros = $quantidade_registros + 2; //numero total de registros (header arquivo, header lote, regi detalhe, trailer lote, trailer arquivo)
         //verificar
 
 
@@ -1039,8 +1047,13 @@ class CnabService
         for ($i = 44 + $num; $i <= 73; $i++) {
             $nome_favorecido = $nome_favorecido . ' ';
         }
+        $cpf_cnpj = Str::replaceArray('.', [''], $pessoa->cpfcnpj);
+        $cpf_cnpj = Str::replaceArray('.', [''], $cpf_cnpj);
+        $cpf_cnpj = Str::replaceArray('.', [''], $cpf_cnpj);
 
-        $seu_numero = (int)$pessoa->cpfcnpj . Carbon::now()->format('dmY');
+        $cpf_cnpj = Str::replaceArray('-', [''], $cpf_cnpj);
+        $cpf_cnpj = Str::replaceArray('/', [''], $cpf_cnpj);
+        $seu_numero = (int)($cpf_cnpj . Carbon::now()->format('dmY'));
 
         $num = Str::length($seu_numero . '');
 
@@ -1080,7 +1093,7 @@ class CnabService
 
         // $data_real_pagamento = Carbon::now()->addDays(2)->format('dmY');
         //verificar
-        for ($i = 155+$num; $i <= 162; $i++) {
+        for ($i = 155 + $num; $i <= 162; $i++) {
             $data_real_pagamento = "0" . $data_real_pagamento;
         }
 
@@ -1088,7 +1101,7 @@ class CnabService
         //verificar
         $num = Str::length($valor_real . '');
 
-        for ($i = 163+$num; $i <= 177; $i++) {
+        for ($i = 163 + $num; $i <= 177; $i++) {
             $valor_real = "0" . $valor_real;
             // $valor_real = " " . $valor_real;
         }
@@ -1189,8 +1202,13 @@ class CnabService
         for ($i = 44 + $num; $i <= 73; $i++) {
             $nome_favorecido = $nome_favorecido . ' ';
         }
+        $cpf_cnpj = Str::replaceArray('.', [''], $pessoa->cpfcnpj);
+        $cpf_cnpj = Str::replaceArray('.', [''], $cpf_cnpj);
+        $cpf_cnpj = Str::replaceArray('.', [''], $cpf_cnpj);
 
-        $seu_numero = $pessoa->cpfcnpj . Carbon::now()->format('dmY');
+        $cpf_cnpj = Str::replaceArray('-', [''], $cpf_cnpj);
+        $cpf_cnpj = Str::replaceArray('/', [''], $cpf_cnpj);
+        $seu_numero = (int)($cpf_cnpj . Carbon::now()->format('dmY'));
         // if (Str::length($seu_numero . '') == 11) {
         //     $seu_numero .= rand(0,99999);
         // }
@@ -1312,13 +1330,19 @@ class CnabService
         $uso_exclusivo = '   ';
 
         $tipo_inscricao = '';
-        if (Str::length($pessoa->cpfcnpj) == 11) {
+        $cpf_cnpj = Str::replaceArray('.', [''], $pessoa->cpfcnpj);
+        $cpf_cnpj = Str::replaceArray('.', [''], $cpf_cnpj);
+        $cpf_cnpj = Str::replaceArray('.', [''], $cpf_cnpj);
+
+        $cpf_cnpj = Str::replaceArray('-', [''], $cpf_cnpj);
+        $cpf_cnpj = Str::replaceArray('/', [''], $cpf_cnpj);
+        if (Str::length($cpf_cnpj) == 11) {
             $tipo_inscricao = '1';
-        } elseif (Str::length($pessoa->cpfcnpj) == 14) {
+        } elseif (Str::length($cpf_cnpj) == 14) {
             $tipo_inscricao = '2';
         }
 
-        $numero_inscricao = $pessoa->cpfcnpj;
+        $numero_inscricao = $cpf_cnpj;
         $num = Str::length($numero_inscricao . '');
 
         for ($i = 19 + $num; $i <= 32; $i++) {
@@ -1485,13 +1509,19 @@ class CnabService
         $uso_exclusivo = '   ';
 
         $tipo_inscricao = '';
-        if (Str::length($pessoa->cpfcnpj) == 11) {
+        $cpf_cnpj = Str::replaceArray('.', [''], $pessoa->cpfcnpj);
+        $cpf_cnpj = Str::replaceArray('.', [''], $cpf_cnpj);
+        $cpf_cnpj = Str::replaceArray('.', [''], $cpf_cnpj);
+
+        $cpf_cnpj = Str::replaceArray('-', [''], $cpf_cnpj);
+        $cpf_cnpj = Str::replaceArray('/', [''], $cpf_cnpj);
+        if (Str::length($cpf_cnpj) == 11) {
             $tipo_inscricao = '1';
-        } elseif (Str::length($pessoa->cpfcnpj) == 14) {
+        } elseif (Str::length($cpf_cnpj) == 14) {
             $tipo_inscricao = '2';
         }
 
-        $numero_inscricao = $pessoa->cpfcnpj;
+        $numero_inscricao = $cpf_cnpj;
         $num = Str::length($numero_inscricao . '');
 
         for ($i = 19 + $num; $i <= 32; $i++) {
