@@ -16,9 +16,11 @@ class ServicosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Empresa $empresa)
+    public function index(Request $request)
     {
-        return Servico::where('empresa_id', $empresa->id)
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return Servico::where('empresa_id', $empresa_id)
             ->where('ativo', true)
             ->orderBy('descricao')
             ->get();
