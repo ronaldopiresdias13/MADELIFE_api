@@ -31,30 +31,44 @@ use Illuminate\Support\Facades\Route;
 */
 
 /*------------- Rotas Utilizando Token -------------*/
+
 Route::group(['middleware' => 'auth:api'], function () {
 
     /*----------------- Web -----------------*/
     Route::prefix('web')->group(function () {
         Route::prefix('areaClinica')->group(function () {
-            Route::get('dashboard/relatorioDiario'                               , 'Api\Web\AreaClinica\DashboardController@relatorioDiario');
-            Route::get('dashboard/relatorioProdutividade'                        , 'Api\Web\AreaClinica\DashboardController@relatorioProdutividade');
-            Route::get('dashboard/relatorioMedicamento'                          , 'Api\Web\AreaClinica\DashboardController@relatorioMedicamentos');
-            Route::get('dashboard/dashboardTotalProfissionaisEscalasPorPeriodo'  , 'Api\Web\AreaClinica\DashboardController@dashboardTotalProfissionaisEscalasPorPeriodo');
-            Route::get('dashboard/dashboardTotalPacientesAtivosPorPeriodo'       , 'Api\Web\AreaClinica\DashboardController@dashboardTotalPacientesAtivosPorPeriodo');
-            Route::get('dashboard/dashboarTotalContratosDesativadosPorPeriodo'   , 'Api\Web\AreaClinica\DashboardController@dashboarTotalContratosDesativadosPorPeriodo');
-            Route::get('dashboard/dashboardTotalPacientesServicosPorPeriodo'     , 'Api\Web\AreaClinica\DashboardController@dashboardTotalPacientesServicosPorPeriodo');
-            Route::get('dashboard/dashboardTotalRelatoriosPorPeriodo'            , 'Api\Web\AreaClinica\DashboardController@dashboardTotalRelatoriosPorPeriodo');
+            Route::get('dashboard/relatorioDiario', 'Api\Web\AreaClinica\DashboardController@relatorioDiario');
+            Route::get('dashboard/relatorioProdutividade', 'Api\Web\AreaClinica\DashboardController@relatorioProdutividade');
+            Route::get('dashboard/relatorioMedicamento', 'Api\Web\AreaClinica\DashboardController@relatorioMedicamentos');
+            Route::get('dashboard/dashboardTotalProfissionaisEscalasPorPeriodo', 'Api\Web\AreaClinica\DashboardController@dashboardTotalProfissionaisEscalasPorPeriodo');
+            Route::get('dashboard/dashboardTotalPacientesAtivosPorPeriodo', 'Api\Web\AreaClinica\DashboardController@dashboardTotalPacientesAtivosPorPeriodo');
+            Route::get('dashboard/dashboarTotalContratosDesativadosPorPeriodo', 'Api\Web\AreaClinica\DashboardController@dashboarTotalContratosDesativadosPorPeriodo');
+            Route::get('dashboard/dashboardTotalPacientesServicosPorPeriodo', 'Api\Web\AreaClinica\DashboardController@dashboardTotalPacientesServicosPorPeriodo');
+            Route::get('dashboard/dashboardTotalRelatoriosPorPeriodo', 'Api\Web\AreaClinica\DashboardController@dashboardTotalRelatoriosPorPeriodo');
             Route::get('dashboard/dashboardTotalProfissionaisCategoriaPorPeriodo', 'Api\Web\AreaClinica\DashboardController@dashboardTotalProfissionaisCategoriaPorPeriodo');
-            Route::get('dashboard/dashboarTotalPacientesPorSupervisor'           , 'Api\Web\AreaClinica\DashboardController@dashboarTotalPacientesPorSupervisor');
-            Route::get('dashboard/dashboarTotalPacientesPorConvenio'             , 'Api\Web\AreaClinica\DashboardController@dashboarTotalPacientesPorConvenio');
-            Route::get('dashboard/dashboarPorIdadePacientes'                     , 'Api\Web\AreaClinica\DashboardController@dashboarPorIdadePacientes');
-            Route::get('dashboard/dashboarCidadesMaisAtendidas'                  , 'Api\Web\AreaClinica\DashboardController@dashboarCidadesMaisAtendidas');
-            Route::get('dashboard/dashboarFaltasdeProfissionaisPorOperadora'     , 'Api\Web\AreaClinica\DashboardController@dashboarFaltasdeProfissionaisPorOperadora');
-            Route::get('dashboard/dashboarFaltasdeProfissionaisPorEspecialidade' , 'Api\Web\AreaClinica\DashboardController@dashboarFaltasdeProfissionaisPorEspecialidade');
-            Route::get('dashboard/dashboarFaltasdeProfissionaisPorCidades'       , 'Api\Web\AreaClinica\DashboardController@dashboarFaltasdeProfissionaisPorCidades');
-            Route::get('dashboard/dashboarTotalCheckinCheckout'                  , 'Api\Web\AreaClinica\DashboardController@dashboarTotalCheckinCheckout');
-            Route::get('dashboard/dashboardTotalMedicamentos'                    , 'Api\Web\AreaClinica\DashboardController@dashboardTotalMedicamentos');
-            Route::get('dashboard/dashboardTotalAtividades'                      , 'Api\Web\AreaClinica\DashboardController@dashboardTotalAtividades');
+            Route::get('dashboard/dashboarTotalPacientesPorSupervisor', 'Api\Web\AreaClinica\DashboardController@dashboarTotalPacientesPorSupervisor');
+            Route::get('dashboard/dashboarTotalPacientesPorConvenio', 'Api\Web\AreaClinica\DashboardController@dashboarTotalPacientesPorConvenio');
+            Route::get('dashboard/dashboarPorIdadePacientes', 'Api\Web\AreaClinica\DashboardController@dashboarPorIdadePacientes');
+            Route::get('dashboard/dashboarCidadesMaisAtendidas', 'Api\Web\AreaClinica\DashboardController@dashboarCidadesMaisAtendidas');
+            Route::get('dashboard/dashboarFaltasdeProfissionaisPorOperadora', 'Api\Web\AreaClinica\DashboardController@dashboarFaltasdeProfissionaisPorOperadora');
+            Route::get('dashboard/dashboarFaltasdeProfissionaisPorEspecialidade', 'Api\Web\AreaClinica\DashboardController@dashboarFaltasdeProfissionaisPorEspecialidade');
+            Route::get('dashboard/dashboarFaltasdeProfissionaisPorCidades', 'Api\Web\AreaClinica\DashboardController@dashboarFaltasdeProfissionaisPorCidades');
+            Route::get('dashboard/dashboarTotalCheckinCheckout', 'Api\Web\AreaClinica\DashboardController@dashboarTotalCheckinCheckout');
+            Route::get('dashboard/dashboardTotalMedicamentos', 'Api\Web\AreaClinica\DashboardController@dashboardTotalMedicamentos');
+            Route::get('dashboard/dashboardTotalAtividades', 'Api\Web\AreaClinica\DashboardController@dashboardTotalAtividades');
+        });
+        Route::prefix('compras')->group(function () {
+            Route::get('fornecedores', 'Api\Web\Compras\FornecedoresController@getAllByEmpresaId');
+            Route::post('fornecedores', 'Api\Web\Compras\FornecedoresController@store');
+            Route::get('fornecedores/{fornecedor}', 'Api\Web\Compras\FornecedoresController@show');
+            Route::put('fornecedores/{fornecedor}', 'Api\Web\Compras\FornecedoresController@update');
+            Route::delete('fornecedores/{fornecedor}', 'Api\Web\Compras\FornecedoresController@destroy');
+
+            Route::get('cotacoes', 'Api\Web\Compras\CotacoesController@getAllByEmpresaId');
+            Route::post('cotacoes', 'Api\Web\Compras\CotacoesController@store');
+            Route::get('cotacoes/{cotacao}', 'Api\Web\Compras\CotacoesController@show');
+            Route::put('cotacoes/{cotacao}', 'Api\Web\Compras\CotacoesController@update');
+            Route::delete('cotacoes/{cotacao}', 'Api\Web\Compras\CotacoesController@destroy');
         });
 
         Route::prefix('gestaoOrcamentaria')->group(function () {
@@ -255,11 +269,7 @@ Route::get('convenios/{convenio}', 'Api\ConveniosController@show');
 Route::put('convenios/{convenio}', 'Api\ConveniosController@update');
 Route::delete('convenios/{convenio}', 'Api\ConveniosController@destroy');
 
-Route::get('cotacoes', 'Api\CotacoesController@index');
-Route::post('cotacoes', 'Api\CotacoesController@store');
-Route::get('cotacoes/{cotacao}', 'Api\CotacoesController@show');
-Route::put('cotacoes/{cotacao}', 'Api\CotacoesController@update');
-Route::delete('cotacoes/{cotacao}', 'Api\CotacoesController@destroy');
+
 
 Route::get('cotacaoproduto', 'Api\CotacaoProdutoController@index');
 Route::post('cotacaoproduto', 'Api\CotacaoProdutoController@store');
