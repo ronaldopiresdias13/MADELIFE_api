@@ -27,7 +27,7 @@ class ResponsaveisController extends Controller
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-        return Responsavel::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade', 'pessoa.user.acessos'])
+        return Responsavel::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade', 'pacientes.pessoa', 'pessoa.user.acessos'])
             ->where('empresa_id', $empresa_id)
             ->where('ativo', true)
             ->get();
