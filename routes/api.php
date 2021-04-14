@@ -153,6 +153,12 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('fornecedores/{fornecedor}', 'Api\Web\Compras\FornecedoresController@show');
             Route::put('fornecedores/{fornecedor}', 'Api\Web\Compras\FornecedoresController@update');
             Route::delete('fornecedores/{fornecedor}', 'Api\Web\Compras\FornecedoresController@destroy');
+
+            Route::get('cotacoes', 'Api\Web\Compras\CotacoesController@getAllByEmpresaId');
+            Route::post('cotacoes', 'Api\Web\Compras\CotacoesController@store');
+            Route::get('cotacoes/{cotacao}', 'Api\Web\Compras\CotacoesController@show');
+            Route::put('cotacoes/{cotacao}', 'Api\Web\Compras\CotacoesController@update');
+            Route::delete('cotacoes/{cotacao}', 'Api\Web\Compras\CotacoesController@destroy');
         });
         Route::prefix('convenio')->group(function () {
             Route::get('categoriadocumentos/listCategorias', 'Api\Web\Convenio\CategoriadocumentosController@listCategorias');
@@ -392,11 +398,7 @@ Route::get('convenios/{convenio}', 'Api\ConveniosController@show');
 Route::put('convenios/{convenio}', 'Api\ConveniosController@update');
 Route::delete('convenios/{convenio}', 'Api\ConveniosController@destroy');
 
-Route::get('cotacoes', 'Api\CotacoesController@index');
-Route::post('cotacoes', 'Api\CotacoesController@store');
-Route::get('cotacoes/{cotacao}', 'Api\CotacoesController@show');
-Route::put('cotacoes/{cotacao}', 'Api\CotacoesController@update');
-Route::delete('cotacoes/{cotacao}', 'Api\CotacoesController@destroy');
+
 
 Route::get('cotacaoproduto', 'Api\CotacaoProdutoController@index');
 Route::post('cotacaoproduto', 'Api\CotacaoProdutoController@store');
