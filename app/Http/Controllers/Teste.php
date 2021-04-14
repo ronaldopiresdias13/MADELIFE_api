@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cliente;
 use App\Models\Escala;
 use App\Models\Ordemservico;
+use App\Models\Paciente;
 use App\Models\Pagamentoexterno;
 use App\Models\Pessoa;
 use App\Models\Tipopessoa;
@@ -22,10 +23,11 @@ class Teste extends Controller
     public function teste(Request $request)
     {
         $user = $request->user();
-        $result = User::with(
-            'pessoa.clientes.homecare.paciente.pessoa'
+
+        $result = Paciente::with(
+            'pessoa'
         )
-        ->find($user->id);
+        ->get();
 
         return $result;
 
