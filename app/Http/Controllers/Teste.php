@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cliente;
 use App\Models\Escala;
 use App\Models\Ordemservico;
 use App\Models\Pagamentoexterno;
@@ -19,6 +20,34 @@ class Teste extends Controller
 {
     public function teste(Request $request)
     {
+        $empresa_id = 3;
+        $cliente = Cliente::firstOrCreate(
+            [
+                'pessoa_id'  => Pessoa::firstOrCreate(
+                    [
+                        'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
+                    ],
+                    [
+                        'id' => ($request['pessoa']['id'] != '') ? $request['id'] : null,
+                        'nome'        => $request['pessoa']['nome'],
+                        'nascimento'  => $request['pessoa']['nascimento'],
+                        'rgie'        => $request['pessoa']['rgie'],
+                        'observacoes' => $request['pessoa']['observacoes'],
+                        'perfil'      => $request['pessoa']['perfil'],
+                        'status'      => $request['pessoa']['status'],
+                    ]
+                )->id,
+                'empresa_id' => $empresa_id,
+            ],
+            [
+                'tipo'       => $request['tipo'],
+            ]
+        );
+
+        return $cliente;
+
+        return 'Stop';
+
         // return Auth::user();
         return DB::transaction(function () {
             $os = Ordemservico::find(297);

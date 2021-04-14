@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\Web\GestaoOrcamentaria;
 
 use App\Models\Cliente;
 use App\Models\Email;
-use App\Models\Empresa;
 use App\Models\Endereco;
 use App\Http\Controllers\Controller;
 use App\Models\Pessoa;
@@ -45,30 +44,38 @@ class ClientesController extends Controller
         DB::transaction(function () use ($request) {
             $user = $request->user();
             $empresa_id = $user->pessoa->profissional->empresa_id;
-            $cliente = Cliente::create([
-                'tipo'       => $request['tipo'],
-                'empresa_id' => $empresa_id,
-                'pessoa_id'  => Pessoa::updateOrCreate(
-                    [
-                        'id' => ($request['pessoa']['id'] != '') ? $request['id'] : null,
-                    ],
-                    [
-                        'nome'        => $request['pessoa']['nome'],
-                        'nascimento'  => $request['pessoa']['nascimento'],
+            $cliente = Cliente::firstOrCreate(
+                [
+                    'pessoa_id'  => Pessoa::firstOrCreate(
+                        [
+                            'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
+                        ],
+                        [
+                            'id' => ($request['pessoa']['id'] != '') ? $request['id'] : null,
+                            'nome'        => $request['pessoa']['nome'],
+                            'nascimento'  => $request['pessoa']['nascimento'],
+                            'rgie'        => $request['pessoa']['rgie'],
+                            'observacoes' => $request['pessoa']['observacoes'],
+                            'perfil'      => $request['pessoa']['perfil'],
+                            'status'      => $request['pessoa']['status'],
+                        ]
+                    )->id,
+                    'empresa_id' => $empresa_id,
+                ],
+                [
+                    'tipo'       => $request['tipo'],
+                ]
+            );
 
-                        'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
-                        'rgie'        => $request['pessoa']['rgie'],
-                        'observacoes' => $request['pessoa']['observacoes'],
-                        'perfil'      => $request['pessoa']['perfil'],
-                        'status'      => $request['pessoa']['status'],
-                    ]
-                )->id,
-            ]);
-            Tipopessoa::create([
-                'tipo'      => 'Cliente',
-                'pessoa_id' => $cliente->pessoa_id,
-                'ativo'     => 1
-            ]);
+            Tipopessoa::updateOrCreate(
+                [
+                    'tipo'      => 'Cliente',
+                    'pessoa_id' => $cliente->pessoa_id,
+                ],
+                [
+                    'ativo'     => 1
+                ]
+            );
 
             if ($request['pessoa']['telefones']) {
                 foreach ($request['pessoa']['telefones'] as $key => $telefone) {
