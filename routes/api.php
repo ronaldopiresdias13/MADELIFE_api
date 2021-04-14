@@ -70,43 +70,12 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::put('cotacoes/{cotacao}', 'Api\Web\Compras\CotacoesController@update');
             Route::delete('cotacoes/{cotacao}', 'Api\Web\Compras\CotacoesController@destroy');
         });
-        Route::prefix('diretoria')->group(function () {
-            Route::get('groupByPagamentoByMesAndEmpresaId/externo', 'Api\Web\DepartamentoPessoal\PagamentoexternosController@groupByPagamentoByMesAndEmpresaId');
-            Route::get('groupByPagamentoByMesAndEmpresaId/interno', 'Web\PagamentointernosController@groupByPagamentoByMesAndEmpresaId');
-        });
-        Route::prefix('financeiro')->group(function () {
-            Route::get('listPagamentosByEmpresaId', 'Api\Web\Financeiro\PagamentopessoasController@listPagamentosByEmpresaId');
-            Route::get('getCategorias', 'Api\Web\Financeiro\CnabsController@getCategorias');
 
-            Route::post('gerarCnab', 'Api\Web\Financeiro\CnabsController@gerarCnab');
-            Route::post('mudarSituacao', 'Api\Web\Financeiro\CnabsController@mudarSituacao');
-
-            Route::get('downloadCnab/{id}', 'Api\Web\Financeiro\CnabsController@downloadCnab');
-            Route::get('getCnabs', 'Api\Web\Financeiro\CnabsController@getCnabs');
-        });
-
-        Route::prefix('chat')->group(function () {
-            Route::get('get_conversas', 'Api\Web\Chat\ChatGeralController@get_conversas');
-            Route::get('get_pessoas', 'Api\Web\Chat\ChatGeralController@get_pessoas');
-            Route::post('enviarArquivos', 'Api\Web\Chat\ChatGeralController@enviarArquivos');
-
-            Route::get('chamados_enfermagem', 'Api\Web\Chat\ChamadosController@chamados_enfermagem');
-            Route::get('chamados_ti', 'Api\Web\Chat\ChamadosController@chamados_ti');
-
-            Route::get('get_pessoas_externo', 'Api\Web\Chat\ChamadosController@get_pessoas_externo');
-            Route::post('criarchamado_atendente_enfermagem', 'Api\Web\Chat\ChamadosController@criarchamado_atendente_enfermagem');
-
-            Route::post('finalizarchamado_enfermagem', 'Api\Web\Chat\ChamadosController@finalizarchamado_enfermagem');
-
-            Route::post('criarchamado_atendente_ti', 'Api\Web\Chat\ChamadosController@criarchamado_atendente_ti');
-
-            Route::post('finalizarchamado_ti', 'Api\Web\Chat\ChamadosController@finalizarchamado_ti');
-        });
         Route::prefix('gestaoOrcamentaria')->group(function () {
-            Route::get('clientes/list', 'Api\Web\GestaoOrcamentaria\ClientesController@index');
-            Route::get('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@show');
-            Route::post('clientes', 'Api\Web\GestaoOrcamentaria\ClientesController@store');
-            Route::put('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@update');
+            Route::get('clientes/list'        , 'Api\Web\GestaoOrcamentaria\ClientesController@index');
+            Route::get('clientes/{cliente}'   , 'Api\Web\GestaoOrcamentaria\ClientesController@show');
+            Route::post('clientes'            , 'Api\Web\GestaoOrcamentaria\ClientesController@store');
+            Route::put('clientes/{cliente}'   , 'Api\Web\GestaoOrcamentaria\ClientesController@update');
             Route::delete('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@destroy');
 
             Route::get('dashboard/dashboarContratosPorPoriodo', 'Api\Web\GestaoOrcamentaria\DashboardController@dashboarContratosPorPoriodo');

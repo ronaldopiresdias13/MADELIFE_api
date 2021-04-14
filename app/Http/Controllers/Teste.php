@@ -8,6 +8,7 @@ use App\Models\Ordemservico;
 use App\Models\Pagamentoexterno;
 use App\Models\Pessoa;
 use App\Models\Tipopessoa;
+use App\Models\User;
 use App\Services\PontoService;
 use Dompdf\Dompdf;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,6 +21,16 @@ class Teste extends Controller
 {
     public function teste(Request $request)
     {
+        $user = $request->user();
+        $result = User::with(
+            'pessoa.clientes.homecare.paciente.pessoa'
+        )
+        ->find($user->id);
+
+        return $result;
+
+        return 'Stop';
+
         $empresa_id = 3;
         $cliente = Cliente::firstOrCreate(
             [

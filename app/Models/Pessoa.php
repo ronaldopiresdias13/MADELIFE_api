@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Pessoa extends Model
 {
@@ -11,6 +12,11 @@ class Pessoa extends Model
     public function cliente()
     {
         return $this->hasOne(Cliente::class)->where('ativo', true);
+    }
+
+    public function clientes(): HasMany
+    {
+        return $this->hasMany(Cliente::class);
     }
 
     public function enderecos()
