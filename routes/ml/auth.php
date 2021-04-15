@@ -18,20 +18,20 @@ Route::group([
     });
 });
 
-Route::group([
-    'prefix' => 'app/v3_0_20/auth'
-], function () {
-    Route::post('login', 'Api\App\v3_0_20\Auth\AuthController@login');
-    Route::post('register', 'Api\App\v3_0_20\Auth\AuthController@register');
-    Route::post('reset', 'Api\App\v3_0_20\Auth\AuthController@reset');
+// Route::group([
+//     'prefix' => 'app/v3_0_20/auth'
+// ], function () {
+//     Route::post('login', 'Api\App\v3_0_20\Auth\AuthController@login');
+//     Route::post('register', 'Api\App\v3_0_20\Auth\AuthController@register');
+//     Route::post('reset', 'Api\App\v3_0_20\Auth\AuthController@reset');
 
-    /* ------------- Rotas Utilizando Token -------------*/
-    Route::group(['middleware' => 'auth:api'], function () {
-        Route::post('change', 'Api\App\v3_0_20\Auth\AuthController@change');
-        Route::get('logout', 'Api\App\v3_0_20\Auth\AuthController@logout');
-        // Route::get('user', 'Auth\AuthController@user');
-    });
-});
+//     /* ------------- Rotas Utilizando Token -------------*/
+//     Route::group(['middleware' => 'auth:api'], function () {
+//         Route::post('change', 'Api\App\v3_0_20\Auth\AuthController@change');
+//         Route::get('logout', 'Api\App\v3_0_20\Auth\AuthController@logout');
+//         // Route::get('user', 'Auth\AuthController@user');
+//     });
+// });
 Route::group([
     'prefix' => 'app/v3_0_21/auth'
 ], function () {
