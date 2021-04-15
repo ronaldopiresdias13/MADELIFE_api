@@ -14,4 +14,12 @@ Route::prefix('chat')->group(function () {
     Route::post('criarchamado_atendente_ti', 'Api\Web\Chat\ChamadosController@criarchamado_atendente_ti');
 
     Route::post('finalizarchamado_ti', 'Api\Web\Chat\ChamadosController@finalizarchamado_ti');
+
+    Route::get('chamados_cliente', 'Api\Web\Chat\ChamadosController@chamados_cliente');
+
+    Route::post('criarchamado_cliente', 'Api\Web\Chat\ChamadosController@criarchamado_cliente');
+
+    Route::post('enviarArquivos_cliente', 'Api\Web\Chat\ChamadosController@enviararquivos_cliente');
+
+
 });

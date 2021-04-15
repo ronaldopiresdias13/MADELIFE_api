@@ -12,7 +12,7 @@ class Chamado extends Model
     protected $table = 'chamados';
 
     protected $fillable = [
-        'prestador_id','criador_id','assunto','mensagem_inicial','finalizado','justificativa','protocolo','tipo'
+        'prestador_id','criador_id','assunto','mensagem_inicial','finalizado','justificativa','protocolo','tipo','empresa_id'
     ];
 
     protected $casts = [
@@ -32,5 +32,10 @@ class Chamado extends Model
     public function mensagens()
     {
         return $this->hasMany(MensagemChamado::class, 'chamado_id', 'id');
+    }
+
+    public function empresa()
+    {
+        return $this->belongsTo(Empresa::class, 'empresa_id', 'id');
     }
 }
