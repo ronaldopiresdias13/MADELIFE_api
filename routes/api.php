@@ -145,6 +145,12 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('convenios/{convenio}', 'Api\Web\RecursosHumanos\ConveniosController@show');
             Route::put('convenios/{convenio}', 'Api\Web\RecursosHumanos\ConveniosController@update');
             Route::delete('convenios/{convenio}', 'Api\Web\RecursosHumanos\ConveniosController@destroy');
+
+            Route::get('setores', 'Api\Web\RecursosHumanos\SetoresController@index');
+            Route::post('setores', 'Api\Web\RecursosHumanos\SetoresController@store');
+            Route::get('setores/{setor}', 'Api\Web\RecursosHumanos\SetoresController@show');
+            Route::put('setores/{setor}', 'Api\Web\RecursosHumanos\SetoresController@update');
+            Route::delete('setores/{setor}', 'Api\Web\RecursosHumanos\SetoresController@destroy');
         });
         Route::prefix('estoque')->group(function () {
             Route::get('movimentacaoEstoque', 'Api\Web\Estoque\ProdutosController@movimentacaoEstoque');
@@ -642,11 +648,6 @@ Route::put('servicos/{servico}', 'Api\ServicosController@update');
 Route::delete('servicos/{servico}', 'Api\ServicosController@destroy');
 Route::get('servicos/empresa/{empresa}', 'Api\ServicosController@indexbyempresa');
 
-Route::get('setores', 'Api\SetoresController@index');
-Route::post('setores', 'Api\SetoresController@store');
-Route::get('setores/{setor}', 'Api\SetoresController@show');
-Route::put('setores/{setor}', 'Api\SetoresController@update');
-Route::delete('setores/{setor}', 'Api\SetoresController@destroy');
 
 Route::get('telefones', 'Api\TelefonesController@index');
 Route::post('telefones', 'Api\TelefonesController@store');
