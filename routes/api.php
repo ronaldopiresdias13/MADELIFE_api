@@ -123,6 +123,13 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::delete('deletarbanco/{dadosbancario}', 'Api\Web\PrestadoresController@deletarbanco');
         });
 
+        Route::prefix('financeiro')->group(function () {
+            Route::get('categorianaturezas', 'Api\Web\Financeiro\CategorianaturezasController@index');
+            Route::post('categorianaturezas', 'Api\Web\Financeiro\CategorianaturezasController@store');
+            Route::get('categorianaturezas/{categorianatureza}', 'Api\Web\Financeiro\CategorianaturezasController@show');
+            Route::put('categorianaturezas/{categorianatureza}', 'Api\Web\Financeiro\CategorianaturezasController@update');
+            Route::delete('categorianaturezas/{categorianatureza}', 'Api\Web\Financeiro\CategorianaturezasController@destroy');
+        });
         Route::prefix('recursosHumanos')->group(function () {
             Route::post('profissionais/novoProfissional', 'Api\Web\RecursosHumanos\ProfissionaisController@novoProfissional');
             Route::get('dashboard/dashboardProfissionaisExternos', 'Api\Web\RecursosHumanos\DashboardController@dashboardProfissionaisExternos');
@@ -229,11 +236,6 @@ Route::delete('bancos/{banco}', 'Api\BancosController@destroy');
 
 
 
-Route::get('categorianaturezas', 'Api\CategorianaturezasController@index');
-Route::post('categorianaturezas', 'Api\CategorianaturezasController@store');
-Route::get('categorianaturezas/{categorianatureza}', 'Api\CategorianaturezasController@show');
-Route::put('categorianaturezas/{categorianatureza}', 'Api\CategorianaturezasController@update');
-Route::delete('categorianaturezas/{categorianatureza}', 'Api\CategorianaturezasController@destroy');
 
 Route::get('cidades', 'Api\CidadesController@index');
 Route::post('cidades', 'Api\CidadesController@store');

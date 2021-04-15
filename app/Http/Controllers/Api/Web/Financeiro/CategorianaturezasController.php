@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Web\Financeiro;
 
 use App\Models\Categorianatureza;
 use App\Http\Controllers\Controller;
