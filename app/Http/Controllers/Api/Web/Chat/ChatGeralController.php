@@ -16,7 +16,9 @@ class ChatGeralController extends Controller
     public function get_conversas(){
         $user = request()->user();
         $pessoa=$user->pessoa()->first();
-        $conversas = Conversa::select('conversas.*')->where('conversas.sender_id',$pessoa->id)->orWhere('conversas.receive_id',$pessoa->id)->join('conversas_mensagens','conversas_mensagens.conversa_id','=','conversas.id')->orderBy('conversas_mensagens.created_at', 'asc')->get()->unique('id');
+        $conversas = Conversa::select('conversas.*')->where(function($q) use($pessoa){
+            $q->where('conversas.sender_id','=', $pessoa->id)->orWhere('conversas.receive_id',$pessoa->id);
+        })->join('conversas_mensagens','conversas_mensagens.conversa_id','=','conversas.id')->orderBy('conversas_mensagens.created_at', 'asc')->get()->unique('id');
         // $conversas = DB::select(DB::raw('select distinct c.id,c.* from conversas as c join conversas_mensagens as cm on cm.conversa_id=c.id order by cm.created_at asc'));
 
         return response()->json([
@@ -27,7 +29,11 @@ class ChatGeralController extends Controller
     public function get_pessoas(Request $request){
         $user = $request->user();
         $pessoa=$user->pessoa()->first();
-        $pessoas = Pessoa::has('profissional')->whereRaw('lower(nome) LIKE lower(?)',['%'.$request->search.'%'])->with(['profissional'=>function($q){
+        $profissinal = $pessoa->profissional()->first();
+
+        $pessoas = Pessoa::has('user')->whereHas('profissional',function($q)use($profissinal) {
+            $q->where('empresa_id','=',$profissinal->empresa_id);
+        })->whereRaw('lower(nome) LIKE lower(?)',['%'.$request->search.'%'])->with(['profissional'=>function($q){
             $q->with(['cargo','setor']);
         }])->orderBy('nome', 'asc')->get();
         // where('id','<>',$pessoa->id)->
