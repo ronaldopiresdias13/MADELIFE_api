@@ -241,12 +241,11 @@ Route::get('certificadoprestadores/{certificadoprestador}', 'Api\Certificadopres
 Route::put('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@update');
 Route::delete('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@destroy');
 
-Route::get('clientes', 'Api\ClientesController@index');
-Route::post('clientes', 'Api\ClientesController@store');
-Route::get('clientes/{cliente}', 'Api\ClientesController@show');
-Route::put('clientes/{cliente}', 'Api\ClientesController@update');
-Route::delete('clientes/{cliente}', 'Api\ClientesController@destroy');
-// Route::get('meuspassientes/{cliente}', 'Api\ClientesController@meuspassientes'); // Custon
+// Route::get('clientes', 'Api\ClientesController@index');
+// Route::post('clientes', 'Api\ClientesController@store');
+// Route::get('clientes/{cliente}', 'Api\ClientesController@show');
+// Route::put('clientes/{cliente}', 'Api\ClientesController@update');
+// Route::delete('clientes/{cliente}', 'Api\ClientesController@destroy');
 
 Route::get('cnabs', 'Api\CnabsController@index');
 Route::post('cnabs', 'Api\CnabsController@store');
