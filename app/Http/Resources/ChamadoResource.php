@@ -25,6 +25,8 @@ class ChamadoResource extends JsonResource
             'tipo'=>$this->tipo,
             'protocolo'=>$this->protocolo,
             'finalizado'=>$this->finalizado,
+            'empresa'=>$this->empresa()->first(),
+
             // 'updated_at'=>Carbon::parse($this->updated_at)->timestamp,
             'date'=>$mensagem!=null?Carbon::parse($mensagem->created_at)->format('Y-m-d H:i:s'):Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),
 

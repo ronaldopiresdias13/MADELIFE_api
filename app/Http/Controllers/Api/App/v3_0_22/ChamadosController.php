@@ -20,7 +20,12 @@ class ChamadosController extends Controller
         $chamados = Chamado::where('finalizado', '=', false)->where('prestador_id', '=', $pessoa->id)->with(['mensagens' => function ($q) {
             $q->with(['atendente', 'prestador'])->orderBy('created_at', 'desc');
         }, 'prestador'])->orderBy('updated_at', 'desc')->get();
-        return response()->json(['conversas' => ChamadoResource::collection($chamados)]);
+        $prestador = $pessoa->prestador()->first();
+        $empresas = [];
+        if($prestador!=null){
+            $empresas = $prestador->empresas()->select(['empresas.id','razao'])->get();
+        }
+        return response()->json(['conversas' => ChamadoResource::collection($chamados),'empresas'=>$empresas]);
     }
 
     public function criarchamado(ChamadoRequest $request)
@@ -37,8 +42,12 @@ class ChamadosController extends Controller
             'finalizado' => false,
             'justificativa' => null,
             'protocolo' => $this->generateRandomString(5),
-            'tipo' => $data['area']
-        ])->save();
+            'tipo' => $data['area'],
+        ]);
+        if(isset($data['empresa'])){
+            $chamado->fill(['empresa_id'=>$data['empresa']]);
+        }
+        $chamado->save();
 
         return response()->json(['chamado' => ChamadoResource::make($chamado)]);
     }

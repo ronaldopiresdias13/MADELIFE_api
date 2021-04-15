@@ -56,7 +56,12 @@ class ChatWebSocketController extends Controller implements MessageComponentInte
                     $from->send(json_encode(['type' => 'disconnect', 'mensagem' => 'Usuário inválido ou desconectado']));
                     return;
                 }
-                $this->clientes_ids[$resp->pessoa->id] = $from;
+                if (isset($this->clientes_ids[$resp->pessoa->id])) {
+                    array_push($this->clientes_ids[$resp->pessoa->id], $from);
+                } else {
+                    $this->clientes_ids[$resp->pessoa->id] = [];
+                    array_push($this->clientes_ids[$resp->pessoa->id], $from);
+                }
                 $this->resouce_pessoa[$from->resourceId] = $resp;
                 Log::info($from->resourceId);
 
@@ -78,27 +83,28 @@ class ChatWebSocketController extends Controller implements MessageComponentInte
                 $q->where('sender_id', $message->receive)->where('receive_id', $message->sender);
             })->first();
             Log::info('reeive1');
-            if($conversa!=null){
-                
-                $mensagem = $conversa->mensagens()->where('conversas_mensagens.sender_id',$message->sender)->where('uuid',$message->uuid)->first();
-            Log::info('reeive2');
+            if ($conversa != null) {
 
-                if($mensagem!=null){
-                    $conversa->mensagens()->where('conversas_mensagens.id','<=',$mensagem->id)->where('conversas_mensagens.sender_id',$message->sender)->update(['visto'=>true]);
+                $mensagem = $conversa->mensagens()->where('conversas_mensagens.sender_id', $message->sender)->where('uuid', $message->uuid)->first();
+                Log::info('reeive2');
+
+                if ($mensagem != null) {
+                    $conversa->mensagens()->where('conversas_mensagens.id', '<=', $mensagem->id)->where('conversas_mensagens.sender_id', $message->sender)->update(['visto' => true]);
                     Log::info('reeive3');
 
                     if (isset($this->clientes_ids[$message->sender])) {
-                        
-                        $this->clientes_ids[$message->sender]->send(json_encode([
-                            'receive' => $this->resouce_pessoa[$from->resourceId]->pessoa,
-                            'sender' => $this->resouce_pessoa[$this->clientes_ids[$message->sender]->resourceId]->pessoa,
-                            'conversa_id' => $conversa->id,
-                            'uuid' => $message->uuid,
-                            'type' => 'msg_receive'
-                        ]));
+                        foreach ($this->clientes_ids[$message->sender] as $socket) {
+
+                            $socket->send(json_encode([
+                                'receive' => $this->resouce_pessoa[$from->resourceId]->pessoa,
+                                'sender' => $this->resouce_pessoa[$socket->resourceId]->pessoa,
+                                'conversa_id' => $conversa->id,
+                                'uuid' => $message->uuid,
+                                'type' => 'msg_receive'
+                            ]));
+                        }
                     }
                 }
-
             }
         } else if ($message->type == 'message') {
             Log::info($from->resourceId);
@@ -134,22 +140,26 @@ class ChatWebSocketController extends Controller implements MessageComponentInte
                     'visto' => false
                 ])->save();
             } catch (Exception $e) {
+                Log::error($e);
                 Log::info('top');
                 return;
             }
             Log::info('mensagem2.1');
 
             if (isset($this->clientes_ids[$message->receive])) {
-                $this->clientes_ids[$message->receive]->send(json_encode([
-                    'sender' => $this->resouce_pessoa[$from->resourceId]->pessoa,
-                    'receive' => $this->resouce_pessoa[$this->clientes_ids[$message->receive]->resourceId]->pessoa,
-                    'conversa_id' => $conversa->id,
-                    'mensagem' => $message->mensagem,
-                    'uuid' => $mensagem->uuid,
-                    'type' => 'message',
-                    'created_at'=>Carbon::parse($mensagem->created_at)->format('Y-m-d H:i:s')
+                foreach ($this->clientes_ids[$message->receive] as $socket) {
 
-                ]));
+                    $socket->send(json_encode([
+                        'sender' => $this->resouce_pessoa[$from->resourceId]->pessoa,
+                        'receive' => $this->resouce_pessoa[$socket->resourceId]->pessoa,
+                        'conversa_id' => $conversa->id,
+                        'mensagem' => $message->mensagem,
+                        'uuid' => $mensagem->uuid,
+                        'type' => 'message',
+                        'created_at' => Carbon::parse($mensagem->created_at)->format('Y-m-d H:i:s')
+
+                    ]));
+                }
             }
             $from->send(json_encode([
                 'sender' => $message->sender,
@@ -158,7 +168,7 @@ class ChatWebSocketController extends Controller implements MessageComponentInte
                 'mensagem' => $message->mensagem,
                 'uuid' => $mensagem->uuid,
                 'type' => 'msg_save',
-                'created_at'=>Carbon::parse($mensagem->created_at)->format('Y-m-d H:i:s')
+                'created_at' => Carbon::parse($mensagem->created_at)->format('Y-m-d H:i:s')
 
             ]));
 
@@ -169,8 +179,7 @@ class ChatWebSocketController extends Controller implements MessageComponentInte
             //         $client->send($msg);
             //     }
             // }
-        }
-        else if ($message->type == 'image' || $message->type == 'video') {
+        } else if ($message->type == 'image' || $message->type == 'video') {
             Log::info($from->resourceId);
 
             Log::info($msg);
@@ -198,8 +207,8 @@ class ChatWebSocketController extends Controller implements MessageComponentInte
                 $mensagem->fill([
                     'conversa_id' => $conversa->id,
                     'sender_id' => $this->resouce_pessoa[$from->resourceId]->pessoa->id,
-                    'arquivo' =>$message->arquivo,
-                    'type'=>$message->type,
+                    'arquivo' => $message->arquivo,
+                    'type' => $message->type,
                     'uuid' => $message->uuid,
                     'visto' => false
                 ])->save();
@@ -210,16 +219,19 @@ class ChatWebSocketController extends Controller implements MessageComponentInte
             Log::info('file2.1');
 
             if (isset($this->clientes_ids[$message->receive])) {
-                $this->clientes_ids[$message->receive]->send(json_encode([
-                    'sender' => $this->resouce_pessoa[$from->resourceId]->pessoa,
-                    'receive' => $this->resouce_pessoa[$this->clientes_ids[$message->receive]->resourceId]->pessoa,
-                    'conversa_id' => $conversa->id,
-                    'arquivo' => $message->arquivo,
-                    'type' => $message->type,
-                    'uuid' => $mensagem->uuid,
-                    'created_at'=>Carbon::parse($mensagem->created_at)->format('Y-m-d H:i:s')
+                foreach ($this->clientes_ids[$message->receive] as $socket) {
 
-                ]));
+                    $socket->send(json_encode([
+                        'sender' => $this->resouce_pessoa[$from->resourceId]->pessoa,
+                        'receive' => $this->resouce_pessoa[$socket->resourceId]->pessoa,
+                        'conversa_id' => $conversa->id,
+                        'arquivo' => $message->arquivo,
+                        'type' => $message->type,
+                        'uuid' => $mensagem->uuid,
+                        'created_at' => Carbon::parse($mensagem->created_at)->format('Y-m-d H:i:s')
+
+                    ]));
+                }
             }
             $from->send(json_encode([
                 'sender' => $message->sender,
@@ -228,7 +240,7 @@ class ChatWebSocketController extends Controller implements MessageComponentInte
                 'arquivo' => $message->arquivo,
                 'uuid' => $mensagem->uuid,
                 'type' => 'msg_save',
-                'created_at'=>Carbon::parse($mensagem->created_at)->format('Y-m-d H:i:s')
+                'created_at' => Carbon::parse($mensagem->created_at)->format('Y-m-d H:i:s')
 
             ]));
 

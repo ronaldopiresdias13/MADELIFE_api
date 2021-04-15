@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ChamadoAtendenteResource;
+use App\Http\Resources\ChamadoResource;
 use App\Models\Chamado;
 use App\Models\Conversa;
 use App\Models\ConversaMensagem;
 use App\Models\MensagemChamado;
+use App\Models\Profissional;
 use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Client;
@@ -65,15 +68,37 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                 $this->resouce_pessoa[$from->resourceId] = $resp;
 
                 if ($message->area == 'Enfermagem') {
-                    $this->clientes_ids[$resp->pessoa->id . $message->area] = $from;
+                    $profissional = Profissional::where('pessoa_id', '=', $resp->pessoa->id)->first();
+                    if ($profissional == null) {
+                        $from->send(json_encode(['type' => 'disconnect', 'mensagem' => 'Usuário inválido ou desconectado']));
+                        return;
+                    }
+                    if (isset($this->clientes_ids[$resp->pessoa->id . $message->area . $profissional->empresa_id])) {
+                        array_push($this->clientes_ids[$resp->pessoa->id . $message->area . $profissional->empresa_id], $from);
+                    } else {
+                        $this->clientes_ids[$resp->pessoa->id . $message->area . $profissional->empresa_id] = [];
+                        array_push($this->clientes_ids[$resp->pessoa->id . $message->area . $profissional->empresa_id], $from);
+                    }
 
                     array_push($this->enfermagem, $from->resourceId);
                 } else if ($message->area == 'T.I.') {
-                    $this->clientes_ids[$resp->pessoa->id . $message->area] = $from;
+                    if (isset($this->clientes_ids[$resp->pessoa->id . $message->area])) {
+                        array_push($this->clientes_ids[$resp->pessoa->id . $message->area], $from);
+                    } else {
+                        $this->clientes_ids[$resp->pessoa->id . $message->area] = [];
+                        array_push($this->clientes_ids[$resp->pessoa->id . $message->area], $from);
+                    }
+
 
                     array_push($this->ti, $from->resourceId);
                 } else {
-                    $this->clientes_ids[$resp->pessoa->id] = $from;
+                    // $this->clientes_ids[$resp->pessoa->id] = $from;
+                    if (isset($this->clientes_ids[$resp->pessoa->id])) {
+                        array_push($this->clientes_ids[$resp->pessoa->id], $from);
+                    } else {
+                        $this->clientes_ids[$resp->pessoa->id] = [];
+                        array_push($this->clientes_ids[$resp->pessoa->id], $from);
+                    }
                 }
                 Log::info($from->resourceId);
 
@@ -91,13 +116,15 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
             Log::info($msg);
             $chamado = Chamado::where('id', '=', $message->chamado_id)->first();
             if (isset($this->clientes_ids[$chamado->prestador_id])) {
+                foreach ($this->clientes_ids[$chamado->prestador_id] as $socket) {
+                    $socket->send(json_encode([
+                        'atendente' => $this->resouce_pessoa[$from->resourceId]->pessoa,
+                        'prestador' => $this->resouce_pessoa[$socket->resourceId]->pessoa,
+                        'chamado' => ChamadoResource::make($chamado),
 
-                $this->clientes_ids[$chamado->prestador_id]->send(json_encode([
-                    'atendente' => $this->resouce_pessoa[$from->resourceId]->pessoa,
-                    'prestador' => $this->resouce_pessoa[$this->clientes_ids[$chamado->prestador_id]->resourceId]->pessoa,
-                    'chamado' => $chamado,
-                    'type' => 'finalizar_chamado'
-                ]));
+                        'type' => 'finalizar_chamado'
+                    ]));
+                }
             }
         } else if ($message->type == 'msg_receive_atendente') {
             Log::info($from->resourceId);
@@ -116,14 +143,16 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                     Log::info('reeive3');
 
                     if (isset($this->clientes_ids[$chamado->prestador_id])) {
+                        foreach ($this->clientes_ids[$chamado->prestador_id] as $socket) {
 
-                        $this->clientes_ids[$chamado->prestador_id]->send(json_encode([
-                            'atendente' => $this->resouce_pessoa[$from->resourceId]->pessoa,
-                            'prestador' => $this->resouce_pessoa[$this->clientes_ids[$chamado->prestador_id]->resourceId]->pessoa,
-                            'chamado' => $chamado,
-                            'uuid' => $message->uuid,
-                            'type' => 'msg_receive'
-                        ]));
+                            $socket->send(json_encode([
+                                'atendente' => $this->resouce_pessoa[$from->resourceId]->pessoa,
+                                'prestador' => $this->resouce_pessoa[$socket->resourceId]->pessoa,
+                                'chamado' => ChamadoResource::make($chamado),
+                                'uuid' => $message->uuid,
+                                'type' => 'msg_receive'
+                            ]));
+                        }
                     }
                 }
             }
@@ -142,16 +171,19 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                     if ($mensagem != null) {
                         $chamado->mensagens()->where('mensagens_chamado.id', '<=', $mensagem->id)->where('mensagens_chamado.atendente_id', '=', $message->atendente->id)->update(['visto' => true]);
                         Log::info('reeive3');
+                        $key = $message->atendente->id . $chamado->tipo . ($chamado->empresa_id == null ? '' : $chamado->empresa_id);
 
-                        if (isset($this->clientes_ids[$message->atendente->id . $chamado->tipo])) {
+                        if (isset($this->clientes_ids[$key])) {
+                            foreach ($this->clientes_ids[$key] as $socket) {
 
-                            $this->clientes_ids[$message->atendente->id . $chamado->tipo]->send(json_encode([
-                                'prestador' => $this->resouce_pessoa[$from->resourceId]->pessoa,
-                                'atendente' => $this->resouce_pessoa[$this->clientes_ids[$message->atendente->id . $chamado->tipo]->resourceId]->pessoa,
-                                'chamado' => $chamado,
-                                'uuid' => $message->uuid,
-                                'type' => 'msg_receive'
-                            ]));
+                                $socket->send(json_encode([
+                                    'prestador' => $this->resouce_pessoa[$from->resourceId]->pessoa,
+                                    'atendente' => $this->resouce_pessoa[$socket->resourceId]->pessoa,
+                                    'chamado' => ChamadoAtendenteResource::make($chamado),
+                                    'uuid' => $message->uuid,
+                                    'type' => 'msg_receive'
+                                ]));
+                            }
                         }
                     }
                 } else {
@@ -167,14 +199,21 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                                 Log::info('atendnete: ' . $atendente_id_resource);
                                 if (isset($this->resouce_pessoa[$atendente_id_resource])) {
                                     $pessoa = $this->resouce_pessoa[$atendente_id_resource]->pessoa->id;
-                                    if (isset($this->clientes_ids[$pessoa . $chamado->tipo])) {
+                                    $key = $pessoa . $chamado->tipo . ($chamado->empresa_id == null ? '' : $chamado->empresa_id);
 
-                                        $this->clientes_ids[$pessoa . $chamado->tipo]->send(json_encode([
-                                            'prestador' => $this->resouce_pessoa[$from->resourceId]->pessoa,
-                                            'chamado' => $chamado,
-                                            'uuid' => $message->uuid,
-                                            'type' => 'msg_receive'
-                                        ]));
+                                    if (isset($this->clientes_ids[$key])) {
+                                        foreach ($this->clientes_ids[$key] as $socket) {
+                                            if ($socket->resourceId == $atendente_id_resource) {
+
+                                                $socket->send(json_encode([
+                                                    'prestador' => $this->resouce_pessoa[$from->resourceId]->pessoa,
+                                                    'chamado' => ChamadoAtendenteResource::make($chamado),
+
+                                                    'uuid' => $message->uuid,
+                                                    'type' => 'msg_receive'
+                                                ]));
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -184,12 +223,18 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                                 if (isset($this->resouce_pessoa[$atendente_id_resource])) {
                                     $pessoa = $this->resouce_pessoa[$atendente_id_resource]->pessoa->id;
                                     if (isset($this->clientes_ids[$pessoa . $chamado->tipo])) {
-                                        $this->clientes_ids[$pessoa . $chamado->tipo]->send(json_encode([
-                                            'prestador' => $this->resouce_pessoa[$from->resourceId]->pessoa,
-                                            'chamado' => $chamado,
-                                            'uuid' => $message->uuid,
-                                            'type' => 'msg_receive'
-                                        ]));
+                                        foreach ($this->clientes_ids[$pessoa . $chamado->tipo] as $socket) {
+                                            if ($socket->resourceId == $atendente_id_resource) {
+
+                                                $socket->send(json_encode([
+                                                    'prestador' => $this->resouce_pessoa[$from->resourceId]->pessoa,
+                                                    'chamado' => ChamadoAtendenteResource::make($chamado),
+
+                                                    'uuid' => $message->uuid,
+                                                    'type' => 'msg_receive'
+                                                ]));
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -221,6 +266,8 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                 ])->save();
             } catch (Exception $e) {
                 Log::info('top');
+                Log::info($e);
+
                 return;
             }
             Log::info('mensagem2.1');
@@ -230,17 +277,26 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                     Log::info('atendnete: ' . $atendente_id_resource);
                     if (isset($this->resouce_pessoa[$atendente_id_resource])) {
                         $pessoa = $this->resouce_pessoa[$atendente_id_resource]->pessoa->id;
-                        if (isset($this->clientes_ids[$pessoa . $chamado->tipo])) {
+                        $key = $pessoa . $chamado->tipo . ($chamado->empresa_id == null ? '' : $chamado->empresa_id);
 
-                            $this->clientes_ids[$pessoa . $chamado->tipo]->send(json_encode([
-                                'prestador' => $this->resouce_pessoa[$from->resourceId]->pessoa,
-                                'chamado' => $chamado,
-                                'mensagem' => $message->mensagem,
-                                'uuid' => $mensagem->uuid,
-                                'type' => 'message',
-                                'created_at' => Carbon::parse($mensagem->created_at)->format('Y-m-d H:i:s')
+                        if (isset($this->clientes_ids[$key])) {
+                            foreach ($this->clientes_ids[$key] as $socket) {
+                                if ($socket->resourceId == $atendente_id_resource) {
+                                    Log::info($socket->resourceId);
+                                    if ($socket->resourceId == $atendente_id_resource) {
 
-                            ]));
+                                        $socket->send(json_encode([
+                                            'prestador' => $this->resouce_pessoa[$from->resourceId]->pessoa,
+                                            'chamado' => ChamadoAtendenteResource::make($chamado),
+                                            'mensagem' => $message->mensagem,
+                                            'uuid' => $mensagem->uuid,
+                                            'type' => 'message',
+                                            'created_at' => Carbon::parse($mensagem->created_at)->format('Y-m-d H:i:s')
+
+                                        ]));
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -250,16 +306,20 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                     if (isset($this->resouce_pessoa[$atendente_id_resource])) {
                         $pessoa = $this->resouce_pessoa[$atendente_id_resource]->pessoa->id;
                         if (isset($this->clientes_ids[$pessoa . $chamado->tipo])) {
+                            foreach ($this->clientes_ids[$pessoa . $chamado->tipo] as $socket) {
+                                if ($socket->resourceId == $atendente_id_resource) {
 
-                            $this->clientes_ids[$pessoa . $chamado->tipo]->send(json_encode([
-                                'prestador' => $this->resouce_pessoa[$from->resourceId]->pessoa,
-                                'chamado' => $chamado,
-                                'mensagem' => $message->mensagem,
-                                'uuid' => $mensagem->uuid,
-                                'type' => 'message',
-                                'created_at' => Carbon::parse($mensagem->created_at)->format('Y-m-d H:i:s')
+                                    $socket->send(json_encode([
+                                        'prestador' => $this->resouce_pessoa[$from->resourceId]->pessoa,
+                                        'chamado' => ChamadoAtendenteResource::make($chamado),
+                                        'mensagem' => $message->mensagem,
+                                        'uuid' => $mensagem->uuid,
+                                        'type' => 'message',
+                                        'created_at' => Carbon::parse($mensagem->created_at)->format('Y-m-d H:i:s')
 
-                            ]));
+                                    ]));
+                                }
+                            }
                         }
                     }
                 }
@@ -315,15 +375,19 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
 
 
             if (isset($this->clientes_ids[$chamado->prestador_id])) {
-                $this->clientes_ids[$chamado->prestador_id]->send(json_encode([
-                    'atendente' => $this->resouce_pessoa[$from->resourceId]->pessoa,
-                    'prestador' => $this->resouce_pessoa[$this->clientes_ids[$chamado->prestador_id]->resourceId]->pessoa,
-                    'chamado' => $chamado,
-                    'mensagem' => $message->mensagem,
-                    'uuid' => $mensagem->uuid,
-                    'type' => 'message',
-                    'created_at' => Carbon::parse($mensagem->created_at)->format('Y-m-d H:i:s')
-                ]));
+                foreach ($this->clientes_ids[$chamado->prestador_id] as $socket) {
+
+                    $socket->send(json_encode([
+                        'atendente' => $this->resouce_pessoa[$from->resourceId]->pessoa,
+                        'prestador' => $this->resouce_pessoa[$socket->resourceId]->pessoa,
+                        'chamado' => ChamadoResource::make($chamado),
+
+                        'mensagem' => $message->mensagem,
+                        'uuid' => $mensagem->uuid,
+                        'type' => 'message',
+                        'created_at' => Carbon::parse($mensagem->created_at)->format('Y-m-d H:i:s')
+                    ]));
+                }
             }
             $from->send(json_encode([
                 'chamado_id' => $chamado->id,
@@ -370,15 +434,19 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
             Log::info('file2.1');
 
             if (isset($this->clientes_ids[$chamado->prestador_id])) {
-                $this->clientes_ids[$chamado->prestador_id]->send(json_encode([
-                    'atendente' => $this->resouce_pessoa[$from->resourceId]->pessoa,
-                    'prestador' => $this->resouce_pessoa[$this->clientes_ids[$chamado->prestador_id]->resourceId]->pessoa,
-                    'chamado' => $chamado,
-                    'arquivo' =>  $mensagem->arquivo,
-                    'uuid' => $mensagem->uuid,
-                    'type' => $mensagem->type,
-                    'created_at' => Carbon::parse($mensagem->created_at)->format('Y-m-d H:i:s')
-                ]));
+                foreach ($this->clientes_ids[$chamado->prestador_id] as $socket) {
+
+                    $socket->send(json_encode([
+                        'atendente' => $this->resouce_pessoa[$from->resourceId]->pessoa,
+                        'prestador' => $this->resouce_pessoa[$socket->resourceId]->pessoa,
+                        'chamado' => ChamadoResource::make($chamado),
+
+                        'arquivo' =>  $mensagem->arquivo,
+                        'uuid' => $mensagem->uuid,
+                        'type' => $mensagem->type,
+                        'created_at' => Carbon::parse($mensagem->created_at)->format('Y-m-d H:i:s')
+                    ]));
+                }
             }
 
             $from->send(json_encode([
@@ -429,18 +497,25 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                     Log::info('atendnete: ' . $atendente_id_resource);
                     if (isset($this->resouce_pessoa[$atendente_id_resource])) {
                         $pessoa = $this->resouce_pessoa[$atendente_id_resource]->pessoa->id;
-                        if (isset($this->clientes_ids[$pessoa . $chamado->tipo])) {
+                        $key = $pessoa . $chamado->tipo . ($chamado->empresa_id == null ? '' : $chamado->empresa_id);
 
-                            $this->clientes_ids[$pessoa . $chamado->tipo]->send(json_encode([
-                                'atendente' => null,
-                                'prestador' => $this->resouce_pessoa[$this->clientes_ids[$chamado->prestador_id]->resourceId]->pessoa,
-                                'chamado' => $chamado,
-                                'arquivo' =>  $mensagem->arquivo,
-                                'uuid' => $mensagem->uuid,
-                                'type' => $mensagem->type,
-                                'created_at' => Carbon::parse($mensagem->created_at)->format('Y-m-d H:i:s')
+                        if (isset($this->clientes_ids[$key])) {
+                            foreach ($this->clientes_ids[$key] as $socket) {
+                                if ($socket->resourceId == $atendente_id_resource) {
 
-                            ]));
+                                    $socket->send(json_encode([
+                                        'atendente' => null,
+                                        'prestador' => $this->resouce_pessoa[$from->resourceId]->pessoa,
+                                        'chamado' => ChamadoAtendenteResource::make($chamado),
+
+                                        'arquivo' =>  $mensagem->arquivo,
+                                        'uuid' => $mensagem->uuid,
+                                        'type' => $mensagem->type,
+                                        'created_at' => Carbon::parse($mensagem->created_at)->format('Y-m-d H:i:s')
+
+                                    ]));
+                                }
+                            }
                         }
                     }
                 }
@@ -450,22 +525,27 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                     if (isset($this->resouce_pessoa[$atendente_id_resource])) {
                         $pessoa = $this->resouce_pessoa[$atendente_id_resource]->pessoa->id;
                         if (isset($this->clientes_ids[$pessoa . $chamado->tipo])) {
+                            foreach ($this->clientes_ids[$pessoa . $chamado->tipo] as $socket) {
+                                if ($socket->resourceId == $atendente_id_resource) {
 
-                            $this->clientes_ids[$pessoa . $chamado->tipo]->send(json_encode([
-                                'atendente' => null,
-                                'prestador' => $this->resouce_pessoa[$this->clientes_ids[$chamado->prestador_id]->resourceId]->pessoa,
-                                'chamado' => $chamado,
-                                'arquivo' =>  $mensagem->arquivo,
-                                'uuid' => $mensagem->uuid,
-                                'type' => $mensagem->type,
-                                'created_at' => Carbon::parse($mensagem->created_at)->format('Y-m-d H:i:s')
+                                    $socket->send(json_encode([
+                                        'atendente' => null,
+                                        'prestador' => $this->resouce_pessoa[$from->resourceId]->pessoa,
+                                        'chamado' => ChamadoAtendenteResource::make($chamado),
 
-                            ]));
+                                        'arquivo' =>  $mensagem->arquivo,
+                                        'uuid' => $mensagem->uuid,
+                                        'type' => $mensagem->type,
+                                        'created_at' => Carbon::parse($mensagem->created_at)->format('Y-m-d H:i:s')
+
+                                    ]));
+                                }
+                            }
                         }
                     }
                 }
             }
-           
+
             $from->send(json_encode([
                 'chamado_id' => $chamado->id,
                 'uuid' => $mensagem->uuid,
@@ -486,36 +566,92 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
 
     public function onClose(ConnectionInterface $conn): void
     {
+        Log::info("desconectou ".$conn->resourceId);
         if (isset($this->resouce_pessoa[$conn->resourceId])) {
+        Log::info("desconectou2 ".$conn->resourceId);
+
             $pessoa = $this->resouce_pessoa[$conn->resourceId]->pessoa;
-            unset($this->resouce_pessoa[$conn->resourceId]);
-            unset($this->clientes_ids[$pessoa->id]);
             if (($key = array_search($conn->resourceId, $this->enfermagem)) !== false) {
                 unset($this->enfermagem[$key]);
+                // unset($this->clientes_ids[$pessoa->id . 'Enfermagem']);
+                $profissional = Profissional::where('pessoa_id', '=', $pessoa->id)->first();
+
+                for ($i = 0; $i < count($this->clientes_ids[$pessoa->id. 'Enfermagem'.$profissional->empresa_id]); $i++) {
+                    if ($this->clientes_ids[$pessoa->id. 'Enfermagem'.$profissional->empresa_id][$i]->resourceId == $conn->resourceId) {
+                        unset($this->clientes_ids[$pessoa->id. 'Enfermagem'.$profissional->empresa_id][$i]);
+                        unset($this->resouce_pessoa[$conn->resourceId]);
+                        break;
+                    }
+                }
             }
-            if (($key = array_search($conn->resourceId, $this->ti)) !== false) {
+            else if (($key = array_search($conn->resourceId, $this->ti)) !== false) {
                 unset($this->ti[$key]);
+                // unset($this->clientes_ids[$pessoa->id . 'T.I.']);
+                for ($i = 0; $i < count($this->clientes_ids[$pessoa->id. 'T.I.']); $i++) {
+                    if ($this->clientes_ids[$pessoa->id. 'T.I.'][$i]->resourceId == $conn->resourceId) {
+                        unset($this->clientes_ids[$pessoa->id. 'T.I.'][$i]);
+                        unset($this->resouce_pessoa[$conn->resourceId]);
+                        break;
+                    }
+                }
+            } else {
+                // unset($this->clientes_ids[$pessoa->id]);
+                for ($i = 0; $i < count($this->clientes_ids[$pessoa->id]); $i++) {
+                    if ($this->clientes_ids[$pessoa->id][$i]->resourceId == $conn->resourceId) {
+                        unset($this->clientes_ids[$pessoa->id][$i]);
+                        unset($this->resouce_pessoa[$conn->resourceId]);
+                        break;
+                    }
+                }
             }
         }
+        $conn->close();
         $this->clients->detach($conn);
     }
 
     public function onError(ConnectionInterface $conn, Exception $exception): void
     {
+        Log::info($exception);
+
         if (isset($this->resouce_pessoa[$conn->resourceId])) {
             $pessoa = $this->resouce_pessoa[$conn->resourceId]->pessoa;
-            unset($this->resouce_pessoa[$conn->resourceId]);
+            // unset($this->resouce_pessoa[$conn->resourceId]);
             if (($key = array_search($conn->resourceId, $this->enfermagem)) !== false) {
                 unset($this->enfermagem[$key]);
-                unset($this->clientes_ids[$pessoa->id . 'Enfermagem']);
+                // unset($this->clientes_ids[$pessoa->id . 'Enfermagem']);
+                $profissional = Profissional::where('pessoa_id', '=', $pessoa->id)->first();
+
+                for ($i = 0; $i < count($this->clientes_ids[$pessoa->id. 'Enfermagem'.$profissional->empresa_id]); $i++) {
+                    if ($this->clientes_ids[$pessoa->id. 'Enfermagem'.$profissional->empresa_id][$i]->resourceId == $conn->resourceId) {
+                        unset($this->clientes_ids[$pessoa->id. 'Enfermagem'.$profissional->empresa_id][$i]);
+                        unset($this->resouce_pessoa[$conn->resourceId]);
+                        break;
+                    }
+                }
             }
-            if (($key = array_search($conn->resourceId, $this->ti)) !== false) {
+            else if (($key = array_search($conn->resourceId, $this->ti)) !== false) {
                 unset($this->ti[$key]);
-                unset($this->clientes_ids[$pessoa->id . 'T.I.']);
+                // unset($this->clientes_ids[$pessoa->id . 'T.I.']);
+                for ($i = 0; $i < count($this->clientes_ids[$pessoa->id. 'T.I.']); $i++) {
+                    if ($this->clientes_ids[$pessoa->id. 'T.I.'][$i]->resourceId == $conn->resourceId) {
+                        unset($this->clientes_ids[$pessoa->id. 'T.I.'][$i]);
+                        unset($this->resouce_pessoa[$conn->resourceId]);
+                        break;
+                    }
+                }
             } else {
-                unset($this->clientes_ids[$pessoa->id]);
+                // unset($this->clientes_ids[$pessoa->id]);
+                for ($i = 0; $i < count($this->clientes_ids[$pessoa->id]); $i++) {
+                    if ($this->clientes_ids[$pessoa->id][$i]->resourceId == $conn->resourceId) {
+                        unset($this->clientes_ids[$pessoa->id][$i]);
+                        unset($this->resouce_pessoa[$conn->resourceId]);
+                        break;
+                    }
+                }
             }
         }
         $conn->close();
+        $this->clients->detach($conn);
+
     }
 }

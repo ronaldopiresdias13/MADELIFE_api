@@ -29,6 +29,8 @@ class ChamadoRequest extends FormRequest
                     'assunto' => 'required|string',
                     'mensagem' => 'required|string',
                     'area' => 'required|string',
+                    'empresa' => 'sometimes',
+
                 ];
                 break;
             case 'enviararquivos':
@@ -36,6 +38,20 @@ class ChamadoRequest extends FormRequest
                     'image' => 'required',
                 ];
                 break;
+            case 'criarchamado_cliente':
+                return [
+                    'assunto' => 'required|string',
+                    'mensagem' => 'required|string',
+                    'area' => 'required|string',
+                ];
+                break;
+            case 'enviararquivos_cliente':
+                return [
+                    'image' => 'required',
+                ];
+                break;
+
+
             default:
                 return [];
                 break;

@@ -22,4 +22,9 @@ class Empresa extends Model
     {
         return $this->hasMany(RegistroCnab::class,'empresa_id','id');
     }
+
+    public function chamados()
+    {
+        return $this->hasMany(Chamado::class,'empresa_id','id');
+    }
 }

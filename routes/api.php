@@ -72,10 +72,10 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
 
         Route::prefix('gestaoOrcamentaria')->group(function () {
-            Route::get('clientes/list'        , 'Api\Web\GestaoOrcamentaria\ClientesController@index');
-            Route::get('clientes/{cliente}'   , 'Api\Web\GestaoOrcamentaria\ClientesController@show');
-            Route::post('clientes'            , 'Api\Web\GestaoOrcamentaria\ClientesController@store');
-            Route::put('clientes/{cliente}'   , 'Api\Web\GestaoOrcamentaria\ClientesController@update');
+            Route::get('clientes/list', 'Api\Web\GestaoOrcamentaria\ClientesController@index');
+            Route::get('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@show');
+            Route::post('clientes', 'Api\Web\GestaoOrcamentaria\ClientesController@store');
+            Route::put('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@update');
             Route::delete('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@destroy');
 
             Route::get('dashboard/dashboarContratosPorPoriodo', 'Api\Web\GestaoOrcamentaria\DashboardController@dashboarContratosPorPoriodo');
@@ -127,6 +127,30 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::post('profissionais/novoProfissional', 'Api\Web\RecursosHumanos\ProfissionaisController@novoProfissional');
             Route::get('dashboard/dashboardProfissionaisExternos', 'Api\Web\RecursosHumanos\DashboardController@dashboardProfissionaisExternos');
             Route::get('dashboard/dashboardMapaPacientesPorEspecialidade', 'Api\Web\RecursosHumanos\DashboardController@dashboardMapaPacientesPorEspecialidade');
+
+            Route::get('beneficios', 'Api\Web\RecursosHumanos\BeneficiosController@index');
+            Route::post('beneficios', 'Api\Web\RecursosHumanos\BeneficiosController@store');
+            Route::get('beneficios/{beneficio}', 'Api\Web\RecursosHumanos\BeneficiosController@show');
+            Route::put('beneficios/{beneficio}', 'Api\Web\RecursosHumanos\BeneficiosController@update');
+            Route::delete('beneficios/{beneficio}', 'Api\Web\RecursosHumanos\BeneficiosController@destroy');
+
+            Route::get('cargos', 'Api\Web\RecursosHumanos\CargosController@index');
+            Route::post('cargos', 'Api\Web\RecursosHumanos\CargosController@store');
+            Route::get('cargos/{cargo}', 'Api\Web\RecursosHumanos\CargosController@show');
+            Route::put('cargos/{cargo}', 'Api\Web\RecursosHumanos\CargosController@update');
+            Route::delete('cargos/{cargo}', 'Api\Web\RecursosHumanos\CargosController@destroy');
+
+            Route::get('convenios', 'Api\Web\RecursosHumanos\ConveniosController@index');
+            Route::post('convenios', 'Api\Web\RecursosHumanos\ConveniosController@store');
+            Route::get('convenios/{convenio}', 'Api\Web\RecursosHumanos\ConveniosController@show');
+            Route::put('convenios/{convenio}', 'Api\Web\RecursosHumanos\ConveniosController@update');
+            Route::delete('convenios/{convenio}', 'Api\Web\RecursosHumanos\ConveniosController@destroy');
+
+            Route::get('setores', 'Api\Web\RecursosHumanos\SetoresController@index');
+            Route::post('setores', 'Api\Web\RecursosHumanos\SetoresController@store');
+            Route::get('setores/{setor}', 'Api\Web\RecursosHumanos\SetoresController@show');
+            Route::put('setores/{setor}', 'Api\Web\RecursosHumanos\SetoresController@update');
+            Route::delete('setores/{setor}', 'Api\Web\RecursosHumanos\SetoresController@destroy');
         });
         Route::prefix('estoque')->group(function () {
             Route::get('movimentacaoEstoque', 'Api\Web\Estoque\ProdutosController@movimentacaoEstoque');
@@ -196,17 +220,8 @@ Route::get('bancos/{banco}', 'Api\BancosController@show');
 Route::put('bancos/{banco}', 'Api\BancosController@update');
 Route::delete('bancos/{banco}', 'Api\BancosController@destroy');
 
-Route::get('beneficios', 'Api\BeneficiosController@index');
-Route::post('beneficios', 'Api\BeneficiosController@store');
-Route::get('beneficios/{beneficio}', 'Api\BeneficiosController@show');
-Route::put('beneficios/{beneficio}', 'Api\BeneficiosController@update');
-Route::delete('beneficios/{beneficio}', 'Api\BeneficiosController@destroy');
 
-Route::get('cargos', 'Api\CargosController@index');
-Route::post('cargos', 'Api\CargosController@store');
-Route::get('cargos/{cargo}', 'Api\CargosController@show');
-Route::put('cargos/{cargo}', 'Api\CargosController@update');
-Route::delete('cargos/{cargo}', 'Api\CargosController@destroy');
+
 
 Route::get('categorianaturezas', 'Api\CategorianaturezasController@index');
 Route::post('categorianaturezas', 'Api\CategorianaturezasController@store');
@@ -226,12 +241,11 @@ Route::get('certificadoprestadores/{certificadoprestador}', 'Api\Certificadopres
 Route::put('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@update');
 Route::delete('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@destroy');
 
-Route::get('clientes', 'Api\ClientesController@index');
-Route::post('clientes', 'Api\ClientesController@store');
-Route::get('clientes/{cliente}', 'Api\ClientesController@show');
-Route::put('clientes/{cliente}', 'Api\ClientesController@update');
-Route::delete('clientes/{cliente}', 'Api\ClientesController@destroy');
-// Route::get('meuspassientes/{cliente}', 'Api\ClientesController@meuspassientes'); // Custon
+// Route::get('clientes', 'Api\ClientesController@index');
+// Route::post('clientes', 'Api\ClientesController@store');
+// Route::get('clientes/{cliente}', 'Api\ClientesController@show');
+// Route::put('clientes/{cliente}', 'Api\ClientesController@update');
+// Route::delete('clientes/{cliente}', 'Api\ClientesController@destroy');
 
 Route::get('cnabs', 'Api\CnabsController@index');
 Route::post('cnabs', 'Api\CnabsController@store');
@@ -263,11 +277,6 @@ Route::get('contasbancarias/{contasbancaria}', 'Api\ContasbancariasController@sh
 Route::put('contasbancarias/{contasbancaria}', 'Api\ContasbancariasController@update');
 Route::delete('contasbancarias/{contasbancaria}', 'Api\ContasbancariasController@destroy');
 
-Route::get('convenios', 'Api\ConveniosController@index');
-Route::post('convenios', 'Api\ConveniosController@store');
-Route::get('convenios/{convenio}', 'Api\ConveniosController@show');
-Route::put('convenios/{convenio}', 'Api\ConveniosController@update');
-Route::delete('convenios/{convenio}', 'Api\ConveniosController@destroy');
 
 
 
@@ -638,11 +647,6 @@ Route::put('servicos/{servico}', 'Api\ServicosController@update');
 Route::delete('servicos/{servico}', 'Api\ServicosController@destroy');
 Route::get('servicos/empresa/{empresa}', 'Api\ServicosController@indexbyempresa');
 
-Route::get('setores', 'Api\SetoresController@index');
-Route::post('setores', 'Api\SetoresController@store');
-Route::get('setores/{setor}', 'Api\SetoresController@show');
-Route::put('setores/{setor}', 'Api\SetoresController@update');
-Route::delete('setores/{setor}', 'Api\SetoresController@destroy');
 
 Route::get('telefones', 'Api\TelefonesController@index');
 Route::post('telefones', 'Api\TelefonesController@store');
