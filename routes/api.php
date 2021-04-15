@@ -134,12 +134,17 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::put('beneficios/{beneficio}', 'Api\Web\RecursosHumanos\BeneficiosController@update');
             Route::delete('beneficios/{beneficio}', 'Api\Web\RecursosHumanos\BeneficiosController@destroy');
 
-
             Route::get('cargos', 'Api\Web\RecursosHumanos\CargosController@index');
             Route::post('cargos', 'Api\Web\RecursosHumanos\CargosController@store');
             Route::get('cargos/{cargo}', 'Api\Web\RecursosHumanos\CargosController@show');
             Route::put('cargos/{cargo}', 'Api\Web\RecursosHumanos\CargosController@update');
             Route::delete('cargos/{cargo}', 'Api\Web\RecursosHumanos\CargosController@destroy');
+
+            Route::get('convenios', 'Api\Web\RecursosHumanos\ConveniosController@index');
+            Route::post('convenios', 'Api\Web\RecursosHumanos\ConveniosController@store');
+            Route::get('convenios/{convenio}', 'Api\Web\RecursosHumanos\ConveniosController@show');
+            Route::put('convenios/{convenio}', 'Api\Web\RecursosHumanos\ConveniosController@update');
+            Route::delete('convenios/{convenio}', 'Api\Web\RecursosHumanos\ConveniosController@destroy');
         });
         Route::prefix('estoque')->group(function () {
             Route::get('movimentacaoEstoque', 'Api\Web\Estoque\ProdutosController@movimentacaoEstoque');
@@ -267,11 +272,6 @@ Route::get('contasbancarias/{contasbancaria}', 'Api\ContasbancariasController@sh
 Route::put('contasbancarias/{contasbancaria}', 'Api\ContasbancariasController@update');
 Route::delete('contasbancarias/{contasbancaria}', 'Api\ContasbancariasController@destroy');
 
-Route::get('convenios', 'Api\ConveniosController@index');
-Route::post('convenios', 'Api\ConveniosController@store');
-Route::get('convenios/{convenio}', 'Api\ConveniosController@show');
-Route::put('convenios/{convenio}', 'Api\ConveniosController@update');
-Route::delete('convenios/{convenio}', 'Api\ConveniosController@destroy');
 
 
 
