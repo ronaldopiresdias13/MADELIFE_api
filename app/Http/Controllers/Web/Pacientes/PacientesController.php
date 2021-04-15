@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Web\Pacientes;
 
 use App\Http\Controllers\Controller;
 use App\Models\Paciente;
+use App\Models\Pessoa;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class PacientesController extends Controller
@@ -18,11 +20,26 @@ class PacientesController extends Controller
     public function pacientesOfCliente(Request $request)
     {
         $user = $request->user();
-        // $result = User::with(
-        //     'pessoa'
-        // );
 
-        return $user;
+        $result = Pessoa::with([
+            'pacientes.homecares.orcamento.ordemservico'
+        ])
+            ->whereHas('pacientes.homecares.orcamento.cliente.pessoa.user', function (Builder $query) use ($user) {
+                $query->where('id', $user->id);
+            });
+
+        if ($request['paginate']) {
+            $result = $result->orderByDesc('nome')->paginate($request['per_page'] ? $request['per_page'] : 15);
+
+            if (env("APP_ENV", 'production') == 'production') {
+                return $result->withPath(str_replace('http:', 'https:', $result->path()));
+            } else {
+                return $result;
+            }
+        } else {
+            $result = $result->get();
+            return $result;
+        }
     }
 
     /**
