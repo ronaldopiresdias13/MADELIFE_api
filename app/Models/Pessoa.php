@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Pessoa extends Model
 {
@@ -115,5 +116,15 @@ class Pessoa extends Model
     public function conversas_receive()
     {
         return $this->hasMany(Conversa::class,'receive_id','id');
+    }
+
+    // public function paciente(): HasOne
+    // {
+    //     return $this->hasOne(Paciente::class);
+    // }
+
+    public function pacientes(): HasMany
+    {
+        return $this->hasMany(Paciente::class);
     }
 }
