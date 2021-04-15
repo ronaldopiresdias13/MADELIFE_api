@@ -22,17 +22,22 @@ class PacientesController extends Controller
         $user = $request->user();
 
         $result = Pessoa::with([
-            'pacientes'
+            'pacientes.homecares.orcamento.ordemservico'
         ])
             ->whereHas('pacientes.homecares.orcamento.cliente.pessoa.user', function (Builder $query) use ($user) {
                 $query->where('id', $user->id);
             });
 
-        $result = $result->orderByDesc('nome')->paginate($request['per_page'] ? $request['per_page'] : 15);
+        if ($request['paginate']) {
+            $result = $result->orderByDesc('nome')->paginate($request['per_page'] ? $request['per_page'] : 15);
 
-        if (env("APP_ENV", 'production') == 'production') {
-            return $result->withPath(str_replace('http:', 'https:', $result->path()));
+            if (env("APP_ENV", 'production') == 'production') {
+                return $result->withPath(str_replace('http:', 'https:', $result->path()));
+            } else {
+                return $result;
+            }
         } else {
+            $result = $result->get();
             return $result;
         }
     }
