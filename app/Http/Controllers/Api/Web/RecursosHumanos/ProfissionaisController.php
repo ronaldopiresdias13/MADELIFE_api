@@ -30,6 +30,20 @@ class ProfissionaisController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function index(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return Profissional::with(['pessoa.user.acessos', 'setor', 'cargo', 'dadoscontratual'])
+            ->where('ativo', 1)
+            ->where('empresa_id', $empresa_id)
+            ->get();
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function meuperfil(Request $request)
     {
         $user = $request->user();
@@ -270,7 +284,16 @@ class ProfissionaisController extends Controller
      */
     public function show(Profissional $profissional)
     {
-        //
+        $profissional->pessoa->enderecos;
+        $profissional->pessoa->telefones;
+        $profissional->pessoa->emails;
+        $profissional->formacoes;
+        $profissional->setor;
+        $profissional->cargo;
+        $profissional->dadoscontratual;
+        $profissional->beneficios;
+        $profissional->convenios;
+        return $profissional;
     }
 
     /**
@@ -319,6 +342,7 @@ class ProfissionaisController extends Controller
      */
     public function destroy(Profissional $profissional)
     {
-        //
+        $profissional->ativo = false;
+        $profissional->save();
     }
 }

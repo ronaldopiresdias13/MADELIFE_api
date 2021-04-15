@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web\Orcs;
 
 use App\Http\Controllers\Controller;
 use App\Models\Orc;
+use App\Models\Orcamento;
 use App\Services\ContratoService;
 use App\Services\OrcService;
 use Illuminate\Database\Eloquent\Builder;
@@ -195,12 +196,27 @@ class OrcsController extends Controller
         // return $contratoService->store();
     }
 
-    public function gerarCodigo(Request $request)
+    public function gerarCodigoOrc(Request $request)
     {
         $now = now()->format('Y');
         $codigo = null;
         $empresa_id = $request->user()->pessoa->profissional->empresa_id;
         $orcamento = Orc::where('empresa_id', $empresa_id)->orderBy('id', 'desc')->first();
+        if ($orcamento) {
+            $numero = substr($orcamento->numero, 5) + 1;
+            $numero = $numero < 10 ? '0' . $numero : $numero;
+            $codigo = $now . '/' . $numero;
+        } else {
+            $codigo = $now . '/01';
+        }
+        return response()->json(['codigo' => $codigo]);
+    }
+    public function gerarCodigoOrcamento(Request $request)
+    {
+        $now = now()->format('Y');
+        $codigo = null;
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+        $orcamento = Orcamento::where('empresa_id', $empresa_id)->orderBy('id', 'desc')->first();
         if ($orcamento) {
             $numero = substr($orcamento->numero, 5) + 1;
             $numero = $numero < 10 ? '0' . $numero : $numero;

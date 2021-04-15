@@ -146,6 +146,12 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::put('convenios/{convenio}', 'Api\Web\RecursosHumanos\ConveniosController@update');
             Route::delete('convenios/{convenio}', 'Api\Web\RecursosHumanos\ConveniosController@destroy');
 
+            Route::get('profissionais', 'Api\Web\RecursosHumanos\ProfissionaisController@index');
+            // Route::post('profissionais', 'Api\Web\RecursosHumanos\ProfissionaisController@store');
+            Route::get('profissionais/{profissional}', 'Api\Web\RecursosHumanos\ProfissionaisController@show');
+            Route::put('profissionais/{profissional}', 'Api\Web\RecursosHumanos\ProfissionaisController@update');
+            Route::delete('profissionais/{profissional}', 'Api\Web\RecursosHumanos\ProfissionaisController@destroy');
+
             Route::get('setores', 'Api\Web\RecursosHumanos\SetoresController@index');
             Route::post('setores', 'Api\Web\RecursosHumanos\SetoresController@store');
             Route::get('setores/{setor}', 'Api\Web\RecursosHumanos\SetoresController@show');
@@ -590,11 +596,6 @@ Route::get('produtos/{produto}', 'Api\ProdutosController@show');
 Route::put('produtos/{produto}', 'Api\ProdutosController@update');
 Route::delete('produtos/{produto}', 'Api\ProdutosController@destroy');
 
-Route::get('profissionais', 'Api\ProfissionaisController@index');
-Route::post('profissionais', 'Api\ProfissionaisController@store');
-Route::get('profissionais/{profissional}', 'Api\ProfissionaisController@show');
-Route::put('profissionais/{profissional}', 'Api\ProfissionaisController@update');
-Route::delete('profissionais/{profissional}', 'Api\ProfissionaisController@destroy');
 
 Route::get('relatorios', 'Api\RelatoriosController@index');
 Route::post('relatorios', 'Api\RelatoriosController@store');
@@ -792,7 +793,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
         Route::prefix('orcs')->group(function () {
             Route::get('', [OrcsController::class, 'index']);
-            Route::get('gerarCodigo', [OrcsController::class, 'gerarCodigo']);
+            Route::get('gerarCodigo', [OrcsController::class, 'gerarCodigoOrc']);
+            Route::get('gerarCodigoOrcamento', [OrcsController::class, 'gerarCodigoOrcamento']);
             Route::get('{orc}', [OrcsController::class, 'show']);
             Route::post('', [OrcsController::class, 'store']);
             Route::put('{orc}', [OrcsController::class, 'update']);
