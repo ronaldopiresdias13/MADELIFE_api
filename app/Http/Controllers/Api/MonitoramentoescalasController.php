@@ -131,6 +131,7 @@ class MonitoramentoescalasController extends Controller
         $monitoramentoescala->vomito     = $request->vomito;
         $monitoramentoescala->crivomito  = $request->crivomito;
         $monitoramentoescala->asp        = $request->asp;
+        $monitoramentoescala->inal       = $request->inal;
         $monitoramentoescala->decub      = $request->decub;
         $monitoramentoescala->curativo   = $request->curativo;
         $monitoramentoescala->fraldas    = $request->fraldas;

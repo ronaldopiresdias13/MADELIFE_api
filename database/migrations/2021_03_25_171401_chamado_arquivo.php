@@ -15,7 +15,6 @@ class ChamadoArquivo extends Migration
     {
         Schema::table('mensagens_chamado', function (Blueprint $table) {
             $table->string('type')->default('text');
-
             $table->string('arquivo')->nullable();
         });
     }
@@ -27,6 +26,10 @@ class ChamadoArquivo extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mensagens_chamado');
+        // Schema::dropIfExists('mensagens_chamado');
+        Schema::table('mensagens_chamado', function (Blueprint $table) {
+            $table->dropColumn('type');
+            $table->dropColumn('arquivo');
+        });
     }
 }
