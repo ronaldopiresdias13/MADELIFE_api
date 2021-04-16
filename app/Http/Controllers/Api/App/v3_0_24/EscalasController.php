@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\App\v3_0_22;
+namespace App\Http\Controllers\Api\App\v3_0_24;
 
 use App\Models\Escala;
 use App\Http\Controllers\Controller;
