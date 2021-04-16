@@ -129,6 +129,12 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('categorianaturezas/{categorianatureza}', 'Api\Web\Financeiro\CategorianaturezasController@show');
             Route::put('categorianaturezas/{categorianatureza}', 'Api\Web\Financeiro\CategorianaturezasController@update');
             Route::delete('categorianaturezas/{categorianatureza}', 'Api\Web\Financeiro\CategorianaturezasController@destroy');
+
+            Route::get('naturezas', 'Api\Web\Financeiro\NaturezasController@index');
+            Route::post('naturezas', 'Api\Web\Financeiro\NaturezasController@store');
+            Route::get('naturezas/{natureza}', 'Api\Web\Financeiro\NaturezasController@show');
+            Route::put('naturezas/{natureza}', 'Api\Web\Financeiro\NaturezasController@update');
+            Route::delete('naturezas/{natureza}', 'Api\Web\Financeiro\NaturezasController@destroy');
         });
         Route::prefix('recursosHumanos')->group(function () {
             Route::post('profissionais/novoProfissional', 'Api\Web\RecursosHumanos\ProfissionaisController@novoProfissional');
@@ -437,11 +443,6 @@ Route::get('monitoramentoescalas/{monitoramentoescala}', 'Api\Monitoramentoescal
 Route::put('monitoramentoescalas/{monitoramentoescala}', 'Api\MonitoramentoescalasController@update');
 Route::delete('monitoramentoescalas/{monitoramentoescala}', 'Api\MonitoramentoescalasController@destroy');
 
-Route::get('naturezas', 'Api\NaturezasController@index');
-Route::post('naturezas', 'Api\NaturezasController@store');
-Route::get('naturezas/{natureza}', 'Api\NaturezasController@show');
-Route::put('naturezas/{natureza}', 'Api\NaturezasController@update');
-Route::delete('naturezas/{natureza}', 'Api\NaturezasController@destroy');
 
 Route::get('orcamentos', 'Api\OrcamentosController@index');
 Route::post('orcamentos', 'Api\OrcamentosController@store');
