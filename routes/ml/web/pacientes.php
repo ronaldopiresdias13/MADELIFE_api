@@ -5,10 +5,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('web')->group(function () {
-        Route::prefix('gestaoOrcamentaria')->group(function () {
-            Route::prefix('pacientes')->group(function () {
-                Route::get('pacientesOfCliente', [PacientesController::class, 'pacientesOfCliente']);
-            });
+        Route::prefix('pacientes')->group(function () {
+            Route::get('pacientesOfCliente', [PacientesController::class, 'pacientesOfCliente']);
         });
     });
 });

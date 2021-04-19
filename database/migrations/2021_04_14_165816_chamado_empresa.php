@@ -26,6 +26,10 @@ class ChamadoEmpresa extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('chamados');
+        // Schema::dropIfExists('chamados');
+        Schema::table('chamados', function (Blueprint $table) {
+            $table->dropForeign(['empresa_id']);
+            $table->dropColumn('empresa_id');
+        });
     }
 }
