@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Paciente extends Model
 {
@@ -31,5 +32,15 @@ class Paciente extends Model
     public function homecares()
     {
         return $this->hasMany(Homecare::class)->where('ativo', true);
+    }
+
+    /**
+     * Get the empresa that owns the Paciente
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function empresa(): BelongsTo
+    {
+        return $this->belongsTo(Empresa::class);
     }
 }
