@@ -59,6 +59,14 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('dashboard/dashboarTotalCheckinCheckout', 'Api\Web\AreaClinica\DashboardController@dashboarTotalCheckinCheckout');
             Route::get('dashboard/dashboardTotalMedicamentos', 'Api\Web\AreaClinica\DashboardController@dashboardTotalMedicamentos');
             Route::get('dashboard/dashboardTotalAtividades', 'Api\Web\AreaClinica\DashboardController@dashboardTotalAtividades');
+
+            Route::get('cuidados', 'Api\Web\AreaClinica\CuidadosController@index');
+            Route::post('cuidados', 'Api\Web\AreaClinica\CuidadosController@store');
+            Route::get('cuidados/{cuidado}', 'Api\Web\AreaClinica\CuidadosController@show');
+            Route::put('cuidados/{cuidado}', 'Api\Web\AreaClinica\CuidadosController@update');
+            Route::delete('cuidados/{cuidado}', 'Api\Web\AreaClinica\CuidadosController@destroy');
+            Route::get('cuidados/count/{empresa}', 'Api\Web\AreaClinica\CuidadosController@quantidadecuidados');
+            Route::get('cuidados/empresa/{empresa}', 'Api\Web\AreaClinica\CuidadosController@indexbyempresa');
         });
         Route::prefix('compras')->group(function () {
             Route::get('fornecedores', 'Api\Web\Compras\FornecedoresController@getAllByEmpresaId');
@@ -303,13 +311,6 @@ Route::get('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoProdutoController@show
 Route::put('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoProdutoController@update');
 Route::delete('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoProdutoController@destroy');
 
-Route::get('cuidados', 'Api\CuidadosController@index');
-Route::post('cuidados', 'Api\CuidadosController@store');
-Route::get('cuidados/{cuidado}', 'Api\CuidadosController@show');
-Route::put('cuidados/{cuidado}', 'Api\CuidadosController@update');
-Route::delete('cuidados/{cuidado}', 'Api\CuidadosController@destroy');
-Route::get('cuidados/count/{empresa}', 'Api\CuidadosController@quantidadecuidados');
-Route::get('cuidados/empresa/{empresa}', 'Api\CuidadosController@indexbyempresa');
 
 Route::get('cuidadoEscalas', 'Api\CuidadoEscalasController@index');
 Route::post('cuidadoEscalas', 'Api\CuidadoEscalasController@store');
