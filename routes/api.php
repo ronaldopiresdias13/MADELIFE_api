@@ -36,6 +36,9 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     /*----------------- Web -----------------*/
     Route::prefix('web')->group(function () {
+        Route::prefix('home')->group(function () {
+            Route::get('dashboard/get_dados', 'Api\Web\Home\DashboardController@get_dados');
+        });
         Route::prefix('areaClinica')->group(function () {
             Route::get('dashboard/relatorioDiario', 'Api\Web\AreaClinica\DashboardController@relatorioDiario');
             Route::get('dashboard/relatorioProdutividade', 'Api\Web\AreaClinica\DashboardController@relatorioProdutividade');

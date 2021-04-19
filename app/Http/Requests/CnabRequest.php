@@ -62,6 +62,7 @@ class CnabRequest extends FormRequest
                     'cnab_id' => 'required',
                     'situacao' => 'required|string',
                     'justificativa' => [new RequiredIf($this->situacao == 'Não pago')],
+                    'ids' => 'sometimes|nullable|array'
                 ];
                 break;
 

@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api\Web\Financeiro;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CnabRequest;
 use App\Http\Resources\CnabResource;
+use App\Models\Pagamentopessoa;
 use App\Models\RegistroCnab;
 use App\Models\Tipopessoa;
 use App\Services\CnabService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
@@ -64,15 +66,47 @@ class CnabsController extends Controller
     }
 
 
-    public function mudarSituacao(CnabRequest $request){
-        $data=$request->validated();
-
+    public function mudarSituacao(CnabRequest $request)
+    {
+        $data = $request->validated();
+        $registro = RegistroCnab::find($data['cnab_id']);
+        $user = $request->user();
+        $pessoa = $user->pessoa;
+        $profissinal = $pessoa->profissional()->first();
         // $user = $request->user();
+        $pessoas_ids=[];
+        if ($data['situacao'] == 'Pago') {
+            if (isset($data['ids'])) {
+                $registro->pagamentos()->whereIn('cnabpessoas.id', $data['ids'])->update(['status' => 'P']);
+                $registro->pagamentos()->whereNotIn('cnabpessoas.id', $data['ids'])->update(['status' => 'N']);
 
-        $registro=RegistroCnab::find($data['cnab_id']);
+
+                $pessoas_ids = $registro->pagamentos()->whereIn('cnabpessoas.id', $data['ids'])->pluck('cnabpessoas.pessoa_id');
+                $pessoas_ids_total = $registro->pagamentos()->pluck('cnabpessoas.pessoa_id');
+
+                Pagamentopessoa::with(['pessoa.dadosbancario.banco'])
+                    ->where('empresa_id', $profissinal->empresa_id)
+                    ->whereIn('pessoa_id',  $pessoas_ids)
+                    ->whereIn('pessoa_id',  $pessoas_ids_total)
+                    ->where('situacao', 'Aprovado')
+                    // ->where('status', false)
+                    ->where(DB::raw("date_format(str_to_date(pagamentopessoas.periodo1, '%Y-%m-%d'), '%Y-%m')"), "=", $registro->mes)
+                    ->update(['status' => true]);
+
+                Pagamentopessoa::with(['pessoa.dadosbancario.banco'])
+                    ->where('empresa_id', $profissinal->empresa_id)
+                    ->whereNotIn('pessoa_id',  $pessoas_ids)
+                    ->where('situacao', 'Aprovado')
+                    ->whereIn('pessoa_id',  $pessoas_ids_total)
+
+                    // ->where('status', false)
+                    ->where(DB::raw("date_format(str_to_date(pagamentopessoas.periodo1, '%Y-%m-%d'), '%Y-%m')"), "=", $registro->mes)
+                    ->update(['status' => false]);
+            }
+        }
+
         $registro->fill($data)->save();
 
-        return response()->json(['status'=>true]);
-
+        return response()->json(['status' => true,'pessoas_ids'=>$pessoas_ids]);
     }
 }

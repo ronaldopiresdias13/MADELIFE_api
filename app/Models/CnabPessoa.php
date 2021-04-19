@@ -14,7 +14,7 @@ class CnabPessoa extends Model
     protected $table = 'cnabpessoas';
 
     protected $fillable = [
-        'cnab_id', 'pessoa_id', 'valor','agencia','conta','digito','banco'
+        'cnab_id', 'pessoa_id', 'valor','agencia','conta','digito','banco','status'
     ];
 
     protected $guarded = [];
