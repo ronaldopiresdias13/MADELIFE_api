@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class TipoChamado extends Migration
+class AddColumnInalToMonitoramentoescalasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class TipoChamado extends Migration
      */
     public function up()
     {
-        Schema::table('chamados', function (Blueprint $table) {
-            $table->string('tipo'); //Enfermagem ou TI
+        Schema::table('monitoramentoescalas', function (Blueprint $table) {
+            $table->boolean('inal')->nullable()->default(0)->after('asp');
         });
     }
 
@@ -25,9 +25,8 @@ class TipoChamado extends Migration
      */
     public function down()
     {
-        // Schema::dropIfExists('chamados');
-        Schema::table('chamados', function (Blueprint $table) {
-            $table->dropColumn('tipo');
+        Schema::table('monitoramentoescalas', function (Blueprint $table) {
+            $table->dropColumn('inal');
         });
     }
 }

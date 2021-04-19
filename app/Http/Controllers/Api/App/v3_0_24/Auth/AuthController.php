@@ -23,12 +23,6 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        // $request->validate([
-        //     'email'       => 'string|email',
-        //     'password'    => 'required|string',
-        //     'remember_me' => 'boolean'
-        // ]);
-
         $user = User::firstWhere('email', $request['email']);
 
         if (!$user || !$user->pessoa->prestador) {
@@ -40,13 +34,6 @@ class AuthController extends Controller
             ], 400)
                 ->header('Content-Type', 'application/json');
         }
-
-        // $credentials = request(['email', 'password']);
-        // if (!Auth::attempt($credentials)) {
-        //     return response()->json([
-        //         'message' => 'E-mail e/ou Senha incorretos.'
-        //     ], 401);
-        // }
 
         if (!password_verify($request['password'], $user['password'])) {
             // return response()->json([
@@ -62,17 +49,8 @@ class AuthController extends Controller
                 ->header('Content-Type', 'application/json');
         }
 
-        // if (!Hash::check($request['password'], $user['password'])) {
-        //     return response()->json([
-        //         'message' => 'E-mail e/ou Senha incorretos.'
-        //     ], 401);
-        // }
-
         $tokenResult = $user->createToken('Personal Access Token');
         $token       = $tokenResult->token;
-        // if ($request->remember_me) {
-        //     $token->expires_at = Carbon::now()->addWeeks(1);
-        // }
         $token->save();
         return response()->json([
             'access_token' => $tokenResult->accessToken,
@@ -121,16 +99,7 @@ class AuthController extends Controller
 
     public function change(Request $request)
     {
-        // $credentials = request(['email', 'password']);
-        // if (!Auth::attempt($credentials)) {
-        //     return response()->json([
-        //         'message' => 'E-mail e/ou Senha incorretos.'
-        //     ], 401);
-        // }
         $user = $request->user();
-        // return $user;
-
-        // return $request['password'];
 
         if (!password_verify($request['password'], $user['password'])) {
             return response()->json([
@@ -138,18 +107,6 @@ class AuthController extends Controller
             ], 0);
         }
 
-        // $request->validate([
-        //     'email'       => 'string|email',
-        //     'password'    => 'required|string',
-        //     'newPassword' => 'required|string'
-        // ]);
-        // $credentials = request(['email', 'password']);
-        // if (!Auth::attempt($credentials)) {
-        //     return response()->json([
-        //         'message' => 'E-mail e/ou Senha incorretos.'
-        //     ], 401);
-        // }
-        // $user        = $request->user();
         $user->password = bcrypt($request->newPassword);
         $user->save();
     }
@@ -171,7 +128,6 @@ class AuthController extends Controller
         if ($user) {
             $prestador = Prestador::firstWhere('pessoa_id', $user->pessoa->id);
             if ($prestador) {
-                // return response()->json('Você já possui cadastro!', 400)->header('Content-Type', 'text/plain');
                 return response()->json([
                     'alert' => [
                         'title' => 'Ops!',
@@ -181,7 +137,7 @@ class AuthController extends Controller
                     ->header('Content-Type', 'application/json');
             } else {
                 DB::transaction(function () use ($request, $user) {
-                    $pessoa_email = PessoaEmail::firstOrCreate([
+                    PessoaEmail::firstOrCreate([
                         'pessoa_id' => $user->pessoa_id,
                         'email_id'  => Email::firstOrCreate(
                             [
@@ -191,7 +147,7 @@ class AuthController extends Controller
                         'tipo'      => 'Pessoal',
                     ]);
 
-                    $conselho = Conselho::create(
+                    Conselho::create(
                         [
                             'instituicao' => $request['conselho']['instituicao'],
                             'numero'      => $request['conselho']['numero'],
@@ -199,7 +155,7 @@ class AuthController extends Controller
                         ]
                     );
 
-                    $formacao = PrestadorFormacao::create(
+                    PrestadorFormacao::create(
                         [
                             'prestador_id' => Prestador::create(
                                 [
@@ -222,19 +178,18 @@ class AuthController extends Controller
                         'pessoa_id'  => Pessoa::create(
                             [
                                 'nome'       => $request['nome'],
-                                // 'nascimento' => $request['nascimento'],
                                 'cpfcnpj'    => $request['cpfcnpj'],
                                 'status'     => $request['status']
                             ]
                         )->id
                     ]
                 );
-                $tipopessoa = Tipopessoa::create([
+                Tipopessoa::create([
                     'tipo'      => 'Prestador',
                     'pessoa_id' => $user->pessoa_id,
                     'ativo'     => 1
                 ]);
-                $pessoa_email = PessoaEmail::firstOrCreate([
+                PessoaEmail::firstOrCreate([
                     'pessoa_id' => $user->pessoa_id,
                     'email_id'  => Email::firstOrCreate(
                         [
@@ -244,7 +199,7 @@ class AuthController extends Controller
                     'tipo'      => 'Pessoal',
                 ]);
 
-                $conselho = Conselho::create(
+                Conselho::create(
                     [
                         'instituicao' => $request['conselho']['instituicao'],
                         'numero'      => $request['conselho']['numero'],
@@ -252,7 +207,7 @@ class AuthController extends Controller
                     ]
                 );
 
-                $formacao = PrestadorFormacao::create(
+                PrestadorFormacao::create(
                     [
                         'prestador_id' => Prestador::create(
                             [

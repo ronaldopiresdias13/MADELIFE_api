@@ -21,6 +21,7 @@ class PagamentoResource extends JsonResource
             'tipos'=>$pessoa->tipos()->get()->pluck('tipo'),
             'pessoa_id'=>$pessoa->id, 
             'valor'=>$this->valor,
+            'status'=>$this->status,
             'agencia'=>$this->agencia,
             'conta'=>$this->conta,
             'digito'=>$this->digito,

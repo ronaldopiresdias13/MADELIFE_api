@@ -43,7 +43,7 @@ class PagamentosCnabController extends Controller
             $pagamentos = Pagamentopessoa::with(['pessoa.dadosbancario.banco'])
                 ->where('empresa_id', $empresa_id)
                 ->where('status', false)
-                ->where('tipopessoa', 'Prestador Externo')
+                // ->where('tipopessoa', 'Prestador Externo')
                 ->where('situacao', "!=", "Criado")
                 ->whereBetween('periodo1', [$request->data_ini, $request->data_fim])
                 ->get();
@@ -53,7 +53,7 @@ class PagamentosCnabController extends Controller
                 ->where('empresa_id', $empresa_id)
                 ->where('status', false)
                 ->where('situacao', "!=", "Criado")
-                ->where('tipopessoa', 'Profissional Interno')
+                // ->where('tipopessoa', 'Profissional Interno')
                 ->whereBetween('periodo1', [$request->data_ini, $request->data_fim])
                 ->get();
         }

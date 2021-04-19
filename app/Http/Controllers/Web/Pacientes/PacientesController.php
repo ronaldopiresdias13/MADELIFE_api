@@ -22,7 +22,8 @@ class PacientesController extends Controller
         $user = $request->user();
 
         $result = Pessoa::with([
-            'pacientes.homecares.orcamento.ordemservico'
+            'pacientes.homecares.orcamento.ordemservico',
+            'pacientes.empresa'
         ])
             ->whereHas('pacientes.homecares.orcamento.cliente.pessoa.user', function (Builder $query) use ($user) {
                 $query->where('id', $user->id);
