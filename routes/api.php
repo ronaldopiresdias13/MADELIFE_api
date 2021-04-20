@@ -66,7 +66,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::put('cuidados/{cuidado}', 'Api\Web\AreaClinica\CuidadosController@update');
             Route::delete('cuidados/{cuidado}', 'Api\Web\AreaClinica\CuidadosController@destroy');
             Route::get('cuidados/count/{empresa}', 'Api\Web\AreaClinica\CuidadosController@quantidadecuidados');
-            Route::get('cuidados/empresa/{empresa}', 'Api\Web\AreaClinica\CuidadosController@indexbyempresa');
+            // Route::get('cuidados/empresa/{empresa}', 'Api\Web\AreaClinica\CuidadosController@indexbyempresa');
         });
         Route::prefix('compras')->group(function () {
             Route::get('fornecedores', 'Api\Web\Compras\FornecedoresController@getAllByEmpresaId');
