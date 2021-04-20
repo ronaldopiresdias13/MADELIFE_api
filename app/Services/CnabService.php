@@ -1336,7 +1336,7 @@ class CnabService
 
         $cpf_cnpj = Str::replaceArray('-', [''], $cpf_cnpj);
         $cpf_cnpj = Str::replaceArray('/', [''], $cpf_cnpj);
-        if (Str::length($cpf_cnpj) == 11) {
+        if (Str::length($cpf_cnpj) <= 11) {
             $tipo_inscricao = '1';
         } elseif (Str::length($cpf_cnpj) == 14) {
             $tipo_inscricao = '2';
@@ -1515,7 +1515,7 @@ class CnabService
 
         $cpf_cnpj = Str::replaceArray('-', [''], $cpf_cnpj);
         $cpf_cnpj = Str::replaceArray('/', [''], $cpf_cnpj);
-        if (Str::length($cpf_cnpj) == 11) {
+        if (Str::length($cpf_cnpj) <= 11) {
             $tipo_inscricao = '1';
         } elseif (Str::length($cpf_cnpj) == 14) {
             $tipo_inscricao = '2';
