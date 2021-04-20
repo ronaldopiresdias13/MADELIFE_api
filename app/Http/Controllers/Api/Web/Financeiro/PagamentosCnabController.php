@@ -89,12 +89,13 @@ class PagamentosCnabController extends Controller
         $empresa_id = $user->pessoa->profissional->empresa_id;
         $pagamentosexternos = DB::select(
             "
-                SELECT DATE_FORMAT(pgp.periodo1, '%Y-%m') AS periodo, pgp.id, p.nome, pgp.valor, pgp.situacao, pgp.tipopessoa as tipo FROM pagamentopessoas AS pgp
+                SELECT DATE_FORMAT(pgp.periodo1, '%Y-%m') AS periodo, pgp.id, p.nome, pgp.valor, pgp.situacao, pgp.tipopessoa as tipo
+                FROM pagamentopessoas AS pgp
                 INNER JOIN pessoas AS p
                 ON p.id = pgp.pessoa_id
                 WHERE pgp.empresa_id = ?
-                AND pgp.`status` = 0 
-                AND pgp.deleted_at IS NULL 
+                AND pgp.`status` = 0
+                AND pgp.deleted_at IS NULL
                 AND pgp.situacao != 'Criado'
             ",
             [

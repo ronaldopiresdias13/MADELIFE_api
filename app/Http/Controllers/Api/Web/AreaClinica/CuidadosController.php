@@ -42,12 +42,6 @@ class CuidadosController extends Controller
                 'status' => $request['status'],
             ]);
         });
-        // $cuidado = new Cuidado();
-        // $cuidado->descricao = $request->descricao;
-        // $cuidado->codigo = $request->codigo;
-        // $cuidado->empresa_id = $request->empresa_id;
-        // $cuidado->status = $request->status;
-        // $cuidado->save();
     }
 
     /**
@@ -87,11 +81,5 @@ class CuidadosController extends Controller
     public function quantidadecuidados(Empresa $empresa)
     {
         return Cuidado::where('empresa_id', $empresa['id'])->where('ativo', 1)->count();
-    }
-    public function indexbyempresa(Empresa $empresa)
-    {
-        return Cuidado::Where('empresa_id', $empresa['id'])
-            ->where('ativo', 1)
-            ->get();
     }
 }
