@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Grupocuidado;
-use App\Cuidado;
-use App\CuidadoGrupocuidado;
+use App\Models\Grupocuidado;
+use App\Models\Cuidado;
+use App\Models\CuidadoGrupocuidado;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -112,11 +112,20 @@ class GrupocuidadosController extends Controller
      */
     public function store(Request $request)
     {
+        $total = Grupocuidado::where('empresa_id', $request->empresa_id)->count();
         $grupocuidado = new Grupocuidado();
         $grupocuidado->descricao = $request->descricao;
-        $grupocuidado->empresa = $request->empresa;
-        $grupocuidado->status = $request->staus;
+        $grupocuidado->codigo = $total + 1;
+        $grupocuidado->empresa_id = $request->empresa_id;
+        $grupocuidado->status = $request->status;
         $grupocuidado->save();
+
+        foreach ($request['cuidado'] as $key => $cuidado) {
+            $cuidado = CuidadoGrupocuidado::firstOrCreate([
+                'grupocuidado_id' => $grupocuidado->id,
+                'cuidado_id'    => $cuidado['id']
+            ]);
+        }
     }
 
     /**
@@ -178,7 +187,14 @@ class GrupocuidadosController extends Controller
      */
     public function update(Request $request, Grupocuidado $grupocuidado)
     {
-        $grupocuidado->update($request->all());
+        $grupocuidado->descricao = $request['descricao'];
+        $grupocuidado->save();
+        foreach ($request['cuidado'] as $key => $cuidado) {
+            $cuidado = CuidadoGrupocuidado::updateOrCreate([
+                'grupocuidado_id' => $grupocuidado->id,
+                'cuidado_id'    => $cuidado['id']
+            ]);
+        }
     }
 
     /**

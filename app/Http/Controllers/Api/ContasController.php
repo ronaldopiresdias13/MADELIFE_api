@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Conta;
-use App\Pagamento;
+use App\Models\Conta;
+use App\Models\Pagamento;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Pessoa;
-use App\Empresa;
-use App\Responsavel;
-use App\Ordemservico;
+use App\Models\Pessoa;
+use App\Models\Empresa;
+use App\Models\Responsavel;
+use App\Models\Ordemservico;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Orcamento;
-use App\OrdemservicoServico;
+use App\Models\Orcamento;
+use App\Models\OrdemservicoServico;
 use Illuminate\Support\Facades\DB;
 
 class OrdemservicosController extends Controller
@@ -131,6 +131,7 @@ class OrdemservicosController extends Controller
                     'orcamento_id' => $request['orcamento_id'],
                 ],
                 [
+                    'empresa_id'             => $request['empresa_id'],
                     'responsavel_id'         => null,
                     'profissional_id'        => $request['profissional_id'],
                     'codigo'                 => $request['codigo'],
@@ -142,11 +143,11 @@ class OrdemservicosController extends Controller
                 ]
             );
 
-            $orcamento = Orcamento::Where('id', $request['orcamento_id'])->first();
+            $orcamento = Orcamento::where('id', $request['orcamento_id'])->first();
 
             foreach ($orcamento->servicos as $key => $servico) {
                 if ($servico['pivot']['basecobranca'] == 'Plantão') {
-                    $ordemservico_servico = OrdemservicoServico::create(
+                    OrdemservicoServico::create(
                         [
                             'ordemservico_id'  => $ordemservico->id,
                             'servico_id'       => $servico->id,
@@ -156,7 +157,7 @@ class OrdemservicosController extends Controller
                         ]
                     );
                 } else {
-                    $ordemservico_servico = OrdemservicoServico::create(
+                    OrdemservicoServico::create(
                         [
                             'ordemservico_id'  => $ordemservico->id,
                             'servico_id'       => $servico->id,
@@ -313,16 +314,12 @@ class OrdemservicosController extends Controller
         $profissional = $user->pessoa->profissional;
 
         $escalas = Ordemservico::with([
-            'orcamento' => function ($query) {
-                $query->select('id', 'cliente_id');
-                $query->with(['homecare' => function ($query) {
-                    $query->select('id', 'orcamento_id', 'paciente_id');
-                    $query->with(['paciente' => function ($query) {
-                        $query->select('id', 'pessoa_id');
-                        $query->with(['pessoa' => function ($query) {
-                            $query->select('id', 'nome');
-                        }]);
-                    }]);
+            // 'servicos',
+            'orcamento.cidade', 'orcamento' => function ($query) {
+                // $query->select('id', 'cliente_id');
+                $query->with(['servicos.servico', 'homecare' => function ($query) {
+                    // $query->select('id', 'orcamento_id', 'paciente_id');
+                    $query->with(['paciente.pessoa', 'paciente.responsavel.pessoa']);
                 }]);
                 $query->with(['cliente' => function ($query) {
                     $query->select('id', 'pessoa_id');

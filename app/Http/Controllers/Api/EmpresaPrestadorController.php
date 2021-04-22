@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\EmpresaPrestador;
-use App\Empresa;
+use App\Models\EmpresaPrestador;
+use App\Models\Empresa;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -289,7 +289,13 @@ class EmpresaPrestadorController extends Controller
     public function downloadFile(EmpresaPrestador $empresaPrestador)
     {
         // return $empresaPrestador;
-        $file = Storage::get($empresaPrestador['contrato']);
+        if (!Storage::exists($empresaPrestador['contrato'])) {
+            return response()
+                ->json('Não foi possivel encontrar o arquivo desejado!', 404)
+                ->header('Content-Type', 'text/plain');
+        } else {
+            $file = Storage::get($empresaPrestador['contrato']);
+        }
 
         $response =  array(
             'nome' => $empresaPrestador['nome'],
@@ -298,8 +304,27 @@ class EmpresaPrestadorController extends Controller
 
         return response()->json($response);
     }
+
     public function quantidadeempresaprestador(Empresa $empresa)
     {
         return EmpresaPrestador::where('empresa_id', $empresa['id'])->where('ativo', 1)->count();
+    }
+
+    public function listaPrestadoresPorEmpresaIdEStatus(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return EmpresaPrestador::with([
+            'prestador.pessoa.conselhos',
+            'prestador.formacoes',
+            'prestador.pessoa.dadosbancario.banco',
+            'prestador.pessoa.enderecos.cidade',
+            'prestador.pessoa.telefones',
+            'prestador.pessoa.emails',
+            'prestador.ordemservicoPrestadores'
+        ])
+            ->where('empresa_id', $empresa_id)
+            ->where('status', $request['status'])
+            ->get();
     }
 }

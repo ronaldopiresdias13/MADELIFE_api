@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Cotacao;
-use App\CotacaoProduto;
+use App\Models\Cotacao;
+use App\Models\CotacaoProduto;
 use App\Http\Controllers\Controller;
-use App\Produto;
+use App\Models\Produto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

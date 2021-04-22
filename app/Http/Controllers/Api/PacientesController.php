@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Email;
-use App\Endereco;
+use App\Models\Email;
+use App\Models\Endereco;
 use App\Http\Controllers\Controller;
-use App\Paciente;
-use App\Pessoa;
-use App\PessoaEmail;
-use App\PessoaEndereco;
-use App\PessoaTelefone;
-use App\Telefone;
-use App\Tipopessoa;
+use App\Models\Paciente;
+use App\Models\Pessoa;
+use App\Models\PessoaEmail;
+use App\Models\PessoaEndereco;
+use App\Models\PessoaTelefone;
+use App\Models\Telefone;
+use App\Models\Tipopessoa;
 use Facade\Ignition\Support\Packagist\Package;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -98,6 +98,24 @@ class PacientesController extends Controller
      */
     public function store(Request $request)
     {
+        $pessoa = Pessoa::where(
+            'cpfcnpj',
+            $request['pessoa']['cpfcnpj']
+        )->first();
+
+        $paciente = null;
+
+        if ($pessoa) {
+            $paciente = Paciente::firstWhere(
+                'pessoa_id',
+                $pessoa->id,
+            );
+        }
+
+        if ($paciente) {
+            return response()->json('Paciente já existe!', 400)->header('Content-Type', 'text/plain');
+        }
+
         DB::transaction(function () use ($request) {
             $paciente = Paciente::create([
                 'empresa_id' => $request['empresa_id'],
@@ -108,7 +126,6 @@ class PacientesController extends Controller
                     [
                         'nome'        => $request['pessoa']['nome'],
                         'nascimento'  => $request['pessoa']['nascimento'],
-
                         'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
                         'rgie'        => $request['pessoa']['rgie'],
                         'observacoes' => $request['pessoa']['observacoes'],
@@ -120,7 +137,7 @@ class PacientesController extends Controller
                 'sexo'           => $request['sexo'],
                 'ativo'           => $request['ativo']
             ]);
-            $tipopessoa = Tipopessoa::create([
+            Tipopessoa::create([
                 'tipo'      => 'Paciente',
                 'pessoa_id' => $paciente->pessoa_id,
                 'ativo'     => 1
@@ -128,7 +145,7 @@ class PacientesController extends Controller
 
             if ($request['pessoa']['telefones']) {
                 foreach ($request['pessoa']['telefones'] as $key => $telefone) {
-                    $pessoa_telefone = PessoaTelefone::firstOrCreate([
+                    PessoaTelefone::firstOrCreate([
                         'pessoa_id'   => $paciente->pessoa_id,
                         'telefone_id' => Telefone::firstOrCreate(
                             [
@@ -141,7 +158,7 @@ class PacientesController extends Controller
 
             if ($request['pessoa']['enderecos']) {
                 foreach ($request['pessoa']['enderecos'] as $key => $endereco) {
-                    $pessoa_endereco = PessoaEndereco::firstOrCreate([
+                    PessoaEndereco::firstOrCreate([
                         'pessoa_id'   => $paciente->pessoa_id,
                         'endereco_id' => Endereco::firstOrCreate(
                             [
@@ -161,7 +178,7 @@ class PacientesController extends Controller
 
             if ($request['pessoa']['emails']) {
                 foreach ($request['pessoa']['emails'] as $key => $email) {
-                    $pessoa_email = PessoaEmail::firstOrCreate([
+                    PessoaEmail::firstOrCreate([
                         'pessoa_id' => $paciente->pessoa_id,
                         'email_id'  => Email::firstOrCreate(
                             [

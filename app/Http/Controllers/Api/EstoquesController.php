@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Estoque;
+use App\Models\Estoque;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

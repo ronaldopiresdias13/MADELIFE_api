@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Outro;
+use App\Models\Outro;
 use Illuminate\Http\Request;
 
 class OutrosController extends Controller

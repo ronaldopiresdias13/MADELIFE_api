@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\api;
 
-use App\TranscricaoProduto;
+use App\Models\TranscricaoProduto;
 use App\Http\Controllers\Controller;
-use App\Transcricao;
+use App\Models\Transcricao;
 use Illuminate\Http\Request;
 
 class TranscricaoProdutoController extends Controller

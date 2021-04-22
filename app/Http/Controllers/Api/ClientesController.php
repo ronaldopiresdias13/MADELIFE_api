@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\User;
-use App\Email;
-use App\Acesso;
-use App\Cidade;
-use App\Pessoa;
-use App\Cliente;
-use App\Endereco;
-use App\Telefone;
-use App\UserAcesso;
-use App\PessoaEmail;
-use App\PessoaTelefone;
-use App\PessoaEndereco;
+use App\Models\User;
+use App\Models\Email;
+use App\Models\Acesso;
+use App\Models\Cidade;
+use App\Models\Pessoa;
+use App\Models\Cliente;
+use App\Models\Endereco;
+use App\Models\Telefone;
+use App\Models\UserAcesso;
+use App\Models\PessoaEmail;
+use App\Models\PessoaTelefone;
+use App\Models\PessoaEndereco;
 use App\Http\Controllers\Controller;
-use App\Tipopessoa;
+use App\Models\Tipopessoa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

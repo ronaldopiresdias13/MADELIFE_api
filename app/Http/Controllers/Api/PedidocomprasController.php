@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Pedidocompra;
-use App\PedidocompraProduto;
+use App\Models\Pedidocompra;
+use App\Models\PedidocompraProduto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

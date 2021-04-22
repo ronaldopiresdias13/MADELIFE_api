@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Escala;
-use App\Empresa;
-use App\Cuidado;
-use App\CuidadoEscala;
+use App\Models\Escala;
+use App\Models\Empresa;
+use App\Models\Cuidado;
+use App\Models\CuidadoEscala;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\OrdemservicoServico;
+use App\Models\Ordemservico;
+use App\Models\OrdemservicoServico;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\DB;
@@ -127,28 +129,42 @@ class EscalasController extends Controller
      */
     public function store(Request $request)
     {
-        $ordemservicoServico = OrdemservicoServico::where('ordemservico_id', $request->ordemservico_id)
-            ->where('servico_id', $request->servico_id)
-            ->first();
+        $ordemservico = Ordemservico::with(
+            [
+                'orcamento.servicos' => function ($query) use ($request) {
+                    $query->with('servico')->whereHas('servico', function (Builder $builder) use ($request) {
+                        $builder->where('id', $request->servico_id);
+                    });
+                }
+            ]
+        )
+            ->find($request->ordemservico_id);
+
+        $tipo   = $ordemservico->orcamento->servicos[0]->basecobranca;
+        $horasD = $ordemservico->orcamento->servicos[0]->horascuidadodiurno;
+        $horasN = $ordemservico->orcamento->servicos[0]->horascuidadonoturno;
+        $valorD = $ordemservico->orcamento->servicos[0]->custodiurno;
+        $valorN = $ordemservico->orcamento->servicos[0]->custonoturno;
 
         $escala = new Escala();
-        if ($ordemservicoServico) {
-            $escala->tipo             = $ordemservicoServico->descricao;
-            $escala->valorhoradiurno  = $ordemservicoServico->valordiurno;
-            $escala->valorhoranoturno = $ordemservicoServico->valornoturno;
+        if ($ordemservico) {
+            $escala->tipo             = $tipo;
+            $escala->valorhoradiurno  = $valorD ? ($tipo == 'Plantão' ? $valorD / $horasD : $valorD) : $valorD;
+            $escala->valorhoranoturno = $valorN ? ($tipo == 'Plantão' ? $valorN / $horasN : $valorN) : $valorN;
             $escala->valoradicional   = 0;
         }
         $escala->empresa_id            = $request->empresa_id;
         $escala->ordemservico_id       = $request->ordemservico_id;
         $escala->prestador_id          = $request->prestador_id;
         $escala->servico_id            = $request->servico_id;
+        $escala->formacao_id           = $request->formacao_id ? $request->formacao_id : null;
         $escala->horaentrada           = $request->horaentrada;
         $escala->horasaida             = $request->horasaida;
         $escala->dataentrada           = $request->dataentrada;
         $escala->datasaida             = $request->datasaida;
         $escala->periodo               = $request->periodo;
-        $escala->assinaturaprestador   = $request->assinaturaprestador;
-        $escala->assinaturaresponsavel = $request->assinaturaresponsavel;
+        $escala->assinaturaprestador   = $request->assinaturaprestador   ?: $escala->assinaturaprestador;
+        $escala->assinaturaresponsavel = $request->assinaturaresponsavel ?: $escala->assinaturaresponsavel;
         $escala->observacao            = $request->observacao;
         $escala->status                = $request->status;
         $escala->folga                 = $request->folga;
@@ -156,7 +172,7 @@ class EscalasController extends Controller
         $escala->save();
 
         foreach ($request->cuidados as $key => $cuidado) {
-            $cuidado_escala = CuidadoEscala::create([
+            CuidadoEscala::create([
                 'escala_id'  => $escala->id,
                 'cuidado_id' => Cuidado::find($cuidado['cuidado']['id'])->id,
                 'data'       => $cuidado['data'],
@@ -234,8 +250,8 @@ class EscalasController extends Controller
         $escala->dataentrada           = $request->dataentrada;
         $escala->datasaida             = $request->datasaida;
         $escala->periodo               = $request->periodo;
-        $escala->assinaturaprestador   = $request->assinaturaprestador;
-        $escala->assinaturaresponsavel = $request->assinaturaresponsavel;
+        $escala->assinaturaprestador   = $request->assinaturaprestador ?: $escala->assinaturaprestador;
+        $escala->assinaturaresponsavel = $request->assinaturaresponsavel ?: $escala->assinaturaresponsavel;
         $escala->observacao            = $request->observacao;
         $escala->status                = $request->status;
         $escala->folga                 = $request->folga;
@@ -245,6 +261,8 @@ class EscalasController extends Controller
         $escala->valorhoranoturno      = $request->valorhoranoturno;
         $escala->valoradicional        = $request->valoradicional;
         $escala->motivoadicional       = $request->motivoadicional;
+        $escala->valordesconto         = $request->valordesconto;
+        $escala->motivodesconto        = $request->motivodesconto;
         $escala->save();
     }
 
@@ -291,6 +309,7 @@ class EscalasController extends Controller
                 }]);
             }
         ])
+            ->where('ativo', true)
             ->where('prestador_id', $prestador->id)
             ->where(
                 'datasaida',
@@ -324,8 +343,8 @@ class EscalasController extends Controller
         // return Escala::With(['servico', 'prestador.formacoes', 'pontos', 'prestador.pessoa.conselhos', 'ordemservico.orcamento.homecare.paciente.pessoa'])->where('ativo', true)->where('dataentrada', date('Y-m-d'))->get();
         return Escala::With([
             'cuidados',
-            // 'monitoramentos',
-            // 'relatorios',
+            'monitoramentos',
+            'relatorios',
             'servico',
             'prestador.formacoes',
             'pontos',
@@ -339,7 +358,8 @@ class EscalasController extends Controller
         // return DB::table('escalas')->join('pontos', 'pontos.escala_id', '=', 'escalas.id')->where('ativo', true)->limit(1)->get();
     }
 
-    public function buscaPontosPorPeriodoEPaciente(string $paciente, string $data1, string $data2 ){
+    public function buscaPontosPorPeriodoEPaciente(string $paciente, string $data1, string $data2)
+    {
         return Escala::With([
             'ordemservico' => function ($query) {
                 $query->select('id', 'orcamento_id');
@@ -356,17 +376,17 @@ class EscalasController extends Controller
                     }]);
                 }]);
             },
-            'servico' => function ($query){
+            'servico' => function ($query) {
                 $query->select('id', 'descricao');
             },
-            'prestador' => function ($query){
+            'prestador' => function ($query) {
                 $query->select('id', 'pessoa_id');
-                $query->with(['formacoes' => function ($query){
+                $query->with(['formacoes' => function ($query) {
                     $query->select('prestador_id', 'descricao');
                 }]);
-                $query->with(['pessoa' => function ($query){
+                $query->with(['pessoa' => function ($query) {
                     $query->select('id', 'nome');
-                    $query->with(['conselhos' => function ($query){
+                    $query->with(['conselhos' => function ($query) {
                         $query->select('pessoa_id', 'instituicao', 'uf', 'numero');
                     }]);
                 }]);
@@ -374,12 +394,12 @@ class EscalasController extends Controller
             'pontos',
             'cuidados',
         ])->where('ativo', true)
-        ->where('ordemservico_id', $paciente)
-        ->where('empresa_id', 1)
-        ->where('dataentrada', '>=', $data1)
-        ->where('dataentrada', '<=', $data2)
-        ->get([
-            'id', 'dataentrada', 'servico_id','periodo','tipo', 'prestador_id', 'status'
-        ]);
+            ->where('ordemservico_id', $paciente)
+            ->where('empresa_id', 1)
+            ->where('dataentrada', '>=', $data1)
+            ->where('dataentrada', '<=', $data2)
+            ->get([
+                'id', 'dataentrada', 'servico_id', 'periodo', 'tipo', 'prestador_id', 'status'
+            ]);
     }
 }

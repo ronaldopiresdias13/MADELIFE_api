@@ -1,7 +1,7 @@
 <?php
 
-use App\Pessoa;
-use App\PessoaEmail;
+use App\Models\Pessoa;
+use App\Models\PessoaEmail;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

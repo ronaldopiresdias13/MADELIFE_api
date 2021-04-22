@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Cnab;
-use App\Cnabdetalhea;
-use App\Cnabdetalheb;
-use App\Cnabheaderarquivo;
-use App\Cnabheaderarquivoheaderlote;
-use App\Cnabheaderarquivotrailerlote;
-use App\Cnabheaderlote;
-use App\Cnabheaderlotedetalhea;
-use App\Cnabheaderlotedetalheb;
-use App\Cnabsantander;
-use App\Cnabtrailerarquivo;
-use App\Cnabtrailerlote;
+use App\Models\Cnab;
+use App\Models\Cnabdetalhea;
+use App\Models\Cnabdetalheb;
+use App\Models\Cnabheaderarquivo;
+use App\Models\Cnabheaderarquivoheaderlote;
+use App\Models\Cnabheaderarquivotrailerlote;
+use App\Models\Cnabheaderlote;
+use App\Models\Cnabheaderlotedetalhea;
+use App\Models\Cnabheaderlotedetalheb;
+use App\Models\Cnabsantander;
+use App\Models\Cnabtrailerarquivo;
+use App\Models\Cnabtrailerlote;
 use App\Http\Controllers\Controller;
-use App\Pagamentopessoa;
+use App\Models\Pagamentopessoa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -490,7 +490,7 @@ class CnabsController extends Controller
     {
         $caminho = '\\cnabs\\' . $cnab->id . '\\' . $tipo . '.txt';
 
-        $cnabsantander = Cnabsantander::firstWhere('tipo', $tipo);
+        $cnabsantander = Cnabsantander::where('tipo', $tipo)->where('cnab_id', $cnab->id)->first();
 
         $header = $cnabsantander->cnabheaderarquivo->codigobanco .
             $cnabsantander->cnabheaderarquivo->loteservico .
@@ -663,7 +663,6 @@ class CnabsController extends Controller
 
         return response()->json($response);
     }
-
     /**
      * Update the specified resource in storage.
      *

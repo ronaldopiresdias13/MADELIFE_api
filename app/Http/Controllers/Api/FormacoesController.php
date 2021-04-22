@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Formacao;
+use App\Models\Formacao;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -185,7 +185,6 @@ class FormacoesController extends Controller
      */
     public function destroy(Formacao $formacao)
     {
-        $formacao->ativo = false;
-        $formacao->save();
+        $formacao->delete();
     }
 }

@@ -1,5 +1,22 @@
 <?php
 
+use App\Http\Controllers\Api\AgendamentosController;
+use App\Http\Controllers\Api\EmpresaPrestadorController as ApiEmpresaPrestadorController;
+use App\Http\Controllers\Api\Novo\Web\EscalasController;
+use App\Http\Controllers\Api\Novo\Web\OrdemservicoAcessoController;
+use App\Http\Controllers\Api\Novo\Web\PrestadoresController;
+use App\Http\Controllers\Api\Novo\Web\TranscricaoProdutoController;
+use App\Http\Controllers\Api\Web\Compras\ProdutoController;
+use App\Http\Controllers\Api\Web\DepartamentoPessoal\PagamentoexternosController;
+use App\Http\Controllers\Api\Web\Financeiro\PagamentosCnabController;
+use App\Http\Controllers\Api\Web\GestaoOrcamentaria\PacotesController;
+use App\Http\Controllers\Web\Contratos\ContratosController;
+use App\Http\Controllers\Web\Escalas\EscalasController as EscalasEscalasController;
+use App\Http\Controllers\Web\Formacoes\FormacoesController;
+use App\Http\Controllers\Web\Orcs\OrcsController;
+use App\Http\Controllers\Web\Ordemservicos\OrdemservicosController;
+use App\Http\Controllers\Web\PagamentointernosController;
+use App\Http\Controllers\Web\Prestadores\PrestadoresController as PrestadoresPrestadoresController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,67 +30,207 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//-------------- Rota de Testes --------------//
-Route::get("/teste", "Teste@teste");
-
-/*-------------- Rota de Logs por email --------------*/
-Route::post("sendMailLog", "LogsController@sendMailLog");
-
-/*-------------- Auth Web --------------*/
-Route::group([
-    'prefix' => 'auth'
-], function () {
-    Route::post('login', 'Auth\AuthController@login')->name('login');
-    Route::post('register', 'Auth\AuthController@register');
-    Route::post('reset', 'Auth\AuthController@reset');
-    Route::post('change', 'Auth\AuthController@change');
-
-    /*------------- Rotas Utilizando Token -------------*/
-    Route::group(['middleware' => 'auth:api'], function () {
-        Route::get('logout', 'Auth\AuthController@logout');
-        Route::get('user', 'Auth\AuthController@user');
-    });
-});
-
-/*-------------- Auth App --------------*/
-Route::group([
-    'prefix' => 'app/auth'
-], function () {
-    Route::post('login', 'Api\App\Auth\AuthController@login');
-    // Route::post('register', 'Auth\AuthController@register');
-    Route::post('reset', 'Api\App\Auth\AuthController@reset');
-    
-    /* ------------- Rotas Utilizando Token -------------*/
-    Route::group(['middleware' => 'auth:api'], function () {
-        Route::post('change', 'Api\App\Auth\AuthController@change');
-        Route::get('logout', 'Api\App\Auth\AuthController@logout');
-        // Route::get('user', 'Auth\AuthController@user');
-    });
-});
-
 /*------------- Rotas Utilizando Token -------------*/
+
 Route::group(['middleware' => 'auth:api'], function () {
-    Route::get('getEscalasMesApp', 'Api\EscalasController@getEscalasMesApp');    // Mudar App e Apagar essa rota
-
-    /*----------------- App -----------------*/
-    Route::prefix('app')->group(function () {
-        Route::get('escalas/listEscalasHoje', 'Api\App\EscalasController@listEscalasHoje');
-        Route::get('escalas/listEscalasMes', 'Api\App\EscalasController@listEscalasMes');
-        Route::get('escalas/getEscalaId/{escala}', 'Api\App\EscalasController@getEscalaId');
-
-        Route::get('formacoes/listFormacoes', 'Api\App\FormacoesController@listFormacoes');
-
-        Route::post('prestadorFormacao/newPrestadorFormacao', 'Api\App\PrestadorFormacaoController@newPrestadorFormacao');
-
-        Route::get('pessoas/getPessoaPerfil', 'Api\App\PessoasController@getPessoaPerfil');
-    });
 
     /*----------------- Web -----------------*/
+    Route::prefix('web')->group(function () {
+        Route::prefix('home')->group(function () {
+            Route::get('dashboard/get_dados', 'Api\Web\Home\DashboardController@get_dados');
+        });
+        Route::prefix('areaClinica')->group(function () {
+            Route::get('dashboard/relatorioDiario', 'Api\Web\AreaClinica\DashboardController@relatorioDiario');
+            Route::get('dashboard/relatorioProdutividade', 'Api\Web\AreaClinica\DashboardController@relatorioProdutividade');
+            Route::get('dashboard/relatorioMedicamento', 'Api\Web\AreaClinica\DashboardController@relatorioMedicamentos');
+            Route::get('dashboard/dashboardTotalProfissionaisEscalasPorPeriodo', 'Api\Web\AreaClinica\DashboardController@dashboardTotalProfissionaisEscalasPorPeriodo');
+            Route::get('dashboard/dashboardTotalPacientesAtivosPorPeriodo', 'Api\Web\AreaClinica\DashboardController@dashboardTotalPacientesAtivosPorPeriodo');
+            Route::get('dashboard/dashboarTotalContratosDesativadosPorPeriodo', 'Api\Web\AreaClinica\DashboardController@dashboarTotalContratosDesativadosPorPeriodo');
+            Route::get('dashboard/dashboardTotalPacientesServicosPorPeriodo', 'Api\Web\AreaClinica\DashboardController@dashboardTotalPacientesServicosPorPeriodo');
+            Route::get('dashboard/dashboardTotalRelatoriosPorPeriodo', 'Api\Web\AreaClinica\DashboardController@dashboardTotalRelatoriosPorPeriodo');
+            Route::get('dashboard/dashboardTotalProfissionaisCategoriaPorPeriodo', 'Api\Web\AreaClinica\DashboardController@dashboardTotalProfissionaisCategoriaPorPeriodo');
+            Route::get('dashboard/dashboarTotalPacientesPorSupervisor', 'Api\Web\AreaClinica\DashboardController@dashboarTotalPacientesPorSupervisor');
+            Route::get('dashboard/dashboarTotalPacientesPorConvenio', 'Api\Web\AreaClinica\DashboardController@dashboarTotalPacientesPorConvenio');
+            Route::get('dashboard/dashboarPorIdadePacientes', 'Api\Web\AreaClinica\DashboardController@dashboarPorIdadePacientes');
+            Route::get('dashboard/dashboarCidadesMaisAtendidas', 'Api\Web\AreaClinica\DashboardController@dashboarCidadesMaisAtendidas');
+            Route::get('dashboard/dashboarFaltasdeProfissionaisPorOperadora', 'Api\Web\AreaClinica\DashboardController@dashboarFaltasdeProfissionaisPorOperadora');
+            Route::get('dashboard/dashboarFaltasdeProfissionaisPorEspecialidade', 'Api\Web\AreaClinica\DashboardController@dashboarFaltasdeProfissionaisPorEspecialidade');
+            Route::get('dashboard/dashboarFaltasdeProfissionaisPorCidades', 'Api\Web\AreaClinica\DashboardController@dashboarFaltasdeProfissionaisPorCidades');
+            Route::get('dashboard/dashboarTotalCheckinCheckout', 'Api\Web\AreaClinica\DashboardController@dashboarTotalCheckinCheckout');
+            Route::get('dashboard/dashboardTotalMedicamentos', 'Api\Web\AreaClinica\DashboardController@dashboardTotalMedicamentos');
+            Route::get('dashboard/dashboardTotalAtividades', 'Api\Web\AreaClinica\DashboardController@dashboardTotalAtividades');
+
+            Route::get('cuidados', 'Api\Web\AreaClinica\CuidadosController@index');
+            Route::post('cuidados', 'Api\Web\AreaClinica\CuidadosController@store');
+            Route::get('cuidados/{cuidado}', 'Api\Web\AreaClinica\CuidadosController@show');
+            Route::put('cuidados/{cuidado}', 'Api\Web\AreaClinica\CuidadosController@update');
+            Route::delete('cuidados/{cuidado}', 'Api\Web\AreaClinica\CuidadosController@destroy');
+            Route::get('cuidados/count/{empresa}', 'Api\Web\AreaClinica\CuidadosController@quantidadecuidados');
+            // Route::get('cuidados/empresa/{empresa}', 'Api\Web\AreaClinica\CuidadosController@indexbyempresa');
+        });
+        Route::prefix('compras')->group(function () {
+            Route::get('fornecedores', 'Api\Web\Compras\FornecedoresController@getAllByEmpresaId');
+            Route::post('fornecedores', 'Api\Web\Compras\FornecedoresController@store');
+            Route::get('fornecedores/{fornecedor}', 'Api\Web\Compras\FornecedoresController@show');
+            Route::put('fornecedores/{fornecedor}', 'Api\Web\Compras\FornecedoresController@update');
+            Route::delete('fornecedores/{fornecedor}', 'Api\Web\Compras\FornecedoresController@destroy');
+
+            Route::get('cotacoes', 'Api\Web\Compras\CotacoesController@getAllByEmpresaId');
+            Route::post('cotacoes', 'Api\Web\Compras\CotacoesController@store');
+            Route::get('cotacoes/{cotacao}', 'Api\Web\Compras\CotacoesController@show');
+            Route::put('cotacoes/{cotacao}', 'Api\Web\Compras\CotacoesController@update');
+            Route::delete('cotacoes/{cotacao}', 'Api\Web\Compras\CotacoesController@destroy');
+        });
+
+        Route::prefix('gestaoOrcamentaria')->group(function () {
+            Route::get('clientes/list', 'Api\Web\GestaoOrcamentaria\ClientesController@index');
+            Route::get('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@show');
+            Route::post('clientes', 'Api\Web\GestaoOrcamentaria\ClientesController@store');
+            Route::put('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@update');
+            Route::delete('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@destroy');
+
+            Route::get('dashboard/dashboarContratosPorPoriodo', 'Api\Web\GestaoOrcamentaria\DashboardController@dashboarContratosPorPoriodo');
+
+            Route::get('orcamentos/list/{empresa}', 'Api\Web\GestaoOrcamentaria\OrcamentosController@index');
+            Route::get('orcamentos/{orcamento}', 'Api\Web\GestaoOrcamentaria\OrcamentosController@show');
+            Route::post('orcamentos', 'Api\Web\GestaoOrcamentaria\OrcamentosController@store');
+            Route::put('orcamentos/{orcamento}', 'Api\Web\GestaoOrcamentaria\OrcamentosController@update');
+            Route::delete('orcamentos/{orcamento}', 'Api\Web\GestaoOrcamentaria\OrcamentosController@destroy');
+            Route::post('orcamentos/enviarOrcamentoPorEmail', 'Api\Web\GestaoOrcamentaria\OrcamentosController@enviarOrcamentoPorEmail');
+
+            Route::get('contratos/dashboardGroupByMotivoDesativados', 'Api\Web\OrdemservicosController@dashboardGroupByMotivoDesativados');
+            Route::get('contratos/dashboardGroupByStatusAtivadosDesativados', 'Api\Web\OrdemservicosController@dashboardGroupByStatusAtivadosDesativados');
+
+            Route::get('pacientes/list', 'Api\Web\PacientesController@index');
+            Route::get('pacientes/{paciente}', 'Api\Web\PacientesController@show');
+            Route::post('pacientes', 'Api\Web\PacientesController@store');
+            Route::put('pacientes/{paciente}', 'Api\Web\PacientesController@update');
+            Route::delete('pacientes/{paciente}', 'Api\Web\PacientesController@destroy');
+
+            Route::get('responsaveis/list', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@index');
+            Route::get('responsaveis/{responsavel}', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@show');
+            Route::post('responsaveis', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@store');
+            Route::put('responsaveis/{responsavel}', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@update');
+            Route::delete('responsaveis/{responsavel}', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@destroy');
+
+
+            Route::get('servicos/list', 'Api\Web\GestaoOrcamentaria\ServicosController@index');
+            Route::get('servicos/listServicosFormacoes', 'Api\Web\GestaoOrcamentaria\ServicosController@listServicosFormacoes');
+            Route::post('servicos', 'Api\Web\GestaoOrcamentaria\ServicosController@store');
+            Route::get('servicos/{servico}', 'Api\Web\GestaoOrcamentaria\ServicosController@show');
+            Route::put('servicos/{servico}', 'Api\Web\GestaoOrcamentaria\ServicosController@update');
+            Route::delete('servicos/{servico}', 'Api\Web\GestaoOrcamentaria\ServicosController@destroy');
+        });
+
+        Route::prefix('departamentoPessoal')->group(function () {
+            Route::get('pontos/pontosPrestadores', 'Api\Web\DepartamentoPessoal\PontosController@pontosPrestadores');
+            Route::post('escalas/updateServicoOfEscala/{escala}', 'Api\Web\DepartamentoPessoal\EscalasController@updateServicoOfEscala');
+            Route::get('buscarPagamentosPessoaPorPeriodoEmpresaId', 'Api\Web\DepartamentoPessoal\PagamentopessoasController@buscarPagamentosPessoaPorPeriodoEmpresaId');
+            Route::get('buscalistadeconselhospodidpessoa/{pessoa}', 'Api\Web\PrestadoresController@buscalistadeconselhospodidpessoa');
+            Route::get('buscalistadebancospodidpessoa/{pessoa}', 'Api\Web\PrestadoresController@buscalistadebancospodidpessoa');
+            Route::post('salvarconselho', 'Api\Web\PrestadoresController@salvarconselho');
+            Route::post('salvarbanco', 'Api\Web\PrestadoresController@salvarbanco');
+            Route::delete('deletarconselho/{conselho}', 'Api\Web\PrestadoresController@deletarconselho');
+            Route::delete('deletarbanco/{dadosbancario}', 'Api\Web\PrestadoresController@deletarbanco');
+        });
+
+        Route::prefix('financeiro')->group(function () {
+            Route::get('categorianaturezas', 'Api\Web\Financeiro\CategorianaturezasController@index');
+            Route::post('categorianaturezas', 'Api\Web\Financeiro\CategorianaturezasController@store');
+            Route::get('categorianaturezas/{categorianatureza}', 'Api\Web\Financeiro\CategorianaturezasController@show');
+            Route::put('categorianaturezas/{categorianatureza}', 'Api\Web\Financeiro\CategorianaturezasController@update');
+            Route::delete('categorianaturezas/{categorianatureza}', 'Api\Web\Financeiro\CategorianaturezasController@destroy');
+
+            Route::get('naturezas', 'Api\Web\Financeiro\NaturezasController@index');
+            Route::post('naturezas', 'Api\Web\Financeiro\NaturezasController@store');
+            Route::get('naturezas/{natureza}', 'Api\Web\Financeiro\NaturezasController@show');
+            Route::put('naturezas/{natureza}', 'Api\Web\Financeiro\NaturezasController@update');
+            Route::delete('naturezas/{natureza}', 'Api\Web\Financeiro\NaturezasController@destroy');
+        });
+        Route::prefix('recursosHumanos')->group(function () {
+            Route::post('profissionais/novoProfissional', 'Api\Web\RecursosHumanos\ProfissionaisController@novoProfissional');
+            Route::get('dashboard/dashboardProfissionaisExternos', 'Api\Web\RecursosHumanos\DashboardController@dashboardProfissionaisExternos');
+            Route::get('dashboard/dashboardMapaPacientesPorEspecialidade', 'Api\Web\RecursosHumanos\DashboardController@dashboardMapaPacientesPorEspecialidade');
+
+            Route::get('beneficios', 'Api\Web\RecursosHumanos\BeneficiosController@index');
+            Route::post('beneficios', 'Api\Web\RecursosHumanos\BeneficiosController@store');
+            Route::get('beneficios/{beneficio}', 'Api\Web\RecursosHumanos\BeneficiosController@show');
+            Route::put('beneficios/{beneficio}', 'Api\Web\RecursosHumanos\BeneficiosController@update');
+            Route::delete('beneficios/{beneficio}', 'Api\Web\RecursosHumanos\BeneficiosController@destroy');
+
+            Route::get('cargos', 'Api\Web\RecursosHumanos\CargosController@index');
+            Route::post('cargos', 'Api\Web\RecursosHumanos\CargosController@store');
+            Route::get('cargos/{cargo}', 'Api\Web\RecursosHumanos\CargosController@show');
+            Route::put('cargos/{cargo}', 'Api\Web\RecursosHumanos\CargosController@update');
+            Route::delete('cargos/{cargo}', 'Api\Web\RecursosHumanos\CargosController@destroy');
+
+            Route::get('convenios', 'Api\Web\RecursosHumanos\ConveniosController@index');
+            Route::post('convenios', 'Api\Web\RecursosHumanos\ConveniosController@store');
+            Route::get('convenios/{convenio}', 'Api\Web\RecursosHumanos\ConveniosController@show');
+            Route::put('convenios/{convenio}', 'Api\Web\RecursosHumanos\ConveniosController@update');
+            Route::delete('convenios/{convenio}', 'Api\Web\RecursosHumanos\ConveniosController@destroy');
+
+            Route::get('profissionais', 'Api\Web\RecursosHumanos\ProfissionaisController@index');
+            // Route::post('profissionais', 'Api\Web\RecursosHumanos\ProfissionaisController@store');
+            Route::get('profissionais/{profissional}', 'Api\Web\RecursosHumanos\ProfissionaisController@show');
+            Route::put('profissionais/{profissional}', 'Api\Web\RecursosHumanos\ProfissionaisController@update');
+            Route::delete('profissionais/{profissional}', 'Api\Web\RecursosHumanos\ProfissionaisController@destroy');
+
+            Route::get('setores', 'Api\Web\RecursosHumanos\SetoresController@index');
+            Route::post('setores', 'Api\Web\RecursosHumanos\SetoresController@store');
+            Route::get('setores/{setor}', 'Api\Web\RecursosHumanos\SetoresController@show');
+            Route::put('setores/{setor}', 'Api\Web\RecursosHumanos\SetoresController@update');
+            Route::delete('setores/{setor}', 'Api\Web\RecursosHumanos\SetoresController@destroy');
+        });
+        Route::prefix('estoque')->group(function () {
+            Route::get('movimentacaoEstoque', 'Api\Web\Estoque\ProdutosController@movimentacaoEstoque');
+        });
+
+        // novoProfissional
+
+        Route::prefix('responsavel')->group(function () {
+            Route::get('escalas/listEscalasByIdResponsavel', 'Api\Web\Responsavel\EscalasController@listEscalasByIdResponsavel');
+            Route::get('escalas/listEscalasByIdOrdemServico/{ordemservico}', 'Api\Web\Responsavel\EscalasController@listEscalasByIdOrdemServico');
+            Route::post('escalas/assinar', 'Api\Web\Responsavel\EscalasController@assinar');
+            Route::get('escalas/dashboard', 'Api\Web\Responsavel\EscalasController@dashboard');
+            Route::get('escalas/dashboardPegarTodosOsRegistrosPorIdDaEmpresa', 'Api\Web\Responsavel\EscalasController@dashboardPegarTodosOsRegistrosPorIdDaEmpresa');
+            Route::get('dashboard/relatorioDiario', 'Api\Web\Responsavel\DashboardController@relatorioDiario');
+            Route::get('dashboard/relatorioProdutividade', 'Api\Web\Responsavel\DashboardController@relatorioProdutividade');
+        });
+        Route::get('buscaProfissionaisInternosPagamento', 'Api\Web\RecursosHumanos\ProfissionaisController@buscaProfissionaisInternosPagamento');
+        Route::get('meu-perfil', 'Api\Web\RecursosHumanos\ProfissionaisController@meuperfil');
+        Route::put('meu-perfil/atualizarFotoPerfil', 'Api\Web\RecursosHumanos\ProfissionaisController@atualizarFotoPerfil');
+
+        Route::get('categoriadocumentos/listCategorias', 'Api\Web\CategoriadocumentosController@listCategorias');
+        Route::post('categoriadocumentos/newCategoria', 'Api\Web\CategoriadocumentosController@newCategoria');
+        Route::put('categoriadocumentos/update/{categoriadocumento}', 'Api\Web\CategoriadocumentosController@update');
+        Route::delete('categoriadocumentos/delete/{categoriadocumento}', 'Api\Web\CategoriadocumentosController@delete');
+
+        Route::get('documentos/listDocumentosByEmpresa', 'Api\Web\DocumentosController@listDocumentosByEmpresa');
+        Route::get('documentos/listDocumentosByConvenio', 'Api\Web\DocumentosController@listDocumentosByConvenio');
+        Route::get('documentos/listDocumentosByResponsavel', 'Api\Web\DocumentosController@listDocumentosByResponsavel');
+        Route::get('documentos/listDocumentos', 'Api\Web\DocumentosController@listDocumentos');
+        Route::post('documentos/newDocumento', 'Api\Web\DocumentosController@newDocumento');
+        Route::get('documentos/download/{documento}', 'Api\Web\DocumentosController@download');
+        Route::delete('documentos/delete/{documento}', 'Api\Web\DocumentosController@delete');
+
+        Route::get('escalas/dashboard', 'Api\Web\EscalasController@dashboard');
+
+        Route::get('prestadores/listNomePrestadores', 'Api\Web\PrestadoresController@listNomePrestadores');
+        Route::get('prestadores/listPrestadoresComFormacoes', 'Api\Web\PrestadoresController@listPrestadoresComFormacoes');
+
+        Route::get('pacientes/listNomePacientes', 'Api\Web\PacientesController@listNomePacientes');
+
+        Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\Web\OrdemservicosController@listaOrdemServicosEscalas');
+    });
+
+
     Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\OrdemservicosController@listaOrdemServicosEscalas');
     Route::get('transcricoes/listaTranscricoes', 'Api\TranscricoesController@listaTranscricoes');
 });
 
 // Route::get('getEscalasHoje', 'Api\EscalasController@getEscalasHoje')->middleware('auth:api');
+Route::get('prestadores/atribuicao', 'Api\Web\PrestadoresController@buscaprestadoresporfiltro'); // MUDAR AQUII DEPOIS
 
 Route::get('acaomedicamentos', 'Api\AcaomedicamentosController@index');
 Route::post('acaomedicamentos', 'Api\AcaomedicamentosController@store');
@@ -87,35 +244,15 @@ Route::get('acessos/{acesso}', 'Api\AcessosController@show');
 Route::put('acessos/{acesso}', 'Api\AcessosController@update');
 Route::delete('acessos/{acesso}', 'Api\AcessosController@destroy');
 
-Route::get('agendamentos', 'Api\AgendamentosController@index');
-Route::post('agendamentos', 'Api\AgendamentosController@store');
-Route::get('agendamentos/{agendamento}', 'Api\AgendamentosController@show');
-Route::put('agendamentos/{agendamento}', 'Api\AgendamentosController@update');
-Route::delete('agendamentos/{agendamento}', 'Api\AgendamentosController@destroy');
-
 Route::get('bancos', 'Api\BancosController@index');
 Route::post('bancos', 'Api\BancosController@store');
 Route::get('bancos/{banco}', 'Api\BancosController@show');
 Route::put('bancos/{banco}', 'Api\BancosController@update');
 Route::delete('bancos/{banco}', 'Api\BancosController@destroy');
 
-Route::get('beneficios', 'Api\BeneficiosController@index');
-Route::post('beneficios', 'Api\BeneficiosController@store');
-Route::get('beneficios/{beneficio}', 'Api\BeneficiosController@show');
-Route::put('beneficios/{beneficio}', 'Api\BeneficiosController@update');
-Route::delete('beneficios/{beneficio}', 'Api\BeneficiosController@destroy');
 
-Route::get('cargos', 'Api\CargosController@index');
-Route::post('cargos', 'Api\CargosController@store');
-Route::get('cargos/{cargo}', 'Api\CargosController@show');
-Route::put('cargos/{cargo}', 'Api\CargosController@update');
-Route::delete('cargos/{cargo}', 'Api\CargosController@destroy');
 
-Route::get('categorianaturezas', 'Api\CategorianaturezasController@index');
-Route::post('categorianaturezas', 'Api\CategorianaturezasController@store');
-Route::get('categorianaturezas/{categorianatureza}', 'Api\CategorianaturezasController@show');
-Route::put('categorianaturezas/{categorianatureza}', 'Api\CategorianaturezasController@update');
-Route::delete('categorianaturezas/{categorianatureza}', 'Api\CategorianaturezasController@destroy');
+
 
 Route::get('cidades', 'Api\CidadesController@index');
 Route::post('cidades', 'Api\CidadesController@store');
@@ -129,18 +266,23 @@ Route::get('certificadoprestadores/{certificadoprestador}', 'Api\Certificadopres
 Route::put('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@update');
 Route::delete('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@destroy');
 
-Route::get('clientes', 'Api\ClientesController@index');
-Route::post('clientes', 'Api\ClientesController@store');
-Route::get('clientes/{cliente}', 'Api\ClientesController@show');
-Route::put('clientes/{cliente}', 'Api\ClientesController@update');
-Route::delete('clientes/{cliente}', 'Api\ClientesController@destroy');
-// Route::get('meuspassientes/{cliente}', 'Api\ClientesController@meuspassientes'); // Custon
+// Route::get('clientes', 'Api\ClientesController@index');
+// Route::post('clientes', 'Api\ClientesController@store');
+// Route::get('clientes/{cliente}', 'Api\ClientesController@show');
+// Route::put('clientes/{cliente}', 'Api\ClientesController@update');
+// Route::delete('clientes/{cliente}', 'Api\ClientesController@destroy');
 
 Route::get('cnabs', 'Api\CnabsController@index');
 Route::post('cnabs', 'Api\CnabsController@store');
 Route::get('cnabs/{cnab}/{tipo}', 'Api\CnabsController@show');
 Route::put('cnabs/{cnab}', 'Api\CnabsController@update');
 Route::delete('cnabs/{cnab}', 'Api\CnabsController@destroy');
+
+// Route::get('comentariosmedicao', 'Api\Web\ComentariomedicaoController@index');
+Route::post('comentariosmedicao', 'Api\Web\ComentariomedicaoController@store');
+Route::get('comentariosmedicao/buscaComentariosPorIdMedicao/{medicao}', 'Api\Web\ComentariomedicaoController@buscaComentariosPorIdMedicao');
+// Route::put('comentariosmedicao/{medicao}', 'Api\ComentariomedicaoController@update');
+//Route::delete('comentariosmedicao/{medicao}', 'Api\ComentariomedicaoController@destroy');
 
 Route::get('conselhos', 'Api\ConselhosController@index');
 Route::post('conselhos', 'Api\ConselhosController@store');
@@ -160,17 +302,8 @@ Route::get('contasbancarias/{contasbancaria}', 'Api\ContasbancariasController@sh
 Route::put('contasbancarias/{contasbancaria}', 'Api\ContasbancariasController@update');
 Route::delete('contasbancarias/{contasbancaria}', 'Api\ContasbancariasController@destroy');
 
-Route::get('convenios', 'Api\ConveniosController@index');
-Route::post('convenios', 'Api\ConveniosController@store');
-Route::get('convenios/{convenio}', 'Api\ConveniosController@show');
-Route::put('convenios/{convenio}', 'Api\ConveniosController@update');
-Route::delete('convenios/{convenio}', 'Api\ConveniosController@destroy');
 
-Route::get('cotacoes', 'Api\CotacoesController@index');
-Route::post('cotacoes', 'Api\CotacoesController@store');
-Route::get('cotacoes/{cotacao}', 'Api\CotacoesController@show');
-Route::put('cotacoes/{cotacao}', 'Api\CotacoesController@update');
-Route::delete('cotacoes/{cotacao}', 'Api\CotacoesController@destroy');
+
 
 Route::get('cotacaoproduto', 'Api\CotacaoProdutoController@index');
 Route::post('cotacaoproduto', 'Api\CotacaoProdutoController@store');
@@ -178,13 +311,6 @@ Route::get('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoProdutoController@show
 Route::put('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoProdutoController@update');
 Route::delete('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoProdutoController@destroy');
 
-Route::get('cuidados', 'Api\CuidadosController@index');
-Route::post('cuidados', 'Api\CuidadosController@store');
-Route::get('cuidados/{cuidado}', 'Api\CuidadosController@show');
-Route::put('cuidados/{cuidado}', 'Api\CuidadosController@update');
-Route::delete('cuidados/{cuidado}', 'Api\CuidadosController@destroy');
-Route::get('cuidados/count/{empresa}', 'Api\CuidadosController@quantidadecuidados');
-Route::get('cuidados/empresa/{empresa}', 'Api\CuidadosController@indexbyempresa');
 
 Route::get('cuidadoEscalas', 'Api\CuidadoEscalasController@index');
 Route::post('cuidadoEscalas', 'Api\CuidadoEscalasController@store');
@@ -218,6 +344,7 @@ Route::get('diagnosticossecundarios/{diagnosticossecundario}', 'Api\Diagnosticos
 Route::put('diagnosticossecundarios/{diagnosticossecundario}', 'Api\DiagnosticossecundariosController@update');
 Route::delete('diagnosticossecundarios/{diagnosticossecundario}', 'Api\DiagnosticossecundariosController@destroy');
 
+
 Route::get('emails', 'Api\EmailsController@index');
 Route::post('emails', 'Api\EmailsController@store');
 Route::get('emails/{email}', 'Api\EmailsController@show');
@@ -247,29 +374,30 @@ Route::delete('enderecos/{endereco}', 'Api\EnderecosController@destroy');
 
 Route::get('entradas', 'Api\EntradasController@index');
 Route::post('entradas', 'Api\EntradasController@store');
+Route::post('entradas/cadastrarFornecedor', 'Api\EntradasController@cadastrarFornecedor');
 Route::get('entradas/{entrada}', 'Api\EntradasController@show');
 Route::put('entradas/{entrada}', 'Api\EntradasController@update');
 Route::delete('entradas/{entrada}', 'Api\EntradasController@destroy');
 
 Route::get('escalas', 'Api\EscalasController@index');
-Route::post('escalas', 'Api\EscalasController@store');
 Route::get('escalas/{escala}', 'Api\EscalasController@show');
+
+//Route::group(['middleware' => 'auth:api'], function () {
+Route::post('escalas', 'Api\EscalasController@store');
 Route::put('escalas/{escala}', 'Api\EscalasController@update');
 Route::delete('escalas/{escala}', 'Api\EscalasController@destroy');
+//});
+
 Route::get('escalas/empresa/{empresa}/dia', 'Api\EscalasController@buscaescalasdodia');
 Route::get('escalas/paciente/{paciente}/data1/{data1}/data2/{data2}', 'Api\EscalasController@buscaPontosPorPeriodoEPaciente');
 
-Route::get('formacoes', 'Api\FormacoesController@index');
+// Route::get('formacoes', 'Api\FormacoesController@index');
 Route::post('formacoes', 'Api\FormacoesController@store');
 Route::get('formacoes/{formacao}', 'Api\FormacoesController@show');
 Route::put('formacoes/{formacao}', 'Api\FormacoesController@update');
 Route::delete('formacoes/{formacao}', 'Api\FormacoesController@destroy');
 
-Route::get('fornecedores', 'Api\FornecedoresController@index');
-Route::post('fornecedores', 'Api\FornecedoresController@store');
-Route::get('fornecedores/{fornecedor}', 'Api\FornecedoresController@show');
-Route::put('fornecedores/{fornecedor}', 'Api\FornecedoresController@update');
-Route::delete('fornecedores/{fornecedor}', 'Api\FornecedoresController@destroy');
+
 
 Route::get('grupocuidados', 'Api\GrupocuidadosController@index');
 Route::post('grupocuidados', 'Api\GrupocuidadosController@store');
@@ -319,11 +447,6 @@ Route::get('monitoramentoescalas/{monitoramentoescala}', 'Api\Monitoramentoescal
 Route::put('monitoramentoescalas/{monitoramentoescala}', 'Api\MonitoramentoescalasController@update');
 Route::delete('monitoramentoescalas/{monitoramentoescala}', 'Api\MonitoramentoescalasController@destroy');
 
-Route::get('naturezas', 'Api\NaturezasController@index');
-Route::post('naturezas', 'Api\NaturezasController@store');
-Route::get('naturezas/{natureza}', 'Api\NaturezasController@show');
-Route::put('naturezas/{natureza}', 'Api\NaturezasController@update');
-Route::delete('naturezas/{natureza}', 'Api\NaturezasController@destroy');
 
 Route::get('orcamentos', 'Api\OrcamentosController@index');
 Route::post('orcamentos', 'Api\OrcamentosController@store');
@@ -346,9 +469,9 @@ Route::delete('orcamentoprodutos/{orcamentoproduto}', 'Api\OrcamentoProdutosCont
 
 Route::get('orcamentoservicos', 'Api\OrcamentoServicosController@index');
 Route::post('orcamentoservicos', 'Api\OrcamentoServicosController@store');
-Route::get('orcamentoservicos/{orcamentoservico}', 'Api\OrcamentoServicosController@show');
-Route::put('orcamentoservicos/{orcamentoservico}', 'Api\OrcamentoServicosController@update');
-Route::delete('orcamentoservicos/{orcamentoservico}', 'Api\OrcamentoServicosController@destroy');
+Route::get('orcamentoservicos/{orcamentoServico}', 'Api\OrcamentoServicosController@show');
+Route::put('orcamentoservicos/{orcamentoServico}', 'Api\OrcamentoServicosController@update');
+Route::delete('orcamentoservicos/{orcamentoServico}', 'Api\OrcamentoServicosController@destroy');
 
 Route::get('ordemservicos', 'Api\OrdemservicosController@index');
 Route::post('ordemservicos', 'Api\OrdemservicosController@store');
@@ -480,11 +603,6 @@ Route::get('produtos/{produto}', 'Api\ProdutosController@show');
 Route::put('produtos/{produto}', 'Api\ProdutosController@update');
 Route::delete('produtos/{produto}', 'Api\ProdutosController@destroy');
 
-Route::get('profissionais', 'Api\ProfissionaisController@index');
-Route::post('profissionais', 'Api\ProfissionaisController@store');
-Route::get('profissionais/{profissional}', 'Api\ProfissionaisController@show');
-Route::put('profissionais/{profissional}', 'Api\ProfissionaisController@update');
-Route::delete('profissionais/{profissional}', 'Api\ProfissionaisController@destroy');
 
 Route::get('relatorios', 'Api\RelatoriosController@index');
 Route::post('relatorios', 'Api\RelatoriosController@store');
@@ -537,11 +655,6 @@ Route::put('servicos/{servico}', 'Api\ServicosController@update');
 Route::delete('servicos/{servico}', 'Api\ServicosController@destroy');
 Route::get('servicos/empresa/{empresa}', 'Api\ServicosController@indexbyempresa');
 
-Route::get('setores', 'Api\SetoresController@index');
-Route::post('setores', 'Api\SetoresController@store');
-Route::get('setores/{setor}', 'Api\SetoresController@show');
-Route::put('setores/{setor}', 'Api\SetoresController@update');
-Route::delete('setores/{setor}', 'Api\SetoresController@destroy');
 
 Route::get('telefones', 'Api\TelefonesController@index');
 Route::post('telefones', 'Api\TelefonesController@store');
@@ -566,6 +679,7 @@ Route::post('transcricoes', 'Api\TranscricoesController@store');
 Route::get('transcricoes/{transcricao}', 'Api\TranscricoesController@show');
 Route::put('transcricoes/{transcricao}', 'Api\TranscricoesController@update');
 Route::delete('transcricoes/{transcricao}', 'Api\TranscricoesController@destroy');
+Route::get('transcricoes/count/{empresa}', 'Api\TranscricoesController@quantidadetranscricoes');
 
 Route::delete('transcricaoprodutos/{transcricao_produto}', 'Api\TranscricaoProdutoController@destroy');
 
@@ -579,6 +693,7 @@ Route::get('users', 'Api\UsersController@index');
 Route::post('users', 'Api\UsersController@store');
 Route::get('users/{user}', 'Api\UsersController@show');
 Route::put('users/{user}', 'Api\UsersController@update');
+Route::put('users/{user}/updateEmail', 'Api\UsersController@updateEmail');
 Route::delete('users/{user}', 'Api\UsersController@destroy');
 
 Route::get('userAcessos', 'Api\UserAcessoController@index');
@@ -586,3 +701,140 @@ Route::post('userAcessos', 'Api\UserAcessoController@store');
 Route::get('userAcessos/{userAcesso}', 'Api\UserAcessoController@show');
 Route::put('userAcessos/{userAcesso}', 'Api\UserAcessoController@update');
 Route::delete('userAcessos/{userAcesso}', 'Api\UserAcessoController@destroy');
+
+Route::get('vendas', 'Api\VendasController@index');
+Route::post('vendas', 'Api\VendasController@store');
+Route::get('vendas/{venda}', 'Api\VendasController@show');
+Route::put('vendas/{venda}', 'Api\VendasController@update');
+Route::delete('vendas/{venda}', 'Api\VendasController@destroy');
+Route::post('vendas/cadastrarCliente', 'Api\VendasController@cadastrarCliente');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Route::get($uri, $callback);
+// Route::post($uri, $callback);
+// Route::put($uri, $callback);
+// Route::patch($uri, $callback);
+// Route::delete($uri, $callback);
+// Route::options($uri, $callback);
+
+/*------------------------------------------- Novas Rotas -------------------------------------------*/
+
+/*------------- Rotas Utilizando Token -------------*/
+Route::group(['middleware' => 'auth:api'], function () {
+    /*----------------- Web -----------------*/
+    Route::prefix('web')->group(function () {
+        Route::prefix('ordemservicoAcesso')->group(function () {
+            Route::get('listaPorOrdemservico', [OrdemservicoAcessoController::class, 'listaDeAcessosPorOrdemservico']);
+            Route::put('check/{ordemservicoAcesso}', [OrdemservicoAcessoController::class, 'checkOrdemservicoAcesso']);
+        });
+        Route::prefix('prestadores')->group(function () {
+            Route::get('listaComFiltro', [PrestadoresController::class, 'listaDePrestadoresComFiltro']);
+        });
+        Route::prefix('transcricaoProduto')->group(function () {
+            Route::get('listaNaoRealizadosComFiltro', [TranscricaoProdutoController::class, 'listaDeMedicamentosNaoRealizadosComFiltro']);
+        });
+        Route::prefix('escalas/{escala}')->group(function () {
+            Route::put('substituirPrestador', [EscalasController::class, 'substituirPrestador']);
+        });
+    });
+});
+
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::prefix('web')->group(function () {
+        Route::prefix('pagamentointerno')->group(function () {
+            Route::get('list', [PagamentointernosController::class, 'list']);
+            Route::post('create', [PagamentointernosController::class, 'create']);
+            Route::post('createlist', [PagamentointernosController::class, 'createlist']);
+        });
+        Route::prefix('pagamentoexterno')->group(function () {
+            Route::get('list', [PagamentoexternosController::class, 'list']);
+            Route::get('gerarlist', [PagamentoexternosController::class, 'gerarlist']);
+            Route::post('create', [PagamentoexternosController::class, 'create']);
+            Route::post('createlist', [PagamentoexternosController::class, 'createlist']);
+            Route::post('atualizarPagamentosExternos', [PagamentoexternosController::class, 'atualizarPagamentosExternos']);
+            Route::delete('apagarpagamento/{pagamentoexterno}', [PagamentoexternosController::class, 'apagarpagamento']);
+        });
+        Route::get('agendamentos', [AgendamentosController::class, 'index']);
+        Route::post('agendamentos', [AgendamentosController::class, 'store']);
+        Route::get('agendamentos/{agendamento}', [AgendamentosController::class, 'show']);
+        Route::put('agendamentos/{agendamento}', [AgendamentosController::class, 'update']);
+        Route::delete('agendamentos/{agendamento}', [AgendamentosController::class, 'destroy']);
+    });
+});
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::prefix('web')->group(function () {
+        Route::prefix('prestadores')->group(function () {
+            Route::get('recrutamento', [PrestadoresPrestadoresController::class, 'listRecrutamento']);
+            Route::get('empresaPrestador/listaPrestadoresPorEmpresaIdEStatus', [ApiEmpresaPrestadorController::class, 'listaPrestadoresPorEmpresaIdEStatus']);
+            Route::get('buscaprestadorexterno/{prestador}', [PrestadoresPrestadoresController::class, 'buscaprestadorexterno']);
+        });
+        Route::prefix('compras')->group(function () {
+            Route::get('produtos/getAllProdutosByIdEmpresa', [ProdutoController::class, 'getAllProdutosByIdEmpresa']);
+        });
+        Route::prefix('formacoes')->group(function () {
+            Route::get('', [FormacoesController::class, 'index']);
+            // Route::delete('{formacao}', [FormacoesController::class, 'destroy']);
+        });
+        Route::prefix('escalas')->group(function () {
+            Route::get('medicao', [EscalasEscalasController::class, 'medicao']);
+        });
+        Route::prefix('ordemservicos')->group(function () {
+            Route::get('', [OrdemservicosController::class, 'index']);
+        });
+        Route::prefix('orcs')->group(function () {
+            Route::get('', [OrcsController::class, 'index']);
+            Route::get('gerarCodigo', [OrcsController::class, 'gerarCodigoOrc']);
+            Route::get('gerarCodigoOrcamento', [OrcsController::class, 'gerarCodigoOrcamento']);
+            Route::get('{orc}', [OrcsController::class, 'show']);
+            Route::post('', [OrcsController::class, 'store']);
+            Route::put('{orc}', [OrcsController::class, 'update']);
+            Route::delete('{orc}', [OrcsController::class, 'destroy']);
+            Route::post('{orc}/criarcontrato', [OrcsController::class, 'criarcontrato']);
+        });
+        Route::prefix('contratos')->group(function () {
+            Route::get('', [ContratosController::class, 'index']);
+            Route::get('{orcamento}', [ContratosController::class, 'show']);
+            Route::post('', [ContratosController::class, 'store']);
+            Route::put('{orcamento}', [ContratosController::class, 'update']);
+            Route::delete('{orcamento}', [ContratosController::class, 'destroy']);
+            Route::put('{orcamento}/prorrogacao', [ContratosController::class, 'prorrogacao']);
+        });
+        Route::prefix('financeiro')->group(function () {
+            Route::get('pagamentos/pessoas', [PagamentosCnabController::class, 'listPagamentosByEmpresaId']);
+            Route::get('pagamentos/cnab/groupByPagamentoByMesAndEmpresaId', [PagamentosCnabController::class, 'groupByPagamentoByMesAndEmpresaId']);
+            Route::post('atualizarSituacaoPagamentoDiretoria', [PagamentosCnabController::class, 'atualizarSituacaoPagamentoDiretoria']);
+        });
+        Route::prefix('gestaoOrcamentaria')->group(function () {
+            Route::get('pacotes', [PacotesController::class, 'index']);
+            Route::get('pacotes/{pacote}', [PacotesController::class, 'show']);
+            Route::post('pacotes', [PacotesController::class, 'store']);
+            Route::put('pacotes/{pacote}', [PacotesController::class, 'update']);
+            Route::delete('pacotes/{pacote}', [PacotesController::class, 'destroy']);
+            Route::delete('pacotes/excluirItemPacoteServico/{pacoteservico}', [PacotesController::class, 'excluirItemPacoteServico']);
+            Route::delete('pacotes/excluirItemPacoteProduto/{pacoteproduto}', [PacotesController::class, 'excluirItemPacoteProduto']);
+        });
+    });
+});
+
+// Route::prefix('web')->group(function () {
+//     Route::prefix('escalas')->group(function () {
+//         Route::get('medicao', [EscalasEscalasController::class, 'medicao']);
+//     });
+// });

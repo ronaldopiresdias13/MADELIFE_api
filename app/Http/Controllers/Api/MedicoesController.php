@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Medicao;
-use App\ServicoMedicao;
+use App\Models\Medicao;
+use App\Models\ProdutoMedicao;
+use App\Models\ServicoMedicao;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -68,13 +69,13 @@ class MedicoesController extends Controller
 
         if ($request['adicionais']) {
             foreach ($itens as $key => $iten) {
-                foreach ($request['adicionais'] as $key => $adicional) {
-                    if (is_string($adicional)) {
+                foreach ($request['adicionais'] as $key => $adicional) { // Percorrer os adicionais
+                    if (is_string($adicional)) { // Se String, chama o adicional
                         $iten[$adicional];
-                    } else {
+                    } else { // Se Array Percorrer o array
                         $iten2 = $iten;
                         foreach ($adicional as $key => $a) {
-                            if ($key == 0) {
+                            if ($key == 0) { // Se primeiro item
                                 if ($iten[0] == null) {
                                     $iten2 = $iten[$a];
                                 } else {
@@ -119,6 +120,8 @@ class MedicoesController extends Controller
             'data1' => $request['data1'],
             'data2' => $request['data2'],
             'valor' => $request['valor'],
+            'adicional' => $request['adicional'],
+            'desconto' => $request['desconto'],
             'situacao' => $request['situacao'],
             'observacao' => $request['observacao'],
             'status' => $request['status']
@@ -134,6 +137,19 @@ class MedicoesController extends Controller
                 'situacao' => $servico['situacao'],
                 'observacao' => $servico['observacao'],
                 'status' => $servico['status'],
+            ]);
+        }
+        foreach ($request['produtos'] as $key => $produto) {
+            $produto_medicao = ProdutoMedicao::create([
+                'medicoes_id' => $medicao,
+                'produto_id' => $produto['produto_id'],
+                'quantidade' => $produto['quantidade'],
+                'atendido' => $produto['atendido'],
+                'valor' => $produto['valor'],
+                'subtotal' => $produto['subtotal'],
+                'situacao' => $produto['situacao'],
+                'observacao' => $produto['observacao'],
+                'status' => $produto['status'],
             ]);
         }
     }
@@ -207,6 +223,8 @@ class MedicoesController extends Controller
                     'data1'           => $request['data1'],
                     'data2'           => $request['data2'],
                     'valor'           => $request['valor'],
+                    'adicional'       => $request['adicional'],
+                    'desconto'        => $request['desconto'],
                     'situacao'        => $request['situacao'],
                     'observacao'      => $request['observacao'],
                     'status'          => $request['status'],
@@ -228,6 +246,26 @@ class MedicoesController extends Controller
                             'situacao'    => $servico['situacao'],
                             'observacao'  => $servico['observacao'],
                             'status'      => $servico['status'],
+                        ]
+                    );
+                }
+            }
+            if ($request['medicao_produtos']) {
+                foreach ($request['medicao_produtos'] as $key => $produto) {
+                    $medicao_produto = ProdutoMedicao::updateOrCreate(
+                        [
+                            'id' => $produto['id'],
+                        ],
+                        [
+                            'medicoes_id' => $produto['medicoes_id'],
+                            'produto_id'  => $produto['produto_id'],
+                            'quantidade'  => $produto['quantidade'],
+                            'atendido'    => $produto['atendido'],
+                            'valor'       => $produto['valor'],
+                            'subtotal'    => $produto['subtotal'],
+                            'situacao'    => $produto['situacao'],
+                            'observacao'  => $produto['observacao'],
+                            'status'      => $produto['status'],
                         ]
                     );
                 }

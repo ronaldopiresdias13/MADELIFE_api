@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\VendaSaida;
+use App\Models\VendaSaida;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -111,6 +111,7 @@ class VendaSaidaController extends Controller
      */
     public function store(Request $request)
     {
+        return $request;
         DB::transaction(function () use ($request) {
             VendaSaida::create($request->all());
         });

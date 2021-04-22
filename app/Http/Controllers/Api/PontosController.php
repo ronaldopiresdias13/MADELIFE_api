@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Escala;
+use App\Models\Escala;
 use App\Http\Controllers\Controller;
-use App\Ponto;
+use App\Models\Ponto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -274,7 +274,8 @@ class PontosController extends Controller
                 ->header('Content-Type', 'text/plain');
         }
     }
-    public function buscaPontosPorIdEscala(Escala $escala){
+    public function buscaPontosPorIdEscala(Escala $escala)
+    {
         return Ponto::Where('escala_id', $escala->id)->get();
     }
 }

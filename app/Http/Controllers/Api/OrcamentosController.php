@@ -2,26 +2,28 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Aph;
-use App\Email;
-use App\Evento;
-use App\Remocao;
-use App\AphEmail;
-use App\Telefone;
-use App\Homecare;
-use App\Orcamento;
-use App\AphTelefone;
-use App\EventoEmail;
-use App\RemocaoEmail;
-use App\EventoTelefone;
-use App\Orcamentocusto;
-use App\RemocaoTelefone;
-use App\OrcamentoServico;
-use App\OrcamentoProduto;
-use App\Historicoorcamento;
+use App\Models\Aph;
+use App\Models\Email;
+use App\Models\Evento;
+use App\Models\Remocao;
+use App\Models\AphEmail;
+use App\Models\Telefone;
+use App\Models\Homecare;
+use App\Models\Orcamento;
+use App\Models\AphTelefone;
+use App\Models\EventoEmail;
+use App\Models\RemocaoEmail;
+use App\Models\EventoTelefone;
+use App\Models\Orcamentocusto;
+use App\Models\RemocaoTelefone;
+use App\Models\OrcamentoServico;
+use App\Models\OrcamentoProduto;
+use App\Models\Historicoorcamento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Ordemservico;
+use App\Models\OrdemservicoServico;
 
 class OrcamentosController extends Controller
 {
@@ -152,19 +154,23 @@ class OrcamentosController extends Controller
 
             if ($request['servicos']) {
                 foreach ($request['servicos'] as $key => $servico) {
-                    $orcamento_servico = OrcamentoServico::create(
+                    OrcamentoServico::create(
                         [
-                            'orcamento_id' => $orcamento->id,
-                            'servico_id'   => $servico['servico_id'],
+                            'orcamento_id'         => $orcamento->id,
+                            'servico_id'           => $servico['servico_id'],
                             'quantidade'           => $servico['quantidade'],
                             'frequencia'           => $servico['frequencia'],
                             'basecobranca'         => $servico['basecobranca'],
                             'valorunitario'        => $servico['valorunitario'],
                             'custo'                => $servico['custo'],
+                            'custodiurno'          => $servico['custodiurno'],
+                            'custonoturno'         => $servico['custonoturno'],
                             'subtotal'             => $servico['subtotal'],
                             'subtotalcusto'        => $servico['subtotalcusto'],
                             'adicionalnoturno'     => $servico['adicionalnoturno'],
                             'horascuidado'         => $servico['horascuidado'],
+                            'horascuidadodiurno'   => $servico['horascuidadodiurno'],
+                            'horascuidadonoturno'  => $servico['horascuidadonoturno'],
                             'icms'                 => $servico['icms'],
                             'inss'                 => $servico['inss'],
                             'iss'                  => $servico['iss'],
@@ -178,7 +184,7 @@ class OrcamentosController extends Controller
 
             if ($request['produtos']) {
                 foreach ($request['produtos'] as $key => $produto) {
-                    $orcamento_produto = OrcamentoProduto::create(
+                    OrcamentoProduto::create(
                         [
                             'orcamento_id' => $orcamento->id,
                             'produto_id'   => $produto['produto_id'],
@@ -197,7 +203,7 @@ class OrcamentosController extends Controller
 
             if ($request['custos']) {
                 foreach ($request['custos'] as $key => $custo) {
-                    $orcamentocusto = Orcamentocusto::create(
+                    Orcamentocusto::create(
                         [
                             'orcamento_id' => $orcamento->id,
                             'descricao'    => $custo['descricao'],
@@ -211,61 +217,12 @@ class OrcamentosController extends Controller
             }
 
             if ($request['homecare']) {
-                $homecare = Homecare::create(
+                Homecare::create(
                     [
                         'orcamento_id' => $orcamento->id,
                         'paciente_id' => $request['homecare']
                     ]
                 );
-
-                // $homecare = Homecare::find($request['homecare']);
-                // $homecare->orcamento_id = $orcamento->id;
-                // $homecare->update();
-                // $homecare = Homecare::updateOrCreate(
-                //     [
-                //         'orcamento_id' => $orcamento->id,
-                //     ],
-                //     [
-                //         'nome'         => $request['homecare']['nome'],
-                //         'sexo'         => $request['homecare']['sexo'],
-                //         'nascimento'   => $request['homecare']['nascimento'],
-                //         'cpfcnpj'      => $request['homecare']['cpfcnpj'],
-                //         'rgie'         => $request['homecare']['rgie'],
-                //         'endereco'     => $request['homecare']['endereco'],
-                //         'cidade_id'    => $request['homecare']['cidade_id'],
-                //         'observacao'   => $request['homecare']['observacao'],
-                //     ]
-                // );
-
-                // if ($request['homecare']['telefones']) {
-                //     foreach ($request['homecare']['telefones'] as $key => $telefone) {
-                //         $homecare_telefone = HomecareTelefone::firstOrCreate([
-                //             'homecare_id' => $homecare->id,
-                //             'telefone_id' => Telefone::firstOrCreate(
-                //                 [
-                //                     'telefone'  => $telefone['telefone'],
-                //                 ]
-                //             )->id,
-                //             'tipo'      => $telefone['pivot']['tipo'],
-                //             'descricao' => $telefone['pivot']['descricao'],
-                //         ]);
-                //     }
-                // }
-
-                // if ($request['homecare']['emails']) {
-                //     foreach ($request['homecare']['emails'] as $key => $email) {
-                //         $homecare_email = HomecareEmail::firstOrCreate([
-                //             'homecare_id' => $homecare->id,
-                //             'email_id'    => Email::firstOrCreate(
-                //                 [
-                //                     'email'     => $email['email'],
-                //                 ]
-                //             )->id,
-                //             'tipo'      => $email['pivot']['tipo'],
-                //             'descricao' => $email['pivot']['descricao'],
-                //         ]);
-                //     }
-                // }
             }
 
             if ($request['remocao']) {
@@ -402,7 +359,7 @@ class OrcamentosController extends Controller
                 }
             }
 
-            $historicoorcamento = Historicoorcamento::create([
+            Historicoorcamento::create([
                 'orcamento_id' => $orcamento->id,
                 'historico'    => json_encode($request->all()),
             ]);
@@ -493,13 +450,14 @@ class OrcamentosController extends Controller
                 ]
             );
 
+            // $this->deleteRelation($orcamento->orcamento_servicos);
             foreach ($orcamento->orcamento_servicos as $key => $servico) {
                 $servico->delete();
             }
 
             if ($request['servicos']) {
                 foreach ($request['servicos'] as $key => $servico) {
-                    $orcamento_servico = OrcamentoServico::create(
+                    OrcamentoServico::create(
                         [
                             'orcamento_id'         => $orcamento->id,
                             'servico_id'           => $servico['servico_id'],
@@ -508,10 +466,14 @@ class OrcamentosController extends Controller
                             'basecobranca'         => $servico['basecobranca'],
                             'valorunitario'        => $servico['valorunitario'],
                             'custo'                => $servico['custo'],
+                            'custodiurno'          => $servico['custodiurno'],
+                            'custonoturno'         => $servico['custonoturno'],
                             'subtotal'             => $servico['subtotal'],
                             'subtotalcusto'        => $servico['subtotalcusto'],
                             'adicionalnoturno'     => $servico['adicionalnoturno'],
                             'horascuidado'         => $servico['horascuidado'],
+                            'horascuidadodiurno'   => $servico['horascuidadodiurno'],
+                            'horascuidadonoturno'  => $servico['horascuidadonoturno'],
                             'icms'                 => $servico['icms'],
                             'inss'                 => $servico['inss'],
                             'iss'                  => $servico['iss'],
@@ -523,14 +485,14 @@ class OrcamentosController extends Controller
                 }
             }
 
+            // $this->deleteRelation($orcamento->orcamento_produtos);
             foreach ($orcamento->orcamento_produtos as $key => $produto) {
                 $produto->delete();
             }
 
-
             if ($request['produtos']) {
                 foreach ($request['produtos'] as $key => $produto) {
-                    $orcamento_produto = OrcamentoProduto::create(
+                    OrcamentoProduto::create(
                         [
                             'orcamento_id'         => $orcamento->id,
                             'produto_id'           => $produto['produto_id'],
@@ -546,13 +508,14 @@ class OrcamentosController extends Controller
                 }
             }
 
+            // $this->deleteRelation($orcamento->orcamentocustos);
             foreach ($orcamento->orcamentocustos as $key => $custo) {
                 $custo->delete();
             }
 
             if ($request['custos']) {
                 foreach ($request['custos'] as $key => $custo) {
-                    $orcamentocusto = Orcamentocusto::create(
+                    Orcamentocusto::create(
                         [
                             'orcamento_id'  => $orcamento->id,
                             'descricao'     => $custo['descricao'],
@@ -565,10 +528,8 @@ class OrcamentosController extends Controller
                 }
             }
 
-            // $orcamento->homecare->delete();
-
             if ($request['homecare']) {
-                $homecare = Homecare::updateOrCreate(
+                Homecare::updateOrCreate(
                     [
                         'orcamento_id' => $orcamento->id,
                     ],
@@ -576,60 +537,6 @@ class OrcamentosController extends Controller
                         'paciente_id'       => $request['homecare'],
                     ]
                 );
-
-                // $homecare = Homecare::updateOrCreate(
-                //     [
-                //         'orcamento_id' => $orcamento->id,
-                //     ],
-                //     [
-                //         'nome'       => $request['homecare']['nome'],
-                //         'sexo'       => $request['homecare']['sexo'],
-                //         'nascimento' => $request['homecare']['nascimento'],
-                //         'cpfcnpj'    => $request['homecare']['cpfcnpj'],
-                //         'rgie'       => $request['homecare']['rgie'],
-                //         'endereco'   => $request['homecare']['endereco'],
-                //         'cidade_id'  => $request['homecare']['cidade_id'],
-                //         'observacao' => $request['homecare']['observacao'],
-                //     ]
-                // );
-
-                // if ($request['homecare']['telefones']) {
-                //     foreach ($request['homecare']['telefones'] as $key => $telefone) {
-                //         $homecare_telefone = HomecareTelefone::updateOrCreate(
-                //             [
-                //                 'homecare_id' => $homecare->id,
-                //                 'telefone_id' => Telefone::firstOrCreate(
-                //                     [
-                //                         'telefone'  => $telefone['telefone'],
-                //                     ]
-                //                 )->id,
-                //             ],
-                //             [
-                //                 'tipo'      => $telefone['pivot']['tipo'],
-                //                 'descricao' => $telefone['pivot']['descricao'],
-                //             ]
-                //         );
-                //     }
-                // }
-
-                // if ($request['homecare']['emails']) {
-                //     foreach ($request['homecare']['emails'] as $key => $email) {
-                //         $homecare_email = HomecareEmail::updateOrCreate(
-                //             [
-                //                 'homecare_id' => $homecare->id,
-                //                 'email_id'    => Email::firstOrCreate(
-                //                     [
-                //                         'email'     => $email['email'],
-                //                     ]
-                //                 )->id,
-                //             ],
-                //             [
-                //                 'tipo'      => $email['pivot']['tipo'],
-                //                 'descricao' => $email['pivot']['descricao'],
-                //             ]
-                //         );
-                //     }
-                // }
             }
 
             if ($request['remocao']) {
@@ -794,7 +701,28 @@ class OrcamentosController extends Controller
                 }
             }
 
-            $historicoorcamento = Historicoorcamento::create([
+            $ordemservico = Ordemservico::where('orcamento_id', $orcamento->id)->where('ativo', true)->first();
+
+            if ($ordemservico) {
+                foreach ($ordemservico->servicos as $key => $servico) {
+                    OrdemservicoServico::find($servico->pivot->id)->delete();
+                    // $servico->delete();
+                }
+
+                foreach ($orcamento->servicos as $key => $servico) {
+                    OrdemservicoServico::create(
+                        [
+                            'ordemservico_id'  => $ordemservico->id,
+                            'servico_id'       => $servico->id,
+                            'descricao'        => $servico['pivot']['basecobranca'],
+                            'valordiurno'      => $servico['pivot']['custodiurno'],
+                            'valornoturno'     => $servico['pivot']['custonoturno'],
+                        ]
+                    );
+                }
+            }
+
+            Historicoorcamento::create([
                 'orcamento_id' => $orcamento->id,
                 'historico'    => json_encode($request->all()),
             ]);
@@ -810,22 +738,7 @@ class OrcamentosController extends Controller
      */
     public function alterarSituacao(Request $request, Orcamento $orcamento)
     {
-        // $orcamento->empresa_id        = $request['empresa_id'];
-        // $orcamento->cliente_id        = $request['cliente_id'];
-        // $orcamento->numero            = $request['numero'];
-        // $orcamento->processo          = $request['processo'];
-        // $orcamento->cidade_id         = $request['cidade_id'];
-        // $orcamento->tipo              = $request['tipo'];
-        // $orcamento->data              = $request['data'];
-        // $orcamento->unidade           = $request['unidade'];
-        // $orcamento->quantidade        = $request['quantidade'];
         $orcamento->situacao          = $request['situacao'];
-        // $orcamento->descricao         = $request['descricao'];
-        // $orcamento->valortotalservico = $request['valortotalservico'];
-        // $orcamento->valortotalcusto   = $request['valortotalcusto'];
-        // $orcamento->valortotalproduto = $request['valortotalproduto'];
-        // $orcamento->observacao        = $request['observacao'];
-        // $orcamento->status            = $request['status'];
         $orcamento->save();
     }
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Monitoramentoescala;
+use App\Models\Monitoramentoescala;
 use Illuminate\Http\Request;
 
 class MonitoramentoescalasController extends Controller
@@ -110,14 +110,14 @@ class MonitoramentoescalasController extends Controller
     public function store(Request $request)
     {
         $monitoramentoescala = new Monitoramentoescala();
-        $monitoramentoescala->escala_id = $request->escala_id;
-        $monitoramentoescala->data = $request->data;
-        $monitoramentoescala->hora = $request->hora;
-        $monitoramentoescala->pa = $request->pa;
-        $monitoramentoescala->p = $request->p;
-        $monitoramentoescala->t = $request->t;
-        $monitoramentoescala->fr = $request->fr;
-        $monitoramentoescala->sat = $request->sat;
+        $monitoramentoescala->escala_id  = $request->escala_id;
+        $monitoramentoescala->data       = $request->data;
+        $monitoramentoescala->hora       = $request->hora;
+        $monitoramentoescala->pa         = $request->pa;
+        $monitoramentoescala->p          = $request->p;
+        $monitoramentoescala->t          = $request->t;
+        $monitoramentoescala->fr         = $request->fr;
+        $monitoramentoescala->sat        = $request->sat;
         $monitoramentoescala->criev      = $request->criev;
         $monitoramentoescala->ev         = $request->ev;
         $monitoramentoescala->dieta      = $request->dieta;
@@ -131,6 +131,7 @@ class MonitoramentoescalasController extends Controller
         $monitoramentoescala->vomito     = $request->vomito;
         $monitoramentoescala->crivomito  = $request->crivomito;
         $monitoramentoescala->asp        = $request->asp;
+        $monitoramentoescala->inal       = $request->inal;
         $monitoramentoescala->decub      = $request->decub;
         $monitoramentoescala->curativo   = $request->curativo;
         $monitoramentoescala->fraldas    = $request->fraldas;

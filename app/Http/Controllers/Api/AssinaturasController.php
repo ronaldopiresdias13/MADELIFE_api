@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Assinatura;
+use App\Models\Assinatura;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 

@@ -2,22 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Escala;
+use App\Models\Pessoa;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 
 class Teste extends Controller
 {
-    public function teste()
+    public function teste(Request $request)
     {
-        // $itens = Escala::with('ordemservico')->where('ativo', true)->limit(5)->get();
-        $itens = Escala::where('ativo', true)
-            ->limit(5)
-            ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
-            ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
-            ->join('homecares', 'homecares.orcamento_id', '=', 'orcamentos.id')
-            ->select('homecares.paciente_id')
-            ->get();
-        // dd($itens);
+        $user = $request->user();
 
-        return $itens;
+        $result = Pessoa::with([
+            'pacientes'
+        ])
+            ->whereHas('pacientes.homecares.orcamento.cliente.pessoa.user', function (Builder $query) use ($user) {
+                $query->where('id', $user->id);
+            });
+
+        $result = $result->orderByDesc('id')->paginate($request['per_page'] ? $request['per_page'] : 15);
+
+        if (env("APP_ENV", 'production') == 'production') {
+            return $result->withPath(str_replace('http:', 'https:', $result->path()));
+        } else {
+            return $result;
+        }
+
+        return $result;
     }
 }

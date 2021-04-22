@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Servico;
-use App\Empresa;
+use App\Models\Servico;
+use App\Models\Empresa;
 use Illuminate\Http\Request;
 
 class ServicosController extends Controller

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Unidademedida;
+use App\Models\Unidademedida;
 use Illuminate\Http\Request;
 
 class UnidademedidasController extends Controller
@@ -111,7 +111,7 @@ class UnidademedidasController extends Controller
     {
         $unidademedida = new Unidademedida();
         // $unidademedida->empresa_id = $request->empresa_id;
-        $unidademedida->empresa_id = 1;
+        $unidademedida->empresa_id = $request->empresa_id;
         $unidademedida->descricao = $request->descricao;
         $unidademedida->sigla = $request->sigla;
         $unidademedida->grupo = $request->grupo;

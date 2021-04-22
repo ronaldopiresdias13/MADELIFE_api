@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\CuidadoEscala;
+use App\Models\CuidadoEscala;
 use App\Http\Controllers\Controller;
+use App\Models\Cuidado;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -110,7 +111,16 @@ class CuidadoEscalasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // return $request;
+        // foreach ($request->cuidados as $key => $cuidado) {
+        CuidadoEscala::create([
+            'escala_id'  => $request->escala_id,
+            'cuidado_id' => $request->cuidado_id,
+            'data'       => $request->data,
+            'hora'       => $request->hora,
+            'status'     => $request->status,
+        ]);
+        // }
     }
 
     /**

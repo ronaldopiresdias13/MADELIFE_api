@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Medicao extends Model
+{
+    protected $table = 'medicoes';
+    protected $guarded = [];
+
+    public function cliente()
+    {
+        return $this->belongsTo(Cliente::class);
+    }
+
+    public function ordemservico()
+    {
+        return $this->belongsTo(Ordemservico::class);
+    }
+
+    public function medicao_servicos()
+    {
+        return $this->hasMany(ServicoMedicao::class, 'medicoes_id')->where('ativo', true);
+    }
+
+    public function medicao_produtos()
+    {
+        return $this->hasMany(ProdutoMedicao::class, 'medicoes_id');
+    }
+    public function comentarios()
+    {
+        return $this->hasMany(Comentariomedicao::class, 'medicoes_id');
+    }
+}

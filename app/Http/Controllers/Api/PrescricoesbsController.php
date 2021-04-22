@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Prescricaob;
+use App\Models\Prescricaob;
 use Illuminate\Http\Request;
 
 class PrescricoesbsController extends Controller

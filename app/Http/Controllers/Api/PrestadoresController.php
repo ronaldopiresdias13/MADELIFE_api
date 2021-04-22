@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Conselho;
-use App\Dadosbancario;
-use App\Email;
-use App\Endereco;
+use App\Models\Conselho;
+use App\Models\Dadosbancario;
+use App\Models\Email;
+use App\Models\Endereco;
 use App\Http\Controllers\Controller;
-use App\Escala;
-use App\Pessoa;
-use App\PessoaEmail;
-use App\PessoaEndereco;
-use App\PessoaTelefone;
-use App\Prestador;
-use App\PrestadorFormacao;
-use App\Telefone;
-use App\User;
+use App\Models\Escala;
+use App\Models\Pessoa;
+use App\Models\PessoaEmail;
+use App\Models\PessoaEndereco;
+use App\Models\PessoaTelefone;
+use App\Models\Prestador;
+use App\Models\PrestadorFormacao;
+use App\Models\Telefone;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -151,7 +151,7 @@ class PrestadoresController extends Controller
                     )->id
                 ]
             );
-            $pessoa_email = PessoaEmail::firstOrCreate([
+            PessoaEmail::firstOrCreate([
                 'pessoa_id' => $user->pessoa_id,
                 'email_id'  => Email::firstOrCreate(
                     [
@@ -160,14 +160,14 @@ class PrestadoresController extends Controller
                 )->id,
                 'tipo'      => 'Pessoal',
             ]);
-            $conselho = Conselho::create(
+            Conselho::create(
                 [
                     'instituicao' => $request['conselho']['instituicao'],
                     'numero'      => $request['conselho']['numero'],
                     'pessoa_id'   => $user->pessoa_id
                 ]
             );
-            $formacao = PrestadorFormacao::create(
+            PrestadorFormacao::create(
                 [
                     'prestador_id' => Prestador::create(
                         [
@@ -288,7 +288,7 @@ class PrestadoresController extends Controller
             );
             if ($request['pessoa']['dadosbancario']) {
                 foreach ($request['pessoa']['dadosbancario'] as $key => $dadosbancario) {
-                    $dados_bancario = Dadosbancario::firstOrCreate([
+                    Dadosbancario::firstOrCreate([
                         'empresa_id'  => $request["pessoa"]['empresa_id'],
                         'banco_id'    => $dadosbancario['banco_id'],
                         'agencia'     => $dadosbancario['agencia'],
@@ -301,7 +301,7 @@ class PrestadoresController extends Controller
             }
             if ($request['formacoes']) {
                 foreach ($request['formacoes'] as $key => $formacao) {
-                    $profissional_formacao = PrestadorFormacao::firstOrCreate([
+                    PrestadorFormacao::firstOrCreate([
                         'prestador_id' => $prestador->id,
                         'formacao_id'     => $formacao['formacao_id'],
                     ]);
@@ -309,7 +309,7 @@ class PrestadoresController extends Controller
             }
             if ($request['pessoa']['conselhos']) {
                 foreach ($request['pessoa']['conselhos'] as $key => $conselho) {
-                    $conselhos = Conselho::firstOrCreate([
+                    Conselho::firstOrCreate([
                         'id'          => $conselho['id'],
                         'instituicao' => $conselho['instituicao'],
                         'uf'          => $conselho['uf'],
@@ -320,7 +320,7 @@ class PrestadoresController extends Controller
             }
             if ($request['pessoa']['enderecos']) {
                 foreach ($request['pessoa']['enderecos'] as $key => $endereco) {
-                    $pessoa_endereco = PessoaEndereco::firstOrCreate([
+                    PessoaEndereco::firstOrCreate([
                         'pessoa_id'   => $prestador->pessoa_id,
                         'endereco_id' => Endereco::firstOrCreate(
                             [
@@ -340,7 +340,7 @@ class PrestadoresController extends Controller
 
             if ($request['pessoa']['telefones']) {
                 foreach ($request['pessoa']['telefones'] as $key => $telefone) {
-                    $pessoa_telefone = PessoaTelefone::firstOrCreate([
+                    PessoaTelefone::firstOrCreate([
                         'pessoa_id'   => $prestador->pessoa_id,
                         'telefone_id' => Telefone::firstOrCreate(
                             [
@@ -355,7 +355,7 @@ class PrestadoresController extends Controller
 
             if ($request['pessoa']['emails']) {
                 foreach ($request['pessoa']['emails'] as $key => $email) {
-                    $pessoa_email = PessoaEmail::firstOrCreate([
+                    PessoaEmail::firstOrCreate([
                         'pessoa_id' => $prestador->pessoa_id,
                         'email_id'  => Email::firstOrCreate(
                             [

@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Orcamento;
+use App\Models\Ordemservico;
+use App\Observers\OrdemservicoObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -28,7 +31,5 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-
-        //
     }
 }

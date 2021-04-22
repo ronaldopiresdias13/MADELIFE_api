@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Dadoscontratual;
+use App\Models\Dadoscontratual;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 

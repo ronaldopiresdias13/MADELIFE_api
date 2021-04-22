@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
-use App\Email;
-use App\Pessoa;
-use App\Conselho;
-use App\Prestador;
+use App\Models\User;
+use App\Models\Email;
+use App\Models\Pessoa;
+use App\Models\Conselho;
+use App\Models\Prestador;
 use Carbon\Carbon;
-use App\Tipopessoa;
-use App\PessoaEmail;
-use App\PrestadorFormacao;
+use App\Models\Tipopessoa;
+use App\Models\PessoaEmail;
+use App\Models\PrestadorFormacao;
 use App\Mail\ResetPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,20 +18,39 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
         $request->validate([
-            'email'       => 'string|email',
+            // 'email'       => 'string|email',
             'password'    => 'required|string',
             'remember_me' => 'boolean'
         ]);
 
-        $user = User::with(['acessos', 'pessoa.prestador', 'pessoa.cliente', 'pessoa.profissional', 'pessoa.responsavel'])
+        $user = User::with(['acessos', 'pessoa.prestador', 'pessoa.cliente.empresa', 'pessoa.profissional.empresa', 'pessoa.responsavel.empresa'])
             ->where('email', $request['email'])
+            ->orWhere('cpfcnpj', $request['email'])
             ->first();
+
+        // return Storage::disk('local')->get('perfil/728/58c21109b8fa38e7fdf18d56a6fd58ef.png');
+
+
+
+        // return storage_path('app');
+
+        // return Storage::get(storage_path('app') . '/' . $user->pessoa->perfil);
+
+        // if (Storage::exists($user->pessoa->perfil)) {
+        //     return "Tem";
+        // } else {
+        //     return "Não tem";
+        // }
+
+        // return "Stop";
+        // return Storage::exists($user->pessoa->perfil);
 
         if (!$user) {
             return response()->json([
@@ -41,7 +60,7 @@ class AuthController extends Controller
 
         if (!password_verify($request['password'], $user['password'])) {
             return response()->json([
-                'message' => 'Email ou Senha Inválidos!'
+                'message' => 'E-mail e/ou Senha incorretos.'
             ], 401);
         }
 
@@ -51,6 +70,13 @@ class AuthController extends Controller
             $token->expires_at = Carbon::now()->addWeeks(1);
         }
         $token->save();
+
+        if (Storage::disk('local')->exists($user->pessoa->perfil)) {
+            $user->pessoa->perfil = Storage::disk('local')->get($user->pessoa->perfil);
+        } else {
+            $user->pessoa->perfil = null;
+        }
+
         return response()->json([
             'access_token' => $tokenResult->accessToken,
             'token_type'   => 'Bearer',
@@ -76,7 +102,7 @@ class AuthController extends Controller
         // $credentials = request(['email', 'password']);
         // if (!Auth::attempt($credentials)) {
         //     return response()->json([
-        //         'message' => 'Email ou Senha Inválidos!'
+        //         'message' => 'E-mail e/ou Senha incorretos.'
         //     ], 401);
         // }
         // $user = $request->user();
@@ -250,7 +276,7 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
         if (!Auth::attempt($credentials)) {
             return response()->json([
-                'message' => 'Email ou Senha Inválidos!'
+                'message' => 'E-mail e/ou Senha incorretos.'
             ], 401);
         }
         $user        = $request->user();

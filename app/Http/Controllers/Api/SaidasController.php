@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Estoque;
+use App\Models\Estoque;
 use App\Http\Controllers\Controller;
-use App\Produto;
-use App\Saida;
-use App\SaidaProduto;
+use App\Models\Produto;
+use App\Models\Saida;
+use App\Models\SaidaProduto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -114,50 +114,57 @@ class SaidasController extends Controller
      */
     public function store(Request $request)
     {
-        DB::transaction(function () use ($request) {
-            $saida = Saida::create([
-                'empresa_id'      => $request['empresa_id'],
-                'data'            => $request['data'],
-                'descricao'       => $request['descricao'],
-                'profissional_id' => $request['profissional_id']
-            ]);
+        // DB::transaction(function () use ($request) {
+        $saida = Saida::create([
+            'empresa_id'      => $request['empresa_id'],
+            'data'            => $request['data'],
+            'descricao'       => $request['descricao'],
+            'profissional_id' => $request['profissional_id']
+        ]);
 
-            // return $saida;
+        // return $saida;
 
-            foreach ($request['produtos'] as $key => $produto) {
-                $prod = Produto::find($produto["produto_id"]);
-                if ($prod->controlelote) {
-                    if ($produto['lote']) {
-                        $estoque = Estoque::firstWhere('lote', $produto['lote']);
-                        if ($estoque) {
-                            $atualiza_quantidade_estoque = Estoque::firstWhere('lote', $produto['lote']);
-                            $atualiza_quantidade_estoque->quantidade = $atualiza_quantidade_estoque->quantidade - $produto['quantidade'];
-                            $atualiza_quantidade_estoque->update();
-                        } else {
-                            $nova_estoque = Estoque::create([
-                                'produto_id' => $produto['produto_id'],
-                                'unidade'    => $prod->unidademedida_id,
-                                'quantidade' => $produto['quantidade'],
-                                'lote'       => $produto['lote'],
-                                'validade'   => $produto['validade'],
-                                'ativo'      => 1
-                            ]);
-                        }
-                        // return $estoque;
+        foreach ($request['produtos'] as $key => $produto) {
+            $prod = Produto::find($produto["produto_id"]);
+            if ($prod->controlelote) {
+                if ($produto['lote']) {
+                    $estoque = Estoque::firstWhere('lote', $produto['lote']);
+                    if ($estoque) {
+                        $atualiza_quantidade_estoque = Estoque::firstWhere('lote', $produto['lote']);
+                        $atualiza_quantidade_estoque->quantidade = $atualiza_quantidade_estoque->quantidade - $produto['quantidade'];
+                        $atualiza_quantidade_estoque->update();
+                    } else {
+                        $nova_estoque = Estoque::create([
+                            'produto_id' => $produto['produto_id'],
+                            'unidade'    => $prod->unidademedida_id,
+                            'quantidade' => $produto['quantidade'],
+                            'lote'       => $produto['lote'],
+                            'validade'   => $produto['validade'],
+                            'ativo'      => 1
+                        ]);
                     }
+                    // return $estoque;
                 }
-                $saida_produto = SaidaProduto::create([
-                    'saida_id'      => $saida->id,
-                    'produto_id'    => $produto['produto_id'],
-                    'quantidade'    => $produto['quantidade'],
-                    'lote'          => $produto['lote'],
-                    'valor'         => $produto['valor'],
-                    'ativo'         => 1
-                ]);
-                $prod->quantidadeestoque = $prod->quantidadeestoque - $produto["quantidade"];
-                $prod->update();
             }
-        });
+            $saida_produto = SaidaProduto::create([
+                'saida_id'      => $saida->id,
+                'produto_id'    => $produto['produto_id'],
+                'quantidade'    => $produto['quantidade'],
+                'lote'          => $produto['lote'],
+                'valor'         => $produto['valor'],
+                'ativo'         => 1
+            ]);
+            $prod->quantidadeestoque = $prod->quantidadeestoque - $produto["quantidade"];
+            $prod->update();
+        }
+        return response()->json([
+            'alert' => [
+                'title' => 'Parabéns!',
+                'text' => 'Salvo com sucesso!'
+            ]
+        ], 200)
+            ->header('Content-Type', 'application/json');
+        // });
     }
 
     /**

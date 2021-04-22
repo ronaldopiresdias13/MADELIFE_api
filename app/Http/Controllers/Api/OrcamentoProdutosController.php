@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\OrcamentoProduto;
+use App\Models\OrcamentoProduto;
 use Illuminate\Http\Request;
 
 class OrcamentoProdutosController extends Controller
@@ -182,9 +182,9 @@ class OrcamentoProdutosController extends Controller
      * @param  \App\OrcamentoProduto  $orcamentoProduto
      * @return \Illuminate\Http\Response
      */
-    public function destroy(OrcamentoProduto $orcamentoProduto)
+    public function destroy(OrcamentoProduto $orcamentoproduto)
     {
-        $orcamentoProduto->ativo = false;
-        $orcamentoProduto->save();
+        $orcamentoproduto->ativo = false;
+        $orcamentoproduto->save();
     }
 }

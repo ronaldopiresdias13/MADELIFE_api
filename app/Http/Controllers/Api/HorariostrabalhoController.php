@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Horariotrabalho;
+use App\Models\Horariotrabalho;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 

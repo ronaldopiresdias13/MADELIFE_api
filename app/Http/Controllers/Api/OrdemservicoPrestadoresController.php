@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\OrdemservicoPrestador;
-use App\Ordemservico;
-use App\Prestador;
+use App\Models\OrdemservicoPrestador;
+use App\Models\Ordemservico;
+use App\Models\Prestador;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -198,11 +198,11 @@ class OrdemservicoPrestadoresController extends Controller
     {
         return OrdemservicoPrestador::With([
             'prestador.pessoa.conselhos',
-            'prestador.formacoes'
+            'prestador.formacoes', 'servico'
         ])
-        ->where(
-            'ordemservico_id',
-            $ordemservico->id
-        )->get();
+            ->where(
+                'ordemservico_id',
+                $ordemservico->id
+            )->get();
     }
 }

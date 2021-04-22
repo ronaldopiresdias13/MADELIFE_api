@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Patrimonio;
+use App\Models\Patrimonio;
 use Illuminate\Http\Request;
 
 class PatrimoniosController extends Controller
@@ -110,7 +110,7 @@ class PatrimoniosController extends Controller
     public function store(Request $request)
     {
         $patrimonio = new Patrimonio();
-        $patrimonio->empresa_id = 1;
+        $patrimonio->empresa_id = $request->empresa_id;
         $patrimonio->produto_id = $request->produto_id;
         $patrimonio->codigo = $request->codigo;
         $patrimonio->observacao = $request->observacao;
