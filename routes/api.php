@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\Api\AgendamentosController;
 use App\Http\Controllers\Api\EmpresaPrestadorController as ApiEmpresaPrestadorController;
 use App\Http\Controllers\Api\Novo\Web\EscalasController;
 use App\Http\Controllers\Api\Novo\Web\OrdemservicoAcessoController;
 use App\Http\Controllers\Api\Novo\Web\PrestadoresController;
 use App\Http\Controllers\Api\Novo\Web\TranscricaoProdutoController;
+use App\Http\Controllers\Api\Web\Agendamento\AgendamentosController;
 use App\Http\Controllers\Api\Web\Compras\ProdutoController;
 use App\Http\Controllers\Api\Web\DepartamentoPessoal\PagamentoexternosController;
 use App\Http\Controllers\Api\Web\Financeiro\PagamentosCnabController;
@@ -38,6 +38,19 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('web')->group(function () {
         Route::prefix('home')->group(function () {
             Route::get('dashboard/get_dados', 'Api\Web\Home\DashboardController@get_dados');
+        });
+        Route::prefix('agendamento')->group(function () {
+            Route::get('agendamentos', [AgendamentosController::class, 'index']);
+            Route::post('agendamentos', [AgendamentosController::class, 'store']);
+            Route::get('agendamentos/{agendamento}', [AgendamentosController::class, 'show']);
+            Route::put('agendamentos/{agendamento}', [AgendamentosController::class, 'update']);
+            Route::delete('agendamentos/{agendamento}', [AgendamentosController::class, 'destroy']);
+
+            Route::get('salas', 'Api\Web\Agendamento\SalasController@index');
+            Route::post('salas', 'Api\Web\Agendamento\SalasController@store');
+            Route::get('salas/{sala}', 'Api\Web\Agendamento\SalasController@show');
+            Route::put('salas/{sala}', 'Api\Web\Agendamento\SalasController@update');
+            Route::delete('salas/{sala}', 'Api\Web\Agendamento\SalasController@destroy');
         });
         Route::prefix('areaClinica')->group(function () {
             Route::get('dashboard/relatorioDiario', 'Api\Web\AreaClinica\DashboardController@relatorioDiario');
@@ -642,11 +655,6 @@ Route::get('saidas/{saida}', 'Api\SaidasController@show');
 Route::put('saidas/{saida}', 'Api\SaidasController@update');
 Route::delete('saidas/{saida}', 'Api\SaidasController@destroy');
 
-Route::get('salas', 'Api\SalasController@index');
-Route::post('salas', 'Api\SalasController@store');
-Route::get('salas/{sala}', 'Api\SalasController@show');
-Route::put('salas/{sala}', 'Api\SalasController@update');
-Route::delete('salas/{sala}', 'Api\SalasController@destroy');
 
 Route::get('servicos', 'Api\ServicosController@index');
 Route::post('servicos', 'Api\ServicosController@store');
@@ -768,11 +776,6 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::post('atualizarPagamentosExternos', [PagamentoexternosController::class, 'atualizarPagamentosExternos']);
             Route::delete('apagarpagamento/{pagamentoexterno}', [PagamentoexternosController::class, 'apagarpagamento']);
         });
-        Route::get('agendamentos', [AgendamentosController::class, 'index']);
-        Route::post('agendamentos', [AgendamentosController::class, 'store']);
-        Route::get('agendamentos/{agendamento}', [AgendamentosController::class, 'show']);
-        Route::put('agendamentos/{agendamento}', [AgendamentosController::class, 'update']);
-        Route::delete('agendamentos/{agendamento}', [AgendamentosController::class, 'destroy']);
     });
 });
 
