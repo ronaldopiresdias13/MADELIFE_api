@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Web;
+namespace App\Http\Controllers\Api\Web\GestaoOrcamentaria;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ordemservico;
@@ -14,9 +14,14 @@ class OrdemservicosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function getAllOrdensServicos(Request $request)
     {
-        //
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return Ordemservico::with(['orcamento.homecare.paciente.pessoa:id,nome', 'orcamento.servicos.servico'])
+            ->where('empresa_id', $empresa_id)
+            ->where('ativo', true)
+            ->get();
     }
 
     /**

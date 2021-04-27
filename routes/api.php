@@ -111,8 +111,9 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::delete('orcamentos/{orcamento}', 'Api\Web\GestaoOrcamentaria\OrcamentosController@destroy');
             Route::post('orcamentos/enviarOrcamentoPorEmail', 'Api\Web\GestaoOrcamentaria\OrcamentosController@enviarOrcamentoPorEmail');
 
-            Route::get('contratos/dashboardGroupByMotivoDesativados', 'Api\Web\OrdemservicosController@dashboardGroupByMotivoDesativados');
-            Route::get('contratos/dashboardGroupByStatusAtivadosDesativados', 'Api\Web\OrdemservicosController@dashboardGroupByStatusAtivadosDesativados');
+            Route::get('contratos/getAllOrdensServicos', 'Api\Web\GestaoOrcamentaria\OrdemservicosController@getAllOrdensServicos');
+            Route::get('contratos/dashboardGroupByMotivoDesativados', 'Api\Web\GestaoOrcamentaria\OrdemservicosController@dashboardGroupByMotivoDesativados');
+            Route::get('contratos/dashboardGroupByStatusAtivadosDesativados', 'Api\Web\GestaoOrcamentaria\OrdemservicosController@dashboardGroupByStatusAtivadosDesativados');
 
             Route::get('pacientes/list', 'Api\Web\PacientesController@index');
             Route::get('pacientes/{paciente}', 'Api\Web\PacientesController@show');
@@ -234,7 +235,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         Route::get('pacientes/listNomePacientes', 'Api\Web\PacientesController@listNomePacientes');
 
-        Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\Web\OrdemservicosController@listaOrdemServicosEscalas');
+        Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\Web\GestaoOrcamentaria\OrdemservicosController@listaOrdemServicosEscalas');
     });
 
 
