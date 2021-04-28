@@ -111,17 +111,24 @@ class PontosController extends Controller
      */
     public function store(Request $request)
     {
-        $ponto = new Ponto();
-        $ponto->empresa_id = $request->empresa_id;
-        $ponto->escala_id = $request->escala_id;
-        $ponto->latitude = $request->latitude;
-        $ponto->longitude = $request->longitude;
-        $ponto->data = $request->data;
-        $ponto->hora = $request->hora;
-        $ponto->tipo = $request->tipo;
-        $ponto->observacao = $request->observacao;
-        $ponto->status = $request->status;
-        $ponto->save();
+        DB::transaction(function () use ($request) {
+            $user = $request->user();
+            $empresa_id = $user->pessoa->profissional->empresa_id;
+            $ponto = Ponto::create(
+                [
+                    'empresa_id' => $empresa_id,
+                    'escala_id' => $request->escala_id,
+                    'latitude' => $request->latitude,
+                    'longitude' => $request->longitude,
+                    'data' => $request->data,
+                    'hora' => $request->hora,
+                    'tipo' => $request->tipo,
+                    'observacao' => $request->observacao,
+                    'status' => $request->status
+                ]
+            );
+            return $ponto;
+        });
     }
 
     /**
@@ -207,27 +214,29 @@ class PontosController extends Controller
      */
     public function checkin(Escala $escala, Request $request)
     {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
         $ponto = Ponto::where('escala_id', $request->escala_id)
             ->where('tipo', 'Check-in')->first();
         if ($ponto) {
             return response()->json('Você já possui Check-in nessa escala!', 400)->header('Content-Type', 'text/plain');
         } else {
-            DB::transaction(function () use ($request) {
-                Ponto::create(
-                    [
-                        'empresa_id' => $request->empresa_id,
-                        'escala_id'  => $request->escala_id,
-                        'latitude'   => $request->latitude,
-                        'longitude'  => $request->longitude,
-                        'data'       => $request->data,
-                        'hora'       => $request->hora,
-                        'tipo'       => 'Check-in',
-                        'observacao' => $request->observacao,
-                        'status'     => $request->status,
-                    ]
-                );
-            });
-            return response()->json('Check-in realizado com Sucesso!', 200)->header('Content-Type', 'text/plain');
+            // DB::transaction(function () use ($request) {
+            $p = Ponto::create(
+                [
+                    'empresa_id' => $empresa_id,
+                    'escala_id'  => $request->escala_id,
+                    'latitude'   => $request->latitude,
+                    'longitude'  => $request->longitude,
+                    'data'       => $request->data,
+                    'hora'       => $request->hora,
+                    'tipo'       => 'Check-in',
+                    'observacao' => $request->observacao,
+                    'status'     => $request->status,
+                ]
+            );
+            return $p;
+            // });
         }
     }
 
