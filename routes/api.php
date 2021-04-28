@@ -79,6 +79,12 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::put('cuidados/{cuidado}', 'Api\Web\AreaClinica\CuidadosController@update');
             Route::delete('cuidados/{cuidado}', 'Api\Web\AreaClinica\CuidadosController@destroy');
             Route::get('cuidados/count/{empresa}', 'Api\Web\AreaClinica\CuidadosController@quantidadecuidados');
+
+            Route::get('grupocuidados', 'Api\Web\AreaClinica\GrupocuidadosController@index');
+            Route::post('grupocuidados', 'Api\Web\AreaClinica\GrupocuidadosController@store');
+            Route::get('grupocuidados/{grupocuidado}', 'Api\Web\AreaClinica\GrupocuidadosController@show');
+            Route::put('grupocuidados/{grupocuidado}', 'Api\Web\AreaClinica\GrupocuidadosController@update');
+            Route::delete('grupocuidados/{grupocuidado}', 'Api\Web\AreaClinica\GrupocuidadosController@destroy');
             // Route::get('cuidados/empresa/{empresa}', 'Api\Web\AreaClinica\CuidadosController@indexbyempresa');
         });
         Route::prefix('compras')->group(function () {
@@ -282,12 +288,6 @@ Route::get('certificadoprestadores/{certificadoprestador}', 'Api\Certificadopres
 Route::put('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@update');
 Route::delete('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@destroy');
 
-// Route::get('clientes', 'Api\ClientesController@index');
-// Route::post('clientes', 'Api\ClientesController@store');
-// Route::get('clientes/{cliente}', 'Api\ClientesController@show');
-// Route::put('clientes/{cliente}', 'Api\ClientesController@update');
-// Route::delete('clientes/{cliente}', 'Api\ClientesController@destroy');
-
 Route::get('cnabs', 'Api\CnabsController@index');
 Route::post('cnabs', 'Api\CnabsController@store');
 Route::get('cnabs/{cnab}/{tipo}', 'Api\CnabsController@show');
@@ -415,11 +415,6 @@ Route::delete('formacoes/{formacao}', 'Api\FormacoesController@destroy');
 
 
 
-Route::get('grupocuidados', 'Api\GrupocuidadosController@index');
-Route::post('grupocuidados', 'Api\GrupocuidadosController@store');
-Route::get('grupocuidados/{grupocuidado}', 'Api\GrupocuidadosController@show');
-Route::put('grupocuidados/{grupocuidado}', 'Api\GrupocuidadosController@update');
-Route::delete('grupocuidados/{grupocuidado}', 'Api\GrupocuidadosController@destroy');
 
 Route::get('historicoorcamentos', 'Api\HistoricoorcamentosController@index');
 Route::post('historicoorcamentos', 'Api\HistoricoorcamentosController@store');
