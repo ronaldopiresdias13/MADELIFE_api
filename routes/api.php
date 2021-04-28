@@ -236,6 +236,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('pacientes/listNomePacientes', 'Api\Web\PacientesController@listNomePacientes');
 
         Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\Web\GestaoOrcamentaria\OrdemservicosController@listaOrdemServicosEscalas');
+
+        Route::post('pontos/checkin/{escala}', 'Api\PontosController@checkin'); // Custon
     });
 
 
@@ -584,7 +586,6 @@ Route::post('pontos', 'Api\PontosController@store');
 Route::get('pontos/{ponto}', 'Api\PontosController@show');
 Route::put('pontos/{ponto}', 'Api\PontosController@update');
 Route::delete('pontos/{ponto}', 'Api\PontosController@destroy');
-Route::post('pontos/checkin/{escala}', 'Api\PontosController@checkin'); // Custon
 Route::post('pontos/checkout/{escala}', 'Api\PontosController@checkout'); // Custon
 Route::get('pontos/escala/{escala}', 'Api\PontosController@buscaPontosPorIdEscala');
 
