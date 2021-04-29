@@ -73,6 +73,11 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('dashboard/dashboardTotalMedicamentos', 'Api\Web\AreaClinica\DashboardController@dashboardTotalMedicamentos');
             Route::get('dashboard/dashboardTotalAtividades', 'Api\Web\AreaClinica\DashboardController@dashboardTotalAtividades');
 
+            Route::get('categoriadocumentos/listCategorias', 'Api\Web\AreaClinica\CategoriadocumentosController@listCategorias');
+            Route::post('categoriadocumentos/newCategoria', 'Api\Web\AreaClinica\CategoriadocumentosController@newCategoria');
+            Route::put('categoriadocumentos/update/{categoriadocumento}', 'Api\Web\AreaClinica\CategoriadocumentosController@update');
+            Route::delete('categoriadocumentos/delete/{categoriadocumento}', 'Api\Web\AreaClinica\CategoriadocumentosController@delete');
+
             Route::get('cuidados', 'Api\Web\AreaClinica\CuidadosController@index');
             Route::post('cuidados', 'Api\Web\AreaClinica\CuidadosController@store');
             Route::get('cuidados/{cuidado}', 'Api\Web\AreaClinica\CuidadosController@show');
@@ -220,11 +225,6 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('buscaProfissionaisInternosPagamento', 'Api\Web\RecursosHumanos\ProfissionaisController@buscaProfissionaisInternosPagamento');
         Route::get('meu-perfil', 'Api\Web\RecursosHumanos\ProfissionaisController@meuperfil');
         Route::put('meu-perfil/atualizarFotoPerfil', 'Api\Web\RecursosHumanos\ProfissionaisController@atualizarFotoPerfil');
-
-        Route::get('categoriadocumentos/listCategorias', 'Api\Web\CategoriadocumentosController@listCategorias');
-        Route::post('categoriadocumentos/newCategoria', 'Api\Web\CategoriadocumentosController@newCategoria');
-        Route::put('categoriadocumentos/update/{categoriadocumento}', 'Api\Web\CategoriadocumentosController@update');
-        Route::delete('categoriadocumentos/delete/{categoriadocumento}', 'Api\Web\CategoriadocumentosController@delete');
 
         Route::get('documentos/listDocumentosByEmpresa', 'Api\Web\DocumentosController@listDocumentosByEmpresa');
         Route::get('documentos/listDocumentosByConvenio', 'Api\Web\DocumentosController@listDocumentosByConvenio');
