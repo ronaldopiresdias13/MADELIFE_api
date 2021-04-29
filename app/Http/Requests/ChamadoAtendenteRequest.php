@@ -29,7 +29,7 @@ class ChamadoAtendenteRequest extends FormRequest
                     'assunto' => 'required|string',
                     'mensagem' => 'required|string',
                     'prestador_id' => 'required|numeric',
-
+                    'ocorrencia' => 'sometimes|nullable|numeric',
                 ];
                 break;
             case 'finalizarchamado_enfermagem':

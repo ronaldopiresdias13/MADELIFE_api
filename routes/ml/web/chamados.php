@@ -22,6 +22,9 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::post('criarchamado_cliente', 'Api\Web\Chat\ChamadosController@criarchamado_cliente');
 
             Route::post('enviarArquivos_cliente', 'Api\Web\Chat\ChamadosController@enviararquivos_cliente');
+
+
         });
     });
 });
+Route::get('get_image/{path}', 'Api\Web\Chat\ChamadosController@get_image');

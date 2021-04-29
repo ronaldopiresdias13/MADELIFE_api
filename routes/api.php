@@ -38,6 +38,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('web')->group(function () {
         Route::prefix('home')->group(function () {
             Route::get('dashboard/get_dados', 'Api\Web\Home\DashboardController@get_dados');
+            Route::post('dashboard/resolver_ocorrencia', 'Api\Web\Home\DashboardController@resolver_ocorrencia');
+            Route::get('dashboard/get_pendencias', 'Api\Web\Home\DashboardController@get_pendencias');
         });
         Route::prefix('areaClinica')->group(function () {
             Route::get('dashboard/relatorioDiario', 'Api\Web\AreaClinica\DashboardController@relatorioDiario');
