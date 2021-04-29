@@ -39,19 +39,6 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::prefix('home')->group(function () {
             Route::get('dashboard/get_dados', 'Api\Web\Home\DashboardController@get_dados');
         });
-        Route::prefix('agendamento')->group(function () {
-            Route::get('agendamentos', [AgendamentosController::class, 'index']);
-            Route::post('agendamentos', [AgendamentosController::class, 'store']);
-            Route::get('agendamentos/{agendamento}', [AgendamentosController::class, 'show']);
-            Route::put('agendamentos/{agendamento}', [AgendamentosController::class, 'update']);
-            Route::delete('agendamentos/{agendamento}', [AgendamentosController::class, 'destroy']);
-
-            Route::get('salas', 'Api\Web\Agendamento\SalasController@index');
-            Route::post('salas', 'Api\Web\Agendamento\SalasController@store');
-            Route::get('salas/{sala}', 'Api\Web\Agendamento\SalasController@show');
-            Route::put('salas/{sala}', 'Api\Web\Agendamento\SalasController@update');
-            Route::delete('salas/{sala}', 'Api\Web\Agendamento\SalasController@destroy');
-        });
         Route::prefix('areaClinica')->group(function () {
             Route::get('dashboard/relatorioDiario', 'Api\Web\AreaClinica\DashboardController@relatorioDiario');
             Route::get('dashboard/relatorioProdutividade', 'Api\Web\AreaClinica\DashboardController@relatorioProdutividade');

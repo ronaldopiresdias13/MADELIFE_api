@@ -87,6 +87,7 @@ class RouteServiceProvider extends ServiceProvider
                 require base_path('routes/ml/mail.php');
 
                 //---------------- WEB ----------------//
+                require base_path('routes/ml/web/agendamentos.php');
                 require base_path('routes/ml/web/categoriadocumentos.php');
                 require base_path('routes/ml/web/chamados.php');
                 require base_path('routes/ml/web/cnabs.php');
@@ -100,6 +101,7 @@ class RouteServiceProvider extends ServiceProvider
                 require base_path('routes/ml/web/pagamentopessoas.php');
                 require base_path('routes/ml/web/prestadores.php');
                 require base_path('routes/ml/web/produtos.php');
+                require base_path('routes/ml/web/salas.php');
 
                 require base_path('routes/api.php');
             });
