@@ -134,6 +134,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('transcricoes/{ordemservico}', 'Api\App\v3_0_21\TranscricoesController@listTranscricoesByEscalaId');
         Route::get('pacientes/listMedicamentosByPaciente/{ordemservico}', 'Api\App\v3_0_21\TranscricoesController@listMedicamentosByPaciente');
         Route::get('chamados', 'Api\App\v3_0_21\ChamadosController@chamados');
+        Route::get('get_pendencias', 'Api\App\v3_0_21\ChamadosController@get_pendencias');
+
         Route::post('criarchamado', 'Api\App\v3_0_21\ChamadosController@criarchamado');
         Route::post('enviarArquivos', 'Api\App\v3_0_21\ChamadosController@enviarArquivos');
     });
@@ -203,6 +205,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('transcricoes/{ordemservico}', 'Api\App\v3_0_22\TranscricoesController@listTranscricoesByEscalaId');
         Route::get('pacientes/listMedicamentosByPaciente/{ordemservico}', 'Api\App\v3_0_22\TranscricoesController@listMedicamentosByPaciente');
         Route::get('chamados', 'Api\App\v3_0_22\ChamadosController@chamados');
+        Route::get('get_pendencias', 'Api\App\v3_0_22\ChamadosController@get_pendencias');
+
         Route::post('criarchamado', 'Api\App\v3_0_22\ChamadosController@criarchamado');
         Route::post('enviarArquivos', 'Api\App\v3_0_22\ChamadosController@enviarArquivos');
     });
@@ -272,6 +276,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('transcricoes/{ordemservico}', 'Api\App\v3_0_24\TranscricoesController@listTranscricoesByEscalaId');
         Route::get('pacientes/listMedicamentosByPaciente/{ordemservico}', 'Api\App\v3_0_24\TranscricoesController@listMedicamentosByPaciente');
         Route::get('chamados', 'Api\App\v3_0_24\ChamadosController@chamados');
+        Route::get('get_pendencias', 'Api\App\v3_0_24\ChamadosController@get_pendencias');
+
         Route::post('criarchamado', 'Api\App\v3_0_24\ChamadosController@criarchamado');
         Route::post('enviarArquivos', 'Api\App\v3_0_24\ChamadosController@enviarArquivos');
     });

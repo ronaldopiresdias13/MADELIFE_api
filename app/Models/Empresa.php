@@ -27,4 +27,9 @@ class Empresa extends Model
     {
         return $this->hasMany(Chamado::class,'empresa_id','id');
     }
+
+    public function ocorrencias()
+    {
+        return $this->hasMany(Ocorrencia::class,'empresa_id','id');
+    }
 }

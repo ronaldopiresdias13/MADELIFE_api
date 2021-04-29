@@ -95,4 +95,22 @@ class ChamadosController extends Controller
             'arquivos' => $files_path
         ]);
     }
+
+    public function get_pendencias()
+    {
+        $user = request()->user();
+        $pessoa = $user->pessoa;
+        $pendencia = false;
+        $chamados = Chamado::where('prestador_id', $pessoa->id)->whereHas('mensagens', function ($q) {
+            $q->where('visto', '=', false)->where('atendente_id', '<>', null);
+        })->where('finalizado', '=', false)->with(['mensagens' => function ($q) {
+            $q->where('visto', '=', false)->orderBy('created_at', 'desc');
+        }])->orderBy('created_at', 'desc')->first();
+        if ($chamados != null) {
+            $pendencia = true;
+        }
+        return response()->json([
+            'pendencia' => $pendencia,
+        ]);
+    }
 }
