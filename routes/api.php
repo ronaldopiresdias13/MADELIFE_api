@@ -59,38 +59,6 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('dashboard/dashboarTotalCheckinCheckout', 'Api\Web\AreaClinica\DashboardController@dashboarTotalCheckinCheckout');
             Route::get('dashboard/dashboardTotalMedicamentos', 'Api\Web\AreaClinica\DashboardController@dashboardTotalMedicamentos');
             Route::get('dashboard/dashboardTotalAtividades', 'Api\Web\AreaClinica\DashboardController@dashboardTotalAtividades');
-
-            Route::get('categoriadocumentos/listCategorias', 'Api\Web\AreaClinica\CategoriadocumentosController@listCategorias');
-            Route::post('categoriadocumentos/newCategoria', 'Api\Web\AreaClinica\CategoriadocumentosController@newCategoria');
-            Route::put('categoriadocumentos/update/{categoriadocumento}', 'Api\Web\AreaClinica\CategoriadocumentosController@update');
-            Route::delete('categoriadocumentos/delete/{categoriadocumento}', 'Api\Web\AreaClinica\CategoriadocumentosController@delete');
-
-            Route::get('cuidados', 'Api\Web\AreaClinica\CuidadosController@index');
-            Route::post('cuidados', 'Api\Web\AreaClinica\CuidadosController@store');
-            Route::get('cuidados/{cuidado}', 'Api\Web\AreaClinica\CuidadosController@show');
-            Route::put('cuidados/{cuidado}', 'Api\Web\AreaClinica\CuidadosController@update');
-            Route::delete('cuidados/{cuidado}', 'Api\Web\AreaClinica\CuidadosController@destroy');
-            Route::get('cuidados/count/{empresa}', 'Api\Web\AreaClinica\CuidadosController@quantidadecuidados');
-
-            Route::get('grupocuidados', 'Api\Web\AreaClinica\GrupocuidadosController@index');
-            Route::post('grupocuidados', 'Api\Web\AreaClinica\GrupocuidadosController@store');
-            Route::get('grupocuidados/{grupocuidado}', 'Api\Web\AreaClinica\GrupocuidadosController@show');
-            Route::put('grupocuidados/{grupocuidado}', 'Api\Web\AreaClinica\GrupocuidadosController@update');
-            Route::delete('grupocuidados/{grupocuidado}', 'Api\Web\AreaClinica\GrupocuidadosController@destroy');
-            // Route::get('cuidados/empresa/{empresa}', 'Api\Web\AreaClinica\CuidadosController@indexbyempresa');
-        });
-        Route::prefix('compras')->group(function () {
-            Route::get('fornecedores', 'Api\Web\Compras\FornecedoresController@getAllByEmpresaId');
-            Route::post('fornecedores', 'Api\Web\Compras\FornecedoresController@store');
-            Route::get('fornecedores/{fornecedor}', 'Api\Web\Compras\FornecedoresController@show');
-            Route::put('fornecedores/{fornecedor}', 'Api\Web\Compras\FornecedoresController@update');
-            Route::delete('fornecedores/{fornecedor}', 'Api\Web\Compras\FornecedoresController@destroy');
-
-            Route::get('cotacoes', 'Api\Web\Compras\CotacoesController@getAllByEmpresaId');
-            Route::post('cotacoes', 'Api\Web\Compras\CotacoesController@store');
-            Route::get('cotacoes/{cotacao}', 'Api\Web\Compras\CotacoesController@show');
-            Route::put('cotacoes/{cotacao}', 'Api\Web\Compras\CotacoesController@update');
-            Route::delete('cotacoes/{cotacao}', 'Api\Web\Compras\CotacoesController@destroy');
         });
 
         Route::prefix('gestaoOrcamentaria')->group(function () {
