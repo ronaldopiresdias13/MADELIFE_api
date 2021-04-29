@@ -7,11 +7,15 @@ use App\Http\Requests\ChamadoAtendenteRequest;
 use App\Http\Requests\ChamadoRequest;
 use App\Http\Resources\ChamadoAtendenteResource;
 use App\Http\Resources\ChamadoResource;
+use App\Http\Resources\OcorrenciaResource;
 use App\Models\Chamado;
+use App\Models\Ocorrencia;
 use App\Models\Pessoa;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ChamadosController extends Controller
 {
@@ -22,7 +26,11 @@ class ChamadosController extends Controller
         $profissinal = $pessoa->profissional()->first();
         $chamados = Chamado::where('empresa_id','=',$profissinal->empresa_id)->with(['mensagens' => function ($q) {
             $q->with(['atendente', 'prestador'])->orderBy('created_at', 'desc');
-        }, 'prestador'])->where('tipo', 'Enfermagem')->where('updated_at', '>', Carbon::now()->subDays(5))->orderBy('updated_at', 'desc')->orderBy('updated_at', 'desc')->get();
+        }, 'prestador'])->where('tipo', 'Enfermagem')->where(function($q){
+            $q->where(function($q2){
+                $q2->where('updated_at', '>', Carbon::now()->subDays(5))->where('finalizado','=',1);
+            })->orWhere('finalizado','=',0);
+        })->where('ocorrencia_id','=',null)->orderBy('updated_at', 'desc')->orderBy('updated_at', 'desc')->get();
         return response()->json(['conversas' => ChamadoAtendenteResource::collection($chamados)]);
     }
 
@@ -30,7 +38,11 @@ class ChamadosController extends Controller
     {
         $chamados = Chamado::with(['mensagens' => function ($q) {
             $q->with(['atendente', 'prestador'])->orderBy('created_at', 'desc');
-        }, 'prestador'])->where('tipo', 'T.I.')->where('updated_at', '>', Carbon::now()->subDays(5))->orderBy('updated_at', 'desc')->get();
+        }, 'prestador'])->where('tipo', 'T.I.')->where(function($q){
+            $q->where(function($q2){
+                $q2->where('updated_at', '>', Carbon::now()->subDays(5))->where('finalizado','=',1);
+            })->orWhere('finalizado','=',0);
+        })->where('ocorrencia_id','=',null)->orderBy('updated_at', 'desc')->get();
         return response()->json(['conversas' => ChamadoAtendenteResource::collection($chamados)]);
     }
 
@@ -93,7 +105,13 @@ class ChamadosController extends Controller
         $user = $request->user();
         $pessoa = $user->pessoa;
         $profissinal = $pessoa->profissional()->first();
-
+        $ocorrencia=null;
+        if(isset($data['ocorrencia'])){
+            $ocorrencia=OcorrenciaResource::make(Ocorrencia::find($data['ocorrencia']));
+        }
+        else{
+            $data['ocorrencia']=null;
+        }
         $chamado = new Chamado();
         $chamado->fill([
             'prestador_id' => $data['prestador_id'],
@@ -104,10 +122,11 @@ class ChamadosController extends Controller
             'justificativa' => null,
             'protocolo' => $this->generateRandomString(5),
             'tipo' => 'Enfermagem',
-            'empresa_id'=>$profissinal->empresa_id
+            'empresa_id'=>$profissinal->empresa_id,
+            'ocorrencia_id'=>$data['ocorrencia']
         ])->save();
 
-        return response()->json(['chamado' => ChamadoAtendenteResource::make($chamado)]);
+        return response()->json(['chamado' => ChamadoAtendenteResource::make($chamado),'ocorrencia'=>$ocorrencia]);
     }
 
 
@@ -229,5 +248,16 @@ class ChamadosController extends Controller
         return response()->json([
             'arquivos' => $files_path
         ]);
+    }
+
+    public function get_image($path){
+        $pessoa=Pessoa::find($path);
+        if (Storage::disk('local')->exists($pessoa->perfil)) {
+            $path_image =  Storage::disk('local')->get($pessoa->perfil);
+            Log::info(explode(',', $path_image)[1]);
+            return base64_decode(explode(',', $path_image)[1]);
+        } else {
+            return null;
+        }
     }
 }

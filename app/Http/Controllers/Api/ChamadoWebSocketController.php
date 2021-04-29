@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ChamadoAtendenteResource;
 use App\Http\Resources\ChamadoResource;
+use App\Jobs\NotificacaoAppJob;
 use App\Models\Chamado;
 use App\Models\Conversa;
 use App\Models\ConversaMensagem;
@@ -372,8 +373,8 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
             Log::info('mensagem2.1');
             Log::info('chamado');
             Log::info($chamado);
-
-
+            $prestador=$chamado->prestador()->first();
+            NotificacaoAppJob::dispatch($prestador,$chamado->tipo.' - '.$chamado->assunto,$message->mensagem);
             if (isset($this->clientes_ids[$chamado->prestador_id])) {
                 foreach ($this->clientes_ids[$chamado->prestador_id] as $socket) {
 

@@ -38,19 +38,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('web')->group(function () {
         Route::prefix('home')->group(function () {
             Route::get('dashboard/get_dados', 'Api\Web\Home\DashboardController@get_dados');
-        });
-        Route::prefix('agendamento')->group(function () {
-            Route::get('agendamentos', [AgendamentosController::class, 'index']);
-            Route::post('agendamentos', [AgendamentosController::class, 'store']);
-            Route::get('agendamentos/{agendamento}', [AgendamentosController::class, 'show']);
-            Route::put('agendamentos/{agendamento}', [AgendamentosController::class, 'update']);
-            Route::delete('agendamentos/{agendamento}', [AgendamentosController::class, 'destroy']);
-
-            Route::get('salas', 'Api\Web\Agendamento\SalasController@index');
-            Route::post('salas', 'Api\Web\Agendamento\SalasController@store');
-            Route::get('salas/{sala}', 'Api\Web\Agendamento\SalasController@show');
-            Route::put('salas/{sala}', 'Api\Web\Agendamento\SalasController@update');
-            Route::delete('salas/{sala}', 'Api\Web\Agendamento\SalasController@destroy');
+            Route::post('dashboard/resolver_ocorrencia', 'Api\Web\Home\DashboardController@resolver_ocorrencia');
+            Route::get('dashboard/get_pendencias', 'Api\Web\Home\DashboardController@get_pendencias');
         });
         Route::prefix('areaClinica')->group(function () {
             Route::get('dashboard/relatorioDiario', 'Api\Web\AreaClinica\DashboardController@relatorioDiario');
@@ -73,26 +62,6 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('dashboard/dashboardTotalMedicamentos', 'Api\Web\AreaClinica\DashboardController@dashboardTotalMedicamentos');
             Route::get('dashboard/dashboardTotalAtividades', 'Api\Web\AreaClinica\DashboardController@dashboardTotalAtividades');
 
-            Route::get('cuidados', 'Api\Web\AreaClinica\CuidadosController@index');
-            Route::post('cuidados', 'Api\Web\AreaClinica\CuidadosController@store');
-            Route::get('cuidados/{cuidado}', 'Api\Web\AreaClinica\CuidadosController@show');
-            Route::put('cuidados/{cuidado}', 'Api\Web\AreaClinica\CuidadosController@update');
-            Route::delete('cuidados/{cuidado}', 'Api\Web\AreaClinica\CuidadosController@destroy');
-            Route::get('cuidados/count/{empresa}', 'Api\Web\AreaClinica\CuidadosController@quantidadecuidados');
-            // Route::get('cuidados/empresa/{empresa}', 'Api\Web\AreaClinica\CuidadosController@indexbyempresa');
-        });
-        Route::prefix('compras')->group(function () {
-            Route::get('fornecedores', 'Api\Web\Compras\FornecedoresController@getAllByEmpresaId');
-            Route::post('fornecedores', 'Api\Web\Compras\FornecedoresController@store');
-            Route::get('fornecedores/{fornecedor}', 'Api\Web\Compras\FornecedoresController@show');
-            Route::put('fornecedores/{fornecedor}', 'Api\Web\Compras\FornecedoresController@update');
-            Route::delete('fornecedores/{fornecedor}', 'Api\Web\Compras\FornecedoresController@destroy');
-
-            Route::get('cotacoes', 'Api\Web\Compras\CotacoesController@getAllByEmpresaId');
-            Route::post('cotacoes', 'Api\Web\Compras\CotacoesController@store');
-            Route::get('cotacoes/{cotacao}', 'Api\Web\Compras\CotacoesController@show');
-            Route::put('cotacoes/{cotacao}', 'Api\Web\Compras\CotacoesController@update');
-            Route::delete('cotacoes/{cotacao}', 'Api\Web\Compras\CotacoesController@destroy');
         });
 
         Route::prefix('gestaoOrcamentaria')->group(function () {
@@ -111,8 +80,9 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::delete('orcamentos/{orcamento}', 'Api\Web\GestaoOrcamentaria\OrcamentosController@destroy');
             Route::post('orcamentos/enviarOrcamentoPorEmail', 'Api\Web\GestaoOrcamentaria\OrcamentosController@enviarOrcamentoPorEmail');
 
-            Route::get('contratos/dashboardGroupByMotivoDesativados', 'Api\Web\OrdemservicosController@dashboardGroupByMotivoDesativados');
-            Route::get('contratos/dashboardGroupByStatusAtivadosDesativados', 'Api\Web\OrdemservicosController@dashboardGroupByStatusAtivadosDesativados');
+            Route::get('contratos/getAllOrdensServicos', 'Api\Web\GestaoOrcamentaria\OrdemservicosController@getAllOrdensServicos');
+            Route::get('contratos/dashboardGroupByMotivoDesativados', 'Api\Web\GestaoOrcamentaria\OrdemservicosController@dashboardGroupByMotivoDesativados');
+            Route::get('contratos/dashboardGroupByStatusAtivadosDesativados', 'Api\Web\GestaoOrcamentaria\OrdemservicosController@dashboardGroupByStatusAtivadosDesativados');
 
             Route::get('pacientes/list', 'Api\Web\PacientesController@index');
             Route::get('pacientes/{paciente}', 'Api\Web\PacientesController@show');
@@ -214,11 +184,6 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('meu-perfil', 'Api\Web\RecursosHumanos\ProfissionaisController@meuperfil');
         Route::put('meu-perfil/atualizarFotoPerfil', 'Api\Web\RecursosHumanos\ProfissionaisController@atualizarFotoPerfil');
 
-        Route::get('categoriadocumentos/listCategorias', 'Api\Web\CategoriadocumentosController@listCategorias');
-        Route::post('categoriadocumentos/newCategoria', 'Api\Web\CategoriadocumentosController@newCategoria');
-        Route::put('categoriadocumentos/update/{categoriadocumento}', 'Api\Web\CategoriadocumentosController@update');
-        Route::delete('categoriadocumentos/delete/{categoriadocumento}', 'Api\Web\CategoriadocumentosController@delete');
-
         Route::get('documentos/listDocumentosByEmpresa', 'Api\Web\DocumentosController@listDocumentosByEmpresa');
         Route::get('documentos/listDocumentosByConvenio', 'Api\Web\DocumentosController@listDocumentosByConvenio');
         Route::get('documentos/listDocumentosByResponsavel', 'Api\Web\DocumentosController@listDocumentosByResponsavel');
@@ -234,12 +199,15 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         Route::get('pacientes/listNomePacientes', 'Api\Web\PacientesController@listNomePacientes');
 
-        Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\Web\OrdemservicosController@listaOrdemServicosEscalas');
+        Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\Web\GestaoOrcamentaria\OrdemservicosController@listaOrdemServicosEscalas');
+
+        Route::post('pontos/checkin/{escala}', 'Api\PontosController@checkin'); // Custon
+        Route::post('pontos/checkout/{escala}', 'Api\PontosController@checkout'); // Custon
     });
 
 
     Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\OrdemservicosController@listaOrdemServicosEscalas');
-    Route::get('transcricoes/listaTranscricoes', 'Api\TranscricoesController@listaTranscricoes');
+    Route::get('transcricoes/listaTranscricoes', 'Api\Web\AreaClinica\TranscricoesController@listaTranscricoes');
 });
 
 // Route::get('getEscalasHoje', 'Api\EscalasController@getEscalasHoje')->middleware('auth:api');
@@ -278,12 +246,6 @@ Route::post('certificadoprestadores', 'Api\CertificadoprestadoresController@stor
 Route::get('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@show');
 Route::put('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@update');
 Route::delete('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@destroy');
-
-// Route::get('clientes', 'Api\ClientesController@index');
-// Route::post('clientes', 'Api\ClientesController@store');
-// Route::get('clientes/{cliente}', 'Api\ClientesController@show');
-// Route::put('clientes/{cliente}', 'Api\ClientesController@update');
-// Route::delete('clientes/{cliente}', 'Api\ClientesController@destroy');
 
 Route::get('cnabs', 'Api\CnabsController@index');
 Route::post('cnabs', 'Api\CnabsController@store');
@@ -412,11 +374,6 @@ Route::delete('formacoes/{formacao}', 'Api\FormacoesController@destroy');
 
 
 
-Route::get('grupocuidados', 'Api\GrupocuidadosController@index');
-Route::post('grupocuidados', 'Api\GrupocuidadosController@store');
-Route::get('grupocuidados/{grupocuidado}', 'Api\GrupocuidadosController@show');
-Route::put('grupocuidados/{grupocuidado}', 'Api\GrupocuidadosController@update');
-Route::delete('grupocuidados/{grupocuidado}', 'Api\GrupocuidadosController@destroy');
 
 Route::get('historicoorcamentos', 'Api\HistoricoorcamentosController@index');
 Route::post('historicoorcamentos', 'Api\HistoricoorcamentosController@store');
@@ -583,7 +540,6 @@ Route::post('pontos', 'Api\PontosController@store');
 Route::get('pontos/{ponto}', 'Api\PontosController@show');
 Route::put('pontos/{ponto}', 'Api\PontosController@update');
 Route::delete('pontos/{ponto}', 'Api\PontosController@destroy');
-Route::post('pontos/checkin/{escala}', 'Api\PontosController@checkin'); // Custon
 Route::post('pontos/checkout/{escala}', 'Api\PontosController@checkout'); // Custon
 Route::get('pontos/escala/{escala}', 'Api\PontosController@buscaPontosPorIdEscala');
 
@@ -682,12 +638,6 @@ Route::get('tipoprodutos/{tipoproduto}', 'Api\TipoprodutosController@show');
 Route::put('tipoprodutos/{tipoproduto}', 'Api\TipoprodutosController@update');
 Route::delete('tipoprodutos/{tipoproduto}', 'Api\TipoprodutosController@destroy');
 
-Route::get('transcricoes', 'Api\TranscricoesController@index');
-Route::post('transcricoes', 'Api\TranscricoesController@store');
-Route::get('transcricoes/{transcricao}', 'Api\TranscricoesController@show');
-Route::put('transcricoes/{transcricao}', 'Api\TranscricoesController@update');
-Route::delete('transcricoes/{transcricao}', 'Api\TranscricoesController@destroy');
-Route::get('transcricoes/count/{empresa}', 'Api\TranscricoesController@quantidadetranscricoes');
 
 Route::delete('transcricaoprodutos/{transcricao_produto}', 'Api\TranscricaoProdutoController@destroy');
 

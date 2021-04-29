@@ -54,7 +54,7 @@ class ServicosController extends Controller
     public function store(Request $request)
     {
         $user = $request->user();
-        $empresa_id = $user->pessoa->profissional->empresa->id;
+        $empresa_id = $user->pessoa->profissional->empresa_id;
         DB::transaction(function () use ($request, $empresa_id) {
             $servico = Servico::updateOrCreate(
                 [
