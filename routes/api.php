@@ -238,6 +238,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\Web\GestaoOrcamentaria\OrdemservicosController@listaOrdemServicosEscalas');
 
         Route::post('pontos/checkin/{escala}', 'Api\PontosController@checkin'); // Custon
+        Route::post('pontos/checkout/{escala}', 'Api\PontosController@checkout'); // Custon
     });
 
 
