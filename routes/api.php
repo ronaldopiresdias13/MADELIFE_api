@@ -59,6 +59,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('dashboard/dashboarTotalCheckinCheckout', 'Api\Web\AreaClinica\DashboardController@dashboarTotalCheckinCheckout');
             Route::get('dashboard/dashboardTotalMedicamentos', 'Api\Web\AreaClinica\DashboardController@dashboardTotalMedicamentos');
             Route::get('dashboard/dashboardTotalAtividades', 'Api\Web\AreaClinica\DashboardController@dashboardTotalAtividades');
+
         });
 
         Route::prefix('gestaoOrcamentaria')->group(function () {
@@ -199,11 +200,12 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\Web\GestaoOrcamentaria\OrdemservicosController@listaOrdemServicosEscalas');
 
         Route::post('pontos/checkin/{escala}', 'Api\PontosController@checkin'); // Custon
+        Route::post('pontos/checkout/{escala}', 'Api\PontosController@checkout'); // Custon
     });
 
 
     Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\OrdemservicosController@listaOrdemServicosEscalas');
-    Route::get('transcricoes/listaTranscricoes', 'Api\TranscricoesController@listaTranscricoes');
+    Route::get('transcricoes/listaTranscricoes', 'Api\Web\AreaClinica\TranscricoesController@listaTranscricoes');
 });
 
 // Route::get('getEscalasHoje', 'Api\EscalasController@getEscalasHoje')->middleware('auth:api');
@@ -634,12 +636,6 @@ Route::get('tipoprodutos/{tipoproduto}', 'Api\TipoprodutosController@show');
 Route::put('tipoprodutos/{tipoproduto}', 'Api\TipoprodutosController@update');
 Route::delete('tipoprodutos/{tipoproduto}', 'Api\TipoprodutosController@destroy');
 
-Route::get('transcricoes', 'Api\TranscricoesController@index');
-Route::post('transcricoes', 'Api\TranscricoesController@store');
-Route::get('transcricoes/{transcricao}', 'Api\TranscricoesController@show');
-Route::put('transcricoes/{transcricao}', 'Api\TranscricoesController@update');
-Route::delete('transcricoes/{transcricao}', 'Api\TranscricoesController@destroy');
-Route::get('transcricoes/count/{empresa}', 'Api\TranscricoesController@quantidadetranscricoes');
 
 Route::delete('transcricaoprodutos/{transcricao_produto}', 'Api\TranscricaoProdutoController@destroy');
 
