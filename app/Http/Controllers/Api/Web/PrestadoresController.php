@@ -6,8 +6,12 @@ use App\Models\Escala;
 use App\Http\Controllers\Controller;
 use App\Models\Conselho;
 use App\Models\Dadosbancario;
+use App\Models\Endereco;
 use App\Models\Pessoa;
+use App\Models\PessoaEndereco;
+use App\Models\PessoaTelefone;
 use App\Models\Prestador;
+use App\Models\Telefone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -20,29 +24,12 @@ class PrestadoresController extends Controller
      */
     public function listNomePrestadores(Request $request)
     {
-        // $user = $request->user();
-
-        // $prestadores = Prestador::with([
-        //     'pessoa' => function ($query) {
-        //         $query->select('id', 'nome');
-        //     }
-        // ])->get(['id', 'pessoa_id']);
-
-
-        // Alterar para trazer somente os prestadores da minha empresa atravez do ususario autenticado
-
         $prestadores = DB::table('prestadores')
             ->join('pessoas', 'pessoas.id', '=', 'prestadores.pessoa_id')
             ->select('prestadores.id as value', 'pessoas.nome as label')
             ->where('prestadores.ativo', true)
             ->orderBy('pessoas.nome')
             ->get();
-        // $prestadores = Prestador::where('ativo', true)
-        //     ->join('pessoas', 'pessoas.id', '=', 'prestadores.pessoa_id')
-        //     ->select('prestadores.id', 'pessoas.nome')
-        //     ->orderBy('pessoas.nome');
-        // // ->get();
-
         return $prestadores;
     }
 
@@ -53,20 +40,6 @@ class PrestadoresController extends Controller
      */
     public function listPrestadoresComFormacoes(Request $request)
     {
-        // $user = $request->user();
-
-        // $prestadores = Prestador::with([
-        //     'pessoa' => function ($query) {
-        //         $query->select('id', 'nome');
-        //     }
-        // ])->get(['id', 'pessoa_id']);
-
-
-        // Alterar para trazer somente os prestadores da minha empresa atravez do ususario autenticado
-
-        // $prestadores = Prestador::with('pessoa', 'formacoes')
-        //     ->where('ativo', true)
-        //     ->get();
         $prestadores = Prestador::where('ativo', true)
             ->join('pessoas', 'pessoas.id', '=', 'prestadores.pessoa_id')
             ->select('prestadores.id', 'pessoas.nome')
@@ -143,6 +116,17 @@ class PrestadoresController extends Controller
     {
         return Conselho::where('ativo', true)->where('pessoa_id', $pessoa->id)->get();
     }
+    public function buscalistadetelefonespodidpessoa(Pessoa $pessoa)
+    {
+        return $pessoa->telefones;
+    }
+    public function buscalistadeenderecospodidpessoa(Pessoa $pessoa)
+    {
+        foreach ($pessoa->enderecos as $key => $endereco) {
+            $endereco->cidade;
+        }
+        return $pessoa->enderecos;
+    }
     public function buscalistadebancospodidpessoa(Pessoa $pessoa)
     {
         return Dadosbancario::with('banco')->where('ativo', true)->where('pessoa_id', $pessoa->id)->get();
@@ -163,6 +147,39 @@ class PrestadoresController extends Controller
                 'ativo'   => $request['ativo'],
             ]
         );
+    }
+    public function salvartelefone(Request $request)
+    {
+        $user = $request->user();
+        PessoaTelefone::firstOrCreate([
+            'pessoa_id'   => $user->pessoa_id,
+            'telefone_id' => Telefone::firstOrCreate(
+                [
+                    'telefone'  => $request['telefone'],
+                ]
+            )->id,
+            'tipo'      => $request['pivot']['tipo'],
+            'descricao' => $request['pivot']['descricao'],
+        ]);
+    }
+    public function salvarendereco(Request $request)
+    {
+        $user = $request->user();
+        PessoaEndereco::firstOrCreate([
+            'pessoa_id'   => $user->pessoa_id,
+            'endereco_id' => Endereco::create(
+                [
+                    'tipo' => $request['tipo'],
+                    'cep' => $request['cep'],
+                    'cidade_id' => $request['cidade_id'],
+                    'bairro' => $request['bairro'],
+                    'rua' => $request['rua'],
+                    'numero' => $request['numero'],
+                    'complemento' => $request['complemento'],
+                    'descricao' => $request['descricao'],
+                ]
+            )->id,
+        ]);
     }
     public function salvarbanco(Request $request)
     {
@@ -194,5 +211,15 @@ class PrestadoresController extends Controller
     {
         $dadosbancario->ativo = false;
         $dadosbancario->save();
+    }
+    public function deletartelefone(PessoaTelefone $pessoaTelefone)
+    {
+        $pessoaTelefone->ativo = false;
+        $pessoaTelefone->save();
+    }
+    public function deletarendereco(PessoaEndereco $pessoaEndereco)
+    {
+        $pessoaEndereco->ativo = false;
+        $pessoaEndereco->save();
     }
 }

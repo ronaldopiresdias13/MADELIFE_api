@@ -61,7 +61,6 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('dashboard/dashboarTotalCheckinCheckout', 'Api\Web\AreaClinica\DashboardController@dashboarTotalCheckinCheckout');
             Route::get('dashboard/dashboardTotalMedicamentos', 'Api\Web\AreaClinica\DashboardController@dashboardTotalMedicamentos');
             Route::get('dashboard/dashboardTotalAtividades', 'Api\Web\AreaClinica\DashboardController@dashboardTotalAtividades');
-
         });
 
         Route::prefix('gestaoOrcamentaria')->group(function () {
@@ -111,10 +110,16 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('buscarPagamentosPessoaPorPeriodoEmpresaId', 'Api\Web\DepartamentoPessoal\PagamentopessoasController@buscarPagamentosPessoaPorPeriodoEmpresaId');
             Route::get('buscalistadeconselhospodidpessoa/{pessoa}', 'Api\Web\PrestadoresController@buscalistadeconselhospodidpessoa');
             Route::get('buscalistadebancospodidpessoa/{pessoa}', 'Api\Web\PrestadoresController@buscalistadebancospodidpessoa');
+            Route::get('buscalistadetelefonespodidpessoa/{pessoa}', 'Api\Web\PrestadoresController@buscalistadetelefonespodidpessoa');
+            Route::get('buscalistadeenderecospodidpessoa/{pessoa}', 'Api\Web\PrestadoresController@buscalistadeenderecospodidpessoa');
             Route::post('salvarconselho', 'Api\Web\PrestadoresController@salvarconselho');
+            Route::post('salvartelefone', 'Api\Web\PrestadoresController@salvartelefone');
             Route::post('salvarbanco', 'Api\Web\PrestadoresController@salvarbanco');
+            Route::post('salvarendereco', 'Api\Web\PrestadoresController@salvarendereco');
             Route::delete('deletarconselho/{conselho}', 'Api\Web\PrestadoresController@deletarconselho');
             Route::delete('deletarbanco/{dadosbancario}', 'Api\Web\PrestadoresController@deletarbanco');
+            Route::delete('deletartelefone/{pessoaTelefone}', 'Api\Web\PrestadoresController@deletartelefone');
+            Route::delete('deletarendereco/{pessoaEndereco}', 'Api\Web\PrestadoresController@deletarendereco');
         });
 
         Route::prefix('financeiro')->group(function () {
