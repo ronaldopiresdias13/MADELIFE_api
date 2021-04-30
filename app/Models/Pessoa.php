@@ -127,4 +127,19 @@ class Pessoa extends Model
     {
         return $this->hasMany(Paciente::class);
     }
+
+    public function ocorrencias()
+    {
+        return $this->belongsToMany(Ocorrencia::class, 'ocorrencias_pessoas', 'pessoa_id', 'ocorrencia_id');
+    }
+
+    public function ocorrencias_responsaveis()
+    {
+        return $this->hasMany(Pessoa::class,'responsavel_id','id');
+    }
+
+    public function ocorrencias_pacientes()
+    {
+        return $this->hasMany(Pessoa::class,'paciente_id','id');
+    }
 }

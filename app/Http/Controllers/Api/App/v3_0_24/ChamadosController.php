@@ -22,10 +22,10 @@ class ChamadosController extends Controller
         }, 'prestador'])->orderBy('updated_at', 'desc')->get();
         $prestador = $pessoa->prestador()->first();
         $empresas = [];
-        if($prestador!=null){
-            $empresas = $prestador->empresas()->select(['empresas.id','razao'])->get();
+        if ($prestador != null) {
+            $empresas = $prestador->empresas()->select(['empresas.id', 'razao'])->get();
         }
-        return response()->json(['conversas' => ChamadoResource::collection($chamados),'empresas'=>$empresas]);
+        return response()->json(['conversas' => ChamadoResource::collection($chamados), 'empresas' => $empresas]);
     }
 
     public function criarchamado(ChamadoRequest $request)
@@ -44,8 +44,8 @@ class ChamadosController extends Controller
             'protocolo' => $this->generateRandomString(5),
             'tipo' => $data['area'],
         ]);
-        if(isset($data['empresa'])){
-            $chamado->fill(['empresa_id'=>$data['empresa']]);
+        if (isset($data['empresa'])) {
+            $chamado->fill(['empresa_id' => $data['empresa']]);
         }
         $chamado->save();
 
@@ -94,6 +94,25 @@ class ChamadosController extends Controller
         }
         return response()->json([
             'arquivos' => $files_path
+        ]);
+    }
+
+
+    public function get_pendencias()
+    {
+        $user = request()->user();
+        $pessoa = $user->pessoa;
+        $pendencia = false;
+        $chamados = Chamado::where('prestador_id', $pessoa->id)->whereHas('mensagens', function ($q) {
+            $q->where('visto', '=', false)->where('atendente_id', '<>', null);
+        })->where('finalizado', '=', false)->with(['mensagens' => function ($q) {
+            $q->where('visto', '=', false)->orderBy('created_at', 'desc');
+        }])->orderBy('created_at', 'desc')->first();
+        if ($chamados != null) {
+            $pendencia = true;
+        }
+        return response()->json([
+            'pendencia' => $pendencia,
         ]);
     }
 }

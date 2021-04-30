@@ -63,6 +63,7 @@ class ProdutosController extends Controller
     {
         //
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -84,5 +85,21 @@ class ProdutosController extends Controller
         INNER JOIN ordemservicos os ON os.orcamento_id = o.id
         WHERE o.ativo = 1 AND o.`status` = 1 AND os.empresa_id = ? AND op.ativo = 1", [$empresa_id]);
         return $query;
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function buscaProdutoPorCodBarra(Request $request)
+    {
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+
+        $result = Produto::where('empresa_id', $empresa_id)
+        ->where('codigobarra', $request->codigobarra)
+        ->first();
+
+        return $result;
     }
 }

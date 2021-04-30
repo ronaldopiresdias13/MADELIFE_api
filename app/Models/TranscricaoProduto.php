@@ -21,4 +21,9 @@ class TranscricaoProduto extends Model
     {
         return $this->hasMany(Acaomedicamento::class)->where('ativo', true);
     }
+
+    public function ocorrencias()
+    {
+        return $this->hasMany(Ocorrencia::class,'transcricao_produto_id','id');
+    }
 }

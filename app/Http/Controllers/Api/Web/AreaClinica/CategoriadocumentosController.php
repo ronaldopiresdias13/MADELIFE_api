@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Web;
+namespace App\Http\Controllers\Api\Web\AreaClinica;
 
 use App\Models\Categoriadocumento;
 use App\Http\Controllers\Controller;
@@ -28,10 +28,12 @@ class CategoriadocumentosController extends Controller
      */
     public function newCategoria(Request $request)
     {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
         Categoriadocumento::firstOrCreate(
             [
                 'categoria' => $request['categoria'],
-                'empresa_id' => $request['empresa_id']
+                'empresa_id' => $empresa_id
             ]
         );
     }

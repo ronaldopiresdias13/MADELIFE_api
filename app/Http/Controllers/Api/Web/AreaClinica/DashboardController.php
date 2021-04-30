@@ -30,6 +30,7 @@ class DashboardController extends Controller
         $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . ($hoje['mday'] < 10 ? '0' . $hoje['mday'] : $hoje['mday']);
 
         $escalas = Escala::with([
+            'cuidados',
             'ordemservico' => function ($query) {
                 $query->select('id', 'orcamento_id', 'profissional_id');
                 $query->with(['orcamento' => function ($query) {

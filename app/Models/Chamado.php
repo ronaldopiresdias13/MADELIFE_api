@@ -12,7 +12,7 @@ class Chamado extends Model
     protected $table = 'chamados';
 
     protected $fillable = [
-        'prestador_id','criador_id','assunto','mensagem_inicial','finalizado','justificativa','protocolo','tipo','empresa_id'
+        'prestador_id','criador_id','assunto','mensagem_inicial','finalizado','justificativa','protocolo','tipo','empresa_id','ocorrencia_id'
     ];
 
     protected $casts = [
@@ -37,5 +37,10 @@ class Chamado extends Model
     public function empresa()
     {
         return $this->belongsTo(Empresa::class, 'empresa_id', 'id');
+    }
+
+    public function ocorrencia()
+    {
+        return $this->belongsTo(Ocorrencia::class, 'ocorrencia_id', 'id');
     }
 }
