@@ -112,11 +112,22 @@ class ServicosController extends Controller
      */
     public function update(Request $request, Servico $servico)
     {
-        DB::transaction(function () use ($request, $servico) {
+        $user = $request->user();
+        if (!$user) {
+            return response()->json([
+                'alert' => [
+                    'title' => 'Ops!',
+                    'text' => 'Por favor faça login novamente!'
+                ]
+            ], 401)
+                ->header('Content-Type', 'application/json');
+        }
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        DB::transaction(function () use ($request, $servico, $empresa_id) {
             $servico->descricao  = $request->descricao;
             $servico->codigo     = $request->codigo;
             $servico->valor      = $request->valor;
-            $servico->empresa_id = $request->empresa_id;
+            $servico->empresa_id = $empresa_id;
             $servico->save();
 
             foreach ($servico->servicoFormacao as $key => $servicoFormacao) {
