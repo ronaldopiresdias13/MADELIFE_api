@@ -36,6 +36,7 @@ class ContratosController extends Controller
                 // 'custos'
             ],
         )
+            ->where('ativo', true)
             ->where('empresa_id', $empresa_id);
 
         if ($request->filter_nome) {
