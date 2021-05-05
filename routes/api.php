@@ -723,14 +723,14 @@ Route::group(['middleware' => 'auth:api'], function () {
         //     Route::post('create', [PagamentointernosController::class, 'create']);
         //     Route::post('createlist', [PagamentointernosController::class, 'createlist']);
         // });
-        Route::prefix('pagamentoexterno')->group(function () {
-            Route::get('list', [PagamentoexternosController::class, 'list']);
-            Route::get('gerarlist', [PagamentoexternosController::class, 'gerarlist']);
-            Route::post('create', [PagamentoexternosController::class, 'create']);
-            Route::post('createlist', [PagamentoexternosController::class, 'createlist']);
-            Route::post('atualizarPagamentosExternos', [PagamentoexternosController::class, 'atualizarPagamentosExternos']);
-            Route::delete('apagarpagamento/{pagamentoexterno}', [PagamentoexternosController::class, 'apagarpagamento']);
-        });
+        // Route::prefix('pagamentoexterno')->group(function () {
+        //     Route::get('list', [PagamentoexternosController::class, 'list']);
+        //     Route::get('gerarlist', [PagamentoexternosController::class, 'gerarlist']);
+        //     Route::post('create', [PagamentoexternosController::class, 'create']);
+        //     Route::post('createlist', [PagamentoexternosController::class, 'createlist']);
+        //     Route::post('atualizarPagamentosExternos', [PagamentoexternosController::class, 'atualizarPagamentosExternos']);
+        //     Route::delete('apagarpagamento/{pagamentoexterno}', [PagamentoexternosController::class, 'apagarpagamento']);
+        // });
     });
 });
 
@@ -738,56 +738,56 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('web')->group(function () {
-        Route::prefix('prestadores')->group(function () {
-            Route::get('recrutamento', [PrestadoresPrestadoresController::class, 'listRecrutamento']);
-            Route::get('empresaPrestador/listaPrestadoresPorEmpresaIdEStatus', [ApiEmpresaPrestadorController::class, 'listaPrestadoresPorEmpresaIdEStatus']);
-            Route::get('buscaprestadorexterno/{prestador}', [PrestadoresPrestadoresController::class, 'buscaprestadorexterno']);
-        });
-        Route::prefix('compras')->group(function () {
-            Route::get('produtos/getAllProdutosByIdEmpresa', [ProdutoController::class, 'getAllProdutosByIdEmpresa']);
-        });
-        Route::prefix('formacoes')->group(function () {
-            Route::get('', [FormacoesController::class, 'index']);
-            // Route::delete('{formacao}', [FormacoesController::class, 'destroy']);
-        });
-        Route::prefix('escalas')->group(function () {
-            Route::get('medicao', [EscalasEscalasController::class, 'medicao']);
-        });
-        Route::prefix('ordemservicos')->group(function () {
-            Route::get('', [OrdemservicosController::class, 'index']);
-        });
-        Route::prefix('orcs')->group(function () {
-            Route::get('', [OrcsController::class, 'index']);
-            Route::get('gerarCodigo', [OrcsController::class, 'gerarCodigoOrc']);
-            Route::get('gerarCodigoOrcamento', [OrcsController::class, 'gerarCodigoOrcamento']);
-            Route::get('{orc}', [OrcsController::class, 'show']);
-            Route::post('', [OrcsController::class, 'store']);
-            Route::put('{orc}', [OrcsController::class, 'update']);
-            Route::delete('{orc}', [OrcsController::class, 'destroy']);
-            Route::post('{orc}/criarcontrato', [OrcsController::class, 'criarcontrato']);
-        });
-        Route::prefix('contratos')->group(function () {
-            Route::get('', [ContratosController::class, 'index']);
-            Route::get('{orcamento}', [ContratosController::class, 'show']);
-            Route::post('', [ContratosController::class, 'store']);
-            Route::put('{orcamento}', [ContratosController::class, 'update']);
-            Route::delete('{orcamento}', [ContratosController::class, 'destroy']);
-            Route::put('{orcamento}/prorrogacao', [ContratosController::class, 'prorrogacao']);
-        });
-        Route::prefix('financeiro')->group(function () {
-            Route::get('pagamentos/pessoas', [PagamentosCnabController::class, 'listPagamentosByEmpresaId']);
-            Route::get('pagamentos/cnab/groupByPagamentoByMesAndEmpresaId', [PagamentosCnabController::class, 'groupByPagamentoByMesAndEmpresaId']);
-            Route::post('atualizarSituacaoPagamentoDiretoria', [PagamentosCnabController::class, 'atualizarSituacaoPagamentoDiretoria']);
-        });
-        Route::prefix('gestaoOrcamentaria')->group(function () {
-            Route::get('pacotes', [PacotesController::class, 'index']);
-            Route::get('pacotes/{pacote}', [PacotesController::class, 'show']);
-            Route::post('pacotes', [PacotesController::class, 'store']);
-            Route::put('pacotes/{pacote}', [PacotesController::class, 'update']);
-            Route::delete('pacotes/{pacote}', [PacotesController::class, 'destroy']);
-            Route::delete('pacotes/excluirItemPacoteServico/{pacoteservico}', [PacotesController::class, 'excluirItemPacoteServico']);
-            Route::delete('pacotes/excluirItemPacoteProduto/{pacoteproduto}', [PacotesController::class, 'excluirItemPacoteProduto']);
-        });
+        // Route::prefix('prestadores')->group(function () {
+        //     Route::get('recrutamento', [PrestadoresPrestadoresController::class, 'listRecrutamento']);
+        //     Route::get('empresaPrestador/listaPrestadoresPorEmpresaIdEStatus', [ApiEmpresaPrestadorController::class, 'listaPrestadoresPorEmpresaIdEStatus']);
+        //     Route::get('buscaprestadorexterno/{prestador}', [PrestadoresPrestadoresController::class, 'buscaprestadorexterno']);
+        // });
+        // Route::prefix('compras')->group(function () {
+        //     Route::get('produtos/getAllProdutosByIdEmpresa', [ProdutoController::class, 'getAllProdutosByIdEmpresa']);
+        // });
+        // Route::prefix('formacoes')->group(function () {
+        //     Route::get('', [FormacoesController::class, 'index']);
+        //     // Route::delete('{formacao}', [FormacoesController::class, 'destroy']);
+        // });
+        // Route::prefix('escalas')->group(function () {
+        //     Route::get('medicao', [EscalasEscalasController::class, 'medicao']);
+        // });
+        // Route::prefix('ordemservicos')->group(function () {
+        //     Route::get('', [OrdemservicosController::class, 'index']);
+        // });
+        // Route::prefix('orcs')->group(function () {
+        //     Route::get('', [OrcsController::class, 'index']);
+        //     Route::get('gerarCodigo', [OrcsController::class, 'gerarCodigoOrc']);
+        //     Route::get('gerarCodigoOrcamento', [OrcsController::class, 'gerarCodigoOrcamento']);
+        //     Route::get('{orc}', [OrcsController::class, 'show']);
+        //     Route::post('', [OrcsController::class, 'store']);
+        //     Route::put('{orc}', [OrcsController::class, 'update']);
+        //     Route::delete('{orc}', [OrcsController::class, 'destroy']);
+        //     Route::post('{orc}/criarcontrato', [OrcsController::class, 'criarcontrato']);
+        // });
+        // Route::prefix('contratos')->group(function () {
+        //     Route::get('', [ContratosController::class, 'index']);
+        //     Route::get('{orcamento}', [ContratosController::class, 'show']);
+        //     Route::post('', [ContratosController::class, 'store']);
+        //     Route::put('{orcamento}', [ContratosController::class, 'update']);
+        //     Route::delete('{orcamento}', [ContratosController::class, 'destroy']);
+        //     Route::put('{orcamento}/prorrogacao', [ContratosController::class, 'prorrogacao']);
+        // });
+        // Route::prefix('financeiro')->group(function () {
+        //     Route::get('pagamentos/pessoas', [PagamentosCnabController::class, 'listPagamentosByEmpresaId']);
+        //     Route::get('pagamentos/cnab/groupByPagamentoByMesAndEmpresaId', [PagamentosCnabController::class, 'groupByPagamentoByMesAndEmpresaId']);
+        //     Route::post('atualizarSituacaoPagamentoDiretoria', [PagamentosCnabController::class, 'atualizarSituacaoPagamentoDiretoria']);
+        // });
+        // Route::prefix('gestaoOrcamentaria')->group(function () {
+        //     Route::get('pacotes', [PacotesController::class, 'index']);
+        //     Route::get('pacotes/{pacote}', [PacotesController::class, 'show']);
+        //     Route::post('pacotes', [PacotesController::class, 'store']);
+        //     Route::put('pacotes/{pacote}', [PacotesController::class, 'update']);
+        //     Route::delete('pacotes/{pacote}', [PacotesController::class, 'destroy']);
+        //     Route::delete('pacotes/excluirItemPacoteServico/{pacoteservico}', [PacotesController::class, 'excluirItemPacoteServico']);
+        //     Route::delete('pacotes/excluirItemPacoteProduto/{pacoteproduto}', [PacotesController::class, 'excluirItemPacoteProduto']);
+        // });
     });
 });
 
