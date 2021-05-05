@@ -716,40 +716,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     });
 });
 
-Route::group(['middleware' => 'auth:api'], function () {
-    Route::prefix('web')->group(function () {
-        // Route::prefix('pagamentointerno')->group(function () {
-        //     Route::get('list', [PagamentointernosController::class, 'list']);
-        //     Route::post('create', [PagamentointernosController::class, 'create']);
-        //     Route::post('createlist', [PagamentointernosController::class, 'createlist']);
-        // });
-        // Route::prefix('pagamentoexterno')->group(function () {
-        //     Route::get('list', [PagamentoexternosController::class, 'list']);
-        //     Route::get('gerarlist', [PagamentoexternosController::class, 'gerarlist']);
-        //     Route::post('create', [PagamentoexternosController::class, 'create']);
-        //     Route::post('createlist', [PagamentoexternosController::class, 'createlist']);
-        //     Route::post('atualizarPagamentosExternos', [PagamentoexternosController::class, 'atualizarPagamentosExternos']);
-        //     Route::delete('apagarpagamento/{pagamentoexterno}', [PagamentoexternosController::class, 'apagarpagamento']);
-        // });
-    });
-});
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('web')->group(function () {
-        // Route::prefix('prestadores')->group(function () {
-        //     Route::get('recrutamento', [PrestadoresPrestadoresController::class, 'listRecrutamento']);
-        //     Route::get('empresaPrestador/listaPrestadoresPorEmpresaIdEStatus', [ApiEmpresaPrestadorController::class, 'listaPrestadoresPorEmpresaIdEStatus']);
-        //     Route::get('buscaprestadorexterno/{prestador}', [PrestadoresPrestadoresController::class, 'buscaprestadorexterno']);
-        // });
-        // Route::prefix('compras')->group(function () {
-        //     Route::get('produtos/getAllProdutosByIdEmpresa', [ProdutoController::class, 'getAllProdutosByIdEmpresa']);
-        // });
-        // Route::prefix('formacoes')->group(function () {
-        //     Route::get('', [FormacoesController::class, 'index']);
-        //     // Route::delete('{formacao}', [FormacoesController::class, 'destroy']);
-        // });
         // Route::prefix('escalas')->group(function () {
         //     Route::get('medicao', [EscalasEscalasController::class, 'medicao']);
         // });

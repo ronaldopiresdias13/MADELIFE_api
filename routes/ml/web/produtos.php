@@ -9,5 +9,8 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('localizacaoOfProdutos', [ProdutosController::class, 'buscaLocalizacaoProdutos']);
             Route::get('buscaProdutoPorCodBarra', [ProdutosController::class, 'buscaProdutoPorCodBarra']);
         });
+        Route::prefix('compras')->group(function () {
+            Route::get('produtos/getAllProdutosByIdEmpresa', [ProdutoController::class, 'getAllProdutosByIdEmpresa']);
+        });
     });
 });
