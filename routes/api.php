@@ -700,10 +700,10 @@ Route::post('vendas/cadastrarCliente', 'Api\VendasController@cadastrarCliente');
 Route::group(['middleware' => 'auth:api'], function () {
     /*----------------- Web -----------------*/
     Route::prefix('web')->group(function () {
-        Route::prefix('ordemservicoAcesso')->group(function () {
-            Route::get('listaPorOrdemservico', [OrdemservicoAcessoController::class, 'listaDeAcessosPorOrdemservico']);
-            Route::put('check/{ordemservicoAcesso}', [OrdemservicoAcessoController::class, 'checkOrdemservicoAcesso']);
-        });
+        // Route::prefix('ordemservicoAcesso')->group(function () {
+        //     Route::get('listaPorOrdemservico', [OrdemservicoAcessoController::class, 'listaDeAcessosPorOrdemservico']);
+        //     Route::put('check/{ordemservicoAcesso}', [OrdemservicoAcessoController::class, 'checkOrdemservicoAcesso']);
+        // });
         Route::prefix('prestadores')->group(function () {
             Route::get('listaComFiltro', [PrestadoresController::class, 'listaDePrestadoresComFiltro']);
         });
@@ -718,11 +718,11 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('web')->group(function () {
-        Route::prefix('pagamentointerno')->group(function () {
-            Route::get('list', [PagamentointernosController::class, 'list']);
-            Route::post('create', [PagamentointernosController::class, 'create']);
-            Route::post('createlist', [PagamentointernosController::class, 'createlist']);
-        });
+        // Route::prefix('pagamentointerno')->group(function () {
+        //     Route::get('list', [PagamentointernosController::class, 'list']);
+        //     Route::post('create', [PagamentointernosController::class, 'create']);
+        //     Route::post('createlist', [PagamentointernosController::class, 'createlist']);
+        // });
         Route::prefix('pagamentoexterno')->group(function () {
             Route::get('list', [PagamentoexternosController::class, 'list']);
             Route::get('gerarlist', [PagamentoexternosController::class, 'gerarlist']);
