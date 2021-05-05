@@ -240,7 +240,6 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::put('empresaPrestador/meusContratos/{empresaPrestador}', 'Api\App\v3_0_25\EmpresaPrestadorController@update');
         Route::get('empresaPrestador/{empresaPrestador}/downloadFile', 'Api\App\v3_0_25\EmpresaPrestadorController@downloadFile');
 
-
         Route::get('escalas/listEscalasHoje', 'Api\App\v3_0_25\EscalasController@listEscalasHoje');
         Route::get('escalas/listEscalasMes', 'Api\App\v3_0_25\EscalasController@listEscalasMes');
         Route::get('escalas/getEscalaId/{escala}', 'Api\App\v3_0_25\EscalasController@getEscalaId');
@@ -260,7 +259,6 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::put('pessoas/atualizaDadosPessoais/{pessoa}', 'Api\App\v3_0_25\PessoasController@atualizaDadosPessoais');
 
         Route::post('pessoaTelefones', 'Api\App\v3_0_25\PessoaTelefoneController@store');
-        // Route::delete('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@destroy');
 
         Route::post('pessoaEmails', 'Api\App\v3_0_25\PessoaEmailController@store');
         Route::delete('pessoaEmails/{pessoaEmail}', 'Api\App\v3_0_25\PessoaEmailController@destroy');
@@ -269,7 +267,6 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::put('pessoaEnderecos/{pessoaEndereco}', 'Api\App\v3_0_25\PessoaEnderecoController@update');
         Route::delete('pessoaEnderecos/{pessoaEndereco}', 'Api\App\v3_0_25\PessoaEnderecoController@destroy');
 
-        // Route::post('pontos', 'Api\PontosController@store');
         Route::post('pontos/checkin/{escala}', 'Api\App\v3_0_25\PontosController@checkin'); // Custon
         Route::post('pontos/checkout/{escala}', 'Api\App\v3_0_25\PontosController@checkout'); // Custon
         Route::post('pontos/assinaturacheckout/{escala}', 'Api\App\v3_0_25\PontosController@assinaturacheckout'); // Custon

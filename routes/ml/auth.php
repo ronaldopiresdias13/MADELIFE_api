@@ -80,6 +80,7 @@ Route::group([
     Route::post('login', 'Api\App\v3_0_25\Auth\AuthController@login');
     Route::post('register', 'Api\App\v3_0_25\Auth\AuthController@register');
     Route::post('reset', 'Api\App\v3_0_25\Auth\AuthController@reset');
+    Route::post('verificaCpfEmail', 'Api\App\v3_0_25\Auth\AuthController@verificaCpfEmail');
 
     /* ------------- Rotas Utilizando Token -------------*/
     Route::group(['middleware' => 'auth:api'], function () {

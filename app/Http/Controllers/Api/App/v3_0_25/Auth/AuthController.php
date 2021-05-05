@@ -232,4 +232,49 @@ class AuthController extends Controller
         $user = $request->user();
         return response()->json($user);
     }
+
+    public function verificaCpfEmail(Request $request)
+    {
+        if (!$request->cpfcnpj && !$request->email) {
+            return response()->json([
+                'alert' => [
+                    'title' => 'Atenção!',
+                    'text' => 'Por favor informe um CPF ou Email!'
+                ]
+            ], 200)
+                ->header('Content-Type', 'application/json');
+        }
+
+        if ($request->cpfcnpj) {
+            $user = User::where('cpfcnpj', $request->cpfcnpj)
+            ->first();
+
+            if ($user) {
+                return response()->json([
+                    'alert' => [
+                        'title' => 'Ops!',
+                        'text' => 'Você já possui um cadastro com esse CPF!'
+                    ]
+                ], 200)
+                    ->header('Content-Type', 'application/json');
+            }
+        }
+
+        if ($request->email) {
+            $user = User::where('email', $request->email)
+            ->first();
+
+            if ($user) {
+                return response()->json([
+                    'alert' => [
+                        'title' => 'Ops!',
+                        'text' => 'Você já possui um cadastro com esse E-mail!'
+                    ]
+                ], 200)
+                    ->header('Content-Type', 'application/json');
+            }
+        }
+
+        return null;
+    }
 }
