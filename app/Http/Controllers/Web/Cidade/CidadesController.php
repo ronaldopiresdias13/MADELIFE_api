@@ -16,12 +16,11 @@ class CidadesController extends Controller
     public function listaCidadesCadastroApp(string $uf)
     {
         $cidades = Cidade::where('ativo', true)
-        ->where('uf', $uf)
+        ->where('uf', $uf)->orderBy('nome')
         ->get(
             [
             'id',
-            'nome',
-            'uf'
+            'nome'
             ]
         );
         return $cidades;
