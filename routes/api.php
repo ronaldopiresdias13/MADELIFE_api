@@ -676,34 +676,12 @@ Route::post('vendas/cadastrarCliente', 'Api\VendasController@cadastrarCliente');
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-// Route::get($uri, $callback);
-// Route::post($uri, $callback);
-// Route::put($uri, $callback);
-// Route::patch($uri, $callback);
-// Route::delete($uri, $callback);
-// Route::options($uri, $callback);
-
 /*------------------------------------------- Novas Rotas -------------------------------------------*/
 
 /*------------- Rotas Utilizando Token -------------*/
 Route::group(['middleware' => 'auth:api'], function () {
     /*----------------- Web -----------------*/
     Route::prefix('web')->group(function () {
-        // Route::prefix('ordemservicoAcesso')->group(function () {
-        //     Route::get('listaPorOrdemservico', [OrdemservicoAcessoController::class, 'listaDeAcessosPorOrdemservico']);
-        //     Route::put('check/{ordemservicoAcesso}', [OrdemservicoAcessoController::class, 'checkOrdemservicoAcesso']);
-        // });
         Route::prefix('prestadores')->group(function () {
             Route::get('listaComFiltro', [PrestadoresController::class, 'listaDePrestadoresComFiltro']);
         });
@@ -715,54 +693,3 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
     });
 });
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-Route::group(['middleware' => 'auth:api'], function () {
-    Route::prefix('web')->group(function () {
-        // Route::prefix('escalas')->group(function () {
-        //     Route::get('medicao', [EscalasEscalasController::class, 'medicao']);
-        // });
-        // Route::prefix('ordemservicos')->group(function () {
-        //     Route::get('', [OrdemservicosController::class, 'index']);
-        // });
-        // Route::prefix('orcs')->group(function () {
-        //     Route::get('', [OrcsController::class, 'index']);
-        //     Route::get('gerarCodigo', [OrcsController::class, 'gerarCodigoOrc']);
-        //     Route::get('gerarCodigoOrcamento', [OrcsController::class, 'gerarCodigoOrcamento']);
-        //     Route::get('{orc}', [OrcsController::class, 'show']);
-        //     Route::post('', [OrcsController::class, 'store']);
-        //     Route::put('{orc}', [OrcsController::class, 'update']);
-        //     Route::delete('{orc}', [OrcsController::class, 'destroy']);
-        //     Route::post('{orc}/criarcontrato', [OrcsController::class, 'criarcontrato']);
-        // });
-        // Route::prefix('contratos')->group(function () {
-        //     Route::get('', [ContratosController::class, 'index']);
-        //     Route::get('{orcamento}', [ContratosController::class, 'show']);
-        //     Route::post('', [ContratosController::class, 'store']);
-        //     Route::put('{orcamento}', [ContratosController::class, 'update']);
-        //     Route::delete('{orcamento}', [ContratosController::class, 'destroy']);
-        //     Route::put('{orcamento}/prorrogacao', [ContratosController::class, 'prorrogacao']);
-        // });
-        // Route::prefix('financeiro')->group(function () {
-        //     Route::get('pagamentos/pessoas', [PagamentosCnabController::class, 'listPagamentosByEmpresaId']);
-        //     Route::get('pagamentos/cnab/groupByPagamentoByMesAndEmpresaId', [PagamentosCnabController::class, 'groupByPagamentoByMesAndEmpresaId']);
-        //     Route::post('atualizarSituacaoPagamentoDiretoria', [PagamentosCnabController::class, 'atualizarSituacaoPagamentoDiretoria']);
-        // });
-        // Route::prefix('gestaoOrcamentaria')->group(function () {
-        //     Route::get('pacotes', [PacotesController::class, 'index']);
-        //     Route::get('pacotes/{pacote}', [PacotesController::class, 'show']);
-        //     Route::post('pacotes', [PacotesController::class, 'store']);
-        //     Route::put('pacotes/{pacote}', [PacotesController::class, 'update']);
-        //     Route::delete('pacotes/{pacote}', [PacotesController::class, 'destroy']);
-        //     Route::delete('pacotes/excluirItemPacoteServico/{pacoteservico}', [PacotesController::class, 'excluirItemPacoteServico']);
-        //     Route::delete('pacotes/excluirItemPacoteProduto/{pacoteproduto}', [PacotesController::class, 'excluirItemPacoteProduto']);
-        // });
-    });
-});
-
-// Route::prefix('web')->group(function () {
-//     Route::prefix('escalas')->group(function () {
-//         Route::get('medicao', [EscalasEscalasController::class, 'medicao']);
-//     });
-// });

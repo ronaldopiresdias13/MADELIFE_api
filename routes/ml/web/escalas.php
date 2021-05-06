@@ -13,7 +13,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('escalas/dashboardPegarTodosOsRegistrosPorIdDaEmpresa', 'Api\Web\Convenio\EscalasController@dashboardConvenio');
         });
         Route::prefix('escalas')->group(function () {
-            Route::get('medicao', [EscalasEscalasController::class, 'medicao']);
+            Route::get('medicao', [EscalasController::class, 'medicao']);
         });
     });
 });
