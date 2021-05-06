@@ -16,3 +16,10 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
     });
 });
+
+
+Route::get('pagamentopessoas', 'Api\PagamentopessoasController@index');
+Route::post('pagamentopessoas', 'Api\PagamentopessoasController@store');
+Route::get('pagamentopessoas/{pagamentopessoa}', 'Api\PagamentopessoasController@show');
+Route::put('pagamentopessoas/{pagamentopessoa}', 'Api\PagamentopessoasController@update');
+Route::delete('pagamentopessoas/{pagamentopessoa}', 'Api\PagamentopessoasController@destroy');

@@ -14,3 +14,10 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
     });
 });
+
+Route::get('servicos', 'Api\ServicosController@index');
+Route::post('servicos', 'Api\ServicosController@store');
+Route::get('servicos/{servico}', 'Api\ServicosController@show');
+Route::put('servicos/{servico}', 'Api\ServicosController@update');
+Route::delete('servicos/{servico}', 'Api\ServicosController@destroy');
+Route::get('servicos/empresa/{empresa}', 'Api\ServicosController@indexbyempresa');

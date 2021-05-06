@@ -18,3 +18,10 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('pacientes/listNomePacientes', 'Api\Web\PacientesController@listNomePacientes');
     });
 });
+
+
+Route::get('pacientes', 'Api\PacientesController@index');
+Route::post('pacientes', 'Api\PacientesController@store');
+Route::get('pacientes/{paciente}', 'Api\PacientesController@show');
+Route::put('pacientes/{paciente}', 'Api\PacientesController@update');
+Route::delete('pacientes/{paciente}', 'Api\PacientesController@destroy');

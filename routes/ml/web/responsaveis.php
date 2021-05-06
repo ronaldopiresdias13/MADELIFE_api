@@ -13,3 +13,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
     });
 });
+
+Route::get('responsaveis', 'Api\ResponsaveisController@index');
+Route::post('responsaveis', 'Api\ResponsaveisController@store');
+Route::get('responsaveis/{responsavel}', 'Api\ResponsaveisController@show');
+Route::put('responsaveis/{responsavel}', 'Api\ResponsaveisController@update');
+Route::delete('responsaveis/{responsavel}', 'Api\ResponsaveisController@destroy');

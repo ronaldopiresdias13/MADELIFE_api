@@ -11,3 +11,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
     });
 });
+
+Route::get('telefones', 'Api\TelefonesController@index');
+Route::post('telefones', 'Api\TelefonesController@store');
+Route::get('telefones/{telefone}', 'Api\TelefonesController@show');
+Route::put('telefones/{telefone}', 'Api\TelefonesController@update');
+Route::delete('telefones/{telefone}', 'Api\TelefonesController@destroy');

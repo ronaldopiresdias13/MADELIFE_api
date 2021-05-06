@@ -15,3 +15,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
     });
 });
+
+Route::get('produtos', 'Api\ProdutosController@index');
+Route::post('produtos', 'Api\ProdutosController@store');
+Route::get('produtos/{produto}', 'Api\ProdutosController@show');
+Route::put('produtos/{produto}', 'Api\ProdutosController@update');
+Route::delete('produtos/{produto}', 'Api\ProdutosController@destroy');

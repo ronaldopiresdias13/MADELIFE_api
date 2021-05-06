@@ -462,191 +462,191 @@ Route::get('prestadores/atribuicao', 'Api\Web\PrestadoresController@buscaprestad
 // Route::get('ordemservicos/count/{empresa}', 'Api\OrdemservicosController@quantidadeordemservicos');
 // Route::get('ordemservicos/groupbyservico/{empresa}', 'Api\OrdemservicosController@groupbyservicos');
 
-Route::get('ordemservicoServicos', 'Api\OrdemservicoServicoController@index');
-Route::post('ordemservicoServicos', 'Api\OrdemservicoServicoController@store');
-Route::get('ordemservicoServicos/{ordemservicoServico}', 'Api\OrdemservicoServicoController@show');
-Route::put('ordemservicoServicos/{ordemservicoServico}', 'Api\OrdemservicoServicoController@update');
-Route::delete('ordemservicoServicos/{ordemservicoServico}', 'Api\OrdemservicoServicoController@destroy');
+// Route::get('ordemservicoServicos', 'Api\OrdemservicoServicoController@index');
+// Route::post('ordemservicoServicos', 'Api\OrdemservicoServicoController@store');
+// Route::get('ordemservicoServicos/{ordemservicoServico}', 'Api\OrdemservicoServicoController@show');
+// Route::put('ordemservicoServicos/{ordemservicoServico}', 'Api\OrdemservicoServicoController@update');
+// Route::delete('ordemservicoServicos/{ordemservicoServico}', 'Api\OrdemservicoServicoController@destroy');
 
-Route::get('ordemservicoPrestadores', 'Api\OrdemservicoPrestadoresController@index');
-Route::post('ordemservicoPrestadores', 'Api\OrdemservicoPrestadoresController@store');
-Route::get('ordemservicoPrestadores/{ordemservicoPrestador}', 'Api\OrdemservicoPrestadoresController@show');
-Route::put('ordemservicoPrestadores/{ordemservicoPrestador}', 'Api\OrdemservicoPrestadoresController@update');
-Route::delete('ordemservicoPrestadores/{ordemservicoPrestador}', 'Api\OrdemservicoPrestadoresController@destroy');
-Route::get('ordemservicoPrestadores/ordemservico/{ordemservico}', 'Api\OrdemservicoPrestadoresController@profissionaisatribuidosaopaciente');
+// Route::get('ordemservicoPrestadores', 'Api\OrdemservicoPrestadoresController@index');
+// Route::post('ordemservicoPrestadores', 'Api\OrdemservicoPrestadoresController@store');
+// Route::get('ordemservicoPrestadores/{ordemservicoPrestador}', 'Api\OrdemservicoPrestadoresController@show');
+// Route::put('ordemservicoPrestadores/{ordemservicoPrestador}', 'Api\OrdemservicoPrestadoresController@update');
+// Route::delete('ordemservicoPrestadores/{ordemservicoPrestador}', 'Api\OrdemservicoPrestadoresController@destroy');
+// Route::get('ordemservicoPrestadores/ordemservico/{ordemservico}', 'Api\OrdemservicoPrestadoresController@profissionaisatribuidosaopaciente');
 
-Route::get('outros', 'Api\OutrosController@index');
-Route::post('outros', 'Api\OutrosController@store');
-Route::get('outros/{outro}', 'Api\OutrosController@show');
-Route::put('outros/{outro}', 'Api\OutrosController@update');
-Route::delete('outros/{outro}', 'Api\OutrosController@destroy');
+// Route::get('outros', 'Api\OutrosController@index');
+// Route::post('outros', 'Api\OutrosController@store');
+// Route::get('outros/{outro}', 'Api\OutrosController@show');
+// Route::put('outros/{outro}', 'Api\OutrosController@update');
+// Route::delete('outros/{outro}', 'Api\OutrosController@destroy');
 
-Route::get('pacientes', 'Api\PacientesController@index');
-Route::post('pacientes', 'Api\PacientesController@store');
-Route::get('pacientes/{paciente}', 'Api\PacientesController@show');
-Route::put('pacientes/{paciente}', 'Api\PacientesController@update');
-Route::delete('pacientes/{paciente}', 'Api\PacientesController@destroy');
+// Route::get('pacientes', 'Api\PacientesController@index');
+// Route::post('pacientes', 'Api\PacientesController@store');
+// Route::get('pacientes/{paciente}', 'Api\PacientesController@show');
+// Route::put('pacientes/{paciente}', 'Api\PacientesController@update');
+// Route::delete('pacientes/{paciente}', 'Api\PacientesController@destroy');
 
-Route::get('pagamentos', 'Api\PagamentosController@index');
-Route::post('pagamentos', 'Api\PagamentosController@store');
-Route::get('pagamentos/{pagamento}', 'Api\PagamentosController@show');
-Route::put('pagamentos/{pagamento}', 'Api\PagamentosController@update');
-Route::delete('pagamentos/{pagamento}', 'Api\PagamentosController@destroy');
-Route::get('pagamentosfiltro', 'Api\PagamentosController@filtro');                    // Custon
+// Route::get('pagamentos', 'Api\PagamentosController@index');
+// Route::post('pagamentos', 'Api\PagamentosController@store');
+// Route::get('pagamentos/{pagamento}', 'Api\PagamentosController@show');
+// Route::put('pagamentos/{pagamento}', 'Api\PagamentosController@update');
+// Route::delete('pagamentos/{pagamento}', 'Api\PagamentosController@destroy');
+// Route::get('pagamentosfiltro', 'Api\PagamentosController@filtro');                    // Custon
 
-Route::get('pagamentopessoas', 'Api\PagamentopessoasController@index');
-Route::post('pagamentopessoas', 'Api\PagamentopessoasController@store');
-Route::get('pagamentopessoas/{pagamentopessoa}', 'Api\PagamentopessoasController@show');
-Route::put('pagamentopessoas/{pagamentopessoa}', 'Api\PagamentopessoasController@update');
-Route::delete('pagamentopessoas/{pagamentopessoa}', 'Api\PagamentopessoasController@destroy');
+// Route::get('pagamentopessoas', 'Api\PagamentopessoasController@index');
+// Route::post('pagamentopessoas', 'Api\PagamentopessoasController@store');
+// Route::get('pagamentopessoas/{pagamentopessoa}', 'Api\PagamentopessoasController@show');
+// Route::put('pagamentopessoas/{pagamentopessoa}', 'Api\PagamentopessoasController@update');
+// Route::delete('pagamentopessoas/{pagamentopessoa}', 'Api\PagamentopessoasController@destroy');
 
-Route::get('patrimonios', 'Api\PatrimoniosController@index');
-Route::post('patrimonios', 'Api\PatrimoniosController@store');
-Route::get('patrimonios/{patrimonio}', 'Api\PatrimoniosController@show');
-Route::put('patrimonios/{patrimonio}', 'Api\PatrimoniosController@update');
-Route::delete('patrimonios/{patrimonio}', 'Api\PatrimoniosController@destroy');
+// Route::get('patrimonios', 'Api\PatrimoniosController@index');
+// Route::post('patrimonios', 'Api\PatrimoniosController@store');
+// Route::get('patrimonios/{patrimonio}', 'Api\PatrimoniosController@show');
+// Route::put('patrimonios/{patrimonio}', 'Api\PatrimoniosController@update');
+// Route::delete('patrimonios/{patrimonio}', 'Api\PatrimoniosController@destroy');
 
-Route::get('pedidocompras', 'Api\PedidocomprasController@index');
-Route::post('pedidocompras', 'Api\PedidocomprasController@store');
-Route::get('pedidocompras/{pedidocompra}', 'Api\PedidocomprasController@show');
-Route::put('pedidocompras/{pedidocompra}', 'Api\PedidocomprasController@update');
-Route::delete('pedidocompras/{pedidocompra}', 'Api\PedidocomprasController@destroy');
+// Route::get('pedidocompras', 'Api\PedidocomprasController@index');
+// Route::post('pedidocompras', 'Api\PedidocomprasController@store');
+// Route::get('pedidocompras/{pedidocompra}', 'Api\PedidocomprasController@show');
+// Route::put('pedidocompras/{pedidocompra}', 'Api\PedidocomprasController@update');
+// Route::delete('pedidocompras/{pedidocompra}', 'Api\PedidocomprasController@destroy');
 
-Route::get('pessoas', 'Api\PessoasController@index');
-Route::post('pessoas', 'Api\PessoasController@store');
-Route::get('pessoas/{pessoa}', 'Api\PessoasController@show');
-Route::put('pessoas/{pessoa}', 'Api\PessoasController@update');
-Route::delete('pessoas/{pessoa}', 'Api\PessoasController@destroy');
+// Route::get('pessoas', 'Api\PessoasController@index');
+// Route::post('pessoas', 'Api\PessoasController@store');
+// Route::get('pessoas/{pessoa}', 'Api\PessoasController@show');
+// Route::put('pessoas/{pessoa}', 'Api\PessoasController@update');
+// Route::delete('pessoas/{pessoa}', 'Api\PessoasController@destroy');
 
-Route::get('pessoaTelefones', 'Api\PessoaTelefoneController@index');
-Route::post('pessoaTelefones', 'Api\PessoaTelefoneController@store');
-Route::get('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@show');
-Route::put('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@update');
-Route::delete('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@destroy');
+// Route::get('pessoaTelefones', 'Api\PessoaTelefoneController@index');
+// Route::post('pessoaTelefones', 'Api\PessoaTelefoneController@store');
+// Route::get('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@show');
+// Route::put('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@update');
+// Route::delete('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@destroy');
 
-Route::get('pessoaEmails', 'Api\PessoaEmailController@index');
-Route::post('pessoaEmails', 'Api\PessoaEmailController@store');
-Route::get('pessoaEmails/{pessoaEmail}', 'Api\PessoaEmailController@show');
-Route::put('pessoaEmails/{pessoaEmail}', 'Api\PessoaEmailController@update');
-Route::delete('pessoaEmails/{pessoaEmail}', 'Api\PessoaEmailController@destroy');
+// Route::get('pessoaEmails', 'Api\PessoaEmailController@index');
+// Route::post('pessoaEmails', 'Api\PessoaEmailController@store');
+// Route::get('pessoaEmails/{pessoaEmail}', 'Api\PessoaEmailController@show');
+// Route::put('pessoaEmails/{pessoaEmail}', 'Api\PessoaEmailController@update');
+// Route::delete('pessoaEmails/{pessoaEmail}', 'Api\PessoaEmailController@destroy');
 
-Route::get('pessoaEnderecos', 'Api\PessoaEnderecoController@index');
-Route::post('pessoaEnderecos', 'Api\PessoaEnderecoController@store');
-Route::get('pessoaEnderecos/{pessoaEndereco}', 'Api\PessoaEnderecoController@show');
-Route::put('pessoaEnderecos/{pessoaEndereco}', 'Api\PessoaEnderecoController@update');
-Route::delete('pessoaEnderecos/{pessoaEndereco}', 'Api\PessoaEnderecoController@destroy');
+// Route::get('pessoaEnderecos', 'Api\PessoaEnderecoController@index');
+// Route::post('pessoaEnderecos', 'Api\PessoaEnderecoController@store');
+// Route::get('pessoaEnderecos/{pessoaEndereco}', 'Api\PessoaEnderecoController@show');
+// Route::put('pessoaEnderecos/{pessoaEndereco}', 'Api\PessoaEnderecoController@update');
+// Route::delete('pessoaEnderecos/{pessoaEndereco}', 'Api\PessoaEnderecoController@destroy');
 
-Route::get('pils', 'Api\PilsController@index');
-Route::post('pils', 'Api\PilsController@store');
-Route::get('pils/{pil}', 'Api\PilsController@show');
-Route::put('pils/{pil}', 'Api\PilsController@update');
-Route::delete('pils/{pil}', 'Api\PilsController@destroy');
+// Route::get('pils', 'Api\PilsController@index');
+// Route::post('pils', 'Api\PilsController@store');
+// Route::get('pils/{pil}', 'Api\PilsController@show');
+// Route::put('pils/{pil}', 'Api\PilsController@update');
+// Route::delete('pils/{pil}', 'Api\PilsController@destroy');
 
-Route::get('pontos', 'Api\PontosController@index');
-Route::post('pontos', 'Api\PontosController@store');
-Route::get('pontos/{ponto}', 'Api\PontosController@show');
-Route::put('pontos/{ponto}', 'Api\PontosController@update');
-Route::delete('pontos/{ponto}', 'Api\PontosController@destroy');
-Route::post('pontos/checkout/{escala}', 'Api\PontosController@checkout'); // Custon
-Route::get('pontos/escala/{escala}', 'Api\PontosController@buscaPontosPorIdEscala');
+// Route::get('pontos', 'Api\PontosController@index');
+// Route::post('pontos', 'Api\PontosController@store');
+// Route::get('pontos/{ponto}', 'Api\PontosController@show');
+// Route::put('pontos/{ponto}', 'Api\PontosController@update');
+// Route::delete('pontos/{ponto}', 'Api\PontosController@destroy');
+// Route::post('pontos/checkout/{escala}', 'Api\PontosController@checkout'); // Custon
+// Route::get('pontos/escala/{escala}', 'Api\PontosController@buscaPontosPorIdEscala');
 
-Route::get('prescricoesbs', 'Api\PrescricoesbsController@index');
-Route::post('prescricoesbs', 'Api\PrescricoesbsController@store');
-Route::get('prescricoesbs/{prescricaob}', 'Api\PrescricoesbsController@show');
-Route::put('prescricoesbs/{prescricaob}', 'Api\PrescricoesbsController@update');
-Route::delete('prescricoesbs/{prescricaob}', 'Api\PrescricoesbsController@destroy');
+// Route::get('prescricoesbs', 'Api\PrescricoesbsController@index');
+// Route::post('prescricoesbs', 'Api\PrescricoesbsController@store');
+// Route::get('prescricoesbs/{prescricaob}', 'Api\PrescricoesbsController@show');
+// Route::put('prescricoesbs/{prescricaob}', 'Api\PrescricoesbsController@update');
+// Route::delete('prescricoesbs/{prescricaob}', 'Api\PrescricoesbsController@destroy');
 
-Route::get('prestadores', 'Api\PrestadoresController@index');
-Route::post('prestadores', 'Api\PrestadoresController@store');
-Route::get('prestadores/{prestador}', 'Api\PrestadoresController@show');
-Route::put('prestadores/{prestador}', 'Api\PrestadoresController@update');
-Route::delete('prestadores/{prestador}', 'Api\PrestadoresController@destroy');
-Route::get('prestadores/{prestador}/meuspacientes', 'Api\PrestadoresController@meuspacientes'); // Custon
+// Route::get('prestadores', 'Api\PrestadoresController@index');
+// Route::post('prestadores', 'Api\PrestadoresController@store');
+// Route::get('prestadores/{prestador}', 'Api\PrestadoresController@show');
+// Route::put('prestadores/{prestador}', 'Api\PrestadoresController@update');
+// Route::delete('prestadores/{prestador}', 'Api\PrestadoresController@destroy');
+// Route::get('prestadores/{prestador}/meuspacientes', 'Api\PrestadoresController@meuspacientes'); // Custon
 
-Route::get('prestadorFormacao', 'Api\PrestadorFormacaoController@index');
-Route::post('prestadorFormacao', 'Api\PrestadorFormacaoController@store');
-Route::get('prestadorFormacao/{prestadorFormacao}', 'Api\PrestadorFormacaoController@show');
-Route::put('prestadorFormacao/{prestadorFormacao}', 'Api\PrestadorFormacaoController@update');
-Route::delete('prestadorFormacao/{prestadorFormacao}', 'Api\PrestadorFormacaoController@destroy');
-Route::get(
-    'prestadorFormacao/{prestadorFormacao}/downloadFile',
-    'Api\PrestadorFormacaoController@downloadFile'
-); // Custon
+// Route::get('prestadorFormacao', 'Api\PrestadorFormacaoController@index');
+// Route::post('prestadorFormacao', 'Api\PrestadorFormacaoController@store');
+// Route::get('prestadorFormacao/{prestadorFormacao}', 'Api\PrestadorFormacaoController@show');
+// Route::put('prestadorFormacao/{prestadorFormacao}', 'Api\PrestadorFormacaoController@update');
+// Route::delete('prestadorFormacao/{prestadorFormacao}', 'Api\PrestadorFormacaoController@destroy');
+// Route::get(
+//     'prestadorFormacao/{prestadorFormacao}/downloadFile',
+//     'Api\PrestadorFormacaoController@downloadFile'
+// ); // Custon
 
-Route::get('produtos', 'Api\ProdutosController@index');
-Route::post('produtos', 'Api\ProdutosController@store');
-Route::get('produtos/{produto}', 'Api\ProdutosController@show');
-Route::put('produtos/{produto}', 'Api\ProdutosController@update');
-Route::delete('produtos/{produto}', 'Api\ProdutosController@destroy');
-
-
-Route::get('relatorios', 'Api\RelatoriosController@index');
-Route::post('relatorios', 'Api\RelatoriosController@store');
-Route::get('relatorios/{relatorio}', 'Api\RelatoriosController@show');
-Route::put('relatorios/{relatorio}', 'Api\RelatoriosController@update');
-Route::delete('relatorios/{relatorio}', 'Api\RelatoriosController@destroy');
-Route::get('relatoriosOfOrdemservico/{ordemservico}', 'Api\RelatoriosController@relatoriosOfOrdemservico');
-Route::get('relatorios/escala/{escala}', 'Api\RelatoriosController@buscaRelatoriosDaEscala');
-
-Route::get('relatorioescalas', 'Api\RelatorioescalasController@index');
-Route::post('relatorioescalas/{escala}', 'Api\RelatorioescalasController@store');
-Route::get('relatorioescalas/{relatorioescala}', 'Api\RelatorioescalasController@show');
-Route::put('relatorioescalas/{relatorioescala}', 'Api\RelatorioescalasController@update');
-Route::delete('relatorioescalas/{relatorioescala}', 'Api\RelatorioescalasController@destroy');
-
-Route::get('requisicoes', 'Api\RequisicoesController@index');
-Route::post('requisicoes', 'Api\RequisicoesController@store');
-Route::get('requisicoes/{requisicao}', 'Api\RequisicoesController@show');
-Route::put('requisicoes/{requisicao}', 'Api\RequisicoesController@update');
-Route::delete('requisicoes/{requisicao}', 'Api\RequisicoesController@destroy');
-
-Route::get('requisicaoprodudos', 'Api\RequisicaoProdutosController@index');
-Route::post('requisicaoprodudos', 'Api\RequisicaoProdutosController@store');
-Route::get('requisicaoprodudos/{requisicaoProduto}', 'Api\RequisicaoProdutosController@show');
-Route::put('requisicaoprodudos/{requisicaoProduto}', 'Api\RequisicaoProdutosController@update');
-Route::delete('requisicaoprodudos/{requisicaoProduto}', 'Api\RequisicaoProdutosController@destroy');
-
-Route::get('responsaveis', 'Api\ResponsaveisController@index');
-Route::post('responsaveis', 'Api\ResponsaveisController@store');
-Route::get('responsaveis/{responsavel}', 'Api\ResponsaveisController@show');
-Route::put('responsaveis/{responsavel}', 'Api\ResponsaveisController@update');
-Route::delete('responsaveis/{responsavel}', 'Api\ResponsaveisController@destroy');
-
-Route::get('saidas', 'Api\SaidasController@index');
-Route::post('saidas', 'Api\SaidasController@store');
-Route::get('saidas/{saida}', 'Api\SaidasController@show');
-Route::put('saidas/{saida}', 'Api\SaidasController@update');
-Route::delete('saidas/{saida}', 'Api\SaidasController@destroy');
+// Route::get('produtos', 'Api\ProdutosController@index');
+// Route::post('produtos', 'Api\ProdutosController@store');
+// Route::get('produtos/{produto}', 'Api\ProdutosController@show');
+// Route::put('produtos/{produto}', 'Api\ProdutosController@update');
+// Route::delete('produtos/{produto}', 'Api\ProdutosController@destroy');
 
 
-Route::get('servicos', 'Api\ServicosController@index');
-Route::post('servicos', 'Api\ServicosController@store');
-Route::get('servicos/{servico}', 'Api\ServicosController@show');
-Route::put('servicos/{servico}', 'Api\ServicosController@update');
-Route::delete('servicos/{servico}', 'Api\ServicosController@destroy');
-Route::get('servicos/empresa/{empresa}', 'Api\ServicosController@indexbyempresa');
+// Route::get('relatorios', 'Api\RelatoriosController@index');
+// Route::post('relatorios', 'Api\RelatoriosController@store');
+// Route::get('relatorios/{relatorio}', 'Api\RelatoriosController@show');
+// Route::put('relatorios/{relatorio}', 'Api\RelatoriosController@update');
+// Route::delete('relatorios/{relatorio}', 'Api\RelatoriosController@destroy');
+// Route::get('relatoriosOfOrdemservico/{ordemservico}', 'Api\RelatoriosController@relatoriosOfOrdemservico');
+// Route::get('relatorios/escala/{escala}', 'Api\RelatoriosController@buscaRelatoriosDaEscala');
+
+// Route::get('relatorioescalas', 'Api\RelatorioescalasController@index');
+// Route::post('relatorioescalas/{escala}', 'Api\RelatorioescalasController@store');
+// Route::get('relatorioescalas/{relatorioescala}', 'Api\RelatorioescalasController@show');
+// Route::put('relatorioescalas/{relatorioescala}', 'Api\RelatorioescalasController@update');
+// Route::delete('relatorioescalas/{relatorioescala}', 'Api\RelatorioescalasController@destroy');
+
+// Route::get('requisicoes', 'Api\RequisicoesController@index');
+// Route::post('requisicoes', 'Api\RequisicoesController@store');
+// Route::get('requisicoes/{requisicao}', 'Api\RequisicoesController@show');
+// Route::put('requisicoes/{requisicao}', 'Api\RequisicoesController@update');
+// Route::delete('requisicoes/{requisicao}', 'Api\RequisicoesController@destroy');
+
+// Route::get('requisicaoprodudos', 'Api\RequisicaoProdutosController@index');
+// Route::post('requisicaoprodudos', 'Api\RequisicaoProdutosController@store');
+// Route::get('requisicaoprodudos/{requisicaoProduto}', 'Api\RequisicaoProdutosController@show');
+// Route::put('requisicaoprodudos/{requisicaoProduto}', 'Api\RequisicaoProdutosController@update');
+// Route::delete('requisicaoprodudos/{requisicaoProduto}', 'Api\RequisicaoProdutosController@destroy');
+
+// Route::get('responsaveis', 'Api\ResponsaveisController@index');
+// Route::post('responsaveis', 'Api\ResponsaveisController@store');
+// Route::get('responsaveis/{responsavel}', 'Api\ResponsaveisController@show');
+// Route::put('responsaveis/{responsavel}', 'Api\ResponsaveisController@update');
+// Route::delete('responsaveis/{responsavel}', 'Api\ResponsaveisController@destroy');
+
+// Route::get('saidas', 'Api\SaidasController@index');
+// Route::post('saidas', 'Api\SaidasController@store');
+// Route::get('saidas/{saida}', 'Api\SaidasController@show');
+// Route::put('saidas/{saida}', 'Api\SaidasController@update');
+// Route::delete('saidas/{saida}', 'Api\SaidasController@destroy');
 
 
-Route::get('telefones', 'Api\TelefonesController@index');
-Route::post('telefones', 'Api\TelefonesController@store');
-Route::get('telefones/{telefone}', 'Api\TelefonesController@show');
-Route::put('telefones/{telefone}', 'Api\TelefonesController@update');
-Route::delete('telefones/{telefone}', 'Api\TelefonesController@destroy');
-
-Route::get('tipopessoas', 'Api\TipopessoasController@index');
-Route::post('tipopessoas', 'Api\TipopessoasController@store');
-Route::get('tipopessoas/{tipopessoa}', 'Api\TipopessoasController@show');
-Route::put('tipopessoas/{tipopessoa}', 'Api\TipopessoasController@update');
-Route::delete('tipopessoas/{tipopessoa}', 'Api\TipopessoasController@destroy');
-
-Route::get('tipoprodutos', 'Api\TipoprodutosController@index');
-Route::post('tipoprodutos', 'Api\TipoprodutosController@store');
-Route::get('tipoprodutos/{tipoproduto}', 'Api\TipoprodutosController@show');
-Route::put('tipoprodutos/{tipoproduto}', 'Api\TipoprodutosController@update');
-Route::delete('tipoprodutos/{tipoproduto}', 'Api\TipoprodutosController@destroy');
+// Route::get('servicos', 'Api\ServicosController@index');
+// Route::post('servicos', 'Api\ServicosController@store');
+// Route::get('servicos/{servico}', 'Api\ServicosController@show');
+// Route::put('servicos/{servico}', 'Api\ServicosController@update');
+// Route::delete('servicos/{servico}', 'Api\ServicosController@destroy');
+// Route::get('servicos/empresa/{empresa}', 'Api\ServicosController@indexbyempresa');
 
 
-Route::delete('transcricaoprodutos/{transcricao_produto}', 'Api\TranscricaoProdutoController@destroy');
+// Route::get('telefones', 'Api\TelefonesController@index');
+// Route::post('telefones', 'Api\TelefonesController@store');
+// Route::get('telefones/{telefone}', 'Api\TelefonesController@show');
+// Route::put('telefones/{telefone}', 'Api\TelefonesController@update');
+// Route::delete('telefones/{telefone}', 'Api\TelefonesController@destroy');
+
+// Route::get('tipopessoas', 'Api\TipopessoasController@index');
+// Route::post('tipopessoas', 'Api\TipopessoasController@store');
+// Route::get('tipopessoas/{tipopessoa}', 'Api\TipopessoasController@show');
+// Route::put('tipopessoas/{tipopessoa}', 'Api\TipopessoasController@update');
+// Route::delete('tipopessoas/{tipopessoa}', 'Api\TipopessoasController@destroy');
+
+// Route::get('tipoprodutos', 'Api\TipoprodutosController@index');
+// Route::post('tipoprodutos', 'Api\TipoprodutosController@store');
+// Route::get('tipoprodutos/{tipoproduto}', 'Api\TipoprodutosController@show');
+// Route::put('tipoprodutos/{tipoproduto}', 'Api\TipoprodutosController@update');
+// Route::delete('tipoprodutos/{tipoproduto}', 'Api\TipoprodutosController@destroy');
+
+
+// Route::delete('transcricaoprodutos/{transcricao_produto}', 'Api\TranscricaoProdutoController@destroy');
 
 Route::get('unidademedidas', 'Api\UnidademedidasController@index');
 Route::post('unidademedidas', 'Api\UnidademedidasController@store');

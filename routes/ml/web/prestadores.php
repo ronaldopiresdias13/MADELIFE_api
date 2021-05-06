@@ -18,3 +18,10 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('prestadores/listPrestadoresComFormacoes', 'Api\Web\PrestadoresController@listPrestadoresComFormacoes');
     });
 });
+
+Route::get('prestadores', 'Api\PrestadoresController@index');
+Route::post('prestadores', 'Api\PrestadoresController@store');
+Route::get('prestadores/{prestador}', 'Api\PrestadoresController@show');
+Route::put('prestadores/{prestador}', 'Api\PrestadoresController@update');
+Route::delete('prestadores/{prestador}', 'Api\PrestadoresController@destroy');
+Route::get('prestadores/{prestador}/meuspacientes', 'Api\PrestadoresController@meuspacientes'); // Custon
