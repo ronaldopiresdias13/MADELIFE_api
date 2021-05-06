@@ -12,3 +12,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
     });
 });
+
+Route::get('enderecos', 'Api\EnderecosController@index');
+Route::post('enderecos', 'Api\EnderecosController@store');
+Route::get('enderecos/{endereco}', 'Api\EnderecosController@show');
+Route::put('enderecos/{endereco}', 'Api\EnderecosController@update');
+Route::delete('enderecos/{endereco}', 'Api\EnderecosController@destroy');

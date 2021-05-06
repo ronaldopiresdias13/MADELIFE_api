@@ -15,3 +15,10 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
     });
 });
+
+Route::get('orcamentos', 'Api\OrcamentosController@index');
+Route::post('orcamentos', 'Api\OrcamentosController@store');
+Route::get('orcamentos/{orcamento}', 'Api\OrcamentosController@show');
+Route::put('orcamentos/{orcamento}', 'Api\OrcamentosController@update');
+Route::put('alterarsituacao/{orcamento}', 'Api\OrcamentosController@alterarSituacao');
+Route::delete('orcamentos/{orcamento}', 'Api\OrcamentosController@destroy');

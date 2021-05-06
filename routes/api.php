@@ -314,153 +314,153 @@ Route::get('prestadores/atribuicao', 'Api\Web\PrestadoresController@buscaprestad
 // Route::put('dadosbancarios/{dadosbancario}', 'Api\DadosbancariosController@update');
 // Route::delete('dadosbancarios/{dadosbancario}', 'Api\DadosbancariosController@destroy');
 
-Route::get('dadoscontratuais', 'Api\DadoscontratuaisController@index');
-Route::post('dadoscontratuais', 'Api\DadoscontratuaisController@store');
-Route::get('dadoscontratuais/{dadoscontratual}', 'Api\DadoscontratuaisController@show');
-Route::put('dadoscontratuais/{dadoscontratual}', 'Api\DadoscontratuaisController@update');
-Route::delete('dadoscontratuais/{dadoscontratual}', 'Api\DadoscontratuaisController@destroy');
+// Route::get('dadoscontratuais', 'Api\DadoscontratuaisController@index');
+// Route::post('dadoscontratuais', 'Api\DadoscontratuaisController@store');
+// Route::get('dadoscontratuais/{dadoscontratual}', 'Api\DadoscontratuaisController@show');
+// Route::put('dadoscontratuais/{dadoscontratual}', 'Api\DadoscontratuaisController@update');
+// Route::delete('dadoscontratuais/{dadoscontratual}', 'Api\DadoscontratuaisController@destroy');
 
-Route::get('diagnosticossecundarios', 'Api\DiagnosticossecundariosController@index');
-Route::post('diagnosticossecundarios', 'Api\DiagnosticossecundariosController@store');
-Route::get('diagnosticossecundarios/{diagnosticossecundario}', 'Api\DiagnosticossecundariosController@show');
-Route::put('diagnosticossecundarios/{diagnosticossecundario}', 'Api\DiagnosticossecundariosController@update');
-Route::delete('diagnosticossecundarios/{diagnosticossecundario}', 'Api\DiagnosticossecundariosController@destroy');
+// Route::get('diagnosticossecundarios', 'Api\DiagnosticossecundariosController@index');
+// Route::post('diagnosticossecundarios', 'Api\DiagnosticossecundariosController@store');
+// Route::get('diagnosticossecundarios/{diagnosticossecundario}', 'Api\DiagnosticossecundariosController@show');
+// Route::put('diagnosticossecundarios/{diagnosticossecundario}', 'Api\DiagnosticossecundariosController@update');
+// Route::delete('diagnosticossecundarios/{diagnosticossecundario}', 'Api\DiagnosticossecundariosController@destroy');
 
 
-Route::get('emails', 'Api\EmailsController@index');
-Route::post('emails', 'Api\EmailsController@store');
-Route::get('emails/{email}', 'Api\EmailsController@show');
-Route::put('emails/{email}', 'Api\EmailsController@update');
-Route::delete('emails/{email}', 'Api\EmailsController@destroy');
+// Route::get('emails', 'Api\EmailsController@index');
+// Route::post('emails', 'Api\EmailsController@store');
+// Route::get('emails/{email}', 'Api\EmailsController@show');
+// Route::put('emails/{email}', 'Api\EmailsController@update');
+// Route::delete('emails/{email}', 'Api\EmailsController@destroy');
 
-Route::get('empresas', 'Api\EmpresasController@index');
-Route::post('empresas', 'Api\EmpresasController@store');
-Route::get('empresas/{empresa}', 'Api\EmpresasController@show');
-Route::put('empresas/{empresa}', 'Api\EmpresasController@update');
-Route::delete('empresas/{empresa}', 'Api\EmpresasController@destroy');
+// Route::get('empresas', 'Api\EmpresasController@index');
+// Route::post('empresas', 'Api\EmpresasController@store');
+// Route::get('empresas/{empresa}', 'Api\EmpresasController@show');
+// Route::put('empresas/{empresa}', 'Api\EmpresasController@update');
+// Route::delete('empresas/{empresa}', 'Api\EmpresasController@destroy');
 
-Route::get('empresaPrestador', 'Api\EmpresaPrestadorController@index');
-Route::post('empresaPrestador', 'Api\EmpresaPrestadorController@store');
-Route::get('empresaPrestador/{empresaPrestador}', 'Api\EmpresaPrestadorController@show');
-Route::put('empresaPrestador/{empresaPrestador}', 'Api\EmpresaPrestadorController@update');
-Route::delete('empresaPrestador/{empresaPrestador}', 'Api\EmpresaPrestadorController@destroy');
-Route::get('empresaPrestador/{empresaPrestador}/downloadFile', 'Api\EmpresaPrestadorController@downloadFile');
-Route::get('empresaPrestador/empresa/{empresa}', 'Api\EmpresaPrestadorController@indexbyempresa');
-Route::get('empresaPrestador/count/{empresa}', 'Api\EmpresaPrestadorController@quantidadeempresaprestador');
+// Route::get('empresaPrestador', 'Api\EmpresaPrestadorController@index');
+// Route::post('empresaPrestador', 'Api\EmpresaPrestadorController@store');
+// Route::get('empresaPrestador/{empresaPrestador}', 'Api\EmpresaPrestadorController@show');
+// Route::put('empresaPrestador/{empresaPrestador}', 'Api\EmpresaPrestadorController@update');
+// Route::delete('empresaPrestador/{empresaPrestador}', 'Api\EmpresaPrestadorController@destroy');
+// Route::get('empresaPrestador/{empresaPrestador}/downloadFile', 'Api\EmpresaPrestadorController@downloadFile');
+// Route::get('empresaPrestador/empresa/{empresa}', 'Api\EmpresaPrestadorController@indexbyempresa');
+// Route::get('empresaPrestador/count/{empresa}', 'Api\EmpresaPrestadorController@quantidadeempresaprestador');
 
-Route::get('enderecos', 'Api\EnderecosController@index');
-Route::post('enderecos', 'Api\EnderecosController@store');
-Route::get('enderecos/{endereco}', 'Api\EnderecosController@show');
-Route::put('enderecos/{endereco}', 'Api\EnderecosController@update');
-Route::delete('enderecos/{endereco}', 'Api\EnderecosController@destroy');
+// Route::get('enderecos', 'Api\EnderecosController@index');
+// Route::post('enderecos', 'Api\EnderecosController@store');
+// Route::get('enderecos/{endereco}', 'Api\EnderecosController@show');
+// Route::put('enderecos/{endereco}', 'Api\EnderecosController@update');
+// Route::delete('enderecos/{endereco}', 'Api\EnderecosController@destroy');
 
-Route::get('entradas', 'Api\EntradasController@index');
-Route::post('entradas', 'Api\EntradasController@store');
-Route::post('entradas/cadastrarFornecedor', 'Api\EntradasController@cadastrarFornecedor');
-Route::get('entradas/{entrada}', 'Api\EntradasController@show');
-Route::put('entradas/{entrada}', 'Api\EntradasController@update');
-Route::delete('entradas/{entrada}', 'Api\EntradasController@destroy');
+// Route::get('entradas', 'Api\EntradasController@index');
+// Route::post('entradas', 'Api\EntradasController@store');
+// Route::post('entradas/cadastrarFornecedor', 'Api\EntradasController@cadastrarFornecedor');
+// Route::get('entradas/{entrada}', 'Api\EntradasController@show');
+// Route::put('entradas/{entrada}', 'Api\EntradasController@update');
+// Route::delete('entradas/{entrada}', 'Api\EntradasController@destroy');
 
-Route::get('escalas', 'Api\EscalasController@index');
-Route::get('escalas/{escala}', 'Api\EscalasController@show');
+// Route::get('escalas', 'Api\EscalasController@index');
+// Route::get('escalas/{escala}', 'Api\EscalasController@show');
 
 //Route::group(['middleware' => 'auth:api'], function () {
-Route::post('escalas', 'Api\EscalasController@store');
-Route::put('escalas/{escala}', 'Api\EscalasController@update');
-Route::delete('escalas/{escala}', 'Api\EscalasController@destroy');
+// Route::post('escalas', 'Api\EscalasController@store');
+// Route::put('escalas/{escala}', 'Api\EscalasController@update');
+// Route::delete('escalas/{escala}', 'Api\EscalasController@destroy');
 //});
 
-Route::get('escalas/empresa/{empresa}/dia', 'Api\EscalasController@buscaescalasdodia');
-Route::get('escalas/paciente/{paciente}/data1/{data1}/data2/{data2}', 'Api\EscalasController@buscaPontosPorPeriodoEPaciente');
+// Route::get('escalas/empresa/{empresa}/dia', 'Api\EscalasController@buscaescalasdodia');
+// Route::get('escalas/paciente/{paciente}/data1/{data1}/data2/{data2}', 'Api\EscalasController@buscaPontosPorPeriodoEPaciente');
 
 // Route::get('formacoes', 'Api\FormacoesController@index');
-Route::post('formacoes', 'Api\FormacoesController@store');
-Route::get('formacoes/{formacao}', 'Api\FormacoesController@show');
-Route::put('formacoes/{formacao}', 'Api\FormacoesController@update');
-Route::delete('formacoes/{formacao}', 'Api\FormacoesController@destroy');
+// Route::post('formacoes', 'Api\FormacoesController@store');
+// Route::get('formacoes/{formacao}', 'Api\FormacoesController@show');
+// Route::put('formacoes/{formacao}', 'Api\FormacoesController@update');
+// Route::delete('formacoes/{formacao}', 'Api\FormacoesController@destroy');
 
 
 
 
-Route::get('historicoorcamentos', 'Api\HistoricoorcamentosController@index');
-Route::post('historicoorcamentos', 'Api\HistoricoorcamentosController@store');
-Route::get('historicoorcamentos/{historicoorcamento}', 'Api\HistoricoorcamentosController@show');
-Route::put('historicoorcamentos/{historicoorcamento}', 'Api\HistoricoorcamentosController@update');
-Route::delete('historicoorcamentos/{historicoorcamento}', 'Api\HistoricoorcamentosController@destroy');
+// Route::get('historicoorcamentos', 'Api\HistoricoorcamentosController@index');
+// Route::post('historicoorcamentos', 'Api\HistoricoorcamentosController@store');
+// Route::get('historicoorcamentos/{historicoorcamento}', 'Api\HistoricoorcamentosController@show');
+// Route::put('historicoorcamentos/{historicoorcamento}', 'Api\HistoricoorcamentosController@update');
+// Route::delete('historicoorcamentos/{historicoorcamento}', 'Api\HistoricoorcamentosController@destroy');
 
-Route::get('horariostrabalho', 'Api\HorariostrabalhoController@index');
-Route::post('horariostrabalho', 'Api\HorariostrabalhoController@store');
-Route::get('horariostrabalho/{horariostrabalho}', 'Api\HorariostrabalhoController@show');
-Route::put('horariostrabalho/{horariostrabalho}', 'Api\HorariostrabalhoController@update');
-Route::delete('horariostrabalho/{horariostrabalho}', 'Api\HorariostrabalhoController@destroy');
+// Route::get('horariostrabalho', 'Api\HorariostrabalhoController@index');
+// Route::post('horariostrabalho', 'Api\HorariostrabalhoController@store');
+// Route::get('horariostrabalho/{horariostrabalho}', 'Api\HorariostrabalhoController@show');
+// Route::put('horariostrabalho/{horariostrabalho}', 'Api\HorariostrabalhoController@update');
+// Route::delete('horariostrabalho/{horariostrabalho}', 'Api\HorariostrabalhoController@destroy');
 
-Route::get('homecares', 'Api\HomecaresController@index');
-Route::post('homecares', 'Api\HomecaresController@store');
-Route::get('homecares/{homecare}', 'Api\HomecaresController@show');
-Route::put('homecares/{homecare}', 'Api\HomecaresController@update');
-Route::delete('homecares/{homecare}', 'Api\HomecaresController@destroy');
+// Route::get('homecares', 'Api\HomecaresController@index');
+// Route::post('homecares', 'Api\HomecaresController@store');
+// Route::get('homecares/{homecare}', 'Api\HomecaresController@show');
+// Route::put('homecares/{homecare}', 'Api\HomecaresController@update');
+// Route::delete('homecares/{homecare}', 'Api\HomecaresController@destroy');
 
-Route::get('impostos', 'Api\ImpostosController@index');
-Route::post('impostos', 'Api\ImpostosController@store');
-Route::get('impostos/{imposto}', 'Api\ImpostosController@show');
-Route::put('impostos/{imposto}', 'Api\ImpostosController@update');
-Route::delete('impostos/{imposto}', 'Api\ImpostosController@destroy');
+// Route::get('impostos', 'Api\ImpostosController@index');
+// Route::post('impostos', 'Api\ImpostosController@store');
+// Route::get('impostos/{imposto}', 'Api\ImpostosController@show');
+// Route::put('impostos/{imposto}', 'Api\ImpostosController@update');
+// Route::delete('impostos/{imposto}', 'Api\ImpostosController@destroy');
 
-Route::get('marcas', 'Api\MarcasController@index');
-Route::post('marcas', 'Api\MarcasController@store');
-Route::get('marcas/{marca}', 'Api\MarcasController@show');
-Route::put('marcas/{marca}', 'Api\MarcasController@update');
-Route::delete('marcas/{marca}', 'Api\MarcasController@destroy');
+// Route::get('marcas', 'Api\MarcasController@index');
+// Route::post('marcas', 'Api\MarcasController@store');
+// Route::get('marcas/{marca}', 'Api\MarcasController@show');
+// Route::put('marcas/{marca}', 'Api\MarcasController@update');
+// Route::delete('marcas/{marca}', 'Api\MarcasController@destroy');
 
-Route::get('medicoes', 'Api\MedicoesController@index');
-Route::post('medicoes', 'Api\MedicoesController@store');
-Route::get('medicoes/{medicao}', 'Api\MedicoesController@show');
-Route::put('medicoes/{medicao}', 'Api\MedicoesController@update');
-Route::delete('medicoes/{medicao}', 'Api\MedicoesController@destroy');
+// Route::get('medicoes', 'Api\MedicoesController@index');
+// Route::post('medicoes', 'Api\MedicoesController@store');
+// Route::get('medicoes/{medicao}', 'Api\MedicoesController@show');
+// Route::put('medicoes/{medicao}', 'Api\MedicoesController@update');
+// Route::delete('medicoes/{medicao}', 'Api\MedicoesController@destroy');
 
-Route::get('monitoramentoescalas', 'Api\MonitoramentoescalasController@index');
-Route::post('monitoramentoescalas', 'Api\MonitoramentoescalasController@store');
-Route::get('monitoramentoescalas/{monitoramentoescala}', 'Api\MonitoramentoescalasController@show');
-Route::put('monitoramentoescalas/{monitoramentoescala}', 'Api\MonitoramentoescalasController@update');
-Route::delete('monitoramentoescalas/{monitoramentoescala}', 'Api\MonitoramentoescalasController@destroy');
+// Route::get('monitoramentoescalas', 'Api\MonitoramentoescalasController@index');
+// Route::post('monitoramentoescalas', 'Api\MonitoramentoescalasController@store');
+// Route::get('monitoramentoescalas/{monitoramentoescala}', 'Api\MonitoramentoescalasController@show');
+// Route::put('monitoramentoescalas/{monitoramentoescala}', 'Api\MonitoramentoescalasController@update');
+// Route::delete('monitoramentoescalas/{monitoramentoescala}', 'Api\MonitoramentoescalasController@destroy');
 
 
-Route::get('orcamentos', 'Api\OrcamentosController@index');
-Route::post('orcamentos', 'Api\OrcamentosController@store');
-Route::get('orcamentos/{orcamento}', 'Api\OrcamentosController@show');
-Route::put('orcamentos/{orcamento}', 'Api\OrcamentosController@update');
-Route::put('alterarsituacao/{orcamento}', 'Api\OrcamentosController@alterarSituacao');
-Route::delete('orcamentos/{orcamento}', 'Api\OrcamentosController@destroy');
+// Route::get('orcamentos', 'Api\OrcamentosController@index');
+// Route::post('orcamentos', 'Api\OrcamentosController@store');
+// Route::get('orcamentos/{orcamento}', 'Api\OrcamentosController@show');
+// Route::put('orcamentos/{orcamento}', 'Api\OrcamentosController@update');
+// Route::put('alterarsituacao/{orcamento}', 'Api\OrcamentosController@alterarSituacao');
+// Route::delete('orcamentos/{orcamento}', 'Api\OrcamentosController@destroy');
 
-Route::get('orcamentocustos', 'Api\OrcamentoCustosController@index');
-Route::post('orcamentocustos', 'Api\OrcamentoCustosController@store');
-Route::get('orcamentocustos/{orcamentocusto}', 'Api\OrcamentoCustosController@show');
-Route::put('orcamentocustos/{orcamentocusto}', 'Api\OrcamentoCustosController@update');
-Route::delete('orcamentocustos/{orcamentocusto}', 'Api\OrcamentoCustosController@destroy');
+// Route::get('orcamentocustos', 'Api\OrcamentoCustosController@index');
+// Route::post('orcamentocustos', 'Api\OrcamentoCustosController@store');
+// Route::get('orcamentocustos/{orcamentocusto}', 'Api\OrcamentoCustosController@show');
+// Route::put('orcamentocustos/{orcamentocusto}', 'Api\OrcamentoCustosController@update');
+// Route::delete('orcamentocustos/{orcamentocusto}', 'Api\OrcamentoCustosController@destroy');
 
-Route::get('orcamentoprodutos', 'Api\OrcamentoProdutosController@index');
-Route::post('orcamentoprodutos', 'Api\OrcamentoProdutosController@store');
-Route::get('orcamentoprodutos/{orcamentoproduto}', 'Api\OrcamentoProdutosController@show');
-Route::put('orcamentoprodutos/{orcamentoproduto}', 'Api\OrcamentoProdutosController@update');
-Route::delete('orcamentoprodutos/{orcamentoproduto}', 'Api\OrcamentoProdutosController@destroy');
+// Route::get('orcamentoprodutos', 'Api\OrcamentoProdutosController@index');
+// Route::post('orcamentoprodutos', 'Api\OrcamentoProdutosController@store');
+// Route::get('orcamentoprodutos/{orcamentoproduto}', 'Api\OrcamentoProdutosController@show');
+// Route::put('orcamentoprodutos/{orcamentoproduto}', 'Api\OrcamentoProdutosController@update');
+// Route::delete('orcamentoprodutos/{orcamentoproduto}', 'Api\OrcamentoProdutosController@destroy');
 
-Route::get('orcamentoservicos', 'Api\OrcamentoServicosController@index');
-Route::post('orcamentoservicos', 'Api\OrcamentoServicosController@store');
-Route::get('orcamentoservicos/{orcamentoServico}', 'Api\OrcamentoServicosController@show');
-Route::put('orcamentoservicos/{orcamentoServico}', 'Api\OrcamentoServicosController@update');
-Route::delete('orcamentoservicos/{orcamentoServico}', 'Api\OrcamentoServicosController@destroy');
+// Route::get('orcamentoservicos', 'Api\OrcamentoServicosController@index');
+// Route::post('orcamentoservicos', 'Api\OrcamentoServicosController@store');
+// Route::get('orcamentoservicos/{orcamentoServico}', 'Api\OrcamentoServicosController@show');
+// Route::put('orcamentoservicos/{orcamentoServico}', 'Api\OrcamentoServicosController@update');
+// Route::delete('orcamentoservicos/{orcamentoServico}', 'Api\OrcamentoServicosController@destroy');
 
-Route::get('ordemservicos', 'Api\OrdemservicosController@index');
-Route::post('ordemservicos', 'Api\OrdemservicosController@store');
-Route::get('ordemservicos/{ordemservico}', 'Api\OrdemservicosController@show');
-Route::put('ordemservicos/{ordemservico}', 'Api\OrdemservicosController@update');
-Route::delete('ordemservicos/{ordemservico}', 'Api\OrdemservicosController@destroy');
-Route::get(
-    'ordemservicos/{ordemservico}/horariomedicamentos',
-    'Api\OrdemservicosController@horariomedicamentos'
-); // Custon
-Route::get('ordemservicos/count/{empresa}', 'Api\OrdemservicosController@quantidadeordemservicos');
-Route::get('ordemservicos/groupbyservico/{empresa}', 'Api\OrdemservicosController@groupbyservicos');
+// Route::get('ordemservicos', 'Api\OrdemservicosController@index');
+// Route::post('ordemservicos', 'Api\OrdemservicosController@store');
+// Route::get('ordemservicos/{ordemservico}', 'Api\OrdemservicosController@show');
+// Route::put('ordemservicos/{ordemservico}', 'Api\OrdemservicosController@update');
+// Route::delete('ordemservicos/{ordemservico}', 'Api\OrdemservicosController@destroy');
+// Route::get(
+//     'ordemservicos/{ordemservico}/horariomedicamentos',
+//     'Api\OrdemservicosController@horariomedicamentos'
+// ); // Custon
+// Route::get('ordemservicos/count/{empresa}', 'Api\OrdemservicosController@quantidadeordemservicos');
+// Route::get('ordemservicos/groupbyservico/{empresa}', 'Api\OrdemservicosController@groupbyservicos');
 
 Route::get('ordemservicoServicos', 'Api\OrdemservicoServicoController@index');
 Route::post('ordemservicoServicos', 'Api\OrdemservicoServicoController@store');

@@ -10,3 +10,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
     });
 });
+
+Route::post('formacoes', 'Api\FormacoesController@store');
+Route::get('formacoes/{formacao}', 'Api\FormacoesController@show');
+Route::put('formacoes/{formacao}', 'Api\FormacoesController@update');
+Route::delete('formacoes/{formacao}', 'Api\FormacoesController@destroy');
