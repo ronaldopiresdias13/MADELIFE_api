@@ -10,10 +10,12 @@ use App\Models\Chamado;
 use App\Models\Conversa;
 use App\Models\Ocorrencia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
 
 class DashboardController extends Controller
 {
-    public function get_dados()
+    public function get_dados(Request $request)
     {
         $user = request()->user();
         $pessoa = $user->pessoa;
@@ -26,7 +28,12 @@ class DashboardController extends Controller
             $chamados_enfermagem_final = [];
             $chamados_enfermagem = Chamado::where('empresa_id', '=', $profissinal->empresa_id)->has('mensagens')->where('finalizado', '=', false)->where('tipo', '=', 'Enfermagem')->with(['mensagens' => function ($q) {
                 $q->orderBy('created_at', 'desc');
-            }])->where('ocorrencia_id','=',null)->orderBy('created_at','desc')->get();
+            }])->where('ocorrencia_id','=',null)->orderBy('created_at','desc')->paginate(10, ['*'], 'chamados_enfermagem');
+
+            $current_page_enfermagem = $chamados_enfermagem->currentPage();
+            $last_page_enfermagem = $chamados_enfermagem->lastPage();
+            $total_enfermagem = $chamados_enfermagem->total();
+            $per_page_enfermagem = $chamados_enfermagem->perPage();
 
             foreach ($chamados_enfermagem as $ti) {
                 if ($ti->mensagens[0]->atendente_id == null) {
@@ -37,17 +44,56 @@ class DashboardController extends Controller
 
             $ocorrencias=Ocorrencia::where('empresa_id', '=', $profissinal->empresa_id)->with(['pessoas','escala','transcricao_produto'=>function($q){
                 $q->with('produto','horariomedicamentos');
-            }])->where('situacao','=','Pendente')->orderBy('created_at','desc')->get();
+            }])->where('situacao','=','Pendente');
+            if($request->tipo!=null && $request->tipo!='Todos'){
+                $ocorrencias=$ocorrencias->where('tipo','=',$request->tipo);
+            }
+            if($request->paciente!=null && Str::length($request->paciente)>0){
+                $ocorrencias=$ocorrencias->whereHas('paciente',function($q)use($request){
+                    $q->whereRaw('lower(nome) LIKE lower(?)',['%'.$request->paciente.'%']);
+                });
+            }
+            if($request->responsavel!=null && Str::length($request->responsavel)>0){
+                $ocorrencias=$ocorrencias->whereHas('responsavel',function($q)use($request){
+                    $q->whereRaw('lower(nome) LIKE lower(?)',['%'.$request->responsavel.'%']);
+                });
+            }
+            if($request->prestador!=null && Str::length($request->prestador)>0){
+                $ocorrencias=$ocorrencias->whereHas('pessoas',function($q)use($request){
+                    $q->whereRaw('lower(nome) LIKE lower(?)',['%'.$request->prestador.'%']);
+                });
+            }
+            $ocorrencias=$ocorrencias->orderBy('created_at','desc')->paginate(10, ['*'], 'ocorrencias');
+
+            $current_page_ocorrencia = $ocorrencias->currentPage();
+            $last_page_ocorrencia = $ocorrencias->lastPage();
+            $total_ocorrencia = $ocorrencias->total();
+            $per_page_ocorrencia = $ocorrencias->perPage();
         } else {
             $chamados_enfermagem = [];
             $ocorrencias=[];
+            $current_page_ocorrencia =1;
+            $last_page_ocorrencia = 1;
+            $total_ocorrencia = 1;
+            $per_page_ocorrencia = 0;
+
+            $current_page_enfermagem = 0;
+            $last_page_enfermagem = 0;
+            $total_enfermagem = 0;
+            $per_page_enfermagem = 0;
         }
 
         if ($user->acessos()->where('acessos.nome', '=', 'TI')->first() != null) {
             $chamados_ti_final = [];
             $chamados_ti = Chamado::has('mensagens')->where('finalizado', '=', false)->where('tipo', '=', 'T.I.')->with(['mensagens' => function ($q) {
                 $q->orderBy('created_at', 'desc');
-            }])->orderBy('created_at','desc')->get();
+            }])->orderBy('created_at','desc')->paginate(10, ['*'], 'chamados_ti');
+
+            $current_page_ti = $chamados_ti->currentPage();
+            $last_page_ti = $chamados_ti->lastPage();
+            $total_ti = $chamados_ti->total();
+            $per_page_ti = $chamados_ti->perPage();
+
             foreach ($chamados_ti as $ti) {
                 if ($ti->mensagens[0]->atendente_id == null) {
                     array_push($chamados_ti_final, $ti);
@@ -56,11 +102,101 @@ class DashboardController extends Controller
             $chamados_ti = ChamadoAtendenteResource::collection($chamados_ti_final);
         } else {
             $chamados_ti = [];
+            $current_page_ti = 0;
+            $last_page_ti = 0;
+            $total_ti = 0;
+            $per_page_ti = 0;
         }
 
         
 
-        return response()->json(['chamados_enfermagem' => $chamados_enfermagem, 'chamados_ti' => $chamados_ti,'ocorrencias'=>OcorrenciaResource::collection($ocorrencias)]);
+        return response()->json([
+            'chamados_enfermagem' => $chamados_enfermagem, 
+            'chamados_ti' => $chamados_ti,
+            'ocorrencias'=>OcorrenciaResource::collection($ocorrencias),
+            'current_page_ocorrencia'=>$current_page_ocorrencia,
+            'last_page_ocorrencia'=>$last_page_ocorrencia,
+            'total_ocorrencia'=>$total_ocorrencia,
+            'per_page_ocorrencia'=>$per_page_ocorrencia,
+
+            'current_page_enfermagem'=>$current_page_enfermagem,
+            'last_page_enfermagem'=>$last_page_enfermagem,
+            'total_enfermagem'=>$total_enfermagem,
+            'per_page_enfermagem'=>$per_page_enfermagem,
+
+            'current_page_ti'=>$current_page_ti,
+            'last_page_ti'=>$last_page_ti,
+            'total_ti'=>$total_ti,
+            'per_page_ti'=>$per_page_ti,
+
+        ]);
+    }
+
+
+    public function get_ocorrencias_resolvidas(Request $request)
+    {
+        $user = request()->user();
+        $pessoa = $user->pessoa;
+        $profissinal = $pessoa->profissional()->first();
+        if ($profissinal == null) {
+
+            return response()->json(['ocorrencias'=>[]]);
+        }
+        if ($user->acessos()->where('acessos.nome', '=', 'Área Clínica')->first() != null) {
+
+           
+            $ocorrencias=Ocorrencia::where('empresa_id', '=', $profissinal->empresa_id)->with(['pessoas','escala','transcricao_produto'=>function($q){
+                $q->with('produto','horariomedicamentos');
+            }])->where('situacao','=','Resolvida');
+            if($request->tipo!=null && $request->tipo!='Todos'){
+                $ocorrencias=$ocorrencias->where('tipo','=',$request->tipo);
+            }
+            if($request->paciente!=null && Str::length($request->paciente)>0){
+                $ocorrencias=$ocorrencias->whereHas('paciente',function($q)use($request){
+                    $q->whereRaw('lower(nome) LIKE lower(?)',['%'.$request->paciente.'%']);
+                });
+            }
+            if($request->responsavel!=null && Str::length($request->responsavel)>0){
+                $ocorrencias=$ocorrencias->whereHas('responsavel',function($q)use($request){
+                    $q->whereRaw('lower(nome) LIKE lower(?)',['%'.$request->responsavel.'%']);
+                });
+            }
+            if($request->prestador!=null && Str::length($request->prestador)>0){
+                $ocorrencias=$ocorrencias->whereHas('pessoas',function($q)use($request){
+                    $q->whereRaw('lower(nome) LIKE lower(?)',['%'.$request->prestador.'%']);
+                });
+            }
+            $ocorrencias=$ocorrencias->orderBy('created_at','desc')->paginate(10, ['*'], 'ocorrencias');
+
+
+            $current_page_ocorrencia = $ocorrencias->currentPage();
+            $last_page_ocorrencia = $ocorrencias->lastPage();
+            $total_ocorrencia = $ocorrencias->total();
+            $per_page_ocorrencia = $ocorrencias->perPage();
+        } else {
+            $chamados_enfermagem = [];
+            $ocorrencias=[];
+            $current_page_ocorrencia =1;
+            $last_page_ocorrencia = 1;
+            $total_ocorrencia = 1;
+            $per_page_ocorrencia = 0;
+
+            
+        }
+
+        
+
+        
+
+        return response()->json([
+            'ocorrencias'=>OcorrenciaResource::collection($ocorrencias),
+            'current_page_ocorrencia'=>$current_page_ocorrencia,
+            'last_page_ocorrencia'=>$last_page_ocorrencia,
+            'total_ocorrencia'=>$total_ocorrencia,
+            'per_page_ocorrencia'=>$per_page_ocorrencia,
+
+
+        ]);
     }
 
 

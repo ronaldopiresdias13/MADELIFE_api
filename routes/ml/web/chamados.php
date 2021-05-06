@@ -8,6 +8,9 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('chamados_enfermagem', 'Api\Web\Chat\ChamadosController@chamados_enfermagem');
             Route::get('chamados_ti', 'Api\Web\Chat\ChamadosController@chamados_ti');
 
+            Route::get('chamados_enfermagem_finalizados', 'Api\Web\Chat\ChamadosController@chamados_enfermagem_finalizados');
+            Route::get('chamados_ti_finalizados', 'Api\Web\Chat\ChamadosController@chamados_ti_finalizados');
+
             Route::get('get_pessoas_externo', 'Api\Web\Chat\ChamadosController@get_pessoas_externo');
             Route::post('criarchamado_atendente_enfermagem', 'Api\Web\Chat\ChamadosController@criarchamado_atendente_enfermagem');
 
