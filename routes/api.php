@@ -64,124 +64,124 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
 
         Route::prefix('gestaoOrcamentaria')->group(function () {
-            Route::get('clientes/list', 'Api\Web\GestaoOrcamentaria\ClientesController@index');
-            Route::get('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@show');
-            Route::post('clientes', 'Api\Web\GestaoOrcamentaria\ClientesController@store');
-            Route::put('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@update');
-            Route::delete('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@destroy');
+            // Route::get('clientes/list', 'Api\Web\GestaoOrcamentaria\ClientesController@index');
+            // Route::get('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@show');
+            // Route::post('clientes', 'Api\Web\GestaoOrcamentaria\ClientesController@store');
+            // Route::put('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@update');
+            // Route::delete('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@destroy');
 
             Route::get('dashboard/dashboarContratosPorPoriodo', 'Api\Web\GestaoOrcamentaria\DashboardController@dashboarContratosPorPoriodo');
 
-            Route::get('orcamentos/list/{empresa}', 'Api\Web\GestaoOrcamentaria\OrcamentosController@index');
-            Route::get('orcamentos/{orcamento}', 'Api\Web\GestaoOrcamentaria\OrcamentosController@show');
-            Route::post('orcamentos', 'Api\Web\GestaoOrcamentaria\OrcamentosController@store');
-            Route::put('orcamentos/{orcamento}', 'Api\Web\GestaoOrcamentaria\OrcamentosController@update');
-            Route::delete('orcamentos/{orcamento}', 'Api\Web\GestaoOrcamentaria\OrcamentosController@destroy');
-            Route::post('orcamentos/enviarOrcamentoPorEmail', 'Api\Web\GestaoOrcamentaria\OrcamentosController@enviarOrcamentoPorEmail');
+            // Route::get('orcamentos/list/{empresa}', 'Api\Web\GestaoOrcamentaria\OrcamentosController@index');
+            // Route::get('orcamentos/{orcamento}', 'Api\Web\GestaoOrcamentaria\OrcamentosController@show');
+            // Route::post('orcamentos', 'Api\Web\GestaoOrcamentaria\OrcamentosController@store');
+            // Route::put('orcamentos/{orcamento}', 'Api\Web\GestaoOrcamentaria\OrcamentosController@update');
+            // Route::delete('orcamentos/{orcamento}', 'Api\Web\GestaoOrcamentaria\OrcamentosController@destroy');
+            // Route::post('orcamentos/enviarOrcamentoPorEmail', 'Api\Web\GestaoOrcamentaria\OrcamentosController@enviarOrcamentoPorEmail');
 
-            Route::get('contratos/getAllOrdensServicos', 'Api\Web\GestaoOrcamentaria\OrdemservicosController@getAllOrdensServicos');
-            Route::get('contratos/dashboardGroupByMotivoDesativados', 'Api\Web\GestaoOrcamentaria\OrdemservicosController@dashboardGroupByMotivoDesativados');
-            Route::get('contratos/dashboardGroupByStatusAtivadosDesativados', 'Api\Web\GestaoOrcamentaria\OrdemservicosController@dashboardGroupByStatusAtivadosDesativados');
+            // Route::get('contratos/getAllOrdensServicos', 'Api\Web\GestaoOrcamentaria\OrdemservicosController@getAllOrdensServicos');
+            // Route::get('contratos/dashboardGroupByMotivoDesativados', 'Api\Web\GestaoOrcamentaria\OrdemservicosController@dashboardGroupByMotivoDesativados');
+            // Route::get('contratos/dashboardGroupByStatusAtivadosDesativados', 'Api\Web\GestaoOrcamentaria\OrdemservicosController@dashboardGroupByStatusAtivadosDesativados');
 
-            Route::get('pacientes/list', 'Api\Web\PacientesController@index');
-            Route::get('pacientes/{paciente}', 'Api\Web\PacientesController@show');
-            Route::post('pacientes', 'Api\Web\PacientesController@store');
-            Route::put('pacientes/{paciente}', 'Api\Web\PacientesController@update');
-            Route::delete('pacientes/{paciente}', 'Api\Web\PacientesController@destroy');
+            // Route::get('pacientes/list', 'Api\Web\PacientesController@index');
+            // Route::get('pacientes/{paciente}', 'Api\Web\PacientesController@show');
+            // Route::post('pacientes', 'Api\Web\PacientesController@store');
+            // Route::put('pacientes/{paciente}', 'Api\Web\PacientesController@update');
+            // Route::delete('pacientes/{paciente}', 'Api\Web\PacientesController@destroy');
 
-            Route::get('responsaveis/list', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@index');
-            Route::get('responsaveis/{responsavel}', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@show');
-            Route::post('responsaveis', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@store');
-            Route::put('responsaveis/{responsavel}', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@update');
-            Route::delete('responsaveis/{responsavel}', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@destroy');
+            // Route::get('responsaveis/list', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@index');
+            // Route::get('responsaveis/{responsavel}', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@show');
+            // Route::post('responsaveis', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@store');
+            // Route::put('responsaveis/{responsavel}', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@update');
+            // Route::delete('responsaveis/{responsavel}', 'Api\Web\GestaoOrcamentaria\ResponsaveisController@destroy');
 
 
-            Route::get('servicos/list', 'Api\Web\GestaoOrcamentaria\ServicosController@index');
-            Route::get('servicos/listServicosFormacoes', 'Api\Web\GestaoOrcamentaria\ServicosController@listServicosFormacoes');
-            Route::post('servicos', 'Api\Web\GestaoOrcamentaria\ServicosController@store');
-            Route::get('servicos/{servico}', 'Api\Web\GestaoOrcamentaria\ServicosController@show');
-            Route::put('servicos/{servico}', 'Api\Web\GestaoOrcamentaria\ServicosController@update');
-            Route::delete('servicos/{servico}', 'Api\Web\GestaoOrcamentaria\ServicosController@destroy');
+            // Route::get('servicos/list', 'Api\Web\GestaoOrcamentaria\ServicosController@index');
+            // Route::get('servicos/listServicosFormacoes', 'Api\Web\GestaoOrcamentaria\ServicosController@listServicosFormacoes');
+            // Route::post('servicos', 'Api\Web\GestaoOrcamentaria\ServicosController@store');
+            // Route::get('servicos/{servico}', 'Api\Web\GestaoOrcamentaria\ServicosController@show');
+            // Route::put('servicos/{servico}', 'Api\Web\GestaoOrcamentaria\ServicosController@update');
+            // Route::delete('servicos/{servico}', 'Api\Web\GestaoOrcamentaria\ServicosController@destroy');
         });
 
-        Route::prefix('departamentoPessoal')->group(function () {
-            Route::get('pontos/pontosPrestadores', 'Api\Web\DepartamentoPessoal\PontosController@pontosPrestadores');
-            Route::post('escalas/updateServicoOfEscala/{escala}', 'Api\Web\DepartamentoPessoal\EscalasController@updateServicoOfEscala');
-            Route::get('buscarPagamentosPessoaPorPeriodoEmpresaId', 'Api\Web\DepartamentoPessoal\PagamentopessoasController@buscarPagamentosPessoaPorPeriodoEmpresaId');
-            Route::get('buscalistadeconselhospodidpessoa/{pessoa}', 'Api\Web\PrestadoresController@buscalistadeconselhospodidpessoa');
-            Route::get('buscalistadebancospodidpessoa/{pessoa}', 'Api\Web\PrestadoresController@buscalistadebancospodidpessoa');
-            Route::get('buscalistadetelefonespodidpessoa/{pessoa}', 'Api\Web\PrestadoresController@buscalistadetelefonespodidpessoa');
-            Route::get('buscalistadeenderecospodidpessoa/{pessoa}', 'Api\Web\PrestadoresController@buscalistadeenderecospodidpessoa');
-            Route::post('salvarconselho', 'Api\Web\PrestadoresController@salvarconselho');
-            Route::post('salvartelefone', 'Api\Web\PrestadoresController@salvartelefone');
-            Route::post('salvarbanco', 'Api\Web\PrestadoresController@salvarbanco');
-            Route::post('salvarendereco', 'Api\Web\PrestadoresController@salvarendereco');
-            Route::delete('deletarconselho/{conselho}', 'Api\Web\PrestadoresController@deletarconselho');
-            Route::delete('deletarbanco/{dadosbancario}', 'Api\Web\PrestadoresController@deletarbanco');
-            Route::delete('deletartelefone/{pessoaTelefone}', 'Api\Web\PrestadoresController@deletartelefone');
-            Route::delete('deletarendereco/{pessoaEndereco}', 'Api\Web\PrestadoresController@deletarendereco');
-        });
+        // Route::prefix('departamentoPessoal')->group(function () {
+        //     // Route::get('pontos/pontosPrestadores', 'Api\Web\DepartamentoPessoal\PontosController@pontosPrestadores');
+        //     // Route::post('escalas/updateServicoOfEscala/{escala}', 'Api\Web\DepartamentoPessoal\EscalasController@updateServicoOfEscala');
+        //     // Route::get('buscarPagamentosPessoaPorPeriodoEmpresaId', 'Api\Web\DepartamentoPessoal\PagamentopessoasController@buscarPagamentosPessoaPorPeriodoEmpresaId');
+        //     // Route::get('buscalistadeconselhospodidpessoa/{pessoa}', 'Api\Web\PrestadoresController@buscalistadeconselhospodidpessoa');
+        //     // Route::get('buscalistadebancospodidpessoa/{pessoa}', 'Api\Web\PrestadoresController@buscalistadebancospodidpessoa');
+        //     // Route::get('buscalistadetelefonespodidpessoa/{pessoa}', 'Api\Web\PrestadoresController@buscalistadetelefonespodidpessoa');
+        //     // Route::get('buscalistadeenderecospodidpessoa/{pessoa}', 'Api\Web\PrestadoresController@buscalistadeenderecospodidpessoa');
+        //     // Route::post('salvarconselho', 'Api\Web\PrestadoresController@salvarconselho');
+        //     // Route::post('salvartelefone', 'Api\Web\PrestadoresController@salvartelefone');
+        //     // Route::post('salvarbanco', 'Api\Web\PrestadoresController@salvarbanco');
+        //     // Route::post('salvarendereco', 'Api\Web\PrestadoresController@salvarendereco');
+        //     // Route::delete('deletarconselho/{conselho}', 'Api\Web\PrestadoresController@deletarconselho');
+        //     // Route::delete('deletarbanco/{dadosbancario}', 'Api\Web\PrestadoresController@deletarbanco');
+        //     // Route::delete('deletartelefone/{pessoaTelefone}', 'Api\Web\PrestadoresController@deletartelefone');
+        //     // Route::delete('deletarendereco/{pessoaEndereco}', 'Api\Web\PrestadoresController@deletarendereco');
+        // });
 
-        Route::prefix('financeiro')->group(function () {
-            Route::get('categorianaturezas', 'Api\Web\Financeiro\CategorianaturezasController@index');
-            Route::post('categorianaturezas', 'Api\Web\Financeiro\CategorianaturezasController@store');
-            Route::get('categorianaturezas/{categorianatureza}', 'Api\Web\Financeiro\CategorianaturezasController@show');
-            Route::put('categorianaturezas/{categorianatureza}', 'Api\Web\Financeiro\CategorianaturezasController@update');
-            Route::delete('categorianaturezas/{categorianatureza}', 'Api\Web\Financeiro\CategorianaturezasController@destroy');
+        // Route::prefix('financeiro')->group(function () {
+        //     Route::get('categorianaturezas', 'Api\Web\Financeiro\CategorianaturezasController@index');
+        //     Route::post('categorianaturezas', 'Api\Web\Financeiro\CategorianaturezasController@store');
+        //     Route::get('categorianaturezas/{categorianatureza}', 'Api\Web\Financeiro\CategorianaturezasController@show');
+        //     Route::put('categorianaturezas/{categorianatureza}', 'Api\Web\Financeiro\CategorianaturezasController@update');
+        //     Route::delete('categorianaturezas/{categorianatureza}', 'Api\Web\Financeiro\CategorianaturezasController@destroy');
 
-            Route::get('naturezas', 'Api\Web\Financeiro\NaturezasController@index');
-            Route::post('naturezas', 'Api\Web\Financeiro\NaturezasController@store');
-            Route::get('naturezas/{natureza}', 'Api\Web\Financeiro\NaturezasController@show');
-            Route::put('naturezas/{natureza}', 'Api\Web\Financeiro\NaturezasController@update');
-            Route::delete('naturezas/{natureza}', 'Api\Web\Financeiro\NaturezasController@destroy');
-        });
+            // Route::get('naturezas', 'Api\Web\Financeiro\NaturezasController@index');
+            // Route::post('naturezas', 'Api\Web\Financeiro\NaturezasController@store');
+            // Route::get('naturezas/{natureza}', 'Api\Web\Financeiro\NaturezasController@show');
+            // Route::put('naturezas/{natureza}', 'Api\Web\Financeiro\NaturezasController@update');
+            // Route::delete('naturezas/{natureza}', 'Api\Web\Financeiro\NaturezasController@destroy');
+        // });
+
         Route::prefix('recursosHumanos')->group(function () {
-            Route::post('profissionais/novoProfissional', 'Api\Web\RecursosHumanos\ProfissionaisController@novoProfissional');
+            // Route::post('profissionais/novoProfissional', 'Api\Web\RecursosHumanos\ProfissionaisController@novoProfissional');
             Route::get('dashboard/dashboardProfissionaisExternos', 'Api\Web\RecursosHumanos\DashboardController@dashboardProfissionaisExternos');
             Route::get('dashboard/dashboardMapaPacientesPorEspecialidade', 'Api\Web\RecursosHumanos\DashboardController@dashboardMapaPacientesPorEspecialidade');
 
-            Route::get('beneficios', 'Api\Web\RecursosHumanos\BeneficiosController@index');
-            Route::post('beneficios', 'Api\Web\RecursosHumanos\BeneficiosController@store');
-            Route::get('beneficios/{beneficio}', 'Api\Web\RecursosHumanos\BeneficiosController@show');
-            Route::put('beneficios/{beneficio}', 'Api\Web\RecursosHumanos\BeneficiosController@update');
-            Route::delete('beneficios/{beneficio}', 'Api\Web\RecursosHumanos\BeneficiosController@destroy');
+            // Route::get('beneficios', 'Api\Web\RecursosHumanos\BeneficiosController@index');
+            // Route::post('beneficios', 'Api\Web\RecursosHumanos\BeneficiosController@store');
+            // Route::get('beneficios/{beneficio}', 'Api\Web\RecursosHumanos\BeneficiosController@show');
+            // Route::put('beneficios/{beneficio}', 'Api\Web\RecursosHumanos\BeneficiosController@update');
+            // Route::delete('beneficios/{beneficio}', 'Api\Web\RecursosHumanos\BeneficiosController@destroy');
 
-            Route::get('cargos', 'Api\Web\RecursosHumanos\CargosController@index');
-            Route::post('cargos', 'Api\Web\RecursosHumanos\CargosController@store');
-            Route::get('cargos/{cargo}', 'Api\Web\RecursosHumanos\CargosController@show');
-            Route::put('cargos/{cargo}', 'Api\Web\RecursosHumanos\CargosController@update');
-            Route::delete('cargos/{cargo}', 'Api\Web\RecursosHumanos\CargosController@destroy');
+            // Route::get('cargos', 'Api\Web\RecursosHumanos\CargosController@index');
+            // Route::post('cargos', 'Api\Web\RecursosHumanos\CargosController@store');
+            // Route::get('cargos/{cargo}', 'Api\Web\RecursosHumanos\CargosController@show');
+            // Route::put('cargos/{cargo}', 'Api\Web\RecursosHumanos\CargosController@update');
+            // Route::delete('cargos/{cargo}', 'Api\Web\RecursosHumanos\CargosController@destroy');
 
-            Route::get('convenios', 'Api\Web\RecursosHumanos\ConveniosController@index');
-            Route::post('convenios', 'Api\Web\RecursosHumanos\ConveniosController@store');
-            Route::get('convenios/{convenio}', 'Api\Web\RecursosHumanos\ConveniosController@show');
-            Route::put('convenios/{convenio}', 'Api\Web\RecursosHumanos\ConveniosController@update');
-            Route::delete('convenios/{convenio}', 'Api\Web\RecursosHumanos\ConveniosController@destroy');
+            // Route::get('convenios', 'Api\Web\RecursosHumanos\ConveniosController@index');
+            // Route::post('convenios', 'Api\Web\RecursosHumanos\ConveniosController@store');
+            // Route::get('convenios/{convenio}', 'Api\Web\RecursosHumanos\ConveniosController@show');
+            // Route::put('convenios/{convenio}', 'Api\Web\RecursosHumanos\ConveniosController@update');
+            // Route::delete('convenios/{convenio}', 'Api\Web\RecursosHumanos\ConveniosController@destroy');
 
-            Route::get('profissionais', 'Api\Web\RecursosHumanos\ProfissionaisController@index');
-            // Route::post('profissionais', 'Api\Web\RecursosHumanos\ProfissionaisController@store');
-            Route::get('profissionais/{profissional}', 'Api\Web\RecursosHumanos\ProfissionaisController@show');
-            Route::put('profissionais/{profissional}', 'Api\Web\RecursosHumanos\ProfissionaisController@update');
-            Route::delete('profissionais/{profissional}', 'Api\Web\RecursosHumanos\ProfissionaisController@destroy');
+            // Route::get('profissionais', 'Api\Web\RecursosHumanos\ProfissionaisController@index');
+            // Route::get('profissionais/{profissional}', 'Api\Web\RecursosHumanos\ProfissionaisController@show');
+            // Route::put('profissionais/{profissional}', 'Api\Web\RecursosHumanos\ProfissionaisController@update');
+            // Route::delete('profissionais/{profissional}', 'Api\Web\RecursosHumanos\ProfissionaisController@destroy');
 
-            Route::get('setores', 'Api\Web\RecursosHumanos\SetoresController@index');
-            Route::post('setores', 'Api\Web\RecursosHumanos\SetoresController@store');
-            Route::get('setores/{setor}', 'Api\Web\RecursosHumanos\SetoresController@show');
-            Route::put('setores/{setor}', 'Api\Web\RecursosHumanos\SetoresController@update');
-            Route::delete('setores/{setor}', 'Api\Web\RecursosHumanos\SetoresController@destroy');
+            // Route::get('setores', 'Api\Web\RecursosHumanos\SetoresController@index');
+            // Route::post('setores', 'Api\Web\RecursosHumanos\SetoresController@store');
+            // Route::get('setores/{setor}', 'Api\Web\RecursosHumanos\SetoresController@show');
+            // Route::put('setores/{setor}', 'Api\Web\RecursosHumanos\SetoresController@update');
+            // Route::delete('setores/{setor}', 'Api\Web\RecursosHumanos\SetoresController@destroy');
         });
-        Route::prefix('estoque')->group(function () {
-            Route::get('movimentacaoEstoque', 'Api\Web\Estoque\ProdutosController@movimentacaoEstoque');
-        });
+        // Route::prefix('estoque')->group(function () {
+        //     Route::get('movimentacaoEstoque', 'Api\Web\Estoque\ProdutosController@movimentacaoEstoque');
+        // });
 
         // novoProfissional
 
         Route::prefix('responsavel')->group(function () {
-            Route::get('escalas/listEscalasByIdResponsavel', 'Api\Web\Responsavel\EscalasController@listEscalasByIdResponsavel');
-            Route::get('escalas/listEscalasByIdOrdemServico/{ordemservico}', 'Api\Web\Responsavel\EscalasController@listEscalasByIdOrdemServico');
-            Route::post('escalas/assinar', 'Api\Web\Responsavel\EscalasController@assinar');
-            Route::get('escalas/dashboard', 'Api\Web\Responsavel\EscalasController@dashboard');
-            Route::get('escalas/dashboardPegarTodosOsRegistrosPorIdDaEmpresa', 'Api\Web\Responsavel\EscalasController@dashboardPegarTodosOsRegistrosPorIdDaEmpresa');
+            // Route::get('escalas/listEscalasByIdResponsavel', 'Api\Web\Responsavel\EscalasController@listEscalasByIdResponsavel');
+            // Route::get('escalas/listEscalasByIdOrdemServico/{ordemservico}', 'Api\Web\Responsavel\EscalasController@listEscalasByIdOrdemServico');
+            // Route::post('escalas/assinar', 'Api\Web\Responsavel\EscalasController@assinar');
+            // Route::get('escalas/dashboard', 'Api\Web\Responsavel\EscalasController@dashboard');
+            // Route::get('escalas/dashboardPegarTodosOsRegistrosPorIdDaEmpresa', 'Api\Web\Responsavel\EscalasController@dashboardPegarTodosOsRegistrosPorIdDaEmpresa');
             Route::get('dashboard/relatorioDiario', 'Api\Web\Responsavel\DashboardController@relatorioDiario');
             Route::get('dashboard/relatorioProdutividade', 'Api\Web\Responsavel\DashboardController@relatorioProdutividade');
         });
@@ -189,128 +189,128 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('meu-perfil', 'Api\Web\RecursosHumanos\ProfissionaisController@meuperfil');
         Route::put('meu-perfil/atualizarFotoPerfil', 'Api\Web\RecursosHumanos\ProfissionaisController@atualizarFotoPerfil');
 
-        Route::get('documentos/listDocumentosByEmpresa', 'Api\Web\DocumentosController@listDocumentosByEmpresa');
-        Route::get('documentos/listDocumentosByConvenio', 'Api\Web\DocumentosController@listDocumentosByConvenio');
-        Route::get('documentos/listDocumentosByResponsavel', 'Api\Web\DocumentosController@listDocumentosByResponsavel');
-        Route::get('documentos/listDocumentos', 'Api\Web\DocumentosController@listDocumentos');
-        Route::post('documentos/newDocumento', 'Api\Web\DocumentosController@newDocumento');
-        Route::get('documentos/download/{documento}', 'Api\Web\DocumentosController@download');
-        Route::delete('documentos/delete/{documento}', 'Api\Web\DocumentosController@delete');
+        // Route::get('documentos/listDocumentosByEmpresa', 'Api\Web\DocumentosController@listDocumentosByEmpresa');
+        // Route::get('documentos/listDocumentosByConvenio', 'Api\Web\DocumentosController@listDocumentosByConvenio');
+        // Route::get('documentos/listDocumentosByResponsavel', 'Api\Web\DocumentosController@listDocumentosByResponsavel');
+        // Route::get('documentos/listDocumentos', 'Api\Web\DocumentosController@listDocumentos');
+        // Route::post('documentos/newDocumento', 'Api\Web\DocumentosController@newDocumento');
+        // Route::get('documentos/download/{documento}', 'Api\Web\DocumentosController@download');
+        // Route::delete('documentos/delete/{documento}', 'Api\Web\DocumentosController@delete');
 
         Route::get('escalas/dashboard', 'Api\Web\EscalasController@dashboard');
 
-        Route::get('prestadores/listNomePrestadores', 'Api\Web\PrestadoresController@listNomePrestadores');
-        Route::get('prestadores/listPrestadoresComFormacoes', 'Api\Web\PrestadoresController@listPrestadoresComFormacoes');
+        // Route::get('prestadores/listNomePrestadores', 'Api\Web\PrestadoresController@listNomePrestadores');
+        // Route::get('prestadores/listPrestadoresComFormacoes', 'Api\Web\PrestadoresController@listPrestadoresComFormacoes');
 
-        Route::get('pacientes/listNomePacientes', 'Api\Web\PacientesController@listNomePacientes');
+        // Route::get('pacientes/listNomePacientes', 'Api\Web\PacientesController@listNomePacientes');
 
-        Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\Web\GestaoOrcamentaria\OrdemservicosController@listaOrdemServicosEscalas');
+        // Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\Web\GestaoOrcamentaria\OrdemservicosController@listaOrdemServicosEscalas');
 
-        Route::post('pontos/checkin/{escala}', 'Api\PontosController@checkin'); // Custon
-        Route::post('pontos/checkout/{escala}', 'Api\PontosController@checkout'); // Custon
+        // Route::post('pontos/checkin/{escala}', 'Api\PontosController@checkin'); // Custon
+        // Route::post('pontos/checkout/{escala}', 'Api\PontosController@checkout'); // Custon
     });
 
 
-    Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\OrdemservicosController@listaOrdemServicosEscalas');
-    Route::get('transcricoes/listaTranscricoes', 'Api\Web\AreaClinica\TranscricoesController@listaTranscricoes');
+    // Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\OrdemservicosController@listaOrdemServicosEscalas');
+    // Route::get('transcricoes/listaTranscricoes', 'Api\Web\AreaClinica\TranscricoesController@listaTranscricoes');
 });
 
 // Route::get('getEscalasHoje', 'Api\EscalasController@getEscalasHoje')->middleware('auth:api');
 Route::get('prestadores/atribuicao', 'Api\Web\PrestadoresController@buscaprestadoresporfiltro'); // MUDAR AQUII DEPOIS
 
-Route::get('acaomedicamentos', 'Api\AcaomedicamentosController@index');
-Route::post('acaomedicamentos', 'Api\AcaomedicamentosController@store');
-Route::get('acaomedicamentos/{acaomedicamento}', 'Api\AcaomedicamentosController@show');
-Route::put('acaomedicamentos/{acaomedicamento}', 'Api\AcaomedicamentosController@update');
-Route::delete('acaomedicamentos/{acaomedicamento}', 'Api\AcaomedicamentosController@destroy');
+// Route::get('acaomedicamentos', 'Api\AcaomedicamentosController@index');
+// Route::post('acaomedicamentos', 'Api\AcaomedicamentosController@store');
+// Route::get('acaomedicamentos/{acaomedicamento}', 'Api\AcaomedicamentosController@show');
+// Route::put('acaomedicamentos/{acaomedicamento}', 'Api\AcaomedicamentosController@update');
+// Route::delete('acaomedicamentos/{acaomedicamento}', 'Api\AcaomedicamentosController@destroy');
 
-Route::get('acessos', 'Api\AcessosController@index');
-Route::post('acessos', 'Api\AcessosController@store');
-Route::get('acessos/{acesso}', 'Api\AcessosController@show');
-Route::put('acessos/{acesso}', 'Api\AcessosController@update');
-Route::delete('acessos/{acesso}', 'Api\AcessosController@destroy');
+// Route::get('acessos', 'Api\AcessosController@index');
+// Route::post('acessos', 'Api\AcessosController@store');
+// Route::get('acessos/{acesso}', 'Api\AcessosController@show');
+// Route::put('acessos/{acesso}', 'Api\AcessosController@update');
+// Route::delete('acessos/{acesso}', 'Api\AcessosController@destroy');
 
-Route::get('bancos', 'Api\BancosController@index');
-Route::post('bancos', 'Api\BancosController@store');
-Route::get('bancos/{banco}', 'Api\BancosController@show');
-Route::put('bancos/{banco}', 'Api\BancosController@update');
-Route::delete('bancos/{banco}', 'Api\BancosController@destroy');
-
-
+// Route::get('bancos', 'Api\BancosController@index');
+// Route::post('bancos', 'Api\BancosController@store');
+// Route::get('bancos/{banco}', 'Api\BancosController@show');
+// Route::put('bancos/{banco}', 'Api\BancosController@update');
+// Route::delete('bancos/{banco}', 'Api\BancosController@destroy');
 
 
 
-Route::get('cidades', 'Api\CidadesController@index');
-Route::post('cidades', 'Api\CidadesController@store');
-Route::get('cidades/{cidade}', 'Api\CidadesController@show');
-Route::put('cidades/{cidade}', 'Api\CidadesController@update');
-Route::delete('cidades/{cidade}', 'Api\CidadesController@destroy');
 
-Route::get('certificadoprestadores', 'Api\CertificadoprestadoresController@index');
-Route::post('certificadoprestadores', 'Api\CertificadoprestadoresController@store');
-Route::get('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@show');
-Route::put('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@update');
-Route::delete('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@destroy');
 
-Route::get('cnabs', 'Api\CnabsController@index');
-Route::post('cnabs', 'Api\CnabsController@store');
-Route::get('cnabs/{cnab}/{tipo}', 'Api\CnabsController@show');
-Route::put('cnabs/{cnab}', 'Api\CnabsController@update');
-Route::delete('cnabs/{cnab}', 'Api\CnabsController@destroy');
+// Route::get('cidades', 'Api\CidadesController@index');
+// Route::post('cidades', 'Api\CidadesController@store');
+// Route::get('cidades/{cidade}', 'Api\CidadesController@show');
+// Route::put('cidades/{cidade}', 'Api\CidadesController@update');
+// Route::delete('cidades/{cidade}', 'Api\CidadesController@destroy');
+
+// Route::get('certificadoprestadores', 'Api\CertificadoprestadoresController@index');
+// Route::post('certificadoprestadores', 'Api\CertificadoprestadoresController@store');
+// Route::get('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@show');
+// Route::put('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@update');
+// Route::delete('certificadoprestadores/{certificadoprestador}', 'Api\CertificadoprestadoresController@destroy');
+
+// Route::get('cnabs', 'Api\CnabsController@index');
+// Route::post('cnabs', 'Api\CnabsController@store');
+// Route::get('cnabs/{cnab}/{tipo}', 'Api\CnabsController@show');
+// Route::put('cnabs/{cnab}', 'Api\CnabsController@update');
+// Route::delete('cnabs/{cnab}', 'Api\CnabsController@destroy');
 
 // Route::get('comentariosmedicao', 'Api\Web\ComentariomedicaoController@index');
-Route::post('comentariosmedicao', 'Api\Web\ComentariomedicaoController@store');
-Route::get('comentariosmedicao/buscaComentariosPorIdMedicao/{medicao}', 'Api\Web\ComentariomedicaoController@buscaComentariosPorIdMedicao');
+// Route::post('comentariosmedicao', 'Api\Web\ComentariomedicaoController@store');
+// Route::get('comentariosmedicao/buscaComentariosPorIdMedicao/{medicao}', 'Api\Web\ComentariomedicaoController@buscaComentariosPorIdMedicao');
 // Route::put('comentariosmedicao/{medicao}', 'Api\ComentariomedicaoController@update');
 //Route::delete('comentariosmedicao/{medicao}', 'Api\ComentariomedicaoController@destroy');
 
-Route::get('conselhos', 'Api\ConselhosController@index');
-Route::post('conselhos', 'Api\ConselhosController@store');
-Route::get('conselhos/{conselho}', 'Api\ConselhosController@show');
-Route::put('conselhos/{conselho}', 'Api\ConselhosController@update');
-Route::delete('conselhos/{conselho}', 'Api\ConselhosController@destroy');
+// Route::get('conselhos', 'Api\ConselhosController@index');
+// Route::post('conselhos', 'Api\ConselhosController@store');
+// Route::get('conselhos/{conselho}', 'Api\ConselhosController@show');
+// Route::put('conselhos/{conselho}', 'Api\ConselhosController@update');
+// Route::delete('conselhos/{conselho}', 'Api\ConselhosController@destroy');
 
-Route::get('contas', 'Api\ContasController@index');
-Route::post('contas', 'Api\ContasController@store');
-Route::get('contas/{contas}', 'Api\ContasController@show');
-Route::put('contas/{contas}', 'Api\ContasController@update');
-Route::delete('contas/{contas}', 'Api\ContasController@destroy');
+// Route::get('contas', 'Api\ContasController@index');
+// Route::post('contas', 'Api\ContasController@store');
+// Route::get('contas/{contas}', 'Api\ContasController@show');
+// Route::put('contas/{contas}', 'Api\ContasController@update');
+// Route::delete('contas/{contas}', 'Api\ContasController@destroy');
 
-Route::get('contasbancarias', 'Api\ContasbancariasController@index');
-Route::post('contasbancarias', 'Api\ContasbancariasController@store');
-Route::get('contasbancarias/{contasbancaria}', 'Api\ContasbancariasController@show');
-Route::put('contasbancarias/{contasbancaria}', 'Api\ContasbancariasController@update');
-Route::delete('contasbancarias/{contasbancaria}', 'Api\ContasbancariasController@destroy');
-
-
+// Route::get('contasbancarias', 'Api\ContasbancariasController@index');
+// Route::post('contasbancarias', 'Api\ContasbancariasController@store');
+// Route::get('contasbancarias/{contasbancaria}', 'Api\ContasbancariasController@show');
+// Route::put('contasbancarias/{contasbancaria}', 'Api\ContasbancariasController@update');
+// Route::delete('contasbancarias/{contasbancaria}', 'Api\ContasbancariasController@destroy');
 
 
-Route::get('cotacaoproduto', 'Api\CotacaoProdutoController@index');
-Route::post('cotacaoproduto', 'Api\CotacaoProdutoController@store');
-Route::get('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoProdutoController@show');
-Route::put('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoProdutoController@update');
-Route::delete('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoProdutoController@destroy');
 
 
-Route::get('cuidadoEscalas', 'Api\CuidadoEscalasController@index');
-Route::post('cuidadoEscalas', 'Api\CuidadoEscalasController@store');
-Route::get('cuidadoEscalas/{cuidadoEscala}', 'Api\CuidadoEscalasController@show');
-Route::put('cuidadoEscalas/{cuidadoEscala}', 'Api\CuidadoEscalasController@update');
-Route::delete('cuidadoEscalas/{cuidadoEscala}', 'Api\CuidadoEscalasController@destroy');
+// Route::get('cotacaoproduto', 'Api\CotacaoProdutoController@index');
+// Route::post('cotacaoproduto', 'Api\CotacaoProdutoController@store');
+// Route::get('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoProdutoController@show');
+// Route::put('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoProdutoController@update');
+// Route::delete('cotacaoproduto/{cotacaoproduto}', 'Api\CotacaoProdutoController@destroy');
 
-Route::get('cuidadoPacientes', 'Api\CuidadoPacienteController@index');
-Route::post('cuidadoPacientes', 'Api\CuidadoPacienteController@store');
-Route::get('cuidadoPacientes/{cuidadoPaciente}', 'Api\CuidadoPacienteController@show');
-Route::put('cuidadoPacientes/{cuidadoPaciente}', 'Api\CuidadoPacienteController@update');
-Route::delete('cuidadoPacientes/{cuidadoPaciente}', 'Api\CuidadoPacienteController@destroy');
-Route::get('cuidadoPacientes/paciente/{paciente}', 'Api\CuidadoPacienteController@buscacuidadosdopaciente');
-Route::get('cuidadoPacientes/groupby/{paciente}', 'Api\CuidadoPacienteController@groupbycuidadosdopaciente');
 
-Route::get('dadosbancarios', 'Api\DadosbancariosController@index');
-Route::post('dadosbancarios', 'Api\DadosbancariosController@store');
-Route::get('dadosbancarios/{dadosbancario}', 'Api\DadosbancariosController@show');
-Route::put('dadosbancarios/{dadosbancario}', 'Api\DadosbancariosController@update');
-Route::delete('dadosbancarios/{dadosbancario}', 'Api\DadosbancariosController@destroy');
+// Route::get('cuidadoEscalas', 'Api\CuidadoEscalasController@index');
+// Route::post('cuidadoEscalas', 'Api\CuidadoEscalasController@store');
+// Route::get('cuidadoEscalas/{cuidadoEscala}', 'Api\CuidadoEscalasController@show');
+// Route::put('cuidadoEscalas/{cuidadoEscala}', 'Api\CuidadoEscalasController@update');
+// Route::delete('cuidadoEscalas/{cuidadoEscala}', 'Api\CuidadoEscalasController@destroy');
+
+// Route::get('cuidadoPacientes', 'Api\CuidadoPacienteController@index');
+// Route::post('cuidadoPacientes', 'Api\CuidadoPacienteController@store');
+// Route::get('cuidadoPacientes/{cuidadoPaciente}', 'Api\CuidadoPacienteController@show');
+// Route::put('cuidadoPacientes/{cuidadoPaciente}', 'Api\CuidadoPacienteController@update');
+// Route::delete('cuidadoPacientes/{cuidadoPaciente}', 'Api\CuidadoPacienteController@destroy');
+// Route::get('cuidadoPacientes/paciente/{paciente}', 'Api\CuidadoPacienteController@buscacuidadosdopaciente');
+// Route::get('cuidadoPacientes/groupby/{paciente}', 'Api\CuidadoPacienteController@groupbycuidadosdopaciente');
+
+// Route::get('dadosbancarios', 'Api\DadosbancariosController@index');
+// Route::post('dadosbancarios', 'Api\DadosbancariosController@store');
+// Route::get('dadosbancarios/{dadosbancario}', 'Api\DadosbancariosController@show');
+// Route::put('dadosbancarios/{dadosbancario}', 'Api\DadosbancariosController@update');
+// Route::delete('dadosbancarios/{dadosbancario}', 'Api\DadosbancariosController@destroy');
 
 Route::get('dadoscontratuais', 'Api\DadoscontratuaisController@index');
 Route::post('dadoscontratuais', 'Api\DadoscontratuaisController@store');

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\Cidade\CidadesController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('enviararquivos', 'Api\App\v3_0_21\ChamadosController@enviararquivos');
@@ -79,6 +80,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('criarchamado', 'Api\App\v3_0_21\ChamadosController@criarchamado');
         Route::post('enviarArquivos', 'Api\App\v3_0_21\ChamadosController@enviarArquivos');
     });
+});
+
+Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix("app/v3_0_22")->group(function () {
         Route::post('acaomedicamentos', 'Api\App\v3_0_22\AcaomedicamentosController@store');
 
@@ -150,6 +154,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('criarchamado', 'Api\App\v3_0_22\ChamadosController@criarchamado');
         Route::post('enviarArquivos', 'Api\App\v3_0_22\ChamadosController@enviarArquivos');
     });
+});
+
+Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix("app/v3_0_24")->group(function () {
         Route::post('acaomedicamentos', 'Api\App\v3_0_24\AcaomedicamentosController@store');
 
@@ -221,6 +228,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('criarchamado', 'Api\App\v3_0_24\ChamadosController@criarchamado');
         Route::post('enviarArquivos', 'Api\App\v3_0_24\ChamadosController@enviarArquivos');
     });
+});
+
+Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix("app/v3_0_25")->group(function () {
         Route::post('acaomedicamentos', 'Api\App\v3_0_25\AcaomedicamentosController@store');
 
@@ -289,4 +299,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('criarchamado', 'Api\App\v3_0_25\ChamadosController@criarchamado');
         Route::post('enviarArquivos', 'Api\App\v3_0_25\ChamadosController@enviarArquivos');
     });
+});
+
+Route::prefix("app/v3_0_25")->group(function(){
+    Route::get('cidades/listaCidadesCadastroApp/{uf}', [CidadesController::class, 'listaCidadesCadastroApp']);
 });

@@ -11,5 +11,8 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('pagamentos/cnab/groupByPagamentoByMesAndEmpresaId', [PagamentosCnabController::class, 'groupByPagamentoByMesAndEmpresaId']);
             Route::post('atualizarSituacaoPagamentoDiretoria', [PagamentosCnabController::class, 'atualizarSituacaoPagamentoDiretoria']);
         });
+        Route::prefix('departamentoPessoal')->group(function () {
+            Route::get('buscarPagamentosPessoaPorPeriodoEmpresaId', 'Api\Web\DepartamentoPessoal\PagamentopessoasController@buscarPagamentosPessoaPorPeriodoEmpresaId');
+        });
     });
 });

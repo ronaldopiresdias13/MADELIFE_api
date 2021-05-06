@@ -15,5 +15,15 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::prefix('escalas')->group(function () {
             Route::get('medicao', [EscalasController::class, 'medicao']);
         });
+        Route::prefix('departamentoPessoal')->group(function () {
+            Route::post('escalas/updateServicoOfEscala/{escala}', 'Api\Web\DepartamentoPessoal\EscalasController@updateServicoOfEscala');
+        });
+        Route::prefix('responsavel')->group(function () {
+            Route::get('escalas/listEscalasByIdResponsavel', 'Api\Web\Responsavel\EscalasController@listEscalasByIdResponsavel');
+            Route::get('escalas/listEscalasByIdOrdemServico/{ordemservico}', 'Api\Web\Responsavel\EscalasController@listEscalasByIdOrdemServico');
+            Route::post('escalas/assinar', 'Api\Web\Responsavel\EscalasController@assinar');
+            Route::get('escalas/dashboard', 'Api\Web\Responsavel\EscalasController@dashboard');
+            Route::get('escalas/dashboardPegarTodosOsRegistrosPorIdDaEmpresa', 'Api\Web\Responsavel\EscalasController@dashboardPegarTodosOsRegistrosPorIdDaEmpresa');
+        });
     });
 });

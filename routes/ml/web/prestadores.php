@@ -14,5 +14,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('empresaPrestador/listaPrestadoresPorEmpresaIdEStatus', [EmpresaPrestadorController::class, 'listaPrestadoresPorEmpresaIdEStatus']);
             Route::get('buscaprestadorexterno/{prestador}', [PrestadoresController::class, 'buscaprestadorexterno']);
         });
+        Route::get('prestadores/listNomePrestadores', 'Api\Web\PrestadoresController@listNomePrestadores');
+        Route::get('prestadores/listPrestadoresComFormacoes', 'Api\Web\PrestadoresController@listPrestadoresComFormacoes');
     });
 });

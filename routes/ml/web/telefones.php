@@ -1,0 +1,13 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::prefix('web')->group(function () {
+        Route::prefix('departamentoPessoal')->group(function () {
+            Route::get('buscalistadetelefonespodidpessoa/{pessoa}', 'Api\Web\PrestadoresController@buscalistadetelefonespodidpessoa');
+            Route::post('salvartelefone', 'Api\Web\PrestadoresController@salvartelefone');
+            Route::delete('deletartelefone/{pessoaTelefone}', 'Api\Web\PrestadoresController@deletartelefone');
+        });
+    });
+});
