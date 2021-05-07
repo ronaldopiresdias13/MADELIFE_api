@@ -1,22 +1,8 @@
 <?php
 
-use App\Http\Controllers\Api\EmpresaPrestadorController as ApiEmpresaPrestadorController;
 use App\Http\Controllers\Api\Novo\Web\EscalasController;
-use App\Http\Controllers\Api\Novo\Web\OrdemservicoAcessoController;
 use App\Http\Controllers\Api\Novo\Web\PrestadoresController;
 use App\Http\Controllers\Api\Novo\Web\TranscricaoProdutoController;
-use App\Http\Controllers\Api\Web\Agendamento\AgendamentosController;
-use App\Http\Controllers\Api\Web\Compras\ProdutoController;
-use App\Http\Controllers\Api\Web\DepartamentoPessoal\PagamentoexternosController;
-use App\Http\Controllers\Api\Web\Financeiro\PagamentosCnabController;
-use App\Http\Controllers\Api\Web\GestaoOrcamentaria\PacotesController;
-use App\Http\Controllers\Web\Contratos\ContratosController;
-use App\Http\Controllers\Web\Escalas\EscalasController as EscalasEscalasController;
-use App\Http\Controllers\Web\Formacoes\FormacoesController;
-use App\Http\Controllers\Web\Orcs\OrcsController;
-use App\Http\Controllers\Web\Ordemservicos\OrdemservicosController;
-use App\Http\Controllers\Web\PagamentointernosController;
-use App\Http\Controllers\Web\Prestadores\PrestadoresController as PrestadoresPrestadoresController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -85,43 +71,6 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 // Route::get('getEscalasHoje', 'Api\EscalasController@getEscalasHoje')->middleware('auth:api');
 Route::get('prestadores/atribuicao', 'Api\Web\PrestadoresController@buscaprestadoresporfiltro'); // MUDAR AQUII DEPOIS
-
-
-
-
-
-
-// Route::delete('transcricaoprodutos/{transcricao_produto}', 'Api\TranscricaoProdutoController@destroy');
-
-// Route::get('unidademedidas', 'Api\UnidademedidasController@index');
-// Route::post('unidademedidas', 'Api\UnidademedidasController@store');
-// Route::get('unidademedidas/{unidademedida}', 'Api\UnidademedidasController@show');
-// Route::put('unidademedidas/{unidademedida}', 'Api\UnidademedidasController@update');
-// Route::delete('unidademedidas/{unidademedida}', 'Api\UnidademedidasController@destroy');
-
-// Route::get('users', 'Api\UsersController@index');
-// Route::post('users', 'Api\UsersController@store');
-// Route::get('users/{user}', 'Api\UsersController@show');
-// Route::put('users/{user}', 'Api\UsersController@update');
-// Route::put('users/{user}/updateEmail', 'Api\UsersController@updateEmail');
-// Route::delete('users/{user}', 'Api\UsersController@destroy');
-
-// Route::get('userAcessos', 'Api\UserAcessoController@index');
-// Route::post('userAcessos', 'Api\UserAcessoController@store');
-// Route::get('userAcessos/{userAcesso}', 'Api\UserAcessoController@show');
-// Route::put('userAcessos/{userAcesso}', 'Api\UserAcessoController@update');
-// Route::delete('userAcessos/{userAcesso}', 'Api\UserAcessoController@destroy');
-
-// Route::get('vendas', 'Api\VendasController@index');
-// Route::post('vendas', 'Api\VendasController@store');
-// Route::get('vendas/{venda}', 'Api\VendasController@show');
-// Route::put('vendas/{venda}', 'Api\VendasController@update');
-// Route::delete('vendas/{venda}', 'Api\VendasController@destroy');
-// Route::post('vendas/cadastrarCliente', 'Api\VendasController@cadastrarCliente');
-
-
-
-
 
 /*------------------------------------------- Novas Rotas -------------------------------------------*/
 
