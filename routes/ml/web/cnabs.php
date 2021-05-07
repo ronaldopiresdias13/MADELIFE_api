@@ -15,3 +15,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
     });
 });
+
+Route::get('cnabs', 'Api\CnabsController@index');
+Route::post('cnabs', 'Api\CnabsController@store');
+Route::get('cnabs/{cnab}/{tipo}', 'Api\CnabsController@show');
+Route::put('cnabs/{cnab}', 'Api\CnabsController@update');
+Route::delete('cnabs/{cnab}', 'Api\CnabsController@destroy');

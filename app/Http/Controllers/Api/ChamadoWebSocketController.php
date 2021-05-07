@@ -373,8 +373,8 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
             Log::info('mensagem2.1');
             Log::info('chamado');
             Log::info($chamado);
-            $prestador=$chamado->prestador()->first();
-            NotificacaoAppJob::dispatch($prestador,$chamado->tipo.' - '.$chamado->assunto,$message->mensagem);
+            $prestador = $chamado->prestador()->first();
+            NotificacaoAppJob::dispatch($prestador, $chamado->tipo . ' - ' . $chamado->assunto, $message->mensagem);
             if (isset($this->clientes_ids[$chamado->prestador_id])) {
                 foreach ($this->clientes_ids[$chamado->prestador_id] as $socket) {
 
@@ -567,9 +567,11 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
 
     public function onClose(ConnectionInterface $conn): void
     {
-        Log::info("desconectou ".$conn->resourceId);
+        $conn->close();
+
+        Log::info("desconectou " . $conn->resourceId);
         if (isset($this->resouce_pessoa[$conn->resourceId])) {
-        Log::info("desconectou2 ".$conn->resourceId);
+            Log::info("desconectou2 " . $conn->resourceId);
 
             $pessoa = $this->resouce_pessoa[$conn->resourceId]->pessoa;
             if (($key = array_search($conn->resourceId, $this->enfermagem)) !== false) {
@@ -577,20 +579,19 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                 // unset($this->clientes_ids[$pessoa->id . 'Enfermagem']);
                 $profissional = Profissional::where('pessoa_id', '=', $pessoa->id)->first();
 
-                for ($i = 0; $i < count($this->clientes_ids[$pessoa->id. 'Enfermagem'.$profissional->empresa_id]); $i++) {
-                    if ($this->clientes_ids[$pessoa->id. 'Enfermagem'.$profissional->empresa_id][$i]->resourceId == $conn->resourceId) {
-                        unset($this->clientes_ids[$pessoa->id. 'Enfermagem'.$profissional->empresa_id][$i]);
+                for ($i = 0; $i < count($this->clientes_ids[$pessoa->id . 'Enfermagem' . $profissional->empresa_id]); $i++) {
+                    if ($this->clientes_ids[$pessoa->id . 'Enfermagem' . $profissional->empresa_id][$i]->resourceId == $conn->resourceId) {
+                        unset($this->clientes_ids[$pessoa->id . 'Enfermagem' . $profissional->empresa_id][$i]);
                         unset($this->resouce_pessoa[$conn->resourceId]);
                         break;
                     }
                 }
-            }
-            else if (($key = array_search($conn->resourceId, $this->ti)) !== false) {
+            } else if (($key = array_search($conn->resourceId, $this->ti)) !== false) {
                 unset($this->ti[$key]);
                 // unset($this->clientes_ids[$pessoa->id . 'T.I.']);
-                for ($i = 0; $i < count($this->clientes_ids[$pessoa->id. 'T.I.']); $i++) {
-                    if ($this->clientes_ids[$pessoa->id. 'T.I.'][$i]->resourceId == $conn->resourceId) {
-                        unset($this->clientes_ids[$pessoa->id. 'T.I.'][$i]);
+                for ($i = 0; $i < count($this->clientes_ids[$pessoa->id . 'T.I.']); $i++) {
+                    if ($this->clientes_ids[$pessoa->id . 'T.I.'][$i]->resourceId == $conn->resourceId) {
+                        unset($this->clientes_ids[$pessoa->id . 'T.I.'][$i]);
                         unset($this->resouce_pessoa[$conn->resourceId]);
                         break;
                     }
@@ -606,53 +607,53 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                 }
             }
         }
-        $conn->close();
         $this->clients->detach($conn);
     }
 
     public function onError(ConnectionInterface $conn, Exception $exception): void
     {
-        Log::info($exception);
-
-        if (isset($this->resouce_pessoa[$conn->resourceId])) {
-            $pessoa = $this->resouce_pessoa[$conn->resourceId]->pessoa;
-            // unset($this->resouce_pessoa[$conn->resourceId]);
-            if (($key = array_search($conn->resourceId, $this->enfermagem)) !== false) {
-                unset($this->enfermagem[$key]);
-                // unset($this->clientes_ids[$pessoa->id . 'Enfermagem']);
-                $profissional = Profissional::where('pessoa_id', '=', $pessoa->id)->first();
-
-                for ($i = 0; $i < count($this->clientes_ids[$pessoa->id. 'Enfermagem'.$profissional->empresa_id]); $i++) {
-                    if ($this->clientes_ids[$pessoa->id. 'Enfermagem'.$profissional->empresa_id][$i]->resourceId == $conn->resourceId) {
-                        unset($this->clientes_ids[$pessoa->id. 'Enfermagem'.$profissional->empresa_id][$i]);
-                        unset($this->resouce_pessoa[$conn->resourceId]);
-                        break;
-                    }
-                }
-            }
-            else if (($key = array_search($conn->resourceId, $this->ti)) !== false) {
-                unset($this->ti[$key]);
-                // unset($this->clientes_ids[$pessoa->id . 'T.I.']);
-                for ($i = 0; $i < count($this->clientes_ids[$pessoa->id. 'T.I.']); $i++) {
-                    if ($this->clientes_ids[$pessoa->id. 'T.I.'][$i]->resourceId == $conn->resourceId) {
-                        unset($this->clientes_ids[$pessoa->id. 'T.I.'][$i]);
-                        unset($this->resouce_pessoa[$conn->resourceId]);
-                        break;
-                    }
-                }
-            } else {
-                // unset($this->clientes_ids[$pessoa->id]);
-                for ($i = 0; $i < count($this->clientes_ids[$pessoa->id]); $i++) {
-                    if ($this->clientes_ids[$pessoa->id][$i]->resourceId == $conn->resourceId) {
-                        unset($this->clientes_ids[$pessoa->id][$i]);
-                        unset($this->resouce_pessoa[$conn->resourceId]);
-                        break;
-                    }
-                }
-            }
-        }
         $conn->close();
-        $this->clients->detach($conn);
 
+        Log::info($exception);
+        try {
+            if (isset($this->resouce_pessoa[$conn->resourceId])) {
+                $pessoa = $this->resouce_pessoa[$conn->resourceId]->pessoa;
+                // unset($this->resouce_pessoa[$conn->resourceId]);
+                if (($key = array_search($conn->resourceId, $this->enfermagem)) !== false) {
+                    unset($this->enfermagem[$key]);
+                    // unset($this->clientes_ids[$pessoa->id . 'Enfermagem']);
+                    $profissional = Profissional::where('pessoa_id', '=', $pessoa->id)->first();
+
+                    for ($i = 0; $i < count($this->clientes_ids[$pessoa->id . 'Enfermagem' . $profissional->empresa_id]); $i++) {
+                        if ($this->clientes_ids[$pessoa->id . 'Enfermagem' . $profissional->empresa_id][$i]->resourceId == $conn->resourceId) {
+                            unset($this->clientes_ids[$pessoa->id . 'Enfermagem' . $profissional->empresa_id][$i]);
+                            unset($this->resouce_pessoa[$conn->resourceId]);
+                            break;
+                        }
+                    }
+                } else if (($key = array_search($conn->resourceId, $this->ti)) !== false) {
+                    unset($this->ti[$key]);
+                    // unset($this->clientes_ids[$pessoa->id . 'T.I.']);
+                    for ($i = 0; $i < count($this->clientes_ids[$pessoa->id . 'T.I.']); $i++) {
+                        if ($this->clientes_ids[$pessoa->id . 'T.I.'][$i]->resourceId == $conn->resourceId) {
+                            unset($this->clientes_ids[$pessoa->id . 'T.I.'][$i]);
+                            unset($this->resouce_pessoa[$conn->resourceId]);
+                            break;
+                        }
+                    }
+                } else {
+                    // unset($this->clientes_ids[$pessoa->id]);
+                    for ($i = 0; $i < count($this->clientes_ids[$pessoa->id]); $i++) {
+                        if ($this->clientes_ids[$pessoa->id][$i]->resourceId == $conn->resourceId) {
+                            unset($this->clientes_ids[$pessoa->id][$i]);
+                            unset($this->resouce_pessoa[$conn->resourceId]);
+                            break;
+                        }
+                    }
+                }
+            }
+            $this->clients->detach($conn);
+        } catch (Exception $e) {
+        }
     }
 }
