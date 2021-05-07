@@ -17,7 +17,10 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('prestadores/listNomePrestadores', 'Api\Web\PrestadoresController@listNomePrestadores');
         Route::get('prestadores/listPrestadoresComFormacoes', 'Api\Web\PrestadoresController@listPrestadoresComFormacoes');
     });
+    //Route::get('prestadores/atribuicao', 'Api\Web\PrestadoresController@buscaprestadoresporfiltro'); // MUDAR AQUII DEPOIS
 });
+
+Route::get('prestadores/atribuicao', 'Api\Web\PrestadoresController@buscaprestadoresporfiltro'); // MUDAR AQUII DEPOIS
 
 Route::get('prestadores', 'Api\PrestadoresController@index');
 Route::post('prestadores', 'Api\PrestadoresController@store');

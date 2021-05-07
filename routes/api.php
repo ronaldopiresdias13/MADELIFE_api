@@ -1,8 +1,22 @@
 <?php
 
+use App\Http\Controllers\Api\EmpresaPrestadorController as ApiEmpresaPrestadorController;
 use App\Http\Controllers\Api\Novo\Web\EscalasController;
+use App\Http\Controllers\Api\Novo\Web\OrdemservicoAcessoController;
 use App\Http\Controllers\Api\Novo\Web\PrestadoresController;
 use App\Http\Controllers\Api\Novo\Web\TranscricaoProdutoController;
+use App\Http\Controllers\Api\Web\Agendamento\AgendamentosController;
+use App\Http\Controllers\Api\Web\Compras\ProdutoController;
+use App\Http\Controllers\Api\Web\DepartamentoPessoal\PagamentoexternosController;
+use App\Http\Controllers\Api\Web\Financeiro\PagamentosCnabController;
+use App\Http\Controllers\Api\Web\GestaoOrcamentaria\PacotesController;
+use App\Http\Controllers\Web\Contratos\ContratosController;
+use App\Http\Controllers\Web\Escalas\EscalasController as EscalasEscalasController;
+use App\Http\Controllers\Web\Formacoes\FormacoesController;
+use App\Http\Controllers\Web\Orcs\OrcsController;
+use App\Http\Controllers\Web\Ordemservicos\OrdemservicosController;
+use App\Http\Controllers\Web\PagamentointernosController;
+use App\Http\Controllers\Web\Prestadores\PrestadoresController as PrestadoresPrestadoresController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -70,7 +84,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 });
 
 // Route::get('getEscalasHoje', 'Api\EscalasController@getEscalasHoje')->middleware('auth:api');
-Route::get('prestadores/atribuicao', 'Api\Web\PrestadoresController@buscaprestadoresporfiltro'); // MUDAR AQUII DEPOIS
+// Route::get('prestadores/atribuicao', 'Api\Web\PrestadoresController@buscaprestadoresporfiltro'); // MUDAR AQUII DEPOIS
 
 /*------------------------------------------- Novas Rotas -------------------------------------------*/
 
