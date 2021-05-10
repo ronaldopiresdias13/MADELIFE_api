@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\app\v3_0_25\VersaoController;
 use App\Http\Controllers\Web\Cidade\CidadesController;
 use Illuminate\Support\Facades\Route;
 
@@ -303,4 +304,5 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 Route::prefix("app/v3_0_25")->group(function(){
     Route::get('cidades/listaCidadesCadastroApp/{uf}', [CidadesController::class, 'listaCidadesCadastroApp']);
+    Route::post('versoes/verificarVersaoApp', [VersaoController::class, 'verificarVersaoApp']);
 });
