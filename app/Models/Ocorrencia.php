@@ -12,15 +12,16 @@ class Ocorrencia extends Model
     protected $table = 'ocorrencias';
 
     protected $fillable = [
-        'tipo', 'situacao','transcricao_produto_id','escala_id','horario','empresa_id','justificativa','paciente_id','responsavel_id'
+        'tipo', 'situacao','transcricao_produto_id','horario','empresa_id','justificativa','paciente_id','responsavel_id'
     ];
 
     protected $guarded = [];
 
-    public function escala()
-    {
-        return $this->belongsTo(Escala::class,'escala_id','id');
-    }
+    // public function escala()
+    // {
+    //     return $this->belongsTo(Escala::class,'escala_id','id');
+    // }
+    
     public function empresa()
     {
         return $this->belongsTo(Empresa::class,'empresa_id','id');
@@ -49,5 +50,11 @@ class Ocorrencia extends Model
     public function responsavel()
     {
         return $this->belongsTo(Pessoa::class,'responsavel_id','id');
+    }
+
+
+    public function escalas()
+    {
+        return $this->belongsToMany(Escala::class, 'ocorrencias_escalas', 'ocorrencia_id', 'escala_id');
     }
 }
