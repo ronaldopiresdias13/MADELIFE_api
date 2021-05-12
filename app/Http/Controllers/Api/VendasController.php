@@ -151,7 +151,7 @@ class VendasController extends Controller
                     $orcamento_produto = OrcamentoProduto::create(
                         [
                             'orcamento_id'         => $orcamento->id,
-                            'produto_id'           => $produto['produto_id'],
+                            'produto_id'           => $produto['produto']['id'],
                             'quantidade'           => $produto['quantidade'],
                             'valorunitario'        => $produto['valor'],
                             'custo'                => $produto['custo'],
@@ -171,7 +171,7 @@ class VendasController extends Controller
             ]);
             if ($request['orcamento']['produtos']) {
                 foreach ($request['orcamento']['produtos'] as $key => $produto) {
-                    $prod = Produto::find($produto["produto_id"]);
+                    $prod = Produto::find($produto["produto"]["id"]);
                     if ($prod->controlelote) {
                         if ($produto['lote']) {
                             $estoque = Estoque::firstWhere('lote', $produto['lote']);
@@ -181,7 +181,7 @@ class VendasController extends Controller
                                 $atualiza_quantidade_estoque->update();
                             } else {
                                 $nova_estoque = Estoque::create([
-                                    'produto_id' => $produto['produto_id'],
+                                    'produto_id' => $produto['produto']['id'],
                                     'unidade'    => $prod->unidademedida_id,
                                     'quantidade' => $produto['quantidade'],
                                     'lote'       => $produto['lote'],
@@ -194,7 +194,7 @@ class VendasController extends Controller
                     }
                     $saida_produto = SaidaProduto::create([
                         'saida_id'      => $saida->id,
-                        'produto_id'    => $produto['produto_id'],
+                        'produto_id'    => $produto['produto']['id'],
                         'quantidade'    => $produto['quantidade'],
                         'lote'          => $produto['lote'],
                         'valor'         => $produto['valor']
