@@ -95,12 +95,12 @@ class PontosController extends Controller
 
     private function calcularPontos(Escala $dado, bool $mult)
     {
-        $escala['escala_id'] = $dado->id;
-        $escala['prestador_id'] = $dado->prestador_id;
-        $escala['prestador'] = $dado->prestador->pessoa->nome;
-        $escala['pessoa_id'] = $dado->prestador->pessoa->id;
-        $escala['periodo'] = $dado->periodo;
-        $escala['relatorioescalas'] = $dado->relatorioescalas;
+        $escala['escala_id']            = $dado->id;
+        $escala['prestador_id']         = $dado->prestador_id;
+        $escala['prestador']            = $dado->prestador->pessoa->nome;
+        $escala['pessoa_id']            = $dado->prestador->pessoa->id;
+        $escala['periodo']              = $dado->periodo;
+        $escala['relatorioescalas']     = $dado->relatorioescalas;
         $escala['servico']['id']        = $dado->servico ? $dado->servico->id : null;
         $escala['servico']['descricao'] = $dado->servico ? $dado->servico->descricao : null;
 
