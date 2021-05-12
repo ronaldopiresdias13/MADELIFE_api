@@ -67,8 +67,13 @@ class Escala extends Model
         return $this->hasMany(Relatorioescala::class)->where('ativo', true);
     }
 
+    // public function ocorrencias()
+    // {
+    //     return $this->hasMany(Ocorrencia::class,'escala_id','id');
+    // }
+
     public function ocorrencias()
     {
-        return $this->hasMany(Ocorrencia::class,'escala_id','id');
+        return $this->belongsToMany(Ocorrencia::class, 'ocorrencias_escalas','escala_id', 'ocorrencia_id');
     }
 }
