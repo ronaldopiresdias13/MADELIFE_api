@@ -26,11 +26,18 @@ class ChamadosController extends Controller
         $profissinal = $pessoa->profissional()->first();
         $chamados = Chamado::where('empresa_id','=',$profissinal->empresa_id)->with(['mensagens' => function ($q) {
             $q->with(['atendente', 'prestador'])->orderBy('created_at', 'desc');
-        }, 'prestador'])->where('tipo', 'Enfermagem')->where(function($q){
-            $q->where(function($q2){
-                $q2->where('updated_at', '>', Carbon::now()->subDays(5))->where('finalizado','=',1);
-            })->orWhere('finalizado','=',0);
-        })->where('ocorrencia_id','=',null)->orderBy('updated_at', 'desc')->orderBy('updated_at', 'desc')->get();
+        }, 'prestador'])->where('tipo', 'Enfermagem')->where('finalizado','=',0)->where('ocorrencia_id','=',null)->orderBy('updated_at', 'desc')->orderBy('updated_at', 'desc')->get();
+        return response()->json(['conversas' => ChamadoAtendenteResource::collection($chamados)]);
+    }
+
+    public function chamados_enfermagem_finalizados(Request $request)
+    {
+        $user = $request->user();
+        $pessoa = $user->pessoa()->first();
+        $profissinal = $pessoa->profissional()->first();
+        $chamados = Chamado::where('empresa_id','=',$profissinal->empresa_id)->with(['mensagens' => function ($q) {
+            $q->with(['atendente', 'prestador'])->orderBy('created_at', 'desc');
+        }, 'prestador'])->where('tipo', 'Enfermagem')->where('finalizado','=',1)->where('ocorrencia_id','=',null)->orderBy('updated_at', 'desc')->orderBy('updated_at', 'desc')->get();
         return response()->json(['conversas' => ChamadoAtendenteResource::collection($chamados)]);
     }
 
@@ -38,11 +45,15 @@ class ChamadosController extends Controller
     {
         $chamados = Chamado::with(['mensagens' => function ($q) {
             $q->with(['atendente', 'prestador'])->orderBy('created_at', 'desc');
-        }, 'prestador'])->where('tipo', 'T.I.')->where(function($q){
-            $q->where(function($q2){
-                $q2->where('updated_at', '>', Carbon::now()->subDays(5))->where('finalizado','=',1);
-            })->orWhere('finalizado','=',0);
-        })->where('ocorrencia_id','=',null)->orderBy('updated_at', 'desc')->get();
+        }, 'prestador'])->where('tipo', 'T.I.')->where('finalizado','=',0)->where('ocorrencia_id','=',null)->orderBy('updated_at', 'desc')->get();
+        return response()->json(['conversas' => ChamadoAtendenteResource::collection($chamados)]);
+    }
+
+    public function chamados_ti_finalizados(Request $request)
+    {
+        $chamados = Chamado::with(['mensagens' => function ($q) {
+            $q->with(['atendente', 'prestador'])->orderBy('created_at', 'desc');
+        }, 'prestador'])->where('tipo', 'T.I.')->where('finalizado','=',1)->where('ocorrencia_id','=',null)->orderBy('updated_at', 'desc')->get();
         return response()->json(['conversas' => ChamadoAtendenteResource::collection($chamados)]);
     }
 

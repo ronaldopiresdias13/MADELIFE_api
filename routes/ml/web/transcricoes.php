@@ -13,4 +13,5 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('transcricoes/count/{empresa}', 'Api\Web\AreaClinica\TranscricoesController@quantidadetranscricoes');
         });
     });
+    Route::get('transcricoes/listaTranscricoes', 'Api\Web\AreaClinica\TranscricoesController@listaTranscricoes');
 });

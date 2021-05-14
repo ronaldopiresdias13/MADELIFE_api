@@ -19,7 +19,8 @@ class NaturezasController extends Controller
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-        return Natureza::where('empresa_id', $empresa_id)
+        return Natureza::with('categorianatureza')
+            ->where('empresa_id', $empresa_id)
             ->where('ativo', true)
             ->orderBy('codigo')
             ->get();
