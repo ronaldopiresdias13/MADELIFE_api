@@ -42,7 +42,7 @@ class DashboardController extends Controller
             }
             $chamados_enfermagem = ChamadoAtendenteResource::collection($chamados_enfermagem_final);
 
-            $ocorrencias=Ocorrencia::where('empresa_id', '=', $profissinal->empresa_id)->with(['pessoas','escala','transcricao_produto'=>function($q){
+            $ocorrencias=Ocorrencia::where('empresa_id', '=', $profissinal->empresa_id)->with(['pessoas','transcricao_produto'=>function($q){
                 $q->with('produto','horariomedicamentos');
             }])->where('situacao','=','Pendente');
             if($request->tipo!=null && $request->tipo!='Todos'){
@@ -145,7 +145,7 @@ class DashboardController extends Controller
         if ($user->acessos()->where('acessos.nome', '=', 'Área Clínica')->first() != null) {
 
            
-            $ocorrencias=Ocorrencia::where('empresa_id', '=', $profissinal->empresa_id)->with(['pessoas','escala','transcricao_produto'=>function($q){
+            $ocorrencias=Ocorrencia::where('empresa_id', '=', $profissinal->empresa_id)->with(['pessoas','transcricao_produto'=>function($q){
                 $q->with('produto','horariomedicamentos');
             }])->where('situacao','=','Resolvida');
             if($request->tipo!=null && $request->tipo!='Todos'){

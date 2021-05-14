@@ -34,6 +34,11 @@ class Paciente extends Model
         return $this->hasMany(Homecare::class)->where('ativo', true);
     }
 
+    public function internacoes(){
+
+        return $this->hasMany(Internacao::class);
+    }
+
     /**
      * Get the empresa that owns the Paciente
      *
