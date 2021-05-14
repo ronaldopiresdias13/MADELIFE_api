@@ -75,18 +75,28 @@ class PontosController extends Controller
 
         foreach ($dados as $key => $dado) {
             $escala = [];
-            $servico = $dado->servico ? $dado->servico->descricao : '';
-            switch ($servico) {
-                case 'CUIDADOR':
-                case 'TECNICO EM ENFERMAGEM':
-                case 'Auxiliar de Enfermagem':
-                case 'ENFERMEIRO (A)':
+            // $servico = $dado->servico ? $dado->servico->descricao : '';
+            // switch ($servico) {
+            //     case 'CUIDADOR':
+            //     case 'TECNICO EM ENFERMAGEM':
+            //     case 'Auxiliar de Enfermagem':
+            //     case 'ENFERMEIRO (A)':
+            //         $escala = $this->calcularPontos($dado, false);
+            //         break;
+            //     default:
+            //         $escala = $this->calcularPontos($dado, true);
+            //         break;
+            // }
+
+            switch ($dado->tipo) {
+                case 'Plantão':
                     $escala = $this->calcularPontos($dado, false);
                     break;
                 default:
                     $escala = $this->calcularPontos($dado, true);
                     break;
             }
+
             if (!array_key_exists($dado->dataentrada, $escalas)) {
                 $escalas[$dado->dataentrada] = [];
             }

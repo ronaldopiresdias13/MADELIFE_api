@@ -254,10 +254,12 @@ class ResponsaveisController extends Controller
      */
     public function update(Request $request, Responsavel $responsavel)
     {
-        DB::transaction(function () use ($request, $responsavel) {
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+
+        DB::transaction(function () use ($request, $responsavel, $empresa_id) {
             $responsavel->update([
                 'parentesco' => $request['parentesco'],
-                'empresa_id' => $request['empresa_id'],
+                'empresa_id' => $empresa_id,
             ]);
             $pessoa = Pessoa::find($request['pessoa']['id']);
             if ($pessoa) {

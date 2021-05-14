@@ -119,16 +119,18 @@ class PacientesController extends Controller
             ]);
             if ($request['pessoa']['telefones']) {
                 foreach ($request['pessoa']['telefones'] as $key => $telefone) {
-                    PessoaTelefone::firstOrCreate([
-                        'pessoa_id'   => $paciente->pessoa_id,
-                        'telefone_id' => Telefone::firstOrCreate(
-                            [
-                                'telefone'  => $telefone['telefone'],
-                            ]
-                        )->id,
-                        'tipo'      => $telefone['pivot']['tipo'],
-                        'descricao' => $telefone['pivot']['descricao'],
-                    ]);
+                    if ($telefone['telefone']) {
+                        PessoaTelefone::firstOrCreate([
+                            'pessoa_id'   => $paciente->pessoa_id,
+                            'telefone_id' => Telefone::firstOrCreate(
+                                [
+                                    'telefone'  => $telefone['telefone'],
+                                ]
+                            )->id,
+                            'tipo'      => $telefone['pivot']['tipo'],
+                            'descricao' => $telefone['pivot']['descricao'],
+                        ]);
+                    }
                 }
             }
             if ($request['pessoa']['enderecos']) {
