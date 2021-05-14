@@ -36,6 +36,7 @@ class DadosbancariosController extends Controller
             $dadosbancario->conta = $request->conta;
             $dadosbancario->digito = $request->digito;
             $dadosbancario->tipoconta = $request->tipoconta;
+            $dadosbancario->cpfcnpj = $request->cpfcnpj;
             $dadosbancario->ativo = 1;
             $dadosbancario->save();
         });
