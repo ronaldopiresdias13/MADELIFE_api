@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web\Internacoes;
 
 use App\Http\Controllers\Controller;
 use App\Models\Internacao;
+use App\Models\Paciente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -12,11 +13,27 @@ class InternacoesController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Paciente  $paciente
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function listInternacoesPorPaciente(Request $request, Paciente $paciente)
     {
-        return Internacao::with(['paciente'])->get();
+        $result = Internacao::where('paciente_id', $paciente->id)
+        ->orderByDesc('data_inicio');
+
+        if ($request['paginate']) {
+            $result = $result->paginate($request['per_page'] ? $request['per_page'] : 15);
+
+            if (env("APP_ENV", 'production') == 'production') {
+                return $result->withPath(str_replace('http:', 'https:', $result->path()));
+            } else {
+                return $result;
+            }
+        } else {
+            $result = $result->get();
+            return $result;
+        }
     }
 
     /**
