@@ -19,7 +19,7 @@ class Versao extends Model
 
     protected $dates = [
         'created_at',
-        'update_at',
+        'updated_at',
         'deleted_at'
     ];
 
@@ -28,7 +28,7 @@ class Versao extends Model
         'plataforma',
         'versao',
         'created_at',
-        'update_at',
+        'updated_at',
         'deleted_at'
     ];
 }
