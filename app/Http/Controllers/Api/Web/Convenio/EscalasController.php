@@ -71,8 +71,6 @@ class EscalasController extends Controller
      */
     public function dashboardConvenio(Request $request)
     {
-        $user = $request->user();
-        $empresa_id = $user->pessoa->cliente->empresa_id;
         $hoje = getdate();
         $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $hoje['mday'];
         $escalas = Escala::with([
