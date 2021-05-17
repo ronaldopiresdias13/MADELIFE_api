@@ -16,7 +16,7 @@ class InternacoesController extends Controller
      */
     public function index()
     {
-        return Internacao::all();
+        return Internacao::with(['paciente'])->get();
     }
 
     /**

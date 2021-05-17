@@ -18,8 +18,22 @@ class Internacao extends Model
     protected $keytype = 'string';
     protected $incrementing = false;
 
-    public function paciente(){
-
+    protected $dates = [
+        'created_at',
+        'update_at',
+        'deleted_at'
+    ];
+    protected $fillable = [
+        'id',
+        'paciente_id',
+        'data_inicio',
+        'data_final',
+        'created_at',
+        'update_at',
+        'deleted_at'
+    ];
+    public function paciente()
+    {
         return $this->belongsTo(Paciente::class);
     }
 }
