@@ -16,7 +16,7 @@ class Internacao extends Model
     protected $table = 'internacoes';
     protected $guarded = [];
     protected $keytype = 'string';
-    protected $incrementing = false;
+    public $incrementing = false;
 
     protected $dates = [
         'created_at',
