@@ -122,7 +122,14 @@ class FornecedoresController extends Controller
      */
     public function show(Request $request, Fornecedor $fornecedor)
     {
-        return $fornecedor::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade']);
+        $fornecedor->pessoa->emails;
+        $fornecedor->pessoa->telefones;
+        if ($fornecedor->pessoa->enderecos) {
+            foreach ($fornecedor->pessoa->enderecos as $key => $endereco) {
+                $endereco->cidade;
+            }
+        }
+        return $fornecedor;
     }
 
     /**
