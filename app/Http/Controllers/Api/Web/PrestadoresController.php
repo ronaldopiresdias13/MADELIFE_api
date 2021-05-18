@@ -148,20 +148,20 @@ class PrestadoresController extends Controller
             ]
         );
     }
-    public function salvartelefone(Request $request)
-    {
-        $user = $request->user();
-        PessoaTelefone::firstOrCreate([
-            'pessoa_id'   => $user->pessoa_id,
-            'telefone_id' => Telefone::firstOrCreate(
-                [
-                    'telefone'  => $request['telefone'],
-                ]
-            )->id,
-            'tipo'      => $request['pivot']['tipo'],
-            'descricao' => $request['pivot']['descricao'],
-        ]);
-    }
+    // public function salvartelefone(Request $request)
+    // {
+    //     $user = $request->user();
+    //     PessoaTelefone::firstOrCreate([
+    //         'pessoa_id'   => $user->pessoa_id,
+    //         'telefone_id' => Telefone::firstOrCreate(
+    //             [
+    //                 'telefone'  => $request['telefone'],
+    //             ]
+    //         )->id,
+    //         'tipo'      => $request['pivot']['tipo'],
+    //         'descricao' => $request['pivot']['descricao'],
+    //     ]);
+    // }
     public function salvarendereco(Request $request)
     {
         $user = $request->user();
