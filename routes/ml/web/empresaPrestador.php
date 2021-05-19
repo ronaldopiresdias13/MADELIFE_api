@@ -9,7 +9,6 @@ Route::group(['middleware' => 'auth:api'], function () {
     });
 });
 
-
 Route::get('empresaPrestador', 'Api\EmpresaPrestadorController@index');
 Route::get('empresaPrestador/{empresaPrestador}', 'Api\EmpresaPrestadorController@show');
 Route::delete('empresaPrestador/{empresaPrestador}', 'Api\EmpresaPrestadorController@destroy');

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Pessoa;
 use App\Models\PessoaTelefone;
 use App\Models\Telefone;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class PessoasController extends Controller
@@ -84,5 +85,39 @@ class PessoasController extends Controller
             'tipo'      => $request['pivot']['tipo'],
             'descricao' => $request['pivot']['descricao'],
         ]);
+    }
+
+    public function listaPessoaPorTipo(Request $request){
+
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+        // $empresa_id = 1;
+
+
+        $pessoas = Pessoa::whereHas('tipopessoas', function (Builder $query) use ($request) {
+            $query->where('tipo', $request->tipo);
+        });
+        if ($request->tipo == 'profissional') {
+            $pessoas = $pessoas->whereHas('profissional', function (Builder $query) use ($empresa_id) {
+                $query->where('empresa_id', $empresa_id);
+            });
+        }
+        if ($request->tipo == 'clientes') {
+            $pessoas = $pessoas->whereHas('clientes', function (Builder $query) use ($empresa_id) {
+                $query->where('empresa_id', $empresa_id);
+            });
+        }
+        if ($request->tipo == 'fornecedor') {
+            $pessoas = $pessoas->whereHas('fornecedor', function (Builder $query) use ($empresa_id) {
+                $query->where('empresa_id', $empresa_id);
+            });
+        }
+        if ($request->tipo == 'prestador') {
+            $pessoas = $pessoas->whereHas('prestador.empresas', function (Builder $query) use ($empresa_id) {
+                $query->where('empresa_id', $empresa_id);
+            });
+        }
+
+        $pessoas = $pessoas->get();
+        return $pessoas;
     }
 }
