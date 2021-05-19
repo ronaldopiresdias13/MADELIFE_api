@@ -109,11 +109,12 @@ class PacientesController extends Controller
                     ]
                 )->id,
                 'responsavel_id' => $request['responsavel_id'],
+                'complexidade'   => $request['complexidade'],
                 'sexo'           => $request['sexo'],
-                'ativo'           => $request['ativo']
+                'ativo'          => $request['ativo']
             ]);
             Tipopessoa::create([
-                'tipo'      => 'Responsável',
+                'tipo'      => 'Paciente',
                 'pessoa_id' => $paciente->pessoa_id,
                 'ativo'     => 1
             ]);
