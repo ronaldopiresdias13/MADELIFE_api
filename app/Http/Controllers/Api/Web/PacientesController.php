@@ -204,6 +204,7 @@ class PacientesController extends Controller
                 'sexo'           => $request['sexo'],
                 'empresa_id'     => $request['empresa_id'],
                 'responsavel_id' => $request['responsavel_id'],
+                'complexidade'   => $request['complexidade'],
                 'ativo'          => $request['ativo'],
             ]);
             $pessoa = Pessoa::find($request['pessoa']['id']);
