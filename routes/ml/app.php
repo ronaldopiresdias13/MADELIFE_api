@@ -270,6 +270,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::put('pessoas/atualizaDadosPessoais/{pessoa}', 'Api\App\v3_0_25\PessoasController@atualizaDadosPessoais');
 
         Route::post('pessoaTelefones', 'Api\App\v3_0_25\PessoaTelefoneController@store');
+        Route::delete('pessoaTelefones/{pessoaTelefone}', 'Api\App\v3_0_25\PessoaTelefoneController@destroy');
 
         Route::post('pessoaEmails', 'Api\App\v3_0_25\PessoaEmailController@store');
         Route::delete('pessoaEmails/{pessoaEmail}', 'Api\App\v3_0_25\PessoaEmailController@destroy');
@@ -302,7 +303,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     });
 });
 
-Route::prefix("app/v3_0_25")->group(function(){
+Route::prefix("app/v3_0_25")->group(function () {
     Route::get('cidades/listaCidadesCadastroApp/{uf}', [CidadesController::class, 'listaCidadesCadastroApp']);
     Route::post('versoes/verificarVersaoApp', [VersaoController::class, 'verificarVersaoApp']);
 });
