@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Prestadores;
 use App\Http\Controllers\Controller;
 use App\Models\Prestador;
 use App\Models\Tipopessoa;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -50,6 +51,7 @@ class PrestadoresController extends Controller
             ->where('prestadores.ativo', true)
             ->select(
                 'prestadores.id as id',
+                'prestadores.created_at as created_at',
                 'pessoas.nome as nome',
                 'cidades.nome as cidade',
                 'cidades.latitude',
@@ -74,6 +76,7 @@ class PrestadoresController extends Controller
             )
             ->groupBy(
                 'prestadores.id',
+                'prestadores.created_at',
                 'pessoas.nome',
                 'pessoas.perfil',
                 'cidades.nome',
@@ -98,7 +101,11 @@ class PrestadoresController extends Controller
             }
             if ($request['cidade_id']) {
                 $result->where('cidades.id', $request['cidade_id']);
+
             }
+        }
+        if ($request['data']) {
+            $result->where('prestadores.created_at', 'like', $request['data'] . '%');
         }
 
         // return 'teste';
