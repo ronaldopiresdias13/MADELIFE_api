@@ -52,7 +52,7 @@ class OcorrenciasJob implements ShouldQueue
         $nao_marcados = DB::select(DB::raw("select hm.horario as hora, tp.id as transcricao_produto_id, tr.empresa_id from transcricao_produto as tp
     join transcricoes as tr on tr.id=tp.transcricao_id
     join horariomedicamentos as hm on hm.transcricao_produto_id=tp.id and hm.horario not in (select a.hora from acaomedicamentos as a where a.transcricao_produto_id=tp.id and a.`data`= :date_now)
-    where tr.empresa_id=:empresa_id and ((hm.horario< :now and hm.horario>= :ago)) and tp.ativo=1 and hm.ativo=1 order by transcricao_produto_id"), array('empresa_id' => 1, 'date_now' => $date_now, 'now' => $hour_now, 'ago' => $hour_ago));
+    where  ((hm.horario< :now and hm.horario>= :ago)) and tp.ativo=1 and hm.ativo=1 order by transcricao_produto_id"), array('date_now' => $date_now, 'now' => $hour_now, 'ago' => $hour_ago));
 
         foreach ($nao_marcados as $dado) {
             // dd(array('date_ago'=>$date_ago,'date_now'=>$date_now,'hour'=>$dado->hora,'id'=>$dado->transcricao_produto_id));
