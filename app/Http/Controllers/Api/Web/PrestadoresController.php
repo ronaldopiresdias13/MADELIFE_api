@@ -192,6 +192,7 @@ class PrestadoresController extends Controller
                 'conta'      => $request['conta'],
                 'digito'     => $request['digito'],
                 'tipoconta'  => $request['tipoconta'],
+                'cpfcnpj'    => $request['cpfcnpj'],
                 'ativo'      => 1
             ]
         );
