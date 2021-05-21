@@ -203,8 +203,8 @@ class EscalasController extends Controller
 
     public function dashboardPegarTodosPacientesporId(Request $request)
     {
-         $user = $request->user();
-         $empresa_id = $user->pessoa->profissional->empresa_id;
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
 
         $hoje = getdate();
         $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $hoje['mday'];
@@ -226,32 +226,30 @@ class EscalasController extends Controller
                 }]);
             },
         ])
-        ->where(
-            'prestador_id', $request->prestador_id,
-        )
-        ->whereBetween('dataentrada', [$request->data_ini ? $request->data_ini : $data, $request->data_fim ? $request->data_fim : $data])
-        ->where('ativo', true)
-        ->where('empresa_id', $empresa_id)
-        ->get([
-            'id',
-            'dataentrada',
-            'datasaida',
-            'horaentrada',
-            'horasaida',
-            'valorhoradiurno',
-            'valorhoranoturno',
-            'valoradicional',
-            'motivoadicional',
-            'servico_id',
-            'periodo',
-            'tipo',
-            'prestador_id',
-            'ordemservico_id',
-            'status',
-            'ativo'
-        ]);
-
-
-
+            ->where(
+                'prestador_id',
+                $request->prestador_id,
+            )
+            ->whereBetween('dataentrada', [$request->data_ini ? $request->data_ini : $data, $request->data_fim ? $request->data_fim : $data])
+            ->where('ativo', true)
+            ->where('empresa_id', $empresa_id)
+            ->get([
+                'id',
+                'dataentrada',
+                'datasaida',
+                'horaentrada',
+                'horasaida',
+                'valorhoradiurno',
+                'valorhoranoturno',
+                'valoradicional',
+                'motivoadicional',
+                'servico_id',
+                'periodo',
+                'tipo',
+                'prestador_id',
+                'ordemservico_id',
+                'status',
+                'ativo'
+            ]);
     }
 }
