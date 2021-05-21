@@ -14,6 +14,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
         Route::prefix('escalas')->group(function () {
             Route::get('medicao', [EscalasController::class, 'medicao']);
+            Route::get('historicoEscalasPorPrestadorId', 'Api\Web\EscalasController@dashboardPegarTodosPacientesporId');
         });
         Route::prefix('departamentoPessoal')->group(function () {
             Route::post('escalas/updateServicoOfEscala/{escala}', 'Api\Web\DepartamentoPessoal\EscalasController@updateServicoOfEscala');
@@ -25,6 +26,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('escalas/dashboard', 'Api\Web\Responsavel\EscalasController@dashboard');
             Route::get('escalas/dashboardPegarTodosOsRegistrosPorIdDaEmpresa', 'Api\Web\Responsavel\EscalasController@dashboardPegarTodosOsRegistrosPorIdDaEmpresa');
         });
+
     });
 });
 
