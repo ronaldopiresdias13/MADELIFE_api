@@ -14,8 +14,10 @@ use App\Models\PessoaEndereco;
 use App\Models\PessoaTelefone;
 use App\Models\Telefone;
 use App\Models\Tipopessoa;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use phpDocumentor\Reflection\Types\Null_;
 
 class PacientesController extends Controller
 {
@@ -26,12 +28,20 @@ class PacientesController extends Controller
      */
     public function index(Request $request)
     {
-        $user = $request->user();
-        $empresa_id = $user->pessoa->profissional->empresa_id;
-        return Paciente::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade', 'responsavel.pessoa:id,nome', 'pessoa.user.acessos'])
-            ->where('empresa_id', $empresa_id)
+        // $user = $request->user();
+        // $empresa_id = $user->pessoa->profissional->empresa_id;
+
+        return Paciente::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade', 'pessoa.pacientes.internacoes',
+        'responsavel.pessoa:id,nome', 'pessoa.user.acessos'])
+
+
+          ->whereHas('internacoes', function (Builder $query) use ($request) {
+            $query->where('data_final', null);
+        })
+            // ->where('empresa_id', $empresa_id)
             ->where('ativo', true)
             ->get();
+
     }
     /**
      * Display a listing of the resource.
