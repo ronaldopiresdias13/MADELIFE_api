@@ -3,7 +3,7 @@
 use  App\Http\Controllers\Web\Escalas\EscalasController;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => 'auth:api'], function () {
+// Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('web')->group(function () {
         Route::prefix('convenio')->group(function () {
             Route::get('escalas/dashboard', 'Api\Web\Convenio\EscalasController@dashboardConvenio');
@@ -15,6 +15,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::prefix('escalas')->group(function () {
             Route::get('medicao', [EscalasController::class, 'medicao']);
             Route::get('historicoEscalasPorPrestadorId', 'Api\Web\EscalasController@dashboardPegarTodosPacientesporId');
+            Route::get('dashboardClonarEscalas', 'Api\Web\EscalasController@dashboardClonarEscalas');
         });
         Route::prefix('departamentoPessoal')->group(function () {
             Route::post('escalas/updateServicoOfEscala/{escala}', 'Api\Web\DepartamentoPessoal\EscalasController@updateServicoOfEscala');
@@ -28,7 +29,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
 
     });
-});
+// });
 
 Route::get('escalas', 'Api\EscalasController@index');
 Route::get('escalas/{escala}', 'Api\EscalasController@show');

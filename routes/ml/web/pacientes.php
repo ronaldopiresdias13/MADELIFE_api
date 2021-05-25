@@ -3,7 +3,7 @@
 use App\Http\Controllers\Web\Pacientes\PacientesController;
 use Illuminate\Support\Facades\Route;
 
-// Route::group(['middleware' => 'auth:api'], function () {
+Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('web')->group(function () {
         Route::prefix('pacientes')->group(function () {
             Route::get('pacientesOfCliente', [PacientesController::class, 'pacientesOfCliente']);
@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
         });
         Route::get('pacientes/listNomePacientes', 'Api\Web\PacientesController@listNomePacientes');
     });
-// });
+});
 
 
 Route::get('pacientes', 'Api\PacientesController@index');

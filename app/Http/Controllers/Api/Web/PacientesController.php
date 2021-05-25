@@ -28,19 +28,21 @@ class PacientesController extends Controller
      */
     public function index(Request $request)
     {
-        // $user = $request->user();
-        // $empresa_id = $user->pessoa->profissional->empresa_id;
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
 
-        return Paciente::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade', 'pessoa.pacientes.internacoes',
-        'responsavel.pessoa:id,nome', 'pessoa.user.acessos'])
+        $pacientes = Paciente::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade', 'pessoa.pacientes.internacoes',
+        'responsavel.pessoa:id,nome', 'pessoa.user.acessos']);
 
-
-          ->whereHas('internacoes', function (Builder $query) use ($request) {
-            $query->where('data_final', null);
-        })
-            // ->where('empresa_id', $empresa_id)
-            ->where('ativo', true)
-            ->get();
+        if($request->data_final){
+            $pacientes = $pacientes->whereHas('internacoes', function (Builder $query) use ($request){
+                $query->where('data_final',null, $request->data_final);
+            });
+        };
+            $pacientes->where('empresa_id', $empresa_id);
+            $pacientes->where('ativo', true);
+            $pacientes = $pacientes->get();
+            return $pacientes;
 
     }
     /**
