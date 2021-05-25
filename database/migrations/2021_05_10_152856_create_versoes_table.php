@@ -13,14 +13,14 @@ class CreateVersoesTable extends Migration
      */
     public function up()
     {
-        Schema::create('versoes', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('aplicacao');
-            $table->string('plataforma');
-            $table->string('versao');
-            $table->timestamps();
-            $table->softDeletes();
-        });
+         Schema::create('versoes', function (Blueprint $table) {
+             $table->uuid('id')->primary();
+             $table->string('aplicacao');
+             $table->string('plataforma');
+             $table->string('versao');
+             $table->timestamps();
+             $table->softDeletes();
+         });
     }
 
     /**

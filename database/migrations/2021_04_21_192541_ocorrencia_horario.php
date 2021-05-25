@@ -13,9 +13,10 @@ class OcorrenciaHorario extends Migration
      */
     public function up()
     {
+        
         Schema::table('ocorrencias', function (Blueprint $table) {
-            $table->timestamp('horario')->nullable();
-        });
+           $table->timestamp('horario')->nullable();
+         });
     }
 
     /**
