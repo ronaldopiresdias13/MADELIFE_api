@@ -171,8 +171,6 @@ class OrcsController extends Controller
         $request['valortotalservico'] = $orcamento->valortotalservico;
         $request['observacao']        = $orcamento->observacao;
         $request['status']            = $orcamento->status;
-        $request['orc_id']            = $orcamento->orc_id;
-        $request['versao']            = $orcamento->versao;
 
         // $request->ordemservico = $orcamento->ordemservico;
 

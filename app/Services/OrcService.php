@@ -34,26 +34,65 @@ class OrcService
         $empresa_id = $user->pessoa->profissional->empresa_id;
 
         $o = Orc::where('empresa_id', $empresa_id)
-        ->count('empresa_id') + 1;
-
-        $a = Orc::where('empresa_id', 'versao')
-        ->where('orc_id', $this->request->orc_id);
+        ->count('id');
 
         $numero = null;
 
-        if($this->request->versao == 'orcamento'){
+        switch($this->request->versao){
 
-            $numero = "o".$o;
+            case 'orcamento':
 
-        }else if($this->request->versao == 'aditivo'){
+                $numero = "O" . ($o + 1);
+                break;
+            case 'aditivo':
 
-            $numero = "a".$o;
+               $a = Orc::where('empresa_id', 'versao')
+                        ->where('orc_id', $this->request->orc_id)
+                        ->count('id');
+
+                $numero = "A" . $this->request->orc_id . "-" .$a + 1;
+
+                break;
+            case 'prorrogativo':
+
+                $p = Orc::where('empresa_id', 'versao')
+                        ->where('orc_id', $this->request->orc_id)
+                        ->count('id');
+
+                $numero = "P" . $this->request->orc_id . "-" . $p + 1;
+
+                break;
+            default:
+
+            break;
 
         }
 
 
+        // if($this->request->versao == 'orcamento'){
 
-        DB::transaction(function () {
+        //     $numero = "o".$o + 1;
+
+        // }else if($this->request->versao == 'aditivo'){
+
+        //     $a = Orc::where('empresa_id', 'versao')
+        //         ->where('orc_id', $this->request->orc_id)
+        //         ->count('id');
+
+        //     $numero = "a" . $o + 1 . "-" . $a + 1;
+
+        // }else if($this->request == 'prorrogativo'){
+
+        //     $p = Orc::where('empresa_id', 'versao')
+        //         ->where('orc_id', $this->request->orc_id)
+        //         ->count('id');
+
+        //     $numero = "p" . $o + 1 . "-" . $p + 1;
+        // }
+
+
+
+        DB::transaction(function () use ($numero) {
             $empresa_id = $this->request->user()->pessoa->profissional->empresa_id;
             if (!$empresa_id) {
                 return 'Error';
@@ -65,7 +104,7 @@ class OrcService
                 "orc_id"                   => $this->request->orc_id,
                 "cliente_id"               => $this->request->cliente_id,
                 "pacote_id"                => $this->request->pacote_id,
-                "numero"                   => $this->request->numero,
+                "numero"                   => $numero,
                 "tipo"                     => $this->request->tipo,
                 "data"                     => $this->request->data,
                 "quantidade"               => $this->request->quantidade,
