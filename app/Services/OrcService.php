@@ -53,7 +53,7 @@ class OrcService
                 $numero = "A" . $this->request->orc_id . "-" .$a + 1;
 
                 break;
-            case 'prorrogativo':
+            case 'prorrogacao':
 
                 $p = Orc::where('empresa_id', 'versao')
                         ->where('orc_id', $this->request->orc_id)
