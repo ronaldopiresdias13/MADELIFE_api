@@ -30,6 +30,29 @@ class OrcService
      */
     public function store()
     {
+        $user = $this->request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+
+        $o = Orc::where('empresa_id', $empresa_id)
+        ->count('empresa_id') + 1;
+
+        $a = Orc::where('empresa_id', 'versao')
+        ->where('orc_id', $this->request->orc_id);
+
+        $numero = null;
+
+        if($this->request->versao == 'orcamento'){
+
+            $numero = "o".$o;
+
+        }else if($this->request->versao == 'aditivo'){
+
+            $numero = "a".$o;
+
+        }
+
+
+
         DB::transaction(function () {
             $empresa_id = $this->request->user()->pessoa->profissional->empresa_id;
             if (!$empresa_id) {
@@ -39,6 +62,7 @@ class OrcService
             $this->orc = new Orc();
             $this->orc->fill([
                 "empresa_id"               => $empresa_id,
+                "orc_id"                   => $this->request->orc_id,
                 "cliente_id"               => $this->request->cliente_id,
                 "pacote_id"                => $this->request->pacote_id,
                 "numero"                   => $this->request->numero,
@@ -50,10 +74,11 @@ class OrcService
                 "processo"                 => $this->request->processo,
                 "situacao"                 => $this->request->situacao,
                 "descricao"                => $this->request->descricao,
+                "versao"                   => $this->request->versao,
                 "valortotalproduto"        => $this->request->valortotalproduto,
                 "valortotalcusto"          => $this->request->valortotalcusto,
                 "valortotalservico"        => $this->request->valortotalservico,
-                "valortotalorcamento"        => $this->request->valortotalorcamento,
+                "valortotalorcamento"      => $this->request->valortotalorcamento,
                 "observacao"               => $this->request->observacao,
                 "status"                   => $this->request->status,
                 "venda_realizada"          => $this->request->venda_realizada,
@@ -78,6 +103,15 @@ class OrcService
                 "remocao_cidadedestino_id" => $this->request->remocao_cidadedestino_id,
                 "remocao_observacao"       => $this->request->remocao_observacao,
             ])->save();
+
+
+
+
+
+
+
+
+
 
             foreach ($this->request->produtos as $item) {
                 $orcProduto = new OrcProduto();
