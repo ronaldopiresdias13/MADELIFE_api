@@ -33,6 +33,7 @@ class ContratosController extends Controller
                 'evento.cidade',
                 'remocao.cidadeorigem',
                 'remocao.cidadedestino',
+                'homecare.paciente.internacoes'
                 // 'produtos.produto',
                 // 'servicos.servico',
                 // 'custos'
@@ -40,6 +41,7 @@ class ContratosController extends Controller
         )
             ->where('ativo', true)
             ->where('empresa_id', $empresa_id);
+
 
         if ($request->filter_nome) {
             $result->whereHas('homecare.paciente.pessoa', function (Builder $query) use ($request) {
@@ -52,7 +54,15 @@ class ContratosController extends Controller
             });
         }
 
+        if($request->data_final){
+                    $result->whereHas('paciente.internacoes', function (Builder $query) use ($request){
+                $query->where('data_final',null, $request->data_final);
+            });
+        };
+
         $result = $result->orderByDesc('id')->paginate($request['per_page'] ? $request['per_page'] : 15);
+
+
 
         if (env("APP_ENV", 'production') == 'production') {
             return $result->withPath(str_replace('http:', 'https:', $result->path()));

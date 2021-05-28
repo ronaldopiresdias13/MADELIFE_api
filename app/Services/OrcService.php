@@ -30,7 +30,66 @@ class OrcService
      */
     public function store()
     {
-        DB::transaction(function () {
+        // return $this->request;
+        $user = $this->request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+
+        $o = Orc::where('empresa_id', $empresa_id)
+            ->count('id');
+
+        $numero = null;
+
+        switch ($this->request->versao) {
+            case 'Orçamento':
+                $numero = "O" . ($o + 1);
+                break;
+            case 'Aditivo':
+                $o = Orc::find($this->request->orc_id);
+                $rest = substr($o->numero, 1); // retorna "d"
+
+                $a = Orc::where('empresa_id', $empresa_id)
+                    ->where('versao', $this->request->versao)
+                    ->where('orc_id', $this->request->orc_id)
+                    ->count('id');
+                $numero = "A" . $rest . "-" . ($a + 1);
+                break;
+            case 'Prorrogação':
+                $p = Orc::where('empresa_id', $empresa_id)
+                    ->where('versao', $this->request->versao)
+                    ->where('orc_id', $this->request->orc_id)
+                    ->count('id');
+                $numero = "P" . $this->request->orc_id . "-" . ($p + 1);
+                break;
+                // default:
+
+                //     break;
+
+        }
+
+        // if($this->request->versao == 'orcamento'){
+
+        //     $numero = "o".$o + 1;
+
+        // }else if($this->request->versao == 'aditivo'){
+
+        //     $a = Orc::where('empresa_id', 'versao')
+        //         ->where('orc_id', $this->request->orc_id)
+        //         ->count('id');
+
+        //     $numero = "a" . $o + 1 . "-" . $a + 1;
+
+        // }else if($this->request == 'prorrogativo'){
+
+        //     $p = Orc::where('empresa_id', 'versao')
+        //         ->where('orc_id', $this->request->orc_id)
+        //         ->count('id');
+
+        //     $numero = "p" . $o + 1 . "-" . $p + 1;
+        // }
+
+
+
+        DB::transaction(function () use ($numero) {
             $empresa_id = $this->request->user()->pessoa->profissional->empresa_id;
             if (!$empresa_id) {
                 return 'Error';
@@ -39,9 +98,10 @@ class OrcService
             $this->orc = new Orc();
             $this->orc->fill([
                 "empresa_id"               => $empresa_id,
+                "orc_id"                   => $this->request->orc_id,
                 "cliente_id"               => $this->request->cliente_id,
                 "pacote_id"                => $this->request->pacote_id,
-                "numero"                   => $this->request->numero,
+                "numero"                   => $numero,
                 "tipo"                     => $this->request->tipo,
                 "data"                     => $this->request->data,
                 "quantidade"               => $this->request->quantidade,
@@ -50,10 +110,11 @@ class OrcService
                 "processo"                 => $this->request->processo,
                 "situacao"                 => $this->request->situacao,
                 "descricao"                => $this->request->descricao,
+                "versao"                   => $this->request->versao,
                 "valortotalproduto"        => $this->request->valortotalproduto,
                 "valortotalcusto"          => $this->request->valortotalcusto,
                 "valortotalservico"        => $this->request->valortotalservico,
-                "valortotalorcamento"        => $this->request->valortotalorcamento,
+                "valortotalorcamento"      => $this->request->valortotalorcamento,
                 "observacao"               => $this->request->observacao,
                 "status"                   => $this->request->status,
                 "venda_realizada"          => $this->request->venda_realizada,
@@ -78,6 +139,15 @@ class OrcService
                 "remocao_cidadedestino_id" => $this->request->remocao_cidadedestino_id,
                 "remocao_observacao"       => $this->request->remocao_observacao,
             ])->save();
+
+
+
+
+
+
+
+
+
 
             foreach ($this->request->produtos as $item) {
                 $orcProduto = new OrcProduto();

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Web\GestaoOrcamentaria;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ordemservico;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -18,9 +19,12 @@ class OrdemservicosController extends Controller
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-        return Ordemservico::with(['orcamento.homecare.paciente.pessoa:id,nome', 'orcamento.servicos.servico'])
+        return Ordemservico::with(['orcamento.homecare.paciente.pessoa:id,nome', 'orcamento.servicos.servico', 'orcamento.homecare.paciente.internacoes'])
             ->where('empresa_id', $empresa_id)
             ->where('ativo', true)
+            ->whereHas('orcamento.homecare.paciente.internacoes', function (Builder $query) use ($request){
+                $query->where('data_final',null, $request->data_final);
+            })
             ->get();
     }
 

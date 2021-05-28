@@ -28,6 +28,7 @@ class Orc extends Model
     protected $fillable = [
         'id',
         'empresa_id',
+        'orc_id',
         'cliente_id',
         'pacote_id',
         'numero',
@@ -39,6 +40,7 @@ class Orc extends Model
         'processo',
         'situacao',
         'descricao',
+        'versao',
         'valortotalproduto',
         'valortotalcusto',
         'valortotalservico',

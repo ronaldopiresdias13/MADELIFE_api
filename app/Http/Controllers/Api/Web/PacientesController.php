@@ -199,6 +199,7 @@ class PacientesController extends Controller
                 $endereco->cidade;
             }
         }
+
         return $paciente;
     }
 
