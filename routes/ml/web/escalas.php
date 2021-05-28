@@ -3,7 +3,7 @@
 use  App\Http\Controllers\Web\Escalas\EscalasController;
 use Illuminate\Support\Facades\Route;
 
-// Route::group(['middleware' => 'auth:api'], function () {
+Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('web')->group(function () {
         Route::prefix('convenio')->group(function () {
             Route::get('escalas/dashboard', 'Api\Web\Convenio\EscalasController@dashboardConvenio');
@@ -29,12 +29,12 @@ use Illuminate\Support\Facades\Route;
         });
 
     });
-// });
 
-Route::get('escalas', 'Api\EscalasController@index');
-Route::get('escalas/{escala}', 'Api\EscalasController@show');
-Route::post('escalas', 'Api\EscalasController@store');
-Route::put('escalas/{escala}', 'Api\EscalasController@update');
-Route::delete('escalas/{escala}', 'Api\EscalasController@destroy');
-Route::get('escalas/empresa/{empresa}/dia', 'Api\EscalasController@buscaescalasdodia');
-Route::get('escalas/paciente/{paciente}/data1/{data1}/data2/{data2}', 'Api\EscalasController@buscaPontosPorPeriodoEPaciente');
+    Route::get('escalas', 'Api\EscalasController@index');
+    Route::get('escalas/{escala}', 'Api\EscalasController@show');
+    Route::post('escalas', 'Api\EscalasController@store');
+    Route::put('escalas/{escala}', 'Api\EscalasController@update');
+    Route::delete('escalas/{escala}', 'Api\EscalasController@destroy');
+    Route::get('escalas/empresa/{empresa}/dia', 'Api\EscalasController@buscaescalasdodia');
+    Route::get('escalas/paciente/{paciente}/data1/{data1}/data2/{data2}', 'Api\EscalasController@buscaPontosPorPeriodoEPaciente');
+});
