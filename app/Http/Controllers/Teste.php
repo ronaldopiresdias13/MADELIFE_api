@@ -11,42 +11,46 @@ class Teste extends Controller
 {
     public function teste(Request $request)
     {
-        $empresa_id = 1;
-        $o = Orc::where('empresa_id', $empresa_id)
-        ->count('id');
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
 
+        $o = null;
         $numero = null;
 
-        switch($request->versao){
-
-            case 'orcamento':
-
-                $numero = "o" . ($o + 1);
+        switch ($request->versao) {
+            case 'Orçamento':
+                $o = Orc::where('empresa_id', $empresa_id)
+                    ->count('id');
+                $numero = "O" . ($o + 1);
                 break;
-            case 'aditivo':
-
-                $a = Orc::where('empresa_id', 'versao')
-                        ->where('orc_id', $request->orc_id)
-                        ->count('id');
-
-                $numero = "a" . $request->orc_id . "-" . ($a + 1);
-
+            case 'Aditivo':
+                $o = Orc::find($request->orc_id)->numero;
+                if (substr($o, 0, 1) == 'O') {
+                    $o = substr($o, 1);
+                } elseif (substr($o, 0, 1) == 'A' || substr($o, 0, 1) == 'P') {
+                    $o = substr(explode('-', $o)[0], 1);
+                }
+                $a = Orc::where('empresa_id', $empresa_id)
+                    ->where('versao', $request->versao)
+                    ->where('orc_id', $request->orc_id)
+                    ->count('id');
+                $numero = "A" . $o . "-" . ($a + 1);
                 break;
-            case 'prorrogacao':
-
-                $p = Orc::where('empresa_id', 'versao')
-                        ->where('orc_id', $request->orc_id)
-                        ->count('id');
-
-                $numero = "p" . $request->orc_id . "-" . ($p + 1);
-
+            case 'Prorrogação':
+                $o = Orc::find($request->orc_id)->numero;
+                if (substr($o, 0, 1) == 'O') {
+                    $o = substr($o, 1);
+                } elseif (substr($o, 0, 1) == 'A' || substr($o, 0, 1) == 'P') {
+                    $o = substr(explode('-', $o)[0], 1);
+                }
+                $p = Orc::where('empresa_id', $empresa_id)
+                    ->where('versao', $request->versao)
+                    ->where('orc_id', $request->orc_id)
+                    ->count('id');
+                $numero = "P" . $o . "-" . ($p + 1);
                 break;
-            default:
+        }
 
-            break;
-
-            }
         return $numero;
-
     }
 }
