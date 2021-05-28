@@ -13,6 +13,7 @@ class OcorrenciasTable extends Migration
      */
     public function up()
     {
+        
         Schema::create('ocorrencias', function (Blueprint $table) {
             $table->id();
             // $table->unsignedBigInteger('pessoa_id')->nullable();
@@ -31,7 +32,9 @@ class OcorrenciasTable extends Migration
             $table->foreign('escala_id')->references('id')->on('escalas')->onDelete('cascade');
             $table->timestamps();
         });
+        
     }
+
 
     /**
      * Reverse the migrations.
