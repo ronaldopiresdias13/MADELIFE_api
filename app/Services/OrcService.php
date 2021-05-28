@@ -30,44 +30,41 @@ class OrcService
      */
     public function store()
     {
+        // return $this->request;
         $user = $this->request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
 
         $o = Orc::where('empresa_id', $empresa_id)
-        ->count('id');
+            ->count('id');
 
         $numero = null;
 
-        switch($this->request->versao){
-
-            case 'orcamento':
-
+        switch ($this->request->versao) {
+            case 'Orçamento':
                 $numero = "O" . ($o + 1);
                 break;
-            case 'aditivo':
+            case 'Aditivo':
+                $o = Orc::find($this->request->orc_id);
+                $rest = substr($o->numero, 1); // retorna "d"
 
-               $a = Orc::where('empresa_id', 'versao')
-                        ->where('orc_id', $this->request->orc_id)
-                        ->count('id');
-
-                $numero = "A" . $this->request->orc_id . "-" .$a + 1;
-
+                $a = Orc::where('empresa_id', $empresa_id)
+                    ->where('versao', $this->request->versao)
+                    ->where('orc_id', $this->request->orc_id)
+                    ->count('id');
+                $numero = "A" . $rest . "-" . ($a + 1);
                 break;
-            case 'prorrogacao':
-
-                $p = Orc::where('empresa_id', 'versao')
-                        ->where('orc_id', $this->request->orc_id)
-                        ->count('id');
-
-                $numero = "P" . $this->request->orc_id . "-" . $p + 1;
-
+            case 'Prorrogação':
+                $p = Orc::where('empresa_id', $empresa_id)
+                    ->where('versao', $this->request->versao)
+                    ->where('orc_id', $this->request->orc_id)
+                    ->count('id');
+                $numero = "P" . $this->request->orc_id . "-" . ($p + 1);
                 break;
-            default:
+                // default:
 
-            break;
+                //     break;
 
         }
-
 
         // if($this->request->versao == 'orcamento'){
 
