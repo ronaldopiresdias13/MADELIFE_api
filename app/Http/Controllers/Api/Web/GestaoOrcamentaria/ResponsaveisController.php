@@ -41,6 +41,7 @@ class ResponsaveisController extends Controller
      */
     public function store(Request $request)
     {
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
         $pessoa = null;
 
         if ($request['pessoa']) {
@@ -55,19 +56,22 @@ class ResponsaveisController extends Controller
         $responsavel = null;
 
         if ($pessoa) {
-            $responsavel = Responsavel::firstWhere(
+            $responsavel = Responsavel::where(
+                'empresa_id',
+                $empresa_id,
+            )
+            ->where(
                 'pessoa_id',
                 $pessoa->id,
-            );
+            )
+            ->first();
         }
 
         if ($responsavel) {
             return response()->json('Responsável já existe!', 400)->header('Content-Type', 'text/plain');
         }
 
-        DB::transaction(function () use ($request, $pessoa) {
-            $user = $request->user();
-            $empresa_id = $user->pessoa->profissional->empresa_id;
+        DB::transaction(function () use ($request, $pessoa, $empresa_id) {
             $responsavel = Responsavel::create([
                 'empresa_id' => $empresa_id,
                 'parentesco' => $request['parentesco'],
@@ -146,83 +150,6 @@ class ResponsaveisController extends Controller
             ]
         ], 200)
             ->header('Content-Type', 'application/json');
-
-        // return response()->json('Responsável cadastrado com sucesso!', 200)->header('Content-Type', 'text/plain');
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // $responsavel = Responsavel::create([
-        //     'empresa_id' => $request['empresa_id'],
-        //     'parentesco' => $request['parentesco'],
-        //     'pessoa_id'  => Pessoa::create([
-        //         'nome'        => $request['pessoa']['nome'],
-        //         'nascimento'  => $request['pessoa']['nascimento'],
-        //         'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
-        //         'rgie'        => $request['pessoa']['rgie'],
-        //         'observacoes' => $request['pessoa']['observacoes'],
-        //         'perfil'      => $request['pessoa']['perfil'],
-        //         'status'      => $request['pessoa']['status'],
-        //     ])->id
-        // ]);
-        // Tipopessoa::create([
-        //     'tipo'      => 'Responsável',
-        //     'pessoa_id' => $responsavel->pessoa_id,
-        //     'ativo'     => 1
-        // ]);
-        // if ($request['pessoa']['telefones']) {
-        //     foreach ($request['pessoa']['telefones'] as $key => $telefone) {
-        //         PessoaTelefone::firstOrCreate([
-        //             'pessoa_id'   => $responsavel->pessoa_id,
-        //             'telefone_id' => Telefone::firstOrCreate(
-        //                 [
-        //                     'telefone'  => $telefone['telefone'],
-        //                 ]
-        //             )->id,
-        //         ]);
-        //     }
-        // }
-        // if ($request['pessoa']['enderecos']) {
-        //     foreach ($request['pessoa']['enderecos'] as $key => $endereco) {
-        //         PessoaEndereco::firstOrCreate([
-        //             'pessoa_id'   => $responsavel->pessoa_id,
-        //             'endereco_id' => Endereco::firstOrCreate(
-        //                 [
-        //                     'cep'         => $endereco['cep'],
-        //                     'cidade_id'   => $endereco['cidade_id'],
-        //                     'rua'         => $endereco['rua'],
-        //                     'bairro'      => $endereco['bairro'],
-        //                     'numero'      => $endereco['numero'],
-        //                     'complemento' => $endereco['complemento'],
-        //                     'tipo'        => $endereco['tipo'],
-        //                     'descricao'   => $endereco['descricao'],
-        //                 ]
-        //             )->id,
-        //         ]);
-        //     }
-        // }
-        // if ($request['pessoa']['emails']) {
-        //     foreach ($request['pessoa']['emails'] as $key => $email) {
-        //         PessoaEmail::firstOrCreate([
-        //             'pessoa_id' => $responsavel->pessoa_id,
-        //             'email_id'  => Email::firstOrCreate(
-        //                 [
-        //                     'email'     => $email['email'],
-        //                 ]
-        //             )->id,
-        //         ]);
-        //     }
-        // }
-        // });
     }
 
     /**
