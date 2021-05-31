@@ -177,27 +177,33 @@ class PontosController extends Controller
      */
     public function assinaturacheckout(Escala $escala, Request $request)
     {
+        if (!$request->assinaturaprestador) {
+            return response()->json([
+                'alert' => [
+                    'title' => 'Ops!',
+                    'text' => 'Assinatura não encontrada!\nPor favor tente novamente.'
+                ]
+            ], 202)->header('Content-Type', 'application/json');
+        }
+
         $ponto = Ponto::where('escala_id', $request->escala_id)
             ->where('tipo', 'Check-in')->first();
         if ($ponto) {
             $ponto = Ponto::where('escala_id', $request->escala_id)
                 ->where('tipo', 'Check-out')->first();
             if ($ponto) {
+                DB::transaction(function () use ($request, $escala) {
+                    $escala->status              = true;
+                    $escala->assinaturaprestador = $request->assinaturaprestador;
+                    $escala->save();
+                });
                 return response()->json([
                     'alert' => [
-                        'title' => 'Ops!',
-                        'text' => 'Esta escala já foi finalizada!'
+                        'title' => 'Obs.',
+                        'text' => 'Esta escala já estava finalizada, foi alterada somente a assinatura!'
                     ]
                 ], 202)->header('Content-Type', 'application/json');
             } else {
-                if (!$request->assinaturaprestador) {
-                    return response()->json([
-                        'alert' => [
-                            'title' => 'Ops!',
-                            'text' => 'Assinatura não encontrada!\nPor favor tente novamente.'
-                        ]
-                    ], 202)->header('Content-Type', 'application/json');
-                }
                 DB::transaction(function () use ($request, $escala) {
                     Ponto::firstOrCreate(
                         [
