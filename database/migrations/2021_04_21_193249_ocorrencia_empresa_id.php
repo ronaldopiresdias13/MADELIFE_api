@@ -13,10 +13,10 @@ class OcorrenciaEmpresaId extends Migration
      */
     public function up()
     {
-        Schema::table('ocorrencias', function (Blueprint $table) {
-            $table->unsignedBigInteger('empresa_id')->nullable();
-            $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
-        });
+         Schema::table('ocorrencias', function (Blueprint $table) {
+             $table->unsignedBigInteger('empresa_id')->nullable();
+             $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
+         });
     }
 
     /**

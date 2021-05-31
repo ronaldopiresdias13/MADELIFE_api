@@ -14,8 +14,10 @@ use App\Models\PessoaEndereco;
 use App\Models\PessoaTelefone;
 use App\Models\Telefone;
 use App\Models\Tipopessoa;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use phpDocumentor\Reflection\Types\Null_;
 
 class PacientesController extends Controller
 {
@@ -28,10 +30,20 @@ class PacientesController extends Controller
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-        return Paciente::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade', 'responsavel.pessoa:id,nome', 'pessoa.user.acessos'])
-            ->where('empresa_id', $empresa_id)
-            ->where('ativo', true)
-            ->get();
+
+        $pacientes = Paciente::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade', 'pessoa.pacientes.internacoes',
+        'responsavel.pessoa:id,nome', 'pessoa.user.acessos']);
+
+        if($request->data_final){
+            $pacientes = $pacientes->whereHas('internacoes', function (Builder $query) use ($request){
+                $query->where('data_final',null, $request->data_final);
+            });
+        };
+            $pacientes->where('empresa_id', $empresa_id);
+            $pacientes->where('ativo', true);
+            $pacientes = $pacientes->get();
+            return $pacientes;
+
     }
     /**
      * Display a listing of the resource.
@@ -187,6 +199,7 @@ class PacientesController extends Controller
                 $endereco->cidade;
             }
         }
+
         return $paciente;
     }
 

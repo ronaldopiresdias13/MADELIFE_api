@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class OcorrenciaHorario extends Migration
+class ColumnVersaoOrcs extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class OcorrenciaHorario extends Migration
      */
     public function up()
     {
-        
-        Schema::table('ocorrencias', function (Blueprint $table) {
-           $table->timestamp('horario')->nullable();
-         });
+        Schema::table('orcs', function (Blueprint $table) {
+            $table->string('versao')->after('descricao')->nullable();
+        });
     }
 
     /**
@@ -26,6 +25,8 @@ class OcorrenciaHorario extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ocorrencias');
+        Schema::table('orcs', function (Blueprint $table) {
+            $table->dropColumn('versao');
+        });
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Homecare;
 use App\Http\Controllers\Controller;
 use App\Models\Paciente;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EscalasController extends Controller
 {
@@ -251,5 +252,37 @@ class EscalasController extends Controller
                 'status',
                 'ativo'
             ]);
+    }
+
+    public function dashboardClonarEscalas(Request $request)
+    {
+        // $user = $request->user();
+        // $empresa_id = $user->pessoa->profissional->empresa_id;
+
+        // $hoje = getdate();
+        // $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $hoje['mday'];
+
+        // $escalas =  Escala::where(
+        //         'prestador_id',
+        //         $request->prestador_id,
+        //     )
+        //     ->whereBetween('dataentrada', [$request->data_ini ? $request->data_ini : $data, $request->data_fim ? $request->data_fim : $data])
+        //     ->where('ativo', true)
+        //     ->where('empresa_id', $empresa_id)
+        //     ->get();
+
+        //     $novasescalas = [];
+
+            foreach ($request as $key => $escala) {
+
+                $escala->status = false;
+
+                DB::transaction(function () use ($request) {
+                    Escala::create($request->all());
+                });
+
+                array_push($escala);
+            }
+            return $escala;
     }
 }

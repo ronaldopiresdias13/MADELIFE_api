@@ -15,6 +15,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::prefix('escalas')->group(function () {
             Route::get('medicao', [EscalasController::class, 'medicao']);
             Route::get('historicoEscalasPorPrestadorId', 'Api\Web\EscalasController@dashboardPegarTodosPacientesporId');
+            Route::get('dashboardClonarEscalas', 'Api\Web\EscalasController@dashboardClonarEscalas');
         });
         Route::prefix('departamentoPessoal')->group(function () {
             Route::post('escalas/updateServicoOfEscala/{escala}', 'Api\Web\DepartamentoPessoal\EscalasController@updateServicoOfEscala');
@@ -28,12 +29,12 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
 
     });
-});
 
-Route::get('escalas', 'Api\EscalasController@index');
-Route::get('escalas/{escala}', 'Api\EscalasController@show');
-Route::post('escalas', 'Api\EscalasController@store');
-Route::put('escalas/{escala}', 'Api\EscalasController@update');
-Route::delete('escalas/{escala}', 'Api\EscalasController@destroy');
-Route::get('escalas/empresa/{empresa}/dia', 'Api\EscalasController@buscaescalasdodia');
-Route::get('escalas/paciente/{paciente}/data1/{data1}/data2/{data2}', 'Api\EscalasController@buscaPontosPorPeriodoEPaciente');
+    Route::get('escalas', 'Api\EscalasController@index');
+    Route::get('escalas/{escala}', 'Api\EscalasController@show');
+    Route::post('escalas', 'Api\EscalasController@store');
+    Route::put('escalas/{escala}', 'Api\EscalasController@update');
+    Route::delete('escalas/{escala}', 'Api\EscalasController@destroy');
+    Route::get('escalas/empresa/{empresa}/dia', 'Api\EscalasController@buscaescalasdodia');
+    Route::get('escalas/paciente/{paciente}/data1/{data1}/data2/{data2}', 'Api\EscalasController@buscaPontosPorPeriodoEPaciente');
+});
