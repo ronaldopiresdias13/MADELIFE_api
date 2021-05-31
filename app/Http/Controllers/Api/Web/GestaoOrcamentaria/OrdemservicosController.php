@@ -19,13 +19,17 @@ class OrdemservicosController extends Controller
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-        return Ordemservico::with(['orcamento.homecare.paciente.pessoa:id,nome', 'orcamento.servicos.servico', 'orcamento.homecare.paciente.internacoes'])
-            ->where('empresa_id', $empresa_id)
-            ->where('ativo', true)
-            ->whereHas('orcamento.homecare.paciente.internacoes', function (Builder $query) use ($request){
+        $pacientes = Ordemservico::with(['orcamento.homecare.paciente.pessoa:id,nome',
+         'orcamento.servicos.servico', 'orcamento.homecare.paciente.internacoes']);
+        if($request->data_final){
+            $pacientes = $pacientes->whereHas('internacoes', function (Builder $query) use ($request){
                 $query->where('data_final',null, $request->data_final);
-            })
-            ->get();
+            });
+        }
+        $pacientes->where('empresa_id', $empresa_id);
+        $pacientes->where('ativo', true);
+        $pacientes = $pacientes->get();
+        return $pacientes;
     }
 
     /**
