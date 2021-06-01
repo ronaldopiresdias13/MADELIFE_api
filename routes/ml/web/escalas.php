@@ -4,6 +4,9 @@ use  App\Http\Controllers\Web\Escalas\EscalasController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth:api'], function () {
+
+    Route::post('escalas', 'Api\EscalasController@clonarEscalas');
+
     Route::prefix('web')->group(function () {
         Route::prefix('convenio')->group(function () {
             Route::get('escalas/dashboard', 'Api\Web\Convenio\EscalasController@dashboardConvenio');
