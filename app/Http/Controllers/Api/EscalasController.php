@@ -422,21 +422,21 @@ class EscalasController extends Controller
                 'dataentrada'      => $escala['dataentrada'],
                 'datasaida'        => $escala['datasaida'],
                 'periodo'          => $escala['periodo'],
-                'assinaturaprestador' => $escala['assinaturaprestador'],
-                'assinaturaresponsavel' => $escala['assinaturaresponsavel'],
-                'observacao'       => $escala['observacao'],
+                'assinaturaprestador' => '',
+                'assinaturaresponsavel' => '',
+                'observacao'       => "",
                 'status'           => false,
-                'folga'            => $escala['folga'],
-                'substituto'       => $escala['substituto']
+                'folga'            => false,
+                'substituto'       => null
 
             ]);
 
             foreach ($escala['cuidados'] as $key => $cuidado) {
                 CuidadoEscala::create([
                     'escala_id'  => $escala->id,
-                    'cuidado_id' => Cuidado::find($cuidado['cuidado']['id'])->id,
-                    'data'       => $cuidado['data'],
-                    'hora'       => $cuidado['hora'],
+                    'cuidado_id' => $cuidado['id'],
+                    'data'       => null,
+                    'hora'       => null,
                     'status'     => false,
                 ]);
             }
