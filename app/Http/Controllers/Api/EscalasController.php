@@ -404,47 +404,42 @@ class EscalasController extends Controller
             ]);
     }
 
-    public function clonarEscalas(Request $request)
+    public function dashboardClonarEscalas(Request $request)
     {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
 
-            $user = $request->user();
-            $empresa_id = $user->pessoa->profissional->empresa_id;
+        foreach ($request->escalas as $key => $escala) {
+            $escala = Escala::create([
 
-            foreach ($request->escalas as $key => $escala) {
-                $escala = Escala::create([
+                'empresa_id'       => $empresa_id,
+                'ordemservico_id'  => $escala['ordemservico_id'],
+                'prestador_id'     => $escala['prestador_id'],
+                'servico_id'       => $escala['servico_id'],
+                'formacao_id'      => $escala['formacao_id'],
+                'horaentrada'      => $escala['horaentrada'],
+                'horasaida'        => $escala['horasaida'],
+                'dataentrada'      => $escala['dataentrada'],
+                'datasaida'        => $escala['datasaida'],
+                'periodo'          => $escala['periodo'],
+                'assinaturaprestador' => $escala['assinaturaprestador'],
+                'assinaturaresponsavel' => $escala['assinaturaresponsavel'],
+                'observacao'       => $escala['observacao'],
+                'status'           => false,
+                'folga'            => $escala['folga'],
+                'substituto'       => $escala['substituto']
 
-                    'empresa_id'       => $empresa_id,
-                    'ordemservico_id'  => $escala->ordemservico_id,
-                    'prestador_id'     => $escala->prestador_id,
-                    'servico_id'       => $escala->servico_id,
-                    'formacao_id'      => $escala->formacao_id,
-                    'horaentrada'      => $escala->horaentrada,
-                    'horasaida'        => $escala->horasaida,
-                    'dataentrada'      => $escala->dataentrada,
-                    'datasaida'        => $escala->datasaida,
-                    'periodo'          => $escala->periodo,
-                    'assinaturaprestador' => $escala->assinaturaprestador,
-                    'assinaturaresponsavel' => $escala->assinaturaresponsavel,
-                    'observacao'       => $escala->observacao,
-                    'status'           => false,
-                    'folga'            => $escala->folga,
-                    'substituto'       => $escala->substituto
+            ]);
 
+            foreach ($escala['cuidados'] as $key => $cuidado) {
+                CuidadoEscala::create([
+                    'escala_id'  => $escala->id,
+                    'cuidado_id' => Cuidado::find($cuidado['cuidado']['id'])->id,
+                    'data'       => $cuidado['data'],
+                    'hora'       => $cuidado['hora'],
+                    'status'     => false,
                 ]);
-
-                foreach($escala->cuidados as $key => $cuidado){
-                    CuidadoEscala::create([
-                        'escala_id'  => $escala->id,
-                        'cuidado_id' => Cuidado::find($cuidado['cuidado']['id'])->id,
-                        'data'       => $cuidado['data'],
-                        'hora'       => $cuidado['hora'],
-                        'status'     => false,
-                    ]);
-                }
             }
-
-
-
-
+        }
     }
 }
