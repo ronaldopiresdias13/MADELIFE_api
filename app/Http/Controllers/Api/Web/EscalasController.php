@@ -273,16 +273,15 @@ class EscalasController extends Controller
 
         //     $novasescalas = [];
 
-            foreach ($request as $key => $escala) {
+        foreach ($request as $key => $escala) {
+            $escala->status = false;
 
-                $escala->status = false;
+            DB::transaction(function () use ($request) {
+                Escala::create($request->all());
+            });
 
-                DB::transaction(function () use ($request) {
-                    Escala::create($request->all());
-                });
-
-                array_push($escala);
-            }
-            return $escala;
+            array_push($escala);
+        }
+        return $escala;
     }
 }
