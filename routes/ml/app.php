@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\api\app\v3_0_25\VersaoController;
+use App\Http\Controllers\Api\App\v3_0_25\VersaoController;
 use App\Http\Controllers\Web\Cidade\CidadesController;
 use Illuminate\Support\Facades\Route;
 
