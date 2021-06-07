@@ -179,7 +179,7 @@ class PrestadoresController extends Controller
     public function salvarendereco(Request $request)
     {
         PessoaEndereco::firstOrCreate([
-            'pessoa_id'   => $request->pessoa_id,
+            'pessoa_id'   => $request['pessoa_id'],
             'endereco_id' => Endereco::create(
                 [
                     'tipo'        => $request['tipo'],
@@ -190,6 +190,7 @@ class PrestadoresController extends Controller
                     'numero'      => $request['numero'],
                     'complemento' => $request['complemento'],
                     'descricao'   => $request['descricao'],
+
                 ]
             )->id,
         ]);

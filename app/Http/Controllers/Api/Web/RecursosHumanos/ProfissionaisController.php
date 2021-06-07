@@ -342,7 +342,7 @@ class ProfissionaisController extends Controller
                 foreach ($request['beneficios'] as $key => $beneficio) {
                     $profissional_beneficio = ProfissionalBeneficio::firstOrCreate([
                         'profissional_id' => $profissional->id,
-                        'beneficio_id'    => $beneficio['id']
+                        'beneficio_id'    => $beneficio['beneficio_id']
                     ]);
                 }
             }
@@ -350,7 +350,7 @@ class ProfissionaisController extends Controller
                 foreach ($request['convenios'] as $key => $convenio) {
                     $profissional_convenio = ProfissionalConvenio::firstOrCreate([
                         'profissional_id' => $profissional->id,
-                        'convenio_id'    => $convenio['id']
+                        'convenio_id'    => $convenio['convenio_id']
                     ]);
                 }
             }
@@ -389,16 +389,20 @@ class ProfissionaisController extends Controller
 
             if ($request['pessoa']['telefones']) {
                 foreach ($request['pessoa']['telefones'] as $key => $telefone) {
-                    $pessoa_telefone = PessoaTelefone::firstOrCreate([
-                        'pessoa_id'   => $profissional->pessoa_id,
-                        'telefone_id' => Telefone::firstOrCreate(
-                            [
-                                'telefone'  => $telefone['telefone'],
-                            ]
-                        )->id,
-                        'tipo'      => $telefone['pivot']['tipo'],
-                        'descricao' => $telefone['pivot']['descricao'],
-                    ]);
+                    $pessoa_telefone = PessoaTelefone::firstOrCreate(
+                        [
+                            'pessoa_id'   => $profissional->pessoa_id,
+                            'telefone_id' => Telefone::firstOrCreate(
+                                [
+                                    'telefone'  => $telefone['telefone'],
+                                ]
+                            )->id,
+                        ],
+                        [
+                            'tipo'      => $telefone['pivot']['tipo'],
+                            'descricao' => $telefone['pivot']['descricao'],
+                        ]
+                    );
                 }
             }
 
