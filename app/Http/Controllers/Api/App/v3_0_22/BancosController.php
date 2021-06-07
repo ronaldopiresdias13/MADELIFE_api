@@ -15,7 +15,7 @@ class BancosController extends Controller
      */
     public function index()
     {
-        return Banco::orderBy('codigo')->get();
+        return Banco::orderBy('codigo')->where('ativo', true)->get();
     }
 
     /**

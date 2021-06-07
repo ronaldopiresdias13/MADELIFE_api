@@ -54,9 +54,9 @@ class ContratosController extends Controller
             });
         }
 
-        if($request->data_final){
-                    $result->whereHas('paciente.internacoes', function (Builder $query) use ($request){
-                $query->where('data_final',null, $request->data_final);
+        if ($request->data_final) {
+            $result->whereHas('paciente.internacoes', function (Builder $query) use ($request) {
+                $query->where('data_final', null, $request->data_final);
             });
         };
 
@@ -101,14 +101,30 @@ class ContratosController extends Controller
             // ->whereHas('ordemServico')
             ->whereHas('ordemServico', function (Builder $builder) use ($request, $primeiroDia, $ultimoDia) {
                 $builder->where(
-                    'fim',
-                    '>=',
-                    $request->inicio ? $request->inicio : $primeiroDia
-                )
-                ->where(
-                    'inicio',
-                    '<=',
-                    $request->fim ? $request->fim : $ultimoDia
+                    [
+                        [
+                            'fim',
+                            '>=',
+                            $request->inicio ? $request->inicio : $primeiroDia
+                        ], [
+                            'inicio',
+                            '<=',
+                            $request->fim ? $request->fim : $ultimoDia
+                        ]
+                    ]
+                );
+                $builder->orWhere(
+                    [
+                        [
+                            'fim',
+                            null
+                        ],
+                        [
+                            'inicio',
+                            '<=',
+                            $request->fim ? $request->fim : $ultimoDia
+                        ]
+                    ]
                 );
             })
             ->where('ativo', true)
@@ -128,6 +144,8 @@ class ContratosController extends Controller
         }
 
         $result = $result->orderByDesc('id');
+
+        // dd($result);
 
         if ($request['paginate']) {
             $result = $result->paginate($request['per_page'] ? $request['per_page'] : 15);
