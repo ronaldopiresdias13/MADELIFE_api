@@ -18,7 +18,7 @@ class HistoricosController extends Controller
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
         return DB::select(
-            "SELECT h.created_at, p.nome, e.id AS escala_id, ps.nome AS paciente, e.dataentrada, e.datasaida, e.periodo, e.horaentrada, e.horasaida, e.status, prof.nome AS prestador, s.descricao,
+            "SELECT DATE_FORMAT(h.created_at, '%d/%m/%Y') AS datahistorico, DATE_FORMAT(h.created_at, '%H:%i') AS hora, p.nome, e.id AS escala_id, ps.nome AS paciente, e.dataentrada, e.datasaida, e.periodo, e.horaentrada, e.horasaida, e.status, e.ativo, prof.nome AS prestador, s.descricao,
 CASE h.tipo when 1 then 'Criado' when 2 then 'Alterado' when 3 then 'Excluído' end as operacao 
 FROM historicos AS h
 INNER JOIN escalas AS e
