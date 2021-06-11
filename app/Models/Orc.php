@@ -33,6 +33,8 @@ class Orc extends Model
         'pacote_id',
         'numero',
         'tipo',
+        'tipoatentendimento',
+        'indicacaoacidente',
         'data',
         'quantidade',
         'unidade',
