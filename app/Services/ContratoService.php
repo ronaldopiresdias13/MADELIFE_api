@@ -129,9 +129,9 @@ class ContratoService
                         "cpfcnpj"          => $this->request->remocao['cpfcnpj'],
                         "rgie"             => $this->request->remocao['rgie'],
                         "enderecoorigem"   => $this->request->remocao['enderecoorigem'],
-                        "cidadeorigem_id"  => $this->request->remocao['cidadeorigem_id'],
+                        "cidadeorigem"     => $this->request->remocao['cidadeorigem'],
                         "enderecodestino"  => $this->request->remocao['enderecodestino'],
-                        "cidadedestino_id" => $this->request->remocao['cidadedestino_id'],
+                        "cidadedestino"    => $this->request->remocao['cidadedestino'],
                         "observacao"       => $this->request->remocao['observacao'],
                     ])->save();
                     break;
@@ -313,9 +313,9 @@ class ContratoService
                             "cpfcnpj"          => $this->request->remocao['cpfcnpj'],
                             "rgie"             => $this->request->remocao['rgie'],
                             "enderecoorigem"   => $this->request->remocao['enderecoorigem'],
-                            "cidadeorigem_id"  => $this->request->remocao['cidadeorigem_id'],
+                            "cidadeorigem"     => $this->request->remocao['cidadeorigem'],
                             "enderecodestino"  => $this->request->remocao['enderecodestino'],
-                            "cidadedestino_id" => $this->request->remocao['cidadedestino_id'],
+                            "cidadedestino"    => $this->request->remocao['cidadedestino'],
                             "observacao"       => $this->request->remocao['observacao'],
                         ],
                         [
