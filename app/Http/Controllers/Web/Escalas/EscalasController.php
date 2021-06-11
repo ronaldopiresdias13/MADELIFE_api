@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Web\Escalas;
 
 use App\Http\Controllers\Controller;
 use App\Models\Escala;
+use App\Models\Historico;
+use App\Models\User;
 use App\Services\PontoService;
 use Illuminate\Http\Request;
 
@@ -216,4 +218,5 @@ class EscalasController extends Controller
     {
         //
     }
+
 }

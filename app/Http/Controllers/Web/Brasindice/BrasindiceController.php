@@ -27,8 +27,18 @@ class BrasindiceController extends Controller
      */
     public function store(Request $request)
     {
-        DB::transaction(function () use ($request) {
-            Brasindice::create($request->all());
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        DB::transaction(function () use ($request, $empresa_id) {
+            // Brasindice::create($request->all());
+            $brasindice = Brasindice::create([
+                'empresa_id' => $empresa_id,
+                'descricao' => $request['descricao'],
+                'versao_revista' => $request['versao_revista'],
+                'data' => $request['data'],
+                'estado' => $request['estado'],
+                'tipo_produto' => $request['tipo_produto'],
+            ]);
         });
     }
 
