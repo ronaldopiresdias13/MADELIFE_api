@@ -211,6 +211,7 @@ class OrdemservicoPrestadoresController extends Controller
             'prestador.pessoa.conselhos',
             'prestador.formacoes', 'servico'
         ])
+            ->where('ativo', true)
             ->where(
                 'ordemservico_id',
                 $ordemservico->id
