@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HistoricosController;
 use  App\Http\Controllers\Web\Escalas\EscalasController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('medicao', [EscalasController::class, 'medicao']);
             Route::get('historicoEscalasPorPrestadorId', 'Api\Web\EscalasController@dashboardPegarTodosPacientesporId');
             Route::post('dashboardClonarEscalas', 'Api\EscalasController@dashboardClonarEscalas');
+            Route::get('historicoescala', [HistoricosController::class, 'historicoescala']);
         });
         Route::prefix('departamentoPessoal')->group(function () {
             Route::post('escalas/updateServicoOfEscala/{escala}', 'Api\Web\DepartamentoPessoal\EscalasController@updateServicoOfEscala');

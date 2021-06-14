@@ -113,8 +113,19 @@ class OrdemservicoPrestadoresController extends Controller
      */
     public function store(Request $request)
     {
+        // return $request;
         DB::transaction(function () use ($request) {
-            OrdemservicoPrestador::create($request->all());
+            OrdemservicoPrestador::create(
+                [
+                    'prestador_id' => $request['prestador_id'],
+                    'ordemservico_id' => $request['ordemservico_id'],
+                    'servico_id' => $request['servico_id'],
+                    'descricao' => $request['descricao'],
+                    'valordiurno' => $request['valordiurno'],
+                    'valornoturno' => $request['valornoturno'],
+                    'ativo' => true,
+                ]
+            );
         });
     }
 
@@ -200,6 +211,7 @@ class OrdemservicoPrestadoresController extends Controller
             'prestador.pessoa.conselhos',
             'prestador.formacoes', 'servico'
         ])
+            ->where('ativo', true)
             ->where(
                 'ordemservico_id',
                 $ordemservico->id

@@ -134,6 +134,7 @@ class ProdutosController extends Controller
             $produto->desvalorizacao    = $request->desvalorizacao;
             $produto->valorfinal        = $request->valorfinal;
             $produto->tipo              = $request->tipo;
+            $produto->codtuss           = $request->codtuss;
             $produto->categoria         = $request->categoria ? $request->categoria : null;
             $produto->save();
         });
@@ -221,6 +222,7 @@ class ProdutosController extends Controller
         $produto->desvalorizacao    = $request->desvalorizacao;
         $produto->valorfinal        = $request->valorfinal;
         $produto->tipo              = $request->tipo;
+        $produto->codtuss           = $request->codtuss;
         $produto->categoria         = $request->categoria ? $request->categoria : null;
         $produto->save();
     }
