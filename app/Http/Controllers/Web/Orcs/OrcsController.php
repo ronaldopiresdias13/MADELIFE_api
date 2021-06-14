@@ -50,23 +50,21 @@ class OrcsController extends Controller
                 $query->where('empresa_id', $empresa_id)
                     ->where('remocao_nome', 'like', '%' . $request->filter_nome . '%');
             });
-
         }
 
-        if($request->data_final){
-                    $result->whereHas('paciente.internacoes', function (Builder $query) use ($request){
-                $query->where('data_final',null, $request->data_final);
+        if ($request->data_final) {
+            $result->whereHas('paciente.internacoes', function (Builder $query) use ($request) {
+                $query->where('data_final', null, $request->data_final);
             });
         };
 
         $result = $result->orderByDesc('id')->paginate($request['per_page'] ? $request['per_page'] : 15);
 
         if (env("APP_ENV", 'production') == 'production') {
-                 return $result->withPath(str_replace('http:', 'https:', $result->path()));
-        } else{
-             return $result;
+            return $result->withPath(str_replace('http:', 'https:', $result->path()));
+        } else {
+            return $result;
         }
-
     }
 
     /**
