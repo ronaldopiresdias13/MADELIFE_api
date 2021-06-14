@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\Web\EscalasController as WebEscalasController;
 use App\Http\Controllers\HistoricosController;
 use  App\Http\Controllers\Web\Escalas\EscalasController;
 use Illuminate\Support\Facades\Route;
