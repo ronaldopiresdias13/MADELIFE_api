@@ -20,6 +20,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('historicoEscalasPorPrestadorId', 'Api\Web\EscalasController@dashboardPegarTodosPacientesporId');
             Route::post('dashboardClonarEscalas', 'Api\EscalasController@dashboardClonarEscalas');
             Route::get('historicoescala', [HistoricosController::class, 'historicoescala']);
+            Route::get('historicoescalaporpacienteid', [HistoricosController::class, 'historicoescalaporpacienteid']);
         });
         Route::prefix('departamentoPessoal')->group(function () {
             Route::post('escalas/updateServicoOfEscala/{escala}', 'Api\Web\DepartamentoPessoal\EscalasController@updateServicoOfEscala');
