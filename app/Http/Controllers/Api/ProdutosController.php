@@ -139,7 +139,47 @@ class ProdutosController extends Controller
             $produto->save();
         });
     }
-
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function saveTabelaProdutos(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        DB::transaction(function () use ($request, $empresa_id) {
+            foreach ($request['itens_brasindice'] as $key => $itens_brasindice) {
+                Produto::create([
+                    'descricao'                 => $itens_brasindice['nome_produto'] . ' ' . $itens_brasindice['nome_apresentacao'],
+                    'empresa_id'                => $empresa_id,
+                    'tipoproduto_id'            => null,
+                    'codigo'                    => $itens_brasindice['codigo_produto'],
+                    'unidademedida_id'          => null,
+                    'codigobarra'               => null,
+                    'validade'                  => null,
+                    'grupo'                     => null,
+                    'observacoes'               => null,
+                    'valorcusto'                => null,
+                    'valorvenda'                => null,
+                    'ultimopreco'               => $itens_brasindice['preco_produto'],
+                    'estoqueminimo'             => null,
+                    'estoquemaximo'             => null,
+                    'quantidadeestoque'         => null,
+                    'armazem'                   => null,
+                    'localizacaofisica'         => null,
+                    'datacompra'                => null,
+                    'marca_id'                  => null,
+                    'desvalorizacao'            => null,
+                    'valorfinal'                => null,
+                    'tipo'                      => null,
+                    'codtuss'                   => $itens_brasindice['codigo_tuss'],
+                    'categoria'                 => $request['categoria'],
+                ]);
+            }
+        });
+    }
     /**
      * Display the specified resource.
      *
