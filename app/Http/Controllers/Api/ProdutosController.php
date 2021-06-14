@@ -145,7 +145,7 @@ class ProdutosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function saveTabelaProdutos(Request $request)
+    public function salvaProdutosImportados(Request $request)
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
