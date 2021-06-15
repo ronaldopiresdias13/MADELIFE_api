@@ -433,6 +433,7 @@ class ProfissionaisController extends Controller
     {
         $profissional->pessoa->telefones;
         $profissional->pessoa->emails;
+        $profissional->pessoa->dadosbancario;
         $profissional->formacoes;
         $profissional->setor;
         $profissional->cargo;
