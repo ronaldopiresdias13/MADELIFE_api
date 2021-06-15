@@ -152,8 +152,9 @@ class ProdutosController extends Controller
         DB::transaction(function () use ($request, $empresa_id) {
             foreach ($request['itens_brasindice'] as $key => $itens_brasindice) {
                 Produto::create([
-                    'descricao'                 => $itens_brasindice['nome_produto'] . ' ' . $itens_brasindice['nome_apresentacao'],
                     'empresa_id'                => $empresa_id,
+                    'tabela'                    => $request['descricao'],
+                    'descricao'                 => $itens_brasindice['nome_produto'] . ' ' . $itens_brasindice['nome_apresentacao'],
                     'tipoproduto_id'            => null,
                     'codigo'                    => $itens_brasindice['codigo_produto'],
                     'unidademedida_id'          => null,
