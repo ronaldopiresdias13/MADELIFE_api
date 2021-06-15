@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Ordemservico;
 use App\Models\OrdemservicoServico;
+use App\Models\Prestador;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -410,13 +411,16 @@ class EscalasController extends Controller
         $empresa_id = $user->pessoa->profissional->empresa_id;
 
         foreach ($request->escalas as $key => $escala) {
-            $escala = Escala::create([
+            $prof = Prestador::find($escala['prestador_id'])->formacoes;
+            $formacao = $prof->first();
+            $cuidados = Escala::find($escala['escala_id'])->cuidados;
+            $e = Escala::create([
 
                 'empresa_id'       => $empresa_id,
                 'ordemservico_id'  => $escala['ordemservico_id'],
                 'prestador_id'     => $escala['prestador_id'],
                 'servico_id'       => $escala['servico_id'],
-                'formacao_id'      => $escala['formacao_id'],
+                'formacao_id'      => $formacao ? $formacao->id : null,
                 'horaentrada'      => $escala['horaentrada'],
                 'horasaida'        => $escala['horasaida'],
                 'dataentrada'      => $escala['dataentrada'],
@@ -430,10 +434,10 @@ class EscalasController extends Controller
                 'substituto'       => null
 
             ]);
-
-            foreach ($escala['cuidados'] as $key => $cuidado) {
+            // return $cuidados;
+            foreach ($cuidados as $key => $cuidado) {
                 CuidadoEscala::create([
-                    'escala_id'  => $escala->id,
+                    'escala_id'  => $e->id,
                     'cuidado_id' => $cuidado['id'],
                     'data'       => null,
                     'hora'       => null,
