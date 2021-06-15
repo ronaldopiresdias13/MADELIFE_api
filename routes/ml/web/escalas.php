@@ -19,7 +19,6 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('medicao', [EscalasController::class, 'medicao']);
             Route::get('historicoEscalasPorPrestadorId', 'Api\Web\EscalasController@dashboardPegarTodosPacientesporId');
             Route::post('dashboardClonarEscalas', 'Api\EscalasController@dashboardClonarEscalas');
-            Route::get('historicoescala', [HistoricosController::class, 'historicoescala']);
             Route::get('EscalasPorPeriodo', 'Api\Web\EscalasController@EscalasPorPeriodo');
         });
         Route::prefix('departamentoPessoal')->group(function () {
@@ -41,5 +40,5 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::delete('escalas/{escala}', 'Api\EscalasController@destroy');
     Route::get('escalas/empresa/{empresa}/dia', 'Api\EscalasController@buscaescalasdodia');
     Route::get('escalas/paciente/{paciente}/data1/{data1}/data2/{data2}', 'Api\EscalasController@buscaPontosPorPeriodoEPaciente');
-    
+
 });
