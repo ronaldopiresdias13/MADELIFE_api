@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\CuidadoEscala;
 use App\Http\Controllers\Controller;
 use App\Models\Cuidado;
+use App\Models\Escala;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -121,6 +122,31 @@ class CuidadoEscalasController extends Controller
             'status'     => $request->status,
         ]);
         // }
+    }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function adicionarCuidadosNaEscala(Request $request)
+    {
+        return $request;
+        foreach ($request->cuidados as $key => $cuidado) {
+            CuidadoEscala::create(
+                [
+                    'escala_id'  => $request->escala_id,
+                    'cuidado_id' => $cuidado['id'],
+                ],
+                [
+                    'data'       => null,
+                    'hora'       => null,
+                    'status'     => false,
+                ]
+            );
+        }
+        $escala = Escala::find($request->escala_id);
+        return $escala->cuidados;
     }
 
     /**
