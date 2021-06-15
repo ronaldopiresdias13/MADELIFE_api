@@ -431,7 +431,6 @@ class ProfissionaisController extends Controller
      */
     public function show(Profissional $profissional)
     {
-        $profissional->pessoa->enderecos;
         $profissional->pessoa->telefones;
         $profissional->pessoa->emails;
         $profissional->formacoes;
@@ -440,6 +439,11 @@ class ProfissionaisController extends Controller
         $profissional->dadoscontratual;
         $profissional->beneficios;
         $profissional->convenios;
+        if ($profissional->pessoa->enderecos) {
+            foreach ($profissional->pessoa->enderecos as $key => $endereco) {
+                $endereco->cidade;
+            }
+        }
         return $profissional;
     }
 
