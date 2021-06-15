@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class Produto extends Model
 {
+    protected $guarded = [];
     // protected static function booted()
     // {
     //     $empresa_id = null;
