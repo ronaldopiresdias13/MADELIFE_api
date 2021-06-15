@@ -285,13 +285,14 @@ class EscalasController extends Controller
         return $escala;
     }
 
-    public function EscalasPorPeriodo(Request $request){
+    public function EscalasPorPeriodo(Request $request)
+    {
 
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
         // $empresa_id = 1;
         return DB::select(
-            "SELECT e.id, e.dataentrada, e.datasaida, e.periodo, e.status, p.nome AS paciente, pp.nome AS prestador, s.descricao AS servico FROM escalas AS e
+            "SELECT e.id, e.ordemservico_id, e.servico_id, e.prestador_id, e.horaentrada, e.horasaida, e.dataentrada, e.datasaida, e.periodo, e.status, p.nome AS paciente, pp.nome AS prestador, s.descricao AS servico FROM escalas AS e
             INNER JOIN ordemservicos AS os
             ON e.ordemservico_id = os.id
             INNER JOIN orcamentos AS o
@@ -308,11 +309,13 @@ class EscalasController extends Controller
             ON pp.id = pre.pessoa_id
             INNER JOIN servicos AS s
             ON e.servico_id = s.id
-            WHERE e.dataentrada BETWEEN '2021-06-01' AND '2021-06-30'
-            AND e.empresa_id = 1
+            WHERE e.dataentrada BETWEEN ? AND ?
+            AND e.empresa_id = ?
             and e.ativo = 1",
 
             [
+                $request->data_ini,
+                $request->data_fim,
                 $empresa_id
             ]
         );
