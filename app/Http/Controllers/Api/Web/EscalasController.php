@@ -284,4 +284,40 @@ class EscalasController extends Controller
         }
         return $escala;
     }
+
+    public function EscalasPorPeriodo(Request $request)
+    {
+
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        // $empresa_id = 1;
+        return DB::select(
+            "SELECT e.id, e.ordemservico_id, e.servico_id, e.prestador_id, e.horaentrada, e.horasaida, e.dataentrada, e.datasaida, e.periodo, e.status, p.nome AS paciente, pp.nome AS prestador, s.descricao AS servico FROM escalas AS e
+            INNER JOIN ordemservicos AS os
+            ON e.ordemservico_id = os.id
+            INNER JOIN orcamentos AS o
+            ON o.id = os.orcamento_id
+            INNER JOIN homecares AS hc 
+            ON hc.orcamento_id = o.id
+            INNER JOIN pacientes AS pc
+            ON pc.id = hc.paciente_id
+            INNER JOIN pessoas AS p
+            ON p.id = pc.pessoa_id
+            INNER JOIN prestadores AS pre
+            ON e.prestador_id = pre.id
+            INNER JOIN pessoas AS pp
+            ON pp.id = pre.pessoa_id
+            INNER JOIN servicos AS s
+            ON e.servico_id = s.id
+            WHERE e.dataentrada BETWEEN ? AND ?
+            AND e.empresa_id = ?
+            and e.ativo = 1",
+
+            [
+                $request->data_ini,
+                $request->data_fim,
+                $empresa_id
+            ]
+        );
+    }
 }
