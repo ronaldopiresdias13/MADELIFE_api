@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Api\Web\Compras\ProdutoController;
 use App\Http\Controllers\Web\Produtos\ProdutosController;
+use App\Http\Controllers\Api\Web\Compras\ProdutoController as ProdutoController2;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth:api'], function () {
@@ -9,9 +9,10 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::prefix('produtos')->group(function () {
             Route::get('localizacaoOfProdutos', [ProdutosController::class, 'buscaLocalizacaoProdutos']);
             Route::get('buscaProdutoPorCodBarra', [ProdutosController::class, 'buscaProdutoPorCodBarra']);
+            Route::post('salvaProdutosImportados', [ProdutosController::class, 'salvaProdutosImportados']);
         });
         Route::prefix('compras')->group(function () {
-            Route::get('produtos/getAllProdutosByIdEmpresa', [ProdutoController::class, 'getAllProdutosByIdEmpresa']);
+            Route::get('produtos/getAllProdutosByIdEmpresa', [ProdutoController2::class, 'getAllProdutosByIdEmpresa']);
         });
     });
 });
