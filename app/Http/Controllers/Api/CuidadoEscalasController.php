@@ -131,9 +131,9 @@ class CuidadoEscalasController extends Controller
      */
     public function adicionarCuidadosNaEscala(Request $request)
     {
-        return $request;
+        // return $request;
         foreach ($request->cuidados as $key => $cuidado) {
-            CuidadoEscala::create(
+            CuidadoEscala::firstOrCreate(
                 [
                     'escala_id'  => $request->escala_id,
                     'cuidado_id' => $cuidado['id'],
