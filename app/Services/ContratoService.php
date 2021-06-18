@@ -219,7 +219,7 @@ class ContratoService
                 "data"              => $this->request->data,
                 "quantidade"        => $this->request->quantidade,
                 "unidade"           => $this->request->unidade,
-                "cidade_id"         => $this->request->cidade_id,
+                "cidade_id"         => $this->request->cidade['id'],
                 "processo"          => $this->request->processo,
                 "situacao"          => $this->request->situacao,
                 "descricao"         => $this->request->descricao,
