@@ -122,8 +122,10 @@ class PacientesController extends Controller
                 )->id,
                 'responsavel_id' => $request['responsavel_id'],
                 'complexidade'   => $request['complexidade'],
+                'numeroCarteira' => $request['numeroCarteira'],
                 'sexo'           => $request['sexo'],
-                'ativo'          => $request['ativo']
+                'ativo'          => $request['ativo'],
+                'atendimentoRN'  => $request['atendimentoRN']
             ]);
             Tipopessoa::create([
                 'tipo'      => 'Paciente',
@@ -217,8 +219,10 @@ class PacientesController extends Controller
                 'sexo'           => $request['sexo'],
                 'empresa_id'     => $request['empresa_id'],
                 'responsavel_id' => $request['responsavel_id'],
+                'numeroCarteira' => $request['numeroCarteira'],
                 'complexidade'   => $request['complexidade'],
                 'ativo'          => $request['ativo'],
+                'atendimentoRN'  => $request['atendimentoRN']
             ]);
             $pessoa = Pessoa::find($request['pessoa']['id']);
             if ($pessoa) {

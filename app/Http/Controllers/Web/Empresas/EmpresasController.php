@@ -61,6 +61,7 @@ class EmpresasController extends Controller
                 'ie'          => $request['ie'],
                 'registroANS' => $request['registroANS'],
                 'tiss_sequencialTransacao' => $request['tiss_sequencialTransacao'],
+                'CNES'        => $request['CNES'],
             ]);
         });
     }
