@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Empresas;
 use App\Http\Controllers\Controller;
 use App\Models\Empresa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EmpresasController extends Controller
 {
@@ -42,7 +43,6 @@ class EmpresasController extends Controller
 
         $result = Empresa::find($empresa_id);
         return $result;
-        
     }
 
     /**
@@ -54,7 +54,13 @@ class EmpresasController extends Controller
      */
     public function update(Request $request, Empresa $empresa)
     {
-        $empresa->update($request->all());
+        $empresa =  DB::transaction(function () use ($request, $empresa) {
+            $empresa->update([
+                'razao'       => $request['razao'],
+                'cnpj'        => $request['cnpj'],
+                'ie'          => $request['ie'],
+            ]);
+        });
     }
 
     /**
