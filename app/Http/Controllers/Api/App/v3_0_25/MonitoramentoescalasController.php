@@ -70,7 +70,24 @@ class MonitoramentoescalasController extends Controller
         ], 200)
             ->header('Content-Type', 'application/json');
     }
-
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllMonitoramentosByEscalaId(Escala $escala)
+    {
+        // return $escala->ordemservico_id;
+        return DB::table('monitoramentoescalas')
+            ->join('escalas', 'escalas.id', '=', 'monitoramentoescalas.escala_id')
+            ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
+            ->select('monitoramentoescalas.*')
+            ->where('ordemservicos.id', $escala->ordemservico_id)
+            // ->groupBy('relatorios.nome')
+            ->orderBy('monitoramentoescalas.data', 'desc')
+            ->limit(20)
+            ->get();
+    }
     /**
      * Display the specified resource.
      *
