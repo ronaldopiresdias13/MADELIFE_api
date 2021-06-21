@@ -260,6 +260,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         Route::get('formacoes/listFormacoes', 'Api\App\v3_0_25\FormacoesController@listFormacoes');
 
+        Route::get('monitoramentoescalas/{escala}/list', 'Api\App\v3_0_25\MonitoramentoescalasController@listaMonitoramento');
         Route::get('monitoramentoescalas/{escala}', 'Api\App\v3_0_25\MonitoramentoescalasController@listaMonitoramento');
         Route::post('monitoramentoescalas', 'Api\App\v3_0_25\MonitoramentoescalasController@salvarMonitoramento');
 
