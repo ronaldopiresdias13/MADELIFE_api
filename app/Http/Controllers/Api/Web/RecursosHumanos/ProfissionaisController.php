@@ -160,6 +160,8 @@ class ProfissionaisController extends Controller
                 'zonatituloeleitor'      => $request['zonatituloeleitor'],
                 'meiativa'               => $request['meiativa'],
                 'dataverificacaomei'     => $request['dataverificacaomei'],
+                'conselhoProfissional'   => $request['conselhoProfissional'],
+                'numeroConselhoProfissional' => $request['numeroConselhoProfissional'],
                 'dadoscontratuais_id'    => Dadoscontratual::create([
                     'tiposalario'             => $request['dadoscontratuais']['tiposalario'],
                     'salario'                 => $request['dadoscontratuais']['salario'],
@@ -319,6 +321,8 @@ class ProfissionaisController extends Controller
                     'zonatituloeleitor'      => $request['zonatituloeleitor'],
                     'meiativa'               => $request['meiativa'],
                     'dataverificacaomei'     => $request['dataverificacaomei'],
+                    'conselhoProfissional'   => $request['conselhoProfissional'],
+                    'numeroConselhoProfissional' => $request['numeroConselhoProfissional'],
                     'dadoscontratuais_id'    => Dadoscontratual::updateOrCreate([
                         'tiposalario'             => $request['dadoscontratuais']['tiposalario'],
                         'salario'                 => $request['dadoscontratuais']['salario'],

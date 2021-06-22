@@ -157,18 +157,21 @@ class OrcsController extends Controller
         $request['cliente_id']        = $orcamento->cliente_id;
         $request['numero']            = $orcamento->numero;
         $request['tipo']              = $orcamento->tipo;
+        $request['indicacaoClinica']  = $orcamento->indicacaoClinica; 
         $request['data']              = $orcamento->data;
         $request['quantidade']        = $orcamento->quantidade;
         $request['unidade']           = $orcamento->unidade;
         $request['cidade_id']         = $orcamento->cidade_id;
         $request['processo']          = $orcamento->processo;
+        $request['caraterAtendimento'] = $orcamento->caraterAtendimento;
         $request['situacao']          = $orcamento->situacao;
         $request['descricao']         = $orcamento->descricao;
         $request['valortotalproduto'] = $orcamento->valortotalproduto;
         $request['valortotalcusto']   = $orcamento->valortotalcusto;
         $request['valortotalservico'] = $orcamento->valortotalservico;
         $request['observacao']        = $orcamento->observacao;
-        $request['car_atendimento']   = $orcamento->car_atendimento;
+        $request['caraterAtendimento']   = $orcamento->caraterAtendimento;
+        $request['indicacaoClinica']  = $orcamento->indicacaoClinica;
         $request['status']            = $orcamento->status;
 
         // $request->ordemservico = $orcamento->ordemservico;
