@@ -187,7 +187,13 @@ class PacientesController extends Controller
                 }
             });
         } else {
-            return $qtdPac;
+            return response()->json([
+                'alert' => [
+                    'title' => 'Ops, não foi possível salvar',
+                    'text' => 'Quantidade máxima de pacientes atingida!'
+                ]
+            ], 400)
+                ->header('Content-Type', 'application/json');
         }
     }
 
