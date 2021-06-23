@@ -7,6 +7,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('empresas', 'Api\EmpresasController@index');
         Route::prefix('Empresas')->group(function () {
             Route::get('empresa', 'Web\Empresas\EmpresasController@show');
+            Route::post('empresa', 'Web\Empresas\EmpresasController@store');
             Route::put('empresa/{empresa}', 'Web\Empresas\EmpresasController@update');
         });
     });

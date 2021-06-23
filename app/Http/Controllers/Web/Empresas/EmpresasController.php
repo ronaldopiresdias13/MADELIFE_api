@@ -27,7 +27,9 @@ class EmpresasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        DB::transaction(function () use ($request) {
+            Empresa::create($request->all());
+        });
     }
 
     /**
