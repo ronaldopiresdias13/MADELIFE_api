@@ -3,18 +3,29 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Medicao extends Model
 {
     protected $table = 'medicoes';
     protected $guarded = [];
 
-    public function cliente()
+    /**
+     * Get the cliente that owns the Medicao
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function cliente(): BelongsTo
     {
         return $this->belongsTo(Cliente::class);
     }
 
-    public function ordemservico()
+    /**
+     * Get the ordemservico that owns the Medicao
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function ordemservico(): BelongsTo
     {
         return $this->belongsTo(Ordemservico::class);
     }
@@ -28,8 +39,19 @@ class Medicao extends Model
     {
         return $this->hasMany(ProdutoMedicao::class, 'medicoes_id');
     }
+
     public function comentarios()
     {
         return $this->hasMany(Comentariomedicao::class, 'medicoes_id');
+    }
+
+    /**
+     * Get the profissional that owns the Medicao
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function profissional(): BelongsTo
+    {
+        return $this->belongsTo(Profissional::class);
     }
 }
