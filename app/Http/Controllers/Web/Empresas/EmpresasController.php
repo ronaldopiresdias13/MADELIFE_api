@@ -75,8 +75,9 @@ class EmpresasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Empresa $empresa)
     {
-        //
+        $empresa->ativo = false;
+        $empresa->save();
     }
 }
