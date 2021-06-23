@@ -27,7 +27,9 @@ class EmpresasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        DB::transaction(function () use ($request) {
+            Empresa::create($request->all());
+        });
     }
 
     /**
@@ -36,13 +38,13 @@ class EmpresasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function show(Request $request, Empresa $empresa)
     {
-        $user = $request->user();
-        $empresa_id = $user->pessoa->profissional->empresa_id;
+        // $user = $request->user();
+        // $empresa_id = $user->pessoa->profissional->empresa_id;
 
-        $result = Empresa::find($empresa_id);
-        return $result;
+        // $result = Empresa::find($empresa_id);
+        return $empresa;
     }
 
     /**
@@ -62,6 +64,7 @@ class EmpresasController extends Controller
                 'registroANS' => $request['registroANS'],
                 'tiss_sequencialTransacao' => $request['tiss_sequencialTransacao'],
                 'CNES'        => $request['CNES'],
+                'quantidadepaciente'        => $request['quantidadepaciente'],
             ]);
         });
     }
@@ -72,8 +75,9 @@ class EmpresasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Empresa $empresa)
     {
-        //
+        $empresa->ativo = false;
+        $empresa->save();
     }
 }

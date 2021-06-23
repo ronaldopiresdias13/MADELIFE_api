@@ -116,6 +116,7 @@ class MedicoesController extends Controller
         $medicao = Medicao::create([
             'empresa_id' => $request['empresa_id'],
             'cliente_id' => $request['cliente_id'],
+            'prestador_id' => $request['prestador_id'],
             'ordemservico_id' => $request['ordemservico_id'],
             'data1' => $request['data1'],
             'data2' => $request['data2'],
@@ -219,6 +220,7 @@ class MedicoesController extends Controller
                 [
                     'empresa_id'      => $request['empresa_id'],
                     'cliente_id'      => $request['cliente_id'],
+                    'prestador_id'    => $request['prestador_id'],
                     'ordemservico_id' => $request['ordemservico_id'],
                     'data1'           => $request['data1'],
                     'data2'           => $request['data2'],
