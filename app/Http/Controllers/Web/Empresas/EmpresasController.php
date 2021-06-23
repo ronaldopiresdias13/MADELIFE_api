@@ -64,6 +64,7 @@ class EmpresasController extends Controller
                 'registroANS' => $request['registroANS'],
                 'tiss_sequencialTransacao' => $request['tiss_sequencialTransacao'],
                 'CNES'        => $request['CNES'],
+                'quantidadepaciente'        => $request['quantidadepaciente'],
             ]);
         });
     }
