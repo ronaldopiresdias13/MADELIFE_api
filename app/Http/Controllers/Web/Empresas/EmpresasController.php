@@ -38,13 +38,13 @@ class EmpresasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function show(Request $request, Empresa $empresa)
     {
-        $user = $request->user();
-        $empresa_id = $user->pessoa->profissional->empresa_id;
+        // $user = $request->user();
+        // $empresa_id = $user->pessoa->profissional->empresa_id;
 
-        $result = Empresa::find($empresa_id);
-        return $result;
+        // $result = Empresa::find($empresa_id);
+        return $empresa;
     }
 
     /**
