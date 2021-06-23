@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('web')->group(function () {
+        Route::get('empresas', 'Api\EmpresasController@index');
         Route::prefix('Empresas')->group(function () {
             Route::get('empresa', 'Web\Empresas\EmpresasController@show');
             Route::put('empresa/{empresa}', 'Web\Empresas\EmpresasController@update');
