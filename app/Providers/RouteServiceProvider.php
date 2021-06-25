@@ -115,6 +115,7 @@ class RouteServiceProvider extends ServiceProvider
                 require base_path('routes/ml/web/cuidados.php');
                 require base_path('routes/ml/web/dadosbancarios.php');
                 require base_path('routes/ml/web/dadoscontratuais.php');
+                require base_path('routes/ml/web/despesas.php');
                 require base_path('routes/ml/web/diagnosticossecundarios.php');
                 require base_path('routes/ml/web/documentos.php');
                 require base_path('routes/ml/web/emails.php');
@@ -176,6 +177,7 @@ class RouteServiceProvider extends ServiceProvider
                 require base_path('routes/ml/web/salas.php');
                 require base_path('routes/ml/web/servicos.php');
                 require base_path('routes/ml/web/setores.php');
+                require base_path('routes/ml/web/tabelas.php');
                 require base_path('routes/ml/web/telefones.php');
                 require base_path('routes/ml/web/tipopessoas.php');
                 require base_path('routes/ml/web/tipoprodutos.php');
