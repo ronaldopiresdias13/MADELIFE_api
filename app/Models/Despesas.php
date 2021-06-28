@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Unidademedida extends Model
+class Despesas extends Model
 {
-    protected $table = 'unidademedidas';
+    use HasFactory;
     public $timestamps = false;
 }
