@@ -15,6 +15,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::delete('{orc}', [OrcsController::class, 'destroy']);
             Route::post('{orc}/criarcontrato', [OrcsController::class, 'criarcontrato']);
             Route::delete('apagarOrcservico/{orcServico}', [OrcsController::class, 'apagarOrcservico']);
+            Route::delete('apagarOrcproduto/{orcProduto}', [OrcsController::class, 'apagarOrcproduto']);
         });
     });
 });

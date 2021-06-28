@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Orcs;
 use App\Http\Controllers\Controller;
 use App\Models\Orc;
 use App\Models\Orcamento;
+use App\Models\OrcProduto;
 use App\Models\OrcServico;
 use App\Services\ContratoService;
 use App\Services\OrcService;
@@ -242,12 +243,23 @@ class OrcsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\OrcamentoServico  $orcamentoServico
+     * @param  \App\OrcServico  $orcServico
      * @return \Illuminate\Http\Response
      */
     public function apagarOrcservico(OrcServico $orcServico)
     {
         $orcServico->ativo = false;
         $orcServico->save();
+    }
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\OrcProduto  $orcProduto
+     * @return \Illuminate\Http\Response
+     */
+    public function apagarOrcproduto(OrcProduto $orcProduto)
+    {
+        $orcProduto->ativo = false;
+        $orcProduto->save();
     }
 }
