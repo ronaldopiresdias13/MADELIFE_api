@@ -26,7 +26,7 @@ class TabelasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**

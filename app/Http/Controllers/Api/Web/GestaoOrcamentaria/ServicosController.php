@@ -61,7 +61,8 @@ class ServicosController extends Controller
                     'codigo'     => $request->codigo,
                     'empresa_id' => $empresa_id,
                     'descricao'  => $request->descricao,
-                    'codtuss'    => $request->codtuss
+                    'codtuss'    => $request->codtuss,
+                    'codigoTabela' => $request->codigoTabela
                 ],
                 [
                     'valor'     => $request->valor,
@@ -130,6 +131,7 @@ class ServicosController extends Controller
             $servico->valor      = $request->valor;
             $servico->empresa_id = $empresa_id;
             $servico->codtuss    = $request->codtuss;
+            $servico->codigoTabela = $request->codigoTabela;
             $servico->save();
 
             foreach ($servico->servicoFormacao as $key => $servicoFormacao) {
