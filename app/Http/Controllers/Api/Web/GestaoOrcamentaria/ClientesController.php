@@ -63,6 +63,7 @@ class ClientesController extends Controller
                     'empresa_id' => $empresa_id,
                 ],
                 [
+                    'versaoTiss'       => $request['versaoTiss'],
                     'tipo'       => $request['tipo'],
                 ]
             );
@@ -165,6 +166,7 @@ class ClientesController extends Controller
         DB::transaction(function () use ($request, $cliente) {
             $cliente->update([
                 'tipo' => $request['tipo'],
+                'versaoTiss'       => $request['versaoTiss'],
                 'empresa_id' => $request['empresa_id'],
             ]);
             $pessoa = Pessoa::find($request['pessoa']['id']);
