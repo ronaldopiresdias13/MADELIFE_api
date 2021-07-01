@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
 
 class Produto extends Model
@@ -35,5 +36,15 @@ class Produto extends Model
     public function empresa()
     {
         return $this->belongsTo(Empresa::class);
+    }
+
+    /**
+     * Get the unidademedida that owns the Produto
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function unidademedida(): BelongsTo
+    {
+        return $this->belongsTo(Unidademedida::class);
     }
 }

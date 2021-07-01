@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Empresa;
 use XMLWriter;
 
 class TissService
@@ -12,82 +13,161 @@ class TissService
 
     protected $sequencialItem = 1;
 
-    public function __construct($versao, $request)
+    // protected $return = null;
+
+    public function __construct($medicao, $empresa)
     {
-
-
-        $this->dados['tipoTransacao']              = $request->tipoTransacao;
-        $this->dados['sequencialTransacao']        = 1;#Pegar sequencia salva no cadastro da empresa
-        $this->dados['dataRegistroTransacao']      = $request->dataRegistroTransacao;#Verificar se essa data deve ser a data de conclusão do lote ou a data da geração do xml
-        $this->dados['horaRegistroTransacao']      = $request->horaRegistroTransacao;#Verificar se essa hora deve ser a hora de conclusão do lote ou a hora da geração do xml
-        $this->dados['CNPJ']                       = '12316361000120';#Pegar do usuário logado ou da medição
-        $this->dados['registroANS']                = '41.858';#Pegar do cadastro do Cliente/Convênio
-        $this->dados['Padrao']                     = $versao;
+        $this->dados['tipoTransacao']              = 'ENVIO_LOTE_GUIAS';
+        $this->dados['sequencialTransacao']        = $empresa->tiss_sequencialTransacao;
+        $this->dados['dataRegistroTransacao']      = substr($medicao->created_at, 0, 10);
+        $this->dados['horaRegistroTransacao']      = substr($medicao->created_at, 11, 8);
+        $this->dados['CNPJ']                       = $empresa->cnpj;
+        $this->dados['registroANS']                = $empresa->registroANS;
+        $this->dados['versaoPadrao']               = str_replace('%_%', '.', $medicao->cliente->versaoTiss);
         $this->dados['numeroLote']                 = '0';
-        $this->dados['numeroGuiaPrestador']        = '202104';
-        $this->dados['numeroCarteira']             = '8355.51.02398.01-8';#Pegar essa informação do cadastro do paciente
-        $this->dados['atendimentoRN']              = 'N';#Recem Nascido, Pegar do cadastro do paciente
-        $this->dados['nomeBeneficiario']           = 'ANTONIO GOMES DOS SANTOS';#Pegar do cadastro do paciente
-        $this->dados['cnpjContratado']             = '12316361000120';#Pegar do cadastro da empresa
-        $this->dados['nomeContratado']             = 'HOME CARE ENFERLIFE HOSPITALAR LTDA';#Pegar do cadastro da empresa
-        $this->dados['nomeProfissional']           = 'EDILSON MAGAVER BRAZ TEIXEIRA';#Pegar do cadastro do profissional, passar id do profissional solicitante
-        $this->dados['conselhoProfissional']       = '02';#Pegar do cadastro do profissional, passar id do profissional solicitante
-        $this->dados['numeroConselhoProfissional'] = '000250197';#Pegar do cadastro do profissional, passar id do profissional solicitante
-        $this->dados['UF']                         = '35';#Pegar do cadastro do profissional, passar id do profissional solicitante
-        $this->dados['CBOS']                       = '223505';#Pegar do cadastro do profissional, passar id do profissional solicitante
-        $this->dados['CNES']                       = '9652191';#Pegar do cadastro da empresa
-        $this->dados['dataSolicitacao']            = '2021-05-10';#Pegar data da criação da medição // acho que a data dever ser antes da data de execução
-        $this->dados['caraterAtendimento']         = '1';#Eletiva ou Urgencia/Emergencia#Pegar do orçamento
-        $this->dados['indicacaoClinica']           = 'EQUIPE MULTIDISCIPLINAR';#Digitado a mão#Pegar do Orçamento
-        $this->dados['tipoAtendimento']            = '06';#Lista no teams#Pegar do Orçamento
-        $this->dados['indicacaoAcidente']          = '9';#Lista no Teams#Pegar do Orçamento
+        $this->dados['numeroGuiaPrestador']        = $medicao->numeroGuiaPrestador;
+        $this->dados['numeroCarteira']             = $medicao->ordemservico->orcamento->homecare->paciente->numeroCarteira;
+        $this->dados['atendimentoRN']              = $medicao->ordemservico->orcamento->homecare->paciente->atendimentoRN ? 'S' : 'N';
+        $this->dados['nomeBeneficiario']           = $medicao->ordemservico->orcamento->homecare->paciente->pessoa->nome;
+        $this->dados['cnpjContratado']             = $empresa->cnpj;
+        $this->dados['nomeContratado']             = $empresa->razao;
+        $this->dados['nomeProfissional']           = $medicao->profissional->pessoa->nome;
+        $this->dados['conselhoProfissional']       = $medicao->profissional->conselhoProfissional;
+        $this->dados['numeroConselhoProfissional'] = $medicao->profissional->numeroConselhoProfissional;
+        $this->dados['UF']                         = $medicao->profissional->uf;
+        $this->dados['CBOS']                       = $medicao->profissional->cbos;
+        $this->dados['CNES']                       = $empresa->CNES;
+        $this->dados['dataSolicitacao']            = $medicao->dataSolicitacao;
+        $this->dados['caraterAtendimento']         = $medicao->ordemservico->orcamento->caraterAtendimento;
+        $this->dados['indicacaoClinica']           = $medicao->ordemservico->orcamento->indicacaoClinica;
+        $this->dados['tipoAtendimento']            = $medicao->ordemservico->orcamento->tipoAtendimento;
+        $this->dados['indicacaoAcidente']          = $medicao->ordemservico->orcamento->indicacaoAcidente;
 
+        $this->dados['valorProcedimentos']   = 0;
+        $this->dados['valorDiarias']         = 0;
+        $this->dados['valorTaxasAlugueis']   = 0;
+        $this->dados['valorMateriais']       = 0;
+        $this->dados['valorMedicamentos']    = 0;
+        $this->dados['valorOPME']            = 0;
+        $this->dados['valorGasesMedicinais'] = 0;
 
-        $this->dados['procedimentosExecutados']    = [
-            [
-                'dataExecucao'          => '2021-05-10',
-                'horaInicial'           => '10:00:00',
-                'horaFinal'             => '11:00:00',
-                'codigoTabela'          => '22',#Pegar do cadastro de serviço
-                'codigoProcedimento'    => '50000241',#Pegar do cadastro de serviço
-                'descricaoProcedimento' => 'CONSULTA DOMICILIAR EM FISIOTERAPIA',#Pegar do cadastro de serviço
-                'quantidadeExecutada'   => '8',#Pegar da medição
-                'reducaoAcrescimo'      => '1.00',#Pegar da medição
-                'valorUnitario'         => '70.00',#Pegar da medição
-                'valorTotal'            => '560.00'#Pegar da medição
-            ]
-        ];#Pegar dados da escala
+        $this->dados['procedimentosExecutados'] = [];
+        foreach ($medicao->medicao_servicos as $key => $servicos) {
+            $array = [
+                'dataExecucao'          => $servicos->dataExecucao,
+                'horaInicial'           => $servicos->horaInicial,
+                'horaFinal'             => $servicos->horaFinal,
+                'codigoTabela'          => $servicos->servico->codigoTabela,
+                'codigoProcedimento'    => $servicos->servico->codtuss,
+                'descricaoProcedimento' => $servicos->servico->descricao,
+                'quantidadeExecutada'   => $servicos->atendido,
+                'reducaoAcrescimo'      => $servicos->reducaoAcrescimo,
+                'valorUnitario'         => $servicos->valor,
+                'valorTotal'            => $servicos->subtotal,
+            ];
+            array_push($this->dados['procedimentosExecutados'], $array);
+            $this->dados['valorProcedimentos'] += $servicos->subtotal;
+        }
 
-        $this->dados['outrasDespesas']    = [
-            [
-                'codigoDespesa'         => '01',#Pegar do cadastro de produtos
-                'dataExecucao'          => '2021-05-10',
-                'horaInicial'           => '10:00:00',
-                'horaFinal'             => '11:00:00',
-                'codigoTabela'          => '22',#Pegar do cadastro de produtos
-                'codigoProcedimento'    => '90002440',#Pegar do cadastro de produtos // Creio que é o TUSS
-                'quantidadeExecutada'   => '31.00',#Pegar da medição
-                'unidadeMedida'         => '036',#Pegar do cadastro de produto
-                'reducaoAcrescimo'      => '1.00',#Pegar da medição
-                'valorUnitario'         => '0.83',#Pegar da medição
-                'valorTotal'            => '25.73',#Pegar da medição
-                'descricaoProcedimento' => 'SORO FISIOLOGICO 10ML'#Pegar do cadastro de serviço
-            ]
-        ];#Pegar dados da medição-produtos
+        $this->dados['outrasDespesas'] = [];
+        foreach ($medicao->medicao_produtos as $key => $produtos) {
+            $array = [
+                'codigoDespesa'         => $produtos->produto->codigoDespesa,
+                'dataExecucao'          => $produtos->dataExecucao,
+                'horaInicial'           => $produtos->horaInicial,
+                'horaFinal'             => $produtos->horaFinal,
+                'codigoTabela'          => $produtos->produto->codigoTabela,
+                'codigoProcedimento'    => $produtos->produto->codtuss,
+                'quantidadeExecutada'   => $produtos->atendido,
+                'unidadeMedida'         => $produtos->produto->unidademedida->codigo,
+                'reducaoAcrescimo'      => $produtos->reducaoAcrescimo,
+                'valorUnitario'         => $produtos->valor,
+                'valorTotal'            => $produtos->subtotal,
+                'descricaoProcedimento' => $produtos->produto->descricao
+            ];#Pegar dados da medição-produtos
+            array_push($this->dados['outrasDespesas'], $array);
+            switch ($produtos->produto->codigoDespesa) {
+                case '01':
+                    $this->dados['valorGasesMedicinais'] += $produtos->subtotal;
+                    break;
+                case '02':
+                    $this->dados['valorMedicamentos'] += $produtos->subtotal;
+                    break;
+                case '03':
+                    $this->dados['valorMateriais'] += $produtos->subtotal;
+                    break;
+                case '05':
+                    $this->dados['valorDiarias'] += $produtos->subtotal;
+                    break;
+                case '07':
+                    $this->dados['valorTaxasAlugueis'] += $produtos->subtotal;
+                    break;
+                case '08':
+                    $this->dados['valorOPME'] += $produtos->subtotal;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        $this->dados['valorTotalGeral'] =
+        $this->dados['valorProcedimentos']   +
+        $this->dados['valorDiarias']         +
+        $this->dados['valorTaxasAlugueis']   +
+        $this->dados['valorMateriais']       +
+        $this->dados['valorMedicamentos']    +
+        $this->dados['valorOPME']            +
+        $this->dados['valorGasesMedicinais'];
+
+        // $chaves = array_keys($this->dados);
+
+        // $texto = '';
+
+        // foreach ($chaves as $key => $chave) {
+        //     if (!is_array($this->dados[$chave])) {
+        //         $texto .= $this->dados[$chave];
+        //     } else {
+        //         $chaves2 = array_keys($this->dados[$chave]);
+        //         foreach ($chaves2 as $key => $chave2) {
+        //             if (!is_array($this->dados[$chave][$chave2])) {
+        //                 $texto .= $this->dados[$chave][$chave2];
+        //             } else {
+        //                 $chaves3 = array_keys($this->dados[$chave][$chave2]);
+        //                 foreach ($chaves3 as $key => $chave3) {
+        //                     if (!is_array($this->dados[$chave][$chave2][$chave3])) {
+        //                         $texto .= $this->dados[$chave][$chave2][$chave3];
+        //                     } else {
+        //                         $chaves4 = array_keys($this->dados[$chave][$chave2][$chave3]);
+        //                         foreach ($chaves4 as $key => $chave4) {
+        //                             if (!is_array($this->dados[$chave][$chave2][$chave3][$chave4])) {
+        //                                 $texto .= $this->dados[$chave][$chave2][$chave3][$chave4];
+        //                             } else {
+        //                                 # code...
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+
+        // dd($texto);
+
+        // dd(gettype($this->dados['outrasDespesas']));
     }
 
     function iniciarArquivo()
     {
         // echo $oXMLWriter->outputMemory ();
-
-
         $this->xml = new XMLWriter();
         $this->xml->openMemory();
         // $this->xml->openUri('file:///home/lucas/Área de Trabalho/zzzz/Laravel/Exemplo TISS TUSS/XMLs/output.xml');
         $this->xml->startDocument('1.0', 'utf-8');
     }
 
-    function finalizarArquivo() {
+    function finalizarArquivo()
+    {
         $this->xml->endDocument();
     }
 
@@ -126,7 +206,7 @@ class TissService
                     $this->xml->endElement();#ans:registroANS
                 $this->xml->endElement();#ans:destino
                 $this->xml->startElement('ans:versaoPadrao');
-                    $this->xml->text($this->dados['Padrao']);
+                    $this->xml->text($this->dados['versaoPadrao']);
                 $this->xml->endElement();#ans:versaoPadrao
             $this->xml->endElement();#ans:cabecalho
             $this->xml->startElement('ans:prestadorParaOperadora');
@@ -331,6 +411,7 @@ class TissService
         $this->finalizarArquivo();
 
         return base64_encode($this->xml->outputMemory());
+        // return $this->return;
     }
 
     public function gerar_xml_3_05_00()
@@ -369,7 +450,7 @@ class TissService
                     $this->xml->endElement();#ans:registroANS
                 $this->xml->endElement();#ans:destino
                 $this->xml->startElement('ans:Padrao');
-                    $this->xml->text($this->dados['Padrao']);
+                    $this->xml->text($this->dados['versaoPadrao']);
                 $this->xml->endElement();#ans:Padrao
             $this->xml->endElement();#ans:cabecalho
 
@@ -554,30 +635,30 @@ class TissService
 
 
                             $this->xml->startElement('ans:valorTotal');
-            //                     $this->xml->startElement('ans:valorProcedimentos');
-            //                         $this->xml->text('560');
-            //                     $this->xml->endElement();#ans:valorProcedimentos
-            //                     $this->xml->startElement('ans:valorDiarias');
-            //                         $this->xml->text('0.00');
-            //                     $this->xml->endElement();#ans:valorDiarias
-            //                     $this->xml->startElement('ans:valorTaxasAlugueis');
-            //                         $this->xml->text('0');
-            //                     $this->xml->endElement();#ans:valorTaxasAlugueis
-            //                     $this->xml->startElement('ans:valorMateriais');
-            //                         $this->xml->text('0');
-            //                     $this->xml->endElement();#ans:valorMateriais
-            //                     $this->xml->startElement('ans:valorMedicamentos');
-            //                         $this->xml->text('0');
-            //                     $this->xml->endElement();#ans:valorMedicamentos
-            //                     $this->xml->startElement('ans:valorOPME');
-            //                         $this->xml->text('0');
-            //                     $this->xml->endElement();#ans:valorOPME
-            //                     $this->xml->startElement('ans:valorGasesMedicinais');
-            //                         $this->xml->text('0');
-            //                     $this->xml->endElement();#ans:valorGasesMedicinais
-            //                     $this->xml->startElement('ans:valorTotalGeral');
-            //                         $this->xml->text('560');
-            //                     $this->xml->endElement();#ans:valorTotalGeral
+                                $this->xml->startElement('ans:valorProcedimentos');
+                                    $this->xml->text($this->dados['valorProcedimentos']);
+                                $this->xml->endElement();#ans:valorProcedimentos
+                                $this->xml->startElement('ans:valorDiarias');
+                                    $this->xml->text($this->dados['valorDiarias']);
+                                $this->xml->endElement();#ans:valorDiarias
+                                $this->xml->startElement('ans:valorTaxasAlugueis');
+                                    $this->xml->text($this->dados['valorTaxasAlugueis']);
+                                $this->xml->endElement();#ans:valorTaxasAlugueis
+                                $this->xml->startElement('ans:valorMateriais');
+                                    $this->xml->text($this->dados['valorMateriais']);
+                                $this->xml->endElement();#ans:valorMateriais
+                                $this->xml->startElement('ans:valorMedicamentos');
+                                    $this->xml->text($this->dados['valorMedicamentos']);
+                                $this->xml->endElement();#ans:valorMedicamentos
+                                $this->xml->startElement('ans:valorOPME');
+                                    $this->xml->text($this->dados['valorOPME']);
+                                $this->xml->endElement();#ans:valorOPME
+                                $this->xml->startElement('ans:valorGasesMedicinais');
+                                    $this->xml->text($this->dados['valorGasesMedicinais']);
+                                $this->xml->endElement();#ans:valorGasesMedicinais
+                                $this->xml->startElement('ans:valorTotalGeral');
+                                    $this->xml->text($this->dados['valorTotalGeral']);
+                                $this->xml->endElement();#ans:valorTotalGeral
                             $this->xml->endElement();#ans:valorTotal
 
 
@@ -595,5 +676,7 @@ class TissService
 
         // return null;
         return base64_encode($this->xml->outputMemory());
+        // return $this->return;
+        // return $this->dados;
     }
 }
