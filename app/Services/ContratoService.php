@@ -151,8 +151,9 @@ class ContratoService
                     "subtotalcusto"        => $item['subtotalcusto'],
                     "valorresultadomensal" => $item['valorresultadomensal'],
                     "valorcustomensal"     => $item['valorcustomensal'],
-                    "locacao"              => $item['locacao'],
+                    "locacao"              => 0,
                     "descricao"            => $item['descricao'],
+                    
                 ])->save();
             }
 
