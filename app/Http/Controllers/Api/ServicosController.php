@@ -94,6 +94,7 @@ class ServicosController extends Controller
         $servico->codigo     = $request->codigo;
         $servico->valor      = $request->valor;
         $servico->empresa_id = $request->empresa_id;
+        $servico->codigoTabela = $request->codigoTabela;
         $servico->save();
     }
 
