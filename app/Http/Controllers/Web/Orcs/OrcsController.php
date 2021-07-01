@@ -259,7 +259,7 @@ class OrcsController extends Controller
      */
     public function apagarOrcproduto(OrcProduto $orcProduto)
     {
-        $orcProduto->ativo = false;
-        $orcProduto->save();
+        $orcProduto->delete();
+        // $orcProduto->save();
     }
 }
