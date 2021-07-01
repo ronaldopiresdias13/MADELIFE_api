@@ -182,9 +182,10 @@ class OrcamentoProdutosController extends Controller
      * @param  \App\OrcamentoProduto  $orcamentoProduto
      * @return \Illuminate\Http\Response
      */
-    public function destroy(OrcamentoProduto $orcamentoproduto)
+    public function destroy(OrcamentoProduto $orcamentoProduto)
     {
-        $orcamentoproduto->ativo = false;
-        $orcamentoproduto->save();
+        return $orcamentoProduto;
+        $orcamentoProduto->ativo = false;
+        $orcamentoProduto->save();
     }
 }
