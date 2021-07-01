@@ -327,7 +327,7 @@ class DashboardController extends Controller
     public function relatorioMedicamentos(Request $request)
     {
         $user = $request->user();
-        $empresa_id = $user->pessoa->profissional->empresa->id;
+        $empresa_id = $user->pessoa->profissional ? $user->pessoa->profissional->empresa->id : $user->pessoa->cliente->empresa->id;
 
         // $request->data_ini = '2020-10-01';
         // $request->data_fim = '2020-10-02';
