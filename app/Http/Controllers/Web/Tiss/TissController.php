@@ -22,7 +22,7 @@ class TissController extends Controller
 
         $empresa = Empresa::find($medicao->empresa_id);
 
-        // return $medicao;
+        // return str_replace('_', '.', $medicao->cliente->versaoTiss);
 
         if ($medicao->cliente->versaoTiss) {
             $func = 'gerar_xml_' . $medicao->cliente->versaoTiss;
