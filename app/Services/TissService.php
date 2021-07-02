@@ -128,7 +128,7 @@ class TissService
         // echo $oXMLWriter->outputMemory ();
         $this->xml = new XMLWriter();
         $this->xml->openMemory();
-        $this->xml->openUri('file:///home/lucas/Área de Trabalho/zzzz/Laravel/Exemplo TISS TUSS/XMLs/output.xml');
+        // $this->xml->openUri('file:///home/lucas/Área de Trabalho/zzzz/Laravel/Exemplo TISS TUSS/XMLs/output.xml');
         $this->xml->startDocument('1.0', 'utf-8');
     }
 
