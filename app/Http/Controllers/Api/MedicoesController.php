@@ -121,6 +121,7 @@ class MedicoesController extends Controller
             'data1' => $request['data1'],
             'data2' => $request['data2'],
             'dataSolicitacao' => $request['dataSolicitacao'],
+            'numeroGuiaPrestador' => $request['numeroGuiaPrestador'],
             'valor' => $request['valor'],
             'adicional' => $request['adicional'],
             'desconto' => $request['desconto'],
