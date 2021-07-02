@@ -30,7 +30,8 @@ class TissController extends Controller
             $resposta = $tissService->$func();
 
             if ($resposta) {
-                return $resposta;
+                // return $resposta;
+                return response()->json(['tiss' => $resposta], 200)->header('Content-Type', 'application/xml');
             } else {
                 throw ValidationException::withMessages([
                     'tiss' => ['Erro ao gerar o TISS. Verifique se todos os dados estão corretos'],
