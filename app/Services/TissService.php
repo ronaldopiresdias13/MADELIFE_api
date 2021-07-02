@@ -119,13 +119,10 @@ class TissService
         $this->dados['valorMedicamentos']    +
         $this->dados['valorOPME']            +
         $this->dados['valorGasesMedicinais'];
-
-        $this->dados['hash'] = '';
     }
 
     function iniciarArquivo()
     {
-        // echo $oXMLWriter->outputMemory ();
         $this->xml = new XMLWriter();
         $this->xml->openMemory();
         // $this->xml->openUri('file:///home/lucas/Área de Trabalho/zzzz/Laravel/Exemplo TISS TUSS/XMLs/output.xml');
@@ -162,7 +159,7 @@ class TissService
                         $this->xml->text($this->dados['horaRegistroTransacao']);
                         $this->texto .= $this->dados['horaRegistroTransacao'];
                     $this->xml->endElement();#ans:horaRegistroTransacao
-                $this->xml->endElement();#ans:identificacaoTransacao>
+                $this->xml->endElement();#ans:identificacaoTransacao
                 $this->xml->startElement('ans:origem');
                     $this->xml->startElement('ans:identificacaoPrestador');
                         $this->xml->startElement('ans:CNPJ');
@@ -442,9 +439,7 @@ class TissService
         $this->xml->endElement();#ans:mensagemTISS>
         $this->finalizarArquivo();
 
-        // return $this->texto;
         return base64_encode($this->xml->outputMemory());
-        // return $this->return;
     }
 
     public function gerar_xml_3_05_00()
@@ -767,9 +762,6 @@ class TissService
         $this->xml->endElement();#ans:mensagemTISS
         $this->finalizarArquivo();
 
-        // return null;
         return base64_encode($this->xml->outputMemory());
-        // return $this->return;
-        // return $this->dados;
     }
 }
