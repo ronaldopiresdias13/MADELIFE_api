@@ -195,7 +195,8 @@ class OrcamentosController extends Controller
                             'subtotalcusto'        => $produto['subtotalcusto'],
                             'descricao'            => $servico['descricao'],
                             'valorresultadomensal' => $produto['valorresultadomensal'],
-                            'valorcustomensal'     => $produto['valorcustomensal']
+                            'valorcustomensal'     => $produto['valorcustomensal'],
+                            'locacao'              => $produto['locacao'],
                         ]
                     );
                 }
@@ -502,7 +503,8 @@ class OrcamentosController extends Controller
                             'subtotal'             => $produto['subtotal'],
                             'subtotalcusto'        => $produto['subtotalcusto'],
                             'valorresultadomensal' => $produto['valorresultadomensal'],
-                            'valorcustomensal'     => $produto['valorcustomensal']
+                            'valorcustomensal'     => array_key_exists('locacao', $produto) ? $produto['locacao'] : false,
+                            'locacao'              => $produto['locacao']
                         ]
                     );
                 }

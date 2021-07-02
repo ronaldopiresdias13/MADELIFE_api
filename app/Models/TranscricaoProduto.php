@@ -24,6 +24,10 @@ class TranscricaoProduto extends Model
 
     public function ocorrencias()
     {
-        return $this->hasMany(Ocorrencia::class,'transcricao_produto_id','id');
+        return $this->hasMany(Ocorrencia::class, 'transcricao_produto_id', 'id');
+    }
+    public function transcricao()
+    {
+        return $this->belongsTo(Transcricao::class)->where('ativo', true);
     }
 }

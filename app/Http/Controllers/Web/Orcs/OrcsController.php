@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Web\Orcs;
 use App\Http\Controllers\Controller;
 use App\Models\Orc;
 use App\Models\Orcamento;
+use App\Models\OrcProduto;
+use App\Models\OrcServico;
 use App\Services\ContratoService;
 use App\Services\OrcService;
 use Illuminate\Database\Eloquent\Builder;
@@ -157,17 +159,21 @@ class OrcsController extends Controller
         $request['cliente_id']        = $orcamento->cliente_id;
         $request['numero']            = $orcamento->numero;
         $request['tipo']              = $orcamento->tipo;
+        $request['indicacaoClinica']  = $orcamento->indicacaoClinica;
         $request['data']              = $orcamento->data;
         $request['quantidade']        = $orcamento->quantidade;
         $request['unidade']           = $orcamento->unidade;
         $request['cidade_id']         = $orcamento->cidade_id;
         $request['processo']          = $orcamento->processo;
+        $request['caraterAtendimento'] = $orcamento->caraterAtendimento;
         $request['situacao']          = $orcamento->situacao;
         $request['descricao']         = $orcamento->descricao;
         $request['valortotalproduto'] = $orcamento->valortotalproduto;
         $request['valortotalcusto']   = $orcamento->valortotalcusto;
         $request['valortotalservico'] = $orcamento->valortotalservico;
         $request['observacao']        = $orcamento->observacao;
+        $request['caraterAtendimento']   = $orcamento->caraterAtendimento;
+        $request['indicacaoClinica']  = $orcamento->indicacaoClinica;
         $request['status']            = $orcamento->status;
 
         // $request->ordemservico = $orcamento->ordemservico;
@@ -234,11 +240,26 @@ class OrcsController extends Controller
         }
         return response()->json(['codigo' => $codigo]);
     }
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\OrcServico  $orcServico
+     * @return \Illuminate\Http\Response
+     */
+    public function apagarOrcservico(OrcServico $orcServico)
+    {
+        $orcServico->ativo = false;
+        $orcServico->save();
+    }
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\OrcProduto  $orcProduto
+     * @return \Illuminate\Http\Response
+     */
+    public function apagarOrcproduto(OrcProduto $orcProduto)
+    {
+        $orcProduto->delete();
+        // $orcProduto->save();
+    }
 }
-
-
-// { label: "Home Care", value: "Home Care" },
-//     { label: "Remoção", value: "Remocao" },
-//     { label: "Evento", value: "Evento" },
-//     { label: "APH (Atendimento Pré Hospitalar)", value: "APH" },
-//     { label: "Tomada de Preço", value: "Tomada de Preço" }

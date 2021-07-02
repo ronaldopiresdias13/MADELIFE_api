@@ -135,6 +135,8 @@ class ProdutosController extends Controller
             $produto->valorfinal        = $request->valorfinal;
             $produto->tipo              = $request->tipo;
             $produto->codtuss           = $request->codtuss;
+            $produto->codigoTabela      = $request->codigoTabela;
+            $produto->codigoDespesa      = $request->codigoDespesa;
             $produto->categoria         = $request->categoria ? $request->categoria : null;
             $produto->save();
         });
@@ -223,6 +225,8 @@ class ProdutosController extends Controller
         $produto->valorfinal        = $request->valorfinal;
         $produto->tipo              = $request->tipo;
         $produto->codtuss           = $request->codtuss;
+        $produto->codigoTabela      = $request->codigoTabela;
+        $produto->codigoDespesa     = $request->codigoDespesa;
         $produto->categoria         = $request->categoria ? $request->categoria : null;
         $produto->save();
     }

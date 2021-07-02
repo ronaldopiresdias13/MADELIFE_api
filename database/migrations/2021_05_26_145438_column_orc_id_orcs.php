@@ -27,6 +27,7 @@ class ColumnOrcIdOrcs extends Migration
     public function down()
     {
         Schema::table('orcs', function (Blueprint $table) {
+            $table->dropForeign(['orc_id']);
             $table->dropColumn('orc_id');
         });
     }

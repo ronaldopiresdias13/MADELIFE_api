@@ -77,10 +77,11 @@ class EscalasController extends Controller
      */
     public function listEscalasMes(Request $request)
     {
+        // return $request;
         $user = $request->user();
         $prestador = $user->pessoa->prestador;
-        $hoje = getdate();
-        $dias = cal_days_in_month(CAL_GREGORIAN, $hoje['mon'], $hoje['year']); // 31
+        // $hoje = getdate();
+        // $dias = cal_days_in_month(CAL_GREGORIAN, $hoje['mon'], $hoje['year']); // 31
 
         // $escalas = Escala::with('ordemservico.orcamento.homecare.paciente.pessoa')
         $escalas = Escala::with([
@@ -103,16 +104,19 @@ class EscalasController extends Controller
         ])
             ->where('ativo', true)
             ->where('prestador_id', $prestador->id)
-            ->where(
-                'datasaida',
-                '>=',
-                $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-01'
-            )
-            ->where(
-                'dataentrada',
-                '<=',
-                $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $dias
-            )
+            ->whereBetween('dataentrada', [$request->data_ini, $request->data_fim])
+            // ->where(
+            //     'datasaida',
+            //     '>=',
+            //     $request->data_fim
+            //     // $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-01'
+            // )
+            // ->where(
+            //     'dataentrada',
+            //     '<=',
+            //     $request->data_ini
+            //     // $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $dias
+            // )
             ->orderBy('dataentrada')
             ->get([
                 'id',

@@ -53,7 +53,7 @@ class PagamentopessoasController extends Controller
                 $array = [
                     'profissional' => $pagamento->pessoa_id,
                     'nome'         => $pagamento->pessoa->nome,
-                    'tipos'         => $pagamento->pessoa->tipopessoas()->get()->pluck('tipo'),
+                    'tipos'        => $pagamento->pessoa->tipopessoas()->get()->pluck('tipo'),
                     'pagamentos'   => [$pagamento]
                 ];
                 array_push($result, $array);

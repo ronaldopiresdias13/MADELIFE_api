@@ -115,6 +115,7 @@ class RouteServiceProvider extends ServiceProvider
                 require base_path('routes/ml/web/cuidados.php');
                 require base_path('routes/ml/web/dadosbancarios.php');
                 require base_path('routes/ml/web/dadoscontratuais.php');
+                require base_path('routes/ml/web/despesas.php');
                 require base_path('routes/ml/web/diagnosticossecundarios.php');
                 require base_path('routes/ml/web/documentos.php');
                 require base_path('routes/ml/web/emails.php');
@@ -128,6 +129,7 @@ class RouteServiceProvider extends ServiceProvider
                 require base_path('routes/ml/web/fornecedores.php');
                 require base_path('routes/ml/web/grupocuidados.php');
                 require base_path('routes/ml/web/historicoorcamentos.php');
+                require base_path('routes/ml/web/HistoricosRoute.php');
                 require base_path('routes/ml/web/homecares.php');
                 require base_path('routes/ml/web/horariostrabalho.php');
                 require base_path('routes/ml/web/impostos.php');
@@ -175,12 +177,15 @@ class RouteServiceProvider extends ServiceProvider
                 require base_path('routes/ml/web/salas.php');
                 require base_path('routes/ml/web/servicos.php');
                 require base_path('routes/ml/web/setores.php');
+                require base_path('routes/ml/web/tabelas.php');
                 require base_path('routes/ml/web/telefones.php');
                 require base_path('routes/ml/web/tipopessoas.php');
                 require base_path('routes/ml/web/tipoprodutos.php');
+                require base_path('routes/ml/web/TissRoute.php');
                 require base_path('routes/ml/web/transcricaoprodutos.php');
                 require base_path('routes/ml/web/transcricoes.php');
                 require base_path('routes/ml/web/unidademedidas.php');
+                require base_path('routes/ml/web/UnidadesfederativasRoute.php');
                 require base_path('routes/ml/web/userAcessos.php');
                 require base_path('routes/ml/web/users.php');
                 require base_path('routes/ml/web/vendas.php');

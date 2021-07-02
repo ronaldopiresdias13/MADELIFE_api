@@ -51,10 +51,12 @@ class ContratoService
                 "cliente_id"        => $this->request->cliente_id,
                 "numero"            => $this->request->numero,
                 "tipo"              => $this->request->tipo,
+                "caraterAtendimento"   => $this->request->caraterAtendimento,
+                "indicacaoClinica"   => $this->request->indicacaoClinica,
                 "data"              => $this->request->data,
                 "quantidade"        => $this->request->quantidade,
                 "unidade"           => $this->request->unidade,
-                "cidade_id"         => $this->request->cidade_id,
+                "cidade_id"         => $this->request->cidade['id'],
                 "processo"          => $this->request->processo,
                 "situacao"          => $this->request->situacao,
                 "descricao"         => $this->request->descricao,
@@ -149,8 +151,9 @@ class ContratoService
                     "subtotalcusto"        => $item['subtotalcusto'],
                     "valorresultadomensal" => $item['valorresultadomensal'],
                     "valorcustomensal"     => $item['valorcustomensal'],
-                    "locacao"              => $item['locacao'],
+                    "locacao"              => 0,
                     "descricao"            => $item['descricao'],
+                    
                 ])->save();
             }
 
@@ -216,10 +219,12 @@ class ContratoService
                 "cliente_id"        => $this->request->cliente_id,
                 "numero"            => $this->request->numero,
                 "tipo"              => $this->request->tipo,
+                "caraterAtendimento" => $this->require->caraterAtendimento,
+                "indicacaoClinica"  => $this->request->indicacaoClinica,
                 "data"              => $this->request->data,
                 "quantidade"        => $this->request->quantidade,
                 "unidade"           => $this->request->unidade,
-                "cidade_id"         => $this->request->cidade_id,
+                "cidade_id"         => $this->request->cidade['id'],
                 "processo"          => $this->request->processo,
                 "situacao"          => $this->request->situacao,
                 "descricao"         => $this->request->descricao,
@@ -339,7 +344,7 @@ class ContratoService
                         "subtotalcusto"        => $item['subtotalcusto'],
                         "valorresultadomensal" => $item['valorresultadomensal'],
                         "valorcustomensal"     => $item['valorcustomensal'],
-                        "locacao"              => array_key_exists ('locacao' , $item) ? $item['locacao'] : false,
+                        "locacao"              => array_key_exists('locacao', $item) ? $item['locacao'] : false,
                         "descricao"            => $item['descricao'],
                     ],
                     [

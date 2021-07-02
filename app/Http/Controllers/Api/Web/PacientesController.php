@@ -31,19 +31,20 @@ class PacientesController extends Controller
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
 
-        $pacientes = Paciente::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade', 'pessoa.pacientes.internacoes',
-        'responsavel.pessoa:id,nome', 'pessoa.user.acessos']);
+        $pacientes = Paciente::with([
+            'pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade', 'pessoa.pacientes.internacoes',
+            'responsavel.pessoa:id,nome', 'pessoa.user.acessos'
+        ]);
 
-        if($request->data_final){
-            $pacientes = $pacientes->whereHas('internacoes', function (Builder $query) use ($request){
-                $query->where('data_final',null, $request->data_final);
+        if ($request->data_final) {
+            $pacientes = $pacientes->whereHas('internacoes', function (Builder $query) use ($request) {
+                $query->where('data_final', null, $request->data_final);
             });
         };
-            $pacientes->where('empresa_id', $empresa_id);
-            $pacientes->where('ativo', true);
-            $pacientes = $pacientes->get();
-            return $pacientes;
-
+        $pacientes->where('empresa_id', $empresa_id);
+        $pacientes->where('ativo', true);
+        $pacientes = $pacientes->get();
+        return $pacientes;
     }
     /**
      * Display a listing of the resource.
@@ -102,84 +103,98 @@ class PacientesController extends Controller
      */
     public function store(Request $request)
     {
-        DB::transaction(function () use ($request) {
-            $paciente = Paciente::create([
-                'empresa_id' => $request['empresa_id'],
-                'pessoa_id'  => Pessoa::updateOrCreate(
-                    [
-                        'id' => ($request['pessoa']['id'] != '') ? $request['id'] : null,
-                    ],
-                    [
-                        'nome'        => $request['pessoa']['nome'],
-                        'nascimento'  => $request['pessoa']['nascimento'],
+        $empresa = $request->user()->pessoa->profissional->empresa;
+        $qtdPac = Paciente::where('empresa_id', $empresa->id)->where('ativo', true)->count();
+        if ($qtdPac < $empresa->quantidadepaciente) {
+            DB::transaction(function () use ($request) {
+                $paciente = Paciente::create([
+                    'empresa_id' => $request['empresa_id'],
+                    'pessoa_id'  => Pessoa::updateOrCreate(
+                        [
+                            'id' => ($request['pessoa']['id'] != '') ? $request['id'] : null,
+                        ],
+                        [
+                            'nome'        => $request['pessoa']['nome'],
+                            'nascimento'  => $request['pessoa']['nascimento'],
 
-                        'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
-                        'rgie'        => $request['pessoa']['rgie'],
-                        'observacoes' => $request['pessoa']['observacoes'],
-                        'perfil'      => $request['pessoa']['perfil'],
-                        'status'      => $request['pessoa']['status'],
-                    ]
-                )->id,
-                'responsavel_id' => $request['responsavel_id'],
-                'complexidade'   => $request['complexidade'],
-                'sexo'           => $request['sexo'],
-                'ativo'          => $request['ativo']
-            ]);
-            Tipopessoa::create([
-                'tipo'      => 'Paciente',
-                'pessoa_id' => $paciente->pessoa_id,
-                'ativo'     => 1
-            ]);
-            if ($request['pessoa']['telefones']) {
-                foreach ($request['pessoa']['telefones'] as $key => $telefone) {
-                    if ($telefone['telefone']) {
-                        PessoaTelefone::firstOrCreate([
+                            'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
+                            'rgie'        => $request['pessoa']['rgie'],
+                            'observacoes' => $request['pessoa']['observacoes'],
+                            'perfil'      => $request['pessoa']['perfil'],
+                            'status'      => $request['pessoa']['status'],
+                        ]
+                    )->id,
+                    'responsavel_id' => $request['responsavel_id'],
+                    'complexidade'   => $request['complexidade'],
+                    'numeroCarteira' => $request['numeroCarteira'],
+                    'sexo'           => $request['sexo'],
+                    'ativo'          => $request['ativo'],
+                    'atendimentoRN'  => $request['atendimentoRN']
+                ]);
+                Tipopessoa::create([
+                    'tipo'      => 'Paciente',
+                    'pessoa_id' => $paciente->pessoa_id,
+                    'ativo'     => 1
+                ]);
+                if ($request['pessoa']['telefones']) {
+                    foreach ($request['pessoa']['telefones'] as $key => $telefone) {
+                        if ($telefone['telefone']) {
+                            PessoaTelefone::firstOrCreate([
+                                'pessoa_id'   => $paciente->pessoa_id,
+                                'telefone_id' => Telefone::firstOrCreate(
+                                    [
+                                        'telefone'  => $telefone['telefone'],
+                                    ]
+                                )->id,
+                                'tipo'      => $telefone['pivot']['tipo'],
+                                'descricao' => $telefone['pivot']['descricao'],
+                            ]);
+                        }
+                    }
+                }
+                if ($request['pessoa']['enderecos']) {
+                    foreach ($request['pessoa']['enderecos'] as $key => $endereco) {
+                        PessoaEndereco::firstOrCreate([
                             'pessoa_id'   => $paciente->pessoa_id,
-                            'telefone_id' => Telefone::firstOrCreate(
+                            'endereco_id' => Endereco::firstOrCreate(
                                 [
-                                    'telefone'  => $telefone['telefone'],
+                                    'cep'         => $endereco['cep'],
+                                    'cidade_id'   => $endereco['cidade_id'],
+                                    'rua'         => $endereco['rua'],
+                                    'bairro'      => $endereco['bairro'],
+                                    'numero'      => $endereco['numero'],
+                                    'complemento' => $endereco['complemento'],
+                                    'tipo'        => $endereco['tipo'],
+                                    'descricao'   => $endereco['descricao'],
                                 ]
                             )->id,
-                            'tipo'      => $telefone['pivot']['tipo'],
-                            'descricao' => $telefone['pivot']['descricao'],
                         ]);
                     }
                 }
-            }
-            if ($request['pessoa']['enderecos']) {
-                foreach ($request['pessoa']['enderecos'] as $key => $endereco) {
-                    PessoaEndereco::firstOrCreate([
-                        'pessoa_id'   => $paciente->pessoa_id,
-                        'endereco_id' => Endereco::firstOrCreate(
-                            [
-                                'cep'         => $endereco['cep'],
-                                'cidade_id'   => $endereco['cidade_id'],
-                                'rua'         => $endereco['rua'],
-                                'bairro'      => $endereco['bairro'],
-                                'numero'      => $endereco['numero'],
-                                'complemento' => $endereco['complemento'],
-                                'tipo'        => $endereco['tipo'],
-                                'descricao'   => $endereco['descricao'],
-                            ]
-                        )->id,
-                    ]);
+                if ($request['pessoa']['emails']) {
+                    foreach ($request['pessoa']['emails'] as $key => $email) {
+                        PessoaEmail::firstOrCreate([
+                            'pessoa_id' => $paciente->pessoa_id,
+                            'email_id'  => Email::firstOrCreate(
+                                [
+                                    'email'     => $email['email'],
+                                ]
+                            )->id,
+                            'tipo'       => $email['pivot']['tipo'],
+                            'descricao'  => $email['pivot']['descricao']
+                        ]);
+                    }
                 }
-            }
-            if ($request['pessoa']['emails']) {
-                foreach ($request['pessoa']['emails'] as $key => $email) {
-                    PessoaEmail::firstOrCreate([
-                        'pessoa_id' => $paciente->pessoa_id,
-                        'email_id'  => Email::firstOrCreate(
-                            [
-                                'email'     => $email['email'],
-                            ]
-                        )->id,
-                        'tipo'       => $email['pivot']['tipo'],
-                        'descricao'  => $email['pivot']['descricao']
-                    ]);
-                }
-            }
-        });
+            });
+        } else {
+            return response()->json([
+                'alert' => [
+                    'title' => 'Ops, não foi possível salvar',
+                    'text' => 'Quantidade máxima de pacientes atingida!'
+                ]
+            ], 400)
+                ->header('Content-Type', 'application/json');
+        }
     }
 
     /**
@@ -217,8 +232,10 @@ class PacientesController extends Controller
                 'sexo'           => $request['sexo'],
                 'empresa_id'     => $request['empresa_id'],
                 'responsavel_id' => $request['responsavel_id'],
+                'numeroCarteira' => $request['numeroCarteira'],
                 'complexidade'   => $request['complexidade'],
                 'ativo'          => $request['ativo'],
+                'atendimentoRN'  => $request['atendimentoRN']
             ]);
             $pessoa = Pessoa::find($request['pessoa']['id']);
             if ($pessoa) {
