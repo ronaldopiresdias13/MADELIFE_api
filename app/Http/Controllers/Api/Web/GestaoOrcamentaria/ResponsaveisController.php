@@ -114,7 +114,7 @@ class ResponsaveisController extends Controller
                         'endereco_id' => Endereco::firstOrCreate(
                             [
                                 'cep'         => $endereco['cep'],
-                                'cidade_id'   => $endereco['cidade_id']['id'],
+                                'cidade_id'   => $endereco['cidade']['id'],
                                 'rua'         => $endereco['rua'],
                                 'bairro'      => $endereco['bairro'],
                                 'numero'      => $endereco['numero'],
@@ -226,7 +226,7 @@ class ResponsaveisController extends Controller
                             'endereco_id' => Endereco::firstOrCreate(
                                 [
                                     'cep'         => $endereco['cep'],
-                                    'cidade_id'   => $endereco['cidade_id']['id'],
+                                    'cidade_id'   => $endereco['cidade']['id'],
                                     'rua'         => $endereco['rua'],
                                     'bairro'      => $endereco['bairro'],
                                     'numero'      => $endereco['numero'],
