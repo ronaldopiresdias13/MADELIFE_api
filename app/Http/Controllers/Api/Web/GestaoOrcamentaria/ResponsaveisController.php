@@ -60,11 +60,11 @@ class ResponsaveisController extends Controller
                 'empresa_id',
                 $empresa_id,
             )
-            ->where(
-                'pessoa_id',
-                $pessoa->id,
-            )
-            ->first();
+                ->where(
+                    'pessoa_id',
+                    $pessoa->id,
+                )
+                ->first();
         }
 
         if ($responsavel) {
@@ -114,7 +114,7 @@ class ResponsaveisController extends Controller
                         'endereco_id' => Endereco::firstOrCreate(
                             [
                                 'cep'         => $endereco['cep'],
-                                'cidade_id'   => $endereco['cidade_id'],
+                                'cidade_id'   => $endereco['cidade_id']['id'],
                                 'rua'         => $endereco['rua'],
                                 'bairro'      => $endereco['bairro'],
                                 'numero'      => $endereco['numero'],
@@ -226,7 +226,7 @@ class ResponsaveisController extends Controller
                             'endereco_id' => Endereco::firstOrCreate(
                                 [
                                     'cep'         => $endereco['cep'],
-                                    'cidade_id'   => $endereco['cidade_id'],
+                                    'cidade_id'   => $endereco['cidade_id']['id'],
                                     'rua'         => $endereco['rua'],
                                     'bairro'      => $endereco['bairro'],
                                     'numero'      => $endereco['numero'],

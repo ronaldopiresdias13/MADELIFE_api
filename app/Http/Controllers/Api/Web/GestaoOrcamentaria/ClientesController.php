@@ -102,7 +102,7 @@ class ClientesController extends Controller
                         'endereco_id' => Endereco::firstOrCreate(
                             [
                                 'cep'         => $endereco['cep'],
-                                'cidade_id'   => $endereco['cidade_id'],
+                                'cidade_id'   => $endereco['cidade_id']['id'],
                                 'rua'         => $endereco['rua'],
                                 'bairro'      => $endereco['bairro'],
                                 'numero'      => $endereco['numero'],
@@ -208,7 +208,7 @@ class ClientesController extends Controller
                             'endereco_id' => Endereco::firstOrCreate(
                                 [
                                     'cep'         => $endereco['cep'],
-                                    'cidade_id'   => $endereco['cidade_id'],
+                                    'cidade_id'   => $endereco['cidade_id']['id'],
                                     'rua'         => $endereco['rua'],
                                     'bairro'      => $endereco['bairro'],
                                     'numero'      => $endereco['numero'],
