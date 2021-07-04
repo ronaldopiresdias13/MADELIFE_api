@@ -163,7 +163,7 @@ class ProfissionaisController extends Controller
                 'conselhoProfissional'   => $request['conselhoProfissional'],
                 'numeroConselhoProfissional' => $request['numeroConselhoProfissional'],
                 'cbos'                   => $request['cbos'],
-                'uf'                     => $request['uf'],   
+                'uf'                     => $request['uf'],
                 'dadoscontratuais_id'    => Dadoscontratual::create([
                     'tiposalario'             => $request['dadoscontratuais']['tiposalario'],
                     'salario'                 => $request['dadoscontratuais']['salario'],
@@ -224,7 +224,7 @@ class ProfissionaisController extends Controller
                         'endereco_id' => Endereco::firstOrCreate(
                             [
                                 'cep'         => $endereco['cep'],
-                                'cidade_id'   => $endereco['cidade_id'],
+                                'cidade_id'   => $endereco['cidade_id']['id'],
                                 'rua'         => $endereco['rua'],
                                 'bairro'      => $endereco['bairro'],
                                 'numero'      => $endereco['numero'],
@@ -326,7 +326,7 @@ class ProfissionaisController extends Controller
                     'conselhoProfissional'   => $request['conselhoProfissional'],
                     'numeroConselhoProfissional' => $request['numeroConselhoProfissional'],
                     'cbos'                   => $request['cbos'],
-                    'uf'                     => $request['uf'],   
+                    'uf'                     => $request['uf'],
                     'dadoscontratuais_id'    => Dadoscontratual::updateOrCreate([
                         'tiposalario'             => $request['dadoscontratuais']['tiposalario'],
                         'salario'                 => $request['dadoscontratuais']['salario'],
@@ -382,7 +382,7 @@ class ProfissionaisController extends Controller
                         'endereco_id' => Endereco::firstOrCreate(
                             [
                                 'cep'         => $endereco['cep'],
-                                'cidade_id'   => $endereco['cidade_id'],
+                                'cidade_id'   => $endereco['cidade_id']['id'],
                                 'rua'         => $endereco['rua'],
                                 'bairro'      => $endereco['bairro'],
                                 'numero'      => $endereco['numero'],
