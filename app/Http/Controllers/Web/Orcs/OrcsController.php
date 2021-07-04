@@ -248,8 +248,8 @@ class OrcsController extends Controller
      */
     public function apagarOrcservico(OrcServico $orcServico)
     {
-        $orcServico->ativo = false;
-        $orcServico->save();
+        $orcServico->delete();
+        // $orcServico->save();
     }
     /**
      * Remove the specified resource from storage.
