@@ -152,8 +152,7 @@ class ContratoService
                     "valorresultadomensal" => $item['valorresultadomensal'],
                     "valorcustomensal"     => $item['valorcustomensal'],
                     "locacao"              => 0,
-                    "descricao"            => $item['descricao'],
-                    
+                    "descricao"            => $item['descricao']
                 ])->save();
             }
 
@@ -219,7 +218,7 @@ class ContratoService
                 "cliente_id"        => $this->request->cliente_id,
                 "numero"            => $this->request->numero,
                 "tipo"              => $this->request->tipo,
-                "caraterAtendimento" => $this->require->caraterAtendimento,
+                "caraterAtendimento" => $this->request->caraterAtendimento,
                 "indicacaoClinica"  => $this->request->indicacaoClinica,
                 "data"              => $this->request->data,
                 "quantidade"        => $this->request->quantidade,
