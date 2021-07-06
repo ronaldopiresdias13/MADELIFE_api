@@ -63,8 +63,10 @@ class ClientesController extends Controller
                     'empresa_id' => $empresa_id,
                 ],
                 [
-                    'versaoTiss'       => $request['versaoTiss'],
+                    'versaoTiss' => $request['versaoTiss'],
                     'tipo'       => $request['tipo'],
+                    'CNES'       => $request['CNES'],
+                    'registroAns' => $request['registroAns'],
                 ]
             );
 
@@ -167,6 +169,8 @@ class ClientesController extends Controller
             $cliente->update([
                 'tipo' => $request['tipo'],
                 'versaoTiss'       => $request['versaoTiss'],
+                'CNES'       => $request['CNES'],
+                'registroAns' => $request['registroAns'],
                 'empresa_id' => $request['empresa_id'],
             ]);
             $pessoa = Pessoa::find($request['pessoa']['id']);
@@ -196,6 +200,7 @@ class ClientesController extends Controller
                         [
                             'tipo'      => $telefone['pivot']['tipo'],
                             'descricao' => $telefone['pivot']['descricao'],
+                        
                         ]
                     );
                 }
