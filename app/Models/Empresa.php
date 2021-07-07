@@ -12,6 +12,10 @@ class Empresa extends Model
     {
         return $this->hasMany(Cliente::class)->where('ativo', true);
     }
+    public function pacientes()
+    {
+        return $this->hasMany(Paciente::class)->where('ativo', true);
+    }
 
     public function acessos()
     {
@@ -20,16 +24,16 @@ class Empresa extends Model
 
     public function cnabs()
     {
-        return $this->hasMany(RegistroCnab::class,'empresa_id','id');
+        return $this->hasMany(RegistroCnab::class, 'empresa_id', 'id');
     }
 
     public function chamados()
     {
-        return $this->hasMany(Chamado::class,'empresa_id','id');
+        return $this->hasMany(Chamado::class, 'empresa_id', 'id');
     }
 
     public function ocorrencias()
     {
-        return $this->hasMany(Ocorrencia::class,'empresa_id','id');
+        return $this->hasMany(Ocorrencia::class, 'empresa_id', 'id');
     }
 }

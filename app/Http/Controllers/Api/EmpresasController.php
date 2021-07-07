@@ -6,6 +6,7 @@ use App\Models\Empresa;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Escala;
+use Illuminate\Support\Facades\DB;
 
 class EmpresasController extends Controller
 {
@@ -16,7 +17,7 @@ class EmpresasController extends Controller
      */
     public function index()
     {
-        return Empresa::all();
+        return Empresa::withCount(['pacientes'])->get();
     }
 
     /**
