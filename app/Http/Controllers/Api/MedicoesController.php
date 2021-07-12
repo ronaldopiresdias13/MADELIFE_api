@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Medicao;
 use App\Models\ProdutoMedicao;
 use App\Models\ServicoMedicao;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -19,90 +20,18 @@ class MedicoesController extends Controller
      */
     public function index(Request $request)
     {
-        $with = [];
-
-        if ($request['adicionais']) {
-            foreach ($request['adicionais'] as $key => $adicional) {
-                if (is_string($adicional)) {
-                    array_push($with, $adicional);
-                } else {
-                    $filho = '';
-                    foreach ($adicional as $key => $a) {
-                        if ($key == 0) {
-                            $filho = $a;
-                        } else {
-                            $filho = $filho . '.' . $a;
-                        }
-                    }
-                    array_push($with, $filho);
-                }
-            }
-            $itens = Medicao::with($with)->where('ativo', true);
-        } else {
-            $itens = Medicao::where('ativo', true);
-        }
-
-        if ($request->commands) {
-            $request = json_decode($request->commands, true);
-        }
-
-        if ($request['where']) {
-            foreach ($request['where'] as $key => $where) {
-                $itens->where(
-                    ($where['coluna']) ? $where['coluna'] : 'id',
-                    ($where['expressao']) ? $where['expressao'] : 'like',
-                    ($where['valor']) ? $where['valor'] : '%'
-                );
-            }
-        }
-
-        if ($request['order']) {
-            foreach ($request['order'] as $key => $order) {
-                $itens->orderBy(
-                    ($order['coluna']) ? $order['coluna'] : 'id',
-                    ($order['tipo']) ? $order['tipo'] : 'asc'
-                );
-            }
-        }
-
-        $itens = $itens->get();
-
-        if ($request['adicionais']) {
-            foreach ($itens as $key => $iten) {
-                foreach ($request['adicionais'] as $key => $adicional) { // Percorrer os adicionais
-                    if (is_string($adicional)) { // Se String, chama o adicional
-                        $iten[$adicional];
-                    } else { // Se Array Percorrer o array
-                        $iten2 = $iten;
-                        foreach ($adicional as $key => $a) {
-                            if ($key == 0) { // Se primeiro item
-                                if ($iten[0] == null) {
-                                    $iten2 = $iten[$a];
-                                } else {
-                                    foreach ($iten as $key => $i) {
-                                        $i[$a];
-                                    }
-                                }
-                            } else {
-                                if ($iten2 != null) {
-                                    if ($iten2->count() > 0) {
-                                        if ($iten2[0] == null) {
-                                            $iten2 = $iten2[$a];
-                                        } else {
-                                            foreach ($iten2 as $key => $i) {
-                                                $i[$a];
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return $itens;
+        // return $request;
+        $user = $request->user()->pessoa;
+        $empresa_id = $user->profissional ? $user->profissional->empresa_id : $user->cliente->empresa_id;
+        return Medicao::with([
+            'medicao_servicos.servico',
+            'medicao_produtos.produto',
+            'cliente.pessoa', 'ordemservico.orcamento.homecare.paciente.pessoa'
+        ])
+            ->where('empresa_id', $empresa_id)
+            ->where(DB::raw("DATE_FORMAT(data1, '%Y-%m')"), $request->periodo)
+            ->where('cliente_id', 'like', $request->cliente_id ? $request->cliente_id : '%')
+            ->get();
     }
 
     /**
