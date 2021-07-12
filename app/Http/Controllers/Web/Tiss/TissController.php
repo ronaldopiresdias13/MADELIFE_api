@@ -5,23 +5,27 @@ namespace App\Http\Controllers\Web\Tiss;
 use App\Http\Controllers\Controller;
 use App\Models\Empresa;
 use App\Models\Medicao;
+use App\Models\Profissional;
 use App\Services\TissService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class TissController extends Controller
 {
-    public function gerarXml(Medicao $medicao)
+    public function gerarXml(Request $request)
     {
-
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
         $medicao = Medicao::with(
             'medicao_produtos.produto',
             'medicao_servicos.servico',
             'ordemservico.orcamento.homecare.paciente.pessoa'
-        )->find($medicao->id);
+        )
+            // ->whereIn('id', [316])
+            //     ->get();
+            ->find($request->medicoes);
 
-        $empresa = Empresa::find($medicao->empresa_id);
-
+        $empresa = Empresa::find($empresa_id);
+        // return $medicao;
         // return str_replace('_', '.', $medicao->cliente->versaoTiss);
 
         if ($medicao->cliente->versaoTiss) {
