@@ -110,7 +110,7 @@ class NotificacaoMedicamentoJob implements ShouldQueue
                 ]);
 
                 $boleto = json_decode($notification_response->getBody());
-                Log::info($notification_response->getBody());
+                $notification_response->getBody()->close();
             }
         }
 
@@ -188,7 +188,8 @@ class NotificacaoMedicamentoJob implements ShouldQueue
                 ]);
 
                 $boleto = json_decode($notification_response->getBody());
-                Log::info($notification_response->getBody());
+                $notification_response->getBody()->close();
+
             }
         }
     }

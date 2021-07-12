@@ -60,6 +60,8 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                 Log::info($message->token_type . ' ' . $message->token);
                 Log::info($response->getBody());
                 $resp = json_decode($response->getBody());
+                $response->getBody()->close();
+
                 if (property_exists($resp, 'message')) {
                     $from->send(json_encode(['type' => 'disconnect', 'mensagem' => 'Usuário inválido ou desconectado']));
                     return;
