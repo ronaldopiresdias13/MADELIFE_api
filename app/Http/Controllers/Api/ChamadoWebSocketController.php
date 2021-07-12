@@ -570,6 +570,7 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
     public function onClose(ConnectionInterface $conn): void
     {
         $conn->close();
+        $this->clients->detach($conn);
 
         Log::info("desconectou " . $conn->resourceId);
         if (isset($this->resouce_pessoa[$conn->resourceId])) {
@@ -609,12 +610,12 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                 }
             }
         }
-        $this->clients->detach($conn);
     }
 
     public function onError(ConnectionInterface $conn, Exception $exception): void
     {
         $conn->close();
+        $this->clients->detach($conn);
 
         Log::info($exception);
         try {
@@ -654,7 +655,6 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                     }
                 }
             }
-            $this->clients->detach($conn);
         } catch (Exception $e) {
         }
     }

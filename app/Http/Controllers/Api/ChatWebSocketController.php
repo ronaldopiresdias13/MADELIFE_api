@@ -258,11 +258,15 @@ class ChatWebSocketController extends Controller implements MessageComponentInte
 
     public function onClose(ConnectionInterface $conn): void
     {
+        $conn->close();
+
         $this->clients->detach($conn);
     }
 
     public function onError(ConnectionInterface $conn, Exception $exception): void
     {
         $conn->close();
+        $this->clients->detach($conn);
+
     }
 }
