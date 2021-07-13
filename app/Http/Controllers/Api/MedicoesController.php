@@ -161,6 +161,8 @@ class MedicoesController extends Controller
                     'cliente_id'      => $request['cliente_id'],
                     'profissional_id'    => $request['profissional_id'],
                     'ordemservico_id' => $request['ordemservico_id'],
+                    'dataSolicitacao' => $request['dataSolicitacao'],
+                    'numeroGuiaPrestador' => $request['numeroGuiaPrestador'],
                     'data1'           => $request['data1'],
                     'data2'           => $request['data2'],
                     'valor'           => $request['valor'],

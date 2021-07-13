@@ -570,6 +570,7 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
     public function onClose(ConnectionInterface $conn): void
     {
         $conn->close();
+        $this->clients->detach($conn);
 
         Log::info("desconectou " . $conn->resourceId);
         if (isset($this->resouce_pessoa[$conn->resourceId])) {
@@ -583,6 +584,7 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
 
                 for ($i = 0; $i < count($this->clientes_ids[$pessoa->id . 'Enfermagem' . $profissional->empresa_id]); $i++) {
                     if ($this->clientes_ids[$pessoa->id . 'Enfermagem' . $profissional->empresa_id][$i]->resourceId == $conn->resourceId) {
+                        $this->clientes_ids[$pessoa->id . 'Enfermagem' . $profissional->empresa_id][$i]->close();
                         unset($this->clientes_ids[$pessoa->id . 'Enfermagem' . $profissional->empresa_id][$i]);
                         unset($this->resouce_pessoa[$conn->resourceId]);
                         break;
@@ -593,6 +595,7 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                 // unset($this->clientes_ids[$pessoa->id . 'T.I.']);
                 for ($i = 0; $i < count($this->clientes_ids[$pessoa->id . 'T.I.']); $i++) {
                     if ($this->clientes_ids[$pessoa->id . 'T.I.'][$i]->resourceId == $conn->resourceId) {
+                        $this->clientes_ids[$pessoa->id . 'T.I.'][$i]->close();
                         unset($this->clientes_ids[$pessoa->id . 'T.I.'][$i]);
                         unset($this->resouce_pessoa[$conn->resourceId]);
                         break;
@@ -602,6 +605,7 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                 // unset($this->clientes_ids[$pessoa->id]);
                 for ($i = 0; $i < count($this->clientes_ids[$pessoa->id]); $i++) {
                     if ($this->clientes_ids[$pessoa->id][$i]->resourceId == $conn->resourceId) {
+                        $this->clientes_ids[$pessoa->id][$i]->close();
                         unset($this->clientes_ids[$pessoa->id][$i]);
                         unset($this->resouce_pessoa[$conn->resourceId]);
                         break;
@@ -609,12 +613,12 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                 }
             }
         }
-        $this->clients->detach($conn);
     }
 
     public function onError(ConnectionInterface $conn, Exception $exception): void
     {
         $conn->close();
+        $this->clients->detach($conn);
 
         Log::info($exception);
         try {
@@ -628,6 +632,7 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
 
                     for ($i = 0; $i < count($this->clientes_ids[$pessoa->id . 'Enfermagem' . $profissional->empresa_id]); $i++) {
                         if ($this->clientes_ids[$pessoa->id . 'Enfermagem' . $profissional->empresa_id][$i]->resourceId == $conn->resourceId) {
+                            $this->clientes_ids[$pessoa->id . 'Enfermagem' . $profissional->empresa_id][$i]->close();
                             unset($this->clientes_ids[$pessoa->id . 'Enfermagem' . $profissional->empresa_id][$i]);
                             unset($this->resouce_pessoa[$conn->resourceId]);
                             break;
@@ -638,6 +643,7 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                     // unset($this->clientes_ids[$pessoa->id . 'T.I.']);
                     for ($i = 0; $i < count($this->clientes_ids[$pessoa->id . 'T.I.']); $i++) {
                         if ($this->clientes_ids[$pessoa->id . 'T.I.'][$i]->resourceId == $conn->resourceId) {
+                            $this->clientes_ids[$pessoa->id . 'T.I.'][$i]->close();
                             unset($this->clientes_ids[$pessoa->id . 'T.I.'][$i]);
                             unset($this->resouce_pessoa[$conn->resourceId]);
                             break;
@@ -647,6 +653,7 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                     // unset($this->clientes_ids[$pessoa->id]);
                     for ($i = 0; $i < count($this->clientes_ids[$pessoa->id]); $i++) {
                         if ($this->clientes_ids[$pessoa->id][$i]->resourceId == $conn->resourceId) {
+                            $this->clientes_ids[$pessoa->id][$i]->close();
                             unset($this->clientes_ids[$pessoa->id][$i]);
                             unset($this->resouce_pessoa[$conn->resourceId]);
                             break;
@@ -654,8 +661,8 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                     }
                 }
             }
-            $this->clients->detach($conn);
         } catch (Exception $e) {
+            Log::info($e);
         }
     }
 }
