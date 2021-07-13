@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Medicao;
 use App\Models\ProdutoMedicao;
 use App\Models\ServicoMedicao;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -29,6 +28,7 @@ class MedicoesController extends Controller
             'cliente.pessoa', 'ordemservico.orcamento.homecare.paciente.pessoa', 'profissional.pessoa'
         ])
             ->where('empresa_id', $empresa_id)
+            ->where('ativo', true)
             ->where(DB::raw("DATE_FORMAT(data1, '%Y-%m')"), $request->periodo)
             ->where('cliente_id', 'like', $request->cliente_id ? $request->cliente_id : '%')
             ->get();
