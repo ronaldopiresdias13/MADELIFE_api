@@ -43,6 +43,11 @@ class EmpresaPrestadorController extends Controller
                         'nome'         => $nomeOriginal,
                         'dataInicio'   => $request['dataInicio'],
                         'dataFim'      => $request['dataFim'],
+                        'INSS'         => $request['INSS'],
+                        'ISS'          => $request['ISS'],
+                        'taxaADM'      => $request['taxaADM'],
+                        'adicionalExtra' => $request['adicionalExtra'],
+                        'adicionalOutros' => $request['adicionalOutros'],
                         'status'       => $request['status'],
                         'forma_contratacao' => $request['forma_contratacao'],
                     ]);
@@ -61,6 +66,11 @@ class EmpresaPrestadorController extends Controller
                         'nome'         => '',
                         'dataInicio'   => $request['dataInicio'],
                         'dataFim'      => $request['dataFim'],
+                        'INSS'         => $request['INSS'],
+                        'ISS'          => $request['ISS'],
+                        'taxaADM'      => $request['taxaADM'],
+                        'adicionalExtra' => $request['adicionalExtra'],
+                        'adicionalOutros' => $request['adicionalOutros'],
                         'status'       => $request['status'],
                         'forma_contratacao' => $request['forma_contratacao'],
                     ]);
@@ -106,6 +116,11 @@ class EmpresaPrestadorController extends Controller
                     $empresaPrestador->nome       = $nomeOriginal;
                     $empresaPrestador->dataInicio = $request['dataInicio'];
                     $empresaPrestador->dataFim    = $request['dataFim'];
+                    $empresaPrestador->INSS       = $request['INSS'];
+                    $empresaPrestador->ISS        = $request['ISS'];
+                    $empresaPrestador->taxaADM    = $request['taxaADM'];
+                    $empresaPrestador->adicionalExtra = $request['adicionalExtra'];
+                    $empresaPrestador->adicionalOutros = $request['adicionalOutros'];
                     $empresaPrestador->status     = $request['status'];
                     $empresaPrestador->forma_contratacao  = $request['forma_contratacao'];
                     $empresaPrestador->save();
