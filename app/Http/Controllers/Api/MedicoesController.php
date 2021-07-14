@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Medicao;
 use App\Models\ProdutoMedicao;
 use App\Models\ServicoMedicao;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -26,9 +25,10 @@ class MedicoesController extends Controller
         return Medicao::with([
             'medicao_servicos.servico',
             'medicao_produtos.produto',
-            'cliente.pessoa', 'ordemservico.orcamento.homecare.paciente.pessoa'
+            'cliente.pessoa', 'ordemservico.orcamento.homecare.paciente.pessoa', 'profissional.pessoa'
         ])
             ->where('empresa_id', $empresa_id)
+            ->where('ativo', true)
             ->where(DB::raw("DATE_FORMAT(data1, '%Y-%m')"), $request->periodo)
             ->where('cliente_id', 'like', $request->cliente_id ? $request->cliente_id : '%')
             ->get();
@@ -184,6 +184,10 @@ class MedicoesController extends Controller
                             'servico_id'  => $servico['servico_id'],
                             'quantidade'  => $servico['quantidade'],
                             'atendido'    => $servico['atendido'],
+                            'dataExecucao' => $servico['dataExecucao'],
+                            'horaInicial' => $servico['horaInicial'],
+                            'horaFinal' => $servico['horaFinal'],
+                            'reducaoAcrescimo' => $servico['reducaoAcrescimo'],
                             'valor'       => $servico['valor'],
                             'subtotal'    => $servico['subtotal'],
                             'situacao'    => $servico['situacao'],
@@ -204,6 +208,10 @@ class MedicoesController extends Controller
                             'produto_id'  => $produto['produto_id'],
                             'quantidade'  => $produto['quantidade'],
                             'atendido'    => $produto['atendido'],
+                            'dataExecucao' => $servico['dataExecucao'],
+                            'horaInicial' => $servico['horaInicial'],
+                            'horaFinal' => $servico['horaFinal'],
+                            'reducaoAcrescimo' => $servico['reducaoAcrescimo'],
                             'valor'       => $produto['valor'],
                             'subtotal'    => $produto['subtotal'],
                             'situacao'    => $produto['situacao'],
