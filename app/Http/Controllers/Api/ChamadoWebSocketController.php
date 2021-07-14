@@ -11,10 +11,12 @@ use App\Models\Conversa;
 use App\Models\ConversaMensagem;
 use App\Models\MensagemChamado;
 use App\Models\Profissional;
+use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -48,26 +50,34 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                 // Log::info('token '.$message->token);
                 // Log::info(json_encode(auth('api')->user()));
 
-                $http = new Client();
-                $response = $http->get(url('/api/auth/user'), [
-                    'headers' => [
-                        'Accept' => 'application/json',
-                        'Authorization' => $message->token_type . ' ' . $message->token,
-                    ],
-                    "http_errors" => false
-                ]);
-
-                Log::info($message->token_type . ' ' . $message->token);
-                Log::info($response->getBody());
-                $resp = json_decode($response->getBody());
-                $response->getBody()->close();
-
-                if (property_exists($resp, 'message')) {
+                // $http = new Client();
+                // $response = $http->get(url('/api/auth/user'), [
+                //     'headers' => [
+                //         'Accept' => 'application/json',
+                //         'Authorization' => $message->token_type . ' ' . $message->token,
+                //     ],
+                //     "http_errors" => false
+                // ]);
+                $user_id = DB::table('oauth_access_tokens')->where('id', $message->token)->value('user_id');
+                $resp = User::where('id','=',$user_id)->with('pessoa')->first();
+                if($resp==null){
                     $from->send(json_encode(['type' => 'disconnect', 'mensagem' => 'Usuário inválido ou desconectado']));
                     return;
-                } else {
+                }
+                else {
                     $from->send(json_encode(['type' => 'connected']));
                 }
+                // Log::info($message->token_type . ' ' . $message->token);
+                // Log::info($response->getBody());
+                // $resp = json_decode($response->getBody());
+                // $response->getBody()->close();
+
+                // if (property_exists($resp, 'message')) {
+                //     $from->send(json_encode(['type' => 'disconnect', 'mensagem' => 'Usuário inválido ou desconectado']));
+                //     return;
+                // } else {
+                //     $from->send(json_encode(['type' => 'connected']));
+                // }
                 $this->resouce_pessoa[$from->resourceId] = $resp;
 
                 if ($message->area == 'Enfermagem') {
