@@ -14,11 +14,14 @@ class AddValorTaxasPagamentoPessoa extends Migration
     public function up()
     {
         Schema::table('pagamentopessoas', function (Blueprint $table) {
-            $table->double('INSS')->nullable()->after('descontos');
-            $table->double('ISS')->nullable()->after('INSS');
-            $table->double('taxaADM')->nullable()->after('ISS');
-            $table->string('adicionalExtra')->nullable()->after('taxaADM');
-            $table->string('adicionalOutros')->nullable()->after('adicionalExtra');
+            $table->double('valorinss')->nullable()->after('descontos');
+            $table->string('tipovalorinss')->nullable()->after('valorinss');
+            $table->double('valoriss')->nullable()->after('tipovalorinss');
+            $table->string('tipovaloriss')->nullable()->after('valoriss');
+            $table->double('taxaadm')->nullable()->after('tipovaloriss');
+            $table->string('tipotaxaadm')->nullable()->after('taxaadm');
+            $table->double('adionalextra')->nullable()->after('tipotaxaadm');
+            $table->double('adionaloutros')->nullable()->after('adionalextra');
         });
     }
 
@@ -30,11 +33,14 @@ class AddValorTaxasPagamentoPessoa extends Migration
     public function down()
     {
         Schema::table('pagamentopessoas', function (Blueprint $table) {
-            $table->dropColumn('INSS');
-            $table->dropColumn('ISS');
-            $table->dropColumn('taxaADM');
-            $table->dropColumn('adicionalExtra');
-            $table->dropColumn('adicionalOutros');
+            $table->dropColumn('valorinss');
+            $table->dropColumn('tipovalorinss');
+            $table->dropColumn('valoriss');
+            $table->dropColumn('tipovaloriss');
+            $table->dropColumn('taxaadm');
+            $table->dropColumn('tipotaxaadm');
+            $table->dropColumn('adionalextra');
+            $table->dropColumn('adionaloutros');
         });
     }
 }
