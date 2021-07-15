@@ -20,8 +20,8 @@ class AddValorTaxasPagamentoPessoa extends Migration
             $table->string('tipovaloriss')->nullable()->after('valoriss');
             $table->double('taxaadm')->nullable()->after('tipovaloriss');
             $table->string('tipotaxaadm')->nullable()->after('taxaadm');
-            $table->double('adionalextra')->nullable()->after('tipotaxaadm');
-            $table->double('adionaloutros')->nullable()->after('adionalextra');
+            $table->double('adicionalextra')->nullable()->after('tipotaxaadm');
+            $table->double('adicionaloutros')->nullable()->after('adicionalextra');
         });
     }
 
@@ -39,8 +39,8 @@ class AddValorTaxasPagamentoPessoa extends Migration
             $table->dropColumn('tipovaloriss');
             $table->dropColumn('taxaadm');
             $table->dropColumn('tipotaxaadm');
-            $table->dropColumn('adionalextra');
-            $table->dropColumn('adionaloutros');
+            $table->dropColumn('adicionalextra');
+            $table->dropColumn('adicionaloutros');
         });
     }
 }
