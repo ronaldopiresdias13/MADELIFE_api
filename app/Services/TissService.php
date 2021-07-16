@@ -604,7 +604,7 @@ class TissService
             $this->xml->startElement('ans:procedimentoExecutado');
             $this->xml->startElement('ans:sequencialItem');
             $this->xml->text($this->sequencialItem);
-            $this->texto .= $this->dados['sequencialIt'];
+            $this->texto .= $this->sequencialItem;
             $this->xml->endElement(); #ans:sequencialItem
             $this->xml->startElement('ans:dataExecucao');
             $this->xml->text($value['dataExecucao']);
@@ -658,7 +658,7 @@ class TissService
             $this->xml->startElement('ans:despesa');
             $this->xml->startElement('ans:sequencialItem');
             $this->xml->text($this->sequencialItem);
-            $this->texto .= $this->dados['sequencialIt'];
+            $this->texto .= $this->sequencialItem;
             $this->xml->endElement(); #ans:sequencialItem
             $this->xml->startElement('ans:codigoDespesa');
             $this->xml->text($value['codigoDespesa']);
