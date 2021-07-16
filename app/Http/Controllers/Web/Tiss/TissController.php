@@ -607,53 +607,53 @@ class TissController extends Controller
 
 
         $this->xml->startElement('ans:procedimentosExecutados');
-        foreach ($this->dados['procedimentosExecutados'] as $key => $value) {
+        foreach ($medicoes->medicao_servicos as $key => $servico) {
             $this->xml->startElement('ans:procedimentoExecutado');
             $this->xml->startElement('ans:sequencialItem');
             $this->xml->text($this->sequencialItem);
             $this->texto .= $this->dados['sequencialIt'];
             $this->xml->endElement(); #ans:sequencialItem
             $this->xml->startElement('ans:dataExecucao');
-            $this->xml->text($value['dataExecucao']);
-            $this->texto .= $this->dados['dataExecucao'];
+            $this->xml->text($servico->dataExecucao);
+            $this->texto .= $servico->dataExecucao;
             $this->xml->endElement(); #ans:dataExecucao
             $this->xml->startElement('ans:horaInicial');
-            $this->xml->text($value['horaInicial']);
-            $this->texto .= $this->dados['horaInicial'];
+            $this->xml->text($servico->horaInicial);
+            $this->texto .= $servico->horaInicial;
             $this->xml->endElement(); #ans:horaInicial
             $this->xml->startElement('ans:horaFinal');
-            $this->xml->text($value['horaFinal']);
-            $this->texto .= $this->dados['horaFinal'];
+            $this->xml->text($servico->horaFinal);
+            $this->texto .= $servico->horaFinal;
             $this->xml->endElement(); #ans:horaFinal
             $this->xml->startElement('ans:procedimento');
             $this->xml->startElement('ans:codigoTabela');
-            $this->xml->text($value['codigoTabela']);
-            $this->texto .= $this->dados['codigoTabela'];
+            $this->xml->text($servico->servico->codigoTabela);
+            $this->texto .= $servico->servico->codigoTabela;
             $this->xml->endElement(); #ans:codigoTabela
             $this->xml->startElement('ans:codigoProcedimento');
-            $this->xml->text($value['codigoProcedimento']);
-            $this->texto .= $this->dados['codigoProcedimento'];
+            $this->xml->text($servico->servico->codtuss);
+            $this->texto .= $servico->servico->codtuss;
             $this->xml->endElement(); #ans:codigoProcedimento
             $this->xml->startElement('ans:descricaoProcedimento');
-            $this->xml->text($value['descricaoProcedimento']);
-            $this->texto .= $this->dados['descricaoProcedimento'];
+            $this->xml->text($servico->servico->descricao);
+            $this->texto .= $servico->servico->descricao;
             $this->xml->endElement(); #ans:descricaoProcedimento
             $this->xml->endElement(); #ans:procedimento
             $this->xml->startElement('ans:quantidadeExecutada');
-            $this->xml->text($value['quantidadeExecutada']);
-            $this->texto .= $this->dados['quantidadeExecutada'];
+            $this->xml->text($servico->atendido);
+            $this->texto .= $servico->atendido;
             $this->xml->endElement(); #ans:quantidadeExecutada
             $this->xml->startElement('ans:reducaoAcrescimo');
-            $this->xml->text($value['reducaoAcrescimo']);
-            $this->texto .= $this->dados['reducaoAcrescimo'];
+            $this->xml->text($servico->reducaoAcrescimo);
+            $this->texto .= $servico->reducaoAcrescimo;
             $this->xml->endElement(); #ans:reducaoAcrescimo
             $this->xml->startElement('ans:valorUnitario');
-            $this->xml->text($value['valorUnitario']);
-            $this->texto .= $this->dados['valorUnitario'];
+            $this->xml->text($servico->valor);
+            $this->texto .= $servico->valor;
             $this->xml->endElement(); #ans:valorUnitario
             $this->xml->startElement('ans:valorTotal');
-            $this->xml->text($value['valorTotal']);
-            $this->texto .= $this->dados['valorTotal'];
+            $this->xml->text($servico->subtotal);
+            $this->texto .= $servico->subtotal;
             $this->xml->endElement(); #ans:valorTotal
             $this->xml->endElement(); #ans:procedimentoExecutado
             $this->sequencialItem += 1;
@@ -661,60 +661,60 @@ class TissController extends Controller
         $this->xml->endElement(); #ans:procedimentosExecutados
 
         $this->xml->startElement('ans:outrasDespesas');
-        foreach ($this->dados['outrasDespesas'] as $key => $value) {
+        foreach ($medicoes->medicao_produtos as $key => $produto) {
             $this->xml->startElement('ans:despesa');
             $this->xml->startElement('ans:sequencialItem');
             $this->xml->text($this->sequencialItem);
             $this->texto .= $this->dados['sequencialIt'];
             $this->xml->endElement(); #ans:sequencialItem
             $this->xml->startElement('ans:codigoDespesa');
-            $this->xml->text($value['codigoDespesa']);
-            $this->texto .= $this->dados['codigoDespesa'];
+            $this->xml->text($produto->produto->codigoDespesa);
+            $this->texto .= $produto->produto->codigoDespesa;
             $this->xml->endElement(); #ans:codigoDespesa
             $this->xml->startElement('ans:servicosExecutados');
             $this->xml->startElement('ans:dataExecucao');
-            $this->xml->text($value['dataExecucao']);
-            $this->texto .= $this->dados['dataExecucao'];
+            $this->xml->text($produto->dataExecucao);
+            $this->texto .= $produto->dataExecucao;
             $this->xml->endElement(); #ans:dataExecucao
             $this->xml->startElement('ans:horaInicial');
-            $this->xml->text($value['horaInicial']);
-            $this->texto .= $this->dados['horaInicial'];
+            $this->xml->text($produto->horaInicial);
+            $this->texto .= $produto->horaInicial;
             $this->xml->endElement(); #ans:horaInicial
             $this->xml->startElement('ans:horaFinal');
-            $this->xml->text($value['horaFinal']);
-            $this->texto .= $this->dados['horaFinal'];
+            $this->xml->text($produto->horaFinal);
+            $this->texto .= $produto->horaFinal;
             $this->xml->endElement(); #ans:horaFinal
             $this->xml->startElement('ans:codigoTabela');
-            $this->xml->text($value['codigoTabela']);
-            $this->texto .= $this->dados['codigoTabela'];
+            $this->xml->text($produto->produto->codigoTabela);
+            $this->texto .= $produto->produto->codigoTabela;
             $this->xml->endElement(); #ans:codigoTabela
             $this->xml->startElement('ans:codigoProcedimento');
-            $this->xml->text($value['codigoProcedimento']);
-            $this->texto .= $this->dados['codigoProcedimento'];
+            $this->xml->text($produto->produto->codtuss);
+            $this->texto .= $produto->produto->codtuss;
             $this->xml->endElement(); #ans:codigoProcedimento
             $this->xml->startElement('ans:quantidadeExecutada');
-            $this->xml->text($value['quantidadeExecutada']);
-            $this->texto .= $this->dados['quantidadeExecutada'];
+            $this->xml->text($produto->atendido);
+            $this->texto .= $produto->atendido;
             $this->xml->endElement(); #ans:quantidadeExecutada
             $this->xml->startElement('ans:unidadeMedida');
-            $this->xml->text($value['unidadeMedida']);
-            $this->texto .= $this->dados['unidadeMedida'];
+            $this->xml->text($produto->produto->unidademedida->codigo);
+            $this->texto .= $produto->produto->unidademedida->codigo;
             $this->xml->endElement(); #ans:unidadeMedida
             $this->xml->startElement('ans:reducaoAcrescimo');
-            $this->xml->text($value['reducaoAcrescimo']);
-            $this->texto .= $this->dados['reducaoAcrescimo'];
+            $this->xml->text($produto->reducaoAcrescimo);
+            $this->texto .= $produto->reducaoAcrescimo;
             $this->xml->endElement(); #ans:reducaoAcrescimo
             $this->xml->startElement('ans:valorUnitario');
-            $this->xml->text($value['valorUnitario']);
-            $this->texto .= $this->dados['valorUnitario'];
+            $this->xml->text($produto->valor);
+            $this->texto .= $produto->valor;
             $this->xml->endElement(); #ans:valorUnitario
             $this->xml->startElement('ans:valorTotal');
-            $this->xml->text($value['valorTotal']);
-            $this->texto .= $this->dados['valorTotal'];
+            $this->xml->text($produto->subtotal);
+            $this->texto .= $produto->subtotal;
             $this->xml->endElement(); #ans:valorTotal
             $this->xml->startElement('ans:descricaoProcedimento');
-            $this->xml->text($value['descricaoProcedimento']);
-            $this->texto .= $this->dados['descricaoProcedimento'];
+            $this->xml->text($produto->produto->descricao);
+            $this->texto .= $produto->produto->descricao;
             $this->xml->endElement(); #ans:descricaoProcedimento
             $this->xml->endElement(); #ans:servicosExecutados
             $this->xml->endElement(); #ans:despesa
