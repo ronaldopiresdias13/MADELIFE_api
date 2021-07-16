@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Api\App\v3_0_25;
 
 use App\Models\Escala;
 use App\Http\Controllers\Controller;
+use App\Models\Ocorrencia;
 use App\Models\Ponto;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PontosController extends Controller
 {
@@ -111,6 +114,20 @@ class PontosController extends Controller
                         'status'     => $request->status,
                     ]
                 );
+                // $escala = Escala::find($request->escala_id);
+                try{
+                    $ocorrencia = Ocorrencia::where('tipo', '=', 'Check-in Atrasado')->whereHas('escalas', function ($q) use ($request) {
+                        $q->where('escala_id', '=', $request->escala_id);
+                    })->first();
+
+                    if ($ocorrencia != null) {
+                        $ocorrencia->fill(['situacao' => 'Resolvida', 'justificativa' => 'Check-in realizado'])->save();
+                        $ocorrencia->chamados()->update(['finalizado' => 1, 'justificativa' => 'Check-in realizado']);
+                    }
+                }
+                catch(Exception $e){
+                    Log::error($e);
+                }
             });
             return response()->json([
                 'alert' => [
@@ -156,6 +173,15 @@ class PontosController extends Controller
                             'status'     => $request->status,
                         ]
                     );
+
+                    $ocorrencia = Ocorrencia::where('tipo', '=', 'Check-out Atrasado')->whereHas('escalas', function ($q) use ($request) {
+                        $q->where('escala_id', '=', $request->escala_id);
+                    })->first();
+    
+                    if ($ocorrencia != null) {
+                        $ocorrencia->fill(['situacao' => 'Resolvida', 'justificativa' => 'Check-out realizado'])->save();
+                        $ocorrencia->chamados()->update(['finalizado' => 1, 'justificativa' => 'Check-out realizado']);
+                    }
                 });
                 $escala->status = true;
                 $escala->save();
