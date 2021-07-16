@@ -51,7 +51,6 @@ class GrupocuidadosController extends Controller
                 ]);
             }
         });
-        
     }
 
     /**
@@ -95,5 +94,17 @@ class GrupocuidadosController extends Controller
     {
         $grupocuidado->ativo = false;
         $grupocuidado->save();
+    }
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Grupocuidado  $grupocuidado
+     * @return \Illuminate\Http\Response
+     */
+    public function apagarCuidadoGrupoCuidado(CuidadoGrupocuidado $cuidadoGrupocuidado)
+    {
+        // return $cuidadoGrupocuidado;
+        $cuidadoGrupocuidado->ativo = false;
+        $cuidadoGrupocuidado->save();
     }
 }

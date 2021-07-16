@@ -6,6 +6,7 @@ use App\Models\Empresa;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Escala;
+use Illuminate\Support\Facades\DB;
 
 class EmpresasController extends Controller
 {
@@ -16,7 +17,7 @@ class EmpresasController extends Controller
      */
     public function index()
     {
-        return Empresa::all();
+        return Empresa::withCount(['pacientes'])->get();
     }
 
     /**
@@ -43,46 +44,7 @@ class EmpresasController extends Controller
      */
     public function show(Request $request, empresa $empresa)
     {
-        $iten = $empresa;
-
-        if ($request->commands) {
-            $request = json_decode($request->commands, true);
-        }
-
-        if ($request['adicionais']) {
-            foreach ($request['adicionais'] as $key => $adicional) {
-                if (is_string($adicional)) {
-                    $iten[$adicional];
-                } else {
-                    $iten2 = $iten;
-                    foreach ($adicional as $key => $a) {
-                        if ($key == 0) {
-                            if ($iten[0] == null) {
-                                $iten2 = $iten[$a];
-                            } else {
-                                foreach ($iten as $key => $i) {
-                                    $i[$a];
-                                }
-                            }
-                        } else {
-                            if ($iten2 != null) {
-                                if ($iten2->count() > 0) {
-                                    if ($iten2[0] == null) {
-                                        $iten2 = $iten2[$a];
-                                    } else {
-                                        foreach ($iten2 as $key => $i) {
-                                            $i[$a];
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return $iten;
+        return $empresa;
     }
 
     /**

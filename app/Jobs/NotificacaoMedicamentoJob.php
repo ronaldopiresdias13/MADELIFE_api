@@ -41,7 +41,7 @@ class NotificacaoMedicamentoJob implements ShouldQueue
         $hour_ago_minute = Carbon::now()->subMinute()->format('H:i');
 
         $date_now = Carbon::now()->format('Y-m-d');
-        $date_ago = Carbon::now()->format('Y-m-d');
+        $date_ago = Carbon::now()->subDay()->format('Y-m-d');
         $tomorrow = Carbon::now()->addDay()->format('Y-m-d');
 
         $hour_ago_ago = Carbon::now()->subMinutes(30)->format('H:i');
@@ -57,7 +57,8 @@ class NotificacaoMedicamentoJob implements ShouldQueue
         $nao_marcados = DB::select(DB::raw("select hm.horario as hora, tp.id as transcricao_produto_id, tr.empresa_id from transcricao_produto as tp
     join transcricoes as tr on tr.id=tp.transcricao_id
     join horariomedicamentos as hm on hm.transcricao_produto_id=tp.id and hm.horario not in (select a.hora from acaomedicamentos as a where a.transcricao_produto_id=tp.id and a.`data`= :date_now)
-    where  ((hm.horario> :now and hm.horario<= :ago) or (hm.horario=:now1)) and tp.ativo=1 and hm.ativo=1 order by transcricao_produto_id"), array('date_now' => $date_now, 'now' => $hour_now, 'ago' => $hour_ago, 'now1' => $hour_now1));
+    where  ((hm.horario> :now and hm.horario<= :ago) or (hm.horario=:now1)) and tp.ativo=1 and hm.ativo=1 order by transcricao_produto_id"), 
+    array('date_now' => $date_now, 'now' => $hour_now, 'ago' => $hour_ago, 'now1' => $hour_now1));
         // dd($nao_marcados);
 
         foreach ($nao_marcados as $dado) {
@@ -67,6 +68,8 @@ class NotificacaoMedicamentoJob implements ShouldQueue
         join transcricoes as t on tp.transcricao_id=t.id
         join escalas as es on es.ordemservico_id=t.ordemservico_id and es.ativo=1 and  ((es.dataentrada=:date_now and es.horaentrada<=:hour and es.horasaida>:hour_1) or (es.dataentrada=:date_ago_ and es.datasaida=:date_now_ and :hour_2<es.horasaida and es.horaentrada>es.horasaida) or (es.dataentrada=:date_now_2 and es.horaentrada<=:hour_3 and es.datasaida=:tomorrow))
         left join prestadores as pre on pre.id=es.prestador_id
+        join prestador_formacao as pf on pf.prestador_id=pre.id
+        join formacoes as fo on fo.id=pf.formacao_id and (fo.descricao='Auxiliar de Enfermagem' or fo.descricao='Técnico de Enfermagem' or fo.descricao='Enfermagem')
         join pessoas as pe on pe.id=pre.pessoa_id
         where tp.id=:id and t.empresa_id=:empresa_id"),
                 array(
@@ -110,7 +113,7 @@ class NotificacaoMedicamentoJob implements ShouldQueue
                 ]);
 
                 $boleto = json_decode($notification_response->getBody());
-                Log::info($notification_response->getBody());
+                $notification_response->getBody()->close();
             }
         }
 
@@ -125,7 +128,7 @@ class NotificacaoMedicamentoJob implements ShouldQueue
         $hour_now = Carbon::now()->subMinute()->format('H:i');
         $hour_ago = Carbon::now()->subMinutes(30)->format('H:i');
         $date_now = Carbon::now()->format('Y-m-d');
-        $date_ago = Carbon::now()->format('Y-m-d');
+        $date_ago = Carbon::now()->subDay()->format('Y-m-d');
         $tomorrow = Carbon::now()->addDay()->format('Y-m-d');
 
         // $date_now = '2021-02-12';
@@ -146,6 +149,8 @@ class NotificacaoMedicamentoJob implements ShouldQueue
         join transcricoes as t on tp.transcricao_id=t.id
         join escalas as es on es.ordemservico_id=t.ordemservico_id and es.ativo=1 and  ((es.dataentrada=:date_now and es.horaentrada<=:hour and es.horasaida>:hour_1) or (es.dataentrada=:date_ago_ and es.datasaida=:date_now_ and :hour_2<es.horasaida and es.horaentrada>es.horasaida) or (es.dataentrada=:date_now_2 and es.horaentrada<=:hour_3 and es.datasaida=:tomorrow))
         left join prestadores as pre on pre.id=es.prestador_id
+        join prestador_formacao as pf on pf.prestador_id=pre.id
+        join formacoes as fo on fo.id=pf.formacao_id and (fo.descricao='Auxiliar de Enfermagem' or fo.descricao='Técnico de Enfermagem' or fo.descricao='Enfermagem')
         join pessoas as pe on pe.id=pre.pessoa_id
         where tp.id=:id and t.empresa_id=:empresa_id"),
                 array(
@@ -188,7 +193,8 @@ class NotificacaoMedicamentoJob implements ShouldQueue
                 ]);
 
                 $boleto = json_decode($notification_response->getBody());
-                Log::info($notification_response->getBody());
+                $notification_response->getBody()->close();
+
             }
         }
     }

@@ -101,7 +101,6 @@ class PrestadoresController extends Controller
             }
             if ($request['cidade_id']) {
                 $result->where('cidades.id', $request['cidade_id']);
-
             }
         }
         if ($request['data']) {
@@ -131,6 +130,49 @@ class PrestadoresController extends Controller
         //
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function buscaPrestadoresPorCliente(Request $request)
+    {
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+        return DB::select(
+            "
+            SELECT profp.nome AS prestador, pp.nome AS paciente, e.periodo, e.tipo, s.descricao, COUNT(e.id) AS total  FROM escalas AS e
+            INNER JOIN ordemservicos AS os
+            ON e.ordemservico_id = os.id
+            INNER JOIN orcamentos AS o
+            ON os.orcamento_id = o.id
+            INNER JOIN homecares AS hc
+            ON hc.orcamento_id = o.id
+            INNER JOIN pacientes AS pac
+            ON pac.id = hc.paciente_id
+            INNER JOIN pessoas AS pp
+            ON pp.id = pac.pessoa_id
+            INNER JOIN prestadores AS prof
+            ON prof.id = e.prestador_id
+            INNER JOIN pessoas AS profp
+            ON profp.id = prof.pessoa_id
+            INNER JOIN servicos AS s
+            ON e.servico_id = s.id
+            WHERE o.cliente_id = ?
+            AND e.ativo = 1
+            AND e.empresa_id = ?
+            AND e.dataentrada BETWEEN ? AND ?
+            GROUP BY pac.id, profp.nome, pp.nome, e.periodo, e.tipo, s.descricao
+            ORDER BY profp.nome
+        ",
+            [
+                $request->cliente_id,
+                $empresa_id,
+                $request->data_ini,
+                $request->data_fim
+            ]
+        );
+    }
     /**
      * Display the specified resource.
      *

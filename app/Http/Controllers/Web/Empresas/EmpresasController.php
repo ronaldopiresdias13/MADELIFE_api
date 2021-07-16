@@ -62,6 +62,7 @@ class EmpresasController extends Controller
                 'cnpj'        => $request['cnpj'],
                 'ie'          => $request['ie'],
                 'registroANS' => $request['registroANS'],
+                'logo' => $request['logo'],
                 'tiss_sequencialTransacao' => $request['tiss_sequencialTransacao'],
                 'CNES'        => $request['CNES'],
                 'quantidadepaciente'        => $request['quantidadepaciente'],
