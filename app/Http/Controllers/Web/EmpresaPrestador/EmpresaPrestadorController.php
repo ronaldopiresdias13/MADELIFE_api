@@ -37,12 +37,20 @@ class EmpresaPrestadorController extends Controller
             if ($upload) {
                 DB::transaction(function () use ($request, $caminho, $nome, $nomeOriginal) {
                     $empresa_prestador = EmpresaPrestador::create([
-                        'empresa_id'   => $request['empresa_id'],
-                        'prestador_id' => $request['prestador_id'],
-                        'contrato'     => $caminho . '/' . $nome,
-                        'nome'         => $nomeOriginal,
-                        'dataInicio'   => $request['dataInicio'],
-                        'dataFim'      => $request['dataFim'],
+                        'empresa_id'    => $request['empresa_id'],
+                        'prestador_id'  => $request['prestador_id'],
+                        'contrato'      => $caminho . '/' . $nome,
+                        'nome'          => $nomeOriginal,
+                        'dataInicio'    => $request['dataInicio'],
+                        'dataFim'       => $request['dataFim'],
+                        'valorinss'     => $request['valorinss'],
+                        'tipovalorinss' => $request['tipovalorinss'],
+                        'valoriss'      => $request['valoriss'],
+                        'tipovaloriss'  => $request['tipovaloriss'],
+                        'taxaadm'       => $request['taxaadm'],
+                        'tipotaxaadm'   => $request['tipotaxaadm'],
+                        'adicionalextra' => $request['adicionalextra'],
+                        'adicionaloutros' => $request['adicionaloutros'],
                         'status'       => $request['status'],
                         'forma_contratacao' => $request['forma_contratacao'],
                     ]);
@@ -61,6 +69,14 @@ class EmpresaPrestadorController extends Controller
                         'nome'         => '',
                         'dataInicio'   => $request['dataInicio'],
                         'dataFim'      => $request['dataFim'],
+                        'valorinss'     => $request['valorinss'],
+                        'tipovalorinss' => $request['tipovalorinss'],
+                        'valoriss'      => $request['valoriss'],
+                        'tipovaloriss'  => $request['tipovaloriss'],
+                        'taxaadm'       => $request['taxaadm'],
+                        'tipotaxaadm'   => $request['tipotaxaadm'],
+                        'adicionalextra' => $request['adicionalextra'],
+                        'adicionaloutros' => $request['adicionaloutros'],
                         'status'       => $request['status'],
                         'forma_contratacao' => $request['forma_contratacao'],
                     ]);
@@ -106,6 +122,14 @@ class EmpresaPrestadorController extends Controller
                     $empresaPrestador->nome       = $nomeOriginal;
                     $empresaPrestador->dataInicio = $request['dataInicio'];
                     $empresaPrestador->dataFim    = $request['dataFim'];
+                    $empresaPrestador->valorinss     = $request['valorinss'];
+                    $empresaPrestador->tipovalorinss = $request['tipovalorinss'];
+                    $empresaPrestador->valoriss      = $request['valoriss'];
+                    $empresaPrestador->tipovaloriss  = $request['tipovaloriss'];
+                    $empresaPrestador->taxaadm       = $request['taxaadm'];
+                    $empresaPrestador->tipotaxaadm   = $request['tipotaxaadm'];
+                    $empresaPrestador->adicionalextra = $request['adicionalextra'];
+                    $empresaPrestador->adicionaloutros = $request['adicionaloutros'];
                     $empresaPrestador->status     = $request['status'];
                     $empresaPrestador->forma_contratacao  = $request['forma_contratacao'];
                     $empresaPrestador->save();
@@ -123,6 +147,14 @@ class EmpresaPrestadorController extends Controller
                     $empresaPrestador->dataFim    = $request['dataFim'];
                     $empresaPrestador->status     = $request['status'];
                     $empresaPrestador->forma_contratacao  = $request['forma_contratacao'];
+                    $empresaPrestador->valorinss     = $request['valorinss'];
+                    $empresaPrestador->tipovalorinss = $request['tipovalorinss'];
+                    $empresaPrestador->valoriss      = $request['valoriss'];
+                    $empresaPrestador->tipovaloriss  = $request['tipovaloriss'];
+                    $empresaPrestador->taxaadm       = $request['taxaadm'];
+                    $empresaPrestador->tipotaxaadm   = $request['tipotaxaadm'];
+                    $empresaPrestador->adicionalextra = $request['adicionalextra'];
+                    $empresaPrestador->adicionaloutros = $request['adicionaloutros'];
                     $empresaPrestador->save();
                 });
                 return response()->json('Dados salvos com sucesso!', 200)->header('Content-Type', 'text/plain');
@@ -130,7 +162,6 @@ class EmpresaPrestadorController extends Controller
                 return response()->json('Arquivo inválido ou corrompido!', 400)->header('Content-Type', 'text/plain');
             }
         }
-
     }
 
     /**
