@@ -443,8 +443,17 @@ class TissController extends Controller
         return base64_encode($this->xml->outputMemory());
     }
 
-    public function gerar_xml_3_05_00()
+    public function gerar_xml_3_05_00($medicoes, $cliente)
     {
+        $now = Carbon::now();
+        $dados = [];
+        $dados['valorProcedimentos']   = 0;
+        $dados['valorDiarias']         = 0;
+        $dados['valorTaxasAlugueis']   = 0;
+        $dados['valorMateriais']       = 0;
+        $dados['valorMedicamentos']    = 0;
+        $dados['valorOPME']            = 0;
+        $dados['valorGasesMedicinais'] = 0;
         $this->iniciarArquivo();
         $this->xml->startElement('ans:mensagemTISS');
         $this->xml->writeAttribute('xmlns:ans', 'http://www.ans.gov.br/padroes/tiss/schemas');
@@ -454,8 +463,7 @@ class TissController extends Controller
         $this->xml->startElement('ans:cabecalho');
         $this->xml->startElement('ans:identificacaoTransacao');
         $this->xml->startElement('ans:tipoTransacao');
-        $this->xml->text($this->dados['tipoTransacao']);
-        $this->texto .= $this->dados['tipoTransacao'];
+        $this->xml->text('ENVIO_LOTE_GUIAS');
         $this->xml->endElement(); #ans:tipoTransacao
         $this->xml->startElement('ans:sequencialTransacao');
         $this->xml->text($this->dados['sequencialTransacao']);
