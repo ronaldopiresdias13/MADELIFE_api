@@ -57,7 +57,7 @@ class NotificacaoMedicamentoJob implements ShouldQueue
         $nao_marcados = DB::select(DB::raw("select hm.horario as hora, tp.id as transcricao_produto_id, tr.empresa_id from transcricao_produto as tp
     join transcricoes as tr on tr.id=tp.transcricao_id
     join horariomedicamentos as hm on hm.transcricao_produto_id=tp.id and hm.horario not in (select a.hora from acaomedicamentos as a where a.transcricao_produto_id=tp.id and a.`data`= :date_now)
-    where  ((hm.horario> :now and hm.horario<= :ago) or (hm.horario=:now1)) and tp.ativo=1 and hm.ativo=1 order by transcricao_produto_id"), 
+    where  ((hm.horario>= :now and hm.horario<= :ago) or (hm.horario=:now1)) and tp.ativo=1 and hm.ativo=1 order by transcricao_produto_id"), 
     array('date_now' => $date_now, 'now' => $hour_now, 'ago' => $hour_ago, 'now1' => $hour_now1));
         // dd($nao_marcados);
 
@@ -127,7 +127,7 @@ class NotificacaoMedicamentoJob implements ShouldQueue
 
         $hour_now = Carbon::now()->subMinute()->format('H:i');
         $hour_ago = Carbon::now()->subMinutes(30)->format('H:i');
-        $date_now = Carbon::now()->format('Y-m-d');
+        $date_now = Carbon::now()->subMinute()->format('Y-m-d');
         $date_ago = Carbon::now()->subDay()->format('Y-m-d');
         $tomorrow = Carbon::now()->addDay()->format('Y-m-d');
 
@@ -140,7 +140,7 @@ class NotificacaoMedicamentoJob implements ShouldQueue
         $nao_marcados = DB::select(DB::raw("select hm.horario as hora, tp.id as transcricao_produto_id, tr.empresa_id from transcricao_produto as tp
     join transcricoes as tr on tr.id=tp.transcricao_id
     join horariomedicamentos as hm on hm.transcricao_produto_id=tp.id and hm.horario not in (select a.hora from acaomedicamentos as a where a.transcricao_produto_id=tp.id and a.`data`= :date_now)
-    where  ((hm.horario< :now and hm.horario>= :ago)) and tp.ativo=1 and hm.ativo=1 order by transcricao_produto_id"), array('date_now' => $date_now, 'now' => $hour_now, 'ago' => $hour_ago));
+    where  ((hm.horario<= :now and hm.horario>= :ago)) and tp.ativo=1 and hm.ativo=1 order by transcricao_produto_id"), array('date_now' => $date_now, 'now' => $hour_now, 'ago' => $hour_ago));
 
         foreach ($nao_marcados as $dado) {
             // dd(array('date_ago'=>$date_ago,'date_now'=>$date_now,'hour'=>$dado->hora,'id'=>$dado->transcricao_produto_id));

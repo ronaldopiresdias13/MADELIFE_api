@@ -10,6 +10,7 @@ use App\Models\Chamado;
 use App\Models\Conversa;
 use App\Models\Ocorrencia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 
@@ -47,6 +48,12 @@ class DashboardController extends Controller
             }])->where('situacao','=','Pendente');
             if($request->tipo!=null && $request->tipo!='Todos'){
                 $ocorrencias=$ocorrencias->where('tipo','=',$request->tipo);
+            }
+            if($request->inicio!=null && $request->inicio!=''){
+                $ocorrencias=$ocorrencias->where('horario','>=',$request->inicio.' 00:00');
+            }
+            if($request->fim!=null && $request->fim!=''){
+                $ocorrencias=$ocorrencias->where('horario','<=',$request->fim.' 23:59');
             }
             if($request->paciente!=null && Str::length($request->paciente)>0){
                 $ocorrencias=$ocorrencias->whereHas('paciente',function($q)use($request){
@@ -150,6 +157,12 @@ class DashboardController extends Controller
             }])->where('situacao','=','Resolvida');
             if($request->tipo!=null && $request->tipo!='Todos'){
                 $ocorrencias=$ocorrencias->where('tipo','=',$request->tipo);
+            }
+            if($request->inicio!=null && $request->inicio!=''){
+                $ocorrencias=$ocorrencias->where('horario','>=',$request->inicio.' 00:00');
+            }
+            if($request->fim!=null && $request->fim!=''){
+                $ocorrencias=$ocorrencias->where('horario','<=',$request->fim.' 23:59');
             }
             if($request->paciente!=null && Str::length($request->paciente)>0){
                 $ocorrencias=$ocorrencias->whereHas('paciente',function($q)use($request){
