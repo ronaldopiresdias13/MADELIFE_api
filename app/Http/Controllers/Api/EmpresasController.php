@@ -33,6 +33,10 @@ class EmpresasController extends Controller
         $empresa->cnpj  = $request->cnpj;
         $empresa->ie    = $request->ie;
         $empresa->logo  = $request->logo;
+        $empresa->quantidadead = $request->quantidadead;
+        $empresa->valorad = $request->valorad;
+        $empresa->quantidadeid = $request->quantidadeid;
+        $empresa->valorid = $request->valorid;
         $empresa->save();
     }
 
