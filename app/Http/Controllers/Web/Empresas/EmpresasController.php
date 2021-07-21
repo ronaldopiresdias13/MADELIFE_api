@@ -28,7 +28,25 @@ class EmpresasController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            Empresa::create($request->all());
+            Empresa::create([
+                'razao'                    => $request['razao'],
+                'cnpj'                     => $request['cnpj'],
+                'ie'                       => $request['ie'],
+                'registroANS'              => $request['registroANS'],
+                'logo'                     => $request['logo'],
+                'tiss_sequencialTransacao' => $request['tiss_sequencialTransacao'],
+                'CNES'                     => $request['CNES'],
+                'quantidadepaciente'       => $request['quantidadepaciente'],
+                'quantidadead'             => $request['quantidadead'],
+                'valorad'                  => $request['valorad'],
+                'quantidadeid'             => $request['quantidadeid'],
+                'valorid'                  => $request['valorid'],
+                'telefone'                 => $request['telefone'],
+                'celular'                  => $request['celular'],
+                'endereco'                 => $request['endereco'],
+                'site'                     => $request['site'],
+                'email'                    => $request['email'],
+            ]);
         });
     }
 
@@ -58,14 +76,23 @@ class EmpresasController extends Controller
     {
         $empresa =  DB::transaction(function () use ($request, $empresa) {
             $empresa->update([
-                'razao'       => $request['razao'],
-                'cnpj'        => $request['cnpj'],
-                'ie'          => $request['ie'],
-                'registroANS' => $request['registroANS'],
-                'logo' => $request['logo'],
+                'razao'                    => $request['razao'],
+                'cnpj'                     => $request['cnpj'],
+                'ie'                       => $request['ie'],
+                'registroANS'              => $request['registroANS'],
+                'logo'                     => $request['logo'],
                 'tiss_sequencialTransacao' => $request['tiss_sequencialTransacao'],
-                'CNES'        => $request['CNES'],
-                'quantidadepaciente'        => $request['quantidadepaciente'],
+                'CNES'                     => $request['CNES'],
+                'quantidadepaciente'       => $request['quantidadepaciente'],
+                'quantidadead'             => $request['quantidadead'],
+                'valorad'                  => $request['valorad'],
+                'quantidadeid'             => $request['quantidadeid'],
+                'valorid'                  => $request['valorid'],
+                'telefone'                 => $request['telefone'],
+                'celular'                  => $request['celular'],
+                'endereco'                 => $request['endereco'],
+                'site'                     => $request['site'],
+                'email'                    => $request['email'],
             ]);
         });
     }
