@@ -19,6 +19,7 @@ class FolgasController extends Controller
     {
         $folgas = Folga::with('escala')
         ->where('empresa_id', $request->empresa_id)
+        ->orderByDesc('created_at')
         ->get();
 
         return $folgas;
