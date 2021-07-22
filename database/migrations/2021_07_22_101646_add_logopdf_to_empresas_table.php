@@ -14,7 +14,7 @@ class AddLogopdfToEmpresasTable extends Migration
     public function up()
     {
         Schema::table('empresas', function (Blueprint $table) {
-            $table->binary('logopdf')->nullable()->after('logo');
+            $table->longText('logopdf')->nullable()->after('logo');
         });
     }
 
