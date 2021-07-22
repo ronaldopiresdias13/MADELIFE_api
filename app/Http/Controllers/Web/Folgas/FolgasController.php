@@ -25,6 +25,66 @@ class FolgasController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function listAguardando(Request $request)
+    {
+        $folgas = Folga::with('escala')
+        ->where('empresa_id', $request->empresa_id)
+        ->where('aprovada', null)
+        ->get();
+
+        return $folgas;
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function listAprovadas(Request $request)
+    {
+        $folgas = Folga::with('escala')
+        ->where('empresa_id', $request->empresa_id)
+        ->where('aprovada', true)
+        ->get();
+
+        return $folgas;
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function listReprovadas(Request $request)
+    {
+        $folgas = Folga::with('escala')
+        ->where('empresa_id', $request->empresa_id)
+        ->where('aprovada', false)
+        ->get();
+
+        return $folgas;
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function listPendentes(Request $request)
+    {
+        $folgas = Folga::with('escala')
+        ->where('empresa_id', $request->empresa_id)
+        ->where('substituto', null)
+        ->get();
+
+        return $folgas;
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -94,6 +154,25 @@ class FolgasController extends Controller
 
             $escala = Escala::find($folga->escala_id);
             $escala->folga = true;
+            $escala->save();
+        });
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Folga  $folga
+     * @return \Illuminate\Http\Response
+     */
+    public function reprovarFolga(Request $request, Folga $folga)
+    {
+        DB::transaction(function () use ($folga) {
+            $folga->aprovada = false;
+            $folga->save();
+
+            $escala = Escala::find($folga->escala_id);
+            $escala->folga = false;
             $escala->save();
         });
     }
