@@ -30,17 +30,6 @@ class FolgasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function solicitarFolga(Request $request)
     {
         DB::transaction(function () use ($request) {
@@ -86,18 +75,6 @@ class FolgasController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Folga $folga)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Folga  $folga
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Folga $folga)
     {
         //
     }
