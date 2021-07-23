@@ -54,8 +54,12 @@ class ChatWebSocketController extends Controller implements MessageComponentInte
                 // Log::info($response->getBody());
                 // $resp = json_decode($response->getBody());
                 // $response->getBody()->close();
+<<<<<<< HEAD
 		
 		$token = $message->token;
+=======
+                $token = $message->token;
+>>>>>>> 38db407e0a768f5908bd4fef37e06f540f2ce034
                 // break up the token into its three parts
                 $token_parts = explode('.', $token);
                 Log::info($token_parts);
@@ -68,6 +72,10 @@ class ChatWebSocketController extends Controller implements MessageComponentInte
                 $token_header_array = json_decode($token_header_json, true);
                 Log::info($token_header_array);
                 $user_token = $token_header_array['jti'];
+<<<<<<< HEAD
+=======
+
+>>>>>>> 38db407e0a768f5908bd4fef37e06f540f2ce034
                 $user_id = DB::table('oauth_access_tokens')->where('id', $user_token)->value('user_id');
                 $resp = User::where('id','=',$user_id)->with('pessoa')->first();
                 if($resp==null){

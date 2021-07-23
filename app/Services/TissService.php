@@ -19,14 +19,14 @@ class TissService
     public function __construct($medicao, $empresa)
     {
         $this->dados['tipoTransacao']              = 'ENVIO_LOTE_GUIAS';
-        $this->dados['sequencialTransacao']        = $empresa->tiss_sequencialTransacao;
+        $this->dados['sequencialTransacao']        = $medicao->cliente->empresa->tiss_sequencialTransacao;
         $this->dados['dataRegistroTransacao']      = substr($medicao->created_at, 0, 10);
         $this->dados['horaRegistroTransacao']      = substr($medicao->created_at, 11, 8);
-        $this->dados['CNPJ']                       = $empresa->cnpj;
-        // $this->dados['registroANS']                = $empresa->registroANS;
+        $this->dados['CNPJ']                       = $medicao->cliente->empresa->cnpj;
         $this->dados['registroANS']                = $medicao->cliente->registroAns;
         $this->dados['versaoPadrao']               = str_replace('_', '.', $medicao->cliente->versaoTiss);
         $this->dados['numeroLote']                 = '0';
+
         $this->dados['numeroGuiaPrestador']        = $medicao->numeroGuiaPrestador;
         $this->dados['numeroCarteira']             = $medicao->ordemservico->orcamento->homecare->paciente->numeroCarteira;
         $this->dados['atendimentoRN']              = $medicao->ordemservico->orcamento->homecare->paciente->atendimentoRN ? 'S' : 'N';
@@ -39,7 +39,6 @@ class TissService
         $this->dados['UF']                         = $medicao->profissional->uf;
         $this->dados['CBOS']                       = $medicao->profissional->cbos;
         $this->dados['CNES']                       = $medicao->cliente->CNES;
-        // $this->dados['CNES']                       = $empresa->CNES;
         $this->dados['dataSolicitacao']            = $medicao->dataSolicitacao;
         $this->dados['caraterAtendimento']         = $medicao->ordemservico->orcamento->caraterAtendimento;
         $this->dados['indicacaoClinica']           = $medicao->ordemservico->orcamento->indicacaoClinica;
@@ -188,6 +187,7 @@ class TissService
         $this->texto .= $this->dados['numeroLote'];
         $this->xml->endElement(); #ans:numeroLote');
         $this->xml->startElement('ans:guiasTISS');
+
         $this->xml->startElement('ans:guiaSP-SADT'); // Foreach
         $this->xml->startElement('ans:cabecalhoGuia');
         $this->xml->startElement('ans:registroANS');
@@ -604,7 +604,7 @@ class TissService
             $this->xml->startElement('ans:procedimentoExecutado');
             $this->xml->startElement('ans:sequencialItem');
             $this->xml->text($this->sequencialItem);
-            $this->texto .= $this->dados['sequencialIt'];
+            $this->texto .= $this->sequencialItem;
             $this->xml->endElement(); #ans:sequencialItem
             $this->xml->startElement('ans:dataExecucao');
             $this->xml->text($value['dataExecucao']);
@@ -658,7 +658,7 @@ class TissService
             $this->xml->startElement('ans:despesa');
             $this->xml->startElement('ans:sequencialItem');
             $this->xml->text($this->sequencialItem);
-            $this->texto .= $this->dados['sequencialIt'];
+            $this->texto .= $this->sequencialItem;
             $this->xml->endElement(); #ans:sequencialItem
             $this->xml->startElement('ans:codigoDespesa');
             $this->xml->text($value['codigoDespesa']);
