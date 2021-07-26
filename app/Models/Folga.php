@@ -24,4 +24,8 @@ class Folga extends Model
     {
         return $this->belongsTo(Escala::class);
     }
+    public function prestador(): BelongsTo
+    {
+        return $this->belongsTo(Prestador::class);
+    }
 }

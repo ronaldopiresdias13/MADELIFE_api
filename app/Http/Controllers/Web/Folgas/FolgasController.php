@@ -18,7 +18,11 @@ class FolgasController extends Controller
     public function index(Request $request)
     {
         $empresa_id = $request->user()->pessoa->profissional->empresa_id;
-        $folgas = Folga::with('escala')
+        $folgas = Folga::with([
+            'escala.ordemservico.orcamento.homecare.paciente.pessoa',
+            'escala.ordemservico.orcamento.cliente.pessoa',
+            'prestador.pessoa'
+        ])
             ->where('empresa_id', $empresa_id)
             ->orderByDesc('created_at')
             ->get();
@@ -102,6 +106,8 @@ class FolgasController extends Controller
             $folga->escala_id       = $escala->id;
             $folga->prestador_id    = $escala->prestador_id;
             $folga->datasolicitacao = $request->datasolicitacao;
+            $folga->dataaprovacao   = $request->dataaprovacao;
+            $folga->aprovada        = $request->aprovada;
             $folga->save();
         });
     }
