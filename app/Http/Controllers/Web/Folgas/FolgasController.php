@@ -113,7 +113,10 @@ class FolgasController extends Controller
      */
     public function adicionarFolga(Request $request)
     {
-        DB::transaction(function () use ($request) {
+        $hoje = getdate();
+        $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . ($hoje['mday'] < 10 ? '0' . $hoje['mday'] : $hoje['mday']);
+
+        DB::transaction(function () use ($request, $data) {
             $escala = Escala::find($request->escala_id);
 
             $folga = new Folga();
@@ -121,7 +124,7 @@ class FolgasController extends Controller
             $folga->escala_id     = $escala->id;
             $folga->prestador_id  = $escala->prestador_id;
             $folga->aprovada      = true;
-            $folga->dataaprovacao = $request->dataaprovacao;
+            $folga->dataaprovacao = $data;
             $folga->save();
 
             $escala->folga = true;
