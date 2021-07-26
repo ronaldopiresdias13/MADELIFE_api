@@ -21,7 +21,8 @@ class FolgasController extends Controller
         $folgas = Folga::with([
             'escala.ordemservico.orcamento.homecare.paciente.pessoa',
             'escala.ordemservico.orcamento.cliente.pessoa',
-            'prestador.pessoa'
+            'prestador.pessoa',
+            'substituto.pessoa'
         ])
             ->where('empresa_id', $empresa_id)
             ->orderByDesc('created_at')
@@ -198,11 +199,11 @@ class FolgasController extends Controller
     public function adicionarSubstituto(Request $request, Folga $folga)
     {
         DB::transaction(function () use ($request, $folga) {
-            $folga->substituto = $request->substituto;
+            $folga->substituto = $request['substituto']['id'];
             $folga->save();
 
             $escala = Escala::find($folga->escala_id);
-            $escala->substituto = $request->substituto;
+            $escala->substituto = $request['substituto']['id'];
             $escala->save();
         });
     }
