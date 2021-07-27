@@ -17,10 +17,16 @@ class FolgasController extends Controller
      */
     public function index(Request $request)
     {
-        $folgas = Folga::with('escala')
-        ->where('empresa_id', $request->empresa_id)
-        ->orderByDesc('created_at')
-        ->get();
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+        $folgas = Folga::with([
+            'escala.ordemservico.orcamento.homecare.paciente.pessoa',
+            'escala.ordemservico.orcamento.cliente.pessoa',
+            'prestador.pessoa',
+            'substituto.pessoa'
+        ])
+            ->where('empresa_id', $empresa_id)
+            ->orderByDesc('created_at')
+            ->get();
 
         return $folgas;
     }
@@ -33,9 +39,9 @@ class FolgasController extends Controller
     public function listAguardando(Request $request)
     {
         $folgas = Folga::with('escala')
-        ->where('empresa_id', $request->empresa_id)
-        ->where('aprovada', null)
-        ->get();
+            ->where('empresa_id', $request->empresa_id)
+            ->where('aprovada', null)
+            ->get();
 
         return $folgas;
     }
@@ -48,9 +54,9 @@ class FolgasController extends Controller
     public function listAprovadas(Request $request)
     {
         $folgas = Folga::with('escala')
-        ->where('empresa_id', $request->empresa_id)
-        ->where('aprovada', true)
-        ->get();
+            ->where('empresa_id', $request->empresa_id)
+            ->where('aprovada', true)
+            ->get();
 
         return $folgas;
     }
@@ -63,9 +69,9 @@ class FolgasController extends Controller
     public function listReprovadas(Request $request)
     {
         $folgas = Folga::with('escala')
-        ->where('empresa_id', $request->empresa_id)
-        ->where('aprovada', false)
-        ->get();
+            ->where('empresa_id', $request->empresa_id)
+            ->where('aprovada', false)
+            ->get();
 
         return $folgas;
     }
@@ -78,9 +84,9 @@ class FolgasController extends Controller
     public function listPendentes(Request $request)
     {
         $folgas = Folga::with('escala')
-        ->where('empresa_id', $request->empresa_id)
-        ->where('substituto', null)
-        ->get();
+            ->where('empresa_id', $request->empresa_id)
+            ->where('substituto', null)
+            ->get();
 
         return $folgas;
     }
@@ -101,6 +107,8 @@ class FolgasController extends Controller
             $folga->escala_id       = $escala->id;
             $folga->prestador_id    = $escala->prestador_id;
             $folga->datasolicitacao = $request->datasolicitacao;
+            $folga->dataaprovacao   = $request->dataaprovacao;
+            $folga->aprovada        = $request->aprovada;
             $folga->save();
         });
     }
@@ -113,7 +121,10 @@ class FolgasController extends Controller
      */
     public function adicionarFolga(Request $request)
     {
-        DB::transaction(function () use ($request) {
+        $hoje = getdate();
+        $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . ($hoje['mday'] < 10 ? '0' . $hoje['mday'] : $hoje['mday']);
+
+        DB::transaction(function () use ($request, $data) {
             $escala = Escala::find($request->escala_id);
 
             $folga = new Folga();
@@ -121,7 +132,7 @@ class FolgasController extends Controller
             $folga->escala_id     = $escala->id;
             $folga->prestador_id  = $escala->prestador_id;
             $folga->aprovada      = true;
-            $folga->dataaprovacao = $request->dataaprovacao;
+            $folga->dataaprovacao = $data;
             $folga->save();
 
             $escala->folga = true;
@@ -188,11 +199,11 @@ class FolgasController extends Controller
     public function adicionarSubstituto(Request $request, Folga $folga)
     {
         DB::transaction(function () use ($request, $folga) {
-            $folga->substituto = $request->substituto;
+            $folga->substituto = $request['substituto']['id'];
             $folga->save();
 
             $escala = Escala::find($folga->escala_id);
-            $escala->substituto = $request->substituto;
+            $escala->substituto = $request['substituto']['id'];
             $escala->save();
         });
     }

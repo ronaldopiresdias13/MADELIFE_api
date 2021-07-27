@@ -3,7 +3,7 @@
 use App\Http\Controllers\Web\Folgas\FolgasController;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => 'auth:api'], function () {
+// Route::group(['middleware' => 'auth:api'], function () {
     Route::get('web/folgas'                            , [FolgasController::class, 'index'              ]);
     Route::get('web/folgas/aguardando'                 , [FolgasController::class, 'listAguardando'     ]);
     Route::get('web/folgas/aprovadas'                  , [FolgasController::class, 'listAprovadas'      ]);
@@ -16,4 +16,4 @@ Route::group(['middleware' => 'auth:api'], function () {
     // Route::get('acaomedicamentos/{acaomedicamento}'   , 'Api\AcaomedicamentosController@show');
     // Route::put('acaomedicamentos/{acaomedicamento}'   , 'Api\AcaomedicamentosController@update');
     // Route::delete('acaomedicamentos/{acaomedicamento}', 'Api\AcaomedicamentosController@destroy');
-});
+// });
