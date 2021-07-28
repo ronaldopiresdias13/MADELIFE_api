@@ -117,6 +117,12 @@ class PagamentoexternosController extends Controller
                             'situacao'       => $item['situacao'],
                             'proventos'      => $item['proventos'],
                             'descontos'      => $item['descontos'],
+                            'valorinss'      => $item['valorinss'],
+                            'tipovalorinss'  => $item['tipovalorinss'],
+                            'valoriss'       => $item['valoriss'],
+                            'tipovaloriss'   => $item['tipovaloriss'],
+                            'taxaadm'        => $item['taxaadm'],
+                            'tipotaxaadm'    => $item['tipotaxaadm'],
                             'tipopessoa'     => "Prestador Externo"
                         ])->id,
                     ]
