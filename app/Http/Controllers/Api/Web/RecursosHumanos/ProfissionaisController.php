@@ -143,7 +143,7 @@ class ProfissionaisController extends Controller
                         'nome'        => $request['pessoa']['nome'],
                         'nascimento'  => $request['pessoa']['nascimento'],
                         'rgie'        => $request['pessoa']['rgie'],
-                        'observacoes' => $request['pessoa']['observacoes'],
+                        // 'observacoes' => $request['pessoa']['observacoes'],
                         'perfil'      => $request['pessoa']['perfil'],
                         'status'      => $request['pessoa']['status'],
                     ]
