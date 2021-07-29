@@ -38,6 +38,16 @@ class Produto extends Model
         return $this->belongsTo(Empresa::class);
     }
 
+    public function marca()
+    {
+        return $this->belongsTo(Marca::class);
+    }
+
+    public function tipoproduto()
+    {
+        return $this->belongsTo(Tipoproduto::class);
+    }
+
     /**
      * Get the unidademedida that owns the Produto
      *
