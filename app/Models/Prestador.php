@@ -29,8 +29,13 @@ class Prestador extends Model
         return $this->belongsToMany(Servico::class, 'prestador_servico')->withPivot('id')->wherePivot('ativo', true);
     }
 
+    // public function empresas()
+    // {
+    //     return $this->belongsToMany(Empresa::class, 'empresa_prestador')->withPivot('id')->wherePivot('ativo', true);
+    // }
+
     public function empresas()
     {
-        return $this->belongsToMany(Empresa::class, 'empresa_prestador')->withPivot('id')->wherePivot('ativo', true);
+        return $this->hasMany(EmpresaPrestador::class)->where('ativo', true);
     }
 }
