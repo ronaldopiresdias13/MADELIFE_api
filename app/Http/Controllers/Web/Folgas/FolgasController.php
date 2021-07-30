@@ -21,8 +21,7 @@ class FolgasController extends Controller
         $folgas = Folga::with([
             'escala.ordemservico.orcamento.homecare.paciente.pessoa',
             'escala.ordemservico.orcamento.cliente.pessoa',
-            'prestador.pessoa',
-            'substituto.pessoa'
+            'prestador.pessoa'
         ])
             ->where('empresa_id', $empresa_id)
             ->orderByDesc('created_at')
@@ -99,16 +98,17 @@ class FolgasController extends Controller
      */
     public function solicitarFolga(Request $request)
     {
-        DB::transaction(function () use ($request) {
+        $hoje = getdate();
+        $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . ($hoje['mday'] < 10 ? '0' . $hoje['mday'] : $hoje['mday']);
+
+        DB::transaction(function () use ($request, $data) {
             $escala = Escala::find($request->escala_id);
 
             $folga = new Folga();
             $folga->empresa_id      = $escala->empresa_id;
             $folga->escala_id       = $escala->id;
             $folga->prestador_id    = $escala->prestador_id;
-            $folga->datasolicitacao = $request->datasolicitacao;
-            $folga->dataaprovacao   = $request->dataaprovacao;
-            $folga->aprovada        = $request->aprovada;
+            $folga->datasolicitacao = $data;
             $folga->save();
         });
     }
@@ -203,7 +203,7 @@ class FolgasController extends Controller
             $folga->save();
 
             $escala = Escala::find($folga->escala_id);
-            $escala->substituto = $request['substituto']['id'];
+            $escala->prestador_id = $request['substituto']['id'];
             $escala->save();
         });
     }
