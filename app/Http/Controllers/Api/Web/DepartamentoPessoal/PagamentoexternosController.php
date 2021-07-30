@@ -89,6 +89,7 @@ class PagamentoexternosController extends Controller
      */
     public function createlist(Request $request)
     {
+        return $request;
         $empresa_id = null;
         if (Auth::check()) {
             if (Auth::user()->pessoa->profissional) {

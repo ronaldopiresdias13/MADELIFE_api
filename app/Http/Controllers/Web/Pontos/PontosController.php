@@ -109,6 +109,7 @@ class PontosController extends Controller
         $escala['prestador']            = $dado->prestador->pessoa->nome;
         $escala['pessoa_id']            = $dado->prestador->pessoa->id;
         $escala['periodo']              = $dado->periodo;
+        $escala['empresas']              = $dado->prestador->empresas;
         $escala['relatorioescalas']     = $dado->relatorioescalas;
         $escala['servico']['id']        = $dado->servico ? $dado->servico->id : null;
         $escala['servico']['descricao'] = $dado->servico ? $dado->servico->descricao : null;
