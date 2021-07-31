@@ -23,6 +23,7 @@ class AddPrestadorProprietarioToEscalasTable extends Migration
         foreach ($escalas as $key => $escala) {
             if ($escala->substituto) {
                 $escala->prestador_proprietario = $escala->substituto;
+                $escala->folga = true;
             } else {
                 $escala->prestador_proprietario = $escala->prestador_id;
             }
