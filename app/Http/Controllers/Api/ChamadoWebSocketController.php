@@ -57,14 +57,10 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                 //         'Authorization' => $message->token_type . ' ' . $message->token,
                 //     ],
                 //     "http_errors" => false
-<<<<<<< HEAD
 		// ]);
-		$token = $message->token;
-=======
                 // ]);
                 // Log::info($message->token);
                 $token = $message->token;
->>>>>>> 38db407e0a768f5908bd4fef37e06f540f2ce034
                 // break up the token into its three parts
                 $token_parts = explode('.', $token);
                 Log::info($token_parts);
@@ -76,20 +72,10 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
 
                 $token_header_array = json_decode($token_header_json, true);
                 Log::info($token_header_array);
-<<<<<<< HEAD
                 $user_token = $token_header_array['jti'];    
 		$user_id = DB::table('oauth_access_tokens')->where('id', $user_token)->value('user_id');
                 $resp = User::where('id','=',$user_id)->with('pessoa')->first();
-                if($resp==null){
-=======
-                $user_token = $token_header_array['jti'];
-
-                
-                $user_id = DB::table('oauth_access_tokens')->where('id',$user_token )->value('user_id');
-                Log::info($user_id);
-                $resp = User::where('id', '=', $user_id)->with('pessoa')->first();
                 if ($resp == null) {
->>>>>>> 38db407e0a768f5908bd4fef37e06f540f2ce034
                     $from->send(json_encode(['type' => 'disconnect', 'mensagem' => 'Usuário inválido ou desconectado']));
                     return;
                 } else {
