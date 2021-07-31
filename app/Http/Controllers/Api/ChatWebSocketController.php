@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Conversa;
 use App\Models\ConversaMensagem;
+use App\Models\Pessoa;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -109,6 +110,14 @@ class ChatWebSocketController extends Controller implements MessageComponentInte
             Log::info($from->resourceId);
 
             Log::info($msg);
+            $pessoa_1 = Pessoa::where('id','=',$message->sender)->first();
+            $pessoa_2 = Pessoa::where('id','=',$message->receive)->first();
+            $profissional_1 = $pessoa_1->profissional()->first();
+            $profissional_2 = $pessoa_2->profissional()->first();
+
+            if($profissional_1==null || $profissional_2==null || $profissional_1->empresa_id!=$profissional_2->empresa_id){
+                return;
+            }
             $conversa = Conversa::where(function ($q) use ($message) {
                 $q->where('sender_id', $message->sender)->where('receive_id', $message->receive);
             })->orWhere(function ($q) use ($message) {
@@ -142,6 +151,14 @@ class ChatWebSocketController extends Controller implements MessageComponentInte
             Log::info($from->resourceId);
 
             Log::info($msg);
+            $pessoa_1 = Pessoa::where('id','=',$message->sender)->first();
+            $pessoa_2 = Pessoa::where('id','=',$message->receive)->first();
+            $profissional_1 = $pessoa_1->profissional()->first();
+            $profissional_2 = $pessoa_2->profissional()->first();
+
+            if($profissional_1==null || $profissional_2==null || $profissional_1->empresa_id!=$profissional_2->empresa_id){
+                return;
+            }
             $conversa = Conversa::where(function ($q) use ($message) {
                 $q->where('sender_id', $message->sender)->where('receive_id', $message->receive);
             })->orWhere(function ($q) use ($message) {
@@ -215,6 +232,14 @@ class ChatWebSocketController extends Controller implements MessageComponentInte
             Log::info($from->resourceId);
 
             Log::info($msg);
+            $pessoa_1 = Pessoa::where('id','=',$message->sender)->first();
+            $pessoa_2 = Pessoa::where('id','=',$message->receive)->first();
+            $profissional_1 = $pessoa_1->profissional()->first();
+            $profissional_2 = $pessoa_2->profissional()->first();
+
+            if($profissional_1==null || $profissional_2==null || $profissional_1->empresa_id!=$profissional_2->empresa_id){
+                return;
+            }
             $conversa = Conversa::where(function ($q) use ($message) {
                 $q->where('sender_id', $message->sender)->where('receive_id', $message->receive);
             })->orWhere(function ($q) use ($message) {
