@@ -220,6 +220,7 @@ class PagamentosController extends Controller
             ->join('pessoas', 'pessoas.id', '=', 'contas.pessoa_id')
             ->join('naturezas', 'naturezas.id', '=', 'contas.natureza_id')
             ->join('contasbancarias', 'contasbancarias.id', '=', 'pagamentos.contasbancaria_id')
+            ->join('bancos', 'bancos.id', '=', 'contasbancarias.banco_id')
             ->select(
                 'pagamentos.*',
                 'pagamentos.status',
@@ -231,13 +232,20 @@ class PagamentosController extends Controller
                 'contas.valorpago',
                 'contas.valortotalconta',
                 'contas.quantidadeconta',
+                'contas.tipocontapagamento',
+                'contas.dataemissao',
+                'contas.datavencimento',
                 'contasbancarias.descricao',
-                'naturezas.categorianatureza_id'
+                'contasbancarias.agencia',
+                'contasbancarias.conta',
+                'contasbancarias.digito',
+                'naturezas.categorianatureza_id',
+                'bancos.descricao'
             )->where('contas.tipoconta', 'like', $request->tipo ? $request->tipo : '%')
             ->where('contas.ativo', 1)
             ->where('pagamentos.ativo', 1)
             ->where('datapagamento', 'like', $request->datapagamento ? $request->datapagamento : '%')
-            // ->where('datavencimento', $request->datavencimento)
+            // ->where('datavencimento', 'like', $request->datavencimento ? $request->datavencimento : '%')
             ->get();
         return $pagamento;
     }
