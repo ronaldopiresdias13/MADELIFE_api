@@ -228,7 +228,8 @@ class PagamentosController extends Controller
                 'contas.tipopessoa',
                 'contas.natureza_id',
                 'contas.historico',
-                'contas.nfe',
+                'contas.valorpago',
+                'contas.valortotalconta',
                 'contas.quantidadeconta',
                 'contasbancarias.descricao',
                 'naturezas.categorianatureza_id'
