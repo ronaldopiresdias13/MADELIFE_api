@@ -212,4 +212,32 @@ class PagamentosController extends Controller
             ->get();
         return $pagamentos;
     }
+
+    public function filtroPagamentoFinanceiro(Request $request)
+    {
+        $pagamento = Pagamento::where('pagamentos.empresa_id', $request->empresa_id)
+            ->join('contas', 'contas.id', '=', 'pagamentos.conta_id')
+            ->join('pessoas', 'pessoas.id', '=', 'contas.pessoa_id')
+            ->join('naturezas', 'naturezas.id', '=', 'contas.natureza_id')
+            // ->join('contasbancarias', 'contasbancarias.id', '=', 'contas.contasbancarias_id')
+            ->select(
+                'pagamentos.*',
+                'pagamentos.status',
+                'pessoas.nome',
+                'contas.tipoconta',
+                'contas.tipopessoa',
+                'contas.natureza_id',
+                'contas.historico',
+                'contas.nfe',
+                'contas.quantidadeconta',
+                // 'contasbancarias.descricao',
+                'naturezas.categorianatureza_id'
+            )->where('contas.tipoconta', $request->tipo)
+            ->where('contas.ativo', true)
+            ->where('pagamentos.ativo', true)
+            ->whereBetween('datapagamento', [$request->data_inicio_pag, $request->data_fim_pag])
+            // ->whereBetween('datavencimento', [$request->data_ini, $request->data_fim])
+            ->get();
+        return $pagamento;
+    }
 }
