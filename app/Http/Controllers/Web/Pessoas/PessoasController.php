@@ -87,8 +87,8 @@ class PessoasController extends Controller
         ]);
     }
 
-    public function listaPessoaPorTipo(Request $request){
-
+    public function listaPessoaPorTipo(Request $request)
+    {
         $empresa_id = $request->user()->pessoa->profissional->empresa_id;
         // $empresa_id = 1;
 
@@ -96,26 +96,26 @@ class PessoasController extends Controller
         $pessoas = Pessoa::whereHas('tipopessoas', function (Builder $query) use ($request) {
             $query->where('tipo', $request->tipo);
         });
-        if ($request->tipo == 'profissional') {
-            $pessoas = $pessoas->whereHas('profissional', function (Builder $query) use ($empresa_id) {
-                $query->where('empresa_id', $empresa_id);
-            });
-        }
-        if ($request->tipo == 'clientes') {
+        // if ($request->tipo == 'profissional') {
+        //     $pessoas = $pessoas->whereHas('profissional', function (Builder $query) use ($empresa_id) {
+        //         $query->where('empresa_id', $empresa_id);
+        //     });
+        // }
+        if ($request->tipo == 'Cliente') {
             $pessoas = $pessoas->whereHas('clientes', function (Builder $query) use ($empresa_id) {
                 $query->where('empresa_id', $empresa_id);
             });
         }
-        if ($request->tipo == 'fornecedor') {
+        if ($request->tipo == 'Fornecedor') {
             $pessoas = $pessoas->whereHas('fornecedor', function (Builder $query) use ($empresa_id) {
                 $query->where('empresa_id', $empresa_id);
             });
         }
-        if ($request->tipo == 'prestador') {
-            $pessoas = $pessoas->whereHas('prestador.empresas', function (Builder $query) use ($empresa_id) {
-                $query->where('empresa_id', $empresa_id);
-            });
-        }
+        // if ($request->tipo == 'prestador') {
+        //     $pessoas = $pessoas->whereHas('prestador.empresas', function (Builder $query) use ($empresa_id) {
+        //         $query->where('empresa_id', $empresa_id);
+        //     });
+        // }
 
         $pessoas = $pessoas->get();
         return $pessoas;
