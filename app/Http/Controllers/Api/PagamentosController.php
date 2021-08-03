@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Pagamento;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PagamentosController extends Controller
 {
@@ -215,38 +216,69 @@ class PagamentosController extends Controller
 
     public function filtroPagamentoFinanceiro(Request $request)
     {
-        $pagamento = Pagamento::where('pagamentos.empresa_id', $request->empresa_id)
-            ->join('contas', 'contas.id', '=', 'pagamentos.conta_id')
-            ->join('pessoas', 'pessoas.id', '=', 'contas.pessoa_id')
-            ->join('naturezas', 'naturezas.id', '=', 'contas.natureza_id')
-            ->join('contasbancarias', 'contasbancarias.id', '=', 'pagamentos.contasbancaria_id')
-            ->join('bancos', 'bancos.id', '=', 'contasbancarias.banco_id')
-            ->select(
-                'pagamentos.*',
-                'pagamentos.status',
-                'pessoas.nome',
-                'contas.tipoconta',
-                'contas.tipopessoa',
-                'contas.natureza_id',
-                'contas.historico',
-                'contas.valorpago',
-                'contas.valortotalconta',
-                'contas.quantidadeconta',
-                'contas.tipocontapagamento',
-                'contas.dataemissao',
-                'contas.datavencimento',
-                'contasbancarias.descricao',
-                'contasbancarias.agencia',
-                'contasbancarias.conta',
-                'contasbancarias.digito',
-                'naturezas.categorianatureza_id',
-                'bancos.descricao'
-            )->where('contas.tipoconta', 'like', $request->tipo ? $request->tipo : '%')
-            ->where('contas.ativo', 1)
-            ->where('pagamentos.ativo', 1)
-            ->where('datapagamento', 'like', $request->datapagamento ? $request->datapagamento : '%')
-            // ->where('datavencimento', 'like', $request->datavencimento ? $request->datavencimento : '%')
-            ->get();
-        return $pagamento;
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+
+        // $pagamento = Pagamento::where('pagamentos.empresa_id', $empresa_id)
+        //     ->join('contas', 'contas.id', '=', 'pagamentos.conta_id')
+        //     ->join('pessoas', 'pessoas.id', '=', 'contas.pessoa_id')
+        //     ->join('naturezas', 'naturezas.id', '=', 'contas.natureza_id')
+        //     ->join('contasbancarias', 'contasbancarias.id', '=', 'pagamentos.contasbancaria_id')
+        //     ->join('bancos', 'bancos.id', '=', 'contasbancarias.banco_id')
+        //     ->select(
+        //         'pagamentos.*',
+        //         'pagamentos.status',
+        //         'pessoas.nome',
+        //         'contas.tipoconta',
+        //         'contas.tipopessoa',
+        //         'contas.natureza_id',
+        //         'contas.historico',
+        //         'contas.valorpago',
+        //         'contas.valortotalconta',
+        //         'contas.quantidadeconta',
+        //         'contas.tipocontapagamento',
+        //         'contas.dataemissao',
+        //         'contas.datavencimento',
+        //         'contasbancarias.descricao',
+        //         'contasbancarias.agencia',
+        //         'contasbancarias.conta',
+        //         'contasbancarias.digito',
+        //         'naturezas.categorianatureza_id',
+        //         'bancos.descricao'
+        //     )->where('contas.tipoconta', 'like', $request->tipoconta ? $request->tipoconta : '%')
+        //     ->where('contas.ativo', 1)
+        //     ->where('pagamentos.ativo', 1)
+        //     ->where('datapagamento', 'like', $request->datapagamento ? $request->datapagamento : '%')
+        //     // ->where('datavencimento', 'like', $request->datavencimento ? $request->datavencimento : '%')
+        //     ->get();
+        // // return $pagamento;
+        return DB::select(
+            'SELECT p.nome, ct.*, pg.* FROM pagamentos AS pg
+              INNER JOIN contas AS ct
+              ON ct.id = pg.conta_id
+              INNER JOIN pessoas AS p
+              ON p.id = ct.pessoa_id
+              WHERE pg.ativo = TRUE
+              AND ct.ativo = TRUE
+              AND pg.empresa_id = ?
+              AND ct.tipoconta like  ? 
+              AND ct.tipopessoa like  ? 
+              AND ct.pessoa_id LIKE  ? 
+              AND ct.natureza_id LIKE  ? 
+              AND pg.tipopagamento like  ? 
+              AND pg.datavencimento like  ? 
+              AND pg.datapagamento like  ? 
+              AND pg.contasbancaria_id LIKE  ? ',
+            [
+                $empresa_id,
+                $request->tipoconta ? $request->tipoconta : '%',
+                $request->tipopessoa ? $request->tipopessoa : '%',
+                $request->pessoa_id ? $request->pessoa_id : '%',
+                $request->natureza_id ? $request->natureza_id : '%',
+                $request->tipoPagamento ? $request->tipoPagamento : '%',
+                $request->dataVencimento ? $request->dataVencimento : '%',
+                $request->dataPagamento ? $request->dataPagamento : '%',
+                $request->contaBancaria ? $request->contaBancaria : '%'
+            ]
+        );
     }
 }
