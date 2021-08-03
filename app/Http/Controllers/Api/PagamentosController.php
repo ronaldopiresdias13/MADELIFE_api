@@ -283,11 +283,11 @@ class PagamentosController extends Controller
         // );
 
         $pagamentos = Pagamento::with('conta.pessoa')
-        ->where('ativo', true)
-        ->whereHas('conta', function (Builder $builder) {
-            $builder->where('ativo', true);
-        })
-        ->where('empresa_id', $empresa_id);
+            ->where('ativo', true)
+            ->whereHas('conta', function (Builder $builder) {
+                $builder->where('ativo', true);
+            })
+            ->where('empresa_id', $empresa_id);
 
         if ($request->tipoconta) {
             $pagamentos->whereHas('conta', function (Builder $builder) use ($request) {
@@ -323,5 +323,6 @@ class PagamentosController extends Controller
         }
 
         $pagamentos = $pagamentos->get();
+        return $pagamentos;
     }
 }
