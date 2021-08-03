@@ -42,10 +42,10 @@ class TranscricoesController extends Controller
             })
             ->get();
         return $tp;
-        return Transcricao::with(['itensTranscricao.produto', 'itensTranscricao.horariomedicamentos', 'itensTranscricao.acoesmedicamentos'])
-            ->where('ordemservico_id', $ordemservico['id'])
-            ->where('ativo', true)
-            ->get();
+        // return Transcricao::with(['itensTranscricao.produto', 'itensTranscricao.horariomedicamentos', 'itensTranscricao.acoesmedicamentos'])
+        //     ->where('ordemservico_id', $ordemservico['id'])
+        //     ->where('ativo', true)
+        //     ->get();
     }
     /**
      * Display a listing of the resource.
