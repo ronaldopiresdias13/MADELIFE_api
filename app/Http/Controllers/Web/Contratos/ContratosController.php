@@ -207,6 +207,7 @@ class ContratosController extends Controller
      */
     public function update(Request $request, Orcamento $orcamento)
     {
+        
         $contratoService = new ContratoService($request, $orcamento);
         return $contratoService->update();
     }
