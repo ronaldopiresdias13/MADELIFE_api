@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pagamento;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -251,34 +252,76 @@ class PagamentosController extends Controller
         //     // ->where('datavencimento', 'like', $request->datavencimento ? $request->datavencimento : '%')
         //     ->get();
         // // return $pagamento;
-        return DB::select(
-            'SELECT p.nome, ct.*, pg.* FROM pagamentos AS pg
-              INNER JOIN contas AS ct
-              ON ct.id = pg.conta_id
-              INNER JOIN pessoas AS p
-              ON p.id = ct.pessoa_id
-              WHERE pg.ativo = TRUE
-              AND ct.ativo = TRUE
-              AND pg.empresa_id = ?
-              AND ct.tipoconta like  ? 
-              AND ct.tipopessoa like  ? 
-              AND ct.pessoa_id LIKE  ? 
-              AND ct.natureza_id LIKE  ? 
-              AND pg.tipopagamento like  ? 
-              AND pg.datavencimento like  ? 
-              AND pg.datapagamento like  ? 
-              AND pg.contasbancaria_id LIKE  ? ',
-            [
-                $empresa_id,
-                $request->tipoconta ? $request->tipoconta : '%',
-                $request->tipopessoa ? $request->tipopessoa : '%',
-                $request->pessoa_id ? $request->pessoa_id : '%',
-                $request->natureza_id ? $request->natureza_id : '%',
-                $request->tipoPagamento ? $request->tipoPagamento : '%',
-                $request->dataVencimento ? $request->dataVencimento : '%',
-                $request->dataPagamento ? $request->dataPagamento : '%',
-                $request->contaBancaria ? $request->contaBancaria : '%'
-            ]
-        );
+        // return DB::select(
+        //     'SELECT p.nome, ct.*, pg.* FROM pagamentos AS pg
+        //       INNER JOIN contas AS ct
+        //       ON ct.id = pg.conta_id
+        //       INNER JOIN pessoas AS p
+        //       ON p.id = ct.pessoa_id
+        //       WHERE pg.ativo = TRUE
+        //       AND ct.ativo = TRUE
+        //       AND pg.empresa_id = ?
+        //       AND ct.tipoconta like  ?
+        //       AND ct.tipopessoa like  ?
+        //       AND ct.pessoa_id LIKE  ?
+        //       AND ct.natureza_id LIKE  ?
+        //       AND pg.tipopagamento like  ?
+        //       AND pg.datavencimento like  ?
+        //       AND pg.datapagamento like  ?
+        //       AND pg.contasbancaria_id LIKE  ? ',
+        //     [
+        //         $empresa_id,
+        //         $request->tipoconta ? $request->tipoconta : '%',
+        //         $request->tipopessoa ? $request->tipopessoa : '%',
+        //         $request->pessoa_id ? $request->pessoa_id : '%',
+        //         $request->natureza_id ? $request->natureza_id : '%',
+        //         $request->tipoPagamento ? $request->tipoPagamento : '%',
+        //         $request->dataVencimento ? $request->dataVencimento : '%',
+        //         $request->dataPagamento ? $request->dataPagamento : '%',
+        //         $request->contaBancaria ? $request->contaBancaria : '%'
+        //     ]
+        // );
+
+        $pagamentos = Pagamento::with('conta.pessoa')
+        ->where('ativo', true)
+        ->whereHas('conta', function (Builder $builder) {
+            $builder->where('ativo', true);
+        })
+        ->where('empresa_id', $empresa_id);
+
+        if ($request->tipoconta) {
+            $pagamentos->whereHas('conta', function (Builder $builder) use ($request) {
+                $builder->where('tipoconta', $request->tipoconta);
+            });
+        }
+        if ($request->tipopessoa) {
+            $pagamentos->whereHas('conta', function (Builder $builder) use ($request) {
+                $builder->where('tipopessoa', $request->tipopessoa);
+            });
+        }
+        if ($request->pessoa_id) {
+            $pagamentos->whereHas('conta', function (Builder $builder) use ($request) {
+                $builder->where('pessoa_id', $request->pessoa_id);
+            });
+        }
+        if ($request->natureza_id) {
+            $pagamentos->whereHas('conta', function (Builder $builder) use ($request) {
+                $builder->where('natureza_id', $request->natureza_id);
+            });
+        }
+        if ($request->tipoPagamento) {
+            $pagamentos->where('tipopagamento', $request->tipoPagamento);
+        }
+        if ($request->dataVencimento) {
+            $pagamentos->where('datavencimento', $request->dataVencimento);
+        }
+        if ($request->dataPagamento) {
+            $pagamentos->where('datapagamento', $request->dataPagamento);
+        }
+        if ($request->contaBancaria) {
+            $pagamentos->where('contasbancaria_id', $request->contaBancaria);
+        }
+
+        $pagamentos = $pagamentos->get();
     }
 }
