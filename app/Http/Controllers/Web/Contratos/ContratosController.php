@@ -9,6 +9,7 @@ use App\Services\ContratoService;
 use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ContratosController extends Controller
 {
@@ -221,8 +222,17 @@ class ContratosController extends Controller
      */
     public function desativarContrato(Request $request, Orcamento $orcamento)
     {
-        $orcamento->status = false;
-        $orcamento->save();
+        DB::transaction(function () use ($request, $orcamento){
+            $orcamento->status = false;
+            $orcamento->save();
+
+            $ordemservico = $orcamento->ordemservico;
+            $ordemservico->descricaomotivo = $request->descricaomotivo;
+            $ordemservico->dataencerramento = $request->dataencerramento;
+            $ordemservico->motivo = $request->motivo;
+            $ordemservico->status = false;
+            $ordemservico->save();
+        });
     }
 
     /**
