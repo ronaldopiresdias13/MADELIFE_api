@@ -207,9 +207,22 @@ class ContratosController extends Controller
      */
     public function update(Request $request, Orcamento $orcamento)
     {
-        
+
         $contratoService = new ContratoService($request, $orcamento);
         return $contratoService->update();
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Orcamento  $orcamento
+     * @return \Illuminate\Http\Response
+     */
+    public function desativarContrato(Request $request, Orcamento $orcamento)
+    {
+        $orcamento->status = false;
+        $orcamento->save();
     }
 
     /**
