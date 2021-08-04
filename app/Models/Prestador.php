@@ -19,7 +19,7 @@ class Prestador extends Model
         return $this->belongsTo(Pessoa::class);
     }
 
-    public function ordemservicoPrestadores()
+    public function ordemservicos()
     {
         return $this->hasMany(OrdemservicoPrestador::class)->where('ativo', true);
     }

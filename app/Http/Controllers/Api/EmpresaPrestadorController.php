@@ -322,7 +322,7 @@ class EmpresaPrestadorController extends Controller
             'prestador.pessoa.enderecos.cidade',
             'prestador.pessoa.telefones',
             'prestador.pessoa.emails',
-            'prestador.ordemservicoPrestadores'
+            'prestador.ordemservicos'
         ])
             ->where('empresa_id', $empresa_id)
             ->where('status', $request['status'])

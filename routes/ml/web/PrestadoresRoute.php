@@ -8,6 +8,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('web/areaClinica/profissionais/historicopacientesprestador/{prestador}', 'Api\Web\PrestadoresController@historicopacientesprestador');
     Route::get('web/prestadores/recrutamento', [PrestadoresController::class, 'listRecrutamento']);
     Route::get('web/prestadores/empresaPrestador/listaPrestadoresPorEmpresaIdEStatus', [EmpresaPrestadorController::class, 'listaPrestadoresPorEmpresaIdEStatus']);
+    Route::get('web/prestadores/buscaPrestadorComServicosPrestadosNaEmpresa/{prestador}', [PrestadoresController::class, 'buscaPrestadorComServicosPrestadosNaEmpresa']);
     Route::get('web/prestadores/buscaprestadorexterno/{prestador}', [PrestadoresController::class, 'buscaprestadorexterno']);
     Route::get('web/prestadores/listNomePrestadores', 'Api\Web\PrestadoresController@listNomePrestadores');
     Route::get('web/prestadores/listPrestadoresComFormacoes', 'Api\Web\PrestadoresController@listPrestadoresComFormacoes');
