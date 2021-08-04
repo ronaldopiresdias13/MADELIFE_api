@@ -23,6 +23,15 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
+        return response()->json([
+            'alert' => [
+                'title' => 'Atenção!',
+                'text' => 'Por favor/nAtualize o aplicativo para continuar!'
+            ]
+        ], 400)
+            ->header('Content-Type', 'application/json');
+
+
         // $request->validate([
         //     'email'       => 'string|email',
         //     'password'    => 'required|string',

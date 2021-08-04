@@ -10,6 +10,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('contratos/{orcamento}', [ContratosController::class, 'show']);
         Route::post('contratos', [ContratosController::class, 'store']);
         Route::put('contratos/{orcamento}', [ContratosController::class, 'update']);
+
+        Route::put('contratos/desativar/{orcamento}', [ContratosController::class, 'desativarContrato']);
+
         Route::delete('contratos/{orcamento}', [ContratosController::class, 'destroy']);
         Route::put('contratos/{orcamento}/prorrogacao', [ContratosController::class, 'prorrogacao']);
 

@@ -58,7 +58,7 @@ class PontosController extends Controller
                 "status",
                 // "folga",
                 // "substituto",
-                // "tipo",
+                "tipo",
                 "valorhoradiurno",
                 "valorhoranoturno",
                 "valoradicional",
