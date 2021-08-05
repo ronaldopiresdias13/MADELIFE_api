@@ -23,7 +23,7 @@ class ChamadosController extends Controller
         $prestador = $pessoa->prestador()->first();
         $empresas = [];
         if ($prestador != null) {
-            $empresas = $prestador->empresas()->select(['empresas.id', 'razao'])->get();
+            $empresas = $prestador->empresas()->select(['empresa_id', 'razao'])->get();
         }
         return response()->json(['conversas' => ChamadoResource::collection($chamados), 'empresas' => $empresas]);
     }
