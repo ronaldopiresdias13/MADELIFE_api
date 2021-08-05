@@ -188,6 +188,7 @@ class ContratosController extends Controller
                 'cidade',
                 'cliente.pessoa',
                 'homecare.paciente.pessoa',
+                'homecare.paciente.responsavel.pessoa',
                 'aph.cidade',
                 'evento.cidade',
                 'remocao.cidadeorigem',
@@ -222,7 +223,7 @@ class ContratosController extends Controller
      */
     public function desativarContrato(Request $request, Orcamento $orcamento)
     {
-        DB::transaction(function () use ($request, $orcamento){
+        DB::transaction(function () use ($request, $orcamento) {
             $orcamento->status = false;
             $orcamento->save();
 
