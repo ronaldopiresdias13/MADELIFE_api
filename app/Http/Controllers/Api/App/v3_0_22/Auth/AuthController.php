@@ -23,64 +23,46 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        // $request->validate([
-        //     'email'       => 'string|email',
-        //     'password'    => 'required|string',
-        //     'remember_me' => 'boolean'
-        // ]);
-
-        $user = User::firstWhere('email', $request['email']);
-
-        if (!$user || !$user->pessoa->prestador) {
-            return response()->json([
-                'alert' => [
-                    'title' => 'Ops!',
-                    'text' => 'Email não cadastrado!'
-                ]
-            ], 400)
-                ->header('Content-Type', 'application/json');
-        }
-
-        // $credentials = request(['email', 'password']);
-        // if (!Auth::attempt($credentials)) {
-        //     return response()->json([
-        //         'message' => 'E-mail e/ou Senha incorretos.'
-        //     ], 401);
-        // }
-
-        if (!password_verify($request['password'], $user['password'])) {
-            // return response()->json([
-            //     'message' => 'E-mail e/ou Senha incorretos.'
-            // ], 404);
-
-            return response()->json([
-                'alert' => [
-                    'title' => 'Ops!',
-                    'text' => 'Email ou senha incorretos!'
-                ]
-            ], 400)
-                ->header('Content-Type', 'application/json');
-        }
-
-        // if (!Hash::check($request['password'], $user['password'])) {
-        //     return response()->json([
-        //         'message' => 'E-mail e/ou Senha incorretos.'
-        //     ], 401);
-        // }
-
-        $tokenResult = $user->createToken('Personal Access Token');
-        $token       = $tokenResult->token;
-        // if ($request->remember_me) {
-        //     $token->expires_at = Carbon::now()->addWeeks(1);
-        // }
-        $token->save();
         return response()->json([
-            'access_token' => $tokenResult->accessToken,
-            'token_type'   => 'Bearer',
-            'expires_at'   => Carbon::parse(
-                $tokenResult->token->expires_at
-            )->toDateTimeString()
-        ]);
+            'alert' => [
+                'title' => 'Atenção!',
+                'text' => 'Por favor/nAtualize o aplicativo para continuar!'
+            ]
+        ], 400)
+            ->header('Content-Type', 'application/json');
+
+        // $user = User::firstWhere('email', $request['email']);
+
+        // if (!$user || !$user->pessoa->prestador) {
+        //     return response()->json([
+        //         'alert' => [
+        //             'title' => 'Ops!',
+        //             'text' => 'Email não cadastrado!'
+        //         ]
+        //     ], 400)
+        //         ->header('Content-Type', 'application/json');
+        // }
+
+        // if (!password_verify($request['password'], $user['password'])) {
+        //     return response()->json([
+        //         'alert' => [
+        //             'title' => 'Ops!',
+        //             'text' => 'Email ou senha incorretos!'
+        //         ]
+        //     ], 400)
+        //         ->header('Content-Type', 'application/json');
+        // }
+
+        // $tokenResult = $user->createToken('Personal Access Token');
+        // $token       = $tokenResult->token;
+        // $token->save();
+        // return response()->json([
+        //     'access_token' => $tokenResult->accessToken,
+        //     'token_type'   => 'Bearer',
+        //     'expires_at'   => Carbon::parse(
+        //         $tokenResult->token->expires_at
+        //     )->toDateTimeString()
+        // ]);
     }
 
     public function reset(Request $request)
@@ -121,16 +103,7 @@ class AuthController extends Controller
 
     public function change(Request $request)
     {
-        // $credentials = request(['email', 'password']);
-        // if (!Auth::attempt($credentials)) {
-        //     return response()->json([
-        //         'message' => 'E-mail e/ou Senha incorretos.'
-        //     ], 401);
-        // }
         $user = $request->user();
-        // return $user;
-
-        // return $request['password'];
 
         if (!password_verify($request['password'], $user['password'])) {
             return response()->json([
@@ -138,18 +111,6 @@ class AuthController extends Controller
             ], 0);
         }
 
-        // $request->validate([
-        //     'email'       => 'string|email',
-        //     'password'    => 'required|string',
-        //     'newPassword' => 'required|string'
-        // ]);
-        // $credentials = request(['email', 'password']);
-        // if (!Auth::attempt($credentials)) {
-        //     return response()->json([
-        //         'message' => 'E-mail e/ou Senha incorretos.'
-        //     ], 401);
-        // }
-        // $user        = $request->user();
         $user->password = bcrypt($request->newPassword);
         $user->save();
     }
@@ -171,7 +132,6 @@ class AuthController extends Controller
         if ($user) {
             $prestador = Prestador::firstWhere('pessoa_id', $user->pessoa->id);
             if ($prestador) {
-                // return response()->json('Você já possui cadastro!', 400)->header('Content-Type', 'text/plain');
                 return response()->json([
                     'alert' => [
                         'title' => 'Ops!',

@@ -39,6 +39,7 @@ class ContratoService
      */
     public function store()
     {
+         
         DB::transaction(function () {
             $this->empresa_id = $this->request->user()->pessoa->profissional->empresa_id;
             if (!$this->empresa_id) {
@@ -215,6 +216,7 @@ class ContratoService
 
     public function update()
     {
+        
         DB::transaction(function () {
             $this->orcamento->fill([
                 "cliente_id"        => $this->request->cliente_id,
@@ -285,10 +287,10 @@ class ContratoService
                     $this->orcamento->aph()->updateOrCreate(
                         [
                             "orcamento_id" => $this->orcamento->id,
-                            "descricao"    => $this->request->aph['descricao'],
-                            "endereco"     => $this->request->aph['endereco'],
-                            "cep"          => $this->request->aph['cep'],
-                            "cidade_id"    => $this->request->aph['cidade_id'],
+                            "descricao"    => $this->request['aph']['descricao'],
+                            "endereco"     => $this->request['aph']['endereco'],
+                            "cep"          => $this->request['aph']['cep'],
+                            "cidade_id"    => $this->request['aph']['cidade_id'],
                         ],
                         [
                             "ativo"        => true,

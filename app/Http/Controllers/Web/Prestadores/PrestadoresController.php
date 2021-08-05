@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Prestador;
 use App\Models\Tipopessoa;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -173,6 +174,7 @@ class PrestadoresController extends Controller
             ]
         );
     }
+
     /**
      * Display the specified resource.
      *
@@ -189,6 +191,30 @@ class PrestadoresController extends Controller
             // 'pessoa.dadobancarios',
             'formacoes'
         ])->find($prestador->id);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Prestador  $prestador
+     * @return \Illuminate\Http\Response
+     */
+    public function buscaPrestadorComServicosPrestadosNaEmpresa(Request $request, Prestador $prestador)
+    {
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+
+        $prestadores = Prestador::with(
+            [
+                'ordemservicos.servico',
+                'ordemservicos.ordemservico.orcamento.homecare.paciente.pessoa'
+            ])
+            ->where('ativo', true)
+            ->whereHas('ordemservicos.ordemservico', function (Builder $builder) use ($empresa_id) {
+                $builder->where('empresa_id', $empresa_id);
+            })
+            ->find($prestador->id);
+
+        return $prestadores;
     }
 
     /**

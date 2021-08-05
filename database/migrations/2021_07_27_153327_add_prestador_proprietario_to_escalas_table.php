@@ -14,10 +14,10 @@ class AddPrestadorProprietarioToEscalasTable extends Migration
      */
     public function up()
     {
-         Schema::table('escalas', function (Blueprint $table) {
-             $table->unsignedBigInteger('prestador_proprietario')->nullable()->after('ordemservico_id');
-             $table->foreign('prestador_proprietario')->references('id')->on('prestadores');
-         });
+        //  Schema::table('escalas', function (Blueprint $table) {
+        //      $table->unsignedBigInteger('prestador_proprietario')->nullable()->after('ordemservico_id');
+        //      $table->foreign('prestador_proprietario')->references('id')->on('prestadores');
+        //  });
 
         $escalas = Escala::all();
         foreach ($escalas as $key => $escala) {
