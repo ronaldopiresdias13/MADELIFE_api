@@ -30,6 +30,7 @@ class ContratosController extends Controller
                 'cidade',
                 'cliente.pessoa',
                 'homecare.paciente.pessoa',
+                'homecare.paciente.resonsavel.pessoa',
                 'aph.cidade',
                 'evento.cidade',
                 'remocao.cidadeorigem',
