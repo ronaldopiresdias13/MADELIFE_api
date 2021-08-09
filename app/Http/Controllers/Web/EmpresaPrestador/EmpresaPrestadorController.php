@@ -165,6 +165,33 @@ class EmpresaPrestadorController extends Controller
     }
 
     /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\EmpresaPrestador  $empresaPrestador
+     * @return \Illuminate\Http\Response
+     */
+    public function ativarPrestador(Request $request, EmpresaPrestador $empresaPrestador)
+    {
+        return $request;
+        $empresaPrestador->status = 'Aprovado';
+        $empresaPrestador->save();
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\EmpresaPrestador  $empresaPrestador
+     * @return \Illuminate\Http\Response
+     */
+    public function desativarPrestador(Request $request, EmpresaPrestador $empresaPrestador)
+    {
+        $empresaPrestador->status = 'Desativado';
+        $empresaPrestador->save();
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\EmpresaPrestador  $empresaPrestador

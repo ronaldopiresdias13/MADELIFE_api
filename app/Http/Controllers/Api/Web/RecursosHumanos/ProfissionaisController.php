@@ -247,8 +247,8 @@ class ProfissionaisController extends Controller
                                 'telefone'  => $telefone['telefone'],
                             ]
                         )->id,
-                        'tipo'      => $telefone['tipo'],
-                        'descricao' => $telefone['descricao'],
+                        'tipo'      => $telefone['pivot']['tipo'],
+                        'descricao' => $telefone['pivot']['descricao'],
                     ]);
                 }
             }
