@@ -50,11 +50,12 @@ class WebSocketServer extends Command
              'local_pk' => '/etc/ssl/private/server.key',
              'verify_peer' => false
          ]);
-
-         $app = new \Ratchet\Http\HttpServer(
-             new \Ratchet\WebSocket\WsServer(
+	$websocket = new \Ratchet\WebSocket\WsServer(
                  new ChatWebSocketController()
-             )
+	 );
+	 $websocket->enableKeepAlive($loop, 60);
+	 $app = new \Ratchet\Http\HttpServer(
+		 $websocket
          );
          $server = new \Ratchet\Server\IoServer($app, $secure_websockets, $loop);
          $server->run();

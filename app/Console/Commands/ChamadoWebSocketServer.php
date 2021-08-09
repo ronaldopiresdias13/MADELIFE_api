@@ -48,11 +48,12 @@ class ChamadoWebSocketServer extends Command
              //  'local_pk' => env('SSL_KEY', '/etc/ssl/private/server.key'),
              'verify_peer' => false
          ]);
-
-         $app = new \Ratchet\Http\HttpServer(
-             new \Ratchet\WebSocket\WsServer(
+	$websocket = new \Ratchet\WebSocket\WsServer(
                  new ChamadoWebSocketController()
-            )
+	 );
+	 $websocket->enableKeepAlive($loop, 30);
+         $app = new \Ratchet\Http\HttpServer(
+             $websocket
          );
          $server = new \Ratchet\Server\IoServer($app, $secure_websockets, $loop);
          $server->run();

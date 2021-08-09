@@ -197,7 +197,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::put('pessoas/atualizaDadosPessoais/{pessoa}', 'Api\App\v3_0_24\PessoasController@atualizaDadosPessoais');
 
         Route::post('pessoaTelefones', 'Api\App\v3_0_24\PessoaTelefoneController@store');
-        // Route::delete('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@destroy');
+        Route::delete('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@destroy');
 
         Route::post('pessoaEmails', 'Api\App\v3_0_24\PessoaEmailController@store');
         Route::delete('pessoaEmails/{pessoaEmail}', 'Api\App\v3_0_24\PessoaEmailController@destroy');
