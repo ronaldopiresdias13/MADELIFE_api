@@ -65,7 +65,7 @@ class EscalasController extends Controller
         ]);
         if ($request->supervisor) {
             $escalas = $escalas->whereHas('ordemservico', function (Builder $builder) use ($user) {
-                $builder->where('prestador_id', $user->pessoa->prestador);
+                $builder->where('profissional_id', $user->pessoa->profissional);
             });
         }
         if ($request->cliente) {
