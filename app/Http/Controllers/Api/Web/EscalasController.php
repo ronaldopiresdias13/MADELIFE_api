@@ -29,7 +29,7 @@ class EscalasController extends Controller
             'ordemservico' => function ($query) {
                 $query->select('id', 'orcamento_id', 'profissional_id');
                 $query->with(['profissional.pessoa', 'orcamento' => function ($query) {
-                    $query->select('id');
+                    $query->select('id', 'cliente_id');
                     $query->with(['homecare' => function ($query) {
                         $query->select('id', 'orcamento_id', 'paciente_id');
                         $query->with(['paciente' => function ($query) {
@@ -65,12 +65,12 @@ class EscalasController extends Controller
         ]);
         if ($request->supervisor) {
             $escalas = $escalas->whereHas('ordemservico', function (Builder $builder) use ($user) {
-                $builder->where('profissional_id', $user->pessoa->profissional);
+                $builder->where('profissional_id', $user->pessoa->profissional->id);
             });
         }
-        if ($request->cliente) {
-            $escalas = $escalas->whereHas('orcamento', function (Builder $builder) use ($user) {
-                $builder->where('cliente_id', $user->pessoa->cliente);
+        if ($request->cliente_id) {
+            $escalas = $escalas->whereHas('ordemservico.orcamento', function (Builder $builder) use ($request) {
+                $builder->where('cliente_id', $request->cliente_id);
             });
         }
         $escalas = $escalas->where('ativo', true);
