@@ -8,6 +8,7 @@ use App\Http\Requests\ChatGeralRequest;
 use App\Http\Resources\ChamadoResource;
 use App\Models\Chamado;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -23,7 +24,7 @@ class ChamadosController extends Controller
         $prestador = $pessoa->prestador()->first();
         $empresas = [];
         if($prestador!=null){
-            $empresas = $prestador->empresas()->select(['empresa_id','razao'])->get();
+            $empresas = DB::select(DB::raw('select e.id as id, e.razao as razao from empresas as e join empresa_prestador as ep on ep.empresa_id=e.id and ep.prestador_id=:prestador_id'), ['prestador_id'=>$prestador->id]);
         }
         return response()->json(['conversas' => ChamadoResource::collection($chamados),'empresas'=>$empresas]);
     }
