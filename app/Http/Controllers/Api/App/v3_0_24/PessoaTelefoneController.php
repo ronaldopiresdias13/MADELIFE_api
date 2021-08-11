@@ -50,6 +50,8 @@ class PessoaTelefoneController extends Controller
         // }
 
         DB::transaction(function () use ($request) {
+            $car = array("(", ")", " ", "-");
+            $request['telefone']['telefone'] = str_replace($car, "", $request['telefone']['telefone']);
             PessoaTelefone::updateOrCreate(
                 [
                     'pessoa_id' => $request->pessoa_id,

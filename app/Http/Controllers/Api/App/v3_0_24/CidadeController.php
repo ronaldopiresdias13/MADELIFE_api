@@ -15,7 +15,7 @@ class CidadeController extends Controller
      */
     public function index(string $uf)
     {
-        return Cidade::where('uf', $uf)->get();
+        return Cidade::where('uf', $uf)->orderBy('nome')->get();
     }
 
     /**

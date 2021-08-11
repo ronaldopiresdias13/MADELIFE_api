@@ -6,6 +6,7 @@ use App\Models\Escala;
 use App\Models\Homecare;
 use App\Http\Controllers\Controller;
 use App\Models\Paciente;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -28,7 +29,7 @@ class EscalasController extends Controller
             'ordemservico' => function ($query) {
                 $query->select('id', 'orcamento_id', 'profissional_id');
                 $query->with(['profissional.pessoa', 'orcamento' => function ($query) {
-                    $query->select('id');
+                    $query->select('id', 'cliente_id');
                     $query->with(['homecare' => function ($query) {
                         $query->select('id', 'orcamento_id', 'paciente_id');
                         $query->with(['paciente' => function ($query) {
@@ -61,36 +62,46 @@ class EscalasController extends Controller
             'monitoramentos',
             'relatorioescalas',
             'acaomedicamentos.transcricaoProduto.produto'
-        ])
-            ->where('ativo', true)
-            ->where('empresa_id', $empresa_id)
-            ->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%')
-            // ->where('dataentrada', '>=', $request->data_ini ? $request->data_ini : $data)
-            // ->where('dataentrada', '<=', $request->data_fim ? $request->data_fim : $data)
-            ->whereBetween('dataentrada', [$request->data_ini ? $request->data_ini : $data, $request->data_fim ? $request->data_fim : $data])
-            ->where('prestador_id', 'like', $request->prestador_id ? $request->prestador_id : '%')
-            ->where('servico_id', 'like', $request->servico_id ? $request->servico_id : '%')
-            ->where('empresa_id', 'like', $request->empresa_id ? $request->empresa_id : '%')
-            // ->limit(5)
-            ->orderBy('dataentrada')
-            ->get([
-                'id',
-                'dataentrada',
-                'datasaida',
-                'horaentrada',
-                'horasaida',
-                'valorhoradiurno',
-                'valorhoranoturno',
-                'valoradicional',
-                'motivoadicional',
-                'servico_id',
-                'periodo',
-                'tipo',
-                'prestador_id',
-                'ordemservico_id',
-                'status',
-                'ativo'
-            ]);
+        ]);
+        if ($request->supervisor) {
+            $escalas = $escalas->whereHas('ordemservico', function (Builder $builder) use ($user) {
+                $builder->where('profissional_id', $user->pessoa->profissional->id);
+            });
+        }
+        if ($request->cliente_id) {
+            $escalas = $escalas->whereHas('ordemservico.orcamento', function (Builder $builder) use ($request) {
+                $builder->where('cliente_id', $request->cliente_id);
+            });
+        }
+        $escalas = $escalas->where('ativo', true);
+        $escalas = $escalas->where('empresa_id', $empresa_id);
+        $escalas = $escalas->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%');
+        // ->where('dataentrada', '>=', $request->data_ini ? $request->data_ini : $data)
+        // ->where('dataentrada', '<=', $request->data_fim ? $request->data_fim : $data)
+        $escalas = $escalas->whereBetween('dataentrada', [$request->data_ini ? $request->data_ini : $data, $request->data_fim ? $request->data_fim : $data]);
+        $escalas = $escalas->where('prestador_id', 'like', $request->prestador_id ? $request->prestador_id : '%');
+        $escalas = $escalas->where('servico_id', 'like', $request->servico_id ? $request->servico_id : '%');
+        $escalas = $escalas->where('empresa_id', 'like', $request->empresa_id ? $request->empresa_id : '%');
+        // ->limit(5)
+        $escalas = $escalas->orderBy('dataentrada');
+        $escalas = $escalas->get([
+            'id',
+            'dataentrada',
+            'datasaida',
+            'horaentrada',
+            'horasaida',
+            'valorhoradiurno',
+            'valorhoranoturno',
+            'valoradicional',
+            'motivoadicional',
+            'servico_id',
+            'periodo',
+            'tipo',
+            'prestador_id',
+            'ordemservico_id',
+            'status',
+            'ativo'
+        ]);
         return $escalas;
     }
 
