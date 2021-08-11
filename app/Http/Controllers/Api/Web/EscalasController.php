@@ -28,15 +28,26 @@ class EscalasController extends Controller
         $escalas = Escala::with([
             'ordemservico' => function ($query) {
                 $query->select('id', 'orcamento_id', 'profissional_id');
+                
                 $query->with(['profissional.pessoa', 'orcamento' => function ($query) {
                     $query->select('id', 'cliente_id');
                     $query->with(['homecare' => function ($query) {
                         $query->select('id', 'orcamento_id', 'paciente_id');
                         $query->with(['paciente' => function ($query) {
-                            $query->select('id', 'pessoa_id');
+                            $query->select('id', 'pessoa_id', 'responsavel_id');
                             $query->with(['pessoa' => function ($query) {
-                                $query->select('id', 'nome');
+                                $query->select('id', 'nome', 'observacoes');
+                                
                             }]);
+                            $query->with([ 'responsavel' => function ($query) {
+                                $query->select('id', 'pessoa_id');
+                                $query->with(['pessoa' => function ($query) {
+                                    $query->select('id', 'nome');
+                                }]);
+                                $query->with(['pessoa.telefones' => function ($query) {
+                                    $query->select('telefone_id', 'telefone');
+                                }]);
+                             }]);
                         }]);
                     }]);
                 }]);
@@ -62,6 +73,7 @@ class EscalasController extends Controller
             'monitoramentos',
             'relatorioescalas',
             'acaomedicamentos.transcricaoProduto.produto'
+            
         ]);
         if ($request->supervisor) {
             $escalas = $escalas->whereHas('ordemservico', function (Builder $builder) use ($user) {
@@ -100,7 +112,8 @@ class EscalasController extends Controller
             'prestador_id',
             'ordemservico_id',
             'status',
-            'ativo'
+            'ativo',
+            
         ]);
         return $escalas;
     }
