@@ -75,7 +75,7 @@ class EscalasController extends Controller
             'acaomedicamentos.transcricaoProduto.produto'
             
         ]);
-        if ($request->supervisor) {
+        if ($request->supervisor == true) {
             $escalas = $escalas->whereHas('ordemservico', function (Builder $builder) use ($user) {
                 $builder->where('profissional_id', $user->pessoa->profissional->id);
             });
