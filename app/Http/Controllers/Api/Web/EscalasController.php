@@ -28,7 +28,7 @@ class EscalasController extends Controller
         $escalas = Escala::with([
             'ordemservico' => function ($query) {
                 $query->select('id', 'orcamento_id', 'profissional_id');
-                
+
                 $query->with(['profissional.pessoa', 'orcamento' => function ($query) {
                     $query->select('id', 'cliente_id');
                     $query->with(['homecare' => function ($query) {
@@ -37,9 +37,8 @@ class EscalasController extends Controller
                             $query->select('id', 'pessoa_id', 'responsavel_id');
                             $query->with(['pessoa' => function ($query) {
                                 $query->select('id', 'nome', 'observacoes');
-                                
                             }]);
-                            $query->with([ 'responsavel' => function ($query) {
+                            $query->with(['responsavel' => function ($query) {
                                 $query->select('id', 'pessoa_id');
                                 $query->with(['pessoa' => function ($query) {
                                     $query->select('id', 'nome');
@@ -47,7 +46,7 @@ class EscalasController extends Controller
                                 $query->with(['pessoa.telefones' => function ($query) {
                                     $query->select('telefone_id', 'telefone');
                                 }]);
-                             }]);
+                            }]);
                         }]);
                     }]);
                 }]);
@@ -73,7 +72,7 @@ class EscalasController extends Controller
             'monitoramentos',
             'relatorioescalas',
             'acaomedicamentos.transcricaoProduto.produto'
-            
+
         ]);
         if ($request->supervisor == true) {
             $escalas = $escalas->whereHas('ordemservico', function (Builder $builder) use ($user) {
@@ -113,7 +112,7 @@ class EscalasController extends Controller
             'ordemservico_id',
             'status',
             'ativo',
-            
+
         ]);
         return $escalas;
     }
@@ -321,7 +320,7 @@ class EscalasController extends Controller
             ON e.ordemservico_id = os.id
             INNER JOIN orcamentos AS o
             ON o.id = os.orcamento_id
-            INNER JOIN homecares AS hc 
+            INNER JOIN homecares AS hc
             ON hc.orcamento_id = o.id
             INNER JOIN pacientes AS pc
             ON pc.id = hc.paciente_id
