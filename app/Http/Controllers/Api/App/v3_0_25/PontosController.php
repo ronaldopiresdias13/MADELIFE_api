@@ -118,9 +118,12 @@ class PontosController extends Controller
                 try{
                     $ocorrencia = Ocorrencia::where('tipo', '=', 'Check-in Atrasado')->whereHas('escalas', function ($q) use ($request) {
                         $q->where('escala_id', '=', $request->escala_id);
-                    })->first();
-
+                    })->where('empresa_id','=',$escala->empresa_id)->first();
+                    // Log::info("ocorrencia procurada cheking");
+                    // Log::info($request->escala_id);
                     if ($ocorrencia != null) {
+                    // Log::info("ocorrencia encontrada cheking");
+
                         $ocorrencia->fill(['situacao' => 'Resolvida', 'justificativa' => 'Check-in realizado'])->save();
                         $ocorrencia->chamados()->update(['finalizado' => 1, 'justificativa' => 'Check-in realizado']);
                     }
@@ -176,9 +179,12 @@ class PontosController extends Controller
 
                     $ocorrencia = Ocorrencia::where('tipo', '=', 'Check-out Atrasado')->whereHas('escalas', function ($q) use ($request) {
                         $q->where('escala_id', '=', $request->escala_id);
-                    })->first();
-    
+                    })->where('empresa_id','=',$request->empresa_id)->first();
+                    // Log::info("ocorrencia procurada checkou assinatura");
+                    // Log::info($request->escala_id);
                     if ($ocorrencia != null) {
+                        // Log::info("ocorrencia encontrada checkou assinatura");
+
                         $ocorrencia->fill(['situacao' => 'Resolvida', 'justificativa' => 'Check-out realizado'])->save();
                         $ocorrencia->chamados()->update(['finalizado' => 1, 'justificativa' => 'Check-out realizado']);
                     }
@@ -249,6 +255,18 @@ class PontosController extends Controller
                     $escala->status              = true;
                     $escala->assinaturaprestador = $request->assinaturaprestador;
                     $escala->save();
+
+                    $ocorrencia = Ocorrencia::where('tipo', '=', 'Check-out Atrasado')->whereHas('escalas', function ($q) use ($request) {
+                        $q->where('escala_id', '=', $request->escala_id);
+                    })->where('empresa_id','=',$escala->empresa_id)->first();
+                    // Log::info("ocorrencia procurada checkou assinatura");
+                    // Log::info($request->escala_id);
+                    if ($ocorrencia != null) {
+                        // Log::info("ocorrencia encontrada checkou assinatura");
+
+                        $ocorrencia->fill(['situacao' => 'Resolvida', 'justificativa' => 'Check-out realizado'])->save();
+                        $ocorrencia->chamados()->update(['finalizado' => 1, 'justificativa' => 'Check-out realizado']);
+                    }
                 });
                 return response()->json([
                     'alert' => [
