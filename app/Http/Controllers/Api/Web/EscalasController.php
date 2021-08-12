@@ -28,7 +28,6 @@ class EscalasController extends Controller
         $escalas = Escala::with([
             'ordemservico' => function ($query) {
                 $query->select('id', 'orcamento_id', 'profissional_id');
-                
                 $query->with(['profissional.pessoa', 'orcamento' => function ($query) {
                     $query->select('id', 'cliente_id');
                     $query->with(['homecare' => function ($query) {
@@ -37,7 +36,6 @@ class EscalasController extends Controller
                             $query->select('id', 'pessoa_id', 'responsavel_id');
                             $query->with(['pessoa' => function ($query) {
                                 $query->select('id', 'nome', 'observacoes');
-                                
                             }]);
                             $query->with([ 'responsavel' => function ($query) {
                                 $query->select('id', 'pessoa_id');
@@ -73,9 +71,8 @@ class EscalasController extends Controller
             'monitoramentos',
             'relatorioescalas',
             'acaomedicamentos.transcricaoProduto.produto'
-            
         ]);
-        if ($request->supervisor == true) {
+        if ($request->supervisor) {
             $escalas = $escalas->whereHas('ordemservico', function (Builder $builder) use ($user) {
                 $builder->where('profissional_id', $user->pessoa->profissional->id);
             });
@@ -113,7 +110,7 @@ class EscalasController extends Controller
             'ordemservico_id',
             'status',
             'ativo',
-            
+
         ]);
         return $escalas;
     }
@@ -321,7 +318,7 @@ class EscalasController extends Controller
             ON e.ordemservico_id = os.id
             INNER JOIN orcamentos AS o
             ON o.id = os.orcamento_id
-            INNER JOIN homecares AS hc 
+            INNER JOIN homecares AS hc
             ON hc.orcamento_id = o.id
             INNER JOIN pacientes AS pc
             ON pc.id = hc.paciente_id
