@@ -45,7 +45,12 @@ class AcaomedicamentosController extends Controller
             try {
                 $ocorrencia = Ocorrencia::where('tipo', '=', 'Medicamento Atrasado')->whereHas('escalas', function ($q) use ($request) {
                     $q->where('escala_id', '=', $request['escala_id']);
-                })->where('horario', '=', $request['data'] . ' ' . $request['hora'] . ':00')->first();
+                })->where('transcricao_produto_id','=',$request['transcricao_produto_id'])->whereRaw('horario like \'%'. $request['hora'] . ':00\'')->first();
+                // Log::info("ocorrencia procurada medicamento");
+                // Log::info($request['data'] . ' ' . $request['hora'] . ':00');
+                // Log::info($request['escala_id']);
+                // Log::info($ocorrencia);
+
                 if ($ocorrencia != null) {
                     $ocorrencia->fill(['situacao' => 'Resolvida', 'justificativa' => 'Medicamento realizado'])->save();
                     $ocorrencia->chamados()->update(['finalizado' => 1, 'justificativa' => 'Medicamento realizado']);
