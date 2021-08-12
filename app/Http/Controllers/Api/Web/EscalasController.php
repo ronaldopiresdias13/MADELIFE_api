@@ -37,6 +37,13 @@ class EscalasController extends Controller
                             $query->with(['pessoa' => function ($query) {
                                 $query->select('id', 'nome', 'observacoes');
                             }]);
+                            $query->with(['pessoa.enderecos' => function ($query) {
+                                $query->select('endereco_id', 'cep', 'rua', 'bairro', 'numero', 'complemento', 'tipo', 'cidade_id');
+                                $query->with(['cidade' => function ($query) {
+                                    $query->select('id', 'nome', 'uf');
+                                }]);
+                            }]);
+
                             $query->with(['responsavel' => function ($query) {
                                 $query->select('id', 'pessoa_id');
                                 $query->with(['pessoa' => function ($query) {
