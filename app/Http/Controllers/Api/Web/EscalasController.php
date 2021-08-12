@@ -28,10 +28,6 @@ class EscalasController extends Controller
         $escalas = Escala::with([
             'ordemservico' => function ($query) {
                 $query->select('id', 'orcamento_id', 'profissional_id');
-<<<<<<< HEAD
-
-=======
->>>>>>> 55273dfd08ab89286322066251a508c80f3fabd3
                 $query->with(['profissional.pessoa', 'orcamento' => function ($query) {
                     $query->select('id', 'cliente_id');
                     $query->with(['homecare' => function ($query) {
