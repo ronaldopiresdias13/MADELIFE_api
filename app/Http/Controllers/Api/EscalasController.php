@@ -431,7 +431,8 @@ class EscalasController extends Controller
                 'observacao'       => "",
                 'status'           => false,
                 'folga'            => false,
-                'substituto'       => null
+                'substituto'       => null,
+                'prestador_proprietario' => $escala['prestador_proprietario'],
 
             ]);
             // return $cuidados;
