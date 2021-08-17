@@ -46,11 +46,11 @@ class EmpresaDadosSeed extends Seeder
     {
         $empresa=new EmpresaDados();
         $empresa->fill($this->santander);
-        $empresa->fill(['empresa_id'=>2])->save();
+        $empresa->fill(['empresa_id'=>1])->save();
 
         $empresa=new EmpresaDados();
         $empresa->fill($this->sicred);
-        $empresa->fill(['empresa_id'=>2])->save();
+        $empresa->fill(['empresa_id'=>1])->save();
 
     }
 }
