@@ -21,7 +21,8 @@ class FolgasController extends Controller
         $folgas = Folga::with([
             'escala.ordemservico.orcamento.homecare.paciente.pessoa',
             'escala.ordemservico.orcamento.cliente.pessoa',
-            'prestador.pessoa'
+            'prestador.pessoa',
+            'substituto.pessoa'
         ])
             ->where('empresa_id', $empresa_id)
             ->orderByDesc('created_at')

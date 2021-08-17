@@ -171,6 +171,7 @@ class EscalasController extends Controller
         $escala->status                = $request->status;
         $escala->folga                 = $request->folga;
         $escala->substituto            = $request->substituto;
+        $escala->prestador_proprietario           = $request->prestador_proprietario;
         $escala->save();
 
         foreach ($request->cuidados as $key => $cuidado) {
@@ -431,7 +432,8 @@ class EscalasController extends Controller
                 'observacao'       => "",
                 'status'           => false,
                 'folga'            => false,
-                'substituto'       => null
+                'substituto'       => null,
+                'prestador_proprietario' => $escala['prestador_proprietario'],
 
             ]);
             // return $cuidados;
