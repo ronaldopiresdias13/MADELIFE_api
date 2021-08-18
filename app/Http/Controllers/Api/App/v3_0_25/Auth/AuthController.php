@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\App\v3_0_25\Auth;
 
+use App\Http\Controllers\Api\App\v3_0_20\PrestadoresController;
 use App\Models\User;
 use App\Models\Email;
 use App\Models\Pessoa;
@@ -215,6 +216,7 @@ class AuthController extends Controller
 
     public function verificaCpfEmail(Request $request)
     {
+        
         if (!$request->cpfcnpj && !$request->email) {
             return response()->json([
                 'alert' => [
@@ -230,13 +232,16 @@ class AuthController extends Controller
                 ->first();
 
             if ($user) {
-                return response()->json([
-                    'alert' => [
-                        'title' => 'Ops!',
-                        'text' => 'Você já possui um cadastro com esse CPF!'
-                    ]
-                ], 200)
-                    ->header('Content-Type', 'application/json');
+                $prestador = Prestador::firstWhere('pessoa_id', $user->pessoa->id);
+                if ($prestador) {
+                    return response()->json([
+                        'alert' => [
+                            'title' => 'Ops!',
+                            'text' => 'Você já possui um cadastro com esse CPF!'
+                        ]
+                    ], 200)
+                        ->header('Content-Type', 'application/json');
+                }
             }
         }
 
@@ -245,13 +250,16 @@ class AuthController extends Controller
                 ->first();
 
             if ($user) {
-                return response()->json([
-                    'alert' => [
-                        'title' => 'Ops!',
-                        'text' => 'Você já possui um cadastro com esse E-mail!'
-                    ]
-                ], 200)
-                    ->header('Content-Type', 'application/json');
+                $prestador = Prestador::firstWhere('pessoa_id', $user->pessoa->id);
+                if ($prestador) {
+                    return response()->json([
+                        'alert' => [
+                            'title' => 'Ops!',
+                            'text' => 'Você já possui um cadastro com esse E-mail!'
+                        ]
+                    ], 200)
+                        ->header('Content-Type', 'application/json');
+                }
             }
         }
 

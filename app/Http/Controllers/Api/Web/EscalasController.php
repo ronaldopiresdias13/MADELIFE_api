@@ -319,7 +319,7 @@ class EscalasController extends Controller
         $empresa_id = $user->pessoa->profissional->empresa_id;
         // $empresa_id = 1;
         return DB::select(
-            "SELECT e.id, e.ordemservico_id, e.servico_id, e.prestador_id, e.horaentrada, e.horasaida, e.dataentrada, e.datasaida, e.periodo, e.status, 
+            "SELECT e.id, e.ordemservico_id, e.servico_id, e.prestador_id, e.horaentrada, e.horasaida, e.dataentrada, e.datasaida, e.periodo, e.status, e.tipo, 
             p.nome AS paciente, pp.nome AS prestador, s.descricao AS servico, e.prestador_proprietario, prestadorproprietariopessoa.nome as prestadorproprietarionome FROM escalas AS e
             INNER JOIN ordemservicos AS os
             ON e.ordemservico_id = os.id
