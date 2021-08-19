@@ -188,12 +188,12 @@ class TissService
             $this->xml->endElement(); #ans:dadosExecutante
             $this->xml->startElement('ans:dadosAtendimento');
             $this->xml->startElement('ans:tipoAtendimento');
-            $this->xml->text($medicao->ordemservico->orcamento->tipoAtendimento);
-            $this->texto .= $medicao->ordemservico->orcamento->tipoAtendimento;
+            $this->xml->text($medicao->ordemservico->orcamento->tipoatendimento);
+            $this->texto .= $medicao->ordemservico->orcamento->tipoatendimento;
             $this->xml->endElement(); #ans:tipoAtendimento
             $this->xml->startElement('ans:indicacaoAcidente');
-            $this->xml->text($medicao->ordemservico->orcamento->indicacaoAcidente);
-            $this->texto .= $medicao->ordemservico->orcamento->indicacaoAcidente;
+            $this->xml->text($medicao->ordemservico->orcamento->indicacaoacidente);
+            $this->texto .= $medicao->ordemservico->orcamento->indicacaoacidente;
             $this->xml->endElement(); #ans:indicacaoAcidente
             $this->xml->endElement(); #ans:dadosAtendimento
 
