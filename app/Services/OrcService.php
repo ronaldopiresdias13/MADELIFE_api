@@ -99,6 +99,7 @@ class OrcService
                 "valortotalproduto"        => $this->request->valortotalproduto,
                 "valortotalcusto"          => $this->request->valortotalcusto,
                 "valortotalservico"        => $this->request->valortotalservico,
+                "valordesconto"            => $this->request->valordesconto,
                 "valortotalorcamento"      => $this->request->valortotalorcamento,
                 "observacao"               => $this->request->observacao,
                 "status"                   => $this->request->status,
@@ -124,15 +125,6 @@ class OrcService
                 "remocao_cidadedestino_id" => $this->request->remocao_cidadedestino_id,
                 "remocao_observacao"       => $this->request->remocao_observacao,
             ])->save();
-
-
-
-
-
-
-
-
-
 
             foreach ($this->request->produtos as $item) {
                 $orcProduto = new OrcProduto();
@@ -213,6 +205,7 @@ class OrcService
                 "valortotalproduto"        => $this->request->valortotalproduto,
                 "valortotalcusto"          => $this->request->valortotalcusto,
                 "valortotalservico"        => $this->request->valortotalservico,
+                "valordesconto"            => $this->request->valordesconto,
                 "valortotalorcamento"      => $this->request->valortotalorcamento,
                 "observacao"               => $this->request->observacao,
                 "status"                   => $this->request->status,
