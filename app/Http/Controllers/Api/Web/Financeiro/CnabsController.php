@@ -47,8 +47,9 @@ class CnabsController extends Controller
         if ($resposta['status'] == true) {
             return $resposta;
         } else {
+            Log::error('Erro ao gerar o Cnab. Verifique se todos os dados estão corretos. Motivo: '.$resposta['message']);
             throw ValidationException::withMessages([
-                'cnab' => ['Erro ao gerar o Cnab. Verifique se todos os dados estão corretos'],
+                'cnab' => ['Erro ao gerar o Cnab. Verifique se todos os dados estão corretos. Motivo: '.$resposta['message']],
             ]);
         }
     }

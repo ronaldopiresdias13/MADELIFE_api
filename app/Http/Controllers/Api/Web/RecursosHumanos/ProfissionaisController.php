@@ -56,7 +56,7 @@ class ProfissionaisController extends Controller
                 'pessoa.dadosbancario.banco',
                 'pessoa.profissional.dadoscontratual',
                 'pessoa.profissional.beneficios',
-                'pessoa.profissional.convenios',
+                'pessoa.profissional.convenios.convenio',
                 'pessoa.profissional.formacoes',
                 'pessoa.profissional.cargo',
                 'pessoa.profissional.setor',
@@ -352,7 +352,7 @@ class ProfissionaisController extends Controller
                 foreach ($request['beneficios'] as $key => $beneficio) {
                     $profissional_beneficio = ProfissionalBeneficio::firstOrCreate([
                         'profissional_id' => $profissional->id,
-                        'beneficio_id'    => $beneficio['id']
+                        'beneficio_id'    => $beneficio['beneficio_id']
                     ]);
                 }
             }
@@ -448,7 +448,6 @@ class ProfissionaisController extends Controller
         $profissional->setor;
         $profissional->cargo;
         $profissional->dadoscontratual;
-        $profissional->beneficios;
         if ($profissional->beneficios) {
             foreach ($profissional->beneficios as $key => $beneficio) {
                 $beneficio->beneficio;
