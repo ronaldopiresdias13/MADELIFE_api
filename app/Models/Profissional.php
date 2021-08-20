@@ -39,9 +39,13 @@ class Profissional extends Model
         return $this->belongsToMany(Formacao::class, 'profissional_formacao')->wherePivot('ativo', true);
     }
 
+    // public function beneficios()
+    // {
+    //     return $this->belongsToMany(Beneficio::class, 'profissional_beneficio')->wherePivot('ativo', true);
+    // }
     public function beneficios()
     {
-        return $this->belongsToMany(Beneficio::class, 'profissional_beneficio')->wherePivot('ativo', true);
+        return $this->hasMany(ProfissionalBeneficio::class)->where('ativo', true);
     }
 
     public function convenios()
