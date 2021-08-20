@@ -173,7 +173,7 @@ class EmpresaPrestadorController extends Controller
      */
     public function ativarPrestador(Request $request, EmpresaPrestador $empresaPrestador)
     {
-        return $request;
+        // return $request;
         $empresaPrestador->status = 'Aprovado';
         $empresaPrestador->save();
     }

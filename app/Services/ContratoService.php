@@ -39,7 +39,7 @@ class ContratoService
      */
     public function store()
     {
-         
+
         DB::transaction(function () {
             $this->empresa_id = $this->request->user()->pessoa->profissional->empresa_id;
             if (!$this->empresa_id) {
@@ -48,26 +48,27 @@ class ContratoService
 
             $this->orcamento = new Orcamento();
             $this->orcamento->fill([
-                "empresa_id"        => $this->empresa_id,
-                "cliente_id"        => $this->request->cliente_id,
-                "numero"            => $this->request->numero,
-                "tipo"              => $this->request->tipo,
+                "empresa_id"         => $this->empresa_id,
+                "cliente_id"         => $this->request->cliente_id,
+                "numero"             => $this->request->numero,
+                "tipo"               => $this->request->tipo,
                 "tipoatentendimento" => $this->request->tipoatentendimento,
-                "caraterAtendimento"   => $this->request->caraterAtendimento,
+                "caraterAtendimento" => $this->request->caraterAtendimento,
                 "indicacaoClinica"   => $this->request->indicacaoClinica,
                 "indicacaoacidente"  => $this->request->indicacaoacidente,
-                "data"              => $this->request->data,
-                "quantidade"        => $this->request->quantidade,
-                "unidade"           => $this->request->unidade,
-                "cidade_id"         => $this->request->cidade_id,
-                "processo"          => $this->request->processo,
-                "situacao"          => $this->request->situacao,
-                "descricao"         => $this->request->descricao,
-                "valortotalproduto" => $this->request->valortotalproduto,
-                "valortotalcusto"   => $this->request->valortotalcusto,
-                "valortotalservico" => $this->request->valortotalservico,
-                "observacao"        => $this->request->observacao,
-                "status"            => $this->request->status ? $this->request->status : false,
+                "data"               => $this->request->data,
+                "quantidade"         => $this->request->quantidade,
+                "unidade"            => $this->request->unidade,
+                "cidade_id"          => $this->request->cidade_id,
+                "processo"           => $this->request->processo,
+                "situacao"           => $this->request->situacao,
+                "descricao"          => $this->request->descricao,
+                "valortotalproduto"  => $this->request->valortotalproduto,
+                "valortotalcusto"    => $this->request->valortotalcusto,
+                "valortotalservico"  => $this->request->valortotalservico,
+                "valordesconto"      => $this->request->valordesconto,
+                "observacao"         => $this->request->observacao,
+                "status"             => $this->request->status ? $this->request->status : false,
             ])->save();
 
             $ordemservico = new Ordemservico();
@@ -216,7 +217,7 @@ class ContratoService
 
     public function update()
     {
-        
+
         DB::transaction(function () {
             $this->orcamento->fill([
                 "cliente_id"        => $this->request->cliente_id,
@@ -236,6 +237,7 @@ class ContratoService
                 "valortotalproduto" => $this->request->valortotalproduto,
                 "valortotalcusto"   => $this->request->valortotalcusto,
                 "valortotalservico" => $this->request->valortotalservico,
+                "valordesconto"     => $this->request->valordesconto,
                 "observacao"        => $this->request->observacao,
                 "status"            => $this->request->status,
             ])->save();
