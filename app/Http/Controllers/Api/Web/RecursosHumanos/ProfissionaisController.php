@@ -56,7 +56,7 @@ class ProfissionaisController extends Controller
                 'pessoa.dadosbancario.banco',
                 'pessoa.profissional.dadoscontratual',
                 'pessoa.profissional.beneficios',
-                'pessoa.profissional.convenios',
+                'pessoa.profissional.convenios.convenio',
                 'pessoa.profissional.formacoes',
                 'pessoa.profissional.cargo',
                 'pessoa.profissional.setor',
@@ -448,7 +448,6 @@ class ProfissionaisController extends Controller
         $profissional->setor;
         $profissional->cargo;
         $profissional->dadoscontratual;
-        $profissional->beneficios;
         if ($profissional->beneficios) {
             foreach ($profissional->beneficios as $key => $beneficio) {
                 $beneficio->beneficio;
