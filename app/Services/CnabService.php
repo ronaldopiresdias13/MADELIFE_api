@@ -89,13 +89,13 @@ class CnabService
         $dados_sicredi = EmpresaDados::where('empresa_id', '=', $empresa_id)->where('codigo', '=', '748')->first();
 
         if ($this->banco == '033' && $dados_santander == null) {
-            return ['status' => false];
+            return ['status' => false,'message'=>'Dados do Santander inválidos'];
         }
         if ($this->banco == '748' && $dados_sicredi == null) {
-            return ['status' => false];
+            return ['status' => false,'message'=>'Dados do Sicredi inválidos'];
         }
         if ($this->banco != '033' && $this->banco != '748') {
-            return ['status' => false];
+            return ['status' => false,'message'=>'Código do banco inválido'];
         }
         $this->santander = $dados_santander->toArray();
         $this->sicred = $dados_sicredi->toArray();
@@ -268,7 +268,7 @@ class CnabService
                 }
             }
             if (count($cnabs) == 0) {
-                return ['status' => false];
+                return ['status' => false,'message'=>'Os dados do convênio do Santander não estão preenchidos'];
             }
             return ['status' => true, 'cnabs' => $cnabs];
         } elseif ($this->banco == '748') {
@@ -452,11 +452,11 @@ class CnabService
                 }
             }
             if (count($cnabs) == 0) {
-                return ['status' => false];
+                return ['status' => false,'message'=>'Os dados do convênio do Sicredi não estão preenchidos'];
             }
             return ['status' => true, 'cnabs' => $cnabs];
         }
-        return ['status' => false];
+        return ['status' => false,'message'=>'Código do banco inválido'];
         //trailer de arquivo
     }
 
