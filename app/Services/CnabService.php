@@ -97,8 +97,12 @@ class CnabService
         if ($this->banco != '033' && $this->banco != '748') {
             return ['status' => false,'message'=>'Código do banco inválido'];
         }
-        $this->santander = $dados_santander->toArray();
-        $this->sicred = $dados_sicredi->toArray();
+        if($dados_santander!=null){
+            $this->santander = $dados_santander->toArray();
+        }
+        if($dados_sicredi!=null){
+            $this->sicred = $dados_sicredi->toArray();
+        }
 
         if ($this->banco == '033') {
             $cnabs = [];
