@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\Web\Prestadores\PrestadoresController;
-use App\Http\Controllers\Api\EmpresaPrestadorController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth:api'], function () {
