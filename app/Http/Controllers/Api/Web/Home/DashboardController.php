@@ -90,7 +90,7 @@ class DashboardController extends Controller
             $per_page_enfermagem = 0;
         }
 
-        if ($user->acessos()->where('acessos.nome', '=', 'TI')->first() != null) {
+        if ($user->acessos()->where('acessos.nome', '=', 'TI')->first() != null && $profissinal->empresa_id==2) {
             $chamados_ti_final = [];
             $chamados_ti = Chamado::has('mensagens')->where('finalizado', '=', false)->where('tipo', '=', 'T.I.')->with(['mensagens' => function ($q) {
                 $q->orderBy('created_at', 'desc');
