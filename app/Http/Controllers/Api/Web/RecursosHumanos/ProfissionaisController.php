@@ -352,7 +352,7 @@ class ProfissionaisController extends Controller
                 foreach ($request['beneficios'] as $key => $beneficio) {
                     $profissional_beneficio = ProfissionalBeneficio::firstOrCreate([
                         'profissional_id' => $profissional->id,
-                        'beneficio_id'    => $beneficio['id']
+                        'beneficio_id'    => $beneficio['beneficio_id']
                     ]);
                 }
             }
