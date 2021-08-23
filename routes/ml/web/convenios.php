@@ -10,6 +10,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('convenios/{convenio}', 'Api\Web\RecursosHumanos\ConveniosController@show');
             Route::put('convenios/{convenio}', 'Api\Web\RecursosHumanos\ConveniosController@update');
             Route::delete('convenios/{convenio}', 'Api\Web\RecursosHumanos\ConveniosController@destroy');
+            Route::delete('convenios/{convenio}', 'Api\Web\RecursosHumanos\ConveniosController@destroyConvenioProfissional');
         });
     });
 });

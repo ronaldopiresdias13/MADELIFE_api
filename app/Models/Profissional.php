@@ -50,6 +50,6 @@ class Profissional extends Model
 
     public function convenios()
     {
-        return $this->belongsToMany(Convenio::class, 'profissional_convenio')->wherePivot('ativo', true);
+        return $this->belongsToMany(Convenio::class, 'profissional_convenio')->withPivot('id')->wherePivot('ativo', true);
     }
 }
