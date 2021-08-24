@@ -82,10 +82,4 @@ class ConveniosController extends Controller
         $convenio->ativo = false;
         $convenio->save();
     }
-
-    public function destroyConvenioProfissional(ProfissionalConvenio $profissionalConvenio)
-    {
-        $profissionalConvenio->ativo = false;
-        $profissionalConvenio->save();
-    }
 }
