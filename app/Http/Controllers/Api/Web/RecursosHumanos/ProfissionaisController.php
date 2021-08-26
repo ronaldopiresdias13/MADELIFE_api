@@ -56,7 +56,7 @@ class ProfissionaisController extends Controller
                 'pessoa.dadosbancario.banco',
                 'pessoa.profissional.dadoscontratual',
                 'pessoa.profissional.beneficios',
-                'pessoa.profissional.convenios',
+                'pessoa.profissional.convenios.convenio',
                 'pessoa.profissional.formacoes',
                 'pessoa.profissional.cargo',
                 'pessoa.profissional.setor',
@@ -184,7 +184,7 @@ class ProfissionaisController extends Controller
                 foreach ($request['formacoes'] as $key => $formacao) {
                     $profissional_formacao = ProfissionalFormacao::firstOrCreate([
                         'profissional_id' => $profissional->id,
-                        'formacao_id'     => $formacao['formacao_id'],
+                        'formacao_id'     => $formacao['id'],
                     ]);
                 }
             }
@@ -344,7 +344,7 @@ class ProfissionaisController extends Controller
                 foreach ($request['formacoes'] as $key => $formacao) {
                     $profissional_formacao = ProfissionalFormacao::firstOrCreate([
                         'profissional_id' => $profissional->id,
-                        'formacao_id'     => $formacao['formacao_id'],
+                        'formacao_id'     => $formacao['id'],
                     ]);
                 }
             }
@@ -360,7 +360,7 @@ class ProfissionaisController extends Controller
                 foreach ($request['convenios'] as $key => $convenio) {
                     $profissional_convenio = ProfissionalConvenio::firstOrCreate([
                         'profissional_id' => $profissional->id,
-                        'convenio_id'    => $convenio['convenio_id']
+                        'convenio_id'    => $convenio['id']
                     ]);
                 }
             }
@@ -448,7 +448,11 @@ class ProfissionaisController extends Controller
         $profissional->setor;
         $profissional->cargo;
         $profissional->dadoscontratual;
-        $profissional->beneficios;
+        if ($profissional->beneficios) {
+            foreach ($profissional->beneficios as $key => $beneficio) {
+                $beneficio->beneficio;
+            }
+        }
         $profissional->convenios;
         if ($profissional->pessoa->enderecos) {
             foreach ($profissional->pessoa->enderecos as $key => $endereco) {

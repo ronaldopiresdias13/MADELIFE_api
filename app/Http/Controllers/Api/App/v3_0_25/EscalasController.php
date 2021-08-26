@@ -126,6 +126,7 @@ class EscalasController extends Controller
                 'datasaida',
                 'horaentrada',
                 'horasaida',
+                'folga',
                 'status',
             ]);
 

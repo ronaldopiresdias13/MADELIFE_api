@@ -117,6 +117,7 @@ class EscalasController extends Controller
             'ordemservico_id',
             'status',
             'ativo',
+            'folga'
 
         ]);
         return $escalas;

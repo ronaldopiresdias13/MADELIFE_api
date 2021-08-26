@@ -141,6 +141,7 @@ class PontosController extends Controller
                     }
                 }
                 $escala['checkin']['alterado'] = $ponto->status;
+                $escala['checkin']['observacao'] = $ponto->observacao;
             } else {
                 $escala['checkout']['id'] = $ponto->id;
                 $dataEscala = $dado->datasaida;
@@ -160,6 +161,7 @@ class PontosController extends Controller
                     }
                 }
                 $escala['checkout']['alterado'] = $ponto->status;
+                $escala['checkout']['observacao'] = $ponto->observacao;
             }
         }
         if (array_key_exists('checkin', $escala) && array_key_exists('checkout', $escala)) {
