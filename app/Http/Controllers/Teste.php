@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contasbancaria;
+use App\Models\Dadosbancario;
 use App\Models\Escala;
 use App\Models\OrdemservicoServico;
 use App\Models\Servico;
@@ -12,6 +14,18 @@ class Teste extends Controller
 {
     public function teste(Request $request)
     {
+        /*Pegar cpf de pessoa e adicionar nas contas bancarias que não tem cpf ou cnpj */
+        $dadosbancarios = Dadosbancario::where('cpfcnpj', null)
+            ->orWhere(function ($query) {
+                $query->where('cpfcnpj', '');
+            })->get();
+        foreach ($dadosbancarios as $key => $dadosbancario) {
+
+            $dadosbancario->cpfcnpj = $dadosbancario->pessoa->cpfcnpj;
+            $dadosbancario->save();
+        }
+        return $dadosbancarios;
+
         /* Preencher Tipos nas escalas que estão null */ // Não está funcionando
         // $escalas = Escala::where('tipo', null)->get();
 
@@ -79,15 +93,15 @@ class Teste extends Controller
         // return $servicos;
 
         /* Remover mascara de todos os telefones */
-        $telefones = Telefone::all();
-        foreach ($telefones as $key => $telefone) {
-            var_dump($telefone->telefone . ' => ');
-            $car = array("(", ")", " ", "-");
-            $telefone->telefone = str_replace($car, "", $telefone->telefone);
-            var_dump($telefone->telefone . '\n');
-            $telefone->save();
-        }
-        return $telefones;
+        // $telefones = Telefone::all();
+        // foreach ($telefones as $key => $telefone) {
+        //     var_dump($telefone->telefone . ' => ');
+        //     $car = array("(", ")", " ", "-");
+        //     $telefone->telefone = str_replace($car, "", $telefone->telefone);
+        //     var_dump($telefone->telefone . '\n');
+        //     $telefone->save();
+        // }
+        // return $telefones;
 
 
         // $empresa_id = 1;
