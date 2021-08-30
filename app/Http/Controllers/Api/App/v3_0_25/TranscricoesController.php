@@ -40,6 +40,7 @@ class TranscricoesController extends Controller
             ->whereHas('transcricao', function (Builder $query) use ($ordemservico) {
                 $query->where('ordemservico_id', $ordemservico['id']);
             })
+            ->where('ativo', true)
             ->get();
         return $tp;
         // return Transcricao::with(['itensTranscricao.produto', 'itensTranscricao.horariomedicamentos', 'itensTranscricao.acoesmedicamentos'])
