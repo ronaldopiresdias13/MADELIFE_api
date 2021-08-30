@@ -147,6 +147,7 @@ class RouteServiceProvider extends ServiceProvider
                 require base_path('routes/ml/web/orcamentos.php');
                 require base_path('routes/ml/web/orcamentoservicos.php');
                 require base_path('routes/ml/web/orcs.php');
+                require base_path('routes/ml/web/orccusto.php');
                 require base_path('routes/ml/web/ordemservicoacessos.php');
                 require base_path('routes/ml/web/ordemservicoPrestadores.php');
                 require base_path('routes/ml/web/ordemservicos.php');
