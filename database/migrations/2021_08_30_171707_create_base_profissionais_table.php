@@ -18,9 +18,9 @@ class CreateBaseProfissionaisTable extends Migration
             $table->string('name')->nullable();
             $table->string('email')->nullable();
             $table->boolean('active')->default(true);
-            $table->string('activation_code')->nullable();
-            $table->string('priv_admin')->nullable();
-            $table->string('crypto')->nullable();
+            // $table->string('activation_code')->nullable();
+            // $table->string('priv_admin')->nullable();
+            // $table->string('crypto')->nullable();
             $table->string('cep')->nullable();
             $table->string('endereco')->nullable();
             $table->string('latitude')->nullable();
@@ -73,6 +73,7 @@ class CreateBaseProfissionaisTable extends Migration
             $table->string('tam_documentos')->nullable();
             $table->string('logo')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
