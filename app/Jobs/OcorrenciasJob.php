@@ -62,6 +62,8 @@ class OcorrenciasJob implements ShouldQueue
         join transcricoes as t on tp.transcricao_id=t.id
         join escalas as es on es.ordemservico_id=t.ordemservico_id and es.ativo=1 and  ((es.dataentrada=:date_now and es.horaentrada<=:hour and es.horasaida>:hour_1) or (es.dataentrada=:date_ago_ and es.datasaida=:date_now_ and :hour_2<es.horasaida and es.horaentrada>es.horasaida) or (es.dataentrada=:date_now_2 and es.horaentrada<=:hour_3 and es.datasaida=:tomorrow))
         left join prestadores as pre on pre.id=es.prestador_id
+        join prestador_formacao as pf on pf.prestador_id=pre.id
+        join formacoes as fo on fo.id=pf.formacao_id and (fo.descricao='Auxiliar de Enfermagem' or fo.descricao='Técnico de Enfermagem' or fo.descricao='Enfermagem')
         join pessoas as pe on pe.id=pre.pessoa_id
         where tp.id=:id and t.empresa_id=:empresa_id"),
                 array(
