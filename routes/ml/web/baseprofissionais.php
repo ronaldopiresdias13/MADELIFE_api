@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Route;
     Route::prefix('web')->group(function () {
             Route::get('baseprofissionais', [BaseProfissionaisController::class,'index']);
             Route::post('baseprofissionais', [BaseProfissionaisController::class,'store']);
-            Route::get('baseprofissionais/{profissional}', [BaseProfissionaisController::class,'show']);
-            Route::put('baseprofissionais/{profissional}', [BaseProfissionaisController::class,'update']);
-            Route::delete('baseprofissionais/{profissional}', [BaseProfissionaisController::class,'destroy']);
+            Route::get('baseprofissionais/{baseprofissionais}', [BaseProfissionaisController::class,'show']);
+            Route::put('baseprofissionais/{baseprofissionais}', [BaseProfissionaisController::class,'update']);
+            Route::delete('baseprofissionais/{baseprofissionais}', [BaseProfissionaisController::class,'destroy']);
     });
 // });
