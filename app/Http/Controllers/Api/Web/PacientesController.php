@@ -14,8 +14,10 @@ use App\Models\PessoaEndereco;
 use App\Models\PessoaTelefone;
 use App\Models\Telefone;
 use App\Models\Tipopessoa;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use phpDocumentor\Reflection\Types\Null_;
 
 class PacientesController extends Controller
 {
@@ -28,10 +30,21 @@ class PacientesController extends Controller
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-        return Paciente::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade', 'responsavel.pessoa:id,nome', 'pessoa.user.acessos'])
-            ->where('empresa_id', $empresa_id)
-            ->where('ativo', true)
-            ->get();
+
+        $pacientes = Paciente::with([
+            'pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade', 'pessoa.pacientes.internacoes',
+            'responsavel.pessoa:id,nome', 'pessoa.user.acessos'
+        ]);
+
+        if ($request->data_final) {
+            $pacientes = $pacientes->whereHas('internacoes', function (Builder $query) use ($request) {
+                $query->where('data_final', null, $request->data_final);
+            });
+        };
+        $pacientes->where('empresa_id', $empresa_id);
+        $pacientes->where('ativo', true);
+        $pacientes = $pacientes->get();
+        return $pacientes;
     }
     /**
      * Display a listing of the resource.
@@ -90,6 +103,9 @@ class PacientesController extends Controller
      */
     public function store(Request $request)
     {
+        $empresa = $request->user()->pessoa->profissional->empresa;
+        // $qtdPac = Paciente::where('empresa_id', $empresa->id)->where('ativo', true)->count();
+        // if ($qtdPac < $empresa->quantidadepaciente) {
         DB::transaction(function () use ($request) {
             $paciente = Paciente::create([
                 'empresa_id' => $request['empresa_id'],
@@ -109,11 +125,15 @@ class PacientesController extends Controller
                     ]
                 )->id,
                 'responsavel_id' => $request['responsavel_id'],
+                'complexidade'   => $request['complexidade'],
+                'numeroCarteira' => $request['numeroCarteira'],
                 'sexo'           => $request['sexo'],
-                'ativo'           => $request['ativo']
+                'tipopaciente'   => $request['tipopaciente'],
+                'ativo'          => $request['ativo'],
+                'atendimentoRN'  => $request['atendimentoRN']
             ]);
             Tipopessoa::create([
-                'tipo'      => 'Responsável',
+                'tipo'      => 'Paciente',
                 'pessoa_id' => $paciente->pessoa_id,
                 'ativo'     => 1
             ]);
@@ -140,7 +160,7 @@ class PacientesController extends Controller
                         'endereco_id' => Endereco::firstOrCreate(
                             [
                                 'cep'         => $endereco['cep'],
-                                'cidade_id'   => $endereco['cidade_id'],
+                                'cidade_id'   => $endereco['cidade']['id'],
                                 'rua'         => $endereco['rua'],
                                 'bairro'      => $endereco['bairro'],
                                 'numero'      => $endereco['numero'],
@@ -167,6 +187,15 @@ class PacientesController extends Controller
                 }
             }
         });
+        // } else {
+        //     return response()->json([
+        //         'alert' => [
+        //             'title' => 'Ops, não foi possível salvar',
+        //             'text' => 'Quantidade máxima de pacientes atingida!'
+        //         ]
+        //     ], 400)
+        //         ->header('Content-Type', 'application/json');
+        // }
     }
 
     /**
@@ -186,6 +215,7 @@ class PacientesController extends Controller
                 $endereco->cidade;
             }
         }
+
         return $paciente;
     }
 
@@ -201,9 +231,13 @@ class PacientesController extends Controller
         DB::transaction(function () use ($request, $paciente) {
             $paciente->update([
                 'sexo'           => $request['sexo'],
+                'tipopaciente'   => $request['tipopaciente'],
                 'empresa_id'     => $request['empresa_id'],
                 'responsavel_id' => $request['responsavel_id'],
+                'numeroCarteira' => $request['numeroCarteira'],
+                'complexidade'   => $request['complexidade'],
                 'ativo'          => $request['ativo'],
+                'atendimentoRN'  => $request['atendimentoRN']
             ]);
             $pessoa = Pessoa::find($request['pessoa']['id']);
             if ($pessoa) {
@@ -243,7 +277,7 @@ class PacientesController extends Controller
                             'endereco_id' => Endereco::firstOrCreate(
                                 [
                                     'cep'         => $endereco['cep'],
-                                    'cidade_id'   => $endereco['cidade_id'],
+                                    'cidade_id'   => $endereco['cidade']['id'],
                                     'rua'         => $endereco['rua'],
                                     'bairro'      => $endereco['bairro'],
                                     'numero'      => $endereco['numero'],

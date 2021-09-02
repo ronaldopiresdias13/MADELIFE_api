@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
 
 class Produto extends Model
 {
+    protected $guarded = [];
     // protected static function booted()
     // {
     //     $empresa_id = null;
@@ -34,5 +36,25 @@ class Produto extends Model
     public function empresa()
     {
         return $this->belongsTo(Empresa::class);
+    }
+
+    public function marca()
+    {
+        return $this->belongsTo(Marca::class);
+    }
+
+    public function tipoproduto()
+    {
+        return $this->belongsTo(Tipoproduto::class);
+    }
+
+    /**
+     * Get the unidademedida that owns the Produto
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function unidademedida(): BelongsTo
+    {
+        return $this->belongsTo(Unidademedida::class);
     }
 }

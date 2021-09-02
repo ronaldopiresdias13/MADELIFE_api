@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Api\App\v3_0_25;
 
 use App\Models\Escala;
 use App\Http\Controllers\Controller;
+use App\Models\Ocorrencia;
 use App\Models\Ponto;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PontosController extends Controller
 {
@@ -111,6 +114,23 @@ class PontosController extends Controller
                         'status'     => $request->status,
                     ]
                 );
+                // $escala = Escala::find($request->escala_id);
+                try{
+                    $ocorrencia = Ocorrencia::where('tipo', '=', 'Check-in Atrasado')->whereHas('escalas', function ($q) use ($request) {
+                        $q->where('escala_id', '=', $request->escala_id);
+                    })->where('empresa_id','=',$escala->empresa_id)->first();
+                    // Log::info("ocorrencia procurada cheking");
+                    // Log::info($request->escala_id);
+                    if ($ocorrencia != null) {
+                    // Log::info("ocorrencia encontrada cheking");
+
+                        $ocorrencia->fill(['situacao' => 'Resolvida', 'justificativa' => 'Check-in realizado'])->save();
+                        $ocorrencia->chamados()->update(['finalizado' => 1, 'justificativa' => 'Check-in realizado']);
+                    }
+                }
+                catch(Exception $e){
+                    Log::error($e);
+                }
             });
             return response()->json([
                 'alert' => [
@@ -156,6 +176,18 @@ class PontosController extends Controller
                             'status'     => $request->status,
                         ]
                     );
+
+                    $ocorrencia = Ocorrencia::where('tipo', '=', 'Check-out Atrasado')->whereHas('escalas', function ($q) use ($request) {
+                        $q->where('escala_id', '=', $request->escala_id);
+                    })->where('empresa_id','=',$request->empresa_id)->first();
+                    // Log::info("ocorrencia procurada checkou assinatura");
+                    // Log::info($request->escala_id);
+                    if ($ocorrencia != null) {
+                        // Log::info("ocorrencia encontrada checkou assinatura");
+
+                        $ocorrencia->fill(['situacao' => 'Resolvida', 'justificativa' => 'Check-out realizado'])->save();
+                        $ocorrencia->chamados()->update(['finalizado' => 1, 'justificativa' => 'Check-out realizado']);
+                    }
                 });
                 $escala->status = true;
                 $escala->save();
@@ -177,27 +209,33 @@ class PontosController extends Controller
      */
     public function assinaturacheckout(Escala $escala, Request $request)
     {
+        if (!$request->assinaturaprestador) {
+            return response()->json([
+                'alert' => [
+                    'title' => 'Ops!',
+                    'text' => 'Assinatura não encontrada!\nPor favor tente novamente.'
+                ]
+            ], 202)->header('Content-Type', 'application/json');
+        }
+
         $ponto = Ponto::where('escala_id', $request->escala_id)
             ->where('tipo', 'Check-in')->first();
         if ($ponto) {
             $ponto = Ponto::where('escala_id', $request->escala_id)
                 ->where('tipo', 'Check-out')->first();
             if ($ponto) {
+                DB::transaction(function () use ($request, $escala) {
+                    $escala->status              = true;
+                    $escala->assinaturaprestador = $request->assinaturaprestador;
+                    $escala->save();
+                });
                 return response()->json([
                     'alert' => [
-                        'title' => 'Ops!',
-                        'text' => 'Esta escala já foi finalizada!'
+                        'title' => 'Obs.',
+                        'text' => 'Esta escala já estava finalizada, foi alterada somente a assinatura!'
                     ]
                 ], 202)->header('Content-Type', 'application/json');
             } else {
-                if (!$request->assinaturaprestador) {
-                    return response()->json([
-                        'alert' => [
-                            'title' => 'Ops!',
-                            'text' => 'Assinatura não encontrada!\nPor favor tente novamente.'
-                        ]
-                    ], 202)->header('Content-Type', 'application/json');
-                }
                 DB::transaction(function () use ($request, $escala) {
                     Ponto::firstOrCreate(
                         [
@@ -217,6 +255,18 @@ class PontosController extends Controller
                     $escala->status              = true;
                     $escala->assinaturaprestador = $request->assinaturaprestador;
                     $escala->save();
+
+                    $ocorrencia = Ocorrencia::where('tipo', '=', 'Check-out Atrasado')->whereHas('escalas', function ($q) use ($request) {
+                        $q->where('escala_id', '=', $request->escala_id);
+                    })->where('empresa_id','=',$escala->empresa_id)->first();
+                    // Log::info("ocorrencia procurada checkou assinatura");
+                    // Log::info($request->escala_id);
+                    if ($ocorrencia != null) {
+                        // Log::info("ocorrencia encontrada checkou assinatura");
+
+                        $ocorrencia->fill(['situacao' => 'Resolvida', 'justificativa' => 'Check-out realizado'])->save();
+                        $ocorrencia->chamados()->update(['finalizado' => 1, 'justificativa' => 'Check-out realizado']);
+                    }
                 });
                 return response()->json([
                     'alert' => [

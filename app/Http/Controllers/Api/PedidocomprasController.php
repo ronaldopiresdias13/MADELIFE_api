@@ -229,4 +229,10 @@ class PedidocomprasController extends Controller
         $pedidocompra->ativo = false;
         $pedidocompra->save();
     }
+
+    public function apagaritempedidocompra(PedidocompraProduto $pedidocompraProduto)
+    {
+        // $pedidocompraProduto->ativo = false;
+        $pedidocompraProduto->delete();
+    }
 }

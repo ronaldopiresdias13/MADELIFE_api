@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Conversa;
 use App\Models\ConversaMensagem;
+use App\Models\Pessoa;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use SplObjectStorage;
 use Ratchet\ConnectionInterface;
@@ -40,22 +42,45 @@ class ChatWebSocketController extends Controller implements MessageComponentInte
                 // Log::info('token '.$message->token);
                 // Log::info(json_encode(auth('api')->user()));
 
-                $http = new Client();
-                $response = $http->get(url('/api/auth/user'), [
-                    'headers' => [
-                        'Accept' => 'application/json',
-                        'Authorization' => $message->token_type . ' ' . $message->token,
-                    ],
-                    "http_errors" => false
-                ]);
+                // $http = new Client();
+                // $response = $http->get(url('/api/auth/user'), [
+                //     'headers' => [
+                //         'Accept' => 'application/json',
+                //         'Authorization' => $message->token_type . ' ' . $message->token,
+                //     ],
+                //     "http_errors" => false
+                // ]);
 
-                Log::info($message->token_type . ' ' . $message->token);
-                Log::info($response->getBody());
-                $resp = json_decode($response->getBody());
-                if (property_exists($resp, 'message')) {
+                // Log::info($message->token_type . ' ' . $message->token);
+                // Log::info($response->getBody());
+                // $resp = json_decode($response->getBody());
+                // $response->getBody()->close();
+                $token = $message->token;
+                // break up the token into its three parts
+                $token_parts = explode('.', $token);
+                Log::info($token_parts);
+                $token_header = $token_parts[1];
+
+                // base64 decode to get a json string
+                $token_header_json = base64_decode($token_header);
+                Log::info($token_header_json);
+
+                $token_header_array = json_decode($token_header_json, true);
+                Log::info($token_header_array);
+                $user_token = $token_header_array['jti'];
+
+                $user_id = DB::table('oauth_access_tokens')->where('id', $user_token)->value('user_id');
+                $resp = User::where('id','=',$user_id)->with('pessoa')->first();
+                if($resp==null){
                     $from->send(json_encode(['type' => 'disconnect', 'mensagem' => 'Usuário inválido ou desconectado']));
                     return;
                 }
+               
+
+                // if (property_exists($resp, 'message')) {
+                //     $from->send(json_encode(['type' => 'disconnect', 'mensagem' => 'Usuário inválido ou desconectado']));
+                //     return;
+                // }
                 if (isset($this->clientes_ids[$resp->pessoa->id])) {
                     array_push($this->clientes_ids[$resp->pessoa->id], $from);
                 } else {
@@ -77,6 +102,14 @@ class ChatWebSocketController extends Controller implements MessageComponentInte
             Log::info($from->resourceId);
 
             Log::info($msg);
+            $pessoa_1 = Pessoa::where('id','=',$message->sender)->first();
+            $pessoa_2 = Pessoa::where('id','=',$message->receive)->first();
+            $profissional_1 = $pessoa_1->profissional()->first();
+            $profissional_2 = $pessoa_2->profissional()->first();
+
+            if($profissional_1==null || $profissional_2==null || $profissional_1->empresa_id!=$profissional_2->empresa_id){
+                return;
+            }
             $conversa = Conversa::where(function ($q) use ($message) {
                 $q->where('sender_id', $message->sender)->where('receive_id', $message->receive);
             })->orWhere(function ($q) use ($message) {
@@ -110,6 +143,14 @@ class ChatWebSocketController extends Controller implements MessageComponentInte
             Log::info($from->resourceId);
 
             Log::info($msg);
+            $pessoa_1 = Pessoa::where('id','=',$message->sender)->first();
+            $pessoa_2 = Pessoa::where('id','=',$message->receive)->first();
+            $profissional_1 = $pessoa_1->profissional()->first();
+            $profissional_2 = $pessoa_2->profissional()->first();
+
+            if($profissional_1==null || $profissional_2==null || $profissional_1->empresa_id!=$profissional_2->empresa_id){
+                return;
+            }
             $conversa = Conversa::where(function ($q) use ($message) {
                 $q->where('sender_id', $message->sender)->where('receive_id', $message->receive);
             })->orWhere(function ($q) use ($message) {
@@ -183,6 +224,14 @@ class ChatWebSocketController extends Controller implements MessageComponentInte
             Log::info($from->resourceId);
 
             Log::info($msg);
+            $pessoa_1 = Pessoa::where('id','=',$message->sender)->first();
+            $pessoa_2 = Pessoa::where('id','=',$message->receive)->first();
+            $profissional_1 = $pessoa_1->profissional()->first();
+            $profissional_2 = $pessoa_2->profissional()->first();
+
+            if($profissional_1==null || $profissional_2==null || $profissional_1->empresa_id!=$profissional_2->empresa_id){
+                return;
+            }
             $conversa = Conversa::where(function ($q) use ($message) {
                 $q->where('sender_id', $message->sender)->where('receive_id', $message->receive);
             })->orWhere(function ($q) use ($message) {
@@ -256,11 +305,15 @@ class ChatWebSocketController extends Controller implements MessageComponentInte
 
     public function onClose(ConnectionInterface $conn): void
     {
+        $conn->close();
+
         $this->clients->detach($conn);
     }
 
     public function onError(ConnectionInterface $conn, Exception $exception): void
     {
         $conn->close();
+        $this->clients->detach($conn);
+
     }
 }

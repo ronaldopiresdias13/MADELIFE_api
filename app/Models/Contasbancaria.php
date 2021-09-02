@@ -12,4 +12,6 @@ class Contasbancaria extends Model
     {
         return $this->belongsTo(Banco::class);
     }
+
+    
 }

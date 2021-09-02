@@ -19,6 +19,7 @@ class ProdutoController extends Controller
         $empresa_id = $user->pessoa->profissional->empresa_id;
         return Produto::where('empresa_id', $empresa_id)
             ->where('ativo', 1)
+            ->where('tabela', 'like', $request->tabela ? $request->tabela : '%')
             ->get();
     }
 

@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Ordemservico;
 use App\Models\OrdemservicoServico;
+use App\Models\Prestador;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -169,6 +171,7 @@ class EscalasController extends Controller
         $escala->status                = $request->status;
         $escala->folga                 = $request->folga;
         $escala->substituto            = $request->substituto;
+        $escala->prestador_proprietario           = $request->prestador_proprietario;
         $escala->save();
 
         foreach ($request->cuidados as $key => $cuidado) {
@@ -401,5 +404,59 @@ class EscalasController extends Controller
             ->get([
                 'id', 'dataentrada', 'servico_id', 'periodo', 'tipo', 'prestador_id', 'status'
             ]);
+    }
+
+    public function dashboardClonarEscalas(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+
+        foreach ($request->escalas as $key => $escala) {
+            $prof = Prestador::find($escala['prestador_id'])->formacoes;
+            $formacao = $prof->first();
+            $cuidados = Escala::find($escala['escala_id'])->cuidados;
+            $ordemservico = Ordemservico::with(
+                [
+                    'orcamento.servicos' => function ($query) use ($escala) {
+                        $query->with('servico')->whereHas('servico', function (Builder $builder) use ($escala) {
+                            $builder->where('id', $escala['servico_id']);
+                        });
+                    }
+                ]
+            )
+                ->find($escala['ordemservico_id']);
+            $e = Escala::create([
+
+                'empresa_id'             => $empresa_id,
+                'ordemservico_id'        => $escala['ordemservico_id'],
+                'prestador_id'           => $escala['prestador_id'],
+                'servico_id'             => $escala['servico_id'],
+                'formacao_id'            => $formacao ? $formacao->id : null,
+                'horaentrada'            => $escala['horaentrada'],
+                'horasaida'              => $escala['horasaida'],
+                'dataentrada'            => $escala['dataentrada'],
+                'datasaida'              => $escala['datasaida'],
+                'periodo'                => $escala['periodo'],
+                'tipo'                   => $escala['tipo'] ? $escala['tipo'] :  $ordemservico->orcamento->servicos[0]->basecobranca,
+                'assinaturaprestador'    => '',
+                'assinaturaresponsavel'  => '',
+                'observacao'             => "",
+                'status'                 => false,
+                'folga'                  => false,
+                'substituto'             => null,
+                'prestador_proprietario' => $escala['prestador_proprietario'],
+
+            ]);
+            // return $cuidados;
+            foreach ($cuidados as $key => $cuidado) {
+                CuidadoEscala::create([
+                    'escala_id'  => $e->id,
+                    'cuidado_id' => $cuidado['id'],
+                    'data'       => null,
+                    'hora'       => null,
+                    'status'     => false,
+                ]);
+            }
+        }
     }
 }

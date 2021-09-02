@@ -19,8 +19,8 @@ class CreateInternacoes extends Migration
             $table->foreign('paciente_id')->references('id')->on('pacientes');
             $table->string('data_inicio');
             $table->string('data_final');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

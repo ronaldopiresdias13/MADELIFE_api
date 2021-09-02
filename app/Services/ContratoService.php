@@ -39,6 +39,7 @@ class ContratoService
      */
     public function store()
     {
+
         DB::transaction(function () {
             $this->empresa_id = $this->request->user()->pessoa->profissional->empresa_id;
             if (!$this->empresa_id) {
@@ -47,22 +48,27 @@ class ContratoService
 
             $this->orcamento = new Orcamento();
             $this->orcamento->fill([
-                "empresa_id"        => $this->empresa_id,
-                "cliente_id"        => $this->request->cliente_id,
-                "numero"            => $this->request->numero,
-                "tipo"              => $this->request->tipo,
-                "data"              => $this->request->data,
-                "quantidade"        => $this->request->quantidade,
-                "unidade"           => $this->request->unidade,
-                "cidade_id"         => $this->request->cidade_id,
-                "processo"          => $this->request->processo,
-                "situacao"          => $this->request->situacao,
-                "descricao"         => $this->request->descricao,
-                "valortotalproduto" => $this->request->valortotalproduto,
-                "valortotalcusto"   => $this->request->valortotalcusto,
-                "valortotalservico" => $this->request->valortotalservico,
-                "observacao"        => $this->request->observacao,
-                "status"            => $this->request->status ? $this->request->status : false,
+                "empresa_id"         => $this->empresa_id,
+                "cliente_id"         => $this->request->cliente_id,
+                "numero"             => $this->request->numero,
+                "tipo"               => $this->request->tipo,
+                "tipoatentendimento" => $this->request->tipoatentendimento,
+                "caraterAtendimento" => $this->request->caraterAtendimento,
+                "indicacaoClinica"   => $this->request->indicacaoClinica,
+                "indicacaoacidente"  => $this->request->indicacaoacidente,
+                "data"               => $this->request->data,
+                "quantidade"         => $this->request->quantidade,
+                "unidade"            => $this->request->unidade,
+                "cidade_id"          => $this->request->cidade_id,
+                "processo"           => $this->request->processo,
+                "situacao"           => $this->request->situacao,
+                "descricao"          => $this->request->descricao,
+                "valortotalproduto"  => $this->request->valortotalproduto,
+                "valortotalcusto"    => $this->request->valortotalcusto,
+                "valortotalservico"  => $this->request->valortotalservico,
+                "valordesconto"      => $this->request->valordesconto,
+                "observacao"         => $this->request->observacao,
+                "status"             => $this->request->status ? $this->request->status : false,
             ])->save();
 
             $ordemservico = new Ordemservico();
@@ -129,9 +135,9 @@ class ContratoService
                         "cpfcnpj"          => $this->request->remocao['cpfcnpj'],
                         "rgie"             => $this->request->remocao['rgie'],
                         "enderecoorigem"   => $this->request->remocao['enderecoorigem'],
-                        "cidadeorigem_id"  => $this->request->remocao['cidadeorigem_id'],
+                        "cidadeorigem"     => $this->request->remocao['cidadeorigem'],
                         "enderecodestino"  => $this->request->remocao['enderecodestino'],
-                        "cidadedestino_id" => $this->request->remocao['cidadedestino_id'],
+                        "cidadedestino"    => $this->request->remocao['cidadedestino'],
                         "observacao"       => $this->request->remocao['observacao'],
                     ])->save();
                     break;
@@ -149,8 +155,8 @@ class ContratoService
                     "subtotalcusto"        => $item['subtotalcusto'],
                     "valorresultadomensal" => $item['valorresultadomensal'],
                     "valorcustomensal"     => $item['valorcustomensal'],
-                    "locacao"              => $item['locacao'],
-                    "descricao"            => $item['descricao'],
+                    "locacao"              => 0,
+                    "descricao"            => $item['descricao']
                 ])->save();
             }
 
@@ -211,11 +217,16 @@ class ContratoService
 
     public function update()
     {
+
         DB::transaction(function () {
             $this->orcamento->fill([
                 "cliente_id"        => $this->request->cliente_id,
                 "numero"            => $this->request->numero,
                 "tipo"              => $this->request->tipo,
+                "tipoatentendimento" => $this->request->tipoatentendimento,
+                "caraterAtendimento" => $this->request->caraterAtendimento,
+                "indicacaoClinica"  => $this->request->indicacaoClinica,
+                "indicacaoacidente"  => $this->request->indicacaoacidente,
                 "data"              => $this->request->data,
                 "quantidade"        => $this->request->quantidade,
                 "unidade"           => $this->request->unidade,
@@ -226,6 +237,7 @@ class ContratoService
                 "valortotalproduto" => $this->request->valortotalproduto,
                 "valortotalcusto"   => $this->request->valortotalcusto,
                 "valortotalservico" => $this->request->valortotalservico,
+                "valordesconto"     => $this->request->valordesconto,
                 "observacao"        => $this->request->observacao,
                 "status"            => $this->request->status,
             ])->save();
@@ -277,10 +289,10 @@ class ContratoService
                     $this->orcamento->aph()->updateOrCreate(
                         [
                             "orcamento_id" => $this->orcamento->id,
-                            "descricao"    => $this->request->aph['descricao'],
-                            "endereco"     => $this->request->aph['endereco'],
-                            "cep"          => $this->request->aph['cep'],
-                            "cidade_id"    => $this->request->aph['cidade_id'],
+                            "descricao"    => $this->request['aph']['descricao'],
+                            "endereco"     => $this->request['aph']['endereco'],
+                            "cep"          => $this->request['aph']['cep'],
+                            "cidade_id"    => $this->request['aph']['cidade_id'],
                         ],
                         [
                             "ativo"        => true,
@@ -313,9 +325,9 @@ class ContratoService
                             "cpfcnpj"          => $this->request->remocao['cpfcnpj'],
                             "rgie"             => $this->request->remocao['rgie'],
                             "enderecoorigem"   => $this->request->remocao['enderecoorigem'],
-                            "cidadeorigem_id"  => $this->request->remocao['cidadeorigem_id'],
+                            "cidadeorigem"     => $this->request->remocao['cidadeorigem'],
                             "enderecodestino"  => $this->request->remocao['enderecodestino'],
-                            "cidadedestino_id" => $this->request->remocao['cidadedestino_id'],
+                            "cidadedestino"    => $this->request->remocao['cidadedestino'],
                             "observacao"       => $this->request->remocao['observacao'],
                         ],
                         [
@@ -339,7 +351,7 @@ class ContratoService
                         "subtotalcusto"        => $item['subtotalcusto'],
                         "valorresultadomensal" => $item['valorresultadomensal'],
                         "valorcustomensal"     => $item['valorcustomensal'],
-                        "locacao"              => array_key_exists ('locacao' , $item) ? $item['locacao'] : false,
+                        // "locacao"              => array_key_exists('locacao', $item) ? $item['locacao'] : false,
                         "descricao"            => $item['descricao'],
                     ],
                     [

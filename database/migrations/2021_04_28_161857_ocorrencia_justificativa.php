@@ -13,9 +13,9 @@ class OcorrenciaJustificativa extends Migration
      */
     public function up()
     {
-        Schema::table('ocorrencias', function (Blueprint $table) {
+         Schema::table('ocorrencias', function (Blueprint $table) {
             $table->string('justificativa')->nullable();
-        });
+         });
     }
 
     /**

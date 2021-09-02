@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Pontos;
 use App\Http\Controllers\Controller;
 use App\Models\Escala;
 use App\Models\Ponto;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use phpDocumentor\Reflection\Types\Boolean;
@@ -18,16 +19,8 @@ class PontosController extends Controller
      */
     public function pontosPrestadores(Request $request)
     {
-        // return 'teste';
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa->id;
-        // $entrada   = gmmktime(19, 30, 00, 10, 01, 2020);
-        // $saida     = gmmktime(07, 34, 00, 10, 02, 2020);
-        // $intervalo = abs($saida - $entrada);
-        // $minutos   = round($intervalo / 60, 2);
-        // $horas     = round($minutos / 60, 2);
-
-        // return $horas;
 
         $hoje = getdate();
         $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $hoje['mday'];
@@ -37,7 +30,11 @@ class PontosController extends Controller
             'pontos',
             'relatorioescalas',
             'servico',
-            'prestador.pessoa'
+            'prestador.pessoa',
+            'prestador.empresas'
+            => function ($query) use ($empresa_id) {
+                $query->where('empresa_id', $empresa_id);
+            }
         ])
             ->where('empresa_id', $empresa_id)
             ->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%')
@@ -61,7 +58,7 @@ class PontosController extends Controller
                 "status",
                 // "folga",
                 // "substituto",
-                // "tipo",
+                "tipo",
                 "valorhoradiurno",
                 "valorhoranoturno",
                 "valoradicional",
@@ -69,7 +66,7 @@ class PontosController extends Controller
                 // "motivoadicional"
             ]);
 
-        return $dados;
+        // return $dados;
 
         $escalas = [];
 
@@ -112,6 +109,7 @@ class PontosController extends Controller
         $escala['prestador']            = $dado->prestador->pessoa->nome;
         $escala['pessoa_id']            = $dado->prestador->pessoa->id;
         $escala['periodo']              = $dado->periodo;
+        $escala['empresas']              = $dado->prestador->empresas;
         $escala['relatorioescalas']     = $dado->relatorioescalas;
         $escala['servico']['id']        = $dado->servico ? $dado->servico->id : null;
         $escala['servico']['descricao'] = $dado->servico ? $dado->servico->descricao : null;
@@ -143,6 +141,7 @@ class PontosController extends Controller
                     }
                 }
                 $escala['checkin']['alterado'] = $ponto->status;
+                $escala['checkin']['observacao'] = $ponto->observacao;
             } else {
                 $escala['checkout']['id'] = $ponto->id;
                 $dataEscala = $dado->datasaida;
@@ -162,6 +161,7 @@ class PontosController extends Controller
                     }
                 }
                 $escala['checkout']['alterado'] = $ponto->status;
+                $escala['checkout']['observacao'] = $ponto->observacao;
             }
         }
         if (array_key_exists('checkin', $escala) && array_key_exists('checkout', $escala)) {

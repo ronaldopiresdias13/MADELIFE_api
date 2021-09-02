@@ -56,7 +56,7 @@ class ProfissionaisController extends Controller
                 'pessoa.dadosbancario.banco',
                 'pessoa.profissional.dadoscontratual',
                 'pessoa.profissional.beneficios',
-                'pessoa.profissional.convenios',
+                'pessoa.profissional.convenios.convenio',
                 'pessoa.profissional.formacoes',
                 'pessoa.profissional.cargo',
                 'pessoa.profissional.setor',
@@ -143,7 +143,7 @@ class ProfissionaisController extends Controller
                         'nome'        => $request['pessoa']['nome'],
                         'nascimento'  => $request['pessoa']['nascimento'],
                         'rgie'        => $request['pessoa']['rgie'],
-                        'observacoes' => $request['pessoa']['observacoes'],
+                        // 'observacoes' => $request['pessoa']['observacoes'],
                         'perfil'      => $request['pessoa']['perfil'],
                         'status'      => $request['pessoa']['status'],
                     ]
@@ -158,8 +158,13 @@ class ProfissionaisController extends Controller
                 'validadecnh'            => $request['validadecnh'],
                 'numerotituloeleitor'    => $request['numerotituloeleitor'],
                 'zonatituloeleitor'      => $request['zonatituloeleitor'],
+                'secaotituloeleitor'     => $request['secaotituloeleitor'],
                 'meiativa'               => $request['meiativa'],
                 'dataverificacaomei'     => $request['dataverificacaomei'],
+                'conselhoProfissional'   => $request['conselhoProfissional'],
+                'numeroConselhoProfissional' => $request['numeroConselhoProfissional'],
+                'cbos'                   => $request['cbos'],
+                'uf'                     => $request['uf'],
                 'dadoscontratuais_id'    => Dadoscontratual::create([
                     'tiposalario'             => $request['dadoscontratuais']['tiposalario'],
                     'salario'                 => $request['dadoscontratuais']['salario'],
@@ -179,7 +184,7 @@ class ProfissionaisController extends Controller
                 foreach ($request['formacoes'] as $key => $formacao) {
                     $profissional_formacao = ProfissionalFormacao::firstOrCreate([
                         'profissional_id' => $profissional->id,
-                        'formacao_id'     => $formacao['formacao_id'],
+                        'formacao_id'     => $formacao['id'],
                     ]);
                 }
             }
@@ -220,7 +225,7 @@ class ProfissionaisController extends Controller
                         'endereco_id' => Endereco::firstOrCreate(
                             [
                                 'cep'         => $endereco['cep'],
-                                'cidade_id'   => $endereco['cidade_id'],
+                                'cidade_id'   => $endereco['cidade']['id'],
                                 'rua'         => $endereco['rua'],
                                 'bairro'      => $endereco['bairro'],
                                 'numero'      => $endereco['numero'],
@@ -242,8 +247,8 @@ class ProfissionaisController extends Controller
                                 'telefone'  => $telefone['telefone'],
                             ]
                         )->id,
-                        'tipo'      => $telefone['tipo'],
-                        'descricao' => $telefone['descricao'],
+                        'tipo'      => $telefone['pivot']['tipo'],
+                        'descricao' => $telefone['pivot']['descricao'],
                     ]);
                 }
             }
@@ -302,7 +307,7 @@ class ProfissionaisController extends Controller
                             'nome'        => $request['pessoa']['nome'],
                             'nascimento'  => $request['pessoa']['nascimento'],
                             'rgie'        => $request['pessoa']['rgie'],
-                            'observacoes' => $request['pessoa']['observacoes'],
+                            // 'observacoes' => $request['pessoa']['observacoes'],
                             'perfil'      => $request['pessoa']['perfil'],
                             'status'      => $request['pessoa']['status'],
                         ]
@@ -317,8 +322,13 @@ class ProfissionaisController extends Controller
                     'validadecnh'            => $request['validadecnh'],
                     'numerotituloeleitor'    => $request['numerotituloeleitor'],
                     'zonatituloeleitor'      => $request['zonatituloeleitor'],
+                    'secaotituloeleitor'     => $request['secaotituloeleitor'],
                     'meiativa'               => $request['meiativa'],
                     'dataverificacaomei'     => $request['dataverificacaomei'],
+                    'conselhoProfissional'   => $request['conselhoProfissional'],
+                    'numeroConselhoProfissional' => $request['numeroConselhoProfissional'],
+                    'cbos'                   => $request['cbos'],
+                    'uf'                     => $request['uf'],
                     'dadoscontratuais_id'    => Dadoscontratual::updateOrCreate([
                         'tiposalario'             => $request['dadoscontratuais']['tiposalario'],
                         'salario'                 => $request['dadoscontratuais']['salario'],
@@ -342,7 +352,7 @@ class ProfissionaisController extends Controller
                 foreach ($request['beneficios'] as $key => $beneficio) {
                     $profissional_beneficio = ProfissionalBeneficio::firstOrCreate([
                         'profissional_id' => $profissional->id,
-                        'beneficio_id'    => $beneficio['id']
+                        'beneficio_id'    => $beneficio['beneficio_id']
                     ]);
                 }
             }
@@ -374,7 +384,7 @@ class ProfissionaisController extends Controller
                         'endereco_id' => Endereco::firstOrCreate(
                             [
                                 'cep'         => $endereco['cep'],
-                                'cidade_id'   => $endereco['cidade_id'],
+                                'cidade_id'   => $endereco['cidade']['id'],
                                 'rua'         => $endereco['rua'],
                                 'bairro'      => $endereco['bairro'],
                                 'numero'      => $endereco['numero'],
@@ -389,16 +399,20 @@ class ProfissionaisController extends Controller
 
             if ($request['pessoa']['telefones']) {
                 foreach ($request['pessoa']['telefones'] as $key => $telefone) {
-                    $pessoa_telefone = PessoaTelefone::firstOrCreate([
-                        'pessoa_id'   => $profissional->pessoa_id,
-                        'telefone_id' => Telefone::firstOrCreate(
-                            [
-                                'telefone'  => $telefone['telefone'],
-                            ]
-                        )->id,
-                        'tipo'      => $telefone['pivot']['tipo'],
-                        'descricao' => $telefone['pivot']['descricao'],
-                    ]);
+                    $pessoa_telefone = PessoaTelefone::firstOrCreate(
+                        [
+                            'pessoa_id'   => $profissional->pessoa_id,
+                            'telefone_id' => Telefone::firstOrCreate(
+                                [
+                                    'telefone'  => $telefone['telefone'],
+                                ]
+                            )->id,
+                        ],
+                        [
+                            'tipo'      => $telefone['pivot']['tipo'],
+                            'descricao' => $telefone['pivot']['descricao'],
+                        ]
+                    );
                 }
             }
 
@@ -427,15 +441,24 @@ class ProfissionaisController extends Controller
      */
     public function show(Profissional $profissional)
     {
-        $profissional->pessoa->enderecos;
         $profissional->pessoa->telefones;
         $profissional->pessoa->emails;
+        $profissional->pessoa->dadosbancario;
         $profissional->formacoes;
         $profissional->setor;
         $profissional->cargo;
         $profissional->dadoscontratual;
-        $profissional->beneficios;
+        if ($profissional->beneficios) {
+            foreach ($profissional->beneficios as $key => $beneficio) {
+                $beneficio->beneficio;
+            }
+        }
         $profissional->convenios;
+        if ($profissional->pessoa->enderecos) {
+            foreach ($profissional->pessoa->enderecos as $key => $endereco) {
+                $endereco->cidade;
+            }
+        }
         return $profissional;
     }
 

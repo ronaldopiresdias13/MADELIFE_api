@@ -83,9 +83,9 @@ class PrestadoresController extends Controller
             ->join('pessoas as p', 'pac.pessoa_id', '=', 'p.id')
             ->leftJoin('responsaveis as  r', 'pac.responsavel_id', '=', 'r.id')
             ->leftJoin('pessoas as ps', 'r.pessoa_id', '=', 'ps.id')
-            ->select('os.id', 'p.nome', 'p.observacoes', 'ps.nome as responsavel')
+            ->select('os.id', 'p.nome', 'pac.complexidade', 'p.observacoes', 'ps.nome as responsavel')
             // ->where('homecares.ativo', true)
-            ->groupBy('os.id', 'p.nome', 'p.observacoes', 'ps.nome')
+            ->groupBy('os.id', 'p.nome', 'pac.complexidade', 'p.observacoes', 'ps.nome')
             ->orderBy('p.nome')
             ->get();
         return $escalas;

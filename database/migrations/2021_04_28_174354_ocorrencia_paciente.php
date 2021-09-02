@@ -13,13 +13,13 @@ class OcorrenciaPaciente extends Migration
      */
     public function up()
     {
-        Schema::table('ocorrencias', function (Blueprint $table) {
-            $table->unsignedBigInteger('paciente_id')->nullable();
-            $table->foreign('paciente_id')->references('id')->on('pessoas')->onDelete('cascade');
+         Schema::table('ocorrencias', function (Blueprint $table) {
+             $table->unsignedBigInteger('paciente_id')->nullable();
+             $table->foreign('paciente_id')->references('id')->on('pessoas')->onDelete('cascade');
 
-            $table->unsignedBigInteger('responsavel_id')->nullable();
+             $table->unsignedBigInteger('responsavel_id')->nullable();
             $table->foreign('responsavel_id')->references('id')->on('pessoas')->onDelete('cascade');
-        });
+         });
     }
 
     /**

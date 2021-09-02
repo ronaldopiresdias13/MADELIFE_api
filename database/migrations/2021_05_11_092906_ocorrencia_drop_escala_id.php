@@ -13,11 +13,11 @@ class OcorrenciaDropEscalaId extends Migration
      */
     public function up()
     {
-        Schema::table('ocorrencias', function (Blueprint $table) {
-            $table->dropForeign(['escala_id']);
+         Schema::table('ocorrencias', function (Blueprint $table) {
+             $table->dropForeign(['escala_id']);
 
-            $table->dropColumn('escala_id');
-        });
+             $table->dropColumn('escala_id');
+         });
     }
 
     /**

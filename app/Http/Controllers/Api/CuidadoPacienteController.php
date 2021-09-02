@@ -203,11 +203,11 @@ class CuidadoPacienteController extends Controller
 
     public function buscacuidadosdopaciente(Paciente $paciente)
     {
-        return CuidadoPaciente::With(['cuidado', 'formacao'])->where('paciente_id', $paciente->id)->get();
+        return CuidadoPaciente::With(['cuidado', 'formacao'])->where('paciente_id', $paciente->id)->where('ativo', true)->get();
     }
 
     public function groupbycuidadosdopaciente(Paciente $paciente)
     {
-        return CuidadoPaciente::With(['cuidado', 'formacao'])->where('paciente_id', $paciente->id)->get()->groupBy('formacao.descricao');
+        return CuidadoPaciente::With(['cuidado', 'formacao'])->where('paciente_id', $paciente->id)->where('ativo', true)->get()->groupBy('formacao.descricao');
     }
 }

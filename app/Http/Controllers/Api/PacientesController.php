@@ -98,6 +98,7 @@ class PacientesController extends Controller
      */
     public function store(Request $request)
     {
+        
         $pessoa = Pessoa::where(
             'cpfcnpj',
             $request['pessoa']['cpfcnpj']
@@ -131,11 +132,12 @@ class PacientesController extends Controller
                         'observacoes' => $request['pessoa']['observacoes'],
                         'perfil'      => $request['pessoa']['perfil'],
                         'status'      => $request['pessoa']['status'],
+                        
                     ]
                 )->id,
                 'responsavel_id' => $request['responsavel_id'],
                 'sexo'           => $request['sexo'],
-                'ativo'           => $request['ativo']
+                'ativo'          => $request['ativo']
             ]);
             Tipopessoa::create([
                 'tipo'      => 'Paciente',
@@ -256,6 +258,7 @@ class PacientesController extends Controller
                 'empresa_id'     => $request['empresa_id'],
                 'responsavel_id' => $request['responsavel_id'],
                 'ativo'          => $request['ativo'],
+                'numeroCarteira' => $request['numeroCarteira'],
             ]);
             $pessoa = Pessoa::find($request['pessoa']['id']);
             if ($pessoa) {

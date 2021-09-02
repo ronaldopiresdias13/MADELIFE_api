@@ -70,6 +70,7 @@ class PagamentosCnabController extends Controller
                 $array = [
                     'profissional' => $pagamento->pessoa_id,
                     'nome'         => $pagamento->pessoa->nome,
+                    'cpfcnpj'      => $pagamento->pessoa->cpfcnpj,
                     'pagamentos'   => [$pagamento],
                     'situacao'     => $pagamento->situacao,
                 ];

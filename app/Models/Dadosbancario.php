@@ -12,4 +12,9 @@ class Dadosbancario extends Model
     {
         return $this->belongsTo(Banco::class);
     }
+
+    public function pessoa()
+    {
+        return $this->belongsTo(Pessoa::class);
+    }
 }

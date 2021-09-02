@@ -14,12 +14,27 @@ class Internacao extends Model
     use Uuid;
 
     protected $table = 'internacoes';
-    protected $guarded = [];
     protected $keytype = 'string';
-    protected $incrementing = false;
+    public $incrementing = false;
 
-    public function paciente(){
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
 
+    protected $fillable = [
+        'id',
+        'paciente_id',
+        'data_inicio',
+        'data_final',
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
+
+    public function paciente()
+    {
         return $this->belongsTo(Paciente::class);
     }
 }

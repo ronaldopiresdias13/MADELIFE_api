@@ -13,12 +13,14 @@ class OcorrenciasPessoas extends Migration
      */
     public function up()
     {
+        
         Schema::create('ocorrencias_pessoas', function (Blueprint $table) {
             $table->unsignedBigInteger('ocorrencia_id')->nullable();
             $table->foreign('ocorrencia_id')->references('id')->on('ocorrencias')->onDelete('cascade');
             $table->unsignedBigInteger('pessoa_id')->nullable();
             $table->foreign('pessoa_id')->references('id')->on('pessoas')->onDelete('cascade');
         });
+        
     }
 
     /**

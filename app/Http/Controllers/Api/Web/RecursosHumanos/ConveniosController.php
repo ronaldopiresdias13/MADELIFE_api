@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Web\RecursosHumanos;
 
 use App\Models\Convenio;
+use App\Models\ProfissionalConvenio;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

@@ -51,6 +51,7 @@ class MonitoramentoescalasController extends Controller
             $monitoramentoescala->vomito     = $request->vomito;
             $monitoramentoescala->crivomito  = $request->crivomito;
             $monitoramentoescala->asp        = $request->asp      ? $request->asp      : false;
+            $monitoramentoescala->inal       = $request->inal      ? $request->inal      : false;
             $monitoramentoescala->decub      = $request->decub    ? $request->decub    : false;
             $monitoramentoescala->curativo   = $request->curativo ? $request->curativo : false;
             $monitoramentoescala->fraldas    = $request->fraldas  ? $request->fraldas  : false;
@@ -70,7 +71,24 @@ class MonitoramentoescalasController extends Controller
         ], 200)
             ->header('Content-Type', 'application/json');
     }
-
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllMonitoramentosByEscalaId(Escala $escala)
+    {
+        // return $escala->ordemservico_id;
+        return DB::table('monitoramentoescalas')
+            ->join('escalas', 'escalas.id', '=', 'monitoramentoescalas.escala_id')
+            ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
+            ->where('escalas.ordemservico_id', $escala->ordemservico_id)
+            ->select('monitoramentoescalas.*')
+            // ->groupBy('relatorios.nome')
+            ->orderBy('monitoramentoescalas.data', 'desc')
+            ->limit(20)
+            ->get();
+    }
     /**
      * Display the specified resource.
      *

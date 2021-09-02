@@ -203,11 +203,15 @@ class OrdemservicosController extends Controller
                                 }
                             }
                         } else {
-                            if ($iten2[0] == null) {
-                                $iten2 = $iten2[$a];
-                            } else {
-                                foreach ($iten2 as $key => $i) {
-                                    $i[$a];
+                            if ($iten2 != null) {
+                                if ($iten2->count() > 0) {
+                                    if ($iten2[0] == null) {
+                                        $iten2 = $iten2[$a];
+                                    } else {
+                                        foreach ($iten2 as $key => $i) {
+                                            $i[$a];
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -314,11 +318,8 @@ class OrdemservicosController extends Controller
         $profissional = $user->pessoa->profissional;
 
         $escalas = Ordemservico::with([
-            // 'servicos',
             'orcamento.cidade', 'orcamento' => function ($query) {
-                // $query->select('id', 'cliente_id');
                 $query->with(['servicos.servico', 'homecare' => function ($query) {
-                    // $query->select('id', 'orcamento_id', 'paciente_id');
                     $query->with(['paciente.pessoa', 'paciente.responsavel.pessoa']);
                 }]);
                 $query->with(['cliente' => function ($query) {

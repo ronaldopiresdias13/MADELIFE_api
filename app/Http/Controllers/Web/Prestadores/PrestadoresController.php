@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Web\Prestadores;
 use App\Http\Controllers\Controller;
 use App\Models\Prestador;
 use App\Models\Tipopessoa;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -50,6 +52,7 @@ class PrestadoresController extends Controller
             ->where('prestadores.ativo', true)
             ->select(
                 'prestadores.id as id',
+                'prestadores.created_at as created_at',
                 'pessoas.nome as nome',
                 'cidades.nome as cidade',
                 'cidades.latitude',
@@ -74,6 +77,7 @@ class PrestadoresController extends Controller
             )
             ->groupBy(
                 'prestadores.id',
+                'prestadores.created_at',
                 'pessoas.nome',
                 'pessoas.perfil',
                 'cidades.nome',
@@ -99,6 +103,9 @@ class PrestadoresController extends Controller
             if ($request['cidade_id']) {
                 $result->where('cidades.id', $request['cidade_id']);
             }
+        }
+        if ($request['data']) {
+            $result->where('prestadores.created_at', 'like', $request['data'] . '%');
         }
 
         // return 'teste';
@@ -127,6 +134,50 @@ class PrestadoresController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function buscaPrestadoresPorCliente(Request $request)
+    {
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+        return DB::select(
+            "
+            SELECT profp.nome AS prestador, pp.nome AS paciente, e.periodo, e.tipo, s.descricao, COUNT(e.id) AS total  FROM escalas AS e
+            INNER JOIN ordemservicos AS os
+            ON e.ordemservico_id = os.id
+            INNER JOIN orcamentos AS o
+            ON os.orcamento_id = o.id
+            INNER JOIN homecares AS hc
+            ON hc.orcamento_id = o.id
+            INNER JOIN pacientes AS pac
+            ON pac.id = hc.paciente_id
+            INNER JOIN pessoas AS pp
+            ON pp.id = pac.pessoa_id
+            INNER JOIN prestadores AS prof
+            ON prof.id = e.prestador_id
+            INNER JOIN pessoas AS profp
+            ON profp.id = prof.pessoa_id
+            INNER JOIN servicos AS s
+            ON e.servico_id = s.id
+            WHERE o.cliente_id = ?
+            AND e.ativo = 1
+            AND e.empresa_id = ?
+            AND e.dataentrada BETWEEN ? AND ?
+            GROUP BY pac.id, profp.nome, pp.nome, e.periodo, e.tipo, s.descricao
+            ORDER BY profp.nome
+        ",
+            [
+                $request->cliente_id,
+                $empresa_id,
+                $request->data_ini,
+                $request->data_fim
+            ]
+        );
+    }
+
+    /**
+     * Display the specified resource.
+     *
      * @param  \App\Prestador  $prestador
      * @return \Illuminate\Http\Response
      */
@@ -140,6 +191,30 @@ class PrestadoresController extends Controller
             // 'pessoa.dadobancarios',
             'formacoes'
         ])->find($prestador->id);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Prestador  $prestador
+     * @return \Illuminate\Http\Response
+     */
+    public function buscaPrestadorComServicosPrestadosNaEmpresa(Request $request, Prestador $prestador)
+    {
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+
+        $prestadores = Prestador::with(
+            [
+                'ordemservicos.servico',
+                'ordemservicos.ordemservico.orcamento.homecare.paciente.pessoa'
+            ])
+            ->where('ativo', true)
+            ->whereHas('ordemservicos.ordemservico', function (Builder $builder) use ($empresa_id) {
+                $builder->where('empresa_id', $empresa_id);
+            })
+            ->find($prestador->id);
+
+        return $prestadores;
     }
 
     /**

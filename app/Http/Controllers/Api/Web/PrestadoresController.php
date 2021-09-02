@@ -83,17 +83,25 @@ class PrestadoresController extends Controller
             ->select('prestadores.*')
             ->get();
     }
+
     /**
      * Display the specified resource.
      *
      * @param  \App\Prestador  $prestador
      * @return \Illuminate\Http\Response
      */
-    public function historicopacientesprestador(Prestador $prestador)
+    public function historicopacientesprestador(Prestador $prestador, Request $request)
     {
-        // $user = $request->user();
-        // $prestador = $request->pessoa->prestador;
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+
+        $hoje = getdate();
+        $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $hoje['mday'];
+
         $escalas = Escala::where('prestador_id', $prestador->id)
+            ->where('escalas.empresa_id', $empresa_id)
+            ->where('escalas.ativo', true)
+            ->whereBetween('dataentrada', [$request->data_ini ? $request->data_ini : $data, $request->data_fim ? $request->data_fim : $data])
             ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
             ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
             ->join('homecares', 'homecares.orcamento_id', '=', 'orcamentos.id')
@@ -106,6 +114,7 @@ class PrestadoresController extends Controller
             ->get();
         return $escalas;
     }
+
     /**
      * Display the specified resource.
      *
@@ -116,10 +125,12 @@ class PrestadoresController extends Controller
     {
         return Conselho::where('ativo', true)->where('pessoa_id', $pessoa->id)->get();
     }
+
     public function buscalistadetelefonespodidpessoa(Pessoa $pessoa)
     {
         return $pessoa->telefones;
     }
+
     public function buscalistadeenderecospodidpessoa(Pessoa $pessoa)
     {
         foreach ($pessoa->enderecos as $key => $endereco) {
@@ -127,10 +138,12 @@ class PrestadoresController extends Controller
         }
         return $pessoa->enderecos;
     }
+
     public function buscalistadebancospodidpessoa(Pessoa $pessoa)
     {
         return Dadosbancario::with('banco')->where('ativo', true)->where('pessoa_id', $pessoa->id)->get();
     }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -148,39 +161,41 @@ class PrestadoresController extends Controller
             ]
         );
     }
-    public function salvartelefone(Request $request)
-    {
-        $user = $request->user();
-        PessoaTelefone::firstOrCreate([
-            'pessoa_id'   => $user->pessoa_id,
-            'telefone_id' => Telefone::firstOrCreate(
-                [
-                    'telefone'  => $request['telefone'],
-                ]
-            )->id,
-            'tipo'      => $request['pivot']['tipo'],
-            'descricao' => $request['pivot']['descricao'],
-        ]);
-    }
+    // public function salvartelefone(Request $request)
+    // {
+    //     $user = $request->user();
+    //     PessoaTelefone::firstOrCreate([
+    //         'pessoa_id'   => $user->pessoa_id,
+    //         'telefone_id' => Telefone::firstOrCreate(
+    //             [
+    //                 'telefone'  => $request['telefone'],
+    //             ]
+    //         )->id,
+    //         'tipo'      => $request['pivot']['tipo'],
+    //         'descricao' => $request['pivot']['descricao'],
+    //     ]);
+    // }
+
     public function salvarendereco(Request $request)
     {
-        $user = $request->user();
         PessoaEndereco::firstOrCreate([
-            'pessoa_id'   => $user->pessoa_id,
+            'pessoa_id'   => $request['pessoa_id'],
             'endereco_id' => Endereco::create(
                 [
-                    'tipo' => $request['tipo'],
-                    'cep' => $request['cep'],
-                    'cidade_id' => $request['cidade_id'],
-                    'bairro' => $request['bairro'],
-                    'rua' => $request['rua'],
-                    'numero' => $request['numero'],
+                    'tipo'        => $request['tipo'],
+                    'cep'         => $request['cep'],
+                    'cidade_id'   => $request['cidade_id'],
+                    'bairro'      => $request['bairro'],
+                    'rua'         => $request['rua'],
+                    'numero'      => $request['numero'],
                     'complemento' => $request['complemento'],
-                    'descricao' => $request['descricao'],
+                    'descricao'   => $request['descricao'],
+
                 ]
             )->id,
         ]);
     }
+
     public function salvarbanco(Request $request)
     {
         Dadosbancario::create(
@@ -192,10 +207,12 @@ class PrestadoresController extends Controller
                 'conta'      => $request['conta'],
                 'digito'     => $request['digito'],
                 'tipoconta'  => $request['tipoconta'],
+                'cpfcnpj'    => $request['cpfcnpj'],
                 'ativo'      => 1
             ]
         );
     }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -207,16 +224,19 @@ class PrestadoresController extends Controller
         $conselho->ativo = false;
         $conselho->save();
     }
+
     public function deletarbanco(Dadosbancario $dadosbancario)
     {
         $dadosbancario->ativo = false;
         $dadosbancario->save();
     }
+
     public function deletartelefone(PessoaTelefone $pessoaTelefone)
     {
         $pessoaTelefone->ativo = false;
         $pessoaTelefone->save();
     }
+
     public function deletarendereco(PessoaEndereco $pessoaEndereco)
     {
         $pessoaEndereco->ativo = false;

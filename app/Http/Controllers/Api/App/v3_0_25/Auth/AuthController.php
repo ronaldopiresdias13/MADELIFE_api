@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\App\v3_0_25\Auth;
 
+use App\Http\Controllers\Api\App\v3_0_20\PrestadoresController;
 use App\Models\User;
 use App\Models\Email;
 use App\Models\Pessoa;
@@ -15,6 +16,10 @@ use App\Mail\ResetPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Endereco;
+use App\Models\PessoaEndereco;
+use App\Models\PessoaTelefone;
+use App\Models\Telefone;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -113,113 +118,89 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $cpfcnpj = User::firstWhere('cpfcnpj', $request['cpfcnpj']);
-
-        $email = User::firstWhere('email', $request['user']['email']);
-
-        $user = null;
-
-        if ($cpfcnpj) {
-            $user = $cpfcnpj;
-        } elseif ($email) {
-            $user = $email;
-        }
-
-        if ($user) {
-            $prestador = Prestador::firstWhere('pessoa_id', $user->pessoa->id);
-            if ($prestador) {
-                return response()->json([
-                    'alert' => [
-                        'title' => 'Ops!',
-                        'text' => 'Você já possui cadastro!!'
-                    ]
-                ], 200)
-                    ->header('Content-Type', 'application/json');
-            } else {
-                DB::transaction(function () use ($request, $user) {
-                    PessoaEmail::firstOrCreate([
-                        'pessoa_id' => $user->pessoa_id,
-                        'email_id'  => Email::firstOrCreate(
-                            [
-                                'email' => $user->email,
-                            ]
-                        )->id,
-                        'tipo'      => 'Pessoal',
-                    ]);
-
-                    Conselho::create(
+        DB::transaction(function () use ($request) {
+            $user = User::create(
+                [
+                    'cpfcnpj'    => $request['cpfcnpj'],
+                    'email'      => $request['email'],
+                    'password'   =>  bcrypt($request['user']['password']),
+                    'pessoa_id'  => Pessoa::create(
                         [
-                            'instituicao' => $request['conselho']['instituicao'],
-                            'numero'      => $request['conselho']['numero'],
-                            'pessoa_id'   => $user->pessoa_id
+                            'nome'       => $request['infopessoal']['nome'],
+                            'nascimento' => $request['infopessoal']['nascimento'],
+                            'rgie'       => $request['infopessoal']['rgie'],
+                            'cpfcnpj'    => $request['cpfcnpj'],
+                            'status'     => $request['status']
                         ]
-                    );
-
-                    PrestadorFormacao::create(
-                        [
-                            'prestador_id' => Prestador::create(
-                                [
-                                    'pessoa_id' => $user->pessoa_id,
-                                    'sexo'      => $request['prestador']['sexo']
-                                ]
-                            )->id,
-                            'formacao_id'  => $request['prestador']['formacao_id']
-                        ]
-                    );
-                });
-            }
-        } else {
-            DB::transaction(function () use ($request) {
-                $user = User::create(
+                    )->id
+                ]
+            );
+            Tipopessoa::create([
+                'tipo'      => 'Prestador',
+                'pessoa_id' => $user->pessoa_id,
+                'ativo'     => 1
+            ]);
+            PessoaEmail::firstOrCreate([
+                'pessoa_id' => $user->pessoa_id,
+                'email_id'  => Email::firstOrCreate(
                     [
-                        'cpfcnpj'    => $request['cpfcnpj'],
-                        'email'      => $request['user']['email'],
-                        'password'   =>  bcrypt($request['user']['password']),
-                        'pessoa_id'  => Pessoa::create(
-                            [
-                                'nome'       => $request['nome'],
-                                'cpfcnpj'    => $request['cpfcnpj'],
-                                'status'     => $request['status']
-                            ]
-                        )->id
+                        'email' => $user->email,
                     ]
-                );
-                Tipopessoa::create([
-                    'tipo'      => 'Prestador',
-                    'pessoa_id' => $user->pessoa_id,
-                    'ativo'     => 1
-                ]);
-                PessoaEmail::firstOrCreate([
-                    'pessoa_id' => $user->pessoa_id,
-                    'email_id'  => Email::firstOrCreate(
-                        [
-                            'email' => $user->email,
-                        ]
-                    )->id,
-                    'tipo'      => 'Pessoal',
-                ]);
+                )->id,
+                'tipo'      => 'Pessoal',
+            ]);
+            PessoaTelefone::firstOrCreate([
+                'pessoa_id' => $user->pessoa_id,
+                'telefone_id'  => Telefone::firstOrCreate(
+                    [
+                        'telefone' => $request['infotelefone']['telefone'],
+                    ]
+                )->id,
+                'tipo'      => 'Pessoal',
+            ]);
 
+            if ($request['infoprofissional']['numeroconselho']) {
                 Conselho::create(
                     [
-                        'instituicao' => $request['conselho']['instituicao'],
-                        'numero'      => $request['conselho']['numero'],
+                        'instituicao' => $request['infoprofissional']['formacao']['conselho'],
+                        'numero'      => $request['infoprofissional']['numeroconselho'],
                         'pessoa_id'   => $user->pessoa_id
                     ]
                 );
+            }
 
-                PrestadorFormacao::create(
+
+            PrestadorFormacao::create(
+                [
+                    'prestador_id' => Prestador::create(
+                        [
+                            'pessoa_id' => $user->pessoa_id,
+                            'sexo'      => $request['infopessoal']['sexo']
+                        ]
+                    )->id,
+                    'formacao_id'  => $request['infoprofissional']['formacao']['id']
+                ]
+            );
+
+            PessoaEndereco::create([
+                'pessoa_id' => $user->pessoa_id,
+                'endereco_id' => Endereco::create(
                     [
-                        'prestador_id' => Prestador::create(
-                            [
-                                'pessoa_id' => $user->pessoa_id,
-                                'sexo'      => $request['prestador']['sexo']
-                            ]
-                        )->id,
-                        'formacao_id'  => $request['prestador']['formacao_id']
+                        'descricao'   => "",
+                        'cep'         => $request['infoendereco']['cep'],
+                        'cidade_id'   => $request['infoendereco']['cidade']['id'],
+                        'rua'         => $request['infoendereco']['rua'],
+                        'bairro'      => $request['infoendereco']['bairro'],
+                        'numero'      => $request['infoendereco']['numero'],
+                        'complemento' => $request['infoendereco']['complemento'],
+                        'tipo'        => 'Residencial',
+                        'ativo'       => true
                     ]
-                );
-            });
-        }
+                )->id,
+                'ativo' => true
+            ]);
+        });
+        // }
     }
 
     /**
@@ -235,6 +216,7 @@ class AuthController extends Controller
 
     public function verificaCpfEmail(Request $request)
     {
+        
         if (!$request->cpfcnpj && !$request->email) {
             return response()->json([
                 'alert' => [
@@ -247,31 +229,37 @@ class AuthController extends Controller
 
         if ($request->cpfcnpj) {
             $user = User::where('cpfcnpj', $request->cpfcnpj)
-            ->first();
+                ->first();
 
             if ($user) {
-                return response()->json([
-                    'alert' => [
-                        'title' => 'Ops!',
-                        'text' => 'Você já possui um cadastro com esse CPF!'
-                    ]
-                ], 200)
-                    ->header('Content-Type', 'application/json');
+                $prestador = Prestador::firstWhere('pessoa_id', $user->pessoa->id);
+                if ($prestador) {
+                    return response()->json([
+                        'alert' => [
+                            'title' => 'Ops!',
+                            'text' => 'Você já possui um cadastro com esse CPF!'
+                        ]
+                    ], 200)
+                        ->header('Content-Type', 'application/json');
+                }
             }
         }
 
         if ($request->email) {
             $user = User::where('email', $request->email)
-            ->first();
+                ->first();
 
             if ($user) {
-                return response()->json([
-                    'alert' => [
-                        'title' => 'Ops!',
-                        'text' => 'Você já possui um cadastro com esse E-mail!'
-                    ]
-                ], 200)
-                    ->header('Content-Type', 'application/json');
+                $prestador = Prestador::firstWhere('pessoa_id', $user->pessoa->id);
+                if ($prestador) {
+                    return response()->json([
+                        'alert' => [
+                            'title' => 'Ops!',
+                            'text' => 'Você já possui um cadastro com esse E-mail!'
+                        ]
+                    ], 200)
+                        ->header('Content-Type', 'application/json');
+                }
             }
         }
 

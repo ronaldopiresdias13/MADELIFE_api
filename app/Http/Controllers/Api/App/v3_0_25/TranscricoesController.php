@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api\App\v3_0_25;
 
 use App\Http\Controllers\Controller;
+use App\Models\Horariomedicamento;
 use App\Models\Ordemservico;
 use App\Models\Transcricao;
+use App\Models\TranscricaoProduto;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class TranscricoesController extends Controller
@@ -16,10 +19,34 @@ class TranscricoesController extends Controller
      */
     public function listTranscricoesByEscalaId(Ordemservico $ordemservico)
     {
-        return Transcricao::with(['itensTranscricao.produto', 'itensTranscricao.horariomedicamentos', 'itensTranscricao.acoesmedicamentos'])
-            ->where('ordemservico_id', $ordemservico['id'])
+        // $h = Horariomedicamento::with([
+        //     'itensTranscricao.produto',
+        //     'itensTranscricao.acoesmedicamentos',
+        //     'itensTranscricao.transcricao',
+        // ])->whereHas('itensTranscricao', function (Builder $query) use ($ordemservico) {
+        //     $query->whereHas('transcricao', function (Builder $query) use ($ordemservico) {
+        //         $query->where('ordemservico_id', $ordemservico);
+        //     });
+        // })
+        //     ->get();
+        // return $h;
+        $tp = TranscricaoProduto::with(
+            [
+                'produto:id,descricao',
+                'horariomedicamentos',
+                'acoesmedicamentos'
+            ]
+        )
+            ->whereHas('transcricao', function (Builder $query) use ($ordemservico) {
+                $query->where('ordemservico_id', $ordemservico['id']);
+            })
             ->where('ativo', true)
             ->get();
+        return $tp;
+        // return Transcricao::with(['itensTranscricao.produto', 'itensTranscricao.horariomedicamentos', 'itensTranscricao.acoesmedicamentos'])
+        //     ->where('ordemservico_id', $ordemservico['id'])
+        //     ->where('ativo', true)
+        //     ->get();
     }
     /**
      * Display a listing of the resource.

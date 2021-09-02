@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web\Orccusto;
 
-use App\Models\Historico;
+use App\Http\Controllers\Controller;
+use App\Models\Orccusto;
 use Illuminate\Http\Request;
 
-class HistoricosController extends Controller
+class OrccustoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,10 +32,10 @@ class HistoricosController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Historico  $historico
+     * @param  \App\Models\Orccusto  $orccusto
      * @return \Illuminate\Http\Response
      */
-    public function show(Historico $historico)
+    public function show(Orccusto $orccusto)
     {
         //
     }
@@ -43,10 +44,10 @@ class HistoricosController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Historico  $historico
+     * @param  \App\Models\Orccusto  $orccusto
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Historico $historico)
+    public function update(Request $request, Orccusto $orccusto)
     {
         //
     }
@@ -54,11 +55,11 @@ class HistoricosController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Historico  $historico
+     * @param  \App\Models\Orccusto  $orccusto
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Historico $historico)
+    public function destroy(Orccusto $orccusto)
     {
-        //
+        $orccusto->delete();
     }
 }

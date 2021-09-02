@@ -89,6 +89,7 @@ class PagamentoexternosController extends Controller
      */
     public function createlist(Request $request)
     {
+        // return $request;
         $empresa_id = null;
         if (Auth::check()) {
             if (Auth::user()->pessoa->profissional) {
@@ -117,6 +118,12 @@ class PagamentoexternosController extends Controller
                             'situacao'       => $item['situacao'],
                             'proventos'      => $item['proventos'],
                             'descontos'      => $item['descontos'],
+                            'valorinss'      => $item['valorinss'],
+                            'tipovalorinss'  => $item['tipovalorinss'],
+                            'valoriss'       => $item['valoriss'],
+                            'tipovaloriss'   => $item['tipovaloriss'],
+                            'taxaadm'        => $item['taxaadm'],
+                            'tipotaxaadm'    => $item['tipotaxaadm'],
                             'tipopessoa'     => "Prestador Externo"
                         ])->id,
                     ]

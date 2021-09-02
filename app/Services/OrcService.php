@@ -30,7 +30,47 @@ class OrcService
      */
     public function store()
     {
-        DB::transaction(function () {
+        $user = $this->request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+
+        $o = null;
+        $numero = null;
+
+        switch ($this->request->versao) {
+            case 'Orçamento':
+                $o = Orc::where('empresa_id', $empresa_id)
+                    ->count('id');
+                $numero = "O" . ($o + 1);
+                break;
+            case 'Aditivo':
+                $o = Orc::find($this->request->orc_id)->numero;
+                if (substr($o, 0, 1) == 'O') {
+                    $o = substr($o, 1);
+                } elseif (substr($o, 0, 1) == 'A' || substr($o, 0, 1) == 'P') {
+                    $o = substr(explode('-', $o)[0], 1);
+                }
+                $a = Orc::where('empresa_id', $empresa_id)
+                    ->where('versao', $this->request->versao)
+                    ->where('orc_id', $this->request->orc_id)
+                    ->count('id');
+                $numero = "A" . $o . "-" . ($a + 1);
+                break;
+            case 'Prorrogação':
+                $o = Orc::find($this->request->orc_id)->numero;
+                if (substr($o, 0, 1) == 'O') {
+                    $o = substr($o, 1);
+                } elseif (substr($o, 0, 1) == 'A' || substr($o, 0, 1) == 'P') {
+                    $o = substr(explode('-', $o)[0], 1);
+                }
+                $p = Orc::where('empresa_id', $empresa_id)
+                    ->where('versao', $this->request->versao)
+                    ->where('orc_id', $this->request->orc_id)
+                    ->count('id');
+                $numero = "P" . $o . "-" . ($p + 1);
+                break;
+        }
+
+        DB::transaction(function () use ($numero) {
             $empresa_id = $this->request->user()->pessoa->profissional->empresa_id;
             if (!$empresa_id) {
                 return 'Error';
@@ -39,21 +79,28 @@ class OrcService
             $this->orc = new Orc();
             $this->orc->fill([
                 "empresa_id"               => $empresa_id,
+                "orc_id"                   => $this->request->orc_id,
                 "cliente_id"               => $this->request->cliente_id,
                 "pacote_id"                => $this->request->pacote_id,
-                "numero"                   => $this->request->numero,
+                "numero"                   => $numero,
                 "tipo"                     => $this->request->tipo,
+                "tipoatentendimento"       => $this->request->tipoatentendimento,
+                "indicacaoacidente"        => $this->request->indicacaoacidente,
                 "data"                     => $this->request->data,
                 "quantidade"               => $this->request->quantidade,
                 "unidade"                  => $this->request->unidade,
                 "cidade_id"                => $this->request->cidade_id,
                 "processo"                 => $this->request->processo,
+                "caraterAtendimento"       => $this->request->caraterAtendimento,
                 "situacao"                 => $this->request->situacao,
                 "descricao"                => $this->request->descricao,
+                "versao"                   => $this->request->versao,
+                "indicacaoClinica"         => $this->request->indicacaoClinica,
                 "valortotalproduto"        => $this->request->valortotalproduto,
                 "valortotalcusto"          => $this->request->valortotalcusto,
                 "valortotalservico"        => $this->request->valortotalservico,
-                "valortotalorcamento"        => $this->request->valortotalorcamento,
+                "valordesconto"            => $this->request->valordesconto,
+                "valortotalorcamento"      => $this->request->valortotalorcamento,
                 "observacao"               => $this->request->observacao,
                 "status"                   => $this->request->status,
                 "venda_realizada"          => $this->request->venda_realizada,
@@ -138,12 +185,17 @@ class OrcService
 
     public function update()
     {
+        
         DB::transaction(function () {
             $this->orc->fill([
                 "cliente_id"               => $this->request->cliente_id,
                 "pacote_id"                => $this->request->pacote_id,
                 "numero"                   => $this->request->numero,
                 "tipo"                     => $this->request->tipo,
+                "caraterAtendimento"       => $this->request->caraterAtendimento,
+                "indicacaoClinica"         => $this->request->indicacaoClinica,
+                "tipoatentendimento"       => $this->request->tipoatentendimento,
+                "indicacaoacidente"        => $this->request->indicacaoacidente,
                 "data"                     => $this->request->data,
                 "quantidade"               => $this->request->quantidade,
                 "unidade"                  => $this->request->unidade,
@@ -154,6 +206,7 @@ class OrcService
                 "valortotalproduto"        => $this->request->valortotalproduto,
                 "valortotalcusto"          => $this->request->valortotalcusto,
                 "valortotalservico"        => $this->request->valortotalservico,
+                "valordesconto"            => $this->request->valordesconto,
                 "valortotalorcamento"      => $this->request->valortotalorcamento,
                 "observacao"               => $this->request->observacao,
                 "status"                   => $this->request->status,

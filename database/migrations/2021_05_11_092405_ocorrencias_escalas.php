@@ -13,12 +13,12 @@ class OcorrenciasEscalas extends Migration
      */
     public function up()
     {
-        Schema::create('ocorrencias_escalas', function (Blueprint $table) {
-            $table->unsignedBigInteger('ocorrencia_id')->nullable();
-            $table->foreign('ocorrencia_id')->references('id')->on('ocorrencias')->onDelete('cascade');
-            $table->unsignedBigInteger('escala_id')->nullable();
-            $table->foreign('escala_id')->references('id')->on('escalas')->onDelete('cascade');
-        });
+         Schema::create('ocorrencias_escalas', function (Blueprint $table) {
+             $table->unsignedBigInteger('ocorrencia_id')->nullable();
+             $table->foreign('ocorrencia_id')->references('id')->on('ocorrencias')->onDelete('cascade');
+             $table->unsignedBigInteger('escala_id')->nullable();
+             $table->foreign('escala_id')->references('id')->on('escalas')->onDelete('cascade');
+         });
     }
 
     /**
