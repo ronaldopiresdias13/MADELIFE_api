@@ -63,12 +63,20 @@ class PagamentoexternosController extends Controller
         $datainicio = $request['datainicio'] ? $request['datainicio'] : date("Y-m-01", strtotime($data));
         $datafim    = $request['datafim']    ? $request['datafim']    : date("Y-m-t", strtotime($data));
 
-        return Pagamentoexterno::with(['pagamentopessoa.pessoa', 'servico', 'ordemservico.orcamento.homecare.paciente.pessoa'])
+        return Pagamentoexterno::with(['pagamentopessoa.pessoa', 'servico', 'ordemservico.orcamento.homecare.paciente.pessoa', 'ordemservico.orcamento.cliente.pessoa'])
             ->whereHas('pagamentopessoa', function (Builder $query) use ($datainicio, $datafim) {
                 $query->where('situacao', "!=", "Criado")->whereBetween('periodo1', [$datainicio, $datafim]);
             })
+            ->whereHas('ordemservico', function (Builder $query) use ($request) {
+                $query->where('id','like', $request->paciente_id ? $request->paciente_id : '%');
+            })
+            ->whereHas('ordemservico.orcamento.cliente', function (Builder $query) use ($request) {
+                $query->where('cliente_id','like', $request->cliente_id ? $request->cliente_id : '%');
+            })
             ->where('empresa_id', $empresa_id)
             ->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%')
+            ->where('turno','like', $request->turno ? $request->turno : '%')
+            ->where('servico_id','like', $request->servico_id ? $request->servico_id : '%')
             ->get();
     }
     /**
