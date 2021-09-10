@@ -38,7 +38,7 @@ class OrcService
 
         switch ($this->request->versao) {
             case 'Orçamento':
-                $o = Orc::where('empresa_id', $empresa_id)
+                $o = Orc::withTrashed()->where('empresa_id', $empresa_id)
                     ->count('id');
                 $numero = "O" . ($o + 1);
                 break;
@@ -185,7 +185,7 @@ class OrcService
 
     public function update()
     {
-        
+
         DB::transaction(function () {
             $this->orc->fill([
                 "cliente_id"               => $this->request->cliente_id,

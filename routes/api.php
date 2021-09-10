@@ -29,6 +29,30 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::post('dashboard/resolver_ocorrencia', 'Api\Web\Home\DashboardController@resolver_ocorrencia');
             Route::get('dashboard/get_pendencias', 'Api\Web\Home\DashboardController@get_pendencias');
         });
+        Route::prefix('pils')->group(function () {
+            Route::get('listPils', 'Api\Web\PilController@get_pils');
+            Route::get('getDadosPil/', 'Api\Web\PilController@getDadosPil');
+
+            Route::get('listDiagnosticos', 'Api\Web\DiagnosticosPrimarioController@listDiagnosticos');
+            Route::post('storeDiagnostico', 'Api\Web\DiagnosticosPrimarioController@store_diagnostico');
+            Route::put('updateDiagnostico', 'Api\Web\DiagnosticosPrimarioController@update_diagnostico');
+
+            Route::get('getDiagnostico/{id}', 'Api\Web\DiagnosticosPrimarioController@getDiagnostico');
+
+            Route::delete('delete_diagnostico/{id}', 'Api\Web\DiagnosticosPrimarioController@delete_diagnostico');
+
+
+
+            Route::get('listDiagnosticosSecundarios', 'Api\Web\DiagnosticosSecundarioController@listDiagnosticos');
+            Route::post('storeDiagnosticoSecundario', 'Api\Web\DiagnosticosSecundarioController@store_diagnostico');
+            Route::put('updateDiagnosticoSecundario', 'Api\Web\DiagnosticosSecundarioController@update_diagnostico');
+
+            Route::get('getDiagnosticoSecundario/{id}', 'Api\Web\DiagnosticosSecundarioController@getDiagnostico');
+
+            Route::delete('delete_diagnostico_secundario/{id}', 'Api\Web\DiagnosticosSecundarioController@delete_diagnostico');
+
+        });
+
         Route::prefix('areaClinica')->group(function () {
             Route::get('dashboard/relatorioDiario', 'Api\Web\AreaClinica\DashboardController@relatorioDiario');
             Route::get('dashboard/relatorioProdutividade', 'Api\Web\AreaClinica\DashboardController@relatorioProdutividade');
