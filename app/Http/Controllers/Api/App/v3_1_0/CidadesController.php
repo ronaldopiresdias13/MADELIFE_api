@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\App\v3_0_25;
+namespace App\Http\Controllers\Api\App\v3_1_0;
 
 use App\Models\Cidade;
 use App\Http\Controllers\Controller;
@@ -16,13 +16,13 @@ class CidadesController extends Controller
     public function index(string $uf)
     {
         $cidades = Cidade::where('ativo', true)
-        ->where('uf', $uf)->orderBy('nome')
-        ->get(
-            [
-            'id',
-            'nome'
-            ]
-        );
+            ->where('uf', $uf)->orderBy('nome')
+            ->get(
+                [
+                    'id',
+                    'nome'
+                ]
+            );
         return $cidades;
     }
 
