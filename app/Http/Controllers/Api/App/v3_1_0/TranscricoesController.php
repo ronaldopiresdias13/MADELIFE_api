@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Api\App\v3_0_25;
+namespace App\Http\Controllers\Api\App\v3_1_0;
 
 use App\Http\Controllers\Controller;
-use App\Models\Horariomedicamento;
 use App\Models\Ordemservico;
 use App\Models\Transcricao;
 use App\Models\TranscricaoProduto;

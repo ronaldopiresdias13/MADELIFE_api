@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\App\v3_0_25;
+namespace App\Http\Controllers\Api\App\v3_1_0;
 
 use App\Http\Controllers\Controller;
 use App\Models\Versao;
@@ -17,8 +17,7 @@ class VersaoController extends Controller
     {
         $versao = Versao::where('aplicacao', 'ml')->where('plataforma', $request->plataforma)->pluck('versao');
 
-        if($request->versao < $versao[0]){
-
+        if ($request->versao < $versao[0]) {
             return response()->json([
                 'alert' => [
                     'title' => 'Ops!',
@@ -26,7 +25,6 @@ class VersaoController extends Controller
                 ]
             ], 200)
                 ->header('Content-Type', 'application/json');
-
         }
 
         return null;
