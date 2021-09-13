@@ -142,7 +142,7 @@ class PrestadoresController extends Controller
         $empresa_id = $request->user()->pessoa->profissional->empresa_id;
         return DB::select(
             "
-            SELECT profp.nome AS prestador, pp.nome AS paciente, e.periodo, e.tipo, s.descricao, COUNT(e.id) AS total  FROM escalas AS e
+            SELECT profp.nome AS prestador, profp.cpfcnpj, con.instituicao, con.numero, pp.nome AS paciente, e.periodo, e.tipo, s.descricao, COUNT(e.id) AS total  FROM escalas AS e
             INNER JOIN ordemservicos AS os
             ON e.ordemservico_id = os.id
             INNER JOIN orcamentos AS o
@@ -157,17 +157,18 @@ class PrestadoresController extends Controller
             ON prof.id = e.prestador_id
             INNER JOIN pessoas AS profp
             ON profp.id = prof.pessoa_id
+            left join conselhos con
+            ON con.pessoa_id = profp.id
             INNER JOIN servicos AS s
             ON e.servico_id = s.id
-            WHERE o.cliente_id = ?
+            WHERE o.cliente_id like ?
             AND e.ativo = 1
             AND e.empresa_id = ?
             AND e.dataentrada BETWEEN ? AND ?
-            GROUP BY pac.id, profp.nome, pp.nome, e.periodo, e.tipo, s.descricao
-            ORDER BY profp.nome
-        ",
+            GROUP BY pac.id, profp.nome, pp.nome, e.periodo, e.tipo, s.descricao, profp.cpfcnpj, con.instituicao, con.numero
+            ORDER BY profp.nome",
             [
-                $request->cliente_id,
+                $request->cliente_id ? $request->cliente_id : '%',
                 $empresa_id,
                 $request->data_ini,
                 $request->data_fim
@@ -207,7 +208,8 @@ class PrestadoresController extends Controller
             [
                 'ordemservicos.servico',
                 'ordemservicos.ordemservico.orcamento.homecare.paciente.pessoa'
-            ])
+            ]
+        )
             ->where('ativo', true)
             ->whereHas('ordemservicos.ordemservico', function (Builder $builder) use ($empresa_id) {
                 $builder->where('empresa_id', $empresa_id);

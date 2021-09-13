@@ -104,6 +104,7 @@ class EscalasController extends Controller
             'id',
             'dataentrada',
             'datasaida',
+            'editavel',
             'horaentrada',
             'horasaida',
             'valorhoradiurno',
