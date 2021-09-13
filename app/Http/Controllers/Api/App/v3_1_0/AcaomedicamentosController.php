@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\App\v3_0_25;
+namespace App\Http\Controllers\Api\App\v3_1_0;
 
 use App\Models\Acaomedicamento;
 use App\Http\Controllers\Controller;
@@ -45,8 +45,8 @@ class AcaomedicamentosController extends Controller
             try {
                 $ocorrencias = Ocorrencia::where('tipo', '=', 'Medicamento Atrasado')->whereHas('escalas', function ($q) use ($request) {
                     $q->where('escala_id', '=', $request['escala_id']);
-                })->where('transcricao_produto_id','=',$request['transcricao_produto_id'])->whereRaw('horario like \'%'. $request['hora'] . ':00\'')->get();
-                foreach($ocorrencias as $ocorrencia){
+                })->where('transcricao_produto_id', '=', $request['transcricao_produto_id'])->whereRaw('horario like \'%' . $request['hora'] . ':00\'')->get();
+                foreach ($ocorrencias as $ocorrencia) {
                     if ($ocorrencia != null) {
                         $ocorrencia->fill(['situacao' => 'Resolvida', 'justificativa' => 'Medicamento realizado'])->save();
                         $ocorrencia->chamados()->update(['finalizado' => 1, 'justificativa' => 'Medicamento realizado']);
