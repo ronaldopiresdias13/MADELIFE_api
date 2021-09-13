@@ -16,7 +16,7 @@ class CreateTissTable extends Migration
         Schema::create('tiss', function (Blueprint $table) {
             $table->uuid('id');
             $table->string('sequencia');
-            $table->string('datasolicitacao');
+            $table->string('data');
             $table->string('caminhoxml');
             $table->timestamps();
             $table->softDeletes();
