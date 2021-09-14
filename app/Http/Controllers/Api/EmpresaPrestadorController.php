@@ -314,9 +314,9 @@ class EmpresaPrestadorController extends Controller
 
     public function listaPrestadoresPorEmpresaIdEStatus(Request $request)
     {
-        $empresa_id=1;
-        // $user = $request->user();
-        // $empresa_id = $user->pessoa->profissional->empresa_id;
+        
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
         return EmpresaPrestador::with([
             'prestador.pessoa.conselhos',
             'prestador.formacoes',
