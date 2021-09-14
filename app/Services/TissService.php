@@ -45,6 +45,8 @@ class TissService
 
             $this->finalizarArquivo();
         });
+
+        return true;
     }
 
     public function editarXml()
@@ -57,6 +59,8 @@ class TissService
 
             $this->finalizarArquivo();
         });
+
+        return true;
     }
 
     public function iniciarArquivo()
@@ -476,7 +480,7 @@ class TissService
         // return base64_encode($this->xml->outputMemory());
     }
 
-    public function gerar_xml_3_05_00()
+    public function montar_xml_3_05_00()
     {
         $dados = [];
         $dados['valorProcedimentos']   = 0;
