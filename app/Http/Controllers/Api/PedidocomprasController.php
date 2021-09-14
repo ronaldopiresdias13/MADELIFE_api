@@ -205,12 +205,13 @@ class PedidocomprasController extends Controller
             if ($request['produtos']) {
                 foreach ($request['produtos'] as $key => $produto) {
                     $requisicao_produto = PedidocompraProduto::updateOrCreate(
-                        [
-                            'pedidocompra_id' => $pedidocompra->id,
-                            'produto_id'      => $produto['pivot']['produto_id'],
-                            'quantidade'      => $produto['pivot']['quantidade'],
-                            'observacao'      => $produto['pivot']['observacao'],
-                            'status'          => $produto['pivot']['status']
+                        [ 
+                             'pedidocompra_id' => $pedidocompra->id,
+                             'produto_id'      => $produto['pivot']['produto_id'],
+                        ],
+                        [ 'quantidade'      => $produto['pivot']['quantidade'],
+                          'observacao'      => $produto['pivot']['observacao'],
+                          'status'          => $produto['pivot']['status']
                         ]
                     );
                 }
