@@ -127,8 +127,8 @@ class ClientesController extends Controller
                                     'email'     => $email['email'],
                                 ]
                             )->id,
-                            'tipo'       => $telefone['pivot']['tipo'],
-                            'descricao'  => $telefone['pivot']['descricao']
+                            'tipo'       => $email['pivot']['tipo'],
+                            'descricao'  => $email['pivot']['descricao']
                         ]);
                     }
                 }
