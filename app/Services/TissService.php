@@ -22,17 +22,14 @@ class TissService
     protected $cliente = null;
     protected $tiss = null;
 
-    // protected $now = null;
     protected $data = null;
     protected $hora = null;
 
     public function __construct($medicoes, $cliente, $tiss = null)
     {
-        // dd($tiss);
         $this->medicoes = $medicoes;
         $this->cliente  = $cliente;
         $this->tiss     = $tiss;
-        // dd($this->tiss);
     }
 
     public function criarXml()

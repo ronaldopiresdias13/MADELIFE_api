@@ -49,14 +49,19 @@ class TissController extends Controller
             ->whereIn('id', $request->medicoes)
             ->get();
 
-            // dd($request['tiss_id']);
-
         if ($cliente->versaoTiss) {
             $tiss = $request['tiss_id'];
             $tissService = new TissService($medicoes, $cliente, $tiss);
             $resposta = $tissService->editarXml();
 
             if ($resposta) {
+                $medicoes = Medicao::where('tiss_id', $tiss)
+                    ->whereNotIn('id', $request->medicoes)
+                    ->get();
+                foreach ($medicoes as $key => $medicao) {
+                    $medicao->tiss_id = null;
+                    $medicao->save();
+                }
                 // return response()->json(['tiss' => $resposta], 200)->header('Content-Type', 'application/xml');
                 return response()->json('Ok!\nSalvo com Sucesso!', 200)->header('Content-Type', 'text/plain');
             } else {
