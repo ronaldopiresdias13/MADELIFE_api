@@ -27,7 +27,8 @@ class TissController extends Controller
             $resposta = $tissService->criarXml();
 
             if ($resposta) {
-                return response()->json(['tiss' => $resposta], 200)->header('Content-Type', 'application/xml');
+                // return response()->json(['tiss' => $resposta], 200)->header('Content-Type', 'application/xml');
+                return response()->json('Ok!\nSalvo com Sucesso!', 200)->header('Content-Type', 'text/plain');
             } else {
                 throw ValidationException::withMessages([
                     'tiss' => ['Erro ao gerar o TISS. Verifique se todos os dados estão corretos'],
@@ -56,7 +57,8 @@ class TissController extends Controller
             $resposta = $tissService->editarXml();
 
             if ($resposta) {
-                return response()->json(['tiss' => $resposta], 200)->header('Content-Type', 'application/xml');
+                // return response()->json(['tiss' => $resposta], 200)->header('Content-Type', 'application/xml');
+                return response()->json('Ok!\nSalvo com Sucesso!', 200)->header('Content-Type', 'text/plain');
             } else {
                 throw ValidationException::withMessages([
                     'tiss' => ['Erro ao gerar o TISS. Verifique se todos os dados estão corretos'],
