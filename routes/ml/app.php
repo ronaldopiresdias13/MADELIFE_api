@@ -8,6 +8,7 @@ Route::post('enviararquivos', 'Api\App\v3_0_21\ChamadosController@enviararquivos
 Route::post('enviararquivos', 'Api\App\v3_0_22\ChamadosController@enviararquivos');
 Route::post('enviararquivos', 'Api\App\v3_0_24\ChamadosController@enviararquivos');
 Route::post('enviararquivos', 'Api\App\v3_0_25\ChamadosController@enviararquivos');
+Route::post('enviararquivos', 'Api\App\v3_1_0\ChamadosController@enviararquivos');
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix("app/v3_0_21")->group(function () {
@@ -15,7 +16,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         Route::get('bancos', 'Api\App\v3_0_21\BancosController@index');
 
-        Route::get('cidades/{uf}', 'Api\App\v3_0_21\CidadeController@index');
+        Route::get('cidades/{uf}', 'Api\App\v3_0_21\CidadesController@index');
 
         Route::post('conselhos', 'Api\App\v3_0_21\ConselhosController@store');
         Route::put('conselhos/{conselho}', 'Api\App\v3_0_21\ConselhosController@update');
@@ -89,7 +90,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         Route::get('bancos', 'Api\App\v3_0_22\BancosController@index');
 
-        Route::get('cidades/{uf}', 'Api\App\v3_0_22\CidadeController@index');
+        Route::get('cidades/{uf}', 'Api\App\v3_0_22\CidadesController@index');
 
         Route::post('conselhos', 'Api\App\v3_0_22\ConselhosController@store');
         Route::put('conselhos/{conselho}', 'Api\App\v3_0_22\ConselhosController@update');
@@ -163,7 +164,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         Route::get('bancos', 'Api\App\v3_0_24\BancosController@index');
 
-        Route::get('cidades/{uf}', 'Api\App\v3_0_24\CidadeController@index');
+        Route::get('cidades/{uf}', 'Api\App\v3_0_24\CidadesController@index');
 
         Route::post('conselhos', 'Api\App\v3_0_24\ConselhosController@store');
         Route::put('conselhos/{conselho}', 'Api\App\v3_0_24\ConselhosController@update');
@@ -237,7 +238,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         Route::get('bancos', 'Api\App\v3_0_25\BancosController@index');
 
-        Route::get('cidades/{uf}', 'Api\App\v3_0_25\CidadeController@index');
+        Route::get('cidades/{uf}', 'Api\App\v3_0_25\CidadesController@index');
 
         Route::post('conselhos', 'Api\App\v3_0_25\ConselhosController@store');
         Route::put('conselhos/{conselho}', 'Api\App\v3_0_25\ConselhosController@update');
@@ -307,4 +308,77 @@ Route::group(['middleware' => 'auth:api'], function () {
 Route::prefix("app/v3_0_25")->group(function () {
     Route::get('cidades/listaCidadesCadastroApp/{uf}', [CidadesController::class, 'listaCidadesCadastroApp']);
     Route::post('versoes/verificarVersaoApp', [VersaoController::class, 'verificarVersaoApp']);
+});
+
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::prefix("app/v3_1_0")->group(function () {
+        Route::post('acaomedicamentos', 'Api\App\v3_1_0\AcaomedicamentosController@store');
+
+        Route::get('bancos', 'Api\App\v3_1_0\BancosController@index');
+
+        Route::get('cidades/{uf}', 'Api\App\v3_1_0\CidadesController@index');
+        Route::get('cidades/listaCidadesCadastroApp/{uf}', 'Api\App\v3_1_0\CidadesController@index');
+
+        Route::post('conselhos', 'Api\App\v3_1_0\ConselhosController@store');
+        Route::put('conselhos/{conselho}', 'Api\App\v3_1_0\ConselhosController@update');
+        Route::delete('conselhos/{conselho}', 'Api\App\v3_1_0\ConselhosController@destroy');
+
+        Route::post('dadosbancarios', 'Api\App\v3_1_0\DadosbancariosController@store');
+        Route::put('dadosbancarios/{dadosbancario}', 'Api\App\v3_1_0\DadosbancariosController@update');
+        Route::delete('dadosbancarios/{dadosbancario}', 'Api\App\v3_1_0\DadosbancariosController@destroy');
+
+        Route::get('empresaPrestador/meusContratos', 'Api\App\v3_1_0\EmpresaPrestadorController@index');
+        Route::put('empresaPrestador/meusContratos/{empresaPrestador}', 'Api\App\v3_1_0\EmpresaPrestadorController@update');
+        Route::get('empresaPrestador/{empresaPrestador}/downloadFile', 'Api\App\v3_1_0\EmpresaPrestadorController@downloadFile');
+
+        Route::get('escalas/listEscalasHoje', 'Api\App\v3_1_0\EscalasController@listEscalasHoje');
+        Route::get('escalas/listEscalasMes', 'Api\App\v3_1_0\EscalasController@listEscalasMes');
+        Route::get('escalas/getEscalaId/{escala}', 'Api\App\v3_1_0\EscalasController@getEscalaId');
+        Route::get('escalas/getEscalaId/{escala}/cuidados', 'Api\App\v3_1_0\EscalasController@getCuidadosByEscalaId');
+
+        Route::put('cuidadoEscalas/{cuidadoEscala}', 'Api\App\v3_1_0\CuidadoEscalasController@updateCuidado');
+
+        Route::get('formacoes/listFormacoes', 'Api\App\v3_1_0\FormacoesController@listFormacoes');
+
+        Route::get('monitoramentoescalas/{escala}/list', 'Api\App\v3_1_0\MonitoramentoescalasController@getAllMonitoramentosByEscalaId');
+        Route::get('monitoramentoescalas/{escala}', 'Api\App\v3_1_0\MonitoramentoescalasController@listaMonitoramento');
+        Route::post('monitoramentoescalas', 'Api\App\v3_1_0\MonitoramentoescalasController@salvarMonitoramento');
+
+        Route::post('prestadorFormacao/newPrestadorFormacao', 'Api\App\v3_1_0\PrestadorFormacaoController@newPrestadorFormacao');
+        Route::delete('prestadorFormacao/{prestadorFormacao}', 'Api\App\v3_1_0\PrestadorFormacaoController@destroy');
+
+        Route::get('pessoas/getPessoaPerfil', 'Api\App\v3_1_0\PessoasController@getPessoaPerfil');
+        Route::put('pessoas/atualizaDadosPessoais/{pessoa}', 'Api\App\v3_1_0\PessoasController@atualizaDadosPessoais');
+
+        Route::post('pessoaTelefones', 'Api\App\v3_1_0\PessoaTelefoneController@store');
+        Route::delete('pessoaTelefones/{pessoaTelefone}', 'Api\App\v3_1_0\PessoaTelefoneController@destroy');
+
+        Route::post('pessoaEmails', 'Api\App\v3_1_0\PessoaEmailController@store');
+        Route::delete('pessoaEmails/{pessoaEmail}', 'Api\App\v3_1_0\PessoaEmailController@destroy');
+
+        Route::post('pessoaEnderecos', 'Api\App\v3_1_0\PessoaEnderecoController@store');
+        Route::put('pessoaEnderecos/{pessoaEndereco}', 'Api\App\v3_1_0\PessoaEnderecoController@update');
+        Route::delete('pessoaEnderecos/{pessoaEndereco}', 'Api\App\v3_1_0\PessoaEnderecoController@destroy');
+
+        Route::post('pontos/checkin/{escala}', 'Api\App\v3_1_0\PontosController@checkin'); // Custon
+        Route::post('pontos/checkout/{escala}', 'Api\App\v3_1_0\PontosController@checkout'); // Custon
+        Route::post('pontos/assinaturacheckout/{escala}', 'Api\App\v3_1_0\PontosController@assinaturacheckout'); // Custon
+
+        Route::get('prestadores/meuspacientes', 'Api\App\v3_1_0\PrestadoresController@meuspacientes'); // Custon
+
+        Route::get('relatorios/{escala}', 'Api\App\v3_1_0\RelatoriosController@listRelatoriosByEscalaId');
+        Route::get('relatorios/{escala}/list', 'Api\App\v3_1_0\RelatoriosController@getAllRelatoriosByEscalaId');
+        Route::post('relatorios', 'Api\App\v3_1_0\RelatoriosController@store');
+        Route::delete('relatorios/{relatorio}', 'Api\App\v3_1_0\RelatoriosController@destroy');
+
+        Route::get('transcricoes/{ordemservico}', 'Api\App\v3_1_0\TranscricoesController@listTranscricoesByEscalaId');
+        Route::get('pacientes/listMedicamentosByPaciente/{ordemservico}', 'Api\App\v3_1_0\TranscricoesController@listMedicamentosByPaciente');
+        Route::get('chamados', 'Api\App\v3_1_0\ChamadosController@chamados');
+        Route::get('get_pendencias', 'Api\App\v3_1_0\ChamadosController@get_pendencias');
+
+        Route::post('criarchamado', 'Api\App\v3_1_0\ChamadosController@criarchamado');
+        Route::post('enviarArquivos', 'Api\App\v3_1_0\ChamadosController@enviarArquivos');
+
+        Route::post('versoes/verificarVersaoApp', 'Api\App\v3_1_0\VersaoController@verificarVersaoApp');
+    });
 });

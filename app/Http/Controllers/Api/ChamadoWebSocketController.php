@@ -72,9 +72,18 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
 
                 $token_header_array = json_decode($token_header_json, true);
                 Log::info($token_header_array);
-                $user_token = $token_header_array['jti'];    
-		$user_id = DB::table('oauth_access_tokens')->where('id', $user_token)->value('user_id');
-                $resp = User::where('id','=',$user_id)->with('pessoa')->first();
+//<<<<<<< HEAD
+//                $user_token = $token_header_array['jti'];    
+//		$user_id = DB::table('oauth_access_tokens')->where('id', $user_token)->value('user_id');
+//                $resp = User::where('id','=',$user_id)->with('pessoa')->first();
+//=======
+                $user_token = $token_header_array['jti'];
+
+
+                $user_id = DB::table('oauth_access_tokens')->where('id',$user_token )->value('user_id');
+                Log::info($user_id);
+                $resp = User::where('id', '=', $user_id)->with('pessoa')->first();
+//>>>>>>> 733d4a11aaec63796b1be549729b657f27b237a2
                 if ($resp == null) {
                     $from->send(json_encode(['type' => 'disconnect', 'mensagem' => 'Usuário inválido ou desconectado']));
                     return;
@@ -458,7 +467,7 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                 Log::info('top');
                 return;
             }
-            Log::info('file2.1');
+            // Log::info('file2.1');
 
             if (isset($this->clientes_ids[$chamado->prestador_id])) {
                 foreach ($this->clientes_ids[$chamado->prestador_id] as $socket) {
@@ -484,7 +493,7 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
 
             ]));
 
-            Log::info('file3');
+            // Log::info('file3');
 
             // foreach ($this->clients as $client) {
             //     if ($client->resourceId != $from->resourceId) {
@@ -517,7 +526,7 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                 Log::info('top');
                 return;
             }
-            Log::info('file2.1');
+            // Log::info('file2.1');
             if ($chamado->tipo == 'Enfermagem') {
 
                 foreach ($this->enfermagem as $atendente_id_resource) {
@@ -581,7 +590,7 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
 
             ]));
 
-            Log::info('file3');
+            // Log::info('file3');
 
             // foreach ($this->clients as $client) {
             //     if ($client->resourceId != $from->resourceId) {

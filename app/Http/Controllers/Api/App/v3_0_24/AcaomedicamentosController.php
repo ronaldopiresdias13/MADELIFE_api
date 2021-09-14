@@ -44,12 +44,14 @@ class AcaomedicamentosController extends Controller
             ]);
 
             try {
-                $ocorrencia = Ocorrencia::where('tipo', '=', 'Medicamento Atrasado')->whereHas('escalas', function ($q) use ($request) {
+                $ocorrencias = Ocorrencia::where('tipo', '=', 'Medicamento Atrasado')->whereHas('escalas', function ($q) use ($request) {
                     $q->where('escala_id', '=', $request['escala_id']);
-                })->where('transcricao_produto_id','=',$request['transcricao_produto_id'])->whereRaw('horario like \'%'. $request['hora'] . ':00\'')->first();
-                if ($ocorrencia != null) {
-                    $ocorrencia->fill(['situacao' => 'Resolvida', 'justificativa' => 'Medicamento realizado'])->save();
-                    $ocorrencia->chamados()->update(['finalizado' => 1, 'justificativa' => 'Medicamento realizado']);
+                })->where('transcricao_produto_id','=',$request['transcricao_produto_id'])->whereRaw('horario like \'%'. $request['hora'] . ':00\'')->get();
+                foreach($ocorrencias as $ocorrencia){
+                    if ($ocorrencia != null) {
+                        $ocorrencia->fill(['situacao' => 'Resolvida', 'justificativa' => 'Medicamento realizado'])->save();
+                        $ocorrencia->chamados()->update(['finalizado' => 1, 'justificativa' => 'Medicamento realizado']);
+                    }
                 }
             } catch (Exception $e) {
                 Log::error($e);
