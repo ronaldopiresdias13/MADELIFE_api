@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\App\v3_0_25;
+namespace App\Http\Controllers\Api\App\v3_1_0;
 
 use App\Models\Dadosbancario;
 use App\Http\Controllers\Controller;
