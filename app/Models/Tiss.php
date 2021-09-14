@@ -22,6 +22,7 @@ class Tiss extends Model
         'cliente_id',
         'sequencia',
         'data',
+        'hora',
         'nomexml',
         'caminhoxml',
         'created_at',

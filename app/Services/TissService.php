@@ -70,8 +70,7 @@ class TissService
         $this->hora = $now->format('H-i-s');
 
         $nomexml    = 'tiss_' . $this->data . '_' . $this->hora . '.xml';
-        $caminhoxml = public_path() . '/tiss';
-
+        $caminhoxml = storage_path('app/public') . '/tiss';
         is_dir($caminhoxml) ? true : mkdir($caminhoxml);
 
         $this->tiss = new Tiss();
@@ -79,6 +78,7 @@ class TissService
             'cliente_id' => $this->cliente->id,
             'sequencia'  => $this->cliente->empresa->tiss_sequencialTransacao + 1,
             'data'       => $this->data,
+            'hora'       => $this->hora,
             'nomexml'    => $nomexml,
             'caminhoxml' => $caminhoxml . '/' . $nomexml
         ])->save();
@@ -95,24 +95,22 @@ class TissService
 
     public function iniciarArquivo2()
     {
-        $now = Carbon::now();
-        $this->data = $now->format('Y-m-d');
-        $this->hora = $now->format('H-i-s');
+        $this->tiss = Tiss::find($this->tiss);
+        $this->data = $this->tiss->data;
+        $this->hora = $this->tiss->hora;
 
         $nomexml    = 'tiss_' . $this->data . '_' . $this->hora . '.xml';
-        $caminhoxml = public_path() . '/tiss';
-
+        $caminhoxml = storage_path('app/public') . '/tiss';
         is_dir($caminhoxml) ? true : mkdir($caminhoxml);
 
-        $this->tiss = Tiss::find($this->tiss);
-        dd($this->tiss);
-        $this->tiss->fill([
-            'cliente_id' => $this->cliente->id,
-            // 'sequencia'  => $this->cliente->empresa->tiss_sequencialTransacao + 1,
-            'data'       => $this->data,
-            'nomexml'    => $nomexml,
-            'caminhoxml' => $caminhoxml . '/' . $nomexml
-        ])->save();
+        // $this->tiss->fill([
+        //     'cliente_id' => $this->cliente->id,
+        //     'sequencia'  => $this->cliente->empresa->tiss_sequencialTransacao + 1,
+        //     'data'       => $this->data,
+        //     'hora'       => $this->hora,
+        //     'nomexml'    => $nomexml,
+        //     'caminhoxml' => $caminhoxml . '/' . $nomexml
+        // ])->save();
 
         // $empresa = Empresa::find($this->cliente->empresa->id);
         // $empresa->tiss_sequencialTransacao = $this->cliente->empresa->tiss_sequencialTransacao + 1;
@@ -475,9 +473,6 @@ class TissService
         $this->xml->endElement(); #ans:hash');
         $this->xml->endElement(); #ans:epilogo>
         $this->xml->endElement(); #ans:mensagemTISS>
-        // $this->finalizarArquivo();
-
-        // return base64_encode($this->xml->outputMemory());
     }
 
     public function montar_xml_3_05_00()
@@ -490,7 +485,7 @@ class TissService
         $dados['valorMedicamentos']    = 0;
         $dados['valorOPME']            = 0;
         $dados['valorGasesMedicinais'] = 0;
-        // $this->iniciarArquivo();
+
         $this->xml->startElement('ans:mensagemTISS');
         $this->xml->writeAttribute('xmlns:ans', 'http://www.ans.gov.br/padroes/tiss/schemas');
         $this->xml->writeAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
@@ -837,8 +832,5 @@ class TissService
         $this->xml->endElement(); #ans:hash
         $this->xml->endElement(); #ans:epilogo
         $this->xml->endElement(); #ans:mensagemTISS
-        // $this->finalizarArquivo();
-
-        // return base64_encode($this->xml->outputMemory());
     }
 }
