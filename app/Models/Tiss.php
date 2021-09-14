@@ -14,11 +14,15 @@ class Tiss extends Model
     use SoftDeletes;
 
     protected $table = 'tiss';
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     protected $fillable = [
         'id',
+        'cliente_id',
         'sequencia',
-        'datasolicitacao',
+        'data',
+        'nomexml',
         'caminhoxml',
         'created_at',
         'updated_at',

@@ -75,7 +75,7 @@ class ChatWebSocketController extends Controller implements MessageComponentInte
                     $from->send(json_encode(['type' => 'disconnect', 'mensagem' => 'Usuário inválido ou desconectado']));
                     return;
                 }
-               
+
 
                 // if (property_exists($resp, 'message')) {
                 //     $from->send(json_encode(['type' => 'disconnect', 'mensagem' => 'Usuário inválido ou desconectado']));
@@ -245,7 +245,7 @@ class ChatWebSocketController extends Controller implements MessageComponentInte
                     'receive_id' => $message->receive,
                 ])->save();
             }
-            Log::info('file1.5');
+            // Log::info('file1.5');
 
             $mensagem = new ConversaMensagem();
             try {
@@ -265,7 +265,7 @@ class ChatWebSocketController extends Controller implements MessageComponentInte
                 Log::info('top');
                 return;
             }
-            Log::info('file2.1');
+            // Log::info('file2.1');
 
             if (isset($this->clientes_ids[$message->receive])) {
                 foreach ($this->clientes_ids[$message->receive] as $socket) {
@@ -293,7 +293,7 @@ class ChatWebSocketController extends Controller implements MessageComponentInte
 
             ]));
 
-            Log::info('file3');
+            // Log::info('file3');
 
             // foreach ($this->clients as $client) {
             //     if ($client->resourceId != $from->resourceId) {
