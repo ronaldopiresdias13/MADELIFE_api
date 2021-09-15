@@ -152,10 +152,10 @@ class OrdemservicosController extends Controller
             ->withCount('escalas')
             ->where('empresa_id', $profissional->empresa_id)
             ->where('ativo', true)
+            // ->orderByDesc('orcamento.homecare.paciente.pessoa.nome')
             ->select(['id', 'orcamento_id', 'profissional_id']);
-
         if ($request->paginate) {
-            $escalas = $escalas->paginate($request['per_page'] ? $request['per_page'] : 15);
+            $escalas = $escalas->paginate($request['per_page'] ? $request['per_page'] : 15)->sortBy('orcamento.homecare.paciente.pessoa.nome');
         } else {
             $escalas = $escalas->get();
         }
