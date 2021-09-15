@@ -262,8 +262,8 @@ class ProfissionaisController extends Controller
                                 'email' => $email['email'],
                             ]
                         )->id,
-                        'tipo'      => $email['tipo'],
-                        'descricao' => $email['descricao'],
+                        'tipo'      => $email['pivot']['tipo'],
+                        'descricao' => $email['pivot']['descricao'],
                     ]);
                 }
             }
