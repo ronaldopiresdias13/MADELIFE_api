@@ -117,6 +117,55 @@ class OrdemservicosController extends Controller
      */
     public function listaOrdemServicosEscalas(Request $request)
     {
+        // $user = $request->user();
+        // $profissional = $user->pessoa->profissional;
+
+        // $escalas = Ordemservico::with([
+        //     // 'servicos',
+        //     'acessos',
+        //     'profissional.pessoa',
+        //     'orcamento.cidade', 'orcamento' => function ($query) {
+        //         $query->with(['servicos.servico', 'homecare' => function ($query) {
+        //             $query->with(['paciente.pessoa', 'paciente.responsavel.pessoa']);
+        //         }]);
+        //         $query->with(['cliente' => function ($query) {
+        //             $query->select('id', 'pessoa_id');
+        //             $query->with(['pessoa' => function ($query) {
+        //                 $query->select('id', 'nome');
+        //             }]);
+        //         }]);
+        //     }
+        // ])
+        //     ->whereHas('orcamento.cliente', function (Builder $query) use ($request) {
+        //         $query->where('id', 'like', $request->cliente_id ? $request->cliente_id : '%');
+        //     })
+        //     ->whereHas('orcamento.cidade', function (Builder $query) use ($request) {
+        //         $query->where('id', 'like', $request->cidade_id ? $request->cidade_id : '%');
+        //     })
+        //     ->whereHas('orcamento.homecare.paciente.pessoa', function (Builder $query) use ($request) {
+        //         $query->where('nome', 'like', $request->nome ? $request->nome : '%');
+        //     })
+        //     ->whereHas('profissional', function (Builder $query) use ($request) {
+        //         $query->where('id', 'like', $request->profissional_id ? $request->profissional_id : '%');
+        //     })
+        //     ->withCount('prestadores')
+        //     ->withCount('escalas')
+        //     ->where('empresa_id', $profissional->empresa_id)
+        //     ->where('ativo', true)
+        //     // ->orderByDesc('orcamento.homecare.paciente.pessoa.nome')
+        //     ->select(['id', 'orcamento_id', 'profissional_id']);
+        // if ($request->paginate) {
+        //     $escalas = $escalas->paginate($request['per_page'] ? $request['per_page'] : 15); //->sortBy('orcamento.homecare.paciente.pessoa.nome');
+        // } else {
+        //     $escalas = $escalas->get();
+        // }
+
+        // if (env("APP_ENV", 'production') == 'production') {
+        //     return $escalas->withPath(str_replace('http:', 'https:', $escalas->path()));
+        // } else {
+        //     return $escalas;
+        // }
+
         $user = $request->user();
         $profissional = $user->pessoa->profissional;
 
@@ -136,24 +185,34 @@ class OrdemservicosController extends Controller
                 }]);
             }
         ])
-            ->whereHas('orcamento.cliente', function (Builder $query) use ($request) {
-                $query->where('id', 'like', $request->cliente_id ? $request->cliente_id : '%');
-            })
-            ->whereHas('orcamento.cidade', function (Builder $query) use ($request) {
-                $query->where('id', 'like', $request->cidade_id ? $request->cidade_id : '%');
-            })
-            ->whereHas('orcamento.homecare.paciente.pessoa', function (Builder $query) use ($request) {
-                $query->where('nome', 'like', $request->nome ? $request->nome : '%');
-            })
-            ->whereHas('profissional', function (Builder $query) use ($request) {
-                $query->where('id', 'like', $request->profissional_id ? $request->profissional_id : '%');
-            })
-            ->withCount('prestadores')
-            ->withCount('escalas')
             ->where('empresa_id', $profissional->empresa_id)
             ->where('ativo', true)
+            ->withCount('prestadores')
+            ->withCount('escalas')
             // ->orderByDesc('orcamento.homecare.paciente.pessoa.nome')
             ->select(['id', 'orcamento_id', 'profissional_id']);
+
+        if ($request->cliente_id) {
+            $escalas->whereHas('orcamento.cliente', function (Builder $query) use ($request) {
+                $query->where('id', $request->cliente_id);
+            });
+        }
+        if ($request->cidade_id) {
+            $escalas->whereHas('orcamento.cidade', function (Builder $query) use ($request) {
+                $query->where('id', $request->cidade_id);
+            });
+        }
+        if ($request->nome) {
+            $escalas->whereHas('orcamento.homecare.paciente.pessoa', function (Builder $query) use ($request) {
+                $query->where('nome', $request->nome);
+            });
+        }
+        if ($request->profissional_id) {
+            $escalas->whereHas('profissional', function (Builder $query) use ($request) {
+                $query->where('id', $request->profissional_id);
+            });
+        }
+
         if ($request->paginate) {
             $escalas = $escalas->paginate($request['per_page'] ? $request['per_page'] : 15); //->sortBy('orcamento.homecare.paciente.pessoa.nome');
         } else {
