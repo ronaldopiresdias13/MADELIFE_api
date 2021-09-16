@@ -19,7 +19,13 @@ class Teste extends Controller
         $user = $request->user();
         $profissional = $user->pessoa->profissional;
 
-        $escalas = Ordemservico::with([
+        $escalas = Ordemservico::
+        join('orcamentos','orcamentos.id','=','ordemservicos.orcamento_id')
+        ->join('homecares','homecares.orcamento_id','=','ordemservicos.orcamento_id')
+        ->join('pacientes','pacientes.id','=','homecares.paciente_id')
+        ->join('pessoas','pessoas.id','=','pacientes.pessoa_id')
+
+        ->with([
             // 'servicos',
             'acessos',
             'profissional.pessoa',
@@ -49,11 +55,13 @@ class Teste extends Controller
             })
             ->withCount('prestadores')
             ->withCount('escalas')
-            ->where('empresa_id', $profissional->empresa_id)
-            ->where('ativo', true)
+            ->where('ordemservicos.empresa_id', $profissional->empresa_id)
+            ->where('ordemservicos.ativo', true)
             // ->limit(1)
-            ->orderByDesc('orcamento.homecare.paciente.pessoa.nome')
-            ->select(['id', 'orcamento_id', 'profissional_id']);
+            ->orderByDesc('pessoas.nome')
+
+            // ->orderByDesc('orcamento.homecare.paciente.pessoa.nome')
+            ->select(['ordemservicos.id', 'ordemservicos.orcamento_id', 'ordemservicos.profissional_id']);
         if ($request->paginate) {
             $escalas = $escalas->paginate($request['per_page'] ? $request['per_page'] : 15); //->sortBy('orcamento.homecare.paciente.pessoa.nome');
         } else {
@@ -61,7 +69,8 @@ class Teste extends Controller
         }
 
         if (env("APP_ENV", 'production') == 'production') {
-            return $escalas->withPath(str_replace('http:', 'https:', $escalas->path()));
+            // return $escalas->withPath(str_replace('http:', 'https:', $escalas->path()));
+            return $escalas;
         } else {
             return $escalas;
         }
