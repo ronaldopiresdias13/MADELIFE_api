@@ -47,9 +47,9 @@ class CnabsController extends Controller
         if ($resposta['status'] == true) {
             return $resposta;
         } else {
-            Log::error('Erro ao gerar o Cnab. Verifique se todos os dados estão corretos. Motivo: '.$resposta['message']);
+            Log::error('Erro ao gerar o Cnab. Verifique se todos os dados estão corretos. Motivo: ' . $resposta['message']);
             throw ValidationException::withMessages([
-                'cnab' => ['Erro ao gerar o Cnab. Verifique se todos os dados estão corretos. Motivo: '.$resposta['message']],
+                'cnab' => ['Erro ao gerar o Cnab. Verifique se todos os dados estão corretos. Motivo: ' . $resposta['message']],
             ]);
         }
     }
@@ -75,7 +75,7 @@ class CnabsController extends Controller
         $pessoa = $user->pessoa;
         $profissinal = $pessoa->profissional()->first();
         // $user = $request->user();
-        $pessoas_ids=[];
+        $pessoas_ids = [];
         if ($data['situacao'] == 'Pago') {
             if (isset($data['ids'])) {
                 $registro->pagamentos()->whereIn('cnabpessoas.id', $data['ids'])->update(['status' => 'P']);
@@ -87,8 +87,8 @@ class CnabsController extends Controller
 
                 Pagamentopessoa::with(['pessoa.dadosbancario.banco'])
                     ->where('empresa_id', $profissinal->empresa_id)
-                    ->whereIn('pessoa_id',  $pessoas_ids)
-                    ->whereIn('pessoa_id',  $pessoas_ids_total)
+                    ->whereIn('pessoa_id', $pessoas_ids)
+                    ->whereIn('pessoa_id', $pessoas_ids_total)
                     ->where('situacao', 'Aprovado')
                     // ->where('status', false)
                     ->where(DB::raw("date_format(str_to_date(pagamentopessoas.periodo1, '%Y-%m-%d'), '%Y-%m')"), "=", $registro->mes)
@@ -96,9 +96,9 @@ class CnabsController extends Controller
 
                 Pagamentopessoa::with(['pessoa.dadosbancario.banco'])
                     ->where('empresa_id', $profissinal->empresa_id)
-                    ->whereNotIn('pessoa_id',  $pessoas_ids)
+                    ->whereNotIn('pessoa_id', $pessoas_ids)
                     ->where('situacao', 'Aprovado')
-                    ->whereIn('pessoa_id',  $pessoas_ids_total)
+                    ->whereIn('pessoa_id', $pessoas_ids_total)
 
                     // ->where('status', false)
                     ->where(DB::raw("date_format(str_to_date(pagamentopessoas.periodo1, '%Y-%m-%d'), '%Y-%m')"), "=", $registro->mes)
@@ -108,6 +108,6 @@ class CnabsController extends Controller
 
         $registro->fill($data)->save();
 
-        return response()->json(['status' => true,'pessoas_ids'=>$pessoas_ids]);
+        return response()->json(['status' => true, 'pessoas_ids' => $pessoas_ids]);
     }
 }

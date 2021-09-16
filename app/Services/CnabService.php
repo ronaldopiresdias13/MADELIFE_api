@@ -63,7 +63,7 @@ class CnabService
         $this->observacao = $observacao;
     }
 
-    function sanitizeString($str)
+    public function sanitizeString($str)
     {
         $str = preg_replace('/[áàãâä]/ui', 'a', $str);
         $str = preg_replace('/[éèêë]/ui', 'e', $str);
@@ -97,10 +97,10 @@ class CnabService
         if ($this->banco != '033' && $this->banco != '748') {
             return ['status' => false,'message'=>'Código do banco inválido'];
         }
-        if($dados_santander!=null){
+        if ($dados_santander!=null) {
             $this->santander = $dados_santander->toArray();
         }
-        if($dados_sicredi!=null){
+        if ($dados_sicredi!=null) {
             $this->sicred = $dados_sicredi->toArray();
         }
 
@@ -108,7 +108,6 @@ class CnabService
             $cnabs = [];
 
             if ($this->santander['convenio'] != null) {
-
                 $cnab = '';
                 $cnab .= $this->header_arquivo_santander('033');
                 $quantidade_lotes = 0;
@@ -132,7 +131,6 @@ class CnabService
                         ->get()->sum('valor');
 
                     if ($pagamentos > 0) {
-
                         array_push($dados_pagamento, [
                             'user_id' => $dado['profissional_id'],
                             'valor' => $pagamentos,
@@ -190,7 +188,6 @@ class CnabService
             }
 
             if ($this->santander['convenio_externo'] != null) {
-
                 $cnab = '';
                 $cnab .= $this->header_arquivo_santander('000');
                 //lote apenas usuários sem conta santander
@@ -278,7 +275,6 @@ class CnabService
         } elseif ($this->banco == '748') {
             $cnabs = [];
             if ($this->sicred['convenio'] != null) {
-
                 $cnab = '';
                 $cnab .= $this->header_arquivo_sicredi($this->banco);
 
@@ -623,7 +619,8 @@ class CnabService
 
         $cod_remessa_retorno = "1"; //143 a 143
 
-        $data_geracao_arquivo = Carbon::now()->format('dmY');; //144 a 151 /DDMMAAAA
+        $data_geracao_arquivo = Carbon::now()->format('dmY');
+        ; //144 a 151 /DDMMAAAA
 
         $hora_geracao_arquivo = Carbon::now()->format('His'); //152 a 157 //HHMMSS
 
@@ -1482,7 +1479,6 @@ class CnabService
         $valor_desconto = '';
         $num = Str::length($valor_desconto . '');
         if ($user_data['codigo'] == "033") {
-
             for ($i = 166 + $num; $i <= 180; $i++) {
                 $valor_desconto = "0" . $valor_desconto;
             }
@@ -1504,7 +1500,6 @@ class CnabService
         $num = Str::length($valor_multa . '');
 
         if ($user_data['codigo'] == "033") {
-
             for ($i = 196 + $num; $i <= 210; $i++) {
                 $valor_multa = "0" . $valor_multa;
             }
@@ -1652,7 +1647,8 @@ class CnabService
         }
 
 
-        $cod_documento_favorecido = $user_data['codigo'] == "748" ? '' : "0000";;
+        $cod_documento_favorecido = $user_data['codigo'] == "748" ? '' : "0000";
+        ;
         $num = Str::length($cod_documento_favorecido . '');
 
         for ($i = 211 + $num; $i <= 225; $i++) {
