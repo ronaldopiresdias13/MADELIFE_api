@@ -79,7 +79,7 @@ class TissController extends Controller
      */
     public function index(Request $request)
     {
-        $result = Tiss::with('cliente.pessoa', 'medicoes')->orderBy('created_at', 'desc');
+        $result = Tiss::with('cliente.pessoa', 'medicoes.ordemservico.orcamento.homecare.paciente.pessoa')->orderBy('created_at', 'desc');
 
         if ($request->paginate) {
             $result = $result->paginate($request['per_page'] ? $request['per_page'] : 15);
