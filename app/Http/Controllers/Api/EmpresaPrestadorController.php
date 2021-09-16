@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\EmpresaPrestador;
 use App\Models\Empresa;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -313,6 +314,7 @@ class EmpresaPrestadorController extends Controller
 
     public function listaPrestadoresPorEmpresaIdEStatus(Request $request)
     {
+        
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
         return EmpresaPrestador::with([
@@ -322,10 +324,13 @@ class EmpresaPrestadorController extends Controller
             'prestador.pessoa.enderecos.cidade',
             'prestador.pessoa.telefones',
             'prestador.pessoa.emails',
-            'prestador.ordemservicos'
+            'prestador.ordemservicos',
         ])
+        ->whereHas('prestador.pessoa', function (Builder $builder) use ($request){
+            $builder->where('nome','like', '%' . $request->nome . '%');
+        })
             ->where('empresa_id', $empresa_id)
             ->where('status', $request['status'])
-            ->get();
+            ->paginate(15);
     }
 }

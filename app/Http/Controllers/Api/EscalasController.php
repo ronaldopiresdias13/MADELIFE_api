@@ -151,8 +151,8 @@ class EscalasController extends Controller
         $escala = new Escala();
         if ($ordemservico) {
             $escala->tipo             = $tipo;
-            $escala->valorhoradiurno  = $valorD ? ($tipo == 'Plantão' ? $valorD / $horasD : $valorD) : $valorD;
-            $escala->valorhoranoturno = $valorN ? ($tipo == 'Plantão' ? $valorN / $horasN : $valorN) : $valorN;
+            $escala->valorhoradiurno  = $horasD ? ($valorD ? ($tipo == 'Plantão' ? $valorD / $horasD : $valorD) : $valorD) : 0;
+            $escala->valorhoranoturno = $horasN ? ($valorN ? ($tipo == 'Plantão' ? $valorN / $horasN : $valorN) : $valorN) : 0;
             $escala->valoradicional   = 0;
         }
         $escala->empresa_id            = $request->empresa_id;
@@ -257,6 +257,7 @@ class EscalasController extends Controller
         $escala->assinaturaresponsavel = $request->assinaturaresponsavel ?: $escala->assinaturaresponsavel;
         $escala->observacao            = $request->observacao;
         $escala->status                = $request->status;
+        $escala->editavel              = $request->editavel;
         $escala->folga                 = $request->folga;
         $escala->substituto            = $request->substituto;
         $escala->tipo                  = $request->tipo;

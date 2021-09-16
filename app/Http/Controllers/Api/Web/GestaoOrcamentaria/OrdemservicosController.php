@@ -20,7 +20,7 @@ class OrdemservicosController extends Controller
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
         $pacientes = Ordemservico::with([
-            'orcamento.homecare.paciente.pessoa:id,nome,cpfcnpj,rgie,nascimento',
+            'orcamento.homecare.paciente.pessoa:id,nome,cpfcnpj,rgie,nascimento', 'orcamento.cliente:id',
             'orcamento.servicos.servico', 'orcamento.produtos.produto', 'orcamento.custos', 'orcamento.homecare.paciente.internacoes', 'orcamento.cliente.pessoa:id,nome'
         ]);
         if ($request->data_final) {
@@ -136,12 +136,34 @@ class OrdemservicosController extends Controller
                 }]);
             }
         ])
+            ->whereHas('orcamento.cliente', function (Builder $query) use ($request) {
+                $query->where('id', 'like', $request->cliente_id ? $request->cliente_id : '%');
+            })
+            ->whereHas('orcamento.cidade', function (Builder $query) use ($request) {
+                $query->where('id', 'like', $request->cidade_id ? $request->cidade_id : '%');
+            })
+            ->whereHas('orcamento.homecare.paciente.pessoa', function (Builder $query) use ($request) {
+                $query->where('nome', 'like', $request->nome ? $request->nome : '%');
+            })
+            ->whereHas('profissional', function (Builder $query) use ($request) {
+                $query->where('id', 'like', $request->profissional_id ? $request->profissional_id : '%');
+            })
             ->withCount('prestadores')
             ->withCount('escalas')
             ->where('empresa_id', $profissional->empresa_id)
             ->where('ativo', true)
-            ->get(['id', 'orcamento_id']);
+            // ->orderByDesc('orcamento.homecare.paciente.pessoa.nome')
+            ->select(['id', 'orcamento_id', 'profissional_id']);
+        if ($request->paginate) {
+            $escalas = $escalas->paginate($request['per_page'] ? $request['per_page'] : 15)->sortBy('orcamento.homecare.paciente.pessoa.nome');
+        } else {
+            $escalas = $escalas->get();
+        }
 
-        return $escalas;
+        if (env("APP_ENV", 'production') == 'production') {
+            return $escalas->withPath(str_replace('http:', 'https:', $escalas->path()));
+        } else {
+            return $escalas;
+        }
     }
 }
