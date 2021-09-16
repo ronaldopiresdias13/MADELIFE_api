@@ -156,6 +156,10 @@ class OrdemservicosController extends Controller
             $escalas->whereHas('orcamento.cidade', function (Builder $query) use ($request) {
                 $query->where('id', $request->cidade_id);
             });
+        } if ($request->uf) {
+            $escalas->whereHas('orcamento.cidade', function (Builder $query) use ($request) {
+                $query->where('uf', $request->uf);
+            });
         }
         if ($request->nome) {
             $escalas->whereHas('orcamento.homecare.paciente.pessoa', function (Builder $query) use ($request) {
