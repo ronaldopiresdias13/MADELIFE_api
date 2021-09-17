@@ -37,6 +37,7 @@ class CnabsController extends Controller
 
     public function gerarCnab(CnabRequest $request)
     {
+        // return $request;
         $data = $request->validated();
 
         $user = $request->user();
