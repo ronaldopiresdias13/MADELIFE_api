@@ -89,18 +89,18 @@ class CnabService
         $dados_sicredi = EmpresaDados::where('empresa_id', '=', $empresa_id)->where('codigo', '=', '748')->first();
 
         if ($this->banco == '033' && $dados_santander == null) {
-            return ['status' => false,'message'=>'Dados do Santander inválidos'];
+            return ['status' => false, 'message' => 'Dados do Santander inválidos'];
         }
         if ($this->banco == '748' && $dados_sicredi == null) {
-            return ['status' => false,'message'=>'Dados do Sicredi inválidos'];
+            return ['status' => false, 'message' => 'Dados do Sicredi inválidos'];
         }
         if ($this->banco != '033' && $this->banco != '748') {
-            return ['status' => false,'message'=>'Código do banco inválido'];
+            return ['status' => false, 'message' => 'Código do banco inválido'];
         }
-        if ($dados_santander!=null) {
+        if ($dados_santander != null) {
             $this->santander = $dados_santander->toArray();
         }
-        if ($dados_sicredi!=null) {
+        if ($dados_sicredi != null) {
             $this->sicred = $dados_sicredi->toArray();
         }
 
@@ -269,7 +269,7 @@ class CnabService
                 }
             }
             if (count($cnabs) == 0) {
-                return ['status' => false,'message'=>'Os dados do convênio do Santander não estão preenchidos'];
+                return ['status' => false, 'message' => 'Os dados do convênio do Santander não estão preenchidos'];
             }
             return ['status' => true, 'cnabs' => $cnabs];
         } elseif ($this->banco == '748') {
@@ -320,7 +320,7 @@ class CnabService
                     $name = 'cnabs/cnab_sicredi_folha_' . Carbon::now()->format('Y-m-d_H-i-s') . '.txt';
 
                     Storage::disk('public')->put($name, $cnab);
-                    $process = new Process(['unix2dos',public_path('storage/'.$name) ]);
+                    $process = new Process(['unix2dos', public_path('storage/' . $name)]);
                     $process->run();
 
                     // executes after the command finishes
@@ -411,10 +411,10 @@ class CnabService
                     $name = 'cnabs/cnab_sicredi_fornecedor_' . Carbon::now()->format('Y-m-d_H-i-s') . '.txt';
 
                     Storage::disk('public')->put($name, $cnab);
-                    $process = new Process(['unix2dos',public_path('storage/'.$name) ]);
+                    $process = new Process(['unix2dos', public_path('storage/' . $name)]);
                     $process->run();
                     Log::info('chegou aqui2');
-                    Log::info('unix2dos '.public_path('storage/'.$name));
+                    Log::info('unix2dos ' . public_path('storage/' . $name));
                     // executes after the command finishes
                     if (!$process->isSuccessful()) {
                         Log::error($process);
@@ -452,11 +452,11 @@ class CnabService
                 }
             }
             if (count($cnabs) == 0) {
-                return ['status' => false,'message'=>'Os dados do convênio do Sicredi não estão preenchidos'];
+                return ['status' => false, 'message' => 'Os dados do convênio do Sicredi não estão preenchidos'];
             }
             return ['status' => true, 'cnabs' => $cnabs];
         }
-        return ['status' => false,'message'=>'Código do banco inválido'];
+        return ['status' => false, 'message' => 'Código do banco inválido'];
         //trailer de arquivo
     }
 
@@ -1112,7 +1112,7 @@ class CnabService
         for ($i = 44 + $num; $i <= 73; $i++) {
             $nome_favorecido = $nome_favorecido . ' ';
         }
-        $cpf_cnpj = Str::replaceArray('.', [''], $pessoa->cpfcnpj);
+        $cpf_cnpj = Str::replaceArray('.', [''], $user_data['cpfcnpj']);
         $cpf_cnpj = Str::replaceArray('.', [''], $cpf_cnpj);
         $cpf_cnpj = Str::replaceArray('.', [''], $cpf_cnpj);
 
@@ -1269,7 +1269,7 @@ class CnabService
         for ($i = 44 + $num; $i <= 73; $i++) {
             $nome_favorecido = $nome_favorecido . ' ';
         }
-        $cpf_cnpj = Str::replaceArray('.', [''], $pessoa->cpfcnpj);
+        $cpf_cnpj = Str::replaceArray('.', [''], $user_data['cpfcnpj']);
         $cpf_cnpj = Str::replaceArray('.', [''], $cpf_cnpj);
         $cpf_cnpj = Str::replaceArray('.', [''], $cpf_cnpj);
 
@@ -1397,7 +1397,7 @@ class CnabService
         $uso_exclusivo = '   ';
 
         $tipo_inscricao = '';
-        $cpf_cnpj = Str::replaceArray('.', [''], $pessoa->cpfcnpj);
+        $cpf_cnpj = Str::replaceArray('.', [''], $user_data['cpfcnpj']);
         $cpf_cnpj = Str::replaceArray('.', [''], $cpf_cnpj);
         $cpf_cnpj = Str::replaceArray('.', [''], $cpf_cnpj);
 
@@ -1574,7 +1574,7 @@ class CnabService
         $uso_exclusivo = '   ';
 
         $tipo_inscricao = '';
-        $cpf_cnpj = Str::replaceArray('.', [''], $pessoa->cpfcnpj);
+        $cpf_cnpj = Str::replaceArray('.', [''], $user_data['cpfcnpj']);
         $cpf_cnpj = Str::replaceArray('.', [''], $cpf_cnpj);
         $cpf_cnpj = Str::replaceArray('.', [''], $cpf_cnpj);
 
