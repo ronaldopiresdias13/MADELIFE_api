@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('web/folgas', [FolgasController::class, 'index']);
+    Route::get('web/filtroPorPeriodo', [FolgasController::class, 'filtroPorPeriodo']);
     Route::get('web/folgas/aguardando', [FolgasController::class, 'listAguardando']);
     Route::get('web/folgas/aprovadas', [FolgasController::class, 'listAprovadas']);
     Route::get('web/folgas/reprovadas', [FolgasController::class, 'listReprovadas']);
