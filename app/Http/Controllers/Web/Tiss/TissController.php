@@ -14,8 +14,6 @@ class TissController extends Controller
 {
     public function gerarXml(Request $request, Cliente $cliente)
     {
-        // return $request;
-        // $empresa_id = $request->user()->pessoa->profissional->empresa_id;
         $medicoes = Medicao::with(
             'medicao_produtos.produto',
             'medicao_servicos.servico',
@@ -24,17 +22,12 @@ class TissController extends Controller
             ->whereIn('id', $request->medicoes)
             ->get();
 
-        // return $medicao;
-        // $empresa = Empresa::find($empresa_id);
-
         if ($cliente->versaoTiss) {
-            $func = 'gerar_xml_' . $cliente->versaoTiss;
             $tissService = new TissService($medicoes, $cliente);
-            $resposta = $tissService->$func($medicoes, $cliente);
+            $resposta = $tissService->criarXml();
 
             if ($resposta) {
-                // return $resposta;
-                return response()->json(['tiss' => $resposta], 200)->header('Content-Type', 'application/xml');
+                return response()->json('Ok!\nSalvo com Sucesso!', 200)->header('Content-Type', 'text/plain');
             } else {
                 throw ValidationException::withMessages([
                     'tiss' => ['Erro ao gerar o TISS. Verifique se todos os dados estão corretos'],
@@ -43,43 +36,11 @@ class TissController extends Controller
         } else {
             return response()->json('Erro!\nVersão do TISS não informado no cadastro do Cliente!', 400)->header('Content-Type', 'text/plain');
         }
-
-
-
-
-        // $empresa_id = $request->user()->pessoa->profissional->empresa_id;
-        // $medicao = Medicao::with(
-        //     'medicao_produtos.produto',
-        //     'medicao_servicos.servico',
-        //     'ordemservico.orcamento.homecare.paciente.pessoa'
-        // )->find($request->medicoes);
-        // $empresa = Empresa::find($empresa_id);
-
-        // if ($medicao->cliente->versaoTiss) {
-        //     $func = 'gerar_xml_' . $medicao->cliente->versaoTiss;
-        //     // $tissService = new TissService($medicao, $empresa);
-        //     // $resposta = $tissService->$func();
-        //     $tissService = new TissService($medicao, $empresa);
-        //     $resposta = $tissService->$func();
-
-        //     if ($resposta) {
-        //         // return $resposta;
-        //         return response()->json(['tiss' => $resposta], 200)->header('Content-Type', 'application/xml');
-        //     } else {
-        //         throw ValidationException::withMessages([
-        //             'tiss' => ['Erro ao gerar o TISS. Verifique se todos os dados estão corretos'],
-        //         ]);
-        //     }
-        // } else {
-        //     return response()->json('Erro!\nVersão do TISS não informado no cadastro do Cliente!', 400)->header('Content-Type', 'text/plain');
-        // }
     }
 
-    public function gerarXmlPorCliente(Request $request, Cliente $cliente)
+    public function editarXml(Request $request, Cliente $cliente)
     {
-        // return $request;
-        // $empresa_id = $request->user()->pessoa->profissional->empresa_id;
-        $medicao = Medicao::with(
+        $medicoes = Medicao::with(
             'medicao_produtos.produto',
             'medicao_servicos.servico',
             'ordemservico.orcamento.homecare.paciente.pessoa'
@@ -87,17 +48,20 @@ class TissController extends Controller
             ->whereIn('id', $request->medicoes)
             ->get();
 
-        // return $medicao;
-        // $empresa = Empresa::find($empresa_id);
-
         if ($cliente->versaoTiss) {
-            $func = 'gerar_xml_' . $cliente->versaoTiss;
-            // $tissService = new TissService($medicao, $empresa);
-            $resposta = $this->$func($medicao, $cliente);
+            $tiss = $request['tiss_id'];
+            $tissService = new TissService($medicoes, $cliente, $tiss);
+            $resposta = $tissService->editarXml();
 
             if ($resposta) {
-                // return $resposta;
-                return response()->json(['tiss' => $resposta], 200)->header('Content-Type', 'application/xml');
+                $medicoes = Medicao::where('tiss_id', $tiss)
+                    ->whereNotIn('id', $request->medicoes)
+                    ->get();
+                foreach ($medicoes as $key => $medicao) {
+                    $medicao->tiss_id = null;
+                    $medicao->save();
+                }
+                return response()->json('Ok!\nSalvo com Sucesso!', 200)->header('Content-Type', 'text/plain');
             } else {
                 throw ValidationException::withMessages([
                     'tiss' => ['Erro ao gerar o TISS. Verifique se todos os dados estão corretos'],
@@ -115,7 +79,7 @@ class TissController extends Controller
      */
     public function index(Request $request)
     {
-        $result = Tiss::orderBy('created_at', 'desc');
+        $result = Tiss::with('cliente.pessoa', 'medicoes.ordemservico.orcamento.homecare.paciente.pessoa')->orderBy('created_at', 'desc');
 
         if ($request->paginate) {
             $result = $result->paginate($request['per_page'] ? $request['per_page'] : 15);
@@ -130,19 +94,11 @@ class TissController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function downloadTiss(Tiss $tiss)
     {
-        $tiss = new Tiss();
-        $tiss->fill([
-            'sequencia' => $request->sequencia,
-            'caminhoxml' => $request->caminhoxml
-        ]);
-        $tiss->save();
+        $headers = [
+            'Content-type'        => 'text/txt',
+        ];
+        return response()->download($tiss->caminhoxml, $tiss->nomexml, $headers);
     }
 }

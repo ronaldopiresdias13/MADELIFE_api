@@ -4,7 +4,7 @@ use App\Http\Controllers\Web\Prestadores\PrestadoresController;
 use App\Http\Controllers\Api\EmpresaPrestadorController;
 use Illuminate\Support\Facades\Route;
 
-// Route::group(['middleware' => 'auth:api'], function () {
+Route::group(['middleware' => 'auth:api'], function () {
     Route::get('web/areaClinica/profissionais/historicopacientesprestador/{prestador}', 'Api\Web\PrestadoresController@historicopacientesprestador');
     Route::get('web/prestadores/recrutamento', [PrestadoresController::class, 'listRecrutamento']);
     Route::get('web/prestadores/empresaPrestador/listaPrestadoresPorEmpresaIdEStatus', [EmpresaPrestadorController::class, 'listaPrestadoresPorEmpresaIdEStatus']);
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('web/prestadores/listNomePrestadores', 'Api\Web\PrestadoresController@listNomePrestadores');
     Route::get('web/prestadores/listPrestadoresComFormacoes', 'Api\Web\PrestadoresController@listPrestadoresComFormacoes');
     Route::get('web/prestadores/buscaPrestadoresPorCliente', [PrestadoresController::class, 'buscaPrestadoresPorCliente']);
-// });
+});
 
 Route::get('prestadores/atribuicao', 'Api\Web\PrestadoresController@buscaprestadoresporfiltro'); // MUDAR AQUII DEPOIS
 

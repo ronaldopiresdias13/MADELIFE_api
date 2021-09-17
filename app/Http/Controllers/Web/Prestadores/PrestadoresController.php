@@ -139,7 +139,9 @@ class PrestadoresController extends Controller
      */
     public function buscaPrestadoresPorCliente(Request $request)
     {
-        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa->id;
+
         return DB::select(
             "
             SELECT profp.nome AS prestador, profp.cpfcnpj, con.instituicao, con.numero, pp.nome AS paciente, e.periodo, e.tipo, s.descricao, COUNT(e.id) AS total  FROM escalas AS e

@@ -20,7 +20,7 @@ class OrdemservicosController extends Controller
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
         $pacientes = Ordemservico::with([
-            'orcamento.homecare.paciente.pessoa:id,nome,cpfcnpj,rgie,nascimento', 'orcamento.cliente:id',
+            'orcamento.homecare.paciente.pessoa:id,nome,cpfcnpj,rgie,nascimento', 'orcamento.cliente.pessoa', 'orcamento.orcamentoservicos',
             'orcamento.servicos.servico', 'orcamento.produtos.produto', 'orcamento.custos', 'orcamento.homecare.paciente.internacoes', 'orcamento.cliente.pessoa:id,nome'
         ]);
         if ($request->data_final) {
@@ -120,28 +120,68 @@ class OrdemservicosController extends Controller
         $user = $request->user();
         $profissional = $user->pessoa->profissional;
 
-        $escalas = Ordemservico::with([
-            // 'servicos',
-            'acessos',
-            'profissional.pessoa',
-            'orcamento.cidade', 'orcamento' => function ($query) {
-                $query->with(['servicos.servico', 'homecare' => function ($query) {
-                    $query->with(['paciente.pessoa', 'paciente.responsavel.pessoa']);
-                }]);
-                $query->with(['cliente' => function ($query) {
-                    $query->select('id', 'pessoa_id');
-                    $query->with(['pessoa' => function ($query) {
-                        $query->select('id', 'nome');
+        $escalas = Ordemservico::join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
+            ->join('homecares', 'homecares.orcamento_id', '=', 'ordemservicos.orcamento_id')
+            ->join('pacientes', 'pacientes.id', '=', 'homecares.paciente_id')
+            ->join('pessoas', 'pessoas.id', '=', 'pacientes.pessoa_id')
+            ->with([
+                // 'servicos',
+                'acessos',
+                'profissional.pessoa',
+                'orcamento.cidade', 'orcamento' => function ($query) {
+                    $query->with(['servicos.servico', 'homecare' => function ($query) {
+                        $query->with(['paciente.pessoa', 'paciente.responsavel.pessoa']);
                     }]);
-                }]);
-            }
-        ])
+                    $query->with(['cliente' => function ($query) {
+                        $query->select('id', 'pessoa_id');
+                        $query->with(['pessoa' => function ($query) {
+                            $query->select('id', 'nome');
+                        }]);
+                    }]);
+                }
+            ])
+            ->where('ordemservicos.empresa_id', $profissional->empresa_id)
+            ->where('ordemservicos.ativo', true)
             ->withCount('prestadores')
             ->withCount('escalas')
-            ->where('empresa_id', $profissional->empresa_id)
-            ->where('ativo', true)
-            ->get(['id', 'orcamento_id']);
+            ->orderBy('pessoas.nome')
+            ->select(['ordemservicos.id', 'ordemservicos.orcamento_id', 'ordemservicos.profissional_id']);
 
-        return $escalas;
+        if ($request->cliente_id) {
+            $escalas->whereHas('orcamento.cliente', function (Builder $query) use ($request) {
+                $query->where('id', $request->cliente_id);
+            });
+        }
+        if ($request->cidade_id) {
+            $escalas->whereHas('orcamento.cidade', function (Builder $query) use ($request) {
+                $query->where('id', $request->cidade_id);
+            });
+        } if ($request->uf) {
+            $escalas->whereHas('orcamento.cidade', function (Builder $query) use ($request) {
+                $query->where('uf', $request->uf);
+            });
+        }
+        if ($request->nome) {
+            $escalas->whereHas('orcamento.homecare.paciente.pessoa', function (Builder $query) use ($request) {
+                $query->where('nome', $request->nome);
+            });
+        }
+        if ($request->profissional_id) {
+            $escalas->whereHas('profissional', function (Builder $query) use ($request) {
+                $query->where('id', $request->profissional_id);
+            });
+        }
+
+        if ($request->paginate) {
+            $escalas = $escalas->paginate($request['per_page'] ? $request['per_page'] : 15); //->sortBy('orcamento.homecare.paciente.pessoa.nome');
+        } else {
+            $escalas = $escalas->get();
+        }
+
+        if (env("APP_ENV", 'production') == 'production') {
+            return $escalas->withPath(str_replace('http:', 'https:', $escalas->path()));
+        } else {
+            return $escalas;
+        }
     }
 }
