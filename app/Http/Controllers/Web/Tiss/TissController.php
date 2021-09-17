@@ -97,7 +97,7 @@ class TissController extends Controller
     public function downloadTiss(Tiss $tiss)
     {
         $headers = [
-            'Content-type'        => 'text/txt',
+            'Content-type' => 'text/txt',
         ];
         return response()->download($tiss->caminhoxml, $tiss->nomexml, $headers);
     }
