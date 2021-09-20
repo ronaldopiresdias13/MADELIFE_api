@@ -204,10 +204,16 @@ class ResponsaveisController extends Controller
                     'status'      => $request['pessoa']['status'],
                 ]);
             }
+
+            foreach ($pessoa->telefones as $key => $telefone) {
+                $pessoatelefone = Pessoatelefone::find($telefone->pivot->id);
+                $pessoatelefone->delete();
+            }
+
             if ($request['pessoa']['telefones']) {
                 foreach ($request['pessoa']['telefones'] as $key => $telefone) {
                     if ($telefone['telefone']) {
-                        PessoaTelefone::firstOrCreate(
+                        PessoaTelefone::updateOrCreate(
                             [
                                 'pessoa_id'   => $pessoa->id,
                                 'telefone_id' => Telefone::firstOrCreate(
@@ -245,6 +251,12 @@ class ResponsaveisController extends Controller
                     );
                 }
             }
+
+            foreach ($pessoa->emails as $key => $email) {
+                $pessoaemail = Pessoaemail::find($email->pivot->id);
+                $pessoaemail->delete();
+            }
+
             if ($request['pessoa']['emails']) {
                 foreach ($request['pessoa']['emails'] as $key => $email) {
                     if ($email['email']) {
