@@ -163,7 +163,7 @@ class OrdemservicosController extends Controller
         }
         if ($request->nome) {
             $escalas->whereHas('orcamento.homecare.paciente.pessoa', function (Builder $query) use ($request) {
-                $query->where('nome', $request->nome);
+                $query->where('nome', 'like', '%' . $request->nome . '%');
             });
         }
         if ($request->profissional_id) {
