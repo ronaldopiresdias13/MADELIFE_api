@@ -29,8 +29,8 @@ class DadosbancariosController extends Controller
     {
         DB::transaction(function () use ($request) {
             $dadosbancario = new Dadosbancario();
-            $dadosbancario->empresa_id = 1;
-            $dadosbancario->banco_id = $request->banco_id;
+            // $dadosbancario->empresa_id = 1;
+            $dadosbancario->banco_id = $request->banco['id'];
             $dadosbancario->pessoa_id = $request->pessoa_id;
             $dadosbancario->agencia = $request->agencia;
             $dadosbancario->conta = $request->conta;
@@ -72,7 +72,7 @@ class DadosbancariosController extends Controller
     public function update(Request $request, Dadosbancario $dadosbancario)
     {
         DB::transaction(function () use ($request, $dadosbancario) {
-            $dadosbancario->banco_id = $request->banco_id;
+            $dadosbancario->banco_id = $request->banco['id'];
             $dadosbancario->pessoa_id = $request->pessoa_id;
             $dadosbancario->agencia = $request->agencia;
             $dadosbancario->conta = $request->conta;

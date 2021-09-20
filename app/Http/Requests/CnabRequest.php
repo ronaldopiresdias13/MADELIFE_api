@@ -21,6 +21,7 @@ class CnabRequest extends FormRequest
     public function messages()
     {
         return [
+            'dados.*.cpfcnpj.required' => 'O CPF/CNPJ do usuário é obrigatório',
             'dados.*.codigo.required' => 'O código de banco do usuário é obrigatório',
             'dados.*.agencia.required' => 'A agência do banco do usuário é obrigatório',
             'dados.*.digito.required' => 'O dígito da conta do banco do profissional é obrigatório',
@@ -47,6 +48,7 @@ class CnabRequest extends FormRequest
                 return [
                     'dados' => 'required|array',
                     'dados.*.codigo' => ['required', 'max:3'],
+                    'dados.*.cpfcnpj' => ['required'],
                     'dados.*.conta' => ['required', 'max:12'],
                     'dados.*.agencia' => ['required', 'max:5'],
                     'dados.*.digito' => ['required', 'size:1'],
@@ -56,20 +58,20 @@ class CnabRequest extends FormRequest
                     'banco' => 'required',
                     'observacao' => 'required',
                 ];
-                break;
-            case 'mudarsituacao':
+        break;
+        case 'mudarsituacao':
                 return [
                     'cnab_id' => 'required',
                     'situacao' => 'required|string',
                     'justificativa' => [new RequiredIf($this->situacao == 'Não pago')],
                     'ids' => 'sometimes|nullable|array'
                 ];
-                break;
+        break;
 
 
-            default:
+        default:
                 return [];
-                break;
+        break;
         endswitch;
     }
 }
