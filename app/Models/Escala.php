@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\TracksHistoryTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Escala extends Model
 {
@@ -75,5 +76,15 @@ class Escala extends Model
     public function ocorrencias()
     {
         return $this->belongsToMany(Ocorrencia::class, 'ocorrencias_escalas','escala_id', 'ocorrencia_id');
+    }
+
+    /**
+     * Get the folga associated with the Escala
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function folga(): HasOne
+    {
+        return $this->hasOne(Folga::class);
     }
 }
