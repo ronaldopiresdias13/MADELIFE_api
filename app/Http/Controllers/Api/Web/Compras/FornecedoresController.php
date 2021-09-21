@@ -155,6 +155,12 @@ class FornecedoresController extends Controller
                     'status'      => $request['pessoa']['status'],
                 ]);
             }
+
+            foreach ($pessoa->telefones as $key => $telefone) {
+                $pessoatelefone = Pessoatelefone::find($telefone->pivot->id);
+                $pessoatelefone->delete();
+            }
+
             if ($request['pessoa']['telefones']) {
                 foreach ($request['pessoa']['telefones'] as $key => $telefone) {
                     if ($telefone['telefone']) {
@@ -196,6 +202,12 @@ class FornecedoresController extends Controller
                     );
                 }
             }
+
+            foreach ($pessoa->emails as $key => $email) {
+                $pessoaemail = Pessoaemail::find($email->pivot->id);
+                $pessoaemail->delete();
+            }
+
             if ($request['pessoa']['emails']) {
                 foreach ($request['pessoa']['emails'] as $key => $email) {
                     if ($email['email']) {
