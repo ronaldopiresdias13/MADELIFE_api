@@ -74,6 +74,6 @@ class Escala extends Model
 
     public function ocorrencias()
     {
-        return $this->belongsToMany(Ocorrencia::class, 'ocorrencias_escalas','escala_id', 'ocorrencia_id');
+        return $this->belongsToMany(Ocorrencia::class, 'ocorrencias_escalas', 'escala_id', 'ocorrencia_id');
     }
 }
