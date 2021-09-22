@@ -71,7 +71,7 @@ class PagamentosController extends Controller
         $pagamentos = Pagamento::with(['conta.pessoa'])
             ->where('ativo', true)
             ->where('empresa_id', $empresa_id)
-            ->where('contasbancaria_id', $request->contaBancaria)
+            ->where('contasbancaria_id', $request->contasbancaria)
             ->whereHas('conta', function (Builder $builder) {
                 $builder->where('ativo', true);
             });
