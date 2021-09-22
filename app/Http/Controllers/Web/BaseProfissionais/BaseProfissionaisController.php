@@ -14,9 +14,11 @@ class BaseProfissionaisController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return BaseProfissionais::all();
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+
+        return BaseProfissionais::where('empresa_id', $empresa_id)->get();
     }
 
     /**
@@ -27,8 +29,11 @@ class BaseProfissionaisController extends Controller
      */
     public function store(Request $request)
     {
-        DB::transaction(function () use ($request) {
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+
+        DB::transaction(function () use ($request, $empresa_id) {
             $baseprofissionais = new BaseProfissionais();
+            $baseprofissionais->empresa_id          = $empresa_id;
             $baseprofissionais->name                = $request->name;
             $baseprofissionais->email               = $request->email;
             // $baseprofissionais->activation_code     = $request->activation_code;
