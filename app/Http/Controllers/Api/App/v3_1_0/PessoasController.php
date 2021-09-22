@@ -71,6 +71,7 @@ class PessoasController extends Controller
 
         $prestador = $pessoa->prestador;
         $prestador->sexo = $request['prestador']['sexo'];
+        $prestador->faixaetariaatendimento = $request['prestador']['faixaetariaatendimento'];
         $prestador->save();
     }
 
