@@ -401,6 +401,13 @@ class ProfissionaisController extends Controller
                 }
             }
 
+            $pessoa = Pessoa::find($request['pessoa']['id']);
+
+            foreach ($pessoa->telefones as $key => $telefone) {
+                $pessoatelefone = Pessoatelefone::find($telefone->pivot->id);
+                $pessoatelefone->delete();
+            }
+
             if ($request['pessoa']['telefones']) {
                 foreach ($request['pessoa']['telefones'] as $key => $telefone) {
                     if ($telefone['telefone']) {
@@ -420,6 +427,11 @@ class ProfissionaisController extends Controller
                         );
                     }
                 }
+            }
+            
+            foreach ($pessoa->emails as $key => $email) {
+                $pessoaemail = Pessoaemail::find($email->pivot->id);
+                $pessoaemail->delete();
             }
 
             if ($request['pessoa']['emails']) {

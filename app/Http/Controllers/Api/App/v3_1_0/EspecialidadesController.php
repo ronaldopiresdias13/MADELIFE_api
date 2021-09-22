@@ -66,7 +66,8 @@ class EspecialidadesController extends Controller
      */
     public function update(Request $request, Especialidade $especialidade)
     {
-        return Especialidade::update($request->all());
+        $especialidade->descricao = $request['descricao'];
+        $especialidade->save();
     }
 
     /**
