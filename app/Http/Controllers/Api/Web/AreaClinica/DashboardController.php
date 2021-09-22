@@ -78,6 +78,7 @@ class DashboardController extends Controller
             // 'cuidados',
             'relatorios',
             'monitoramentos',
+            'folga.prestador.pessoa',
             'relatorioescalas',
             // 'acaomedicamentos.transcricaoProduto.produto'
         ])
