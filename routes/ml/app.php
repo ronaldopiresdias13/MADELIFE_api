@@ -340,6 +340,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('formacoes/listFormacoes', 'Api\App\v3_1_0\FormacoesController@listFormacoes');
 
         Route::post('especialidades', 'Api\App\v3_1_0\EspecialidadesController@store');
+        Route::put('especialidades/{especialidade}', 'Api\App\v3_1_0\EspecialidadesController@update');
+        Route::delete('especialidades/{especialidade}', 'Api\App\v3_1_0\EspecialidadesController@destroy');
 
         Route::get('monitoramentoescalas/{escala}/list', 'Api\App\v3_1_0\MonitoramentoescalasController@getAllMonitoramentosByEscalaId');
         Route::get('monitoramentoescalas/{escala}', 'Api\App\v3_1_0\MonitoramentoescalasController@listaMonitoramento');
