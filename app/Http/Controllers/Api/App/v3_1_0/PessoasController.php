@@ -44,6 +44,7 @@ class PessoasController extends Controller
             'emails',
             'enderecos.cidade',
             'dadosbancario.banco',
+            'prestador.especialidades',
             'prestador.formacoes'
         ])
             ->find($user->pessoa_id);
