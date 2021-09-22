@@ -11,4 +11,6 @@ class BaseProfissionais extends Model
     use HasFactory;
     use SoftDeletes;
     protected $table = 'baseprofissionais';
+
+    protected $guarded = [];
 }

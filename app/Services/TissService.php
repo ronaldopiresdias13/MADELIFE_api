@@ -25,7 +25,7 @@ class TissService
     protected $data = null;
     protected $hora = null;
 
-    public function __construct($medicoes, $cliente, $tiss = null)
+    public function __construct($medicoes, $cliente = null, $tiss = null)
     {
         $this->medicoes = $medicoes;
         $this->cliente  = $cliente;
@@ -93,6 +93,7 @@ class TissService
     public function iniciarArquivo2()
     {
         $this->tiss = Tiss::find($this->tiss);
+        $this->cliente = $this->tiss->cliente;
         $this->data = $this->tiss->data;
         $this->hora = $this->tiss->hora;
 
