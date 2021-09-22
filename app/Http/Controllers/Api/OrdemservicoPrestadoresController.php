@@ -217,4 +217,29 @@ class OrdemservicoPrestadoresController extends Controller
                 $ordemservico->id
             )->get();
     }
+    public function pacientesatribuidosaoprofissional(OrdemservicoPrestador $ordemservicoPrestador)
+    {
+        return OrdemservicoPrestador::With([
+            'ordemservico.orcamento.homecare.paciente.pessoa',
+            'servico'
+        ])
+            ->where('ativo', true)
+            ->where(
+                'prestador_id',
+                $ordemservicoPrestador
+            )->get();
+    }
+    // public function pacientesatribuidosaoprofissional(Ordemservico $ordemservico)
+    // {
+    //     return OrdemServicoPrestador::With([
+    //         'ordemservico.orcamento.homecare.paciente.pessoa',
+    //         'servico',
+    //     ])
+
+    //     ->where('ativo', true)
+    //     ->where(
+    //         'prestador_id', 
+    //         $ordemservico
+    //     )->get();
+    // }
 }
