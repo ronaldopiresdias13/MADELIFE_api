@@ -21,7 +21,7 @@ class TranscricoesController extends Controller
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa->id;
-        return Transcricao::with(['ordemservico.orcamento.homecare.paciente.pessoa', 'itensTranscricao.produto', 'itensTranscricao.horariomedicamentos'])
+        return Transcricao::with(['ordemservico.orcamento.homecare.paciente.pessoa', 'profissional.pessoa', 'itensTranscricao.produto', 'itensTranscricao.horariomedicamentos'])
             ->where('empresa_id', $empresa_id)
             ->where('ativo', true)
             ->get();
