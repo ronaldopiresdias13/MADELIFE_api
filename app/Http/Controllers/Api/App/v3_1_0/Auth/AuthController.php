@@ -183,10 +183,11 @@ class AuthController extends Controller
                             'prestador_id' => Prestador::create(
                                 [
                                     'pessoa_id' => $user->pessoa_id,
-                                    'sexo'      => $request['infopessoal']['sexo']
+                                    'sexo'      => $request['infopessoal']['sexo'],
+                                    'faixaetariaatendimento' => $request['infoprofissional']['faixaetariaatendimento']
                                 ]
                             )->id,
-                            'formacao_id'  => $request['infoprofissional']['formacao']['id']
+                            'formacao_id'  => $request['infoprofissional']['formacao']['id'],
                         ]
                     );
 
@@ -275,7 +276,8 @@ class AuthController extends Controller
                         'prestador_id' => Prestador::create(
                             [
                                 'pessoa_id' => $user->pessoa_id,
-                                'sexo'      => $request['infopessoal']['sexo']
+                                'sexo'      => $request['infopessoal']['sexo'],
+                                'faixaetariaatendimento' => $request['infoprofissional']['faixaetariaatendimento']
                             ]
                         )->id,
                         'formacao_id'  => $request['infoprofissional']['formacao']['id']

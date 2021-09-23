@@ -38,4 +38,8 @@ class Prestador extends Model
     {
         return $this->hasMany(EmpresaPrestador::class)->where('ativo', true);
     }
+    public function especialidades()
+    {
+        return $this->hasMany(Especialidade::class);
+    }
 }

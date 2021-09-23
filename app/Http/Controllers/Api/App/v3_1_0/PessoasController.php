@@ -44,6 +44,7 @@ class PessoasController extends Controller
             'emails',
             'enderecos.cidade',
             'dadosbancario.banco',
+            'prestador.especialidades',
             'prestador.formacoes'
         ])
             ->find($user->pessoa_id);
@@ -70,6 +71,7 @@ class PessoasController extends Controller
 
         $prestador = $pessoa->prestador;
         $prestador->sexo = $request['prestador']['sexo'];
+        $prestador->faixaetariaatendimento = $request['prestador']['faixaetariaatendimento'];
         $prestador->save();
     }
 

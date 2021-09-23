@@ -59,7 +59,7 @@ class CnabsController extends Controller
         $registro = RegistroCnab::find($id);
         $file = public_path() . '/' . $registro->arquivo;
         $name = explode('/', $registro->arquivo)[count(explode('/', $registro->arquivo)) - 1];
-        Log::info($name);
+        // Log::info($name);
         $headers = [
             'Content-type'        => 'text/txt',
         ];

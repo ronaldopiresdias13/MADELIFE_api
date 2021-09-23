@@ -317,7 +317,6 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('bancos', 'Api\App\v3_1_0\BancosController@index');
 
         Route::get('cidades/{uf}', 'Api\App\v3_1_0\CidadesController@index');
-        Route::get('cidades/listaCidadesCadastroApp/{uf}', 'Api\App\v3_1_0\CidadesController@index');
 
         Route::post('conselhos', 'Api\App\v3_1_0\ConselhosController@store');
         Route::put('conselhos/{conselho}', 'Api\App\v3_1_0\ConselhosController@update');
@@ -339,6 +338,10 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::put('cuidadoEscalas/{cuidadoEscala}', 'Api\App\v3_1_0\CuidadoEscalasController@updateCuidado');
 
         Route::get('formacoes/listFormacoes', 'Api\App\v3_1_0\FormacoesController@listFormacoes');
+
+        Route::post('especialidades', 'Api\App\v3_1_0\EspecialidadesController@store');
+        Route::put('especialidades/{especialidade}', 'Api\App\v3_1_0\EspecialidadesController@update');
+        Route::delete('especialidades/{especialidade}', 'Api\App\v3_1_0\EspecialidadesController@destroy');
 
         Route::get('monitoramentoescalas/{escala}/list', 'Api\App\v3_1_0\MonitoramentoescalasController@getAllMonitoramentosByEscalaId');
         Route::get('monitoramentoescalas/{escala}', 'Api\App\v3_1_0\MonitoramentoescalasController@listaMonitoramento');
@@ -381,4 +384,9 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         Route::post('versoes/verificarVersaoApp', 'Api\App\v3_1_0\VersaoController@verificarVersaoApp');
     });
+});
+
+Route::prefix("app/v3_1_0")->group(function () {
+    Route::post('versoes/verificarVersaoApp', 'Api\App\v3_1_0\VersaoController@verificarVersaoApp');
+    Route::get('cidades/listaCidadesCadastroApp/{uf}', 'Api\App\v3_1_0\CidadesController@index');
 });
