@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\OrdemservicoPrestador;
 use App\Models\Ordemservico;
 use App\Models\Prestador;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -217,17 +218,20 @@ class OrdemservicoPrestadoresController extends Controller
                 $ordemservico->id
             )->get();
     }
-    public function pacientesatribuidosaoprofissional(OrdemservicoPrestador $ordemservicoPrestador)
+    public function pacientesatribuidosaoprofissional(Request $request, Prestador $prestador)
     {
+        // return $prestador;
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
         return OrdemservicoPrestador::With([
             'ordemservico.orcamento.homecare.paciente.pessoa',
             'servico'
         ])
             ->where('ativo', true)
-            ->where(
-                'prestador_id',
-                $ordemservicoPrestador
-            )->get();
+            ->where('prestador_id', $prestador->id)
+            ->whereHas('ordemservico', function (Builder $builder) use ($empresa_id) {
+                $builder->where('empresa_id', $empresa_id);
+            })
+            ->get();
     }
     // public function pacientesatribuidosaoprofissional(Ordemservico $ordemservico)
     // {
@@ -238,7 +242,7 @@ class OrdemservicoPrestadoresController extends Controller
 
     //     ->where('ativo', true)
     //     ->where(
-    //         'prestador_id', 
+    //         'prestador_id',
     //         $ordemservico
     //     )->get();
     // }

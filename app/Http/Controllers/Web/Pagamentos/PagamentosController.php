@@ -70,29 +70,30 @@ class PagamentosController extends Controller
         // $empresa_id = 1;
         $pagamentos = Pagamento::with(['conta.pessoa'])
             ->where('ativo', true)
+            ->where('status', true)
             ->where('empresa_id', $empresa_id)
             ->where('contasbancaria_id', $request->contasbancaria)
             ->whereHas('conta', function (Builder $builder) {
                 $builder->where('ativo', true);
             });
-            if($request->pessoa_id){
-                $pagamentos->whereHas('conta', function (Builder $builder) use ($request) {
-                    $builder->where('pessoa_id', $request->pessoa_id);
-                });
-            }
-            if($request->tipopessoa){
-                $pagamentos->whereHas('conta', function (Builder $builder) use ($request) {
-                    $builder->where('tipopessoa', $request->tipopessoa);
-                });
-            }
-            if($request->data_final) {
-                    $pagamentos->where('datapagamento','<=', $request->data_final ? $request->data_final : $pagamentos);
-            }
-            if($request->data_ini) {
-                    $pagamentos->where('datapagamento','>=', $request->data_ini ? $request->data_ini : $pagamentos);
-            }
-            
-            $pagamentos = $pagamentos->get();
-            return $pagamentos;
+        if ($request->pessoa_id) {
+            $pagamentos->whereHas('conta', function (Builder $builder) use ($request) {
+                $builder->where('pessoa_id', $request->pessoa_id);
+            });
+        }
+        if ($request->tipopessoa) {
+            $pagamentos->whereHas('conta', function (Builder $builder) use ($request) {
+                $builder->where('tipopessoa', $request->tipopessoa);
+            });
+        }
+        if ($request->data_final) {
+            $pagamentos->where('datapagamento', '<=', $request->data_final);
+        }
+        if ($request->data_ini) {
+            $pagamentos->where('datapagamento', '>=', $request->data_ini);
+        }
+
+        $pagamentos = $pagamentos->get();
+        return $pagamentos;
     }
 }
