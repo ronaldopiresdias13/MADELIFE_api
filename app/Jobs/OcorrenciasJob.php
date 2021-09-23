@@ -53,7 +53,7 @@ class OcorrenciasJob implements ShouldQueue
         $nao_marcados = DB::select(DB::raw("select hm.horario as hora, tp.id as transcricao_produto_id, tr.empresa_id from transcricao_produto as tp
     join transcricoes as tr on tr.id=tp.transcricao_id
     join horariomedicamentos as hm on hm.transcricao_produto_id=tp.id and hm.horario not in (select a.hora from acaomedicamentos as a where a.transcricao_produto_id=tp.id and a.`data`= :date_now)
-    where  ((hm.horario<= :now and hm.horario>= :ago)) and tp.ativo=1 and tr.ativo=1 and hm.ativo=1 order by transcricao_produto_id"), array('date_now' => $date_now, 'now' => $hour_now, 'ago' => $hour_ago));
+    where  ((hm.horario<= :now and hm.horario>= :ago)) and tp.ativo=1 and hm.ativo=1 order by transcricao_produto_id"), array('date_now' => $date_now, 'now' => $hour_now, 'ago' => $hour_ago));
 
         foreach ($nao_marcados as $dado) {
             // dd(array('date_ago'=>$date_ago,'date_now'=>$date_now,'hour'=>$dado->hora,'id'=>$dado->transcricao_produto_id));
@@ -65,7 +65,7 @@ class OcorrenciasJob implements ShouldQueue
         join prestador_formacao as pf on pf.prestador_id=pre.id
         join formacoes as fo on fo.id=pf.formacao_id and (fo.descricao='Auxiliar de Enfermagem' or fo.descricao='Técnico de Enfermagem' or fo.descricao='Enfermagem')
         join pessoas as pe on pe.id=pre.pessoa_id
-        where tp.id=:id and t.empresa_id=:empresa_id and t.ativo=1 and tp.ativo=1"),
+        where tp.id=:id and t.empresa_id=:empresa_id"),
                 array(
                     'empresa_id' => $dado->empresa_id,
                     'date_now' => $date_now,
@@ -94,7 +94,7 @@ class OcorrenciasJob implements ShouldQueue
         join pessoas as p on pac.pessoa_id=p.id
         left join responsaveis as r on r.id=pac.responsavel_id
         left join pessoas as ps on ps.id=r.pessoa_id
-        where tp.id=:id and t.empresa_id=:empresa_id and t.ativo=1 and tp.ativo=1"),
+        where tp.id=:id and t.empresa_id=:empresa_id"),
                 array(
                     'empresa_id' => $dado->empresa_id,
                     'id' => $dado->transcricao_produto_id
@@ -144,7 +144,7 @@ class OcorrenciasJob implements ShouldQueue
         join transcricoes as tr on tr.id=tp.transcricao_id
         join prestadores as pre on pre.id=a.prestador_id
         join pessoas as pe on pe.id=pre.pessoa_id
-        where tr.ativo=1 and tp.ativo=1 and a.`data`= :date_now and a.status=0 and  ((a.hora<= :now and a.hora>= :ago))"), array('date_now' => $date_now, 'now' => $hour_now, 'ago' => $hour_ago));
+        where a.`data`= :date_now and a.status=0 and  ((a.hora<= :now and a.hora>= :ago))"), array('date_now' => $date_now, 'now' => $hour_now, 'ago' => $hour_ago));
 
         foreach ($bolados as $dado) {
             // dd(array('date_ago'=>$date_ago,'date_now'=>$date_now,'hour'=>$dado->hora,'id'=>$dado->transcricao_produto_id));
@@ -161,7 +161,7 @@ class OcorrenciasJob implements ShouldQueue
             join pessoas as p on pac.pessoa_id=p.id
             left join responsaveis as r on r.id=pac.responsavel_id
             left join pessoas as ps on ps.id=r.pessoa_id
-            where tp.id=:id and t.empresa_id=:empresa_id and t.ativo=1 and tp.ativo=1"),
+            where tp.id=:id and t.empresa_id=:empresa_id"),
                 array(
                     'empresa_id' => $dado->empresa_id,
                     'id' => $dado->transcricao_produto_id
