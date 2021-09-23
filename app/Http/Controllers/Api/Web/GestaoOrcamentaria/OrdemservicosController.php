@@ -20,7 +20,7 @@ class OrdemservicosController extends Controller
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
         $pacientes = Ordemservico::with([
-            'orcamento.homecare.paciente.pessoa:id,nome,cpfcnpj,rgie,nascimento', 'orcamento.cliente:id',
+            'orcamento.homecare.paciente.pessoa:id,nome,cpfcnpj,rgie,nascimento', 'orcamento.cliente.pessoa', 'orcamento.servicos',
             'orcamento.servicos.servico', 'orcamento.produtos.produto', 'orcamento.custos', 'orcamento.homecare.paciente.internacoes', 'orcamento.cliente.pessoa:id,nome'
         ]);
         if ($request->data_final) {
