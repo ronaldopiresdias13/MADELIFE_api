@@ -10,5 +10,5 @@ Route::put('ordemservicoPrestadores/{ordemservicoPrestador}', 'Api\OrdemservicoP
 Route::delete('ordemservicoPrestadores/{ordemservicoPrestador}', 'Api\OrdemservicoPrestadoresController@destroy');
 Route::get('ordemservicoPrestadores/ordemservico/{ordemservico}', 'Api\OrdemservicoPrestadoresController@profissionaisatribuidosaopaciente');
 Route::group(['middleware' => 'auth:api'], function () {
-    Route::get('ordemservicoPrestadores/pacienteporprofissional/{ordemservico}', 'Api\OrdemservicoPrestadoresController@pacientesatribuidosaoprofissional');
+    Route::get('ordemservicoPrestadores/pacienteporprofissional/{prestador}', 'Api\OrdemservicoPrestadoresController@pacientesatribuidosaoprofissional');
 });
