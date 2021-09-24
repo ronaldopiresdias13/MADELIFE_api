@@ -364,7 +364,7 @@ class ProfissionaisController extends Controller
                 foreach ($request['convenios'] as $key => $convenio) {
                     $profissional_convenio = ProfissionalConvenio::firstOrCreate([
                         'profissional_id' => $profissional->id,
-                        'convenio_id'    => $convenio['id']
+                        'convenio_id'    => $convenio['convenio_id']
                     ]);
                 }
             }
