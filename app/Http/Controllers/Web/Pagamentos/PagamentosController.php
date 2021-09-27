@@ -121,6 +121,7 @@ class PagamentosController extends Controller
         if ($request->data_final) {
             $entrada->where('datapagamento', '<', $request->data_final);
         }
+        $entrada = $entrada->limit(5)->sum('valorpago');
         $saida = Pagamento::with(['conta.pessoa'])
             ->where('ativo', true)
             ->where('status', true)
@@ -143,12 +144,12 @@ class PagamentosController extends Controller
         if ($request->data_final) {
             $saida->where('datapagamento', '<', $request->data_final);
         }
-
+        $saida = $saida->sum('valorpago');
         return response()->json([
-            'toast' => [
+            'saldo' => [
                 'entrada' => $entrada,
                 'saida' => $saida,
-                'total' => (float)$entrada - (float)$saida
+                // 'total' => (float)$entrada - (float)$saida
             ]
         ], 200)
             ->header('Content-Type', 'application/json');
