@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Web\Notificacoes;
 
 use App\Http\Controllers\Controller;
 use App\Models\Notificacao;
+use App\Models\Profissional;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class NotificacoesController extends Controller
 {
@@ -27,7 +29,20 @@ class NotificacoesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        DB::transaction(function () use ($request) {
+            $profissionais = Profissional::where('ativo', true)->get();
+            foreach ($profissionais as $key => $prof) {
+                Notificacao::create([
+                    'tipo' => $request['tipo'],
+                    'titulo' => $request['titulo'],
+                    'conteudo' => $request['conteudo'],
+                    'link' => $request['link'],
+                    'visto' => false,
+                    'resolvido' => false,
+                    'profissional_id' => $prof->id
+                ]);
+            }
+        });
     }
 
     /**
@@ -38,7 +53,7 @@ class NotificacoesController extends Controller
      */
     public function show(Notificacao $notificacao)
     {
-        //
+        return $notificacao;
     }
 
     /**
