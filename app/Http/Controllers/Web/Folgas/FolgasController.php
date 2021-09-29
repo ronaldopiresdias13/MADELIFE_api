@@ -53,6 +53,11 @@ class FolgasController extends Controller
                 $query->where('dataentrada','>=', $request->data_ini ? $request->data_ini : $folgas);
             });
         }
+        if($request->cliente_id) {
+            $folgas = $folgas->whereHas('escala.ordemservico.orcamento', function (Builder $query) use ($request) {
+                $query->where('cliente_id', $request->cliente_id);
+            });
+        }
         $folgas->where('empresa_id', $empresa_id);
         $folgas = $folgas->get();
            
