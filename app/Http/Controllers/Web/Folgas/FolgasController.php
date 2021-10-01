@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Web\Folgas;
 use App\Http\Controllers\Controller;
 use App\Models\Escala;
 use App\Models\Folga;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -26,38 +25,13 @@ class FolgasController extends Controller
             'substituto.pessoa',
             'escala'
         ])
-     
-        ->where('empresa_id', $empresa_id)
-        ->orderByDesc('created_at')
-        ->get();
+            ->where('empresa_id', $empresa_id)
+            ->orderByDesc('created_at')
+            ->get();
 
         return $folgas;
     }
-    public function filtroPorPeriodo(Request $request)
-    {
-        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
-        $folgas = Folga::with([
-            'escala.ordemservico.orcamento.homecare.paciente.pessoa',
-            'escala.ordemservico.orcamento.cliente.pessoa',
-            'prestador.pessoa',
-            'substituto.pessoa',
-            'escala',
-        ]);
-        if($request->data_final) {
-            $folgas = $folgas->whereHas('escala', function (Builder $query) use ($request, $folgas) {
-                $query->where('datasaida','<=', $request->data_final ? $request->data_final : $folgas);
-            });
-        }
-        if($request->data_ini) {
-            $folgas = $folgas->whereHas('escala', function (Builder $query) use ($request, $folgas) {
-                $query->where('dataentrada','>=', $request->data_ini ? $request->data_ini : $folgas);
-            });
-        }
-        $folgas->where('empresa_id', $empresa_id);
-        $folgas = $folgas->get();
-           
-        return $folgas;
-    }
+
     /**
      * Display a listing of the resource.
      *

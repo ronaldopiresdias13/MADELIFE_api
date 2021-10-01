@@ -27,14 +27,11 @@ class UserAcessoController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request;
         DB::transaction(function () use ($request) {
-            foreach ($request['acesso_id'] as $key => $acesso) {
-                $user_acesso = UserAcesso::firstOrCreate([
-                    'user_id'   => $request['user_id'],
-                    'acesso_id' => $acesso,
-                ]);
-            }
+            $user_acesso = UserAcesso::firstOrCreate([
+                'user_id'   => $request['user_id'],
+                'acesso_id' => $request['acesso_id'],
+            ]);
         });
     }
 

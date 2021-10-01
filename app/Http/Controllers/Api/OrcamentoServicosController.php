@@ -173,7 +173,7 @@ class OrcamentoServicosController extends Controller
      */
     public function update(Request $request, OrcamentoServico $orcamentoServico)
     {
-        $orcamentoServico->update($request->all());
+        //
     }
 
     /**
