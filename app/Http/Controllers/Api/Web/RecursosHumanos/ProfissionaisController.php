@@ -7,6 +7,7 @@ use App\Models\Dadoscontratual;
 use App\Models\Email;
 use App\Models\Endereco;
 use App\Http\Controllers\Controller;
+use App\Models\Anexo;
 use App\Models\Pessoa;
 use App\Models\PessoaEmail;
 use App\Models\PessoaEndereco;
@@ -271,6 +272,30 @@ class ProfissionaisController extends Controller
                     }
                 }
             }
+            $file = $request->file('file');
+            $request = json_decode($request->data, true);
+            if ($file && $file->isValid()) {
+                    $md5 = md5_file($file);
+                    $caminho = 'anexos/';
+                    $nome = $md5 . '.' . $file->extension();
+                    $upload = $file->storeAs($caminho, $nome);
+                    $nomeOriginal = $file->getClientOriginalName();
+                    if ($upload) {
+                        DB::transaction(function () use ($request, $caminho, $nome, $nomeOriginal) {
+                            foreach ($request['documentos'] as $key => $documento) {
+                                if ($documento['documentos']) {
+                                    Anexo::firstOrCreate([
+                                        'anexo' => $caminho . '/' . $nome,
+                                        'nome'  => $nomeOriginal
+                                    ]);
+                                }
+                            }
+                        });
+                        return response()->json('Upload de arquivo bem sucedido!', 200)->header('Content-Type', 'text/plain');
+                    } else {
+                        return response()->json('Erro, Upload não realizado!', 400)->header('Content-Type', 'text/plain');
+                    }
+                }
         });
 
         // return response()->json('Profissional cadastrado com sucesso!', 200)->header('Content-Type', 'text/plain');
