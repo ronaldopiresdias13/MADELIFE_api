@@ -40,11 +40,11 @@ class PagamentosCnabController extends Controller
         //         ->whereBetween('datainicio', [$request->data_ini, $request->data_fim])
         //         ->get();
         // }
-        Log::info("teste");
         if ($request->tipo == "Prestador") {
             $pagamentos = Pagamentopessoa::with(['pessoa.dadosbancario.banco'])
                 ->where('empresa_id', $empresa_id)
-                // ->where('status', false)
+                ->where('status', false)
+                ->where('tipopessoa', 'Prestador Externo')
                 ->where('situacao', "!=", "Criado")
                 ->whereBetween('periodo1', [$request->data_ini, $request->data_fim])
                 ->get();
@@ -52,8 +52,9 @@ class PagamentosCnabController extends Controller
         if ($request->tipo == "Profissional") {
             $pagamentos = Pagamentopessoa::with(['pessoa.dadosbancario.banco'])
                 ->where('empresa_id', $empresa_id)
-                // ->where('status', false)
+                ->where('status', false)
                 ->where('situacao', "!=", "Criado")
+                ->where('tipopessoa', 'Profissional Interno')
                 ->whereBetween('periodo1', [$request->data_ini, $request->data_fim])
                 ->get();
         }

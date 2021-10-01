@@ -2,79 +2,108 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Web\BaseProfissionais\BaseProfissionaisController;
+use App\Imports\BaseProfissionaisImport;
+use App\Models\BaseProfissionais;
 use App\Models\Contasbancaria;
 use App\Models\Dadosbancario;
 use App\Models\Escala;
 use App\Models\Ordemservico;
 use App\Models\OrdemservicoServico;
+use App\Models\Produto;
 use App\Models\Servico;
 use App\Models\Telefone;
+use App\Models\Tipoproduto;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Teste extends Controller
 {
     public function teste(Request $request)
     {
-        $user = $request->user();
-        $profissional = $user->pessoa->profissional;
+        // $data = [
+        //     $request->allFiles(),
+        // ];
+        // return response()->json($data);
 
-        $escalas = Ordemservico::
-        join('orcamentos','orcamentos.id','=','ordemservicos.orcamento_id')
-        ->join('homecares','homecares.orcamento_id','=','ordemservicos.orcamento_id')
-        ->join('pacientes','pacientes.id','=','homecares.paciente_id')
-        ->join('pessoas','pessoas.id','=','pacientes.pessoa_id')
+        // $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+        $empresa_id = 1;
 
-        ->with([
-            // 'servicos',
-            'acessos',
-            'profissional.pessoa',
-            'orcamento.cidade', 'orcamento' => function ($query) {
-                $query->with(['servicos.servico', 'homecare' => function ($query) {
-                    $query->with(['paciente.pessoa', 'paciente.responsavel.pessoa']);
-                }]);
-                $query->with(['cliente' => function ($query) {
-                    $query->select('id', 'pessoa_id');
-                    $query->with(['pessoa' => function ($query) {
-                        $query->select('id', 'nome');
-                    }]);
-                }]);
+        $file = fopen("/home/lucas/Área de Trabalho/Brasindice/MEDICAMENTO_BRA_PMC.txt", "r");
+
+        while (!feof($file)) {
+            $linha = fgets($file);
+            $array = explode('","', $linha);
+            foreach ($array as $key => $item) {
+                $array[$key] = str_replace(['"', "\r", "\n"], "", $item);
             }
-        ])
-            ->whereHas('orcamento.cliente', function (Builder $query) use ($request) {
-                $query->where('id', 'like', $request->cliente_id ? $request->cliente_id : '%');
-            })
-            ->whereHas('orcamento.cidade', function (Builder $query) use ($request) {
-                $query->where('id', 'like', $request->cidade_id ? $request->cidade_id : '%');
-            })
-            ->whereHas('orcamento.homecare.paciente.pessoa', function (Builder $query) use ($request) {
-                $query->where('nome', 'like', $request->nome ? $request->nome : '%');
-            })
-            ->whereHas('profissional', function (Builder $query) use ($request) {
-                $query->where('id', 'like', $request->profissional_id ? $request->profissional_id : '%');
-            })
-            ->withCount('prestadores')
-            ->withCount('escalas')
-            ->where('ordemservicos.empresa_id', 1)
-            ->where('ordemservicos.ativo', true)
-            // ->limit(1)
-            ->orderByDesc('pessoas.nome')
+// <<<<<<< HEAD
+            // dd($array);
 
-            // ->orderByDesc('orcamento.homecare.paciente.pessoa.nome')
-            ->select(['ordemservicos.id', 'ordemservicos.orcamento_id', 'ordemservicos.profissional_id']);
-        if ($request->paginate) {
-            $escalas = $escalas->paginate($request['per_page'] ? $request['per_page'] : 15); //->sortBy('orcamento.homecare.paciente.pessoa.nome');
-        } else {
-            $escalas = $escalas->get();
+            $produto = new Produto();
+            $produto->empresa_id = $empresa_id;
+            $produto->tabela = $request->tabela;
+            $produto->tipoproduto_id = Tipoproduto::firstOrCreate(
+                [
+                    "empresa_id" => $empresa_id,
+                    "descricao" => "MEDICAMENTOS"
+                ]
+            )->id;
+            $produto->codigo = $array[0] . '.' . $array[2] . '.' . $array[4];
+            $produto->codigoTabela = 20;
+            $produto->codigoDespesa = 02;
+            $produto->descricao = $array[3] . ' ' . $array[5];
+            $produto->inidademedida_id = "????????????????????";
+            $produto->codigobarra = $array[13];
+            dd($produto);
+// =======
+//         ])
+//             ->whereHas('orcamento.cliente', function (Builder $query) use ($request) {
+//                 $query->where('id', 'like', $request->cliente_id ? $request->cliente_id : '%');
+//             })
+//             ->whereHas('orcamento.cidade', function (Builder $query) use ($request) {
+//                 $query->where('id', 'like', $request->cidade_id ? $request->cidade_id : '%');
+//             })
+//             ->whereHas('orcamento.homecare.paciente.pessoa', function (Builder $query) use ($request) {
+//                 $query->where('nome', 'like', $request->nome ? $request->nome : '%');
+//             })
+//             ->whereHas('profissional', function (Builder $query) use ($request) {
+//                 $query->where('id', 'like', $request->profissional_id ? $request->profissional_id : '%');
+//             })
+//             ->withCount('prestadores')
+//             ->withCount('escalas')
+//             ->where('ordemservicos.empresa_id', 1)
+//             ->where('ordemservicos.ativo', true)
+//             // ->limit(1)
+//             ->orderByDesc('pessoas.nome')
+
+//             // ->orderByDesc('orcamento.homecare.paciente.pessoa.nome')
+//             ->select(['ordemservicos.id', 'ordemservicos.orcamento_id', 'ordemservicos.profissional_id']);
+//         if ($request->paginate) {
+//             $escalas = $escalas->paginate($request['per_page'] ? $request['per_page'] : 15); //->sortBy('orcamento.homecare.paciente.pessoa.nome');
+//         } else {
+//             $escalas = $escalas->get();
+// // >>>>>>> 41938c3d4899b2cd9c73269594abd0849132750d
         }
 
-        if (env("APP_ENV", 'production') == 'production') {
-            // return $escalas->withPath(str_replace('http:', 'https:', $escalas->path()));
-            return $escalas;
-        } else {
-            return $escalas;
-        }
+        fclose($file);
 
+        return 'ok';
+
+
+        // Excel::import(new BaseprofissionaisImport, '/home/lucas/Área de Trabalho/2021-arquivo de profissionais.xlsx');
+
+        // return response()->json('Ok!\nSalvo com Sucesso!', 200)->header('Content-Type', 'text/plain');
+        // return $request;
+
+        // $arquivo = fopen ('/home/lucas/Área de Trabalho/2021-arquivo de profissionais.xlsx', 'r');
+
+        // return $arquivo;
+
+        // dd($arquivo);
+
+        // return $request;
         /*Pegar cpf de pessoa e adicionar nas contas bancarias que não tem cpf ou cnpj */
         // $dadosbancarios = Dadosbancario::where('cpfcnpj', null)
         //     ->orWhere(function ($query) {
