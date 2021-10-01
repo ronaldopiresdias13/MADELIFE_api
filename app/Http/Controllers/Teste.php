@@ -55,7 +55,7 @@ class Teste extends Controller
             })
             ->withCount('prestadores')
             ->withCount('escalas')
-            ->where('ordemservicos.empresa_id', $profissional->empresa_id)
+            ->where('ordemservicos.empresa_id', 1)
             ->where('ordemservicos.ativo', true)
             // ->limit(1)
             ->orderByDesc('pessoas.nome')

@@ -227,10 +227,10 @@ class ContratosController extends Controller
             $orcamento->status = false;
             $orcamento->save();
 
-            $ordemservico = $orcamento->ordemservico;
-            $ordemservico->descricaomotivo = $request->descricaomotivo;
-            $ordemservico->dataencerramento = $request->dataencerramento;
-            $ordemservico->motivo = $request->motivo;
+            $ordemservico = $orcamento['ordemservico'];
+            $ordemservico->descricaomotivo = $request['ordemservico']['descricaomotivo'];
+            $ordemservico->dataencerramento = $request['ordemservico']['dataencerramento'];
+            $ordemservico->motivo = $request['ordemservico']['motivo'];
             $ordemservico->status = false;
             $ordemservico->save();
         });

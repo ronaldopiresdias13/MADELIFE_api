@@ -48,4 +48,8 @@ class Paciente extends Model
     {
         return $this->belongsTo(Empresa::class);
     }
+
+    public function planilhas(){
+        return $this->hasMany(PlanilhaPil::class,'paciente_id','id');
+    }
 }

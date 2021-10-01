@@ -33,8 +33,8 @@ class PagamentopessoasController extends Controller
         $empresa_id = $user->pessoa->profissional->empresa_id;
         $pagamentos = Pagamentopessoa::with(['pessoa.dadosbancario.banco'])
             ->where('empresa_id', $empresa_id)
-            ->where('status', false)
-            ->where('ativo', true)
+            // ->where('status', false)
+            // ->where('ativo', true)
             ->where(DB::raw("date_format(str_to_date(pagamentopessoas.periodo1, '%Y-%m-%d'), '%Y-%m')"), "=", $request['mes'])
             ->get();
         // ->groupBy("pessoa_id");

@@ -82,7 +82,7 @@ class EmpresasController extends Controller
                 'ie'                       => $request['ie'],
                 'registroANS'              => $request['registroANS'],
                 'logo'                     => $request['logo'],
-                'logopdf'                  => $request['logopdf'],
+                // 'logopdf'                  => $request['logopdf'],
                 'tiss_sequencialTransacao' => $request['tiss_sequencialTransacao'],
                 'CNES'                     => $request['CNES'],
                 'quantidadepaciente'       => $request['quantidadepaciente'],
