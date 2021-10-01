@@ -19,91 +19,304 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-// Route::get('/', function () {
+Route::get('/', function () {
 
-//     // return view('welcome');
-//     $hour_now = Carbon::now()->subMinute()->format('H:i');
-//     $hour_ago = Carbon::now()->subMinutes(15)->format('H:i');
-//     $date_now = Carbon::now()->format('Y-m-d');
-//     $date_ago = Carbon::now()->format('Y-m-d');
+    // return view('welcome');
+    $hour_now = Carbon::now()->subMinute()->format('H:i');
+    $hour_ago = Carbon::now()->subMinutes(15)->format('H:i');
+    $date_now = Carbon::now()->format('Y-m-d');
+    $date_ago = Carbon::now()->format('Y-m-d');
+    $tomorrow = Carbon::now()->addDay()->format('Y-m-d');
 
-//     $date_now='2021-02-12';
-//     $date_ago='2021-02-11';
+    $tomorrow = '2021-09-02';
 
-//     $hour_now='00:14';
-//     $hour_ago='00:00';
-//     DB::enableQueryLog();
-//     $nao_marcados = DB::select(DB::raw("select hm.horario as hora, tp.id as transcricao_produto_id, tr.empresa_id from transcricao_produto as tp
-//     join transcricoes as tr on tr.id=tp.transcricao_id
-//     join horariomedicamentos as hm on hm.transcricao_produto_id=tp.id and hm.horario not in (select a.hora from acaomedicamentos as a where a.transcricao_produto_id=tp.id and a.`data`= :date_now)
-//     where tr.empresa_id=:empresa_id and ((hm.horario< :now and hm.horario>= :ago)) and tp.ativo=1 and hm.ativo=1 order by transcricao_produto_id"),array('empresa_id'=>1, 'date_now'=>$date_now,'now'=>$hour_now,'ago'=>$hour_ago));
-    
-//     foreach($nao_marcados as $dado){
-//         // dd(array('date_ago'=>$date_ago,'date_now'=>$date_now,'hour'=>$dado->hora,'id'=>$dado->transcricao_produto_id));
-//         $dados_prestadores = DB::select(DB::raw("select tp.id as transcricao_produto_id, es.id as escala_id, pe.id as pessoa_id, pe.nome, es.dataentrada, es.horaentrada, es.datasaida,es.horasaida from transcricao_produto as tp
-//         join transcricoes as t on tp.transcricao_id=t.id
-//         join escalas as es on es.ordemservico_id=t.ordemservico_id and es.ativo=1 and  ((es.dataentrada=:date_now and es.horaentrada<:hour and es.horasaida>:hour_1) or (es.dataentrada=:date_ago_ and es.datasaida=:date_now_ and :hour_2<es.horasaida and es.horaentrada>es.horasaida))
-//         left join prestadores as pre on pre.id=es.prestador_id
-//         join pessoas as pe on pe.id=pre.pessoa_id
-//         where tp.id=:id and t.empresa_id=:empresa_id"),
-//         array(
-//             'empresa_id'=>$dado->empresa_id,
-//             'date_now'=>$date_now,
-//             'date_now_'=>$date_now,
+    $date_now = '2021-09-01';
+    $date_ago = '2021-08-31';
 
-//             'hour'=>$dado->hora,
-//             'hour_1'=>$dado->hora,
-//             'hour_2'=>$dado->hora,
+    $hour_now = '09:14';
+    $hour_ago = '09:00';
+    DB::enableQueryLog();
+    $nao_marcados = DB::select(DB::raw("select hm.horario as hora, tp.id as transcricao_produto_id, tr.empresa_id from transcricao_produto as tp
+    join transcricoes as tr on tr.id=tp.transcricao_id
+    join horariomedicamentos as hm on hm.transcricao_produto_id=tp.id and hm.horario not in (select a.hora from acaomedicamentos as a where a.transcricao_produto_id=tp.id and a.`data`= :date_now)
+    where  ((hm.horario<= :now and hm.horario>= :ago)) and tp.ativo=1 and tr.ativo=1 and hm.ativo=1 order by transcricao_produto_id"), array('date_now' => $date_now, 'now' => $hour_now, 'ago' => $hour_ago));
 
-//             'date_ago_'=>$date_ago,
-//             'id'=>$dado->transcricao_produto_id
-//         ));
+    foreach ($nao_marcados as $dado) {
+        // dd(array('date_ago'=>$date_ago,'date_now'=>$date_now,'hour'=>$dado->hora,'id'=>$dado->transcricao_produto_id));
+        $dados_prestadores = DB::select(
+            DB::raw("select tp.id as transcricao_produto_id, es.id as escala_id, pe.id as pessoa_id, pe.nome, es.dataentrada, es.horaentrada, es.datasaida,es.horasaida from transcricao_produto as tp
+    join transcricoes as t on tp.transcricao_id=t.id
+    join escalas as es on es.ordemservico_id=t.ordemservico_id and es.ativo=1 and  ((es.dataentrada=:date_now and es.horaentrada<=:hour and es.horasaida>:hour_1) or (es.dataentrada=:date_ago_ and es.datasaida=:date_now_ and :hour_2<es.horasaida and es.horaentrada>es.horasaida) or (es.dataentrada=:date_now_2 and es.horaentrada<=:hour_3 and es.datasaida=:tomorrow))
+    left join prestadores as pre on pre.id=es.prestador_id
+    join prestador_formacao as pf on pf.prestador_id=pre.id
+    join formacoes as fo on fo.id=pf.formacao_id and (fo.descricao='Auxiliar de Enfermagem' or fo.descricao='Técnico de Enfermagem' or fo.descricao='Enfermagem')
+    join pessoas as pe on pe.id=pre.pessoa_id
+    where tp.id=:id and t.empresa_id=:empresa_id and t.ativo=1 and tp.ativo=1"),
+            array(
+                'empresa_id' => $dado->empresa_id,
+                'date_now' => $date_now,
+                'date_now_' => $date_now,
+                'date_now_2' => $date_now,
+                'tomorrow' => $tomorrow,
+
+                'hour' => $dado->hora,
+                'hour_1' => $dado->hora,
+                'hour_2' => $dado->hora,
+                'hour_3' => $dado->hora,
+
+                'date_ago_' => $date_ago,
+                'id' => $dado->transcricao_produto_id
+            )
+        );
+        dd($dados_prestadores);
 
 
-//         $paciente = DB::select(DB::raw("select p.id as paciente_id, p.nome as paciente_nome, ps.id as responsavel_id, ps.nome as responsavel_nome, tp.id as transcricao_produto_id from transcricao_produto as tp
-//         join transcricoes as t on tp.transcricao_id=t.id
-//         join ordemservicos as os on os.id=t.ordemservico_id
-//         join orcamentos as o on o.id=os.orcamento_id
-//         join homecares as hc on hc.orcamento_id=o.id
-//         join pacientes as pac on pac.id=hc.paciente_id
-//         join pessoas as p on pac.pessoa_id=p.id
-//         left join responsaveis as r on r.id=pac.responsavel_id
-//         left join pessoas as ps on ps.id=r.pessoa_id
-//         where tp.id=:id and t.empresa_id=:empresa_id"),
-//         array(
-//             'empresa_id'=>$dado->empresa_id,
-//             'id'=>$dado->transcricao_produto_id
-//         ));
+        $paciente = DB::select(
+            DB::raw("select p.id as paciente_id, p.nome as paciente_nome, ps.id as responsavel_id, ps.nome as responsavel_nome, tp.id as transcricao_produto_id from transcricao_produto as tp
+        join transcricoes as t on tp.transcricao_id=t.id
+        join ordemservicos as os on os.id=t.ordemservico_id
+        join orcamentos as o on o.id=os.orcamento_id
+        join homecares as hc on hc.orcamento_id=o.id
+        join pacientes as pac on pac.id=hc.paciente_id
+        join pessoas as p on pac.pessoa_id=p.id
+        left join responsaveis as r on r.id=pac.responsavel_id
+        left join pessoas as ps on ps.id=r.pessoa_id
+        where tp.id=:id and t.empresa_id=:empresa_id and t.ativo=1 and tp.ativo=1"),
+            array(
+                'empresa_id' => $dado->empresa_id,
+                'id' => $dado->transcricao_produto_id
+            )
+        );
 
-        
-//         $pessoas=[];
-//         foreach($dados_prestadores as $dado_prestador){
-//             if($dado_prestador->pessoa_id!=null){
-//                 array_push($pessoas,$dado_prestador->pessoa_id);
-//             }
-//         }
-//         //chacar se tem alguma escala essa hora?
-//         // if (!property_exists($resp, 'responsavel_id')) {
 
-//         // }
-//         // dd([$dados_prestadores,$dado]);
+        $pessoas = [];
+        $escalas = [];
 
-//         $ocorrencia=new Ocorrencia();
-//         $ocorrencia->fill([
-//             'tipo'=>'Medicamento Atrasado',
-//             'transcricao_produto_id'=>$dado->transcricao_produto_id,
-//             'empresa_id'=>$dado->empresa_id,
-//             'paciente_id'=>$paciente[0]->paciente_id,
-//             'responsavel_id'=>$paciente[0]->responsavel_id,
+        foreach ($dados_prestadores as $dado_prestador) {
+            if ($dado_prestador->pessoa_id != null) {
+                array_push($pessoas, $dado_prestador->pessoa_id);
+            }
+            if ($dado_prestador->escala_id != null) {
+                array_push($escalas, $dado_prestador->escala_id);
+            }
+        }
+        //chacar se tem alguma escala essa hora?
+        // if (!property_exists($resp, 'responsavel_id')) {
 
-//             'horario'=>$date_now.' '.$dado->hora,
-//             'situacao'=>'Pendente'
-//         ])->save();
-//         $ocorrencia->pessoas()->Sync($pessoas);
-        
-//     }
+        // }
+        // dd([$dados_prestadores,$dado]);
+        if (count($pessoas) > 0) {
 
-//     // dd($nao_marcados);
-//     // dd(DB::getQueryLog());
-//     return $nao_marcados;
-// });
+            $ocorrencia = new Ocorrencia();
+            $ocorrencia->fill([
+                'tipo' => 'Medicamento Atrasado',
+                'transcricao_produto_id' => $dado->transcricao_produto_id,
+                'empresa_id' => $dado->empresa_id,
+                'paciente_id' => $paciente[0]->paciente_id,
+                'responsavel_id' => $paciente[0]->responsavel_id,
+
+                'horario' => $date_now . ' ' . $dado->hora,
+                'situacao' => 'Pendente'
+            ])->save();
+            $ocorrencia->pessoas()->Sync($pessoas);
+            $ocorrencia->escalas()->Sync($escalas);
+        }
+    }
+
+
+    //Medicamento bolado
+
+    $bolados = DB::select(DB::raw("select a.hora as hora, a.escala_id as escala_id, tp.id as transcricao_produto_id, tr.empresa_id, a.prestador_id, pre.pessoa_id as pessoa_id from acaomedicamentos as a
+        join transcricao_produto as tp on tp.id=a.transcricao_produto_id
+        join transcricoes as tr on tr.id=tp.transcricao_id
+        join prestadores as pre on pre.id=a.prestador_id
+        join pessoas as pe on pe.id=pre.pessoa_id
+        where tr.ativo=1 and tp.ativo=1 and  a.`data`= :date_now and a.status=0 and  ((a.hora<= :now and a.hora>= :ago))"), array('date_now' => $date_now, 'now' => $hour_now, 'ago' => $hour_ago));
+
+    foreach ($bolados as $dado) {
+        // dd(array('date_ago'=>$date_ago,'date_now'=>$date_now,'hour'=>$dado->hora,'id'=>$dado->transcricao_produto_id));
+
+
+
+        $paciente = DB::select(
+            DB::raw("select p.id as paciente_id, p.nome as paciente_nome, ps.id as responsavel_id, ps.nome as responsavel_nome, tp.id as transcricao_produto_id from transcricao_produto as tp
+            join transcricoes as t on tp.transcricao_id=t.id
+            join ordemservicos as os on os.id=t.ordemservico_id
+            join orcamentos as o on o.id=os.orcamento_id
+            join homecares as hc on hc.orcamento_id=o.id
+            join pacientes as pac on pac.id=hc.paciente_id
+            join pessoas as p on pac.pessoa_id=p.id
+            left join responsaveis as r on r.id=pac.responsavel_id
+            left join pessoas as ps on ps.id=r.pessoa_id
+            where tp.id=:id and t.empresa_id=:empresa_id and t.ativo=1 and tp.ativo=1"),
+            array(
+                'empresa_id' => $dado->empresa_id,
+                'id' => $dado->transcricao_produto_id
+            )
+        );
+
+
+        $pessoas = [];
+        $escalas = [];
+
+
+        if ($dado->pessoa_id != null) {
+            array_push($pessoas, $dado->pessoa_id);
+        }
+        if ($dado->escala_id != null) {
+            array_push($escalas, $dado->escala_id);
+        }
+
+        //chacar se tem alguma escala essa hora?
+        // if (!property_exists($resp, 'responsavel_id')) {
+
+        // }
+        // dd([$dados_prestadores,$dado]);
+        if (count($pessoas) > 0) {
+
+            $ocorrencia = new Ocorrencia();
+            $ocorrencia->fill([
+                'tipo' => 'Medicamento Bolado',
+                'transcricao_produto_id' => $dado->transcricao_produto_id,
+                'empresa_id' => $dado->empresa_id,
+                'paciente_id' => $paciente[0]->paciente_id,
+                'responsavel_id' => $paciente[0]->responsavel_id,
+
+                'horario' => $date_now . ' ' . $dado->hora,
+                'situacao' => 'Pendente'
+            ])->save();
+            $ocorrencia->pessoas()->Sync($pessoas);
+            $ocorrencia->escalas()->Sync($escalas);
+        }
+    }
+
+
+
+    $checkins_atrasados = DB::select(
+        DB::raw("select es.empresa_id as empresa_id, pa.id as paciente_id, pa.nome as paciente_nome, ps.id as responsavel_id, ps.nome as responsavel_nome, pre.pessoa_id as prestador_id,pe.nome as prestador_nome, es.id as escala_id, es.dataentrada, es.horaentrada,es.datasaida,es.horasaida from escalas as es 
+        join prestadores as pre on pre.id=es.prestador_id
+        join pessoas as pe on pe.id=pre.pessoa_id
+        join ordemservicos as os on os.id=es.ordemservico_id
+        join orcamentos as o on o.id=os.orcamento_id
+        join homecares as hc on hc.orcamento_id=o.id
+        join pacientes as pac on pac.id=hc.paciente_id
+        join pessoas as pa on pac.pessoa_id=pa.id
+        left join responsaveis as r on r.id=pac.responsavel_id
+        left join pessoas as ps on ps.id=r.pessoa_id
+        where es.ativo=1 and es.horaentrada>=:hour_last and es.horaentrada<=:hour_now and es.dataentrada=:date_now
+        and es.id not in (select p.escala_id from pontos as p where p.tipo='Checkin' or p.tipo='Check-in') order by pe.nome"),
+        array(
+            'hour_last' => $hour_ago,
+            'hour_now' => $hour_now,
+            'date_now' => $date_now,
+        )
+    );
+
+    foreach ($checkins_atrasados as $checkin_atrasado) {
+        $ocorrencia = new Ocorrencia();
+        $ocorrencia->fill([
+            'tipo' => 'Check-in Atrasado',
+            'empresa_id' => $checkin_atrasado->empresa_id,
+            'paciente_id' => $checkin_atrasado->paciente_id,
+            'responsavel_id' => $checkin_atrasado->responsavel_id,
+            'horario' => $checkin_atrasado->dataentrada . ' ' . $checkin_atrasado->horaentrada,
+            'situacao' => 'Pendente'
+        ])->save();
+        $ocorrencia->pessoas()->Sync([$checkin_atrasado->prestador_id]);
+        $ocorrencia->escalas()->Sync([$checkin_atrasado->escala_id]);
+    }
+
+
+    $checkout_atrasados = DB::select(
+        DB::raw("select es.empresa_id as empresa_id, pa.id as paciente_id, pa.nome as paciente_nome, ps.id as responsavel_id, ps.nome as responsavel_nome, pre.pessoa_id as prestador_id,pe.nome as prestador_nome, es.id as escala_id, es.dataentrada, es.horaentrada,es.datasaida,es.horasaida from escalas as es 
+        join prestadores as pre on pre.id=es.prestador_id
+        join pessoas as pe on pe.id=pre.pessoa_id
+        join ordemservicos as os on os.id=es.ordemservico_id
+        join orcamentos as o on o.id=os.orcamento_id
+        join homecares as hc on hc.orcamento_id=o.id
+        join pacientes as pac on pac.id=hc.paciente_id
+        join pessoas as pa on pac.pessoa_id=pa.id
+        left join responsaveis as r on r.id=pac.responsavel_id
+        left join pessoas as ps on ps.id=r.pessoa_id
+        where es.ativo=1 and es.horasaida>=:hour_last and es.horasaida<=:hour_now and es.datasaida=:date_now
+        and es.id not in (select p.escala_id from pontos as p where p.tipo='Checkout' or p.tipo='Check-out') order by pe.nome"),
+        array(
+            'hour_last' => $hour_ago,
+            'hour_now' => $hour_now,
+            'date_now' => $date_now,
+        )
+    );
+
+    foreach ($checkout_atrasados as $checkout_atrasado) {
+        $ocorrencia = new Ocorrencia();
+        $ocorrencia->fill([
+            'tipo' => 'Check-out Atrasado',
+            'empresa_id' => $checkout_atrasado->empresa_id,
+            'paciente_id' => $checkout_atrasado->paciente_id,
+            'responsavel_id' => $checkout_atrasado->responsavel_id,
+            'horario' => $checkout_atrasado->datasaida . ' ' . $checkout_atrasado->horasaida,
+            'situacao' => 'Pendente'
+        ])->save();
+        $ocorrencia->pessoas()->Sync([$checkout_atrasado->prestador_id]);
+        $ocorrencia->escalas()->Sync([$checkout_atrasado->escala_id]);
+    }
+
+
+    // dd($nao_marcados);
+    // dd(DB::getQueryLog());
+    return $nao_marcados;
+});
+
+Route::get('/aviso', function () {
+    $hour_now = Carbon::now()->addMinutes(30)->subMinute()->format('H:i');
+    $hour_now1 = Carbon::now()->addMinutes(30)->format('H:i');
+
+    $hour_ago = Carbon::now()->format('H:i');
+    $date_now = Carbon::now()->format('Y-m-d');
+    $date_ago = Carbon::now()->format('Y-m-d');
+    $tomorrow = Carbon::now()->addDay()->format('Y-m-d');
+
+    $tomorrow = '2021-02-13';
+
+    $date_now = '2021-02-12';
+    $date_ago = '2021-02-11';
+
+    $hour_now1 = '19:00';
+    $hour_now = '18:59';
+    $hour_ago = '18:30';
+    $nao_marcados = DB::select(DB::raw("select hm.horario as hora, tp.id as transcricao_produto_id, tr.empresa_id from transcricao_produto as tp
+    join transcricoes as tr on tr.id=tp.transcricao_id
+    join horariomedicamentos as hm on hm.transcricao_produto_id=tp.id and hm.horario not in (select a.hora from acaomedicamentos as a where a.transcricao_produto_id=tp.id and a.`data`= :date_now)
+    where tr.empresa_id=:empresa_id and ((hm.horario> :now and hm.horario<= :ago) or (hm.horario=:now1)) and tp.ativo=1 and hm.ativo=1 order by transcricao_produto_id"), array('empresa_id' => 1, 'date_now' => $date_now, 'now' => $hour_now, 'ago' => $hour_ago, 'now1' => $hour_now1));
+    $dados = [];
+    // dd($nao_marcados);
+
+    foreach ($nao_marcados as $dado) {
+        // dd(array('date_ago'=>$date_ago,'date_now'=>$date_now,'hour'=>$dado->hora,'id'=>$dado->transcricao_produto_id));
+        $dados_prestadores = DB::select(
+            DB::raw("select tp.id as transcricao_produto_id, es.id as escala_id, pe.id as pessoa_id, pe.nome, es.dataentrada, es.horaentrada, es.datasaida,es.horasaida from transcricao_produto as tp
+        join transcricoes as t on tp.transcricao_id=t.id
+        join escalas as es on es.ordemservico_id=t.ordemservico_id and es.ativo=1 and  ((es.dataentrada=:date_now and es.horaentrada<=:hour and es.horasaida>:hour_1) or (es.dataentrada=:date_ago_ and es.datasaida=:date_now_ and :hour_2<es.horasaida and es.horaentrada>es.horasaida) or (es.dataentrada=:date_now_2 and es.horaentrada<=:hour_3 and es.datasaida=:tomorrow))
+        left join prestadores as pre on pre.id=es.prestador_id
+        join pessoas as pe on pe.id=pre.pessoa_id
+        where tp.id=:id and t.empresa_id=:empresa_id"),
+            array(
+                'empresa_id' => $dado->empresa_id,
+                'date_now' => $date_now,
+                'date_now_' => $date_now,
+                'date_now_2' => $date_now,
+                'tomorrow' => $tomorrow,
+
+                'hour' => $dado->hora,
+                'hour_1' => $dado->hora,
+                'hour_2' => $dado->hora,
+                'hour_3' => $dado->hora,
+
+
+                'date_ago_' => $date_ago,
+                'id' => $dado->transcricao_produto_id
+            )
+        );
+        dd($dados_prestadores[0]->pessoa_id);
+    }
+});
