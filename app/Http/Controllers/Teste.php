@@ -85,7 +85,7 @@ class Teste extends Controller
 //         } else {
 //             $escalas = $escalas->get();
 // // >>>>>>> 41938c3d4899b2cd9c73269594abd0849132750d
-//         }
+        }
 
         fclose($file);
 
