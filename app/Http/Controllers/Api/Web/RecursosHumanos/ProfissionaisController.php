@@ -7,6 +7,7 @@ use App\Models\Dadoscontratual;
 use App\Models\Email;
 use App\Models\Endereco;
 use App\Http\Controllers\Controller;
+use App\Models\Anexo;
 use App\Models\Pessoa;
 use App\Models\PessoaEmail;
 use App\Models\PessoaEndereco;
