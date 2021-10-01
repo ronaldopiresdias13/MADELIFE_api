@@ -271,6 +271,31 @@ class ProfissionaisController extends Controller
                     }
                 }
             }
+            $file = $request->file('file');
+            $request = json_decode($request->data, true);
+            if ($file && $file->isValid()) {
+                $md5 = md5_file($file);
+                $caminho = 'anexos/';
+                $nome = $md5 . '.' . $file->extension();
+                $upload = $file->storeAs($caminho, $nome);
+                $nomeOriginal = $file->getClientOriginalName();
+                foreach ($request['documentos'] as $key => $documento) {
+                    if ($upload) {
+                        DB::transaction(function () use ($request, $caminho, $nome, $nomeOriginal, $documento) {
+
+                            if ($documento['documentos']) {
+                                Anexo::create([
+                                    'anexo' => $caminho . '/' . $nome,
+                                    'nome'  => $nomeOriginal
+                                ]);
+                            }
+                        });
+                        return response()->json('Upload de arquivo bem sucedido!', 200)->header('Content-Type', 'text/plain');
+                    } else {
+                        return response()->json('Erro, Upload não realizado!', 400)->header('Content-Type', 'text/plain');
+                    }
+                }
+            }
         });
 
         // return response()->json('Profissional cadastrado com sucesso!', 200)->header('Content-Type', 'text/plain');

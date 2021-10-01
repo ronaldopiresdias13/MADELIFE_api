@@ -18,7 +18,9 @@ class BaseProfissionaisController extends Controller
     {
         $empresa_id = $request->user()->pessoa->profissional->empresa_id;
 
-        return BaseProfissionais::where('empresa_id', $empresa_id)->get();
+        return BaseProfissionais::where('empresa_id', $empresa_id)
+        ->orderBy('name')
+        ->get();
     }
 
     /**
