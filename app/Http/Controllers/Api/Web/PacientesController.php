@@ -104,8 +104,8 @@ class PacientesController extends Controller
     public function store(Request $request)
     {
         $empresa = $request->user()->pessoa->profissional->empresa;
-        // $qtdPac = Paciente::where('empresa_id', $empresa->id)->where('ativo', true)->count();
-        // if ($qtdPac < $empresa->quantidadepaciente) {
+        $qtdPac = Paciente::where('empresa_id', $empresa->id)->where('ativo', true)->count();
+        if ($qtdPac < $empresa->quantidadepaciente) {
         DB::transaction(function () use ($request) {
             $paciente = Paciente::create([
                 'empresa_id' => $request['empresa_id'],
@@ -189,15 +189,15 @@ class PacientesController extends Controller
                 }
             }
         });
-        // } else {
-        //     return response()->json([
-        //         'alert' => [
-        //             'title' => 'Ops, não foi possível salvar',
-        //             'text' => 'Quantidade máxima de pacientes atingida!'
-        //         ]
-        //     ], 400)
-        //         ->header('Content-Type', 'application/json');
-        // }
+        } else {
+            return response()->json([
+                'alert' => [
+                    'title' => 'Ops, não foi possível salvar',
+                    'text' => 'Quantidade máxima de pacientes atingida!'
+                ]
+            ], 400)
+                ->header('Content-Type', 'application/json');
+        }
     }
 
     /**

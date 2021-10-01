@@ -30,8 +30,66 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('dashboard/get_pendencias', 'Api\Web\Home\DashboardController@get_pendencias');
         });
         Route::prefix('pils')->group(function () {
+
+             //anexosB
+             Route::get('listAnexosB', 'Api\Web\AnexoBController@get_anexosB');
+             Route::get('getDadosAnexoB/', 'Api\Web\AnexoBController@getDadosAnexoB');
+             Route::post('store_anexob', 'Api\Web\AnexoBController@store_anexob');
+             Route::get('getAnexoBEdit/{id}', 'Api\Web\AnexoBController@getAnexoBEdit');
+             Route::post('update_anexob', 'Api\Web\AnexoBController@update_anexob');
+ 
+             Route::delete('delete_anexob/{id}', 'Api\Web\AnexoBController@delete_anexob');
+
+            //anexosA
+            Route::get('listAnexosA', 'Api\Web\AnexoAController@get_anexosA');
+            Route::get('getDadosAnexoA/', 'Api\Web\AnexoAController@getDadosAnexoA');
+            Route::post('store_anexoa', 'Api\Web\AnexoAController@store_anexoa');
+            Route::get('getAnexoAEdit/{id}', 'Api\Web\AnexoAController@getAnexoAEdit');
+            Route::post('update_anexoa', 'Api\Web\AnexoAController@update_anexoa');
+
+            Route::delete('delete_anexoa/{id}', 'Api\Web\AnexoAController@delete_anexoa');
+
+            //pil
             Route::get('listPils', 'Api\Web\PilController@get_pils');
             Route::get('getDadosPil/', 'Api\Web\PilController@getDadosPil');
+            Route::get('getPil/{id}', 'Api\Web\PilController@getPil');
+
+            Route::get('getCuidados/', 'Api\Web\PilController@getCuidados');
+            Route::get('getMedicamentos/', 'Api\Web\PilController@getMedicamentos');
+            Route::post('store_pil', 'Api\Web\PilController@store_pil');
+            Route::post('update_pil', 'Api\Web\PilController@update_pil');
+
+
+            Route::delete('delete_pil/{id}', 'Api\Web\PilController@delete_pil');
+
+
+            //nead
+            Route::get('listNeads', 'Api\Web\NeadController@get_neads');
+            Route::get('getDadosNead/', 'Api\Web\NeadController@getDadosNead');
+
+            Route::get('getNeadEdit/{id}', 'Api\Web\NeadController@getNeadEdit');
+
+            Route::post('store_nead', 'Api\Web\NeadController@store_nead');
+
+            Route::delete('delete_nead/{id}', 'Api\Web\NeadController@delete_nead');
+            Route::post('update_nead', 'Api\Web\NeadController@update_nead');
+
+
+            //abmid
+
+            Route::get('listAbmids', 'Api\Web\AbmidController@get_abmids');
+            Route::get('getDadosAbmid/', 'Api\Web\AbmidController@getDadosAbmid');
+
+            Route::get('getAbmidEdit/{id}', 'Api\Web\AbmidController@getAbmidEdit');
+
+            Route::post('store_abmid', 'Api\Web\AbmidController@store_abmid');
+
+            Route::delete('delete_abmid/{id}', 'Api\Web\AbmidController@delete_abmid');
+            Route::post('update_abmid', 'Api\Web\AbmidController@update_abmid');
+
+
+
+            //diagnosticos
 
             Route::get('listDiagnosticos', 'Api\Web\DiagnosticosPrimarioController@listDiagnosticos');
             Route::post('storeDiagnostico', 'Api\Web\DiagnosticosPrimarioController@store_diagnostico');
