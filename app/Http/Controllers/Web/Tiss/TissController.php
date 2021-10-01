@@ -27,14 +27,14 @@ class TissController extends Controller
             $resposta = $tissService->criarXml();
 
             if ($resposta) {
-                return response()->json('Ok!\nSalvo com Sucesso!', 200)->header('Content-Type', 'text/plain');
+                return response()->json('Ok! \nSalvo com Sucesso!', 200)->header('Content-Type', 'text/plain');
             } else {
                 throw ValidationException::withMessages([
                     'tiss' => ['Erro ao gerar o TISS. Verifique se todos os dados estão corretos'],
                 ]);
             }
         } else {
-            return response()->json('Erro!\nVersão do TISS não informado no cadastro do Cliente!', 400)->header('Content-Type', 'text/plain');
+            return response()->json('Erro! \nVersão do TISS não informado no cadastro do Cliente!', 400)->header('Content-Type', 'text/plain');
         }
     }
 
