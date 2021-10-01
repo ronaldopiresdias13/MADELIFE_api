@@ -284,12 +284,13 @@ class ProfissionaisController extends Controller
                         DB::transaction(function () use ($request, $caminho, $nome, $nomeOriginal) {
                             foreach ($request['documentos'] as $key => $documento) {
                                 if ($documento['documentos']) {
-                                    Anexo::firstOrCreate([
-                                        'anexo' => $caminho . '/' . $nome,
-                                        'nome'  => $nomeOriginal
-                                    ]);
+                                        Anexo::create([
+                                            'anexo' => $caminho . '/' . $nome,
+                                            'nome'  => $nomeOriginal
+                                        ]);
                                 }
                             }
+
                         });
                         return response()->json('Upload de arquivo bem sucedido!', 200)->header('Content-Type', 'text/plain');
                     } else {
