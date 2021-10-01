@@ -128,7 +128,9 @@ class ContasController extends Controller
                     'valorpago'          => $request['valorpago'],
                     'tipocontapagamento' => $request['tipocontapagamento'],
                     'datavencimento'     => $request['datavencimento'],
+                    'datavencimentofim'     => $request['datavencimentofim'],
                     'dataemissao'        => $request['dataemissao'],
+                    'dataemissaofim'        => $request['dataemissaofim'],
                 ]
             );
             foreach ($request['pagamentos'] as $key => $pagamento) {
