@@ -7,6 +7,7 @@ use App\Models\Dadoscontratual;
 use App\Models\Email;
 use App\Models\Endereco;
 use App\Http\Controllers\Controller;
+use App\Models\Anexo;
 use App\Models\Pessoa;
 use App\Models\PessoaEmail;
 use App\Models\PessoaEndereco;
@@ -131,7 +132,7 @@ class ProfissionaisController extends Controller
             return response()->json('Profissional já existe!', 400)->header('Content-Type', 'text/plain');
         }
 
-        DB::transaction(function () use ($request, $profissional, $empresa_id) {
+        DB::transaction(function () use ($request, $empresa_id) {
             $profissional = Profissional::create([
                 'pessoafisica' => 1,
                 'empresa_id'   => $empresa_id,
@@ -271,6 +272,33 @@ class ProfissionaisController extends Controller
                     }
                 }
             }
+
+            // return $request->documentos;
+
+            // if ($request['documentos']) {
+            //     foreach ($request->documentos as $key => $documento) {
+            //         $file = $documento['anexo']->file('file');
+            //         $documento['anexo'] = json_decode($documento['anexo'], true);
+            //         if ($file && $file->isValid()) {
+            //             $md5 = md5_file($file);
+            //             $caminho = 'anexos/';
+            //             $nome = $md5 . '.' . $file->extension();
+            //             $upload = $file->storeAs($caminho, $nome);
+            //             $nomeOriginal = $file->getClientOriginalName();
+
+            //             if ($upload) {
+            //                 Anexo::create([
+            //                     'anexo_id' => $profissional->id,
+            //                     'anexo_type' => 'profissionais',
+            //                     'caminho' => $caminho . '/' . $nome,
+            //                     'nome'  => $nomeOriginal,
+            //                     'descricao'  => $documento['anexo']['descricao']
+            //                 ]);
+                        
+            //             }
+            //         }
+            //     }
+            // }
         });
 
         // return response()->json('Profissional cadastrado com sucesso!', 200)->header('Content-Type', 'text/plain');
@@ -428,7 +456,7 @@ class ProfissionaisController extends Controller
                     }
                 }
             }
-            
+
             foreach ($pessoa->emails as $key => $email) {
                 $pessoaemail = Pessoaemail::find($email->pivot->id);
                 $pessoaemail->delete();
