@@ -72,18 +72,18 @@ class PrestadoresController extends Controller
      */
     public function buscaprestadoresporfiltro(Request $request)
     {
-        $user = $request->user();
-        $empresa_id = $user->pessoa->profissional->empresa->id;
+        // $user = $request->user();
+        // $empresa_id = $user->pessoa->profissional->empresa->id;
         return Prestador::with(['formacoes', 'pessoa.conselhos', 'pessoa.enderecos' => function ($query) {
             $query->with('cidade');
         }])
-        ->whereHas('empresas', function (Builder $query) use ($empresa_id){
-            $query->where('status', '=', 'Aprovado');
-            $query->where('ativo', '=', 1);
-            $query->where('empresa_id', $empresa_id);
-        })
+        // ->whereHas('empresas', function (Builder $query) use ($empresa_id){
+        //     $query->where('status', '=', 'Aprovado');
+        //     $query->where('ativo', '=', 1);
+        //     $query->where('empresa_id', $empresa_id);
+        // })
             // ->join('formacoes', 'pessoas.id', '=', 'prestadores.pessoa_id')
-            
+
             ->join('pessoas', 'pessoas.id', '=', 'prestadores.pessoa_id')
             ->join('conselhos', 'pessoas.id', '=', 'conselhos.pessoa_id')
             ->where('pessoas.nome', 'like', $request->nome ? '%' . $request->nome . '%' : '')
@@ -93,7 +93,7 @@ class PrestadoresController extends Controller
             ->select('prestadores.*')
             ->get();
     }
-    
+
     /**
      * Display the specified resource.
      *
