@@ -83,14 +83,13 @@ class TissController extends Controller
 
         if ($request->paginate) {
             $result = $result->paginate($request['per_page'] ? $request['per_page'] : 15);
+            if (env("APP_ENV", 'production') == 'production') {
+                return $result->withPath(str_replace('http:', 'https:', $result->path()));
+            } else {
+                return $result;
+            }
         } else {
-            $result = $result->get();
-        }
-
-        if (env("APP_ENV", 'production') == 'production') {
-            return $result->withPath(str_replace('http:', 'https:', $result->path()));
-        } else {
-            return $result;
+            return $result->get();
         }
     }
 
