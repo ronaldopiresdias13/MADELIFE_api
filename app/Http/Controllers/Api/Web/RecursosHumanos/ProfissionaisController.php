@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
+
 class ProfissionaisController extends Controller
 {
     /**
@@ -109,10 +110,10 @@ class ProfissionaisController extends Controller
         }
 
         $empresa_id = Auth::user()->pessoa->profissional->empresa_id;
-        
-        $file = $request->documentos;
+
+        $file = $request->file('documentos');
         $request = json_decode($request->data, true);
-        
+
         if ($request['pessoa']) {
             $pessoa = Pessoa::where(
                 'cpfcnpj',
@@ -280,7 +281,7 @@ class ProfissionaisController extends Controller
 
             if ($request['documentos']) {
                 foreach ($request['documentos'] as $key => $documento) {
-                    
+
                     if ($file && $file->isValid()) {
                         $md5 = md5_file($file);
                         $caminho = 'anexos/';
@@ -289,13 +290,14 @@ class ProfissionaisController extends Controller
                         $nomeOriginal = $file->getClientOriginalName();
 
                         if ($upload) {
-                             Anexo::create([
-                                'anexo_id' => $profissional->id,
-                                'anexo_type' => 'profissionais',
-                                'caminho' => $caminho . '/' . $nome,
-                                'nome'  => $nomeOriginal,
-                                'descricao'  => $documento['descricao']
-                            ]);
+                                Anexo::create([
+                                    'anexo_id' => $profissional->id,
+                                    'anexo_type' => 'profissionais',
+                                    'caminho' => $caminho . '/' . $nome,
+                                    'nome'  => $nomeOriginal,
+                                    'descricao'  => $documento['descricao']
+                                ]);
+                         
                         }
                     }
                 }
