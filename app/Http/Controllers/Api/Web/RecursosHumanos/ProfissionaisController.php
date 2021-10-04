@@ -294,7 +294,6 @@ class ProfissionaisController extends Controller
                                 'nome'  => $nomeOriginal,
                                 'descricao'  => $documento['anexo']['descricao']
                             ]);
-                        
                         }
                     }
                 }
