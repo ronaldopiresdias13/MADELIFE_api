@@ -24,6 +24,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
 
 class ProfissionaisController extends Controller
 {
@@ -110,7 +111,10 @@ class ProfissionaisController extends Controller
         }
 
         $empresa_id = Auth::user()->pessoa->profissional->empresa_id;
+
+        $file = $request->documentos;
         $request = json_decode($request->data, true);
+
         if ($request['pessoa']) {
             $pessoa = Pessoa::where(
                 'cpfcnpj',
@@ -133,7 +137,7 @@ class ProfissionaisController extends Controller
             return response()->json('Profissional já existe!', 400)->header('Content-Type', 'text/plain');
         }
 
-        DB::transaction(function () use ($request, $empresa_id) {
+        DB::transaction(function () use ($request, $empresa_id, $file) {
             $profissional = Profissional::create([
                 'pessoafisica' => 1,
                 'empresa_id'   => $empresa_id,
@@ -276,8 +280,7 @@ class ProfissionaisController extends Controller
 
             // return $request->documentos;
             if ($request['documentos']) {
-                foreach ($request['documentos'] as $documento) {
-                    $file = $documento->file('file');
+                foreach ($request['documentos'] as $key => $documento) {
 
                     if ($file && $file->isValid()) {
                         $md5 = md5_file($file);
@@ -292,7 +295,7 @@ class ProfissionaisController extends Controller
                                 'anexo_type' => 'profissionais',
                                 'caminho' => $caminho . '/' . $nome,
                                 'nome'  => $nomeOriginal,
-                                'descricao'  => $documento['anexo']['descricao']
+                                'descricao'  => $documento['descricao']
                             ]);
                         }
                     }
