@@ -275,30 +275,30 @@ class ProfissionaisController extends Controller
 
             // return $request->documentos;
 
-            // if ($request['documentos']) {
-            //     foreach ($request->documentos as $key => $documento) {
-            //         $file = $documento['anexo']->file('file');
-            //         $documento['anexo'] = json_decode($documento['anexo'], true);
-            //         if ($file && $file->isValid()) {
-            //             $md5 = md5_file($file);
-            //             $caminho = 'anexos/';
-            //             $nome = $md5 . '.' . $file->extension();
-            //             $upload = $file->storeAs($caminho, $nome);
-            //             $nomeOriginal = $file->getClientOriginalName();
+            if ($request['documentos']) {
+                foreach ($request['documentos'] as $key => $documento) {
+                    $file = $documento['anexo']->file('file');
+                    $documento['anexo'] = json_decode($documento['anexo'], true);
+                    if ($file && $file->isValid()) {
+                        $md5 = md5_file($file);
+                        $caminho = 'anexos/';
+                        $nome = $md5 . '.' . $file->extension();
+                        $upload = $file->storeAs($caminho, $nome);
+                        $nomeOriginal = $file->getClientOriginalName();
 
-            //             if ($upload) {
-            //                 Anexo::create([
-            //                     'anexo_id' => $profissional->id,
-            //                     'anexo_type' => 'profissionais',
-            //                     'caminho' => $caminho . '/' . $nome,
-            //                     'nome'  => $nomeOriginal,
-            //                     'descricao'  => $documento['anexo']['descricao']
-            //                 ]);
+                        if ($upload) {
+                            Anexo::create([
+                                'anexo_id' => $profissional->id,
+                                'anexo_type' => 'profissionais',
+                                'caminho' => $caminho . '/' . $nome,
+                                'nome'  => $nomeOriginal,
+                                'descricao'  => $documento['anexo']['descricao']
+                            ]);
                         
-            //             }
-            //         }
-            //     }
-            // }
+                        }
+                    }
+                }
+            }
         });
 
         // return response()->json('Profissional cadastrado com sucesso!', 200)->header('Content-Type', 'text/plain');
