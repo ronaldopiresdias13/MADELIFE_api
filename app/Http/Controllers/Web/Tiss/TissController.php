@@ -27,14 +27,14 @@ class TissController extends Controller
             $resposta = $tissService->criarXml();
 
             if ($resposta) {
-                return response()->json('Ok!\nSalvo com Sucesso!', 200)->header('Content-Type', 'text/plain');
+                return response()->json('Ok! \nSalvo com Sucesso!', 200)->header('Content-Type', 'text/plain');
             } else {
                 throw ValidationException::withMessages([
                     'tiss' => ['Erro ao gerar o TISS. Verifique se todos os dados estão corretos'],
                 ]);
             }
         } else {
-            return response()->json('Erro!\nVersão do TISS não informado no cadastro do Cliente!', 400)->header('Content-Type', 'text/plain');
+            return response()->json('Erro! \nVersão do TISS não informado no cadastro do Cliente!', 400)->header('Content-Type', 'text/plain');
         }
     }
 
@@ -79,18 +79,19 @@ class TissController extends Controller
      */
     public function index(Request $request)
     {
-        $result = Tiss::with('cliente.pessoa', 'medicoes.ordemservico.orcamento.homecare.paciente.pessoa')->orderBy('created_at', 'desc');
+        $result = Tiss::join('clientes as c', 'c.id', '=', 'tiss.cliente_id')
+            ->join('pessoas as p', 'p.id', '=', 'c.pessoa_id')
+            ->with('cliente.pessoa', 'medicoes.ordemservico.orcamento.homecare.paciente.pessoa')->orderBy('p.nome');
 
         if ($request->paginate) {
             $result = $result->paginate($request['per_page'] ? $request['per_page'] : 15);
+            if (env("APP_ENV", 'production') == 'production') {
+                return $result->withPath(str_replace('http:', 'https:', $result->path()));
+            } else {
+                return $result;
+            }
         } else {
-            $result = $result->get();
-        }
-
-        if (env("APP_ENV", 'production') == 'production') {
-            return $result->withPath(str_replace('http:', 'https:', $result->path()));
-        } else {
-            return $result;
+            return $result->get();
         }
     }
 

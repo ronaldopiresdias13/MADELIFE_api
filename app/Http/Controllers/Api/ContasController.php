@@ -112,10 +112,10 @@ class ContasController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+            // $empresa_id = $request->user()->pessoa->profissional->empresa_id;
             $conta = Conta::create(
                 [
-                    'empresa_id'         => $empresa_id,
+                    'empresa_id'         => $request['empresa_id'],
                     'tipopessoa'         => $request['tipopessoa'],
                     'pessoa_id'          => $request['pessoa_id'],
                     'natureza_id'        => $request['natureza_id'],
@@ -128,7 +128,9 @@ class ContasController extends Controller
                     'valorpago'          => $request['valorpago'],
                     'tipocontapagamento' => $request['tipocontapagamento'],
                     'datavencimento'     => $request['datavencimento'],
+                    'datavencimentofim'     => $request['datavencimentofim'],
                     'dataemissao'        => $request['dataemissao'],
+                    'dataemissaofim'        => $request['dataemissaofim'],
                 ]
             );
             foreach ($request['pagamentos'] as $key => $pagamento) {
