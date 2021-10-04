@@ -277,7 +277,7 @@ class ProfissionaisController extends Controller
             // return $request->documentos;
             if ($request['documentos']) {
                 foreach ($request['documentos'] as $documento) {
-                    $file = $request->file('anexo');
+                    $file = $documento->file('file');
 
                     if ($file && $file->isValid()) {
                         $md5 = md5_file($file);
