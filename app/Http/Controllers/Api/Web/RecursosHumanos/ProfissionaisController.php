@@ -8,6 +8,7 @@ use App\Models\Email;
 use App\Models\Endereco;
 use App\Http\Controllers\Controller;
 use App\Models\Anexo;
+use App\Models\Documento;
 use App\Models\Pessoa;
 use App\Models\PessoaEmail;
 use App\Models\PessoaEndereco;
@@ -278,7 +279,6 @@ class ProfissionaisController extends Controller
             }
 
             // return $request->documentos;
-
             if ($request['documentos']) {
                 foreach ($request['documentos'] as $key => $documento) {
 
