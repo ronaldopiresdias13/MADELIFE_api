@@ -100,6 +100,7 @@ class ProfissionaisController extends Controller
      */
     public function novoProfissional(Request $request)
     {
+
         if (!Auth::check()) {
             return response()->json([
                 'alert' => [
@@ -112,7 +113,9 @@ class ProfissionaisController extends Controller
 
         $empresa_id = Auth::user()->pessoa->profissional->empresa_id;
 
-        $file = $request->file('documentos');
+
+        $files = $request['arquivos'];
+        // $count = count($request['documentos']);
         $request = json_decode($request->data, true);
 
         if ($request['pessoa']) {
@@ -134,10 +137,10 @@ class ProfissionaisController extends Controller
         }
 
         if ($profissional) {
-            return response()->json('Profissional já existe!', 400)->header('Content-Type', 'text/plain');
+            return response()->json('Profissional já existe!' . json_encode($request), 400)->header('Content-Type', 'text/plain');
         }
 
-        DB::transaction(function () use ($request, $empresa_id, $file) {
+        DB::transaction(function () use ($request, $empresa_id, $files) {
             $profissional = Profissional::create([
                 'pessoafisica' => 1,
                 'empresa_id'   => $empresa_id,
@@ -279,27 +282,52 @@ class ProfissionaisController extends Controller
             }
 
             // return $request->documentos;
-            if ($request['documentos']) {
-                foreach ($request['documentos'] as $key => $documento) {
+            // $request['anexo']->file('file')
+            // if ($request['documentos']) {
+            //     foreach ($request['documentos'] as $key => $documento) {
 
-                    if ($file && $file->isValid()) {
-                        $md5 = md5_file($file);
-                        $caminho = 'anexos/';
-                        $nome = $md5 . '.' . $file->extension();
-                        $upload = $file->storeAs($caminho, $nome);
-                        $nomeOriginal = $file->getClientOriginalName();
+            //         if ($file && $file->isValid()) {
+            //             $md5 = md5_file($file);
+            //             $caminho = 'anexos/';
+            //             $nome = $md5 . '.' . $file->extension();
+            //             $upload = $file->storeAs($caminho, $nome);
+            //             $nomeOriginal = $file->getClientOriginalName();
 
-                        if ($upload) {
-                                Anexo::create([
-                                    'anexo_id' => $profissional->id,
-                                    'anexo_type' => 'profissionais',
-                                    'caminho' => $caminho . '/' . $nome,
-                                    'nome'  => $nomeOriginal,
-                                    'descricao'  => $documento['descricao']
-                                ]);
-                         
-                        }
-                    }
+            //             if ($upload) {
+            //                     Anexo::create([
+            //                         'anexo_id' => $profissional->id,
+            //                         'anexo_type' => 'profissionais',
+            //                         'caminho' => $caminho . '/' . $nome,
+            //                         'nome'  => $nomeOriginal,
+            //                         'descricao'  => $documento['descricao']
+            //                     ]);
+
+            //             }
+            //         }
+            //     }
+            // }
+            if ($files) {
+                foreach ($files as $documento) {
+                    // $f = $documento->file('anexo');
+                    // $f = $documento->toJson();
+                    // if ($documento && $documento->anexo->file->isValid()) {
+                    $desc = $documento->descricao;
+                    $md5 = md5_file($documento);
+                    $caminho = 'anexos/';
+                    $nome = $md5 . '.' . $documento->extension();
+                    $upload = $documento->storeAs($caminho, $nome);
+                    $nomeOriginal = $documento->getClientOriginalName();
+                    // $desc = ;
+                    //if ($upload) {
+                    Anexo::create([
+                        'anexo_id' => $profissional->id,
+                        'anexo_type' => 'profissionais',
+                        'caminho' => $caminho . '/' . $nome,
+                        'nome'  => $nomeOriginal,
+                        'descricao'  => $desc
+                    ]);
+                    //}
+                    // }
                 }
             }
         });
