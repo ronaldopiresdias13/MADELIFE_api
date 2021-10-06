@@ -140,6 +140,7 @@ class VendasController extends Controller
                 'quantidade'        => $request['orcamento']['quantidade'],
                 'situacao'          => $request['orcamento']['situacao'],
                 'descricao'         => $request['orcamento']['descricao'],
+                'valordesconto'     => $request['orcamento']['valordesconto'],
                 'valortotalservico' => $request['orcamento']['valortotalservico'] ? $request['orcamento']['valortotalservico'] : 0,
                 'valortotalcusto'   => $request['orcamento']['valortotalcusto'] ? $request['orcamento']['valortotalcusto'] : 0,
                 'valortotalproduto' => $request['orcamento']['valortotalproduto'] ? $request['orcamento']['valortotalproduto'] : 0,
