@@ -323,9 +323,55 @@ class VendasController extends Controller
      * @param  \App\Venda  $venda
      * @return \Illuminate\Http\Response
      */
-    public function show(Venda $venda)
+    public function show(Request $request, Venda $venda)
     {
-        //
+        $iten = $venda;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adicional) {
+                if (is_string($adicional)) {
+                    $iten[$adicional];
+                } else {
+                    $iten2 = $iten;
+                    foreach ($adicional as $key => $a) {
+                        if ($key == 0) {
+                            if ($iten[0] == null) {
+                                $iten2 = $iten[$a];
+                            } else {
+                                foreach ($iten as $key => $i) {
+                                    $i[$a];
+                                }
+                            }
+                        } else {
+                            if ($iten2 != null) {
+                                if ($iten2->count() > 0) {
+                                    if ($iten2[0] == null) {
+                                        $iten2 = $iten2[$a];
+                                    } else {
+                                        foreach ($iten2 as $key => $i) {
+                                            $i[$a];
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // return Orcamento::with(
+        //     [
+        //         'cliente.pessoa',
+        //         'produtos.produto'
+        //     ]
+        // )->find($iten->orcamento_id);
+            return $iten;
+        
     }
 
     /**
@@ -337,7 +383,7 @@ class VendasController extends Controller
      */
     public function update(Request $request, Venda $venda)
     {
-        //
+        $venda->update($request->all());
     }
 
     /**
