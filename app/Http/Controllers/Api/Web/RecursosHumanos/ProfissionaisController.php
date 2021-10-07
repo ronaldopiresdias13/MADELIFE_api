@@ -8,6 +8,7 @@ use App\Models\Email;
 use App\Models\Endereco;
 use App\Http\Controllers\Controller;
 use App\Models\Anexo;
+use App\Models\Documento;
 use App\Models\Pessoa;
 use App\Models\PessoaEmail;
 use App\Models\PessoaEndereco;
@@ -23,6 +24,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
 
 class ProfissionaisController extends Controller
 {
@@ -98,6 +100,7 @@ class ProfissionaisController extends Controller
      */
     public function novoProfissional(Request $request)
     {
+
         if (!Auth::check()) {
             return response()->json([
                 'alert' => [
@@ -110,12 +113,17 @@ class ProfissionaisController extends Controller
 
         $empresa_id = Auth::user()->pessoa->profissional->empresa_id;
 
-        if ($request['data']['pessoa']) {
+
+        $files = $request['arquivos'];
+        // $count = count($request['documentos']);
+        $request = json_decode($request->data, true);
+
+        if ($request['pessoa']) {
             $pessoa = Pessoa::where(
                 'cpfcnpj',
-                $request['data']['pessoa']['cpfcnpj']
+                $request['pessoa']['cpfcnpj']
             )->first();
-        } elseif ($request['data']['pessoa_id']) {
+        } elseif ($request['pessoa_id']) {
             $pessoa = Pessoa::find($request['pessoa_id']);
         }
 
@@ -129,24 +137,24 @@ class ProfissionaisController extends Controller
         }
 
         if ($profissional) {
-            return response()->json('Profissional já existe!', 400)->header('Content-Type', 'text/plain');
+            return response()->json('Profissional já existe!' . json_encode($request), 400)->header('Content-Type', 'text/plain');
         }
 
-        DB::transaction(function () use ($request, $empresa_id) {
+        DB::transaction(function () use ($request, $empresa_id, $files) {
             $profissional = Profissional::create([
                 'pessoafisica' => 1,
                 'empresa_id'   => $empresa_id,
                 'pessoa_id'    => Pessoa::firstOrCreate(
                     [
-                        'cpfcnpj'     => $request['data']['pessoa']['cpfcnpj'],
+                        'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
                     ],
                     [
-                        'nome'        => $request['data']['pessoa']['nome'],
-                        'nascimento'  => $request['data']['pessoa']['nascimento'],
-                        'rgie'        => $request['data']['pessoa']['rgie'],
+                        'nome'        => $request['pessoa']['nome'],
+                        'nascimento'  => $request['pessoa']['nascimento'],
+                        'rgie'        => $request['pessoa']['rgie'],
                         // 'observacoes' => $request['pessoa']['observacoes'],
-                        'perfil'      => $request['data']['pessoa']['perfil'],
-                        'status'      => $request['data']['pessoa']['status'],
+                        'perfil'      => $request['pessoa']['perfil'],
+                        'status'      => $request['pessoa']['status'],
                     ]
                 )->id,
                 'sexo'                   => $request['sexo'],
@@ -219,8 +227,8 @@ class ProfissionaisController extends Controller
                 }
             }
 
-            if ($request['data']['pessoa']['enderecos']) {
-                foreach ($request['data']['pessoa']['enderecos'] as $key => $endereco) {
+            if ($request['pessoa']['enderecos']) {
+                foreach ($request['pessoa']['enderecos'] as $key => $endereco) {
                     $pessoa_endereco = PessoaEndereco::firstOrCreate([
                         'pessoa_id'   => $profissional->pessoa_id,
                         'endereco_id' => Endereco::firstOrCreate(
@@ -239,8 +247,8 @@ class ProfissionaisController extends Controller
                 }
             }
 
-            if ($request['data']['pessoa']['telefones']) {
-                foreach ($request['data']['pessoa']['telefones'] as $key => $telefone) {
+            if ($request['pessoa']['telefones']) {
+                foreach ($request['pessoa']['telefones'] as $key => $telefone) {
                     if ($telefone['telefone']) {
                         PessoaTelefone::firstOrCreate([
                             'pessoa_id'   => $profissional->pessoa_id,
@@ -256,8 +264,8 @@ class ProfissionaisController extends Controller
                 }
             }
 
-            if ($request['data']['pessoa']['emails']) {
-                foreach ($request['data']['pessoa']['emails'] as $key => $email) {
+            if ($request['pessoa']['emails']) {
+                foreach ($request['pessoa']['emails'] as $key => $email) {
                     if ($email['email']) {
                         PessoaEmail::firstOrCreate([
                             'pessoa_id' => $profissional->pessoa_id,
@@ -274,6 +282,9 @@ class ProfissionaisController extends Controller
             }
 
             // return $request->documentos;
+            // $request['anexo']->file('file')
+            // if ($request['documentos']) {
+            //     foreach ($request['documentos'] as $key => $documento) {
 
 
             if ($request['documentos']) {
