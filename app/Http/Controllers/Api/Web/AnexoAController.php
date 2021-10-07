@@ -85,6 +85,11 @@ class AnexoAController extends Controller
         $data = $request->validated();
         $empresa_id = $user->pessoa->profissional->empresa_id;
 
+        $nead_check = PlanilhaAnexoA::where('empresa_id','=',$empresa_id)->where('paciente_id','=',$data['paciente_id'])->first();
+        if($nead_check!=null){
+            return response()->json(['status'=>false, 'message'=>'Esse paciente já possui um Anexo A cadastrado']);
+        }
+
         $anexoa = new PlanilhaAnexoA();
         $anexoa->fill([
             'diagnostico_principal_id' => $data['diagnostico_principal_id'],
@@ -180,6 +185,12 @@ class AnexoAController extends Controller
         $empresa_id = $user->pessoa->profissional->empresa_id;
 
         $anexoa = PlanilhaAnexoA::find($data['anexo_a_id']);
+
+        $nead_check = PlanilhaAnexoA::where('empresa_id','=',$empresa_id)->where('paciente_id','=',$data['paciente_id'])->first();
+        if($nead_check!=null && $nead_check->id!=$anexoa->id){
+            return response()->json(['status'=>false, 'message'=>'Esse paciente já possui um Anexo A cadastrado']);
+        }
+
         $anexoa->fill([
             'diagnostico_principal_id' => $data['diagnostico_principal_id'],
             'empresa_id' => $empresa_id,

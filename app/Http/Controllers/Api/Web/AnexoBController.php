@@ -65,7 +65,6 @@ class AnexoBController extends Controller
             ->join(DB::raw('responsaveis as r'), 'r.id', '=', 'pacientes.responsavel_id')
             ->join(DB::raw('pessoas as pr'), 'r.pessoa_id', '=', 'pr.id')->get();
 
-       
         return response()->json(['pacientes' => $pacientes]);
     }
 
@@ -74,6 +73,11 @@ class AnexoBController extends Controller
         $user = $request->user();
         $data = $request->validated();
         $empresa_id = $user->pessoa->profissional->empresa_id;
+
+        $nead_check = PlanilhaAnexoB::where('empresa_id','=',$empresa_id)->where('paciente_id','=',$data['paciente_id'])->first();
+        if($nead_check!=null){
+            return response()->json(['status'=>false, 'message'=>'Esse paciente já possui um Anexo B cadastrado']);
+        }
 
         $anexoa = new PlanilhaAnexoB();
         $anexoa->fill([
@@ -175,8 +179,13 @@ class AnexoBController extends Controller
         $user = $request->user();
         $data = $request->validated();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-
         $anexoa = PlanilhaAnexoB::find($data['anexo_b_id']);
+
+        $nead_check = PlanilhaAnexoB::where('empresa_id','=',$empresa_id)->where('paciente_id','=',$data['paciente_id'])->first();
+        if($nead_check!=null && $nead_check->id!=$anexoa->id){
+            return response()->json(['status'=>false, 'message'=>'Esse paciente já possui um Anexo B cadastrado']);
+        }
+
         $anexoa->fill([
             'empresa_id' => $empresa_id,
             'paciente_id' => $data['paciente_id'],
