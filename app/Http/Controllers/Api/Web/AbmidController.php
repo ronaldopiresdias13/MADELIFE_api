@@ -79,6 +79,11 @@ class AbmidController extends Controller
         $data=$request->validated();
         $empresa_id = $user->pessoa->profissional->empresa_id;
 
+        $nead_check = PlanilhaAbmid::where('empresa_id','=',$empresa_id)->where('paciente_id','=',$data['paciente_id'])->first();
+        if($nead_check!=null){
+            return response()->json(['status'=>false, 'message'=>'Esse paciente já possui uma Abmid cadastrada']);
+        }
+
         $abmid = new PlanilhaAbmid();
         $abmid->fill([
             'paciente_id'=>$data['paciente_id'],
@@ -153,6 +158,12 @@ class AbmidController extends Controller
         $empresa_id = $user->pessoa->profissional->empresa_id;
 
         $abmid = PlanilhaAbmid::find($data['abmid_id']);
+
+        $nead_check = PlanilhaAbmid::where('empresa_id','=',$empresa_id)->where('paciente_id','=',$data['paciente_id'])->first();
+        if($nead_check!=null && $nead_check->id!=$abmid->id){
+            return response()->json(['status'=>false, 'message'=>'Esse paciente já possui uma Abmid cadastrada']);
+        }
+
         $abmid->fill([
             'paciente_id'=>$data['paciente_id'],
             'classificacao'=>$data['classificacao'],
