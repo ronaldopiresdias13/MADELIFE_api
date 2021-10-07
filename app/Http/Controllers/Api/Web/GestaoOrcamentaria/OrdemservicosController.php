@@ -149,10 +149,7 @@ class OrdemservicosController extends Controller
             ->orderBy('pessoas.nome')
             ->select(['ordemservicos.id', 'ordemservicos.orcamento_id', 'ordemservicos.profissional_id']);
 
-        // if ($request->status == 'false') {
-        //     // return 'Caiu aqui';
-        //     $escalas->where('orcamento.status', true);
-        // }
+
         if ($request->cliente_id) {
             $escalas->whereHas('orcamento.cliente', function (Builder $query) use ($request) {
                 $query->where('id', $request->cliente_id);
