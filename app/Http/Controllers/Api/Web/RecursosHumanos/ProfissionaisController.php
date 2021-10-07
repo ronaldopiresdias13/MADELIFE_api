@@ -275,29 +275,48 @@ class ProfissionaisController extends Controller
 
             // return $request->documentos;
 
+
             if ($request['documentos']) {
                 foreach ($request['documentos'] as $documento) {
-                    $file = $request->file('anexo');
-                    $documento = json_decode($file, true);
-                    if ($file && $file->isValid()) {
-                        $md5 = md5_file($file);
-                        $caminho = 'anexos/';
-                        $nome = $md5 . '.' . $file->extension();
-                        $upload = $file->storeAs($caminho, $nome);
-                        $nomeOriginal = $file->getClientOriginalName();
-
-                        if ($upload) {
-                             Anexo::create([
-                                'anexo_id' => $profissional->id,
-                                'anexo_type' => 'profissionais',
-                                'caminho' => $caminho . '/' . $nome,
-                                'nome'  => $nomeOriginal,
-                                'descricao'  => $documento['anexo']['descricao']
-                            ]);
-                        }
-                    }
+                    $md5 = md5_file($documento->file);
+                    $caminho = 'anexos/';
+                    $nome = $md5 . '.' . explode(';', explode('/', $documento->file)[1])[0];
+                    $file = explode(',', $documento->file)[1];
+                    Storage::put($caminho . $nome, base64_decode($file));
+                    Anexo::create([
+                        'anexo_id' => $profissional->id,
+                        'anexo_type' => 'profissionais',
+                        'caminho' => $caminho . '/' . $nome,
+                        'nome'  => $documento->nome,
+                        'descricao'  => $documento->descricao
+                    ]);
                 }
             }
+
+
+            // if ($request['documentos']) {
+            //     foreach ($request['documentos'] as $documento) {
+            //         $file = $request->file('anexo');
+            //         $documento = json_decode($file, true);
+            //         if ($file && $file->isValid()) {
+            //             $md5 = md5_file($file);
+            //             $caminho = 'anexos/';
+            //             $nome = $md5 . '.' . $file->extension();
+            //             $upload = $file->storeAs($caminho, $nome);
+            //             $nomeOriginal = $file->getClientOriginalName();
+
+            //             if ($upload) {
+            //                  Anexo::create([
+            //                     'anexo_id' => $profissional->id,
+            //                     'anexo_type' => 'profissionais',
+            //                     'caminho' => $caminho . '/' . $nome,
+            //                     'nome'  => $nomeOriginal,
+            //                     'descricao'  => $documento['anexo']['descricao']
+            //                 ]);
+            //             }
+            //         }
+            //     }
+            // }
         });
 
         // return response()->json('Profissional cadastrado com sucesso!', 200)->header('Content-Type', 'text/plain');
