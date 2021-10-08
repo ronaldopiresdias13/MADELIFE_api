@@ -81,7 +81,10 @@ class NeadController extends Controller
         $user = $request->user();
         $data=$request->validated();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-
+        $nead_check = Nead::where('empresa_id','=',$empresa_id)->where('paciente_id','=',$data['paciente_id'])->first();
+        if($nead_check!=null){
+            return response()->json(['status'=>false, 'message'=>'Esse paciente já possui uma Nead cadastrada']);
+        }
         $nead = new Nead();
         $nead->fill([
             'paciente_id'=>$data['paciente_id'],
@@ -89,6 +92,7 @@ class NeadController extends Controller
             'pontuacao_katz'=>$data['classificacao_katz']['pontos'],
             'diagnostico_principal_id'=>$data['diagnostico_principal_id'],
             'data_avaliacao'=>Carbon::now()->format('Y-m-d H:i:s'),
+            'classificacaop_selecionado'=>isset($data['classificacao_pacient']['selecionado'])?$data['classificacao_pacient']['selecionado']:null,
             'empresa_id'=>$empresa_id
         ])->save();
 
@@ -178,14 +182,20 @@ class NeadController extends Controller
         $user = $request->user();
         $data=$request->validated();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-
         $nead = Nead::find($data['nead_id']);
+
+        $nead_check = Nead::where('empresa_id','=',$empresa_id)->where('paciente_id','=',$data['paciente_id'])->first();
+        if($nead_check!=null && $nead_check->id!=$nead->id){
+            return response()->json(['status'=>false, 'message'=>'Esse paciente já possui uma Nead cadastrada']);
+        }
         $nead->fill([
             'paciente_id'=>$data['paciente_id'],
             'pontuacao_final'=>$data['classificacao_pacient']['pontos'],
             'pontuacao_katz'=>$data['classificacao_katz']['pontos'],
             'diagnostico_principal_id'=>$data['diagnostico_principal_id'],
             'data_avaliacao'=>Carbon::now()->format('Y-m-d H:i:s'),
+            'classificacaop_selecionado'=>isset($data['classificacao_pacient']['selecionado'])?$data['classificacao_pacient']['selecionado']:null,
+
             'empresa_id'=>$empresa_id
         ])->save();
 

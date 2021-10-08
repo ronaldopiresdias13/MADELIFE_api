@@ -32,90 +32,10 @@ class VendasController extends Controller
      */
     public function index(Request $request)
     {
-        $with = [];
-
-        if ($request['adicionais']) {
-            foreach ($request['adicionais'] as $key => $adicional) {
-                if (is_string($adicional)) {
-                    array_push($with, $adicional);
-                } else {
-                    $filho = '';
-                    foreach ($adicional as $key => $a) {
-                        if ($key == 0) {
-                            $filho = $a;
-                        } else {
-                            $filho = $filho . '.' . $a;
-                        }
-                    }
-                    array_push($with, $filho);
-                }
-            }
-            $itens = Venda::with($with)->where('id', 'like', '%');
-        } else {
-            $itens = Venda::where('id', 'like', '%');
-        }
-
-        if ($request->commands) {
-            $request = json_decode($request->commands, true);
-        }
-
-        if ($request['where']) {
-            foreach ($request['where'] as $key => $where) {
-                $itens->where(
-                    ($where['coluna']) ? $where['coluna'] : 'id',
-                    ($where['expressao']) ? $where['expressao'] : 'like',
-                    ($where['valor']) ? $where['valor'] : '%'
-                );
-            }
-        }
-
-        if ($request['order']) {
-            foreach ($request['order'] as $key => $order) {
-                $itens->orderBy(
-                    ($order['coluna']) ? $order['coluna'] : 'id',
-                    ($order['tipo']) ? $order['tipo'] : 'asc'
-                );
-            }
-        }
-
-        $itens = $itens->get();
-
-        if ($request['adicionais']) {
-            foreach ($itens as $key => $iten) {
-                foreach ($request['adicionais'] as $key => $adicional) {
-                    if (is_string($adicional)) {
-                        $iten[$adicional];
-                    } else {
-                        $iten2 = $iten;
-                        foreach ($adicional as $key => $a) {
-                            if ($key == 0) {
-                                if ($iten[0] == null) {
-                                    $iten2 = $iten[$a];
-                                } else {
-                                    foreach ($iten as $key => $i) {
-                                        $i[$a];
-                                    }
-                                }
-                            } else {
-                                if ($iten2 != null) {
-                                    if ($iten2->count() > 0) {
-                                        if ($iten2[0] == null) {
-                                            $iten2 = $iten2[$a];
-                                        } else {
-                                            foreach ($iten2 as $key => $i) {
-                                                $i[$a];
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return $itens;
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+        return Venda::with(['orcamento.cliente.pessoa.enderecos.cidade', 'orcamento.produtos.produto'])
+            ->where('empresa_id', $empresa_id)
+            ->get();
     }
 
     /**
@@ -140,6 +60,7 @@ class VendasController extends Controller
                 'quantidade'        => $request['orcamento']['quantidade'],
                 'situacao'          => $request['orcamento']['situacao'],
                 'descricao'         => $request['orcamento']['descricao'],
+                'valordesconto'     => $request['orcamento']['valordesconto'],
                 'valortotalservico' => $request['orcamento']['valortotalservico'] ? $request['orcamento']['valortotalservico'] : 0,
                 'valortotalcusto'   => $request['orcamento']['valortotalcusto'] ? $request['orcamento']['valortotalcusto'] : 0,
                 'valortotalproduto' => $request['orcamento']['valortotalproduto'] ? $request['orcamento']['valortotalproduto'] : 0,
@@ -163,58 +84,58 @@ class VendasController extends Controller
                     );
                 }
             }
-            $saida = Saida::create([
-                'empresa_id'      => $request['saida']['empresa_id'],
-                'data'            => $request['saida']['data'],
-                'descricao'       => $request['saida']['descricao'],
-                'profissional_id' => $request['saida']['profissional_id']
-            ]);
-            if ($request['orcamento']['produtos']) {
-                foreach ($request['orcamento']['produtos'] as $key => $produto) {
-                    $prod = Produto::find($produto["produto"]["id"]);
-                    if ($prod->controlelote) {
-                        if ($produto['lote']) {
-                            $estoque = Estoque::firstWhere('lote', $produto['lote']);
-                            if ($estoque) {
-                                $atualiza_quantidade_estoque = Estoque::firstWhere('lote', $produto['lote']);
-                                $atualiza_quantidade_estoque->quantidade = $atualiza_quantidade_estoque->quantidade - $produto['quantidade'];
-                                $atualiza_quantidade_estoque->update();
-                            } else {
-                                $nova_estoque = Estoque::create([
-                                    'produto_id' => $produto['produto']['id'],
-                                    'unidade'    => $prod->unidademedida_id,
-                                    'quantidade' => $produto['quantidade'],
-                                    'lote'       => $produto['lote'],
-                                    'validade'   => $produto['validade']
-                                    // 'ativo'      => 1
-                                ]);
-                            }
-                            // return $estoque;
-                        }
-                    }
-                    $saida_produto = SaidaProduto::create([
-                        'saida_id'      => $saida->id,
-                        'produto_id'    => $produto['produto']['id'],
-                        'quantidade'    => $produto['quantidade'],
-                        'lote'          => $produto['lote'],
-                        'valor'         => $produto['valor']
-                        // 'ativo'         => 1
-                    ]);
-                    $prod->quantidadeestoque = $prod->quantidadeestoque - $produto["quantidade"];
-                    $prod->update();
-                }
-            }
-            $venda_saida = VendaSaida::create([
-                'venda_id' => Venda::create([
-                    'orcamento_id' => $orcamento->id,
-                    'realizada' => 1,
-                    'data' => $request['saida']['data'],
-                    'empresa_id' => $request['empresa_id']
-                    // 'ativo' => 1
-                ])->id,
-                'saida_id' => $saida->id
-                // 'ativo' => 1
-            ]);
+            // $saida = Saida::create([
+            //     'empresa_id'      => $request['saida']['empresa_id'],
+            //     'data'            => $request['saida']['data'],
+            //     'descricao'       => $request['saida']['descricao'],
+            //     'profissional_id' => $request['saida']['profissional_id']
+            // ]);
+            // if ($request['orcamento']['produtos']) {
+            //     foreach ($request['orcamento']['produtos'] as $key => $produto) {
+            //         $prod = Produto::find($produto["produto"]["id"]);
+            //         if ($prod->controlelote) {
+            //             if ($produto['lote']) {
+            //                 $estoque = Estoque::firstWhere('lote', $produto['lote']);
+            //                 if ($estoque) {
+            //                     $atualiza_quantidade_estoque = Estoque::firstWhere('lote', $produto['lote']);
+            //                     $atualiza_quantidade_estoque->quantidade = $atualiza_quantidade_estoque->quantidade - $produto['quantidade'];
+            //                     $atualiza_quantidade_estoque->update();
+            //                 } else {
+            //                     $nova_estoque = Estoque::create([
+            //                         'produto_id' => $produto['produto']['id'],
+            //                         'unidade'    => $prod->unidademedida_id,
+            //                         'quantidade' => $produto['quantidade'],
+            //                         'lote'       => $produto['lote'],
+            //                         'validade'   => $produto['validade']
+            //                         // 'ativo'      => 1
+            //                     ]);
+            //                 }
+            //                 // return $estoque;
+            //             }
+            //         }
+            //         $saida_produto = SaidaProduto::create([
+            //             'saida_id'      => $saida->id,
+            //             'produto_id'    => $produto['produto']['id'],
+            //             'quantidade'    => $produto['quantidade'],
+            //             'lote'          => $produto['lote'],
+            //             'valor'         => $produto['valor']
+            //             // 'ativo'         => 1
+            //         ]);
+            //         $prod->quantidadeestoque = $prod->quantidadeestoque - $produto["quantidade"];
+            //         $prod->update();
+            //     }
+            // }
+            // $venda_saida = VendaSaida::create([
+            //     'venda_id' => Venda::create([
+            //         'orcamento_id' => $orcamento->id,
+            //         'realizada' => 1,
+            //         'data' => $request['saida']['data'],
+            //         'empresa_id' => $request['empresa_id']
+            //         // 'ativo' => 1
+            //     ])->id,
+            //     'saida_id' => $saida->id
+            //     // 'ativo' => 1
+            // ]);
         });
         return response()->json([
             'alert' => [
@@ -322,9 +243,54 @@ class VendasController extends Controller
      * @param  \App\Venda  $venda
      * @return \Illuminate\Http\Response
      */
-    public function show(Venda $venda)
+    public function show(Request $request, Venda $venda)
     {
-        //
+        $iten = $venda;
+
+        if ($request->commands) {
+            $request = json_decode($request->commands, true);
+        }
+
+        if ($request['adicionais']) {
+            foreach ($request['adicionais'] as $key => $adicional) {
+                if (is_string($adicional)) {
+                    $iten[$adicional];
+                } else {
+                    $iten2 = $iten;
+                    foreach ($adicional as $key => $a) {
+                        if ($key == 0) {
+                            if ($iten[0] == null) {
+                                $iten2 = $iten[$a];
+                            } else {
+                                foreach ($iten as $key => $i) {
+                                    $i[$a];
+                                }
+                            }
+                        } else {
+                            if ($iten2 != null) {
+                                if ($iten2->count() > 0) {
+                                    if ($iten2[0] == null) {
+                                        $iten2 = $iten2[$a];
+                                    } else {
+                                        foreach ($iten2 as $key => $i) {
+                                            $i[$a];
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // return Orcamento::with(
+        //     [
+        //         'cliente.pessoa',
+        //         'produtos.produto'
+        //     ]
+        // )->find($iten->orcamento_id);
+        return $iten;
     }
 
     /**
@@ -336,7 +302,7 @@ class VendasController extends Controller
      */
     public function update(Request $request, Venda $venda)
     {
-        //
+        $venda->update($request->all());
     }
 
     /**

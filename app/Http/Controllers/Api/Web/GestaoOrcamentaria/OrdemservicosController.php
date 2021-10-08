@@ -117,6 +117,7 @@ class OrdemservicosController extends Controller
      */
     public function listaOrdemServicosEscalas(Request $request)
     {
+        // return $request->status;
         $user = $request->user();
         $profissional = $user->pessoa->profissional;
 
@@ -126,7 +127,7 @@ class OrdemservicosController extends Controller
             ->join('pessoas', 'pessoas.id', '=', 'pacientes.pessoa_id')
             ->with([
                 // 'servicos',
-                'acessos',
+                // 'acessos',
                 'profissional.pessoa',
                 'orcamento.cidade', 'orcamento' => function ($query) {
                     $query->with(['servicos.servico', 'homecare' => function ($query) {
@@ -142,10 +143,12 @@ class OrdemservicosController extends Controller
             ])
             ->where('ordemservicos.empresa_id', $profissional->empresa_id)
             ->where('ordemservicos.ativo', true)
+            ->where('orcamentos.status', 'like', $request->status == 'false' ? true : '%')
             ->withCount('prestadores')
             ->withCount('escalas')
             ->orderBy('pessoas.nome')
             ->select(['ordemservicos.id', 'ordemservicos.orcamento_id', 'ordemservicos.profissional_id']);
+
 
         if ($request->cliente_id) {
             $escalas->whereHas('orcamento.cliente', function (Builder $query) use ($request) {

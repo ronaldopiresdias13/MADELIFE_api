@@ -19,7 +19,8 @@ class Nead extends Model
         'pontuacao_katz',
         'data_avaliacao',
         'empresa_id',
-        'diagnostico_principal_id'
+        'diagnostico_principal_id',
+        'classificacaop_selecionado'
     ];
 
     public function diagnostico_principal()
