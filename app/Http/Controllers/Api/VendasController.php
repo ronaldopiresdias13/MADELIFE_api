@@ -46,12 +46,20 @@ class VendasController extends Controller
      */
     public function store(Request $request)
     {
+        $user = $this->request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        $o = null;
+        $numero = null;
+        $o = Venda::withTrashed()
+            ->where('empresa_id', $empresa_id)
+            ->count('id');
+        $numero = "V" . ($o + 1);
         // return $request;
-        DB::transaction(function () use ($request) {
+        DB::transaction(function () use ($request, $numero) {
             $orcamento = Orcamento::create([
                 'empresa_id'        => $request['orcamento']['empresa_id'],
                 'cliente_id'        => $request['orcamento']['cliente_id'],
-                'numero'            => $request['orcamento']['numero'],
+                'numero'            => $numero,
                 'processo'          => $request['orcamento']['processo'],
                 'cidade_id'         => $request['orcamento']['cidade']['id'],
                 'tipo'              => $request['orcamento']['tipo'],
