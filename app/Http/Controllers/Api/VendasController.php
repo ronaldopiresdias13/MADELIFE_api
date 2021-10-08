@@ -84,58 +84,58 @@ class VendasController extends Controller
                     );
                 }
             }
-            $saida = Saida::create([
-                'empresa_id'      => $request['saida']['empresa_id'],
-                'data'            => $request['saida']['data'],
-                'descricao'       => $request['saida']['descricao'],
-                'profissional_id' => $request['saida']['profissional_id']
-            ]);
-            if ($request['orcamento']['produtos']) {
-                foreach ($request['orcamento']['produtos'] as $key => $produto) {
-                    $prod = Produto::find($produto["produto"]["id"]);
-                    if ($prod->controlelote) {
-                        if ($produto['lote']) {
-                            $estoque = Estoque::firstWhere('lote', $produto['lote']);
-                            if ($estoque) {
-                                $atualiza_quantidade_estoque = Estoque::firstWhere('lote', $produto['lote']);
-                                $atualiza_quantidade_estoque->quantidade = $atualiza_quantidade_estoque->quantidade - $produto['quantidade'];
-                                $atualiza_quantidade_estoque->update();
-                            } else {
-                                $nova_estoque = Estoque::create([
-                                    'produto_id' => $produto['produto']['id'],
-                                    'unidade'    => $prod->unidademedida_id,
-                                    'quantidade' => $produto['quantidade'],
-                                    'lote'       => $produto['lote'],
-                                    'validade'   => $produto['validade']
-                                    // 'ativo'      => 1
-                                ]);
-                            }
-                            // return $estoque;
-                        }
-                    }
-                    $saida_produto = SaidaProduto::create([
-                        'saida_id'      => $saida->id,
-                        'produto_id'    => $produto['produto']['id'],
-                        'quantidade'    => $produto['quantidade'],
-                        'lote'          => $produto['lote'],
-                        'valor'         => $produto['valor']
-                        // 'ativo'         => 1
-                    ]);
-                    $prod->quantidadeestoque = $prod->quantidadeestoque - $produto["quantidade"];
-                    $prod->update();
-                }
-            }
-            $venda_saida = VendaSaida::create([
-                'venda_id' => Venda::create([
-                    'orcamento_id' => $orcamento->id,
-                    'realizada' => 1,
-                    'data' => $request['saida']['data'],
-                    'empresa_id' => $request['empresa_id']
-                    // 'ativo' => 1
-                ])->id,
-                'saida_id' => $saida->id
-                // 'ativo' => 1
-            ]);
+            // $saida = Saida::create([
+            //     'empresa_id'      => $request['saida']['empresa_id'],
+            //     'data'            => $request['saida']['data'],
+            //     'descricao'       => $request['saida']['descricao'],
+            //     'profissional_id' => $request['saida']['profissional_id']
+            // ]);
+            // if ($request['orcamento']['produtos']) {
+            //     foreach ($request['orcamento']['produtos'] as $key => $produto) {
+            //         $prod = Produto::find($produto["produto"]["id"]);
+            //         if ($prod->controlelote) {
+            //             if ($produto['lote']) {
+            //                 $estoque = Estoque::firstWhere('lote', $produto['lote']);
+            //                 if ($estoque) {
+            //                     $atualiza_quantidade_estoque = Estoque::firstWhere('lote', $produto['lote']);
+            //                     $atualiza_quantidade_estoque->quantidade = $atualiza_quantidade_estoque->quantidade - $produto['quantidade'];
+            //                     $atualiza_quantidade_estoque->update();
+            //                 } else {
+            //                     $nova_estoque = Estoque::create([
+            //                         'produto_id' => $produto['produto']['id'],
+            //                         'unidade'    => $prod->unidademedida_id,
+            //                         'quantidade' => $produto['quantidade'],
+            //                         'lote'       => $produto['lote'],
+            //                         'validade'   => $produto['validade']
+            //                         // 'ativo'      => 1
+            //                     ]);
+            //                 }
+            //                 // return $estoque;
+            //             }
+            //         }
+            //         $saida_produto = SaidaProduto::create([
+            //             'saida_id'      => $saida->id,
+            //             'produto_id'    => $produto['produto']['id'],
+            //             'quantidade'    => $produto['quantidade'],
+            //             'lote'          => $produto['lote'],
+            //             'valor'         => $produto['valor']
+            //             // 'ativo'         => 1
+            //         ]);
+            //         $prod->quantidadeestoque = $prod->quantidadeestoque - $produto["quantidade"];
+            //         $prod->update();
+            //     }
+            // }
+            // $venda_saida = VendaSaida::create([
+            //     'venda_id' => Venda::create([
+            //         'orcamento_id' => $orcamento->id,
+            //         'realizada' => 1,
+            //         'data' => $request['saida']['data'],
+            //         'empresa_id' => $request['empresa_id']
+            //         // 'ativo' => 1
+            //     ])->id,
+            //     'saida_id' => $saida->id
+            //     // 'ativo' => 1
+            // ]);
         });
         return response()->json([
             'alert' => [
