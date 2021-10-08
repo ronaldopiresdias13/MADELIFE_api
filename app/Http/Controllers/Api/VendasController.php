@@ -46,15 +46,16 @@ class VendasController extends Controller
      */
     public function store(Request $request)
     {
-        $empresa_id = $request->empresa_id;
-        $o = null;
-        $numero = null;
-        $o = Venda::withTrashed()
-            ->where('empresa_id', $empresa_id)
-            ->count('id');
-        $numero = "V" . ($o + 1);
+
         // return $request;
-        DB::transaction(function () use ($request, $numero) {
+        DB::transaction(function () use ($request) {
+            $empresa_id = $request->empresa_id;
+            $o = null;
+            $numero = null;
+            $o = Venda::withTrashed()
+                ->where('empresa_id', $empresa_id)
+                ->count('id');
+            $numero = "V" . ($o + 1);
             $orcamento = Orcamento::create([
                 'empresa_id'        => $request['orcamento']['empresa_id'],
                 'cliente_id'        => $request['orcamento']['cliente_id'],
@@ -133,24 +134,24 @@ class VendasController extends Controller
             //     }
             // }
             // $venda_saida = VendaSaida::create([
-            //     'venda_id' => Venda::create([
-            //         'orcamento_id' => $orcamento->id,
-            //         'realizada' => 1,
-            //         'data' => $request['saida']['data'],
-            //         'empresa_id' => $request['empresa_id']
-            //         // 'ativo' => 1
-            //     ])->id,
+            Venda::create([
+                'orcamento_id' => $orcamento->id,
+                'realizada' => 1,
+                'data' => $request['orcamento']['data'],
+                'empresa_id' => $request['empresa_id']
+                // 'ativo' => 1
+            ]);
             //     'saida_id' => $saida->id
             //     // 'ativo' => 1
             // ]);
         });
-        return response()->json([
-            'alert' => [
-                'title' => 'Salvo!',
-                'text' => 'Salvo com sucesso!'
-            ]
-        ], 200)
-            ->header('Content-Type', 'application/json');
+        // return response()->json([
+        //     'alert' => [
+        //         'title' => 'Salvo!',
+        //         'text' => 'Salvo com sucesso!'
+        //     ]
+        // ], 200)
+        //     ->header('Content-Type', 'application/json');
     }
     /**
      * Store a newly created resource in storage.
