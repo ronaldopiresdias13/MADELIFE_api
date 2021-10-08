@@ -114,9 +114,9 @@ class ProfissionaisController extends Controller
         $empresa_id = Auth::user()->pessoa->profissional->empresa_id;
 
 
-        $files = $request['arquivos'];
+        // $files = $request['arquivos'];
         // $count = count($request['documentos']);
-        $request = json_decode($request->data, true);
+        // $request = json_decode($request->data, true);
 
         if ($request['pessoa']) {
             $pessoa = Pessoa::where(
@@ -140,7 +140,7 @@ class ProfissionaisController extends Controller
             return response()->json('Profissional já existe!' . json_encode($request), 400)->header('Content-Type', 'text/plain');
         }
 
-        DB::transaction(function () use ($request, $empresa_id, $files) {
+        DB::transaction(function () use ($request, $empresa_id) {
             $profissional = Profissional::create([
                 'pessoafisica' => 1,
                 'empresa_id'   => $empresa_id,
@@ -289,17 +289,17 @@ class ProfissionaisController extends Controller
 
             if ($request['documentos']) {
                 foreach ($request['documentos'] as $documento) {
-                    $md5 = md5_file($documento->file);
+                    $md5 = md5_file($documento['anexo']['file']);
                     $caminho = 'anexos/';
-                    $nome = $md5 . '.' . explode(';', explode('/', $documento->file)[1])[0];
-                    $file = explode(',', $documento->file)[1];
+                    $nome = $md5 . '.' . explode(';', explode('/', $documento['anexo']['file'])[1])[0];
+                    $file = explode(',', $documento['anexo']['file'])[1];
                     Storage::put($caminho . $nome, base64_decode($file));
                     Anexo::create([
                         'anexo_id' => $profissional->id,
                         'anexo_type' => 'profissionais',
                         'caminho' => $caminho . '/' . $nome,
-                        'nome'  => $documento->nome,
-                        'descricao'  => $documento->descricao
+                        'nome'  => $documento['anexo']['name'],
+                        'descricao'  => $documento['descricao']
                     ]);
                 }
             }
