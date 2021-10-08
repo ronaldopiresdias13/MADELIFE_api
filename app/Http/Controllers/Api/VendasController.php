@@ -59,7 +59,7 @@ class VendasController extends Controller
                 'empresa_id'        => $request['orcamento']['empresa_id'],
                 'cliente_id'        => $request['orcamento']['cliente_id'],
                 'numero'            => $numero,
-                'processo'          => $request['orcamento']['processo'],
+                'processo'          => "",
                 'cidade_id'         => $request['orcamento']['cidade']['id'],
                 'tipo'              => $request['orcamento']['tipo'],
                 'data'              => $request['orcamento']['data'],
