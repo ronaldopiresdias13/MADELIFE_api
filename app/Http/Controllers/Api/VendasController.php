@@ -46,7 +46,7 @@ class VendasController extends Controller
      */
     public function store(Request $request)
     {
-        $user = $this->request->user();
+        $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
         $o = null;
         $numero = null;
