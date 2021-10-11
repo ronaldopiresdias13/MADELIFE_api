@@ -31,6 +31,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
         Route::prefix('pils')->group(function () {
 
+            Route::get('get_related_paciente/{type}/{paciente_id}', 'Api\Web\PilController@get_related_paciente');
+
              //anexosB
              Route::get('listAnexosB', 'Api\Web\AnexoBController@get_anexosB');
              Route::get('getDadosAnexoB/', 'Api\Web\AnexoBController@getDadosAnexoB');
