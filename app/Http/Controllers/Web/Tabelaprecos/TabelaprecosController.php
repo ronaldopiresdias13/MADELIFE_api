@@ -15,7 +15,7 @@ class TabelaprecosController extends Controller
      */
     public function index()
     {
-        //
+        return Tabelapreco::all();
     }
 
     /**
@@ -26,7 +26,13 @@ class TabelaprecosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+        $tabelapreco = new Tabelapreco();
+        $tabelapreco->empresa_id = $empresa_id;
+        $tabelapreco->nome       = $request->nome;
+        $tabelapreco->padrao     = $request->padrao;
+        $tabelapreco->save();
+        return $tabelapreco;
     }
 
     /**
@@ -37,7 +43,7 @@ class TabelaprecosController extends Controller
      */
     public function show(Tabelapreco $tabelapreco)
     {
-        //
+        return $tabelapreco;
     }
 
     /**
@@ -59,6 +65,28 @@ class TabelaprecosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Tabelapreco $tabelapreco)
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function importacaoBrasindice(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function importacaoSimpro(Request $request)
     {
         //
     }

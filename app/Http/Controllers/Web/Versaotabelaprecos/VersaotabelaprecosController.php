@@ -26,7 +26,11 @@ class VersaotabelaprecosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $versaotabelapreco = new Versaotabelapreco();
+        $versaotabelapreco->tabelapreco_id = $request->tabelapreco_id;
+        $versaotabelapreco->versao         = $request->versao;
+        $versaotabelapreco->save();
+        return $versaotabelapreco;
     }
 
     /**

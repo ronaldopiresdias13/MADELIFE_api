@@ -127,10 +127,7 @@ class RouteServiceProvider extends ServiceProvider
                 require base_path('routes/ml/web/entradas.php');
                 require base_path('routes/ml/web/escalas.php');
                 require base_path('routes/ml/web/estoques.php');
-
                 require base_path('routes/ml/web/FolgasRoute.php');
-                require base_path('routes/ml/web/NotificacoesRoute.php');
-
                 require base_path('routes/ml/web/formacoes.php');
                 require base_path('routes/ml/web/fornecedores.php');
                 require base_path('routes/ml/web/grupocuidados.php');
@@ -140,11 +137,13 @@ class RouteServiceProvider extends ServiceProvider
                 require base_path('routes/ml/web/horariostrabalho.php');
                 require base_path('routes/ml/web/impostos.php');
                 require base_path('routes/ml/web/internacoes.php');
+                require base_path('routes/ml/web/ItemtabelaprecosRoute.php');
                 require base_path('routes/ml/web/itensbrasindice.php');
                 require base_path('routes/ml/web/marcas.php');
                 require base_path('routes/ml/web/medicoes.php');
                 require base_path('routes/ml/web/monitoramentoescalas.php');
                 require base_path('routes/ml/web/naturezas.php');
+                require base_path('routes/ml/web/NotificacoesRoute.php');
                 require base_path('routes/ml/web/orcamentocustos.php');
                 require base_path('routes/ml/web/orcamentoprodutos.php');
                 require base_path('routes/ml/web/orcamentos.php');
@@ -188,6 +187,7 @@ class RouteServiceProvider extends ServiceProvider
                 require base_path('routes/ml/web/salas.php');
                 require base_path('routes/ml/web/servicos.php');
                 require base_path('routes/ml/web/setores.php');
+                require base_path('routes/ml/web/TabelaprecosRoute.php');
                 require base_path('routes/ml/web/tabelas.php');
                 require base_path('routes/ml/web/telefones.php');
                 require base_path('routes/ml/web/tipopessoas.php');
@@ -200,6 +200,7 @@ class RouteServiceProvider extends ServiceProvider
                 require base_path('routes/ml/web/userAcessos.php');
                 require base_path('routes/ml/web/users.php');
                 require base_path('routes/ml/web/vendas.php');
+                require base_path('routes/ml/web/VersaotabelaprecosRoute.php');
 
                 require base_path('routes/api.php');
             });

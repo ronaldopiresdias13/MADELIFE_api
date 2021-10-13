@@ -26,7 +26,15 @@ class ItemtabelaprecosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $itemtabelapreco = new Itemtabelapreco();
+        $itemtabelapreco->versaotabelapreco_id = $request->versaotabelapreco_id;
+        $itemtabelapreco->codigo               = $request->codigo;
+        $itemtabelapreco->tiss                 = $request->tiss;
+        $itemtabelapreco->tuss                 = $request->tuss;
+        $itemtabelapreco->nome                 = $request->nome;
+        $itemtabelapreco->preco                = $request->preco;
+        $itemtabelapreco->save();
+        return $itemtabelapreco;
     }
 
     /**
