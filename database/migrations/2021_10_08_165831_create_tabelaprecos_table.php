@@ -14,7 +14,7 @@ class CreateTabelaprecosTable extends Migration
     public function up()
     {
         Schema::create('tabelaprecos', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->unsignedBigInteger('empresa_id');
             $table->foreign('empresa_id')->references('id')->on('empresas');
             $table->string('nome');

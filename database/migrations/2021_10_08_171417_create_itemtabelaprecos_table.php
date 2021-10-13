@@ -14,7 +14,7 @@ class CreateItemtabelaprecosTable extends Migration
     public function up()
     {
         Schema::create('itemtabelaprecos', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->foreignUuid('versaotabelapreco_id')->references('id')->on('versaotabelaprecos');
             $table->string('codigo');
             $table->string('tiss');

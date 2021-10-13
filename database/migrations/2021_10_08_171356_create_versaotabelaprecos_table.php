@@ -14,7 +14,7 @@ class CreateVersaotabelaprecosTable extends Migration
     public function up()
     {
         Schema::create('versaotabelaprecos', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->foreignUuid('tabelapreco_id')->references('id')->on('tabelaprecos');
             $table->string('versao');
             $table->timestamps();
