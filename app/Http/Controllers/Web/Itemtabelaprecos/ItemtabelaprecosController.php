@@ -13,9 +13,9 @@ class ItemtabelaprecosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return Itemtabelapreco::where('tabela_id', $request->versao_id)->get();
     }
 
     /**
@@ -45,7 +45,7 @@ class ItemtabelaprecosController extends Controller
      */
     public function show(Itemtabelapreco $itemtabelapreco)
     {
-        //
+        return $itemtabelapreco;
     }
 
     /**
@@ -57,7 +57,14 @@ class ItemtabelaprecosController extends Controller
      */
     public function update(Request $request, Itemtabelapreco $itemtabelapreco)
     {
-        //
+        $itemtabelapreco->versaotabelapreco_id = $request->versaotabelapreco_id;
+        $itemtabelapreco->codigo               = $request->codigo;
+        $itemtabelapreco->tiss                 = $request->tiss;
+        $itemtabelapreco->tuss                 = $request->tuss;
+        $itemtabelapreco->nome                 = $request->nome;
+        $itemtabelapreco->preco                = $request->preco;
+        $itemtabelapreco->save();
+        return $itemtabelapreco;
     }
 
     /**
@@ -68,6 +75,6 @@ class ItemtabelaprecosController extends Controller
      */
     public function destroy(Itemtabelapreco $itemtabelapreco)
     {
-        //
+        $itemtabelapreco->delete;
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Tabelaprecos;
 use App\Http\Controllers\Controller;
 use App\Models\Tabelapreco;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TabelaprecosController extends Controller
 {
@@ -15,7 +16,8 @@ class TabelaprecosController extends Controller
      */
     public function index()
     {
-        return Tabelapreco::all();
+        $empresa_id = Auth::user()->pessoa->profissional->empresa_id;
+        return Tabelapreco::where('empresa_id', $empresa_id)->get();
     }
 
     /**
@@ -55,7 +57,10 @@ class TabelaprecosController extends Controller
      */
     public function update(Request $request, Tabelapreco $tabelapreco)
     {
-        //
+        $tabelapreco->nome   = $request->nome;
+        $tabelapreco->padrao = $request->padrao;
+        $tabelapreco->save();
+        return $tabelapreco;
     }
 
     /**
@@ -66,7 +71,7 @@ class TabelaprecosController extends Controller
      */
     public function destroy(Tabelapreco $tabelapreco)
     {
-        //
+        $tabelapreco->delete;
     }
 
     /**

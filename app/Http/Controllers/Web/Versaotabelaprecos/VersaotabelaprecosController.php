@@ -13,9 +13,9 @@ class VersaotabelaprecosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return Versaotabelapreco::where('tabela_id', $request->tabela_id)->get();
     }
 
     /**
@@ -41,7 +41,7 @@ class VersaotabelaprecosController extends Controller
      */
     public function show(Versaotabelapreco $versaotabelapreco)
     {
-        //
+        return $versaotabelapreco;
     }
 
     /**
@@ -53,7 +53,10 @@ class VersaotabelaprecosController extends Controller
      */
     public function update(Request $request, Versaotabelapreco $versaotabelapreco)
     {
-        //
+        $versaotabelapreco->tabelapreco_id = $request->tabelapreco_id;
+        $versaotabelapreco->versao         = $request->versao;
+        $versaotabelapreco->save();
+        return $versaotabelapreco;
     }
 
     /**
@@ -64,6 +67,6 @@ class VersaotabelaprecosController extends Controller
      */
     public function destroy(Versaotabelapreco $versaotabelapreco)
     {
-        //
+        $versaotabelapreco->delete;
     }
 }
