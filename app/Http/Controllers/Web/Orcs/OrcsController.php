@@ -262,4 +262,16 @@ class OrcsController extends Controller
         $orcProduto->delete();
         // $orcProduto->save();
     }
+
+    public function quantidadeOrcPorStatus(Request $request)
+    {
+        // return 'teste';
+        // $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+        // Orc::where('empresa_id', $empresa_id)->whereBetween('data', [$request->data_ini, $request->data_fim])->groupBy('situacao')->select('situacao', DB::raw('count(*) as total'))->get();
+        // Orc::where('empresa_id', 2)->whereBetween('data', ['2021-10-14', '2021-10-14'])->groupBy('situacao')->select('situacao', 'Sem Sucesso')->get();
+        return Orc::where('empresa_id', 2)->select('situacao', DB::raw('count(*) as total'))->groupBy('situacao')->get();
+        // Orcs::where('empresa_id', $empresa_id)
+        //     ->whereBetween('data', [$request->data_ini, $request->data_fim])
+        //     ->groupBy('situacao')->count();
+    }
 }
