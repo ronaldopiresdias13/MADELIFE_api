@@ -6,7 +6,7 @@ use App\Models\Cidade;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class CidadeController extends Controller
+class CidadesController extends Controller
 {
     /**
      * Display a listing of the resource.
