@@ -7,6 +7,7 @@ use App\Models\Dadosbancario;
 use App\Models\Email;
 use App\Models\Endereco;
 use App\Http\Controllers\Controller;
+use App\Models\Anexo;
 use App\Models\Escala;
 use App\Models\Pessoa;
 use App\Models\PessoaEmail;
@@ -18,6 +19,7 @@ use App\Models\Telefone;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 // use Illuminate\Support\Facades\DB;
 
@@ -253,6 +255,7 @@ class PrestadoresController extends Controller
      */
     public function update(Request $request, Prestador $prestador)
     {
+        // return $request;
         DB::transaction(function () use ($request, $prestador) {
             $prestador = Prestador::updateOrCreate(
                 [
@@ -276,7 +279,7 @@ class PrestadoresController extends Controller
                             // 'empresa_id'  => $request['pessoa']['empresa_id'],
                             'nome'        => $request['pessoa']['nome'],
                             'nascimento'  => $request['pessoa']['nascimento'],
-                            'tipo'        => $request['pessoa']['tipo'],
+                            // 'tipo'        => $request['pessoa']['tipo'],
                             'rgie'        => $request['pessoa']['rgie'],
                             'cpfcnpj'     => $request['pessoa']['cpfcnpj'],
                             'observacoes' => $request['pessoa']['observacoes'],
@@ -364,6 +367,23 @@ class PrestadoresController extends Controller
                         )->id,
                         'tipo'      => $email['pivot']['tipo'],
                         'descricao' => $email['pivot']['descricao'],
+                    ]);
+                }
+            }
+            
+            if ($request['documentos']) {
+                foreach ($request['documentos'] as $documento) {
+                    $md5 = md5_file($documento['anexo']['file']);
+                    $caminho = 'anexos/prestadores/';
+                    $nome = $md5 . '.' . explode(';', explode('/', $documento['anexo']['file'])[1])[0];
+                    $file = explode(',', $documento['anexo']['file'])[1];
+                    Storage::put($caminho . $nome, base64_decode($file));
+                    Anexo::create([
+                        'anexo_id' => $prestador->id,
+                        'anexo_type' => 'empresa_prestador',
+                        'caminho' => $caminho . '/' . $nome,
+                        'nome'  => $documento['anexo']['name'],
+                        'descricao'  => $documento['descricao']
                     ]);
                 }
             }
