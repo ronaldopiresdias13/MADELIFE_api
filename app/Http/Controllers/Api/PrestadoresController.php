@@ -292,7 +292,7 @@ class PrestadoresController extends Controller
             if ($request['pessoa']['dadosbancario']) {
                 foreach ($request['pessoa']['dadosbancario'] as $key => $dadosbancario) {
                     Dadosbancario::firstOrCreate([
-                        'empresa_id'  => $request["pessoa"]['empresa_id'],
+                        // 'empresa_id'  => $request["pessoa"]['empresa_id'],
                         'banco_id'    => $dadosbancario['banco_id'],
                         'agencia'     => $dadosbancario['agencia'],
                         'conta'       => $dadosbancario['conta'],
@@ -304,10 +304,12 @@ class PrestadoresController extends Controller
             }
             if ($request['formacoes']) {
                 foreach ($request['formacoes'] as $key => $formacao) {
-                    PrestadorFormacao::firstOrCreate([
-                        'prestador_id' => $prestador->id,
-                        'formacao_id'     => $formacao['formacao_id'],
-                    ]);
+                    if ($formacao['formacao_id']) {
+                        PrestadorFormacao::firstOrCreate([
+                            'prestador_id' => $prestador->id,
+                            'formacao_id'     => $formacao['formacao_id'],
+                        ]);
+                    }
                 }
             }
             if ($request['pessoa']['conselhos']) {
@@ -370,7 +372,7 @@ class PrestadoresController extends Controller
                     ]);
                 }
             }
-            
+
             if ($request['documentos']) {
                 foreach ($request['documentos'] as $documento) {
                     $md5 = md5_file($documento['anexo']['file']);
