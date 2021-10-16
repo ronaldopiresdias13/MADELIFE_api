@@ -507,6 +507,22 @@ class ProfissionaisController extends Controller
                     }
                 }
             }
+            if ($request['documentos']) {
+                foreach ($request['documentos'] as $documento) {
+                    $md5 = md5_file($documento['anexo']['file']);
+                    $caminho = 'anexos/';
+                    $nome = $md5 . '.' . explode(';', explode('/', $documento['anexo']['file'])[1])[0];
+                    $file = explode(',', $documento['anexo']['file'])[1];
+                    Storage::put($caminho . $nome, base64_decode($file));
+                    Anexo::firstOrCreate([
+                        'anexo_id' => $profissional->id,
+                        'anexo_type' => 'profissionais',
+                        'caminho' => $caminho . '/' . $nome,
+                        'nome'  => $documento['anexo']['name'],
+                        'descricao'  => $documento['descricao']
+                    ]);
+                }
+            }
         });
     }
 
@@ -525,6 +541,11 @@ class ProfissionaisController extends Controller
         $profissional->setor;
         $profissional->cargo;
         $profissional->dadoscontratual;
+        if ($profissional->anexos) {
+            foreach ($profissional->anexos as $key => $anexos) {
+                $anexos->anexos;
+            }
+        }
         if ($profissional->beneficios) {
             foreach ($profissional->beneficios as $key => $beneficio) {
                 $beneficio->beneficio;

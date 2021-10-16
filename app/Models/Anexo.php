@@ -12,4 +12,8 @@ class Anexo extends Model
     use HasFactory;
     
     protected $guarded = [];
+
+    public function anexo(){
+        return $this->morphTo();
+    }
 }
