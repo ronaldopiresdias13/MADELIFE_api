@@ -537,7 +537,7 @@ class ProfissionaisController extends Controller
 
                 $anexos = Anexo::where('anexo_id', $profissional->id)
                     ->where('anexo_type', 'app\Models\Profissional')
-                    ->whereNotIn($ids)
+                    ->whereNotIn('id', $ids)
                     ->get();
 
                 foreach ($anexos as $key => $anexo) {
