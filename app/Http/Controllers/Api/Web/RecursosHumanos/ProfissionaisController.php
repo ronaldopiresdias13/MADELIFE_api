@@ -299,10 +299,10 @@ class ProfissionaisController extends Controller
                     $file = explode(',', $anexo['file'])[1];
                     Storage::put($caminho . $nome, base64_decode($file));
                     Anexo::create([
-                        'anexo_id' => $profissional->id,
+                        'anexo_id'   => $profissional->id,
                         'anexo_type' => 'app\Models\Profissional',
-                        'caminho' => $caminho . '/' . $nome,
-                        'nome'  => $anexo['nome'],
+                        'caminho'    => $caminho . '/' . $nome,
+                        'nome'       => $anexo['nome'],
                         'descricao'  => $anexo['descricao']
                     ]);
                 }
@@ -515,26 +515,34 @@ class ProfissionaisController extends Controller
                 // created_at: "2021-10-17T16:11:33.000000Z"
                 // updated_at: "2021-10-17T16:11:33.000000Z"
 
-                foreach ($profissional->anexos as $key => $anexo) {
-                    $anexo->delete();
+                $ids = [];
+
+                foreach ($request['anexos'] as $anexo) {
+                    array_push($ids, $anexo['id']);
+                    if (!$anexo['id']) {
+                        $md5 = md5_file($anexo['file']);
+                        $caminho = 'anexos/';
+                        $nome = $md5 . '.' . explode(';', explode('/', $anexo['file'])[1])[0];
+                        $file = explode(',', $anexo['file'])[1];
+                        Storage::put($caminho . $nome, base64_decode($file));
+                        Anexo::create([
+                            'anexo_id'   => $profissional->id,
+                            'anexo_type' => 'app\Models\Profissional',
+                            'caminho'    => $caminho . '/' . $nome,
+                            'nome'       => $anexo['nome'],
+                            'descricao'  => $anexo['descricao']
+                        ]);
+                    }
                 }
 
-                // if ($request['anexos']) {
-                foreach ($request['anexos'] as $anexo) {
-                    $md5 = md5_file($anexo['file']);
-                    $caminho = 'anexos/';
-                    $nome = $md5 . '.' . explode(';', explode('/', $anexo['file'])[1])[0];
-                    $file = explode(',', $anexo['file'])[1];
-                    Storage::put($caminho . $nome, base64_decode($file));
-                    Anexo::create([
-                        'anexo_id' => $profissional->id,
-                        'anexo_type' => 'app\Models\Profissional',
-                        'caminho' => $caminho . '/' . $nome,
-                        'nome'  => $anexo['nome'],
-                        'descricao'  => $anexo['descricao']
-                    ]);
+                $anexos = Anexo::where('anexo_id', $profissional->id)
+                    ->where('anexo_type', 'app\Models\Profissional')
+                    ->whereNotIn($ids)
+                    ->get();
+
+                foreach ($anexos as $key => $anexo) {
+                    $anexo->delete();
                 }
-                // }
 
                 // foreach ($profissional->anexos as $key => $anexo) {
                 //     $anexo->delete();
