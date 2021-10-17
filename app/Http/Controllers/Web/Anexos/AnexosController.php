@@ -120,4 +120,11 @@ class AnexosController extends Controller
             }
         }
     }
+    public function download(Anexo $anexo)
+    {
+        $headers = [
+            'Content-type' => 'text/txt',
+        ];
+        return response()->download(storage_path('app/public') . '/' . $anexo->caminho, $anexo->nome, $headers);
+    }
 }

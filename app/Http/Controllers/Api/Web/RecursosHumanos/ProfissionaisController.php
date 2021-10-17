@@ -37,7 +37,7 @@ class ProfissionaisController extends Controller
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-        return Profissional::with(['pessoa.user.acessos', 'setor', 'cargo', 'dadoscontratual'])
+        return Profissional::with(['pessoa.user.acessos', 'setor', 'cargo', 'dadoscontratual', 'anexos'])
             ->where('ativo', 1)
             ->where('empresa_id', $empresa_id)
             ->get();
@@ -646,13 +646,5 @@ class ProfissionaisController extends Controller
     {
         $profissional->ativo = false;
         $profissional->save();
-    }
-
-    public function downloadfile(Anexo $anexo)
-    {
-        $headers = [
-            'Content-type' => 'text/txt',
-        ];
-        return response()->download($anexo->caminho, $anexo->nome, $headers);
     }
 }
