@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Anexo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AnexosController extends Controller
 {
@@ -27,7 +28,22 @@ class AnexosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request['documentos']) {
+            foreach ($request['documentos'] as $documento) {
+                $md5 = md5_file($documento['anexo']['file']);
+                $caminho = 'anexos/prestadores/';
+                $nome = $md5 . '.' . explode(';', explode('/', $documento['anexo']['file'])[1])[0];
+                $file = explode(',', $documento['anexo']['file'])[1];
+                Storage::put($caminho . $nome, base64_decode($file));
+                Anexo::create([
+                    'anexo_id' => $request->anexo_id,
+                    'anexo_type' => $request->anexo_type,
+                    'caminho' => $caminho . '/' . $nome,
+                    'nome'  => $documento['anexo']['name'],
+                    'descricao'  => $documento['descricao']
+                ]);
+            }
+        }
     }
 
     /**
@@ -67,7 +83,7 @@ class AnexosController extends Controller
     public function upload(Request $request)
     {
         // $data = [
-            // $request['file']->allFiles();
+        // $request['file']->allFiles();
         // ];
         // return response()->json($request);
         // return $request;
@@ -80,23 +96,23 @@ class AnexosController extends Controller
         // $upload = $file1->storeAs($caminho, $nome);
         // return "ok";
         $request = json_decode($request->data, true);
-        if($file && $file->isValid())
-        {
+        if ($file && $file->isValid()) {
             $md5 = md5_file($file);
-            $caminho = 'anexos/' ;
+            $caminho = 'anexos/';
             $nome = $md5 . '.' . $file->extension();
             $upload = $file->storeAs($caminho, $nome);
             $nomeOriginal = $file->getClientOriginalName();
             if ($upload) {
                 DB::transaction(function () use ($request, $nomeOriginal, $caminho, $nome) {
-                   Anexo::create(
+                    Anexo::create(
                         [
                             'anexo_type' => $request['anexo_type'],
                             // 'anexo_id'   => $request['anexo_id'],
                             'nome'       => $nomeOriginal,
                             'caminho'    => $caminho . '/' . $nome,
-                            // 'descricao'  => $request['descricao'] 
-                        ]); 
+                            // 'descricao'  => $request['descricao']
+                        ]
+                    );
                 });
                 return response()->json('Upload de arquivo bem sucedido!', 200)->header('Content-Type', 'text/plain');
             } else {

@@ -382,7 +382,7 @@ class PrestadoresController extends Controller
                     Storage::put($caminho . $nome, base64_decode($file));
                     Anexo::create([
                         'anexo_id' => $prestador->id,
-                        'anexo_type' => 'empresa_prestador',
+                        'anexo_type' => 'app\Models\EmpresaPrestador',
                         'caminho' => $caminho . '/' . $nome,
                         'nome'  => $documento['anexo']['name'],
                         'descricao'  => $documento['descricao']
