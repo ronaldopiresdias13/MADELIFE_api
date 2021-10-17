@@ -12,6 +12,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::put('contratos/{orcamento}', [ContratosController::class, 'update']);
 
         Route::put('contratos/desativar/{orcamento}', [ContratosController::class, 'desativarContrato']);
+        Route::put('contratos/ativar/{orcamento}', [ContratosController::class, 'ativarContrato']);
 
         Route::delete('contratos/{orcamento}', [ContratosController::class, 'destroy']);
         Route::put('contratos/{orcamento}/prorrogacao', [ContratosController::class, 'prorrogacao']);

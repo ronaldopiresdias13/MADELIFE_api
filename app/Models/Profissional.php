@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Profissional extends Model
 {
@@ -51,5 +53,9 @@ class Profissional extends Model
     public function convenios()
     {
         return $this->belongsToMany(Convenio::class, 'profissional_convenio')->withPivot('id')->wherePivot('ativo', true);
+    }
+    public function anexos()
+    {
+        return $this->morphMany(Anexo::class, 'anexo');
     }
 }

@@ -15,7 +15,7 @@ class VersaotabelaprecosController extends Controller
      */
     public function index(Request $request)
     {
-        return Versaotabelapreco::where('tabela_id', $request->tabela_id)->get();
+        return Versaotabelapreco::where('tabelapreco_id', $request->tabelapreco_id)->get();
     }
 
     /**
