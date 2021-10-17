@@ -301,7 +301,7 @@ class ProfissionaisController extends Controller
                     Anexo::create([
                         'anexo_id'   => $profissional->id,
                         'anexo_type' => 'app\Models\Profissional',
-                        'caminho'    => $caminho . '/' . $nome,
+                        'caminho'    => $caminho . $nome,
                         'nome'       => $anexo['nome'],
                         'descricao'  => $anexo['descricao']
                     ]);
@@ -528,7 +528,7 @@ class ProfissionaisController extends Controller
                         Anexo::create([
                             'anexo_id'   => $profissional->id,
                             'anexo_type' => 'app\Models\Profissional',
-                            'caminho'    => $caminho . '/' . $nome,
+                            'caminho'    => $caminho . $nome,
                             'nome'       => $anexo['nome'],
                             'descricao'  => $anexo['descricao']
                         ]);
