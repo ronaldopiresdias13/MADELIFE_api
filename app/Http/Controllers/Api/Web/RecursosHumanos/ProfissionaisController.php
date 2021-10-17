@@ -296,7 +296,7 @@ class ProfissionaisController extends Controller
                     Storage::put($caminho . $nome, base64_decode($file));
                     Anexo::create([
                         'anexo_id' => $profissional->id,
-                        'anexo_type' => 'profissionais',
+                        'anexo_type' => 'app\Models\Profissional',
                         'caminho' => $caminho . '/' . $nome,
                         'nome'  => $documento['anexo']['name'],
                         'descricao'  => $documento['descricao']
