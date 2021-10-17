@@ -209,7 +209,6 @@ class ContratosController extends Controller
      */
     public function update(Request $request, Orcamento $orcamento)
     {
-
         $contratoService = new ContratoService($request, $orcamento);
         return $contratoService->update();
     }
@@ -232,6 +231,20 @@ class ContratosController extends Controller
             $ordemservico->dataencerramento = $request['ordemservico']['dataencerramento'];
             $ordemservico->motivo = $request['ordemservico']['motivo'];
             $ordemservico->status = false;
+            $ordemservico->save();
+        });
+    }
+    public function ativarContrato(Request $request, Orcamento $orcamento)
+    {
+        DB::transaction(function () use ($request, $orcamento) {
+            $orcamento->status = true;
+            $orcamento->save();
+
+            $ordemservico = $orcamento['ordemservico'];
+            $ordemservico->descricaomotivo = "";
+            $ordemservico->dataencerramento = "";
+            $ordemservico->motivo = "";
+            $ordemservico->status = true;
             $ordemservico->save();
         });
     }
