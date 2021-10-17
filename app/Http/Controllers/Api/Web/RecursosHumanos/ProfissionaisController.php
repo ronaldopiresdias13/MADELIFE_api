@@ -324,7 +324,6 @@ class ProfissionaisController extends Controller
             //         ]);
             //     }
             // }
-
         });
 
         // return response()->json('Profissional cadastrado com sucesso!', 200)->header('Content-Type', 'text/plain');
@@ -647,5 +646,13 @@ class ProfissionaisController extends Controller
     {
         $profissional->ativo = false;
         $profissional->save();
+    }
+
+    public function downloadfile(Anexo $anexo)
+    {
+        $headers = [
+            'Content-type' => 'text/txt',
+        ];
+        return response()->download($anexo->caminho, $anexo->nome, $headers);
     }
 }
