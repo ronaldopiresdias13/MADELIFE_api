@@ -53,8 +53,8 @@ class AnexosController extends Controller
                 $file = explode(',', $anexo['file'])[1];
                 Storage::put($caminho . $nome, base64_decode($file));
                 Anexo::create([
-                    'anexo_id'   => $request->anexo_id,
-                    'anexo_type' => $request->anexo_type,
+                    'anexo_id'   => $anexo['anexo_id'],
+                    'anexo_type' => $anexo['anexo_type'],
                     'caminho'    => $caminho . $nome,
                     'nome'       => $anexo['nome'],
                     'descricao'  => $anexo['descricao']
