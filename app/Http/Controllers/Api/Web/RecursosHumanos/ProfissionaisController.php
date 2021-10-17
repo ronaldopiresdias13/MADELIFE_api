@@ -508,13 +508,16 @@ class ProfissionaisController extends Controller
                 }
             }
             if ($request['documentos']) {
+                foreach ($profissional->anexos as $key => $anexo) {
+                    $anexo->delete();
+                }
                 foreach ($request['documentos'] as $documento) {
                     $md5 = md5_file($documento['anexo']['file']);
                     $caminho = 'anexos/';
                     $nome = $md5 . '.' . explode(';', explode('/', $documento['anexo']['file'])[1])[0];
                     $file = explode(',', $documento['anexo']['file'])[1];
                     Storage::put($caminho . $nome, base64_decode($file));
-                    Anexo::firstOrCreate([
+                    Anexo::create([
                         'anexo_id' => $profissional->id,
                         'anexo_type' => 'profissionais',
                         'caminho' => $caminho . '/' . $nome,
