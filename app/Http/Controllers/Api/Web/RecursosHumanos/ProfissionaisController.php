@@ -100,7 +100,6 @@ class ProfissionaisController extends Controller
      */
     public function novoProfissional(Request $request)
     {
-
         if (!Auth::check()) {
             return response()->json([
                 'alert' => [
@@ -287,8 +286,8 @@ class ProfissionaisController extends Controller
             //     foreach ($request['documentos'] as $key => $documento) {
 
 
-            if ($request['documentos']) {
-                foreach ($request['documentos'] as $documento) {
+            if ($request['anexos']) {
+                foreach ($request['anexos'] as $documento) {
                     $md5 = md5_file($documento['anexo']['file']);
                     $caminho = 'anexos/';
                     $nome = $md5 . '.' . explode(';', explode('/', $documento['anexo']['file'])[1])[0];
@@ -507,11 +506,11 @@ class ProfissionaisController extends Controller
                     }
                 }
             }
-            if ($request['documentos']) {
+            if ($request['anexos']) {
                 foreach ($profissional->anexos as $key => $anexo) {
                     $anexo->delete();
                 }
-                foreach ($request['documentos'] as $documento) {
+                foreach ($request['anexos'] as $documento) {
                     $md5 = md5_file($documento['anexo']['file']);
                     $caminho = 'anexos/';
                     $nome = $md5 . '.' . explode(';', explode('/', $documento['anexo']['file'])[1])[0];
@@ -519,7 +518,7 @@ class ProfissionaisController extends Controller
                     Storage::put($caminho . $nome, base64_decode($file));
                     Anexo::create([
                         'anexo_id' => $profissional->id,
-                        'anexo_type' => 'profissionais',
+                        'anexo_type' => 'app\Models\Profissional',
                         'caminho' => $caminho . '/' . $nome,
                         'nome'  => $documento['anexo']['name'],
                         'descricao'  => $documento['descricao']
