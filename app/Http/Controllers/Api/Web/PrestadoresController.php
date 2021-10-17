@@ -85,7 +85,7 @@ class PrestadoresController extends Controller
             // ->join('formacoes', 'pessoas.id', '=', 'prestadores.pessoa_id')
 
             ->join('pessoas', 'pessoas.id', '=', 'prestadores.pessoa_id')
-            ->join('conselhos', 'pessoas.id', '=', 'conselhos.pessoa_id')
+            ->leftJoin('conselhos', 'pessoas.id', '=', 'conselhos.pessoa_id')
             ->where('pessoas.nome', 'like', $request->nome ? '%' . $request->nome . '%' : '')
             ->where('prestadores.ativo', 1)
             ->orWhere('pessoas.cpfcnpj', 'like', $request->cpf ? $request->cpf : '')
@@ -95,7 +95,6 @@ class PrestadoresController extends Controller
     }
     public function buscaprestadoresporfiltro2(Request $request)
     {
-
         $prestador = Prestador::with([
             'formacoes', 'pessoa', 'pessoa.conselhos', 'pessoa.enderecos' => function ($query) {
                 $query->with('cidade');
@@ -140,24 +139,24 @@ class PrestadoresController extends Controller
                 $query->where('empresa_id', $empresa_id);
             });
 
-            if ($request->nome) {
-                $prestador->whereHas('pessoa', function (Builder $query) use ($request) {
-                    $query->where('nome', 'like', $request->nome ? '%' . $request->nome . '%' : '');
-                });
-            }
-            if ($request->cpf) {
-                $prestador->whereHas('pessoa', function (Builder $query) use ($request) {
-                    $query->where('cpfcnpj', 'like', $request->cpf ? $request->cpf : '');
-                });
-            }
-            if ($request->conselho) {
-                $prestador->whereHas('pessoa.conselhos', function (Builder $query) use ($request) {
-                    $query->where('numero', 'like', $request->conselho ? $request->conselho : '');
-                });
-            }
-            $prestador->where('ativo', 1);
-            $prestador = $prestador->get();
-            return $prestador;
+        if ($request->nome) {
+            $prestador->whereHas('pessoa', function (Builder $query) use ($request) {
+                $query->where('nome', 'like', $request->nome ? '%' . $request->nome . '%' : '');
+            });
+        }
+        if ($request->cpf) {
+            $prestador->whereHas('pessoa', function (Builder $query) use ($request) {
+                $query->where('cpfcnpj', 'like', $request->cpf ? $request->cpf : '');
+            });
+        }
+        if ($request->conselho) {
+            $prestador->whereHas('pessoa.conselhos', function (Builder $query) use ($request) {
+                $query->where('numero', 'like', $request->conselho ? $request->conselho : '');
+            });
+        }
+        $prestador->where('ativo', 1);
+        $prestador = $prestador->get();
+        return $prestador;
     }
 
     /**

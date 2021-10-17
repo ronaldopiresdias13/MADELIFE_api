@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('web')->group(function () {
         Route::prefix('orcs')->group(function () {
-            // Route::get('', [OrcsController::class, 'index']);
+            Route::get('', [OrcsController::class, 'index']);
             Route::get('gerarCodigo', [OrcsController::class, 'gerarCodigoOrc']);
             Route::get('buscaquantidadeorcamentosporsituacao', [OrcsController::class, 'buscaquantidadeorcamentosporsituacao']);
             Route::get('gerarCodigoOrcamento', [OrcsController::class, 'gerarCodigoOrcamento']);
