@@ -28,12 +28,12 @@ class ItemtabelaprecosController extends Controller
     {
         foreach ($request->itenstabelapreco as $key => $item) {
             $itemtabelapreco = new Itemtabelapreco();
-            $itemtabelapreco->versaotabelapreco_id = $item->versaotabelapreco_id;
-            $itemtabelapreco->codigo               = $item->codigo;
-            $itemtabelapreco->tiss                 = $item->tiss;
-            $itemtabelapreco->tuss                 = $item->tuss;
-            $itemtabelapreco->nome                 = $item->nome;
-            $itemtabelapreco->preco                = $item->preco;
+            $itemtabelapreco->versaotabelapreco_id = $item['versaotabelapreco_id'];
+            $itemtabelapreco->codigo               = $item['codigo'];
+            $itemtabelapreco->tiss                 = $item['tiss'];
+            $itemtabelapreco->tuss                 = $item['tuss'];
+            $itemtabelapreco->nome                 = $item['nome'];
+            $itemtabelapreco->preco                = $item['preco'];
             $itemtabelapreco->save();
         }
 
