@@ -314,7 +314,6 @@ class EmpresaPrestadorController extends Controller
 
     public function listaPrestadoresPorEmpresaIdEStatus(Request $request)
     {
-        
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
         return EmpresaPrestador::with([
@@ -325,10 +324,11 @@ class EmpresaPrestadorController extends Controller
             'prestador.pessoa.telefones',
             'prestador.pessoa.emails',
             'prestador.ordemservicos',
+            'anexos'
         ])
-        ->whereHas('prestador.pessoa', function (Builder $builder) use ($request){
-            $builder->where('nome','like', '%' . $request->nome . '%');
-        })
+            ->whereHas('prestador.pessoa', function (Builder $builder) use ($request) {
+                $builder->where('nome', 'like', '%' . $request->nome . '%');
+            })
             ->where('empresa_id', $empresa_id)
             ->where('status', $request['status'])
             ->paginate(15);
