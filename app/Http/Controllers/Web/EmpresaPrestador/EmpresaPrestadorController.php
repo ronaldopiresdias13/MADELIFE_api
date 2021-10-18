@@ -165,6 +165,18 @@ class EmpresaPrestadorController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param  \App\Prestador  $prestador
+     * @return \Illuminate\Http\Response
+     */
+    public function anexos(EmpresaPrestador $empresaPrestador)
+    {
+        $anexos = $empresaPrestador->anexos;
+        return $anexos;
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
