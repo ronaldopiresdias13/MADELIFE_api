@@ -300,9 +300,14 @@ class VendasController extends Controller
         // )->find($venda->orcamento_id);
         // return $iten;
         // $empresa_id = $request->user()->pessoa->profissional->empresa_id;
-        return Venda::with(['orcamento.cliente.pessoa.enderecos.cidade', 'orcamento.produtos.produto'],)->find($venda->id);
-            // ->where('empresa_id', $empresa_id)
-            // ->get();
+        return Venda::with(['orcamento.cliente.pessoa.enderecos.cidade', 'orcamento' ,'orcamento.cliente.pessoa' ,'orcamento.produtos.produto'],)->find($venda->id);
+        // ->where('empresa_id', $empresa_id)
+        // ->get();
+        // $venda->orcamento->cliente;
+        // $venda->orcamento->cidade;
+        // $venda->orcamento;
+        // $venda->orcamento->produtos->produto;
+        // return $venda;
     }
 
     /**
@@ -312,22 +317,22 @@ class VendasController extends Controller
      * @param  \App\Venda  $venda
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Venda $venda)
+    public function update(Request $request)
     {
         // return "TESTE";
         DB::transaction(function () use ($request) {
-            $empresa_id = $request->empresa_id;
-            $o = null;
-            $numero = null;
-            $o = Venda::withTrashed()
-                ->where('empresa_id', $empresa_id)
-                ->count('id');
-            $numero = "V" . ($o + 1);
+            // $empresa_id = $request->empresa_id;
+            // $o = null;
+            // $numero = null;
+            // $o = Venda::withTrashed()
+            //     ->where('empresa_id', $empresa_id)
+            //     ->count('id');
+            // $numero = "V" . ($o + 1);
             $orcamento = Orcamento::updateOrCreate([
-                
+
                 'empresa_id'        => $request['orcamento']['empresa_id'],
                 'cliente_id'        => $request['orcamento']['cliente_id'],
-                'numero'            => $numero,
+                'numero'            => $request['numero'],
                 'processo'          => "",
                 'cidade_id'         => $request['orcamento']['cidade']['id'],
                 'tipo'              => $request['orcamento']['tipo'],
@@ -348,9 +353,10 @@ class VendasController extends Controller
                     $orcamento_produto = OrcamentoProduto::updateOrCreate(
                         [
                             'orcamento_id'         => $orcamento->id,
+                            'produto_id'           => $produto['produto']['id'],
                         ],
                         [
-                            'produto_id'           => $produto['produto']['id'],
+
                             'quantidade'           => $produto['quantidade'],
                             'valorunitario'        => $produto['valor'],
                             'custo'                => $produto['custo'],
@@ -363,17 +369,19 @@ class VendasController extends Controller
                 }
             }
             Venda::updateOrCreate(
+
                 [
                     'id' => $request['id']
                 ],
                 [
-                'orcamento_id' => $orcamento->id,
-                'realizada' => 1,
-                'data' => $request['orcamento']['data'],
-                'empresa_id' => $request['empresa_id']
-                // 'ativo' => 1
-            ]
-        );
+
+                    'orcamento_id' => $orcamento->id,
+                    'realizada' => 1,
+                    'data' => $request['orcamento']['data'],
+                    'empresa_id' => $request['empresa_id']
+                    // 'ativo' => 1
+                ]
+            );
         });
     }
 
