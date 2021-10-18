@@ -253,52 +253,56 @@ class VendasController extends Controller
      */
     public function show(Request $request, Venda $venda)
     {
-        $iten = $venda;
+        // $iten = $venda;
 
-        if ($request->commands) {
-            $request = json_decode($request->commands, true);
-        }
+        // if ($request->commands) {
+        //     $request = json_decode($request->commands, true);
+        // }
 
-        if ($request['adicionais']) {
-            foreach ($request['adicionais'] as $key => $adicional) {
-                if (is_string($adicional)) {
-                    $iten[$adicional];
-                } else {
-                    $iten2 = $iten;
-                    foreach ($adicional as $key => $a) {
-                        if ($key == 0) {
-                            if ($iten[0] == null) {
-                                $iten2 = $iten[$a];
-                            } else {
-                                foreach ($iten as $key => $i) {
-                                    $i[$a];
-                                }
-                            }
-                        } else {
-                            if ($iten2 != null) {
-                                if ($iten2->count() > 0) {
-                                    if ($iten2[0] == null) {
-                                        $iten2 = $iten2[$a];
-                                    } else {
-                                        foreach ($iten2 as $key => $i) {
-                                            $i[$a];
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        // if ($request['adicionais']) {
+        //     foreach ($request['adicionais'] as $key => $adicional) {
+        //         if (is_string($adicional)) {
+        //             $iten[$adicional];
+        //         } else {
+        //             $iten2 = $iten;
+        //             foreach ($adicional as $key => $a) {
+        //                 if ($key == 0) {
+        //                     if ($iten[0] == null) {
+        //                         $iten2 = $iten[$a];
+        //                     } else {
+        //                         foreach ($iten as $key => $i) {
+        //                             $i[$a];
+        //                         }
+        //                     }
+        //                 } else {
+        //                     if ($iten2 != null) {
+        //                         if ($iten2->count() > 0) {
+        //                             if ($iten2[0] == null) {
+        //                                 $iten2 = $iten2[$a];
+        //                             } else {
+        //                                 foreach ($iten2 as $key => $i) {
+        //                                     $i[$a];
+        //                                 }
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
         // return Orcamento::with(
         //     [
-        //         'cliente.pessoa',
+        //         'cliente.pessoa:id,nome',
         //         'produtos.produto'
         //     ]
-        // )->find($iten->orcamento_id);
-        return $iten;
+        // )->find($venda->orcamento_id);
+        // return $iten;
+        // $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+        return Venda::with(['orcamento.cliente.pessoa.enderecos.cidade', 'orcamento.produtos.produto'],)->find($venda->id);
+            // ->where('empresa_id', $empresa_id)
+            // ->get();
     }
 
     /**
@@ -310,7 +314,67 @@ class VendasController extends Controller
      */
     public function update(Request $request, Venda $venda)
     {
-        $venda->update($request->all());
+        // return "TESTE";
+        DB::transaction(function () use ($request) {
+            $empresa_id = $request->empresa_id;
+            $o = null;
+            $numero = null;
+            $o = Venda::withTrashed()
+                ->where('empresa_id', $empresa_id)
+                ->count('id');
+            $numero = "V" . ($o + 1);
+            $orcamento = Orcamento::updateOrCreate([
+                
+                'empresa_id'        => $request['orcamento']['empresa_id'],
+                'cliente_id'        => $request['orcamento']['cliente_id'],
+                'numero'            => $numero,
+                'processo'          => "",
+                'cidade_id'         => $request['orcamento']['cidade']['id'],
+                'tipo'              => $request['orcamento']['tipo'],
+                'data'              => $request['orcamento']['data'],
+                'unidade'           => $request['orcamento']['unidade'],
+                'quantidade'        => $request['orcamento']['quantidade'],
+                'situacao'          => $request['orcamento']['situacao'],
+                'descricao'         => $request['orcamento']['descricao'],
+                'valordesconto'     => $request['orcamento']['valordesconto'],
+                'valortotalservico' => $request['orcamento']['valortotalservico'] ? $request['orcamento']['valortotalservico'] : 0,
+                'valortotalcusto'   => $request['orcamento']['valortotalcusto'] ? $request['orcamento']['valortotalcusto'] : 0,
+                'valortotalproduto' => $request['orcamento']['valortotalproduto'] ? $request['orcamento']['valortotalproduto'] : 0,
+                'observacao'        => $request['orcamento']['observacao'],
+                'status'            => 1
+            ]);
+            if ($request['orcamento']['produtos']) {
+                foreach ($request['orcamento']['produtos'] as $key => $produto) {
+                    $orcamento_produto = OrcamentoProduto::updateOrCreate(
+                        [
+                            'orcamento_id'         => $orcamento->id,
+                        ],
+                        [
+                            'produto_id'           => $produto['produto']['id'],
+                            'quantidade'           => $produto['quantidade'],
+                            'valorunitario'        => $produto['valor'],
+                            'custo'                => $produto['custo'],
+                            'subtotal'             => $produto['subtotal'],
+                            'subtotalcusto'        => $produto['subtotalcusto'],
+                            'valorresultadomensal' => $produto['valorresultadomensal'],
+                            'valorcustomensal'     => $produto['valorcustomensal']
+                        ]
+                    );
+                }
+            }
+            Venda::updateOrCreate(
+                [
+                    'id' => $request['id']
+                ],
+                [
+                'orcamento_id' => $orcamento->id,
+                'realizada' => 1,
+                'data' => $request['orcamento']['data'],
+                'empresa_id' => $request['empresa_id']
+                // 'ativo' => 1
+            ]
+        );
+        });
     }
 
     /**
