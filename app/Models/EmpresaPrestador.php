@@ -18,4 +18,8 @@ class EmpresaPrestador extends Model
     {
         return $this->belongsTo(Empresa::class);
     }
+    public function anexos()
+    {
+        return $this->morphMany(Anexo::class, 'anexo');
+    }
 }

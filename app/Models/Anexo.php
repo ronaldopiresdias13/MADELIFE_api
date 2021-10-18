@@ -10,8 +10,13 @@ class Anexo extends Model
 {
     use Uuid;
     use HasFactory;
-    
-    protected $fillable = [
-        'nome',
-    ];
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+    protected $guarded = [];
+
+    public function anexo()
+    {
+        return $this->morphTo();
+    }
 }

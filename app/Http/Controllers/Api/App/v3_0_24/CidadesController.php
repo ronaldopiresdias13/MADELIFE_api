@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api\App\v3_0_25;
+namespace App\Http\Controllers\Api\App\v3_0_24;
 
 use App\Models\Cidade;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class CidadeController extends Controller
+class CidadesController extends Controller
 {
     /**
      * Display a listing of the resource.

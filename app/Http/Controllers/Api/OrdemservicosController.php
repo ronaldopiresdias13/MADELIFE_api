@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Orcamento;
 use App\Models\OrdemservicoServico;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
 class OrdemservicosController extends Controller
@@ -330,10 +331,42 @@ class OrdemservicosController extends Controller
                 }]);
             }
         ])
+            ->whereHas('orcamento', function (Builder $builder) {
+                    $builder->where('status', true);
+                })
             ->where('empresa_id', $profissional->empresa_id)
             ->where('ativo', true)
             ->get(['id', 'orcamento_id']);
 
         return $escalas;
+    }
+
+    public function listaOrdemDeServicos(Request $request)
+    {
+        $user = $request->user();
+        $profissional = $user->pessoa->profissional;
+        // $empresa_id = 1;
+           $result = Ordemservico::with([
+            'orcamento.cidade', 'orcamento.evento', 'orcamento.cliente.pessoa', 'profissional.pessoa', 'orcamento' => function ($query) {
+                $query->with(['servicos.servico', 'produtos.produto', 'homecare' => function ($query) {
+                    $query->with(['paciente.pessoa']);
+                }]);
+            }
+        ])
+        ->where('empresa_id', $profissional->empresa_id)
+        ->where('ativo', true);
+
+        if ($request->nome) {
+            $result->whereHas('orcamento.homecare.paciente.pessoa', function (Builder $query) use ($request) {
+                $query->where('nome', 'like', '%' . $request->nome . '%');
+            });
+        }
+        $result = $result->orderByDesc('id')->paginate($request['per_page'] ? $request['per_page'] : 15);
+
+        if (env("APP_ENV", 'production') == 'production') {
+            return $result->withPatch(str_replace('http:', 'https:', $result->path()));
+        } else {
+            return $result;
+        }
     }
 }
