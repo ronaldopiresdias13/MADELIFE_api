@@ -28,19 +28,36 @@ class AnexosController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request['documentos']) {
-            foreach ($request['documentos'] as $documento) {
-                $md5 = md5_file($documento['anexo']['file']);
-                $caminho = 'anexos/prestadores/';
-                $nome = $md5 . '.' . explode(';', explode('/', $documento['anexo']['file'])[1])[0];
-                $file = explode(',', $documento['anexo']['file'])[1];
+        // if ($request['documentos']) {
+        //     foreach ($request['documentos'] as $documento) {
+        //         $md5 = md5_file($documento['anexo']['file']);
+        //         $caminho = 'anexos/prestadores/';
+        //         $nome = $md5 . '.' . explode(';', explode('/', $documento['anexo']['file'])[1])[0];
+        //         $file = explode(',', $documento['anexo']['file'])[1];
+        //         Storage::put($caminho . $nome, base64_decode($file));
+        //         Anexo::create([
+        //             'anexo_id' => $request->anexo_id,
+        //             'anexo_type' => $request->anexo_type,
+        //             'caminho' => $caminho . $nome,
+        //             'nome'  => $documento['anexo']['name'],
+        //             'descricao'  => $documento['descricao']
+        //         ]);
+        //     }
+        // }
+
+        if ($request['anexos']) {
+            foreach ($request['anexos'] as $anexo) {
+                $md5 = md5_file($anexo['file']);
+                $caminho = 'anexos/';
+                $nome = $md5 . '.' . explode(';', explode('/', $anexo['file'])[1])[0];
+                $file = explode(',', $anexo['file'])[1];
                 Storage::put($caminho . $nome, base64_decode($file));
                 Anexo::create([
-                    'anexo_id' => $request->anexo_id,
-                    'anexo_type' => $request->anexo_type,
-                    'caminho' => $caminho . '/' . $nome,
-                    'nome'  => $documento['anexo']['name'],
-                    'descricao'  => $documento['descricao']
+                    'anexo_id'   => $anexo['anexo_id'],
+                    'anexo_type' => $anexo['anexo_type'],
+                    'caminho'    => $caminho . $nome,
+                    'nome'       => $anexo['nome'],
+                    'descricao'  => $anexo['descricao']
                 ]);
             }
         }
@@ -75,9 +92,9 @@ class AnexosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Anexo $anexo)
     {
-        //
+        $anexo->delete();
     }
 
     public function upload(Request $request)
@@ -119,5 +136,12 @@ class AnexosController extends Controller
                 return response()->json('Erro, Upload não realizado!', 400)->header('Content-Type', 'text/plain');
             }
         }
+    }
+    public function download(Anexo $anexo)
+    {
+        $headers = [
+            'Content-type' => 'text/txt',
+        ];
+        return response()->download(storage_path('app/public') . '/' . $anexo->caminho, $anexo->nome, $headers);
     }
 }
