@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\VendasController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('vendas', 'Api\VendasController@store');
@@ -10,5 +11,5 @@ Route::post('vendas/cadastrarCliente', 'Api\VendasController@cadastrarCliente');
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('vendas', 'Api\VendasController@index');
-    Route::get('web/vendas/{venda}', 'Web\Vendas\VendasController@show');
+    Route::get('vendas/{venda}', [VendasController::class, 'show']);
 });
