@@ -56,14 +56,14 @@ class AnexoBController extends Controller
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-        $pacientes = Paciente::selectRaw('
+        $pacientes = Paciente::selectRaw('pacientes.id as id,pacientes.pessoa_id as pessoa_id,
         pacientes.id as paciente_id, pacientes.pessoa_id as pessoa_paciente_id,p.nome as paciente_nome, 
         pacientes.sexo as paciente_sexo, r.id as responsavel_id, pr.nome as responsavel_nome, r.parentesco,
         r.pessoa_id as pessoa_responsavel_id
         ')->where('pacientes.empresa_id', '=', $empresa_id)
             ->join(DB::raw('pessoas as p'), 'p.id', '=', 'pacientes.pessoa_id')
             ->join(DB::raw('responsaveis as r'), 'r.id', '=', 'pacientes.responsavel_id')
-            ->join(DB::raw('pessoas as pr'), 'r.pessoa_id', '=', 'pr.id')->get();
+            ->join(DB::raw('pessoas as pr'), 'r.pessoa_id', '=', 'pr.id')->with(['pessoa.enderecos.cidade','responsavel.pessoa.telefones'])->get();
 
         return response()->json(['pacientes' => $pacientes]);
     }
