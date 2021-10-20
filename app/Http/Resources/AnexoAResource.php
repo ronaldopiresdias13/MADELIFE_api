@@ -16,7 +16,7 @@ class AnexoAResource extends JsonResource
     {
         $data =  parent::toArray($request);
         $data['paciente']=$this->paciente()->with(['pessoa'])->first();
-        $data['diagnostico_principal']=$this->diagnostico_principal()->first();
+        $data['diagnosticos_principais']=$this->diagnosticos_principais()->get();
         $data['diagnosticos_secundarios']=$this->diagnosticos_secundarios()->get();
 
         $data['escalas_braden']=$this->escalas_braden()->get();

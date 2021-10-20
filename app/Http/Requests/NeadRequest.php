@@ -26,7 +26,7 @@ class NeadRequest extends FormRequest
         switch (strtolower($this->route()->getActionMethod())):
             case 'store_nead':
                 return [
-                    'diagnostico_principal_id' => 'required',
+                    'diagnosticos_principais' => 'required',
                     'paciente_id' => 'required',
                     'diagnostico_secundarios_id' => 'required',
                     'classificacao_katz' => 'required',
@@ -39,7 +39,7 @@ class NeadRequest extends FormRequest
                 break;
             case 'update_nead':
                 return [
-                    'diagnostico_principal_id' => 'required',
+                    'diagnosticos_principais' => 'required',
                     'paciente_id' => 'required',
                     'diagnostico_secundarios_id' => 'required',
                     'classificacao_katz' => 'required',

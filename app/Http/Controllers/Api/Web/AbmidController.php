@@ -35,7 +35,7 @@ class AbmidController extends Controller
             });
         }
         if($request->diagnostico!=null && Str::length($request->diagnostico)>0){
-            $abmids=$abmids->whereHas('diagnostico_principal',function($q)use($request){
+            $abmids=$abmids->whereHas('diagnosticos_principais',function($q)use($request){
                 $q->whereRaw('lower(nome) LIKE lower(?)',['%'.$request->diagnostico.'%']);
             });
         }
@@ -56,14 +56,14 @@ class AbmidController extends Controller
     public function getDadosAbmid(Request $request){
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-        $pacientes = Paciente::selectRaw('
+        $pacientes = Paciente::selectRaw('pacientes.id as id,pacientes.pessoa_id as pessoa_id,
         pacientes.id as paciente_id, pacientes.pessoa_id as pessoa_paciente_id,p.nome as paciente_nome, 
         pacientes.sexo as paciente_sexo, r.id as responsavel_id, pr.nome as responsavel_nome, r.parentesco,
         r.pessoa_id as pessoa_responsavel_id
         ')->where('pacientes.empresa_id','=',$empresa_id)
         ->join(DB::raw('pessoas as p'),'p.id','=','pacientes.pessoa_id')
         ->join(DB::raw('responsaveis as r'),'r.id','=','pacientes.responsavel_id')
-        ->join(DB::raw('pessoas as pr'),'r.pessoa_id','=','pr.id')->get();
+        ->join(DB::raw('pessoas as pr'),'r.pessoa_id','=','pr.id')->with(['pessoa.enderecos.cidade','responsavel.pessoa.telefones'])->get();
 
         $diagnosticos_principais = DiagnosticoPil::where('flag','=','Primário')->orderBy('nome','asc')->get();
 
@@ -88,10 +88,17 @@ class AbmidController extends Controller
         $abmid->fill([
             'paciente_id'=>$data['paciente_id'],
             'classificacao'=>$data['classificacao'],
-            'diagnostico_principal_id'=>$data['diagnostico_principal_id'],
+            'diagnostico_principal_id'=>$data['diagnosticos_principais'][0]['id'],
             'data_avaliacao'=>Carbon::now()->format('Y-m-d H:i:s'),
             'empresa_id'=>$empresa_id
         ])->save();
+
+        $diagnosticos_principais = [];
+        foreach ($data['diagnosticos_principais'] as $diag_principal) {
+            array_push($diagnosticos_principais, $diag_principal['id']);
+        }
+        $abmid->diagnosticos_principais()->Sync($diagnosticos_principais);
+
 
         $abmid->diagnosticos_secundarios()->Sync($data['diagnostico_secundarios_id']);
 
@@ -167,13 +174,20 @@ class AbmidController extends Controller
         $abmid->fill([
             'paciente_id'=>$data['paciente_id'],
             'classificacao'=>$data['classificacao'],
-            'diagnostico_principal_id'=>$data['diagnostico_principal_id'],
+            'diagnostico_principal_id'=>$data['diagnosticos_principais'][0]['id'],
             'data_avaliacao'=>Carbon::now()->format('Y-m-d H:i:s'),
             'empresa_id'=>$empresa_id
         ])->save();
 
         $abmid->diagnosticos_secundarios()->Sync($data['diagnostico_secundarios_id']);
         $abmid->itens()->delete();
+
+        $diagnosticos_principais = [];
+        foreach ($data['diagnosticos_principais'] as $diag_principal) {
+            array_push($diagnosticos_principais, $diag_principal['id']);
+        }
+        $abmid->diagnosticos_principais()->Sync($diagnosticos_principais);
+
 
         foreach($data['cuidados'] as $g1){
             if($g1['checked']==true){
