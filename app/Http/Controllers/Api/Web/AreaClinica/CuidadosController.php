@@ -32,16 +32,23 @@ class CuidadosController extends Controller
      */
     public function store(Request $request)
     {
-        DB::transaction(function () use ($request) {
+        
+        $cuidado = DB::transaction(function () use ($request) {
             $user = $request->user();
             $empresa_id = $user->pessoa->profissional->empresa->id;
-            Cuidado::create([
+            $cuidado = Cuidado::create([
                 'descricao' => $request['descricao'],
                 'codigo' => $request['codigo'],
                 'empresa_id' => $empresa_id,
                 'status' => $request['status'],
             ]);
+
+            $cuidado=$cuidado->fresh();
+            return $cuidado;
         });
+
+        return $cuidado;
+
     }
 
     /**

@@ -26,7 +26,7 @@ class AbmidRequest extends FormRequest
         switch (strtolower($this->route()->getActionMethod())):
             case 'store_abmid':
                 return [
-                    'diagnostico_principal_id' => 'required',
+                    'diagnosticos_principais' => 'required',
                     'paciente_id' => 'required',
                     'diagnostico_secundarios_id' => 'required',
                     'classificacao' => 'required',
@@ -35,7 +35,7 @@ class AbmidRequest extends FormRequest
                 break;
             case 'update_abmid':
                 return [
-                    'diagnostico_principal_id' => 'required',
+                    'diagnosticos_principais' => 'required',
                     'paciente_id' => 'required',
                     'diagnostico_secundarios_id' => 'required',
                     'classificacao' => 'required',

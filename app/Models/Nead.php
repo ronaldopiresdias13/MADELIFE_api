@@ -23,10 +23,10 @@ class Nead extends Model
         'classificacaop_selecionado'
     ];
 
-    public function diagnostico_principal()
-    {
-        return $this->belongsTo(DiagnosticoPil::class, 'diagnostico_principal_id', 'id');
-    }
+    // public function diagnostico_principal()
+    // {
+    //     return $this->belongsTo(DiagnosticoPil::class, 'diagnostico_principal_id', 'id');
+    // }
 
     public function grupos1(){
         return $this->hasMany(NeadGrupo1::class,'neads_id','id');
@@ -56,5 +56,10 @@ class Nead extends Model
     public function diagnosticos_secundarios()
     {
         return $this->belongsToMany(DiagnosticoPil::class, 'neads_diagnosticos_secundarios', 'nead_id', 'diagnostico_secundario_id');
+    }
+
+    public function diagnosticos_principais()
+    {
+        return $this->belongsToMany(DiagnosticoPil::class, 'nead_diagnosticos_principais', 'nead_id', 'diagnostico_principal_id');
     }
 }
