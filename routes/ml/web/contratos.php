@@ -16,6 +16,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         Route::delete('contratos/{orcamento}', [ContratosController::class, 'destroy']);
         Route::put('contratos/{orcamento}/prorrogacao', [ContratosController::class, 'prorrogacao']);
+        Route::get('quantidadeContratoPorTipo', [ContratosController::class, 'quantidadeContratoPorTipo']);
 
         Route::prefix('gestaoOrcamentaria')->group(function () {
             Route::get('contratos/getAllOrdensServicos', 'Api\Web\GestaoOrcamentaria\OrdemservicosController@getAllOrdensServicos');
