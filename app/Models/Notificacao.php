@@ -14,6 +14,8 @@ class Notificacao extends Model
     use SoftDeletes;
 
     protected $table = 'notificacoes';
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     protected $guarded = [];
 

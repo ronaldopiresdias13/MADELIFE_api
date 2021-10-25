@@ -73,6 +73,6 @@ class CidadesController extends Controller
     }
     public function pegarCidadesPorUf(string $uf)
     {
-        return Cidade::where('uf', $uf)->get(['id', 'nome', 'uf']);
+        return Cidade::where('uf', $uf)->get();
     }
 }

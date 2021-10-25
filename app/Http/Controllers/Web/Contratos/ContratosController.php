@@ -271,4 +271,9 @@ class ContratosController extends Controller
     {
         $orcamento->ordemservico()->update(['fim' => $request->datafim]);
     }
+    public function quantidadeContratoPorTipo(Request $request)
+    {
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+        return Orcamento::where('empresa_id', $empresa_id)->where('ativo', true)->whereBetween('data', [$request->data_ini, $request->data_fim])->select('status', DB::raw('count(*) as total'))->groupBy('status')->get();
+    }
 }
