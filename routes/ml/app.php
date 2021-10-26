@@ -4,11 +4,11 @@ use App\Http\Controllers\Api\App\v3_0_25\VersaoController;
 use App\Http\Controllers\Web\Cidade\CidadesController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('enviararquivos', 'Api\App\v3_0_21\ChamadosController@enviararquivos');
-Route::post('enviararquivos', 'Api\App\v3_0_22\ChamadosController@enviararquivos');
-Route::post('enviararquivos', 'Api\App\v3_0_24\ChamadosController@enviararquivos');
-Route::post('enviararquivos', 'Api\App\v3_0_25\ChamadosController@enviararquivos');
-Route::post('enviararquivos', 'Api\App\v3_1_0\ChamadosController@enviararquivos');
+Route::post('enviar_arquivos', 'Api\App\v3_0_21\ChamadosController@enviar_arquivos');
+Route::post('enviar_arquivos', 'Api\App\v3_0_22\ChamadosController@enviar_arquivos');
+Route::post('enviar_arquivos', 'Api\App\v3_0_24\ChamadosController@enviar_arquivos');
+Route::post('enviar_arquivos', 'Api\App\v3_0_25\ChamadosController@enviar_arquivos');
+Route::post('enviar_arquivos', 'Api\App\v3_1_0\ChamadosController@enviar_arquivos');
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix("app/v3_0_21")->group(function () {
