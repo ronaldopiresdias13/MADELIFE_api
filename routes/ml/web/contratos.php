@@ -11,6 +11,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('contratos', [ContratosController::class, 'store']);
         Route::put('contratos/{orcamento}', [ContratosController::class, 'update']);
 
+        Route::get('filtroPorPeriodoECliente', [ContratosController::class, 'filtroPorPeriodoECliente']);
         Route::put('contratos/desativar/{orcamento}', [ContratosController::class, 'desativarContrato']);
         Route::put('contratos/ativar/{orcamento}', [ContratosController::class, 'ativarContrato']);
 
