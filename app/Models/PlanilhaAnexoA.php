@@ -23,10 +23,10 @@ class PlanilhaAnexoA extends Model
         return $this->belongsTo(Paciente::class, 'paciente_id', 'id');
     }
 
-    public function diagnostico_principal()
-    {
-        return $this->belongsTo(DiagnosticoPil::class, 'diagnostico_principal_id', 'id');
-    }
+    // public function diagnostico_principal()
+    // {
+    //     return $this->belongsTo(DiagnosticoPil::class, 'diagnostico_principal_id', 'id');
+    // }
 
     public function diagnosticos_secundarios()
     {
@@ -53,5 +53,10 @@ class PlanilhaAnexoA extends Model
     public function empresa()
     {
         return $this->belongsTo(Empresa::class, 'empresa_id', 'id');
+    }
+
+    public function diagnosticos_principais()
+    {
+        return $this->belongsToMany(DiagnosticoPil::class, 'anexoa_diagnosticos_principais', 'anexoa_id', 'diagnostico_principal_id');
     }
 }

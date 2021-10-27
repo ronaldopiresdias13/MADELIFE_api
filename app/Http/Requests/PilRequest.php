@@ -26,7 +26,7 @@ class PilRequest extends FormRequest
         switch (strtolower($this->route()->getActionMethod())):
             case 'store_pil':
                 return [
-                    'diagnostico_principal' => 'required',
+                    'diagnosticos_principais' => 'required',
                     'paciente' => 'required',
                     'diagnosticos_secundarios' => 'required',
                     'prescricoes_a' => 'required',
@@ -43,7 +43,7 @@ class PilRequest extends FormRequest
                 break;
             case 'update_pil':
                 return [
-                    'diagnostico_principal' => 'required',
+                    'diagnosticos_principais' => 'required',
                     'paciente' => 'required',
                     'diagnosticos_secundarios' => 'required',
                     'prescricoes_a' => 'required',

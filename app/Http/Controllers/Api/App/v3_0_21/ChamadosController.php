@@ -63,13 +63,13 @@ class ChamadosController extends Controller
         return $randomString;
     }
 
-    public function enviararquivos(ChamadoRequest $request)
+    public function enviar_arquivos(ChamadoRequest $request)
     {
         $data = $request->validated();
         Log::info($data);
 
-        Log::info($data['image']);
-        Log::info($request->file('image'));
+        Log::info($data['file']);
+        Log::info($request->file('file'));
 
         $files_path = [];
         // foreach ($data['image'] as $arquivo) {
@@ -85,7 +85,7 @@ class ChamadosController extends Controller
 
         //     array_push($files_path, $name);
         // }
-        if ($arquivo = $data['image']) {
+        if ($arquivo = $data['file']) {
             // foreach($arquivos as $arquivo){
                 $name = uniqid('foto_') . '.' . $arquivo->getClientOriginalExtension();
                 $filename = $arquivo->storeAs('arquivos_chamado', $name, ['disk' => 'public']);

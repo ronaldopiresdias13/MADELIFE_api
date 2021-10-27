@@ -18,7 +18,7 @@ class NotificacoesController extends Controller
     public function index(Request $request)
     {
         $empresa_id = $request->user()->pessoa->profissional->empresa_id;
-        return Notificacao::with(['profissional.pessoa'])->get();
+        return Notificacao::with(['profissional.pessoa:id,nome'])->get();
     }
 
     /**
@@ -55,6 +55,16 @@ class NotificacoesController extends Controller
     {
         return $notificacao;
     }
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Notificacao  $notificacao
+     * @return \Illuminate\Http\Response
+     */
+    public function notificacoesporprofissional(Profissional $profissional)
+    {
+        return Notificacao::with('profissional.pessoa')->where('profissional_id', $profissional->id)->get();
+    }
 
     /**
      * Update the specified resource in storage.
@@ -65,7 +75,8 @@ class NotificacoesController extends Controller
      */
     public function update(Request $request, Notificacao $notificacao)
     {
-        //
+        $notificacao->visto = $request['visto'];
+        $notificacao->save();
     }
 
     /**
@@ -76,6 +87,6 @@ class NotificacoesController extends Controller
      */
     public function destroy(Notificacao $notificacao)
     {
-        //
+        $notificacao->delete();
     }
 }

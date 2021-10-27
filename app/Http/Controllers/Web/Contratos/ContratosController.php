@@ -271,4 +271,49 @@ class ContratosController extends Controller
     {
         $orcamento->ordemservico()->update(['fim' => $request->datafim]);
     }
+    public function filtroPorPeriodoECliente(Request $request)
+    {
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+        // $empresa_id = 2;
+        $orc = Orcamento::with([
+            'ordemservico',
+            'cidade',
+            'cliente.pessoa',
+            'homecare.paciente.pessoa',
+            'aph.cidade',
+            'evento.cidade',
+            'remocao.cidadeorigem',
+            'remocao.cidadedestino',
+            'homecare.paciente.internacoes'
+            // 'produtos.produto',
+            // 'servicos.servico',
+            // 'custos'
+        ]);
+        if($request->data_final) {
+            $orc = $orc->whereHas('ordemservico', function (Builder $query) use ($request, $orc) {
+                $query->where('fim','<=', $request->data_final ? $request->data_final : $orc);
+            });
+        }
+        if($request->data_ini) {
+            $orc = $orc->whereHas('ordemservico', function (Builder $query) use ($request, $orc) {
+                $query->where('inicio','>=', $request->data_ini ? $request->data_ini : $orc);
+            });
+        }
+        if($request->cliente_id) {
+            $orc = $orc->where('cliente_id', $request->cliente_id);
+            // });
+        }
+        $orc->where('empresa_id', $empresa_id);
+        // $orc = $orc->get();
+           
+        $orc = $orc->orderByDesc('created_at')->paginate($request['per_page'] ? $request['per_page'] : 15);
+
+
+
+        if (env("APP_ENV", 'production') == 'production') {
+            return $orc->withPath(str_replace('http:', 'https:', $orc->path()));
+        } else {
+            return $orc;
+        }
+    }
 }
