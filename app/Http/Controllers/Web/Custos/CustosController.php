@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Custos;
 use App\Http\Controllers\Controller;
 use App\Models\Custo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CustosController extends Controller
 {
@@ -13,9 +14,13 @@ class CustosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return Custo::where('empresa_id', $empresa_id)
+            ->orderBy('descricao')
+            ->get();
     }
 
     /**
@@ -26,7 +31,16 @@ class CustosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        DB::transaction(function () use ($request, $empresa_id) {
+            $custo = Custo::create(
+                [
+                    'empresa_id' => $empresa_id,
+                    'descricao'  => $request->descricao,
+                ]
+            );
+        });
     }
 
     /**
@@ -37,7 +51,7 @@ class CustosController extends Controller
      */
     public function show(Custo $custo)
     {
-        //
+        return $custo;
     }
 
     /**
@@ -49,7 +63,13 @@ class CustosController extends Controller
      */
     public function update(Request $request, Custo $custo)
     {
-        //
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        DB::transaction(function () use ($request, $custo, $empresa_id) {
+            $custo->descricao  = $request->descricao;
+            $custo->empresa_id = $empresa_id;
+            $custo->save();
+        });
     }
 
     /**
@@ -60,6 +80,6 @@ class CustosController extends Controller
      */
     public function destroy(Custo $custo)
     {
-        //
+        $custo->delete();
     }
 }
