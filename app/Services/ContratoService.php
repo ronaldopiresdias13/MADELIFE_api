@@ -198,7 +198,8 @@ class ContratoService
                 $orcamentocusto = new Orcamentocusto();
                 $orcamentocusto->fill([
                     "orcamento_id"  => $this->orcamento->id,
-                    "descricao"     => $item['descricao'],
+                    "custo_id"     => $item['custo']['id'],
+                    // "descricao"     => $item['descricao'],
                     "quantidade"    => $item['quantidade'],
                     "unidade"       => $item['unidade'],
                     "valorunitario" => $item['valorunitario'],
@@ -411,7 +412,8 @@ class ContratoService
                 Orcamentocusto::updateOrCreate(
                     [
                         "orcamento_id"  => $this->orcamento->id,
-                        "descricao"     => $item['descricao'],
+                        "custo_id"      => $item['custo']['id'],
+                        // "descricao"     => $item['descricao'],
                         "quantidade"    => $item['quantidade'],
                         "unidade"       => $item['unidade'],
                         "valorunitario" => $item['valorunitario'],

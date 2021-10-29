@@ -38,7 +38,7 @@ class OrcsController extends Controller
                 'remocao_cidadedestino',
                 'produtos.produto',
                 'servicos.servico',
-                'custos',
+                'custos.custo',
                 'paciente.internacoes'
             ],
         )
@@ -102,7 +102,7 @@ class OrcsController extends Controller
                 'remocao_cidadedestino',
                 'produtos.produto',
                 'servicos.servico',
-                'custos'
+                'custos.custo'
             ],
         )->find($orc->id);
     }
@@ -152,7 +152,7 @@ class OrcsController extends Controller
                 'remocao_cidadedestino',
                 'produtos.produto',
                 'servicos.servico',
-                'custos'
+                'custos.custo'
             ],
         )->find($orc->id);
 
@@ -281,12 +281,12 @@ class OrcsController extends Controller
         //     ->whereBetween('data', [$request->data_ini, $request->data_fim])
         //     ->groupBy('situacao')->count();
     }
-    public function quantidadeOrcsPorTipo(Request $request) 
+    public function quantidadeOrcsPorTipo(Request $request)
     {
         $empresa_id = $request->user()->pessoa->profissional->empresa_id;
         return Orc::where('empresa_id', $empresa_id)->whereBetween('data', [$request->data_ini, $request->data_fim])->select('tipo', DB::raw('count(*) as total'))->groupBy('tipo')->get();
     }
-    public function quantidadeOrcsPorCliente(Request $request) 
+    public function quantidadeOrcsPorCliente(Request $request)
     {
         // return $request;
         $empresa_id = $request->user()->pessoa->profissional->empresa_id;
@@ -330,7 +330,7 @@ class OrcsController extends Controller
                 'remocao_cidadedestino',
                 'produtos.produto',
                 'servicos.servico',
-                'custos',
+                'custos.custo',
                 'paciente.internacoes'
         ]);
         if($request->data) {
@@ -341,7 +341,7 @@ class OrcsController extends Controller
         }
         $orc->where('empresa_id', $empresa_id);
         // $orc = $orc->get();
-           
+
         $orc = $orc->orderByDesc('created_at')->paginate($request['per_page'] ? $request['per_page'] : 15);
 
 
