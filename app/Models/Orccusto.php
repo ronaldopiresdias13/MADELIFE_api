@@ -45,4 +45,14 @@ class Orccusto extends Model
     {
         return $this->belongsTo(Orc::class);
     }
+
+    /**
+     * Get the custo that owns the Orccusto
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function custo(): BelongsTo
+    {
+        return $this->belongsTo(Custo::class);
+    }
 }
