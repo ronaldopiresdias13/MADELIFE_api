@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Web\Escalas;
 
 use App\Http\Controllers\Controller;
 use App\Models\Escala;
-use App\Models\Historico;
-use App\Models\User;
-use App\Services\PontoService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EscalasController extends Controller
 {
@@ -219,4 +217,102 @@ class EscalasController extends Controller
         //
     }
 
+    public function listaescalascalendario(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        return DB::select(
+            "SELECT e.id, ppr.nome AS prestador, ppac.nome AS paciente, pcli.nome AS cliente, s.descricao AS servico,
+                e.dataentrada, e.datasaida, 
+                e.horaentrada, e.horasaida, e.periodo, e.prestador_id, e.observacao
+                FROM escalas AS e
+                INNER JOIN prestadores AS pr
+                ON pr.id = e.prestador_id
+                INNER JOIN pessoas AS ppr
+                ON ppr.id = pr.pessoa_id
+                INNER JOIN ordemservicos AS os
+                ON os.id = e.ordemservico_id
+                INNER JOIN orcamentos AS o
+                ON o.id = os.orcamento_id
+                INNER JOIN homecares AS hc
+                ON hc.orcamento_id = o.id
+                INNER JOIN pacientes AS pac
+                ON pac.id = hc.paciente_id
+                INNER JOIN pessoas AS ppac
+                ON ppac.id = pac.pessoa_id
+                INNER JOIN clientes AS cli
+                ON cli.id = o.cliente_id
+                INNER JOIN pessoas AS pcli
+                ON pcli.id = cli.pessoa_id
+                INNER JOIN servicos AS s
+                ON s.id = e.servico_id
+
+                WHERE e.dataentrada BETWEEN ? AND ?
+                AND e.empresa_id = ?
+                AND e.ativo = 1
+                AND e.ordemservico_id LIKE ?
+                ORDER BY e.periodo
+                ",
+            [
+                $request->data_ini,
+                $request->data_fim,
+                $empresa_id,
+                $request->ordemservico_id ? $request->ordemservico_id : '%'
+            ]
+        );
+    }
+
+    public function clonarEscalas(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        $escalas = Escala::where('ativo', true)
+            ->where('empresa_id', $empresa_id)
+            ->whereBetween('dataentrada', [$request->data_ini, $request->data_fim,])
+            ->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%')
+            // ->limit(10)
+            ->get();
+        $last_day = date('d', strtotime('last day of this month', strtotime($request->data_ini)));
+        $next_month_end = date('Y-m-d', strtotime('last day of next month', strtotime($request->data_ini)));
+        $last_day_next_mont = date('d', strtotime('last day of next month', strtotime($request->data_ini)));
+        return $last_day;
+        foreach ($escalas as $key => $escala) {
+            $escala->dataentrada = date('Y-m-d', strtotime('+1 month', strtotime($escala->dataentrada)));
+            $escala->datasaida = date('Y-m-d', strtotime('+1 month', strtotime($escala->datasaida)));
+            //     Escala::firstOrCreate([
+
+            //         // $e = new Escala();
+            //         'empresa_id'             => $escala->empresa_id,
+            //         'ordemservico_id'        => $escala->ordemservico_id,
+            //         'prestador_proprietario' => $escala->prestador_proprietario,
+            //         'prestador_id'           => $escala->prestador_proprietario,
+            //         'servico_id'             => $escala->servico_id,
+            //         'formacao_id'            => $escala->formacao_id,
+            //         'horaentrada'            => $escala->horaentrada,
+            //         'horasaida'              => $escala->horasaida,
+            //         'dataentrada'            => date('Y-m-d', strtotime('+30 days', strtotime($escala->dataentrada))),
+            //         'datasaida'              => date('Y-m-d', strtotime('+30 days', strtotime($escala->datasaida))),
+            //         'periodo'                => $escala->periodo,
+            //         // $e->assinaturaprestador    = $escala->assinaturaprestador;
+            //         // $e->assinaturaresponsavel  = $escala->assinaturaresponsavel;
+            //         // $e->observacao             = $escala->observacao;
+            //         // $e->status                 = $escala->status;
+            //         // $e->folga                  = $escala->folga;
+            //         // $e->substituto             = $escala->substituto;
+            //         'tipo'                   => $escala->tipo,
+            //         'valorhoradiurno'        => $escala->valorhoradiurno,
+            //         'valorhoranoturno'       => $escala->valorhoranoturno,
+            //         // $e->valoradicional         = $escala->valoradicional;
+            //         // $e->valordesconto          = $escala->valordesconto;
+            //         // $e->motivoadicional        = $escala->motivoadicional;
+            //         // $e->motivodesconto         = $escala->motivodesconto;
+            //         // $e->ativo                  = $escala->ativo;
+            //         // $e->editavel               = $escala->editavel;
+            //         // $e->save();
+            //     ]);
+            //     // return $e;
+        }
+        return $escalas;
+        // return 'Churrasco por conta do Romulo!!!';
+    }
 }
