@@ -26,6 +26,7 @@ class Orccusto extends Model
     protected $fillable = [
         'id',
         'orc_id',
+        'custo_id',
         'descricao',
         'quantidade',
         'unidade',
