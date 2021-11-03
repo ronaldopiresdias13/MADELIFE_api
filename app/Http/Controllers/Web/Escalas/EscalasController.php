@@ -272,10 +272,11 @@ class EscalasController extends Controller
             ->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%')
             // ->limit(10)
             ->get();
+        $teste = date('Y-m-d', strtotime('+1 month', strtotime('2021-01-31')));
         $last_day = date('d', strtotime('last day of this month', strtotime($request->data_ini)));
         $next_month_end = date('Y-m-d', strtotime('last day of next month', strtotime($request->data_ini)));
         $last_day_next_mont = date('d', strtotime('last day of next month', strtotime($request->data_ini)));
-        return $last_day;
+        return $teste;
         foreach ($escalas as $key => $escala) {
             $escala->dataentrada = date('Y-m-d', strtotime('+1 month', strtotime($escala->dataentrada)));
             $escala->datasaida = date('Y-m-d', strtotime('+1 month', strtotime($escala->datasaida)));
