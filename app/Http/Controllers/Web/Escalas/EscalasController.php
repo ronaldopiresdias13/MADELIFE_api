@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\Escalas;
 
 use App\Http\Controllers\Controller;
+use App\Models\CuidadoEscala;
 use App\Models\Escala;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -272,48 +273,90 @@ class EscalasController extends Controller
             ->where('ordemservico_id', 'like', $request->ordemservico_id ? $request->ordemservico_id : '%')
             // ->limit(10)
             ->get();
-        $teste = date('Y-m-d', strtotime('+1 month', strtotime('2021-01-31')));
+        $teste = date('Y-m-d', strtotime('+1 month', strtotime('2021-02-28')));
         $last_day = date('d', strtotime('last day of this month', strtotime($request->data_ini)));
+        $last_date = date('Y-m-d', strtotime('last day of this month', strtotime($request->data_ini)));
         $next_month_end = date('Y-m-d', strtotime('last day of next month', strtotime($request->data_ini)));
         $last_day_next_mont = date('d', strtotime('last day of next month', strtotime($request->data_ini)));
-        return $teste;
+        // return response()->json([
+        //     'teste' => $teste,
+        //     'last_day' => $last_day,
+        //     'last_date' => $last_date,
+        //     'next_month_end' => $next_month_end,
+        //     'last_day_next_mont' => $last_day_next_mont
+        // ]);
         foreach ($escalas as $key => $escala) {
-            $escala->dataentrada = date('Y-m-d', strtotime('+1 month', strtotime($escala->dataentrada)));
-            $escala->datasaida = date('Y-m-d', strtotime('+1 month', strtotime($escala->datasaida)));
-            //     Escala::firstOrCreate([
+            $escala->dataentrada = date('Y-m-d', strtotime($last_day % 2 == 1 ? '30 days' : '+1 month', strtotime($escala->dataentrada)));
+            $escala->datasaida = date('Y-m-d', strtotime($last_day % 2 == 1 ? '30 days' : '+1 month', strtotime($escala->datasaida)));
+            // $escala->cuidados;
+            // $e = Escala::create([
 
-            //         // $e = new Escala();
-            //         'empresa_id'             => $escala->empresa_id,
-            //         'ordemservico_id'        => $escala->ordemservico_id,
-            //         'prestador_proprietario' => $escala->prestador_proprietario,
-            //         'prestador_id'           => $escala->prestador_proprietario,
-            //         'servico_id'             => $escala->servico_id,
-            //         'formacao_id'            => $escala->formacao_id,
-            //         'horaentrada'            => $escala->horaentrada,
-            //         'horasaida'              => $escala->horasaida,
-            //         'dataentrada'            => date('Y-m-d', strtotime('+30 days', strtotime($escala->dataentrada))),
-            //         'datasaida'              => date('Y-m-d', strtotime('+30 days', strtotime($escala->datasaida))),
-            //         'periodo'                => $escala->periodo,
-            //         // $e->assinaturaprestador    = $escala->assinaturaprestador;
-            //         // $e->assinaturaresponsavel  = $escala->assinaturaresponsavel;
-            //         // $e->observacao             = $escala->observacao;
-            //         // $e->status                 = $escala->status;
-            //         // $e->folga                  = $escala->folga;
-            //         // $e->substituto             = $escala->substituto;
-            //         'tipo'                   => $escala->tipo,
-            //         'valorhoradiurno'        => $escala->valorhoradiurno,
-            //         'valorhoranoturno'       => $escala->valorhoranoturno,
-            //         // $e->valoradicional         = $escala->valoradicional;
-            //         // $e->valordesconto          = $escala->valordesconto;
-            //         // $e->motivoadicional        = $escala->motivoadicional;
-            //         // $e->motivodesconto         = $escala->motivodesconto;
-            //         // $e->ativo                  = $escala->ativo;
-            //         // $e->editavel               = $escala->editavel;
-            //         // $e->save();
+            //     // $e = new Escala();
+            //     'empresa_id'             => $escala->empresa_id,
+            //     'ordemservico_id'        => $escala->ordemservico_id,
+            //     'prestador_proprietario' => $escala->prestador_proprietario,
+            //     'prestador_id'           => $escala->prestador_proprietario,
+            //     'servico_id'             => $escala->servico_id,
+            //     'formacao_id'            => $escala->formacao_id,
+            //     'horaentrada'            => $escala->horaentrada,
+            //     'horasaida'              => $escala->horasaida,
+            //     'dataentrada'            =>  $escala->dataentrada,
+            //     'datasaida'              => $escala->datasaida,
+            //     'periodo'                => $escala->periodo,
+            //     'tipo'                   => $escala->tipo,
+            //     'valorhoradiurno'        => $escala->valorhoradiurno,
+            //     'valorhoranoturno'       => $escala->valorhoranoturno,
+            //     // $e->valoradicional         = $escala->valoradicional;
+            //     // $e->valordesconto          = $escala->valordesconto;
+            //     // $e->motivoadicional        = $escala->motivoadicional;
+            //     // $e->motivodesconto         = $escala->motivodesconto;
+            //     // $e->ativo                  = $escala->ativo;
+            //     // $e->editavel               = $escala->editavel;
+            //     // $e->save();
+            // ]);
+            // foreach ($escala->cuidados as $key => $cuidado) {
+            //     CuidadoEscala::create([
+            //         'escala_id'  => $e->id,
+            //         'cuidado_id' => $cuidado['id'],
+            //         'data'       => null,
+            //         'hora'       => null,
+            //         'status'     => false,
             //     ]);
+            // }
             //     // return $e;
         }
-        return $escalas;
+        $this->salvarEscalasClonadas($escalas);
         // return 'Churrasco por conta do Romulo!!!';
+    }
+    public function salvarEscalasClonadas($escalas)
+    {
+        foreach ($escalas as $key => $escala) {
+            $e = Escala::create([
+                'empresa_id'             => $escala->empresa_id,
+                'ordemservico_id'        => $escala->ordemservico_id,
+                'prestador_proprietario' => $escala->prestador_proprietario,
+                'prestador_id'           => $escala->prestador_proprietario,
+                'servico_id'             => $escala->servico_id,
+                'formacao_id'            => $escala->formacao_id,
+                'horaentrada'            => $escala->horaentrada,
+                'horasaida'              => $escala->horasaida,
+                'dataentrada'            =>  $escala->dataentrada,
+                'datasaida'              => $escala->datasaida,
+                'periodo'                => $escala->periodo,
+                'tipo'                   => $escala->tipo,
+                'valorhoradiurno'        => $escala->valorhoradiurno,
+                'valorhoranoturno'       => $escala->valorhoranoturno,
+            ]);
+            foreach ($escala->cuidados as $key => $cuidado) {
+                CuidadoEscala::create([
+                    'escala_id'  => $e->id,
+                    'cuidado_id' => $cuidado['id'],
+                    'data'       => null,
+                    'hora'       => null,
+                    'status'     => false,
+                ]);
+            }
+        }
+        return $escalas;
     }
 }
