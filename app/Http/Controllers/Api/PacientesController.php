@@ -136,8 +136,6 @@ class PacientesController extends Controller
                     ]
                 )->id,
                 'responsavel_id' => $request['responsavel_id'],
-                'diagnostico' => $request['diagnostico'],
-                'codPaciente' => $request['codPaciente'],
                 'sexo'           => $request['sexo'],
                 'ativo'          => $request['ativo']
             ]);
@@ -259,8 +257,6 @@ class PacientesController extends Controller
                 'sexo'           => $request['sexo'],
                 'empresa_id'     => $request['empresa_id'],
                 'responsavel_id' => $request['responsavel_id'],
-                'diagnostico' => $request['diagnostico'],
-                'codPaciente' => $request['codPaciente'],
                 'ativo'          => $request['ativo'],
                 'numeroCarteira' => $request['numeroCarteira'],
             ]);
