@@ -195,7 +195,7 @@ class ContratosController extends Controller
                 'remocao.cidadedestino',
                 'produtos.produto',
                 'servicos.servico',
-                'custos'
+                'custos.custo'
             ],
         )->find($orcamento->id);
     }
@@ -305,10 +305,8 @@ class ContratosController extends Controller
         }
         $orc->where('empresa_id', $empresa_id);
         // $orc = $orc->get();
-           
+
         $orc = $orc->orderByDesc('created_at')->paginate($request['per_page'] ? $request['per_page'] : 15);
-
-
 
         if (env("APP_ENV", 'production') == 'production') {
             return $orc->withPath(str_replace('http:', 'https:', $orc->path()));
