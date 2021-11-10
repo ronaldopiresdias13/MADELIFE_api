@@ -4,69 +4,132 @@ namespace App\Http\Controllers;
 
 use App\Models\CuidadoEscala;
 use App\Models\Escala;
+use App\Models\Itemtabelapreco;
+use App\Models\Tabelapreco;
+use App\Models\Versaotabelapreco;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class Teste extends Controller
 {
+    protected $empresa_id;
+    protected $tabela;
     protected $versao;
     protected $file;
 
-    public function teste2(Request $request)
+    public function teste(Request $request)
     {
+        $this->empresa_id = 1;
+        $this->tabela = $request->tabela;
+        $this->versao = $request->versao;
+        $this->file   = $request->file;
 
-        /* Teste Importação Brasindice */
-        // $empresa_id = $request->user()->pessoa->profissional->empresa_id;
-        // $empresa_id = 1;
-
-        // $file = fopen("/home/lucas/Área de Trabalho/Brasindice/MEDICAMENTO_BRA_PMC.txt", "r");
-
-        // while (!feof($file)) {
-        //     $linha = fgets($file);
-        //     $array = explode('","', $linha);
-        //     foreach ($array as $key => $item) {
-        //         $array[$key] = str_replace(['"', "\r", "\n"], "", $item);
-        //     }
-        //     // <<<<<<< HEAD
-        //     // dd($array);
-
-        //     $produto = new Produto();
-        //     $produto->empresa_id = $empresa_id;
-        //     $produto->tabela = $request->tabela;
-        //     $produto->tipoproduto_id = Tipoproduto::firstOrCreate(
-        //         [
-        //             "empresa_id" => $empresa_id,
-        //             "descricao" => "MEDICAMENTOS"
-        //         ]
-        //     )->id;
-        //     $produto->codigo = $array[0] . '.' . $array[2] . '.' . $array[4];
-        //     $produto->codigoTabela = 20;
-        //     $produto->codigoDespesa = 02;
-        //     $produto->descricao = $array[3] . ' ' . $array[5];
-        //     $produto->inidademedida_id = "????????????????????";
-        //     $produto->codigobarra = $array[13];
-        //     dd($produto);
-        // }
-
-        // fclose($file);
-
-        $retorno = $this->brasindice();
-
-        return $retorno;
+        $func = $this->tabela;
+        return $this->$func();
 
         return 'ok';
     }
 
-    private function simpro()
-    {
-    }
-
     private function brasindice()
     {
-        return 'entrou';
+        $tabela = Tabelapreco::firstOrCreate([
+            'nome'       => $this->tabela,
+            'empresa_id' => $this->empresa_id
+        ]);
+
+        $versao = Versaotabelapreco::firstOrCreate([
+            'versao'         => $this->versao,
+            'tabelapreco_id' => $tabela->id
+        ]);
+
+        $md5 = md5_file($this->file);
+        $caminho = 'temp/';
+        $nome = $md5 . '.' . explode(';', explode('/', $this->file)[1])[0];
+        $file = explode(',', $this->file)[1];
+        Storage::put($caminho . $nome, base64_decode($file));
+
+        $file = fopen(storage_path("app/public/temp/") . $nome, "r");
+
+        while (!feof($file)) {
+            $linha = fgets($file);
+            $array = explode('","', $linha);
+            foreach ($array as $key => $item) {
+                $array[$key] = str_replace(['"', "\r", "\n"], "", $item);
+            }
+
+            if ($array[0]) {
+                Itemtabelapreco::updateOrCreate(
+                    [
+                        'versaotabelapreco_id' => $versao->id,
+                        'codigo'               => $array[0] . '.' . $array[2] . '.' . $array[4] // 18
+                    ],
+                    [
+                        'tiss'  => '',
+                        'tuss'  => '',
+                        'nome'  => utf8_encode($array[3]) . ' ' . $array[5], // 2
+                        'preco' => $array[9] //
+                    ]
+                );
+            }
+        }
+
+        fclose($file);
+        Storage::delete([$caminho . $nome]);
+
+        return 'Importado Brasindice!!!';
     }
 
-    public function teste(Request $request)
+    private function simpro()
+    {
+        $tabela = Tabelapreco::firstOrCreate([
+            'nome'       => $this->tabela,
+            'empresa_id' => $this->empresa_id
+        ]);
+
+        $versao = Versaotabelapreco::firstOrCreate([
+            'versao'         => $this->versao,
+            'tabelapreco_id' => $tabela->id
+        ]);
+
+        $md5 = md5_file($this->file);
+        $caminho = 'temp/';
+        $nome = $md5 . '.' . explode(';', explode('/', $this->file)[1])[0];
+        $file = explode(',', $this->file)[1];
+        Storage::put($caminho . $nome, base64_decode($file));
+
+        $file = fopen(storage_path("app/public/temp/") . $nome, "r");
+
+        while (!feof($file)) {
+            $linha = fgets($file);
+
+            $codigo = substr($linha, 267, 10);
+            $name = substr($linha, 32, 100);
+            $preco = substr($linha, 155, 8) . '.' . substr($linha, 163, 2);
+
+            if ($linha) {
+                Itemtabelapreco::updateOrCreate(
+                    [
+                        'versaotabelapreco_id' => $versao->id,
+                        'codigo'               => $codigo // $array[18]
+                    ],
+                    [
+                        'tiss'  => '',
+                        'tuss'  => '',
+                        'nome'  => utf8_encode($name), // $array[2]),
+                        'preco' => $preco // $array[6]
+                    ]
+                );
+            }
+        }
+
+        fclose($file);
+        Storage::delete([$caminho . $nome]);
+
+        return 'Importado Simpro!!!';
+    }
+
+    public function teste2(Request $request)
     {
         $mesDe = '2021-10';
         $mesPara = '2021-11';
