@@ -26,7 +26,7 @@ class AddColumnNumeroAutorizacaoClientes extends Migration
     public function down()
     {
         Schema::table('clientes', function (Blueprint $table) {
-            $table->string('numeroAutorizacao');
+            $table->dropColumn('numeroAutorizacao');
         });
     }
 }
