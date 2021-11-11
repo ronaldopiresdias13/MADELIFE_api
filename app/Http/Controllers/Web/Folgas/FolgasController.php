@@ -26,10 +26,10 @@ class FolgasController extends Controller
             'substituto.pessoa',
             'escala'
         ])
-     
-        ->where('empresa_id', $empresa_id)
-        ->orderByDesc('created_at')
-        ->get();
+
+            ->where('empresa_id', $empresa_id)
+            ->orderByDesc('created_at')
+            ->get();
 
         return $folgas;
     }
@@ -43,24 +43,24 @@ class FolgasController extends Controller
             'substituto.pessoa',
             'escala',
         ]);
-        if($request->data_final) {
+        if ($request->data_final) {
             $folgas = $folgas->whereHas('escala', function (Builder $query) use ($request, $folgas) {
-                $query->where('datasaida','<=', $request->data_final ? $request->data_final : $folgas);
+                $query->where('datasaida', '<=', $request->data_final ? $request->data_final : $folgas);
             });
         }
-        if($request->data_ini) {
+        if ($request->data_ini) {
             $folgas = $folgas->whereHas('escala', function (Builder $query) use ($request, $folgas) {
-                $query->where('dataentrada','>=', $request->data_ini ? $request->data_ini : $folgas);
+                $query->where('dataentrada', '>=', $request->data_ini ? $request->data_ini : $folgas);
             });
         }
-        if($request->cliente_id) {
+        if ($request->cliente_id) {
             $folgas = $folgas->whereHas('escala.ordemservico.orcamento', function (Builder $query) use ($request) {
                 $query->where('cliente_id', $request->cliente_id);
             });
         }
         $folgas->where('empresa_id', $empresa_id);
         $folgas = $folgas->get();
-           
+
         return $folgas;
     }
     /**
@@ -160,22 +160,23 @@ class FolgasController extends Controller
 
         DB::transaction(function () use ($request, $data) {
             foreach ($request->escalas as $key => $escala) {
-                $escala = Escala::find($escala['id']);
-                if (!$escala->folga) {
-                    // if($escala->empresa_id){
-                        $folga = new Folga();
-                        $folga->empresa_id    = $escala['empresa_id'];
-                        $folga->escala_id     = $escala['id'];
-                        $folga->prestador_id  = $escala['prestador_id'];
-                        $folga->aprovada      = true;
-                        $folga->dataaprovacao = $data;
-                        $folga->save();
-    
-                        $escala->folga = true;
-                        $escala->save();
-                    // }
-                  
-                }
+                $e = Escala::find($escala['id']);
+                // if (!$escala->folga) {
+                // if($escala->empresa_id){
+                $folga = new Folga();
+                $folga->empresa_id    = $e->empresa_id;
+                $folga->escala_id     = $e->id;
+                $folga->prestador_id  = $e->prestador_id;
+                $folga->tipo          = $escala['tipo'];
+                $folga->aprovada      = true;
+                $folga->situacao      = $e->dataentrada == $data ? 'Emergente' : 'Pendente';
+                $folga->dataaprovacao = $data;
+                $folga->save();
+
+                $e->folga = true;
+                $e->save();
+                // }
+                // }
             }
 
             // $folga = new Folga();

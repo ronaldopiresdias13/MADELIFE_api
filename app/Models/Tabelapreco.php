@@ -17,6 +17,13 @@ class Tabelapreco extends Model
     protected $keyType = 'string';
     public $incrementing = false;
 
+    protected $fillable = [
+        'id',
+        'empresa_id',
+        'nome',
+        'padrao'
+    ];
+
     /**
      * Get all of the versoes for the Tabelapreco
      *

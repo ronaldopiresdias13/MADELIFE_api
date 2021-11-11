@@ -18,6 +18,12 @@ class Versaotabelapreco extends Model
     protected $keyType = 'string';
     public $incrementing = false;
 
+    protected $fillable = [
+        'id',
+        'tabelapreco_id',
+        'versao'
+    ];
+
     /**
      * Get all of the itens for the Versaotabelapreco
      *

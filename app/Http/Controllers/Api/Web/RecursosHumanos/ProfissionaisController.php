@@ -8,7 +8,6 @@ use App\Models\Email;
 use App\Models\Endereco;
 use App\Http\Controllers\Controller;
 use App\Models\Anexo;
-use App\Models\Documento;
 use App\Models\Pessoa;
 use App\Models\PessoaEmail;
 use App\Models\PessoaEndereco;
@@ -24,7 +23,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\UploadedFile;
 
 class ProfissionaisController extends Controller
 {
@@ -124,10 +122,7 @@ class ProfissionaisController extends Controller
         $profissional = null;
 
         if ($pessoa) {
-            $profissional = Profissional::firstWhere(
-                'pessoa_id',
-                $pessoa->id,
-            );
+            $profissional = Profissional::where('ativo', true)->where('pessoa_id', $pessoa->id)->first();
         }
 
         if ($profissional) {
@@ -178,14 +173,14 @@ class ProfissionaisController extends Controller
                     'demissao'                => $request['dadoscontratuais']['demissao'],
                 ])->id,
             ]);
-            $tipopessoa = Tipopessoa::create([
+            Tipopessoa::create([
                 'tipo'      => 'Profissional',
                 'pessoa_id' => $profissional->pessoa_id,
                 'ativo'     => 1
             ]);
             if ($request['formacoes']) {
                 foreach ($request['formacoes'] as $key => $formacao) {
-                    $profissional_formacao = ProfissionalFormacao::firstOrCreate([
+                    ProfissionalFormacao::firstOrCreate([
                         'profissional_id' => $profissional->id,
                         'formacao_id'     => $formacao['id'],
                     ]);
@@ -193,7 +188,7 @@ class ProfissionaisController extends Controller
             }
             if ($request['beneficios']) {
                 foreach ($request['beneficios'] as $key => $beneficio) {
-                    $profissional_beneficio = ProfissionalBeneficio::firstOrCreate([
+                    ProfissionalBeneficio::firstOrCreate([
                         'profissional_id' => $profissional->id,
                         'beneficio_id'    => $beneficio['beneficio_id']
                     ]);
@@ -201,7 +196,7 @@ class ProfissionaisController extends Controller
             }
             if ($request['convenios']) {
                 foreach ($request['convenios'] as $key => $convenio) {
-                    $profissional_convenio = ProfissionalConvenio::firstOrCreate([
+                    ProfissionalConvenio::firstOrCreate([
                         'profissional_id' => $profissional->id,
                         'convenio_id'    => $convenio['convenio_id']
                     ]);
@@ -209,7 +204,7 @@ class ProfissionaisController extends Controller
             }
             if ($request['dadosBancario']) {
                 foreach ($request['dadosBancario'] as $key => $dadosbancario) {
-                    $dados_bancario = Dadosbancario::firstOrCreate([
+                    Dadosbancario::firstOrCreate([
                         'empresa_id'  => $empresa_id,
                         'banco_id'    => $dadosbancario['banco_id'],
                         'agencia'     => $dadosbancario['agencia'],
@@ -223,7 +218,7 @@ class ProfissionaisController extends Controller
 
             if ($request['pessoa']['enderecos']) {
                 foreach ($request['pessoa']['enderecos'] as $key => $endereco) {
-                    $pessoa_endereco = PessoaEndereco::firstOrCreate([
+                    PessoaEndereco::firstOrCreate([
                         'pessoa_id'   => $profissional->pessoa_id,
                         'endereco_id' => Endereco::firstOrCreate(
                             [
@@ -302,6 +297,7 @@ class ProfissionaisController extends Controller
         ], 200)
             ->header('Content-Type', 'application/json');
     }
+
     /**
      * Update the specified resource in storage.
      *

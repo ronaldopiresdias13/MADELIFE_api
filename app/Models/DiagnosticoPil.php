@@ -16,11 +16,16 @@ class DiagnosticoPil extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'codigo','nome', 'descricao','referencias','flag'
+        'codigo','nome', 'flag'
     ];
 
-    public function planilhas_diagnostico_primario(){
-        return $this->hasMany(PlanilhaPil::class,'diagnostico_primario_id','id');
+    // public function planilhas_diagnostico_primario(){
+    //     return $this->hasMany(PlanilhaPil::class,'diagnostico_primario_id','id');
+    // }
+
+    public function planilhas_diagnosticos_principais()
+    {
+        return $this->belongsToMany(PlanilhaPil::class, 'pil_diagnosticos_principais',  'diagnostico_principal_id','pil_id');
     }
 
 
@@ -39,13 +44,28 @@ class DiagnosticoPil extends Model
         return $this->belongsToMany(Nead::class, 'neads_diagnosticos_secundarios', 'diagnostico_secundario_id','nead_id');
     }
 
+    public function neads_diagnosticos_principais()
+    {
+        return $this->belongsToMany(Nead::class, 'nead_diagnosticos_principais', 'diagnostico_principal_id','nead_id');
+    }
+
     public function abmids_diagnosticos_secundarios()
     {
         return $this->belongsToMany(PlanilhaAbmid::class, 'abmids_ds', 'diagnostico_secundario_id','abmid_id');
     }
 
+    public function abmids_diagnosticos_principais()
+    {
+        return $this->belongsToMany(PlanilhaAbmid::class, 'abmid_diagnosticos_principais', 'diagnostico_principal_id','abmid_id');
+    }
+
     public function anexoa_diagnosticos_secundarios()
     {
         return $this->belongsToMany(PlanilhaAnexoA::class, 'anexoa_ds', 'diagnostico_secundario_id','anexo_a_id');
+    }
+
+    public function anexoa_diagnosticos_principais()
+    {
+        return $this->belongsToMany(PlanilhaAnexoA::class, 'anexoa_diagnosticos_principais', 'diagnostico_principal_id','anexoa_id');
     }
 }

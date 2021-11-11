@@ -172,7 +172,8 @@ class OrcService
                 $custo = new Orccusto();
                 $custo->fill([
                     "orc_id"        => $this->orc->id,
-                    "descricao"     => $item['descricao'],
+                    "custo_id"      => $item['custo']['id'],
+                    // "descricao"     => $item['descricao'],
                     "quantidade"    => $item['quantidade'],
                     "unidade"       => $item['unidade'],
                     "valorunitario" => $item['valorunitario'],
@@ -293,7 +294,8 @@ class OrcService
                 Orccusto::withTrashed()->updateOrCreate(
                     [
                         "orc_id"        => $this->orc->id,
-                        "descricao"     => $item['descricao'],
+                        "custo_id"      => $item['custo']['id'],
+                        // "descricao"     => $item['descricao'],
                         "quantidade"    => $item['quantidade'],
                         "unidade"       => $item['unidade'],
                         "valorunitario" => $item['valorunitario'],
