@@ -132,6 +132,7 @@ class ItemtabelaprecosController extends Controller
                     [
                         'tiss'  => '',
                         'tuss'  => '',
+                        // 'nome'  => utf8_encode($array[3]) . ' ' . $array[5], // 2
                         'nome'  => utf8_encode($array[3]) . ' ' . $array[5], // 2
                         'preco' => $array[9] //
                     ]
