@@ -13,15 +13,15 @@ class CreateProdutoDiariaTable extends Migration
      */
     public function up()
     {
-        // Schema::create('produto_diaria', function (Blueprint $table) {
-        //     $table->uuid('id')->primary();
+        Schema::create('produto_diaria', function (Blueprint $table) {
+            $table->uuid('id')->primary();
 
-        //     $table->foreignUuid('contrato_id')->references('id')->on('contratos');
-        //     $table->foreignUuid('diaria_id')->references('id')->on('diarias');
+            $table->foreignUuid('produto_id')->references('id')->on('produtos');
+            $table->foreignUuid('diaria_id')->references('id')->on('diarias');
 
-        //     $table->timestamps();
-        //     $table->softDeletes();
-        // });
+            $table->timestamps();
+            $table->softDeletes();
+        });
     }
 
     /**
