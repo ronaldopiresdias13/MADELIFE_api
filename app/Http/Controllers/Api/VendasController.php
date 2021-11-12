@@ -393,6 +393,6 @@ class VendasController extends Controller
      */
     public function destroy(Venda $venda)
     {
-        //
+        $venda->delete();
     }
 }
