@@ -22,9 +22,10 @@ class FolgasController extends Controller
         $folgas = Folga::with([
             'escala.ordemservico.orcamento.homecare.paciente.pessoa',
             'escala.ordemservico.orcamento.cliente.pessoa',
+            'escala.ordemservico.orcamento.cidade',
             'prestador.pessoa',
             'substituto.pessoa',
-            'escala.servico'
+            'escala.servico',
         ])
 
             ->where('empresa_id', $empresa_id)
