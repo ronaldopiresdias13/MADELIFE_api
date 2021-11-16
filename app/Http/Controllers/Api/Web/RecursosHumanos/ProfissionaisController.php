@@ -466,15 +466,6 @@ class ProfissionaisController extends Controller
             }
             if ($request['anexos']) {
 
-                // id: "380d29ae-3261-4cf7-acdd-6bc53f7e09d6"
-                // nome: "screen-1.jpg"
-                // descricao: "dfhffsfr"
-                // caminho: "anexos//646ad5146575baab018fc99be731213f.jpeg"
-                // anexo_id: "83"
-                // anexo_type: "app\\Models\\Profissional"
-                // created_at: "2021-10-17T16:11:33.000000Z"
-                // updated_at: "2021-10-17T16:11:33.000000Z"
-
                 $ids = [];
 
                 foreach ($request['anexos'] as $anexo) {
@@ -503,24 +494,6 @@ class ProfissionaisController extends Controller
                 foreach ($anexos as $key => $anexo) {
                     $anexo->delete();
                 }
-
-                // foreach ($profissional->anexos as $key => $anexo) {
-                //     $anexo->delete();
-                // }
-                // foreach ($request['anexos'] as $documento) {
-                //     $md5 = md5_file($documento['anexo']['file']);
-                //     $caminho = 'anexos/';
-                //     $nome = $md5 . '.' . explode(';', explode('/', $documento['anexo']['file'])[1])[0];
-                //     $file = explode(',', $documento['anexo']['file'])[1];
-                //     Storage::put($caminho . $nome, base64_decode($file));
-                //     Anexo::create([
-                //         'anexo_id' => $profissional->id,
-                //         'anexo_type' => 'app\Models\Profissional',
-                //         'caminho' => $caminho . '/' . $nome,
-                //         'nome'  => $documento['anexo']['name'],
-                //         'descricao'  => $documento['descricao']
-                //     ]);
-                // }
             }
         });
     }
