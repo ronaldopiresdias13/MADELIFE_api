@@ -267,7 +267,7 @@ class EscalasController extends Controller
         $escala->motivoadicional       = $request->motivoadicional;
         $escala->valordesconto         = $request->valordesconto;
         $escala->motivodesconto        = $request->motivodesconto;
-        $escala->observacoes           = $request->observacoes;
+        $escala->observacao           = $request->observacao;
         $escala->save();
     }
 
