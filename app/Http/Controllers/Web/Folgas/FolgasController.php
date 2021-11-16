@@ -24,7 +24,7 @@ class FolgasController extends Controller
             'escala.ordemservico.orcamento.cliente.pessoa',
             'prestador.pessoa',
             'substituto.pessoa',
-            'escala'
+            'escala.servico'
         ])
 
             ->where('empresa_id', $empresa_id)
