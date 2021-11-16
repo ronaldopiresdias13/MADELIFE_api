@@ -41,7 +41,7 @@ class FolgasController extends Controller
             'escala.ordemservico.orcamento.cliente.pessoa',
             'prestador.pessoa',
             'substituto.pessoa',
-            'escala',
+            'escala.servico',
         ]);
         if ($request->data_final) {
             $folgas = $folgas->whereHas('escala', function (Builder $query) use ($request, $folgas) {
@@ -252,6 +252,7 @@ class FolgasController extends Controller
     {
         DB::transaction(function () use ($request, $folga) {
             $folga->substituto = $request['substituto']['id'];
+            $folga->situacao = 'Substituído';
             $folga->save();
 
             $escala = Escala::find($folga->escala_id);
