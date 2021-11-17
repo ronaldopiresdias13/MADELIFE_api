@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProdutoDiariaTable extends Migration
+class CreateCustoDiariaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateProdutoDiariaTable extends Migration
      */
     public function up()
     {
-        Schema::create('produto_diaria', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->unsignedBigInteger('produto_id');
-            $table->foreign('produto_id')->references('id')->on('produtos');
+        Schema::create('custo_diaria', function (Blueprint $table) {
+            $table->uuid('id');
+            $table->foreignUuid('custo_id')->references('id')->on('custos');
             $table->foreignUuid('diaria_id')->references('id')->on('diarias');
             $table->float('quantidade');
             $table->float('custounitario');
@@ -33,6 +32,6 @@ class CreateProdutoDiariaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('produto_diaria');
+        Schema::dropIfExists('custo_diaria');
     }
 }
