@@ -361,8 +361,13 @@ class ContratoService
                 );
             }
 
-            $this->orcamento->servicos()->delete();
-            $this->orcamento->ordemservico->ordemservico_servicos()->delete();
+            if ($this->orcamento->servicos) {
+                $this->orcamento->servicos()->delete();
+            }
+            if($this->orcamento->ordemservico) {
+                $this->orcamento->ordemservico->ordemservico_servicos()->delete();
+            }
+            
 
             foreach ($this->request->servicos as $item) {
                 OrcamentoServico::updateOrCreate(
