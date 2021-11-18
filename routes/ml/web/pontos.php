@@ -7,6 +7,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('web')->group(function () {
         Route::prefix('pontos')->group(function () {
             Route::get('pontosPrestadores', [PontosController::class, 'pontosPrestadores']);
+            Route::get('fecharEscalas', [PontosController::class, 'fecharEscala']);
             Route::put('correcaoPontos', [PontosController::class, 'correcaoPontos']);
         });
         Route::prefix('departamentoPessoal')->group(function () {

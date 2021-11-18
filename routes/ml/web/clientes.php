@@ -11,5 +11,10 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::put('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@update');
             Route::delete('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@destroy');
         });
+        Route::get('clientes/list', 'Web\Clientes\ClientesController@index');
+        Route::get('clientes/{cliente}', 'Web\Clientes\ClientesController@show');
+        Route::post('clientes', 'Web\Clientes\ClientesController@store');
+        Route::put('clientes/{cliente}', 'Web\Clientes\ClientesController@update');
+        Route::delete('clientes/{cliente}', 'Web\Clientes\ClientesController@destroy');
     });
 });
