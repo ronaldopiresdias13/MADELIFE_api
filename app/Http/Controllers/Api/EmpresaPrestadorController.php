@@ -328,6 +328,7 @@ class EmpresaPrestadorController extends Controller
         ])
             ->whereHas('prestador.pessoa', function (Builder $builder) use ($request) {
                 $builder->where('nome', 'like', '%' . $request->nome . '%');
+                $builder->orderBy('nome');
             })
             ->where('empresa_id', $empresa_id)
             ->where('status', $request['status'])
