@@ -115,7 +115,8 @@ class PontosController extends Controller
         $escala['servico']['id']        = $dado->servico ? $dado->servico->id : null;
         $escala['servico']['descricao'] = $dado->servico ? $dado->servico->descricao : null;
         $escala['editavel']             = $dado->editavel;
-
+        $escala['horaentrada']          = $dado->horaentrada;
+        $escala['horasaida']            = $dado->horasaida;
         // $escala['servico_id'] = $dado->servico ? $dado->servico->id : null;
         // $escala['servico'] = $dado->servico ? $dado->servico->descricao : null;
         $escala['valorhora'] = (float)($dado->periodo == 'DIURNO' ?
