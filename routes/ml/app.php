@@ -380,11 +380,12 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('get_pendencias', 'Api\App\v3_1_0\ChamadosController@get_pendencias');
 
         Route::post('criarchamado', 'Api\App\v3_1_0\ChamadosController@criarchamado');
-        Route::post('enviarArquivos', 'Api\App\v3_1_0\ChamadosController@enviarArquivos');
+        // Route::post('enviarArquivos', 'Api\App\v3_1_0\ChamadosController@enviarArquivos');
     });
 });
 
 Route::prefix("app/v3_1_0")->group(function () {
     Route::post('versoes/verificarVersaoApp', 'Api\App\v3_1_0\VersaoController@verificarVersaoApp');
     Route::get('cidades/listaCidadesCadastroApp/{uf}', 'Api\App\v3_1_0\CidadesController@index');
+    Route::post('enviarArquivos', 'Api\App\v3_1_0\ChamadosController@enviarArquivos');
 });

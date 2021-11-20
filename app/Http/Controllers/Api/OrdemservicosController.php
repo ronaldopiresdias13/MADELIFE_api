@@ -364,7 +364,7 @@ class OrdemservicosController extends Controller
         $result = $result->orderByDesc('id')->paginate($request['per_page'] ? $request['per_page'] : 15);
 
         if (env("APP_ENV", 'production') == 'production') {
-            return $result->withPatch(str_replace('http:', 'https:', $result->path()));
+            return $result->withPath(str_replace('http:', 'https:', $result->path()));
         } else {
             return $result;
         }
