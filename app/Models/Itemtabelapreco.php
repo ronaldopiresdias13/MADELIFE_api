@@ -17,6 +17,16 @@ class Itemtabelapreco extends Model
     protected $keyType = 'string';
     public $incrementing = false;
 
+    protected $fillable = [
+        'id',
+        'versaotabelapreco_id',
+        'codigo',
+        'tiss',
+        'tuss',
+        'nome',
+        'preco'
+    ];
+
     /**
      * Get the versao that owns the Itemtabelapreco
      *

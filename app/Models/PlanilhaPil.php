@@ -28,9 +28,14 @@ class PlanilhaPil extends Model
         return $this->belongsTo(Paciente::class, 'paciente_id', 'id');
     }
 
-    public function diagnostico_primario()
+    // public function diagnostico_primario()
+    // {
+    //     return $this->belongsTo(DiagnosticoPil::class, 'diagnostico_primario_id', 'id');
+    // }
+
+    public function diagnosticos_principais()
     {
-        return $this->belongsTo(DiagnosticoPil::class, 'diagnostico_primario_id', 'id');
+        return $this->belongsToMany(DiagnosticoPil::class, 'pil_diagnosticos_principais', 'pil_id', 'diagnostico_principal_id');
     }
 
     public function diagnosticos_secundarios()

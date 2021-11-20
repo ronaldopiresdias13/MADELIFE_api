@@ -22,6 +22,10 @@ class Servico extends Model
     {
         return $this->belongsToMany(Formacao::class, 'servico_formacao')->wherePivot('ativo', true);
     }
+    public function orcs()
+    {
+        return $this->belongsToMany(Orc::class, 'orc_servico');
+    }
 
     public function servicoFormacao()
     {

@@ -20,7 +20,7 @@ class PontosController extends Controller
     public function pontosPrestadores(Request $request)
     {
         $user = $request->user();
-        $empresa_id = $user->pessoa->profissional->empresa->id;
+        $empresa_id = $user->pessoa->profissional->empresa_id;
 
         $hoje = getdate();
         $data = $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $hoje['mday'];
@@ -54,6 +54,7 @@ class PontosController extends Controller
                 "dataentrada",
                 "datasaida",
                 "periodo",
+                "editavel",
                 // "observacao",
                 "status",
                 // "folga",
@@ -109,11 +110,13 @@ class PontosController extends Controller
         $escala['prestador']            = $dado->prestador->pessoa->nome;
         $escala['pessoa_id']            = $dado->prestador->pessoa->id;
         $escala['periodo']              = $dado->periodo;
-        $escala['empresas']              = $dado->prestador->empresas;
+        $escala['empresas']             = $dado->prestador->empresas;
         $escala['relatorioescalas']     = $dado->relatorioescalas;
         $escala['servico']['id']        = $dado->servico ? $dado->servico->id : null;
         $escala['servico']['descricao'] = $dado->servico ? $dado->servico->descricao : null;
-
+        $escala['editavel']             = $dado->editavel;
+        $escala['horaentrada']          = $dado->horaentrada;
+        $escala['horasaida']            = $dado->horasaida;
         // $escala['servico_id'] = $dado->servico ? $dado->servico->id : null;
         // $escala['servico'] = $dado->servico ? $dado->servico->descricao : null;
         $escala['valorhora'] = (float)($dado->periodo == 'DIURNO' ?
@@ -192,6 +195,25 @@ class PontosController extends Controller
         }
 
         return $escala;
+    }
+
+    public function fecharEscala(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        $escalas = Escala::where('empresa_id', $empresa_id)
+        ->where('ordemservico_id', '=', $request->ordemservico_id)
+        ->where('dataentrada', '>=', $request->data_ini)
+        ->where('dataentrada', '<=', $request->data_fim)
+        ->where('ativo', true)->get();
+
+
+        foreach ($escalas as $key => $escala) {
+            $escala->editavel = false;
+            $escala->save();
+        }
+        // return $escalas;
+
     }
 
     /**

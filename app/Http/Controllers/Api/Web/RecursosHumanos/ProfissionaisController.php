@@ -8,7 +8,6 @@ use App\Models\Email;
 use App\Models\Endereco;
 use App\Http\Controllers\Controller;
 use App\Models\Anexo;
-use App\Models\Documento;
 use App\Models\Pessoa;
 use App\Models\PessoaEmail;
 use App\Models\PessoaEndereco;
@@ -24,7 +23,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\UploadedFile;
 
 class ProfissionaisController extends Controller
 {
@@ -112,11 +110,6 @@ class ProfissionaisController extends Controller
 
         $empresa_id = Auth::user()->pessoa->profissional->empresa_id;
 
-
-        // $files = $request['arquivos'];
-        // $count = count($request['documentos']);
-        // $request = json_decode($request->data, true);
-
         if ($request['pessoa']) {
             $pessoa = Pessoa::where(
                 'cpfcnpj',
@@ -129,10 +122,7 @@ class ProfissionaisController extends Controller
         $profissional = null;
 
         if ($pessoa) {
-            $profissional = Profissional::firstWhere(
-                'pessoa_id',
-                $pessoa->id,
-            );
+            $profissional = Profissional::where('ativo', true)->where('pessoa_id', $pessoa->id)->first();
         }
 
         if ($profissional) {
@@ -183,14 +173,14 @@ class ProfissionaisController extends Controller
                     'demissao'                => $request['dadoscontratuais']['demissao'],
                 ])->id,
             ]);
-            $tipopessoa = Tipopessoa::create([
+            Tipopessoa::create([
                 'tipo'      => 'Profissional',
                 'pessoa_id' => $profissional->pessoa_id,
                 'ativo'     => 1
             ]);
             if ($request['formacoes']) {
                 foreach ($request['formacoes'] as $key => $formacao) {
-                    $profissional_formacao = ProfissionalFormacao::firstOrCreate([
+                    ProfissionalFormacao::firstOrCreate([
                         'profissional_id' => $profissional->id,
                         'formacao_id'     => $formacao['id'],
                     ]);
@@ -198,7 +188,7 @@ class ProfissionaisController extends Controller
             }
             if ($request['beneficios']) {
                 foreach ($request['beneficios'] as $key => $beneficio) {
-                    $profissional_beneficio = ProfissionalBeneficio::firstOrCreate([
+                    ProfissionalBeneficio::firstOrCreate([
                         'profissional_id' => $profissional->id,
                         'beneficio_id'    => $beneficio['beneficio_id']
                     ]);
@@ -206,7 +196,7 @@ class ProfissionaisController extends Controller
             }
             if ($request['convenios']) {
                 foreach ($request['convenios'] as $key => $convenio) {
-                    $profissional_convenio = ProfissionalConvenio::firstOrCreate([
+                    ProfissionalConvenio::firstOrCreate([
                         'profissional_id' => $profissional->id,
                         'convenio_id'    => $convenio['convenio_id']
                     ]);
@@ -214,7 +204,7 @@ class ProfissionaisController extends Controller
             }
             if ($request['dadosBancario']) {
                 foreach ($request['dadosBancario'] as $key => $dadosbancario) {
-                    $dados_bancario = Dadosbancario::firstOrCreate([
+                    Dadosbancario::firstOrCreate([
                         'empresa_id'  => $empresa_id,
                         'banco_id'    => $dadosbancario['banco_id'],
                         'agencia'     => $dadosbancario['agencia'],
@@ -228,7 +218,7 @@ class ProfissionaisController extends Controller
 
             if ($request['pessoa']['enderecos']) {
                 foreach ($request['pessoa']['enderecos'] as $key => $endereco) {
-                    $pessoa_endereco = PessoaEndereco::firstOrCreate([
+                    PessoaEndereco::firstOrCreate([
                         'pessoa_id'   => $profissional->pessoa_id,
                         'endereco_id' => Endereco::firstOrCreate(
                             [
@@ -280,17 +270,6 @@ class ProfissionaisController extends Controller
                 }
             }
 
-
-            // id: "380d29ae-3261-4cf7-acdd-6bc53f7e09d6"
-            // nome: "screen-1.jpg"
-            // descricao: "dfhffsfr"
-            // caminho: "anexos//646ad5146575baab018fc99be731213f.jpeg"
-            // anexo_id: "83"
-            // anexo_type: "app\\Models\\Profissional"
-            // created_at: "2021-10-17T16:11:33.000000Z"
-            // updated_at: "2021-10-17T16:11:33.000000Z"
-
-
             if ($request['anexos']) {
                 foreach ($request['anexos'] as $anexo) {
                     $md5 = md5_file($anexo['file']);
@@ -307,26 +286,7 @@ class ProfissionaisController extends Controller
                     ]);
                 }
             }
-
-            // if ($request['anexos']) {
-            //     foreach ($request['anexos'] as $documento) {
-            //         $md5 = md5_file($documento['anexo']['file']);
-            //         $caminho = 'anexos/';
-            //         $nome = $md5 . '.' . explode(';', explode('/', $documento['anexo']['file'])[1])[0];
-            //         $file = explode(',', $documento['anexo']['file'])[1];
-            //         Storage::put($caminho . $nome, base64_decode($file));
-            //         Anexo::create([
-            //             'anexo_id' => $profissional->id,
-            //             'anexo_type' => 'app\Models\Profissional',
-            //             'caminho' => $caminho . '/' . $nome,
-            //             'nome'  => $documento['anexo']['name'],
-            //             'descricao'  => $documento['descricao']
-            //         ]);
-            //     }
-            // }
         });
-
-        // return response()->json('Profissional cadastrado com sucesso!', 200)->header('Content-Type', 'text/plain');
 
         return response()->json([
             'toast' => [
@@ -337,6 +297,7 @@ class ProfissionaisController extends Controller
         ], 200)
             ->header('Content-Type', 'application/json');
     }
+
     /**
      * Update the specified resource in storage.
      *
@@ -505,15 +466,6 @@ class ProfissionaisController extends Controller
             }
             if ($request['anexos']) {
 
-                // id: "380d29ae-3261-4cf7-acdd-6bc53f7e09d6"
-                // nome: "screen-1.jpg"
-                // descricao: "dfhffsfr"
-                // caminho: "anexos//646ad5146575baab018fc99be731213f.jpeg"
-                // anexo_id: "83"
-                // anexo_type: "app\\Models\\Profissional"
-                // created_at: "2021-10-17T16:11:33.000000Z"
-                // updated_at: "2021-10-17T16:11:33.000000Z"
-
                 $ids = [];
 
                 foreach ($request['anexos'] as $anexo) {
@@ -542,24 +494,6 @@ class ProfissionaisController extends Controller
                 foreach ($anexos as $key => $anexo) {
                     $anexo->delete();
                 }
-
-                // foreach ($profissional->anexos as $key => $anexo) {
-                //     $anexo->delete();
-                // }
-                // foreach ($request['anexos'] as $documento) {
-                //     $md5 = md5_file($documento['anexo']['file']);
-                //     $caminho = 'anexos/';
-                //     $nome = $md5 . '.' . explode(';', explode('/', $documento['anexo']['file'])[1])[0];
-                //     $file = explode(',', $documento['anexo']['file'])[1];
-                //     Storage::put($caminho . $nome, base64_decode($file));
-                //     Anexo::create([
-                //         'anexo_id' => $profissional->id,
-                //         'anexo_type' => 'app\Models\Profissional',
-                //         'caminho' => $caminho . '/' . $nome,
-                //         'nome'  => $documento['anexo']['name'],
-                //         'descricao'  => $documento['descricao']
-                //     ]);
-                // }
             }
         });
     }

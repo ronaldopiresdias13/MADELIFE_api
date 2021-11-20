@@ -328,9 +328,37 @@ class EmpresaPrestadorController extends Controller
         ])
             ->whereHas('prestador.pessoa', function (Builder $builder) use ($request) {
                 $builder->where('nome', 'like', '%' . $request->nome . '%');
+                $builder->orderBy('nome');
             })
             ->where('empresa_id', $empresa_id)
             ->where('status', $request['status'])
             ->paginate(15);
     }
+    // public function listaPrestadoresPorEmpresaIdEStatus(Request $request)
+    // {
+    //     $user = $request->user();
+    //     $empresa_id = $user->pessoa->profissional->empresa_id;
+    //     return EmpresaPrestador::join('prestadores', 'prestadores.id', '=', 'empresa_prestador.prestador_id')
+    //     ->join('pessoas', 'pessoas.id', '=', 'prestadores.pessoa_id')
+    //     ->select('pessoas.nome')
+    //     ->with([
+    //         'prestador.pessoa.conselhos',
+    //         'prestador.formacoes',
+    //         'prestador.pessoa.dadosbancario.banco',
+    //         'prestador.pessoa.enderecos.cidade',
+    //         'prestador.pessoa.telefones',
+    //         'prestador.pessoa.emails',
+    //         'prestador.ordemservicos',
+    //         'anexos'
+    //     ])
+    //         ->whereHas('prestador.pessoa', function (Builder $builder) use ($request) {
+    //             $builder->where('nome', 'like', '%' . $request->nome . '%');
+    //         })
+    //         ->where('empresa_id', $empresa_id)
+    //         ->orderBy('pessoas.nome')
+    //         ->where('empresa_prestador.status', $request['status'])
+    //         ->select(['*'])
+
+    //         ->paginate(15);
+    // }
 }
