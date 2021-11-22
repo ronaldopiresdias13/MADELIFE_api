@@ -11,12 +11,13 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('contratos', [ContratosController::class, 'store']);
         Route::put('contratos/{orcamento}', [ContratosController::class, 'update']);
 
+        Route::get('filtroPorPeriodoECliente', [ContratosController::class, 'filtroPorPeriodoECliente']);
         Route::put('contratos/desativar/{orcamento}', [ContratosController::class, 'desativarContrato']);
         Route::put('contratos/ativar/{orcamento}', [ContratosController::class, 'ativarContrato']);
 
         Route::delete('contratos/{orcamento}', [ContratosController::class, 'destroy']);
         Route::put('contratos/{orcamento}/prorrogacao', [ContratosController::class, 'prorrogacao']);
-        Route::get('quantidadeContratoPorTipo', [ContratosController::class, 'quantidadeContratoPorTipo']);
+        // Route::get('quantidadeContratoPorTipo', [ContratosController::class, 'quantidadeContratoPorTipo']);
 
         Route::prefix('gestaoOrcamentaria')->group(function () {
             Route::get('contratos/getAllOrdensServicos', 'Api\Web\GestaoOrcamentaria\OrdemservicosController@getAllOrdensServicos');

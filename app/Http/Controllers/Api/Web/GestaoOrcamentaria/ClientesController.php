@@ -63,10 +63,11 @@ class ClientesController extends Controller
                     'empresa_id' => $empresa_id,
                 ],
                 [
-                    'versaoTiss' => $request['versaoTiss'],
-                    'tipo'       => $request['tipo'],
-                    'CNES'       => $request['CNES'],
-                    'registroAns' => $request['registroAns'],
+                    'versaoTiss'        => $request['versaoTiss'],
+                    'tipo'              => $request['tipo'],
+                    'CNES'              => $request['CNES'],
+                    'registroAns'       => $request['registroAns'],
+                    'numeroAutorizacao' => $request['numeroAutorizacao'],
                 ]
             );
 
@@ -167,11 +168,12 @@ class ClientesController extends Controller
     {
         DB::transaction(function () use ($request, $cliente) {
             $cliente->update([
-                'tipo' => $request['tipo'],
+                'tipo'             => $request['tipo'],
                 'versaoTiss'       => $request['versaoTiss'],
-                'CNES'       => $request['CNES'],
-                'registroAns' => $request['registroAns'],
-                'empresa_id' => $request['empresa_id'],
+                'CNES'             => $request['CNES'],
+                'registroAns'      => $request['registroAns'],
+                'numeroAutorizacao' => $request['numeroAutorizacao'],
+                'empresa_id'        => $request['empresa_id'],
             ]);
             $pessoa = Pessoa::find($request['pessoa']['id']);
             if ($pessoa) {
