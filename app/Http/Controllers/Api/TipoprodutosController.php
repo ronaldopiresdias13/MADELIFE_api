@@ -17,7 +17,7 @@ class TipoprodutosController extends Controller
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-        return Tipoproduto::where('empresa_id', $empresa_id)->where('ativo', true)->get();
+        return Tipoproduto::where('empresa_id', $empresa_id)->where('ativo', true)->orderBy('descricao')->get();
     }
 
     /**
