@@ -28,6 +28,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
         Route::prefix('responsavel')->group(function () {
             Route::get('escalas/listEscalasByIdResponsavel', 'Api\Web\Responsavel\EscalasController@listEscalasByIdResponsavel');
+            Route::get('escalas/listEscalasAssinadasByIdResponsavel', 'Api\Web\Responsavel\EscalasController@listEscalasAssinadasByIdResponsavel');
             Route::get('escalas/listEscalasByIdOrdemServico/{ordemservico}', 'Api\Web\Responsavel\EscalasController@listEscalasByIdOrdemServico');
             Route::post('escalas/assinar', 'Api\Web\Responsavel\EscalasController@assinar');
             Route::get('escalas/dashboard', 'Api\Web\Responsavel\EscalasController@dashboard');
