@@ -223,9 +223,9 @@ class EscalasController extends Controller
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
         return DB::select(
-            "SELECT e.id, ppr.nome AS prestador, ppac.nome AS paciente, pcli.nome AS cliente, s.descricao AS servico,
-                e.dataentrada, e.datasaida,
-                e.horaentrada, e.horasaida, e.periodo, e.prestador_id, e.observacao
+            "SELECT e.id, ppr.nome AS prestador, ppac.nome AS paciente, s.descricao AS servico,
+                e.dataentrada, 
+                e.horaentrada, e.periodo, e.prestador_id, e.observacao
                 FROM escalas AS e
                 INNER JOIN prestadores AS pr
                 ON pr.id = e.prestador_id
@@ -241,18 +241,12 @@ class EscalasController extends Controller
                 ON pac.id = hc.paciente_id
                 INNER JOIN pessoas AS ppac
                 ON ppac.id = pac.pessoa_id
-                INNER JOIN clientes AS cli
-                ON cli.id = o.cliente_id
-                INNER JOIN pessoas AS pcli
-                ON pcli.id = cli.pessoa_id
                 INNER JOIN servicos AS s
                 ON s.id = e.servico_id
-
                 WHERE e.dataentrada BETWEEN ? AND ?
                 AND e.empresa_id = ?
                 AND e.ativo = 1
                 AND e.ordemservico_id LIKE ?
-                ORDER BY e.periodo
                 ",
             [
                 $request->data_ini,

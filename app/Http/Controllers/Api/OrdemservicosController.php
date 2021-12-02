@@ -332,8 +332,8 @@ class OrdemservicosController extends Controller
             }
         ])
             ->whereHas('orcamento', function (Builder $builder) {
-                    $builder->where('status', true);
-                })
+                $builder->where('status', true);
+            })
             ->where('empresa_id', $profissional->empresa_id)
             ->where('ativo', true)
             ->get(['id', 'orcamento_id']);
@@ -346,15 +346,15 @@ class OrdemservicosController extends Controller
         $user = $request->user();
         $profissional = $user->pessoa->profissional;
         // $empresa_id = 1;
-           $result = Ordemservico::with([
+        $result = Ordemservico::with([
             'orcamento.cidade', 'orcamento.evento', 'orcamento.cliente.pessoa', 'profissional.pessoa', 'orcamento' => function ($query) {
                 $query->with(['servicos.servico', 'produtos.produto', 'homecare' => function ($query) {
-                    $query->with(['paciente.pessoa']);
+                    $query->with(['paciente.pessoa', 'paciente.pessoa.enderecos', 'paciente.responsavel.pessoa']);
                 }]);
             }
         ])
-        ->where('empresa_id', $profissional->empresa_id)
-        ->where('ativo', true);
+            ->where('empresa_id', $profissional->empresa_id)
+            ->where('ativo', true);
 
         if ($request->nome) {
             $result->whereHas('orcamento.homecare.paciente.pessoa', function (Builder $query) use ($request) {
