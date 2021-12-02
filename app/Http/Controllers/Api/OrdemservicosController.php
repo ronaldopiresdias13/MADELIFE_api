@@ -349,7 +349,7 @@ class OrdemservicosController extends Controller
         $result = Ordemservico::with([
             'orcamento.cidade', 'orcamento.evento', 'orcamento.cliente.pessoa', 'profissional.pessoa', 'orcamento' => function ($query) {
                 $query->with(['servicos.servico', 'produtos.produto', 'homecare' => function ($query) {
-                    $query->with(['paciente.pessoa', 'paciente.responsavel.pessoa']);
+                    $query->with(['paciente.pessoa', 'paciente.pessoa.enderecos', 'paciente.responsavel.pessoa']);
                 }]);
             }
         ])
