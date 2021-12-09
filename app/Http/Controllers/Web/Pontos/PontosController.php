@@ -55,7 +55,7 @@ class PontosController extends Controller
                 "datasaida",
                 "periodo",
                 "editavel",
-                // "observacao",
+                "observacao",
                 "status",
                 // "folga",
                 // "substituto",
@@ -117,6 +117,7 @@ class PontosController extends Controller
         $escala['editavel']             = $dado->editavel;
         $escala['horaentrada']          = $dado->horaentrada;
         $escala['horasaida']            = $dado->horasaida;
+        $escala['tipo']                 = $dado->tipo;
         // $escala['servico_id'] = $dado->servico ? $dado->servico->id : null;
         // $escala['servico'] = $dado->servico ? $dado->servico->descricao : null;
         $escala['valorhora'] = (float)($dado->periodo == 'DIURNO' ?
@@ -187,6 +188,8 @@ class PontosController extends Controller
         if ($dado->status) {
             if ($mult) {
                 $escala['valortotal'] = ($escala['valorhora'] + (float)$dado->valoradicional) - (float)$dado->valordesconto;
+                // $escala['valortotal'] = ($escala['valorhora']) ;
+                // $escala['valortotal'] = 14;
             } else {
                 $escala['valortotal'] = (($escala['valorhora'] * $escala['totalhoras']) + (float)$dado->valoradicional) - (float)$dado->valordesconto;
             }
@@ -202,18 +205,16 @@ class PontosController extends Controller
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
         $escalas = Escala::where('empresa_id', $empresa_id)
-        ->where('ordemservico_id', '=', $request->ordemservico_id)
-        ->where('dataentrada', '>=', $request->data_ini)
-        ->where('dataentrada', '<=', $request->data_fim)
-        ->where('ativo', true)->get();
+            ->where('ordemservico_id', '=', $request->ordemservico_id)
+            ->where('dataentrada', '>=', $request->data_ini)
+            ->where('dataentrada', '<=', $request->data_fim)
+            ->where('ativo', true)->get();
 
 
         foreach ($escalas as $key => $escala) {
             $escala->editavel = false;
             $escala->save();
         }
-        // return $escalas;
-
     }
 
     /**
