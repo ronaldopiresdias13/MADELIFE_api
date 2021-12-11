@@ -28,9 +28,9 @@ class CreateProtocoloSkinsTable extends Migration
             $table->string('data')->nullable();
             $table->string('nivel_consciencia')->nullable();
             $table->string('obs_nivel_consciencia')->nullable();
-            $table->boolean('hipertensao_arterial')->nullable();
+            $table->string('hipertensao_arterial')->nullable();
             $table->string('pa')->nullable();
-            $table->boolean('diabetes')->nullable();
+            $table->string('diabetes')->nullable();
             $table->string('glicemia')->nullable();
             $table->string('hematocrito')->nullable();
             $table->string('hemoglobina')->nullable();

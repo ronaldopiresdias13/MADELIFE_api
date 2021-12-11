@@ -15,10 +15,10 @@ class CreateProtocoloDiagnosticoFeridasTable extends Migration
     {
         Schema::create('protocolo_diagnostico_ferida', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('protocolocausa_id');
-            $table->foreign('protocolocausa_id')->references('id')->on('protocolo_causa_feridas');
-            $table->unsignedBigInteger('protocolosintomas_id');
-            $table->foreign('protocolosintomas_id')->references('id')->on('protocolo_sinais_sintoma_feridas');
+            $table->unsignedBigInteger('protocolocausa_id')->nullable();
+            $table->foreign('protocolocausa_id')->references('id')->on('protocolo_causa_feridas')->onDelete('cascade');
+            $table->unsignedBigInteger('protocolosintomas_id')->nullable();
+            $table->foreign('protocolosintomas_id')->references('id')->on('protocolo_sinais_sintoma_feridas')->onDelete('cascade');
             $table->boolean('integridade_tissular')->nullable();
             $table->boolean('risco_infeccao')->nullable();
             $table->boolean('alt_temperatura')->nullable();
@@ -40,6 +40,6 @@ class CreateProtocoloDiagnosticoFeridasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('protocolo_diagnostico_ferida');
+        // Schema::dropIfExists('protocolo_diagnostico_ferida');
     }
 }

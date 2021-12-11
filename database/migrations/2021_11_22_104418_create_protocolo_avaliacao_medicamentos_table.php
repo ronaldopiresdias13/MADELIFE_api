@@ -15,7 +15,7 @@ class CreateProtocoloAvaliacaoMedicamentosTable extends Migration
     {
         Schema::create('protocolo_avaliacao_medicamento', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('protocolo_medicacao_id');
+            $table->unsignedBigInteger('protocolo_medicacao_id')->nullable();
             $table->foreign('protocolo_medicacao_id')->references('id')->on('protocolo_medicacao');
             $table->string('medicamento')->nullable();
             $table->string('dosagem')->nullable();

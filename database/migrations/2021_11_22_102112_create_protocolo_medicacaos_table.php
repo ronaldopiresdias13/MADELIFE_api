@@ -16,7 +16,7 @@ class CreateProtocoloMedicacaosTable extends Migration
         Schema::create('protocolo_medicacao', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('protocolo_id');
-            $table->foreign('protocolo_id')->references('id')->on('protocolo_skin');
+            $table->foreign('protocolo_id')->references('id')->on('protocolo_skin')->onDelete('cascade');
             $table->unsignedBigInteger('empresa_id');
             $table->foreign('empresa_id')->references('id')->on('empresas');
             $table->boolean('curativo_cateter_picc')->nullable();

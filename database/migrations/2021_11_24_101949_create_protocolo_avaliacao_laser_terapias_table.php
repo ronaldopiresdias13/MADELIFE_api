@@ -15,8 +15,8 @@ class CreateProtocoloAvaliacaoLaserTerapiasTable extends Migration
     {
         Schema::create('avaliacaolaserterapia', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('pro_diagnostico_id');
-            $table->foreign('pro_diagnostico_id')->references('id')->on('protocolo_diagnostico_ferida');
+            $table->unsignedBigInteger('pro_diagnostico_id')->nullable();
+            $table->foreign('pro_diagnostico_id')->references('id')->on('protocolo_diagnostico_ferida')->onDelete('cascade');
             $table->string('laserterapia_localizacao')->nullable();
             $table->boolean('tratamento_ferida_cirurgica')->nullable();
             $table->boolean('tratamento_ferida_lesao_pressao')->nullable();
@@ -58,6 +58,6 @@ class CreateProtocoloAvaliacaoLaserTerapiasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('protocolo_avaliacao_laser_terapia');
+        Schema::dropIfExists('avaliacaolaserterapia');
     }
 }

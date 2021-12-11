@@ -16,7 +16,7 @@ class CreateProtocoloAvaliacaoEstomasTable extends Migration
         Schema::create('protocolo_avaliacao_estoma', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('protocolo_id');
-            $table->foreign('protocolo_id')->references('id')->on('protocolo_skin');
+            $table->foreign('protocolo_id')->references('id')->on('protocolo_skin')->onDelete('cascade');
             $table->unsignedBigInteger('empresa_id');
             $table->foreign('empresa_id')->references('id')->on('empresas');
             $table->boolean('cl_traqueostomia')->nullable();

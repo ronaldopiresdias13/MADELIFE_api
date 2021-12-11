@@ -16,15 +16,15 @@ class CreateProtocoloAvaliacaoFeridasTable extends Migration
         Schema::create('protocolo_avaliacao_ferida', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('protocolo_id');
-            $table->foreign('protocolo_id')->references('id')->on('protocolo_skin');
+            $table->foreign('protocolo_id')->references('id')->on('protocolo_skin')->onDelete('cascade');
             $table->unsignedBigInteger('empresa_id');
             $table->foreign('empresa_id')->references('id')->on('empresas');
-            $table->unsignedBigInteger('protocololesao_id');
-            $table->foreign('protocololesao_id')->references('id')->on('protocolo_avaliacao_lesao_pressao');
-            $table->unsignedBigInteger('protocolopesdiabeticos_id');
-            $table->foreign('protocolopesdiabeticos_id')->references('id')->on('protocolo_avaliacao_pes_diabeticos');
-            $table->unsignedBigInteger('protocololaserterapia_id');
-            $table->foreign('protocololaserterapia_id')->references('id')->on('avaliacaolaserterapia');
+            $table->unsignedBigInteger('protocololesao_id')->nullable();
+            $table->foreign('protocololesao_id')->references('id')->on('protocolo_avaliacao_lesao_pressao')->onDelete('cascade');
+            $table->unsignedBigInteger('protocolopesdiabeticos_id')->nullable();
+            $table->foreign('protocolopesdiabeticos_id')->references('id')->on('protocolo_avaliacao_pes_diabeticos')->onDelete('cascade');
+            $table->unsignedBigInteger('protocololaserterapia_id')->nullable();
+            $table->foreign('protocololaserterapia_id')->references('id')->on('avaliacaolaserterapia')->onDelete('cascade');
             $table->boolean('ferida_cirurgica')->nullable();
             $table->boolean('ferida_lesao_pressao')->nullable();
             $table->boolean('ferida_diabetica')->nullable();
