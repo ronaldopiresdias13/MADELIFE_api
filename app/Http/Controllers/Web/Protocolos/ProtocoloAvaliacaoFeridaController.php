@@ -27,7 +27,7 @@ class ProtocoloAvaliacaoFeridaController extends Controller
     public function index(Request $request)
     {
         $empresa_id = $request->user()->pessoa->profissional->empresa_id;
-        return ProtocoloAvaliacaoFerida::with('protocolo' ,'protocolo.cliente.pessoa', 'protocolo.paciente.pessoa' ,'protocololesao', 'protocolopesdiabeticos', 'protocololaserterapia')
+        return ProtocoloAvaliacaoFerida::with('protocolo' ,'protocolo.cliente.pessoa', 'protocolo.paciente.pessoa' ,'protocololesao', 'protocolopesdiabeticos', 'protocololaserterapia', 'protocololaserterapia.protocolodiagnostico', 'protocololaserterapia.protocolodiagnostico.protocolocausa', 'protocololaserterapia.protocolodiagnostico.protocolosintomas')
         ->where('empresa_id', $empresa_id)
         ->get();
     }

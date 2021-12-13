@@ -13,7 +13,7 @@ class ProtocoloAvaliacaoLaserTerapia extends Model
     protected $table = 'avaliacaolaserterapia';
     protected $guarded = [];
 
-    public function protocolodiagnosticos()
+    public function protocolodiagnostico()
     {
         return $this->belongsTo(ProtocoloDiagnosticoFerida::class, 'pro_diagnostico_id');
     }
