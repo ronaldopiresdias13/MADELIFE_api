@@ -31,7 +31,7 @@ class OrcsController extends Controller
             [
                 'cidade',
                 'cliente.pessoa',
-                'homecare_paciente.pessoa',
+                'homecare_paciente.pessoa.enderecos.cidade',
                 'aph_cidade',
                 'evento_cidade',
                 'remocao_cidadeorigem',
@@ -300,7 +300,6 @@ class OrcsController extends Controller
         }
 
         return $result->get();
-
     }
     public function quantidadeOrcsPorServico(Request $request)
     {
@@ -309,8 +308,7 @@ class OrcsController extends Controller
             $query->whereBetween('data', [$request->data_ini, $request->data_fim]);
         });
 
-        if ($request->filter_nome)
-        {
+        if ($request->filter_nome) {
             $result->where('descricao', 'like', '%' . $request->filter_nome . '%');
         }
 
@@ -322,21 +320,21 @@ class OrcsController extends Controller
         // $empresa_id = 2;
         $orc = Orc::with([
             'cidade',
-                'cliente.pessoa',
-                'homecare_paciente.pessoa',
-                'aph_cidade',
-                'evento_cidade',
-                'remocao_cidadeorigem',
-                'remocao_cidadedestino',
-                'produtos.produto',
-                'servicos.servico',
-                'custos.custo',
-                'paciente.internacoes'
+            'cliente.pessoa',
+            'homecare_paciente.pessoa',
+            'aph_cidade',
+            'evento_cidade',
+            'remocao_cidadeorigem',
+            'remocao_cidadedestino',
+            'produtos.produto',
+            'servicos.servico',
+            'custos.custo',
+            'paciente.internacoes'
         ]);
-        if($request->data) {
-            $orc = $orc->where('data',$request->data);
+        if ($request->data) {
+            $orc = $orc->where('data', $request->data);
         }
-        if($request->cliente_id) {
+        if ($request->cliente_id) {
             $orc = $orc->where('cliente_id', $request->cliente_id);
         }
         $orc->where('empresa_id', $empresa_id);
