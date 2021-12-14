@@ -13,9 +13,14 @@ class ProtocoloMedicacao extends Model
     protected $table = 'protocolo_medicacao';
     protected $guarded = [];
 
-    public function protocoloskin()
+    public function protocolo()
     {
         return $this->belongsTo(ProtocoloSkin::class);
+    }
+
+    public function protocolo_avaliacao_medicamento()
+    {
+        return $this->belongsTo(ProtocoloAvaliacaoMedicamento::class, 'medicamento_id');
     }
 
     public function empresa()
