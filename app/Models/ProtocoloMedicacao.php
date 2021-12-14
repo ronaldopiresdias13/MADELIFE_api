@@ -20,7 +20,7 @@ class ProtocoloMedicacao extends Model
 
     public function protocolo_avaliacao_medicamento()
     {
-        return $this->belongsTo(ProtocoloAvaliacaoMedicamento::class, 'medicamento_id');
+        return $this->belongsTo(ProtocoloAvaliacaoMedicamento::class, 'protocolo_avaliacao_medicacao_id');
     }
 
     public function empresa()
