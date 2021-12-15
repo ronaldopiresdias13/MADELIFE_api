@@ -26,7 +26,7 @@ class CreateProtocoloSkinsTable extends Migration
             $table->boolean('afastado')->nullable();
             $table->boolean('aposentado')->nullable();
             $table->string('data')->nullable();
-            $table->string('nivel_consciencia')->nullable();
+            $table->boolean('nivel_consciencia')->nullable();
             $table->string('obs_nivel_consciencia')->nullable();
             $table->string('hipertensao_arterial')->nullable();
             $table->string('pa')->nullable();
