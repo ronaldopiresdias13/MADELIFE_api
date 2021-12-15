@@ -581,4 +581,22 @@ class ProfissionaisController extends Controller
         $profissional->ativo = false;
         $profissional->save();
     }
+
+    public function profissionaisPage(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        $result = Profissional::with(['pessoa.user.acessos', 'setor', 'cargo', 'dadoscontratual', 'anexos'])
+            ->where('ativo', 1)
+            ->where('empresa_id', $empresa_id)
+            // ->get();
+          
+        ->paginate($request['per_page'] ? $request['per_page'] : 15);
+
+        if (env("APP_ENV", 'production') == 'production') {
+            return $result->withPath(str_replace('http:', 'https:', $result->path()));
+        } else {
+            return $result;
+        }
+    }
 }

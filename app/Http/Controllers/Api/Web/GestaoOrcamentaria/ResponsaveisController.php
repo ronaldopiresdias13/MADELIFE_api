@@ -291,4 +291,21 @@ class ResponsaveisController extends Controller
         $responsavel->ativo = false;
         $responsavel->save();
     }
+    public function responsaveisPage(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        $result = Responsavel::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade', 'pacientes.pessoa', 'pessoa.user.acessos'])
+            ->where('empresa_id', $empresa_id)
+            ->where('ativo', true)
+            // ->get();
+          
+        ->paginate($request['per_page'] ? $request['per_page'] : 15);
+
+        if (env("APP_ENV", 'production') == 'production') {
+            return $result->withPath(str_replace('http:', 'https:', $result->path()));
+        } else {
+            return $result;
+        }
+    }
 }

@@ -276,4 +276,23 @@ class ClientesController extends Controller
         $cliente->ativo = false;
         $cliente->save();
     }
+    public function clientePage(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        $result = Cliente::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade', 'pessoa.user.acessos'])
+        ->where('empresa_id', $empresa_id)
+        ->where('ativo', true)
+
+          
+        ->paginate($request['per_page'] ? $request['per_page'] : 15);
+
+        if (env("APP_ENV", 'production') == 'production') {
+            return $result->withPath(str_replace('http:', 'https:', $result->path()));
+        } else {
+            return $result;
+        }
+    }
+
+
 }
