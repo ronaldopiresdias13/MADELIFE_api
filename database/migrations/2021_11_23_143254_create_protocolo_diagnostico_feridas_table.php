@@ -40,6 +40,6 @@ class CreateProtocoloDiagnosticoFeridasTable extends Migration
      */
     public function down()
     {
-        // Schema::dropIfExists('protocolo_diagnostico_ferida');
+        Schema::dropIfExists('protocolo_diagnostico_ferida');
     }
 }

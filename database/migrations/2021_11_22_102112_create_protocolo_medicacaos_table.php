@@ -17,6 +17,8 @@ class CreateProtocoloMedicacaosTable extends Migration
             $table->id();
             $table->unsignedBigInteger('protocolo_id');
             $table->foreign('protocolo_id')->references('id')->on('protocolo_skin')->onDelete('cascade');
+            $table->unsignedBigInteger('protocolo_avaliacao_medicacao_id')->nullable();
+            $table->foreign('protocolo_avaliacao_medicacao_id')->references('id')->on('protocolo_avaliacao_medicamento');
             $table->unsignedBigInteger('empresa_id');
             $table->foreign('empresa_id')->references('id')->on('empresas');
             $table->boolean('curativo_cateter_picc')->nullable();
