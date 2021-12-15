@@ -18,7 +18,7 @@ class ProtocoloMedicacao extends Model
         return $this->belongsTo(ProtocoloSkin::class);
     }
 
-    public function protocolo_avaliacao_medicamento()
+    public function medicamento()
     {
         return $this->belongsTo(ProtocoloAvaliacaoMedicamento::class, 'protocolo_avaliacao_medicacao_id');
     }
