@@ -60,6 +60,11 @@ class FolgasController extends Controller
             });
         }
         $folgas->where('empresa_id', $empresa_id);
+        if($request->situacao){
+            $folgas = $folga->whereHas('situacao', function (Builder $query) use ($request) {
+                $query->where('situacao', $request->situacao);
+            });
+        }
         $folgas = $folgas->get();
 
         return $folgas;
