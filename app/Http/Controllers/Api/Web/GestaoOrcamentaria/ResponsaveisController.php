@@ -13,6 +13,7 @@ use App\Models\PessoaTelefone;
 use App\Models\Responsavel;
 use App\Models\Telefone;
 use App\Models\Tipopessoa;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -295,12 +296,18 @@ class ResponsaveisController extends Controller
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-        $result = Responsavel::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade', 'pacientes.pessoa', 'pessoa.user.acessos'])
-            ->where('empresa_id', $empresa_id)
-            ->where('ativo', true)
-            // ->get();
+        $result = Responsavel::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade', 'pacientes.pessoa', 'pessoa.user.acessos']);
+        $result->where('empresa_id', $empresa_id);
+        $result->where('ativo', true);
+            
+        if($request->nome)
+        {
+            $result->whereHas('pessoa', function (Builder $query) use ($request) {
+                $query->where('nome', 'like', '%' . $request->nome . '%');
+            });
+        };
           
-        ->paginate($request['per_page'] ? $request['per_page'] : 15);
+        $result = $result->paginate($request['per_page'] ? $request['per_page'] : 15);
 
         if (env("APP_ENV", 'production') == 'production') {
             return $result->withPath(str_replace('http:', 'https:', $result->path()));

@@ -12,6 +12,7 @@ use App\Models\PessoaEndereco;
 use App\Models\PessoaTelefone;
 use App\Models\Telefone;
 use App\Models\Tipopessoa;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -280,12 +281,20 @@ class ClientesController extends Controller
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-        $result = Cliente::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade', 'pessoa.user.acessos'])
-        ->where('empresa_id', $empresa_id)
-        ->where('ativo', true)
+        $result = Cliente::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade', 'pessoa.user.acessos']);
+        $result->where('empresa_id', $empresa_id);
+        $result->where('ativo', true);
 
-          
-        ->paginate($request['per_page'] ? $request['per_page'] : 15);
+        if($request->nome)
+        {
+            $result->whereHas('pessoa', function (Builder $query) use ($request) {
+                $query->where('nome', 'like', '%' . $request->nome . '%');
+            });
+        };
+
+        $result = $result->paginate($request['per_page'] ? $request['per_page'] : 15);
+
+       
 
         if (env("APP_ENV", 'production') == 'production') {
             return $result->withPath(str_replace('http:', 'https:', $result->path()));
