@@ -266,6 +266,25 @@ class FolgasController extends Controller
     }
 
     /**
+     * Delete the specified resource in storage.
+     *
+     * @param  \App\Models\Folga  $folga
+     * @return \Illuminate\Http\Response
+     */
+    public function removerFolga(Folga $folga)
+    {
+        DB::transaction(function () use ($folga) {
+            $folga->aprovada = false;
+            $folga->save();
+            $folga->delete();
+
+            $escala = Escala::find($folga->escala_id);
+            $escala->folga = false;
+            $escala->save();
+        });
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Folga  $folga
