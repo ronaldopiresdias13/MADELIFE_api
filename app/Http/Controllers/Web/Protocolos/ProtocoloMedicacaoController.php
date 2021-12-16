@@ -9,6 +9,7 @@ use App\Models\ProtocoloAvaliacaoMedicamento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
 
 class ProtocoloMedicacaoController extends Controller
 {
@@ -20,9 +21,34 @@ class ProtocoloMedicacaoController extends Controller
     public function index(Request $request)
     {
         $empresa_id = $request->user()->pessoa->profissional->empresa_id;
-        return ProtocoloMedicacao::with('protocolo' ,'protocolo.cliente.pessoa', 'protocolo.paciente.pessoa' ,'medicamento')
-        ->where('empresa_id', $empresa_id)
-        ->get();
+        $result = ProtocoloMedicacao::with(['protocolo' ,'protocolo.cliente.pessoa', 'protocolo.paciente.pessoa' ,'medicamento']);
+        $result->where('empresa_id', $empresa_id);
+
+        
+        if($request->nome)
+        {
+            $result->whereHas('protocolo.paciente.pessoa', function (Builder $query) use ($request) {
+                $query->where('nome', 'like', '%' . $request->nome . '%');
+            });
+        };
+
+        if($request->data_ini)
+        {
+            $result->whereHas('protocolo', function (Builder $query) use ($request) {
+                $query->where('data','=', $request->data_ini);
+            });
+        };
+        
+        return $result->get();
+
+        // $result = $result->paginate($request['per_page'] ? $request['per_page'] : 15);
+
+        // if(env("APP_ENV", 'production') == 'production') {
+        //     return $result->wherePath(str_replace('http:', 'https:', $result->path()));
+        // } else {
+        //     return $result;
+        // }
+
     }
 
     /**
