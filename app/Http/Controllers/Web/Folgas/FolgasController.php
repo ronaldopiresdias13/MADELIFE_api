@@ -43,15 +43,15 @@ class FolgasController extends Controller
             'prestador.pessoa',
             'substituto.pessoa',
             'escala.servico',
-        ]);
-        if ($request->data_final) {
-            $folgas = $folgas->whereHas('escala', function (Builder $query) use ($request, $folgas) {
-                $query->where('datasaida', '<=', $request->data_final ? $request->data_final : $folgas);
-            });
-        }
+        ])->orderBy('situacao');
+        // if ($request->data_final) {
+        //     $folgas = $folgas->whereHas('escala', function (Builder $query) use ($request, $folgas) {
+        //         $query->where('datasaida', '<=', $request->data_final ? $request->data_final : $folgas);
+        //     });
+        // }
         if ($request->data_ini) {
             $folgas = $folgas->whereHas('escala', function (Builder $query) use ($request, $folgas) {
-                $query->where('dataentrada', '>=', $request->data_ini ? $request->data_ini : $folgas);
+                $query->whereBetween('dataentrada', [$request->data_ini, $request->data_fim,]);
             });
         }
         if ($request->cliente_id) {
@@ -61,9 +61,10 @@ class FolgasController extends Controller
         }
         $folgas->where('empresa_id', $empresa_id);
         if($request->situacao){
-            $folgas = $folga->whereHas('situacao', function (Builder $query) use ($request) {
-                $query->where('situacao', $request->situacao);
-            });
+            $folgas->where('situacao', $request->situacao);
+            // $folgas = $folga->whereHas('situacao', function (Builder $query) use ($request) {
+            //     $query->where('situacao', $request->situacao);
+            // });
         }
         $folgas = $folgas->get();
 

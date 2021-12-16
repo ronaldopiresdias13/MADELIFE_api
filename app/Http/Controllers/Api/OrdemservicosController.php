@@ -331,9 +331,9 @@ class OrdemservicosController extends Controller
                 }]);
             }
         ])
-            ->whereHas('orcamento', function (Builder $builder) {
-                $builder->where('status', true);
-            })
+            // ->whereHas('orcamento', function (Builder $builder) {
+            //     $builder->where('status', true);
+            // })
             ->where('empresa_id', $profissional->empresa_id)
             ->where('ativo', true)
             ->get(['id', 'orcamento_id']);
