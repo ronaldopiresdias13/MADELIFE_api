@@ -43,7 +43,7 @@ class FolgasController extends Controller
             'prestador.pessoa',
             'substituto.pessoa',
             'escala.servico',
-        ]);
+        ])->orderBy('situacao');
         // if ($request->data_final) {
         //     $folgas = $folgas->whereHas('escala', function (Builder $query) use ($request, $folgas) {
         //         $query->where('datasaida', '<=', $request->data_final ? $request->data_final : $folgas);
