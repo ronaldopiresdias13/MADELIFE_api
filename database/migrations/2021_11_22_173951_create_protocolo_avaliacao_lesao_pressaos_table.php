@@ -60,7 +60,7 @@ class CreateProtocoloAvaliacaoLesaoPressaosTable extends Migration
             $table->string('cuidador_idade')->nullable();
             $table->string('cuidador_data_nasc')->nullable();
             $table->boolean('cuidador_disponibilidade')->nullable();
-            $table->boolean('cuidador_observacoes')->nullable();
+            $table->string('cuidador_observacoes')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

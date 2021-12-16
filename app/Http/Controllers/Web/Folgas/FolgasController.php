@@ -44,14 +44,14 @@ class FolgasController extends Controller
             'substituto.pessoa',
             'escala.servico',
         ]);
-        if ($request->data_final) {
-            $folgas = $folgas->whereHas('escala', function (Builder $query) use ($request, $folgas) {
-                $query->where('datasaida', '<=', $request->data_final ? $request->data_final : $folgas);
-            });
-        }
+        // if ($request->data_final) {
+        //     $folgas = $folgas->whereHas('escala', function (Builder $query) use ($request, $folgas) {
+        //         $query->where('datasaida', '<=', $request->data_final ? $request->data_final : $folgas);
+        //     });
+        // }
         if ($request->data_ini) {
             $folgas = $folgas->whereHas('escala', function (Builder $query) use ($request, $folgas) {
-                $query->where('dataentrada', '>=', $request->data_ini ? $request->data_ini : $folgas);
+                $query->whereBetween('dataentrada', [$request->data_ini, $request->data_fim,]);
             });
         }
         if ($request->cliente_id) {
@@ -60,6 +60,12 @@ class FolgasController extends Controller
             });
         }
         $folgas->where('empresa_id', $empresa_id);
+        if($request->situacao){
+            $folgas->where('situacao', $request->situacao);
+            // $folgas = $folga->whereHas('situacao', function (Builder $query) use ($request) {
+            //     $query->where('situacao', $request->situacao);
+            // });
+        }
         $folgas = $folgas->get();
 
         return $folgas;
@@ -261,6 +267,25 @@ class FolgasController extends Controller
             $escala->valorhoradiurno  = $request['escala']['valorhoradiurno'];
             $escala->valorhoranoturno = $request['escala']['valorhoranoturno'];
             $escala->observacao       = $request['escala']['observacao'];
+            $escala->save();
+        });
+    }
+
+    /**
+     * Delete the specified resource in storage.
+     *
+     * @param  \App\Models\Folga  $folga
+     * @return \Illuminate\Http\Response
+     */
+    public function removerFolga(Folga $folga)
+    {
+        DB::transaction(function () use ($folga) {
+            $folga->aprovada = false;
+            $folga->save();
+            $folga->delete();
+
+            $escala = Escala::find($folga->escala_id);
+            $escala->folga = false;
             $escala->save();
         });
     }
