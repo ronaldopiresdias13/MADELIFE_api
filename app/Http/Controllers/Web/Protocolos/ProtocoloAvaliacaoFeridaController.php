@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Builder;
 
 class ProtocoloAvaliacaoFeridaController extends Controller
 {
@@ -27,9 +28,24 @@ class ProtocoloAvaliacaoFeridaController extends Controller
     public function index(Request $request)
     {
         $empresa_id = $request->user()->pessoa->profissional->empresa_id;
-        return ProtocoloAvaliacaoFerida::with('protocolo' ,'protocolo.cliente.pessoa', 'protocolo.paciente.pessoa' ,'protocololesao', 'protocolopesdiabeticos', 'protocololaserterapia', 'protocololaserterapia.protocolodiagnostico', 'protocololaserterapia.protocolodiagnostico.protocolocausa', 'protocololaserterapia.protocolodiagnostico.protocolosintomas')
-        ->where('empresa_id', $empresa_id)
-        ->get();
+        $result = ProtocoloAvaliacaoFerida::with('protocolo' ,'protocolo.cliente.pessoa', 'protocolo.paciente.pessoa' ,'protocololesao', 'protocolopesdiabeticos', 'protocololaserterapia', 'protocololaserterapia.protocolodiagnostico', 'protocololaserterapia.protocolodiagnostico.protocolocausa', 'protocololaserterapia.protocolodiagnostico.protocolosintomas');
+        $result->where('empresa_id', $empresa_id);
+        
+        if($request->nome)
+        {
+            $result->whereHas('protocolo.paciente.pessoa', function (Builder $query) use ($request) {
+                $query->where('nome', 'like', '%' . $request->nome . '%');
+            });
+        };
+
+        if($request->data_ini)
+        {
+            $result->whereHas('protocolo', function (Builder $query) use ($request) {
+                $query->where('data','=', $request->data_ini);
+            });
+        };
+        
+        return $result->get();
     }
 
     /**
@@ -544,9 +560,9 @@ class ProtocoloAvaliacaoFeridaController extends Controller
         $protocoloAvaliacaoFerida->protocolopesdiabeticos;
         $protocoloAvaliacaoFerida->protocololesao;
         // $protocoloAvaliacaoFerida->protocololaserterapia;
-        $protocoloAvaliacaoFerida->protocololaserterapia->protocolodiagnosticos;
-        $protocoloAvaliacaoFerida->protocololaserterapia->protocolodiagnosticos->protocolocausa;
-        $protocoloAvaliacaoFerida->protocololaserterapia->protocolodiagnosticos->protocolosintomas;
+        $protocoloAvaliacaoFerida->protocololaserterapia->protocolodiagnostico;
+        $protocoloAvaliacaoFerida->protocololaserterapia->protocolodiagnostico->protocolocausa;
+        $protocoloAvaliacaoFerida->protocololaserterapia->protocolodiagnostico->protocolosintomas;
         
         return $protocoloAvaliacaoFerida;
     }

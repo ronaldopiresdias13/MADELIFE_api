@@ -8,6 +8,7 @@ use App\Models\ProtocoloSkin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
 
 class ProtocoloAvaliacaoEstomasController extends Controller
 {
@@ -23,9 +24,24 @@ class ProtocoloAvaliacaoEstomasController extends Controller
         // $user = $request->user();
         $empresa_id = $request->user()->pessoa->profissional->empresa_id;
         // $empresa_id = 2;
-        return ProtocoloAvaliacaoEstoma::with(['protocolo', 'protocolo.cliente.pessoa', 'protocolo.paciente.pessoa'])
-            ->where('empresa_id', $empresa_id)
-            ->get();
+        $result = ProtocoloAvaliacaoEstoma::with(['protocolo', 'protocolo.cliente.pessoa', 'protocolo.paciente.pessoa']);
+        $result->where('empresa_id', $empresa_id);
+            
+            if($request->nome)
+            {
+                $result->whereHas('protocolo.paciente.pessoa', function (Builder $query) use ($request) {
+                    $query->where('nome', 'like', '%' . $request->nome . '%');
+                });
+            };
+    
+            if($request->data_ini)
+            {
+                $result->whereHas('protocolo', function (Builder $query) use ($request) {
+                    $query->where('data','=', $request->data_ini);
+                });
+            };
+            
+            return $result->get();
     }
 
     /**

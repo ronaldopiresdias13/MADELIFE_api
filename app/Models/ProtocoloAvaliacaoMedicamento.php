@@ -13,8 +13,4 @@ class ProtocoloAvaliacaoMedicamento extends Model
     protected $table = 'protocolo_avaliacao_medicamento';
     protected $guarded = [];
 
-    public function medicacao()
-    {
-        return $this->belongsTo(ProtocoloMedicacao::class);
-    }
 }

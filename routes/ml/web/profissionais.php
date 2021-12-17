@@ -11,6 +11,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::put('profissionais/{profissional}', 'Api\Web\RecursosHumanos\ProfissionaisController@update');
             Route::delete('profissionais/{profissional}', 'Api\Web\RecursosHumanos\ProfissionaisController@destroy');
             // Route::get('profissionais/downloadfile/{anexo}', 'Api\Web\RecursosHumanos\ProfissionaisController@downloadfile');
+            Route::get('profissionaisAcessos', 'Api\Web\RecursosHumanos\ProfissionaisController@profissionaisPage');
         });
     });
 });

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Web\GestaoOrcamentaria\ClientesController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth:api'], function () {
@@ -10,6 +11,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::post('clientes', 'Api\Web\GestaoOrcamentaria\ClientesController@store');
             Route::put('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@update');
             Route::delete('clientes/{cliente}', 'Api\Web\GestaoOrcamentaria\ClientesController@destroy');
+            Route::get('clientes', [ClientesController::class, 'clientePage']);
         });
         Route::get('clientes/list', 'Web\Clientes\ClientesController@index');
         Route::get('clientes/{cliente}', 'Web\Clientes\ClientesController@show');
