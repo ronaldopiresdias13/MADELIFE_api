@@ -52,4 +52,5 @@ class Paciente extends Model
     public function planilhas(){
         return $this->hasMany(PlanilhaPil::class,'paciente_id','id');
     }
+    
 }
