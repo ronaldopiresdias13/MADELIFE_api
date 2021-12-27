@@ -49,21 +49,38 @@ class EmpresasController extends Controller
                 'site'                     => $request['site'],
                 'email'                    => $request['email'],
             ]);
-            EmpresaDados::firstOrCreate(
-                [
-                    'codigo'              =>  $request['empresa_dado']['codigo'],
-                    'agencia'             =>  $request['empresa_dado']['agencia'],
-                    'digito_agencia'      =>  $request['empresa_dado']['digito_agencia'],
-                    'conta'               => $request['empresa_dado']['conta'],
-                    'digito_conta'        =>  $request['empresa_dado']['digito_conta'],
-                    'convenio'            => $request['empresa_dado']['convenio'],
-                    'convenio_externo'    => $request['empresa_dado']['convenio_externo'],
-                    'nome'                =>  $request['empresa_dado']['nome'],
+            if ($request['empresa_dado']) {
+                foreach ($request['empresa_dado'] as $key => $dadosbancario) {
+                    $empresa_dado = EmpresaDados::firstOrCreate([
+                    'codigo'              =>  $dadosbancario['codigo'],
+                    'agencia'             =>  $dadosbancario['agencia'],
+                    'digito_agencia'      =>  $dadosbancario['digito_agencia'],
+                    'conta'               => $dadosbancario['conta'],
+                    'digito_conta'        =>  $dadosbancario['digito_conta'],
+                    'convenio'            => $dadosbancario['convenio'],
+                    'convenio_externo'    => $dadosbancario['convenio_externo'],
+                    'nome'                =>  $dadosbancario['nome'],
                     'nome_empresa'        => $empresa->razao,
                     'cnpj'                => $empresa->cnpj,
                     'empresa_id'          => $empresa->id,
-                ]
-            );
+                    ]);
+                }
+            }
+            // EmpresaDados::firstOrCreate(
+            //     [
+            //         'codigo'              =>  $request['empresa_dado']['codigo'],
+            //         'agencia'             =>  $request['empresa_dado']['agencia'],
+            //         'digito_agencia'      =>  $request['empresa_dado']['digito_agencia'],
+            //         'conta'               => $request['empresa_dado']['conta'],
+            //         'digito_conta'        =>  $request['empresa_dado']['digito_conta'],
+            //         'convenio'            => $request['empresa_dado']['convenio'],
+            //         'convenio_externo'    => $request['empresa_dado']['convenio_externo'],
+            //         'nome'                =>  $request['empresa_dado']['nome'],
+            //         'nome_empresa'        => $empresa->razao,
+            //         'cnpj'                => $empresa->cnpj,
+            //         'empresa_id'          => $empresa->id,
+            //     ]
+            // );
         });
     }
 
@@ -78,6 +95,7 @@ class EmpresasController extends Controller
         // $user = $request->user();
         // $empresa_id = $user->pessoa->profissional->empresa_id;
         $empresa->empresa_dado;
+        
         // $result = Empresa::find($empresa_id);
         return $empresa;
     }
@@ -112,24 +130,23 @@ class EmpresasController extends Controller
                 'site'                     => $request['site'],
                 'email'                    => $request['email'],
             ]);
-            EmpresaDados::updateOrCreate(
-                [
-                    'id'                 => $request['empresa_dado']['id']
-                ],
-                [
-                    'codigo'              =>  $request['empresa_dado']['codigo'],
-                    'agencia'             =>  $request['empresa_dado']['agencia'],
-                    'digito_agencia'      =>  $request['empresa_dado']['digito_agencia'],
-                    'conta'               => $request['empresa_dado']['conta'],
-                    'digito_conta'        =>  $request['empresa_dado']['digito_conta'],
-                    'convenio'            => $request['empresa_dado']['convenio'],
-                    'convenio_externo'    => $request['empresa_dado']['convenio_externo'],
-                    'nome'                =>  $request['empresa_dado']['nome'],
+            if ($request['empresa_dado']) {
+                foreach ($request['empresa_dado'] as $key => $dadosbancario) {
+                    $empresa_dado = EmpresaDados::firstOrCreate([
+                    'codigo'              =>  $dadosbancario['codigo'],
+                    'agencia'             =>  $dadosbancario['agencia'],
+                    'digito_agencia'      =>  $dadosbancario['digito_agencia'],
+                    'conta'               => $dadosbancario['conta'],
+                    'digito_conta'        =>  $dadosbancario['digito_conta'],
+                    'convenio'            => $dadosbancario['convenio'],
+                    'convenio_externo'    => $dadosbancario['convenio_externo'],
+                    'nome'                =>  $dadosbancario['nome'],
                     'nome_empresa'        => $empresa->razao,
                     'cnpj'                => $empresa->cnpj,
                     'empresa_id'          => $empresa->id,
-                ]
-            );
+                    ]);
+                }
+            }
         });
     }
 
