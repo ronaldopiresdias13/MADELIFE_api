@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\Pacientes;
 
 use App\Http\Controllers\Controller;
+use App\Models\Orcamento;
 use App\Models\Paciente;
 use App\Models\Pessoa;
 use App\Models\User;
@@ -21,26 +22,32 @@ class PacientesController extends Controller
     {
         $user = $request->user();
 
-        $result = Pessoa::with([
-            'pacientes.homecares.orcamento.ordemservico',
-            'pacientes.empresa'
-        ])
-            ->whereHas('pacientes.homecares.orcamento.cliente.pessoa.user', function (Builder $query) use ($user) {
-                $query->where('id', $user->id);
-            });
+        return Orcamento::with(["ordemservico", "homecare.paciente.pessoa", "homecare.paciente.pessoa.enderecos.cidade", "homecare.paciente.responsavel.pessoa"])
+            ->where("cliente_id", $user->pessoa->cliente->id)
+            ->where("ativo", true)
+            ->where("tipo", "Home Care")
+            ->get();
 
-        if ($request['paginate']) {
-            $result = $result->orderByDesc('nome')->paginate($request['per_page'] ? $request['per_page'] : 15);
+        // $result = Pessoa::with([
+        //     'pacientes.homecares.orcamento.ordemservico',
+        //     'pacientes.empresa'
+        // ])
+        //     ->whereHas('pacientes.homecares.orcamento.cliente.pessoa.user', function (Builder $query) use ($user) {
+        //         $query->where('id', $user->id);
+        //     });
 
-            if (env("APP_ENV", 'production') == 'production') {
-                return $result->withPath(str_replace('http:', 'https:', $result->path()));
-            } else {
-                return $result;
-            }
-        } else {
-            $result = $result->get();
-            return $result;
-        }
+        // if ($request['paginate']) {
+        //     $result = $result->orderByDesc('nome')->paginate($request['per_page'] ? $request['per_page'] : 15);
+
+        //     if (env("APP_ENV", 'production') == 'production') {
+        //         return $result->withPath(str_replace('http:', 'https:', $result->path()));
+        //     } else {
+        //         return $result;
+        //     }
+        // } else {
+        //     $result = $result->get();
+        //     return $result;
+        // }
     }
 
     /**
