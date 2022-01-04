@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('web')->group(function () {
+        Route::get('pegarRegistrosPorId', 'Api\OrcamentosController@pegarRegistrosPorId');
         Route::prefix('gestaoOrcamentaria')->group(function () {
             Route::get('orcamentos/list/{empresa}', 'Api\Web\GestaoOrcamentaria\OrcamentosController@index');
             Route::get('orcamentos/{orcamento}', 'Api\Web\GestaoOrcamentaria\OrcamentosController@show');

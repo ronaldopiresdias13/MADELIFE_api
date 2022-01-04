@@ -331,9 +331,9 @@ class OrdemservicosController extends Controller
                 }]);
             }
         ])
-            ->whereHas('orcamento', function (Builder $builder) {
-                $builder->where('status', true);
-            })
+            // ->whereHas('orcamento', function (Builder $builder) {
+            //     $builder->where('status', true);
+            // })
             ->where('empresa_id', $profissional->empresa_id)
             ->where('ativo', true)
             ->get(['id', 'orcamento_id']);
@@ -349,7 +349,7 @@ class OrdemservicosController extends Controller
         $result = Ordemservico::with([
             'orcamento.cidade', 'orcamento.evento', 'orcamento.cliente.pessoa', 'profissional.pessoa', 'orcamento' => function ($query) {
                 $query->with(['servicos.servico', 'produtos.produto', 'homecare' => function ($query) {
-                    $query->with(['paciente.pessoa', 'paciente.pessoa.enderecos', 'paciente.responsavel.pessoa']);
+                    $query->with(['paciente.pessoa', 'paciente.pessoa.enderecos', 'paciente.pessoa.enderecos.cidade', 'paciente.responsavel.pessoa']);
                 }]);
             }
         ])

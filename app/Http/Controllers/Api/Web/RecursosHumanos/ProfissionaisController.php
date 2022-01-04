@@ -19,6 +19,7 @@ use App\Models\ProfissionalFormacao;
 use App\Models\Telefone;
 use App\Models\Tipopessoa;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -580,5 +581,29 @@ class ProfissionaisController extends Controller
     {
         $profissional->ativo = false;
         $profissional->save();
+    }
+
+    public function profissionaisPage(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        $result = Profissional::with(['pessoa.user.acessos', 'setor', 'cargo', 'dadoscontratual', 'anexos']);
+        $result->where('ativo', 1);
+        $result->where('empresa_id', $empresa_id);
+            
+            if($request->nome)
+            {
+                $result->whereHas('pessoa', function (Builder $query) use ($request) {
+                    $query->where('nome', 'like', '%' . $request->nome . '%');
+                });
+            };
+          
+            $result = $result->paginate($request['per_page'] ? $request['per_page'] : 15);
+
+        if (env("APP_ENV", 'production') == 'production') {
+            return $result->withPath(str_replace('http:', 'https:', $result->path()));
+        } else {
+            return $result;
+        }
     }
 }

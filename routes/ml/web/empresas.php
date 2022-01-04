@@ -11,6 +11,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::post('empresa', 'Web\Empresas\EmpresasController@store');
             Route::put('empresa/{empresa}', 'Web\Empresas\EmpresasController@update');
             Route::delete('empresa/{empresa}', 'Web\Empresas\EmpresasController@destroy');
+            Route::delete('empresaDados/{empresaDados}', 'Web\EmpresaDados\EmpresaDadosController@destroy');
         });
     });
 });

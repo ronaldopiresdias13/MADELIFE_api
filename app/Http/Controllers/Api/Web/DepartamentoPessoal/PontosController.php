@@ -59,7 +59,7 @@ class PontosController extends Controller
                 "status",
                 // "folga",
                 // "substituto",
-                // "tipo",
+                "tipo",
                 "valorhoradiurno",
                 "valorhoranoturno",
                 "valoradicional",
@@ -78,6 +78,7 @@ class PontosController extends Controller
                 case 'CUIDADOR':
                 case 'TECNICO EM ENFERMAGEM':
                 case 'Auxiliar de Enfermagem':
+                case 'Tecnico de Enfermagem 24h':
                 case 'ENFERMEIRO (A)':
                     $escala = $this->calcularPontos($dado, false);
                     break;
