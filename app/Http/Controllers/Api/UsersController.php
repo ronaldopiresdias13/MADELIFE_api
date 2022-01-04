@@ -13,6 +13,7 @@ use App\Models\PessoaEmail;
 use App\Models\PrestadorFormacao;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
@@ -268,5 +269,38 @@ class UsersController extends Controller
     {
         $user->email = $request['email'];
         $user->update();
+    }
+
+    public function usersAcessos(Request $request)
+    {
+        // $user = $request->user();
+        // $empresa_id = $user->pessoa->profissional->empresa_id;
+
+        $result = User::with('pessoa');
+
+        if($request->name)
+        {
+            $result = $result->whereHas('pessoa', function (Builder $query) use ($request) {
+                $query->where('nome', 'like', '%' . $request->name . '%');
+            });
+        };
+        if($request->email)
+        {
+            $result->where('email', 'like', '%' . $request->email . '%');
+        };
+        if($request->cpfcnpj)
+        {
+            $result->where('cpfcnpj', 'like', '%' . $request->cpfcnpj . '%');
+        };
+
+        $result->where('ativo', true);
+        
+        $result = $result->paginate($request['per_page'] ? $request['per_page'] : 15);
+
+        if (env("APP_ENV", 'production') == 'production') {
+            return $result->withPath(str_replace('http:', 'https:', $result->path()));
+        } else {
+            return $result;
+        }
     }
 }

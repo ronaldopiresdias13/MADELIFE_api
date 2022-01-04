@@ -296,10 +296,11 @@ class ResponsaveisController extends Controller
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-        $result = Responsavel::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade', 'pacientes.pessoa', 'pessoa.user.acessos']);
+        $result = Responsavel::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade', 'pacientes.pessoa', 'pessoa.user.acessos',
+        'pessoa']);
+        
         $result->where('empresa_id', $empresa_id);
         $result->where('ativo', true);
-            
         if($request->nome)
         {
             $result->whereHas('pessoa', function (Builder $query) use ($request) {
