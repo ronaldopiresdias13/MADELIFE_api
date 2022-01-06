@@ -7,12 +7,15 @@ use App\Http\Requests\DiagnosticoRequest;
 use App\Http\Requests\PilRequest;
 use App\Http\Resources\AnexoAResource;
 use App\Http\Resources\DiagnosticoResource;
+use App\Http\Resources\GrupoAResource;
 use App\Http\Resources\NeadResource;
 use App\Http\Resources\PlanilhaAbmidResource;
 use App\Http\Resources\PlanilhaPilResource;
+use App\Http\Resources\PrescricaoAResource;
 use App\Models\ClientPatient;
 use App\Models\Cuidado;
 use App\Models\DiagnosticoPil;
+use App\Models\GrupoPrescricaoA;
 use App\Models\HorarioMedicamentoPil;
 use App\Models\MedicamentoPil;
 use App\Models\Nead;
@@ -21,6 +24,7 @@ use App\Models\PlanilhaAbmid;
 use App\Models\PlanilhaAnexoA;
 use App\Models\PlanilhaAnexoB;
 use App\Models\PlanilhaPil;
+use App\Models\PrescricaoA;
 use App\Models\PrescricaoBPil;
 use App\Models\Produto;
 use Illuminate\Http\Request;
@@ -96,9 +100,15 @@ class PilController extends Controller
 
         $diagnosticos_secundarios = DiagnosticoPil::where('flag', '=', 'Secundário')->orderBy('nome', 'asc')->get();
 
+        $prescricoes = PrescricaoA::where('empresa_id', '=', $empresa_id)->orderBy('nome')->get();
+        $grupos = GrupoPrescricaoA::where('empresa_id', '=', $empresa_id)->orderBy('nome')->get();
+
         // $cuidados = Cuidado::where('ativo','=',1)->where('empresa_id','=',$empresa_id)->orderBy('descricao')->get();
 
-        return response()->json(['medicamentos' => [], 'cuidados' => [], 'pacientes' => $pacientes, 'diagnosticos_principais' => $diagnosticos_principais, 'diagnosticos_secundarios' => $diagnosticos_secundarios,'clients_patients'=>$clients_patients]);
+        return response()->json([
+            'prescricoes'=>PrescricaoAResource::collection($prescricoes),
+            'grupos'=>GrupoAResource::collection($grupos),
+            'medicamentos' => [], 'cuidados' => [], 'pacientes' => $pacientes, 'diagnosticos_principais' => $diagnosticos_principais, 'diagnosticos_secundarios' => $diagnosticos_secundarios,'clients_patients'=>$clients_patients]);
     }
 
     public function getPil(Request $request, $id)
@@ -119,6 +129,9 @@ class PilController extends Controller
         $diagnosticos_principais = DiagnosticoPil::where('flag', '=', 'Primário')->orderBy('nome', 'asc')->get();
 
         $diagnosticos_secundarios = DiagnosticoPil::where('flag', '=', 'Secundário')->orderBy('nome', 'asc')->get();
+
+        $prescricoes = PrescricaoA::where('empresa_id', '=', $empresa_id)->orderBy('nome')->get();
+        $grupos = GrupoPrescricaoA::where('empresa_id', '=', $empresa_id)->orderBy('nome')->get();
 
         $pil = PlanilhaPil::where('id', '=', $id)->where('empresa_id', '=', $empresa_id)->first();
         // $cuidados = Cuidado::where('ativo','=',1)->where('empresa_id','=',$empresa_id)->orderBy('descricao')->get();
@@ -175,6 +188,8 @@ class PilController extends Controller
         return response()->json([
             'paciente_selecionado' => $paciente_selecionado,
             'pil' => PlanilhaPilResource::make($pil),
+            'prescricoes'=>PrescricaoAResource::collection($prescricoes),
+            'grupos'=>GrupoAResource::collection($grupos),
             'prescricoes_a' => $prescricoes_a,
             'prescricoes_b' => $prescricoes_b,
             'medicamentos_' => $medicamentos_,

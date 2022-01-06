@@ -26,4 +26,9 @@ class PrescricaoA extends Model
     {
         return $this->belongsTo(Empresa::class, 'empresa_id', 'id');
     }
+
+    public function pils()
+    {
+        return $this->belongsToMany(PlanilhaPil::class, 'prescricoes_a_pil', 'prescricao_id','pil_id');
+    }
 }

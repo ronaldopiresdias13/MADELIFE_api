@@ -14,6 +14,8 @@ class GrupoAResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $data= parent::toArray($request);
+        $data['prescricoes']=$this->prescricoes()->get();
+        return $data;
     }
 }

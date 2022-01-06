@@ -57,6 +57,8 @@ class GrupoAController extends Controller
         $prescricao = new GrupoPrescricaoA();
         $prescricao->fill($data)->save();
 
+        $prescricao->prescricoes()->Sync($data['prescricoes']);
+
 
         return response()->json(['status'=>true,'grupo'=>$prescricao]);
     }
@@ -69,6 +71,7 @@ class GrupoAController extends Controller
 
         $prescricao = GrupoPrescricaoA::where('id','=',$data['grupo_id'])->where('empresa_id','=',$empresa_id)->first();
         $prescricao->fill($data)->save();
+        $prescricao->prescricoes()->Sync($data['prescricoes']);
 
         return response()->json(['status'=>true]);
     }
@@ -79,9 +82,12 @@ class GrupoAController extends Controller
         
         $empresa_id = $user->pessoa->profissional->empresa_id;
         $prescricao = GrupoPrescricaoA::where('id','=',$id)->where('empresa_id','=',$empresa_id)->first();
+        $prescricoes = PrescricaoA::where('empresa_id','=',$empresa_id)->orderBy('nome','asc')->get();
        
         return response()->json([
             'grupo' => GrupoAResource::make($prescricao),
+            'prescricoes' => PrescricaoAResource::collection($prescricoes),
+
         ]);
     }
 

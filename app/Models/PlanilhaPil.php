@@ -51,7 +51,7 @@ class PlanilhaPil extends Model
 
     public function prescricoes_a()
     {
-        return $this->belongsToMany(Cuidado::class, 'prescricoes_a_pil', 'pil_id', 'cuidado_id');
+        return $this->belongsToMany(PrescricaoA::class, 'prescricoes_a_pil', 'pil_id', 'prescricao_id');
     }
 
     public function prescricoes_b()

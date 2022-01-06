@@ -34,6 +34,7 @@ class GrupoPrescricaoARequest extends FormRequest
             case 'store_grupo_a':
                 return [
                     'nome' => 'required',
+                    'prescricoes' => 'required|array',
                     // 'descricao' => 'required',
                     // 'referencias' => 'sometimes',
                 ];
@@ -41,6 +42,7 @@ class GrupoPrescricaoARequest extends FormRequest
             case 'update_grupo_a':
                 return [
                     'nome' => 'required',
+                    'prescricoes' => 'required|array',
                     // 'descricao' => 'required',
                     'grupo_id' => 'required',
                     // 'referencias' => 'sometimes',

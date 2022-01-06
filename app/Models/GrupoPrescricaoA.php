@@ -17,9 +17,9 @@ class GrupoPrescricaoA extends Model
         'nome','empresa_id'
     ];
 
-    public function grupos()
+    public function prescricoes()
     {
-        return $this->belongsToMany(GrupoPrescricaoA::class, 'grupos_prescricoes_a','grupo_id', 'prescricao_id');
+        return $this->belongsToMany(PrescricaoA::class, 'grupos_prescricoes_a','grupo_id', 'prescricao_id');
     }
 
     public function empresa()
