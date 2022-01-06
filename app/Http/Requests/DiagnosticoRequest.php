@@ -36,7 +36,7 @@ class DiagnosticoRequest extends FormRequest
             case 'store_diagnostico':
                 return [
                     'nome' => 'required',
-                    'codigo' => 'required',
+                    'codigo' => 'sometimes',
                     // 'descricao' => 'required',
                     // 'referencias' => 'sometimes',
                 ];
@@ -44,7 +44,7 @@ class DiagnosticoRequest extends FormRequest
             case 'update_diagnostico':
                 return [
                     'nome' => 'required',
-                    'codigo' => 'required',
+                    'codigo' => 'sometimes',
                     // 'descricao' => 'required',
                     'diagnostico_id' => 'required',
                     // 'referencias' => 'sometimes',

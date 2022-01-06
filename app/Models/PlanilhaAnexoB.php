@@ -15,8 +15,15 @@ class PlanilhaAnexoB extends Model
 
     protected $fillable = [
         'empresa_id', 'paciente_id', 
-        'data_avaliacao'
+        'data_avaliacao',
+        'cpatient_id'
+
     ];
+
+    public function cpaciente()
+    {
+        return $this->belongsTo(ClientPatient::class, 'cpatient_id', 'id');
+    }
 
     public function paciente()
     {

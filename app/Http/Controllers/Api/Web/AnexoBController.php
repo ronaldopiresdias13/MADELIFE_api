@@ -7,6 +7,7 @@ use App\Http\Requests\AnexoBRequest;
 use App\Http\Resources\AnexoBEditResource;
 use App\Http\Resources\AnexoBResource;
 use App\Models\AnexoBInformacoes;
+use App\Models\ClientPatient;
 use App\Models\OpcoesAnexoB;
 use App\Models\Paciente;
 use App\Models\PlanilhaAnexoB;
@@ -31,9 +32,17 @@ class AnexoBController extends Controller
             $anexoas = $anexoas->where('created_at', '<=', $request->fim . ' 23:59:00');
         }
         if ($request->paciente != null && Str::length($request->paciente) > 0) {
-            $anexoas = $anexoas->whereHas('paciente', function ($q) use ($request) {
-                $q->whereHas('pessoa', function ($q2) use ($request) {
-                    $q2->whereRaw('lower(nome) LIKE lower(?)', ['%' . $request->paciente . '%']);
+            $anexoas = $anexoas->where(function($q3)use ($request){
+                $q3->where(function($q4)use ($request){
+                    $q4->whereHas('paciente', function ($q) use ($request) {
+                        $q->whereHas('pessoa', function ($q2) use ($request) {
+                            $q2->whereRaw('lower(nome) LIKE lower(?)', ['%' . $request->paciente . '%']);
+                        });
+                    });
+                })->orWhere(function($q5)use ($request){
+                    $q5->whereHas('cpaciente', function ($q) use ($request) {
+                        $q->whereRaw('lower(nome) LIKE lower(?)', ['%' . $request->paciente . '%']);
+                    });
                 });
             });
         }
@@ -63,9 +72,11 @@ class AnexoBController extends Controller
         ')->where('pacientes.empresa_id', '=', $empresa_id)
             ->join(DB::raw('pessoas as p'), 'p.id', '=', 'pacientes.pessoa_id')
             ->join(DB::raw('responsaveis as r'), 'r.id', '=', 'pacientes.responsavel_id')
-            ->join(DB::raw('pessoas as pr'), 'r.pessoa_id', '=', 'pr.id')->with(['pessoa.enderecos.cidade','responsavel.pessoa.telefones'])->get();
+            ->join(DB::raw('pessoas as pr'), 'r.pessoa_id', '=', 'pr.id')->with(['pessoa.enderecos.cidade','responsavel.pessoa.telefones'])->orderBy('pr.nome')->get();
 
-        return response()->json(['pacientes' => $pacientes]);
+        $clients_patients = ClientPatient::where('empresa_id', '=', $empresa_id)->orderBy('nome')->get();
+
+        return response()->json(['clients_patients'=>$clients_patients,'pacientes' => $pacientes]);
     }
 
     public function store_anexob(AnexoBRequest $request)
@@ -74,17 +85,35 @@ class AnexoBController extends Controller
         $data = $request->validated();
         $empresa_id = $user->pessoa->profissional->empresa_id;
 
-        $nead_check = PlanilhaAnexoB::where('empresa_id','=',$empresa_id)->where('paciente_id','=',$data['paciente_id'])->first();
-        if($nead_check!=null){
-            return response()->json(['status'=>false, 'message'=>'Esse paciente já possui um Anexo B cadastrado']);
-        }
+        if(isset($data['paciente']['paciente_id'])){
 
-        $anexoa = new PlanilhaAnexoB();
-        $anexoa->fill([
-            'empresa_id' => $empresa_id,
-            'paciente_id' => $data['paciente_id'],
-            'data_avaliacao' => Carbon::now()->format('Y-m-d H:i:s'),
-        ])->save();
+            $nead_check = PlanilhaAnexoB::where('empresa_id','=',$empresa_id)->where('paciente_id','=',$data['paciente']['paciente_id'])->first();
+            if($nead_check!=null){
+                return response()->json(['status'=>false, 'message'=>'Esse paciente já possui um Anexo B cadastrado']);
+            }
+
+            $anexoa = new PlanilhaAnexoB();
+            $anexoa->fill([
+                'empresa_id' => $empresa_id,
+                'paciente_id'=>$data['paciente']['paciente_id'],
+                'cpatient_id'=>null,
+                'data_avaliacao' => Carbon::now()->format('Y-m-d H:i:s'),
+            ])->save();
+        }
+        else{
+            $nead_check = PlanilhaAnexoB::where('empresa_id','=',$empresa_id)->where('cpatient_id','=',$data['paciente']['id'])->first();
+            if($nead_check!=null){
+                return response()->json(['status'=>false, 'message'=>'Esse paciente já possui um Anexo B cadastrado']);
+            }
+
+            $anexoa = new PlanilhaAnexoB();
+            $anexoa->fill([
+                'empresa_id' => $empresa_id,
+                'cpatient_id'=>$data['paciente']['id'],
+                'paciente_id'=>null,
+                'data_avaliacao' => Carbon::now()->format('Y-m-d H:i:s'),
+            ])->save();
+        }
 
         foreach ($data['dados'] as $key => $g1) {
             if(isset($g1['descricao2'])){
@@ -157,20 +186,24 @@ class AnexoBController extends Controller
     public function getAnexoBEdit(Request $request,$id){
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-        $pacientes = Paciente::selectRaw('
+        $pacientes = Paciente::selectRaw('pacientes.id as id,pacientes.pessoa_id as pessoa_id,
         pacientes.id as paciente_id, pacientes.pessoa_id as pessoa_paciente_id,p.nome as paciente_nome, 
         pacientes.sexo as paciente_sexo, r.id as responsavel_id, pr.nome as responsavel_nome, r.parentesco,
         r.pessoa_id as pessoa_responsavel_id
         ')->where('pacientes.empresa_id','=',$empresa_id)
         ->join(DB::raw('pessoas as p'),'p.id','=','pacientes.pessoa_id')
         ->join(DB::raw('responsaveis as r'),'r.id','=','pacientes.responsavel_id')
-        ->join(DB::raw('pessoas as pr'),'r.pessoa_id','=','pr.id')->get();
+        ->join(DB::raw('pessoas as pr'),'r.pessoa_id','=','pr.id')->with(['pessoa.enderecos.cidade','responsavel.pessoa.telefones'])->orderBy('pr.nome')->get();
+
+        $clients_patients = ClientPatient::where('empresa_id', '=', $empresa_id)->get();
 
         $anexoa = PlanilhaAnexoB::find($id);
         // $cuidados = Cuidado::where('ativo','=',1)->where('empresa_id','=',$empresa_id)->orderBy('descricao')->get();
 
         return response()->json([
             'anexob'=>AnexoBEditResource::make($anexoa),
+            'clients_patients'=>$clients_patients,
+
            'pacientes'=>$pacientes]);
     }
 
@@ -181,16 +214,33 @@ class AnexoBController extends Controller
         $empresa_id = $user->pessoa->profissional->empresa_id;
         $anexoa = PlanilhaAnexoB::find($data['anexo_b_id']);
 
-        $nead_check = PlanilhaAnexoB::where('empresa_id','=',$empresa_id)->where('paciente_id','=',$data['paciente_id'])->first();
-        if($nead_check!=null && $nead_check->id!=$anexoa->id){
-            return response()->json(['status'=>false, 'message'=>'Esse paciente já possui um Anexo B cadastrado']);
-        }
+        if(isset($data['paciente']['paciente_id'])){
 
-        $anexoa->fill([
-            'empresa_id' => $empresa_id,
-            'paciente_id' => $data['paciente_id'],
-            'data_avaliacao' => Carbon::now()->format('Y-m-d H:i:s'),
-        ])->save();
+            $nead_check = PlanilhaAnexoB::where('empresa_id','=',$empresa_id)->where('paciente_id','=',$data['paciente']['paciente_id'])->first();
+            if($nead_check!=null && $nead_check->id!=$anexoa->id){
+                return response()->json(['status'=>false, 'message'=>'Esse paciente já possui um Anexo B cadastrado']);
+            }
+
+            $anexoa->fill([
+                'empresa_id' => $empresa_id,
+                'paciente_id'=>$data['paciente']['paciente_id'],
+                'cpatient_id'=>null,
+                'data_avaliacao' => Carbon::now()->format('Y-m-d H:i:s'),
+            ])->save();
+        }
+        else{
+            $nead_check = PlanilhaAnexoB::where('empresa_id','=',$empresa_id)->where('cpatient_id','=',$data['paciente']['id'])->first();
+            if($nead_check!=null && $nead_check->id!=$anexoa->id){
+                return response()->json(['status'=>false, 'message'=>'Esse paciente já possui um Anexo B cadastrado']);
+            }
+
+            $anexoa->fill([
+                'empresa_id' => $empresa_id,
+                'cpatient_id'=>$data['paciente']['id'],
+                'paciente_id'=>null,
+                'data_avaliacao' => Carbon::now()->format('Y-m-d H:i:s'),
+            ])->save();
+        }
 
         $anexoa->opcoes()->delete();
         $anexoa->informacoes()->delete();

@@ -10,6 +10,7 @@ use App\Http\Resources\DiagnosticoResource;
 use App\Http\Resources\NeadResource;
 use App\Http\Resources\PlanilhaAbmidResource;
 use App\Http\Resources\PlanilhaPilResource;
+use App\Models\ClientPatient;
 use App\Models\Cuidado;
 use App\Models\DiagnosticoPil;
 use App\Models\HorarioMedicamentoPil;
@@ -41,9 +42,18 @@ class PilController extends Controller
             $pils = $pils->where('created_at', '<=', $request->fim . ' 23:59:00');
         }
         if ($request->paciente != null && Str::length($request->paciente) > 0) {
-            $pils = $pils->whereHas('paciente', function ($q) use ($request) {
-                $q->whereHas('pessoa', function ($q2) use ($request) {
-                    $q2->whereRaw('lower(nome) LIKE lower(?)', ['%' . $request->paciente . '%']);
+
+            $pils = $pils->where(function($q3)use ($request){
+                $q3->where(function($q4)use ($request){
+                    $q4->whereHas('paciente', function ($q) use ($request) {
+                        $q->whereHas('pessoa', function ($q2) use ($request) {
+                            $q2->whereRaw('lower(nome) LIKE lower(?)', ['%' . $request->paciente . '%']);
+                        });
+                    });
+                })->orWhere(function($q5)use ($request){
+                    $q5->whereHas('cpaciente', function ($q) use ($request) {
+                        $q->whereRaw('lower(nome) LIKE lower(?)', ['%' . $request->paciente . '%']);
+                    });
                 });
             });
         }
@@ -77,7 +87,10 @@ class PilController extends Controller
         ')->where('pacientes.empresa_id', '=', $empresa_id)
             ->join(DB::raw('pessoas as p'), 'p.id', '=', 'pacientes.pessoa_id')
             ->join(DB::raw('responsaveis as r'), 'r.id', '=', 'pacientes.responsavel_id')
-            ->join(DB::raw('pessoas as pr'), 'r.pessoa_id', '=', 'pr.id')->with(['pessoa.enderecos.cidade','responsavel.pessoa.telefones'])->get();
+            ->join(DB::raw('pessoas as pr'), 'r.pessoa_id', '=', 'pr.id')->with(['pessoa.enderecos.cidade','responsavel.pessoa.telefones'])->orderBy('pr.nome')->get();
+
+
+        $clients_patients = ClientPatient::where('empresa_id', '=', $empresa_id)->orderBy('nome')->get();
 
         $diagnosticos_principais = DiagnosticoPil::where('flag', '=', 'Primário')->orderBy('nome', 'asc')->get();
 
@@ -85,7 +98,7 @@ class PilController extends Controller
 
         // $cuidados = Cuidado::where('ativo','=',1)->where('empresa_id','=',$empresa_id)->orderBy('descricao')->get();
 
-        return response()->json(['medicamentos' => [], 'cuidados' => [], 'pacientes' => $pacientes, 'diagnosticos_principais' => $diagnosticos_principais, 'diagnosticos_secundarios' => $diagnosticos_secundarios]);
+        return response()->json(['medicamentos' => [], 'cuidados' => [], 'pacientes' => $pacientes, 'diagnosticos_principais' => $diagnosticos_principais, 'diagnosticos_secundarios' => $diagnosticos_secundarios,'clients_patients'=>$clients_patients]);
     }
 
     public function getPil(Request $request, $id)
@@ -99,7 +112,9 @@ class PilController extends Controller
         ')->where('pacientes.empresa_id', '=', $empresa_id)
             ->join(DB::raw('pessoas as p'), 'p.id', '=', 'pacientes.pessoa_id')
             ->join(DB::raw('responsaveis as r'), 'r.id', '=', 'pacientes.responsavel_id')
-            ->join(DB::raw('pessoas as pr'), 'r.pessoa_id', '=', 'pr.id')->with(['pessoa.enderecos.cidade','responsavel.pessoa.telefones'])->get();
+            ->join(DB::raw('pessoas as pr'), 'r.pessoa_id', '=', 'pr.id')->with(['pessoa.enderecos.cidade','responsavel.pessoa.telefones'])->orderBy('pr.nome')->get();
+
+        $clients_patients = ClientPatient::where('empresa_id', '=', $empresa_id)->get();
 
         $diagnosticos_principais = DiagnosticoPil::where('flag', '=', 'Primário')->orderBy('nome', 'asc')->get();
 
@@ -107,15 +122,19 @@ class PilController extends Controller
 
         $pil = PlanilhaPil::where('id', '=', $id)->where('empresa_id', '=', $empresa_id)->first();
         // $cuidados = Cuidado::where('ativo','=',1)->where('empresa_id','=',$empresa_id)->orderBy('descricao')->get();
-        $paciente_selecionado = Paciente::selectRaw('pacientes.id as id,pacientes.pessoa_id as pessoa_id,
-        pacientes.id as paciente_id, pacientes.pessoa_id as pessoa_paciente_id,p.nome as paciente_nome, 
-        pacientes.sexo as paciente_sexo, r.id as responsavel_id, pr.nome as responsavel_nome, r.parentesco,
-        r.pessoa_id as pessoa_responsavel_id
-        ')->where('pacientes.empresa_id', '=', $empresa_id)
-            ->join(DB::raw('pessoas as p'), 'p.id', '=', 'pacientes.pessoa_id')
-            ->join(DB::raw('responsaveis as r'), 'r.id', '=', 'pacientes.responsavel_id')
-            ->join(DB::raw('pessoas as pr'), 'r.pessoa_id', '=', 'pr.id')->where('pacientes.id', '=', $pil->paciente_id)->with(['pessoa.enderecos.cidade','responsavel.pessoa.telefones'])->first();
-
+        if($pil->paciente_id!=null){
+            $paciente_selecionado = Paciente::selectRaw('pacientes.id as id,pacientes.pessoa_id as pessoa_id,
+            pacientes.id as paciente_id, pacientes.pessoa_id as pessoa_paciente_id,p.nome as paciente_nome, 
+            pacientes.sexo as paciente_sexo, r.id as responsavel_id, pr.nome as responsavel_nome, r.parentesco,
+            r.pessoa_id as pessoa_responsavel_id
+            ')->where('pacientes.empresa_id', '=', $empresa_id)
+                ->join(DB::raw('pessoas as p'), 'p.id', '=', 'pacientes.pessoa_id')
+                ->join(DB::raw('responsaveis as r'), 'r.id', '=', 'pacientes.responsavel_id')
+                ->join(DB::raw('pessoas as pr'), 'r.pessoa_id', '=', 'pr.id')->where('pacientes.id', '=', $pil->paciente_id)->with(['pessoa.enderecos.cidade','responsavel.pessoa.telefones'])->first();
+        }
+        else{
+            $paciente_selecionado = ClientPatient::where('id','=', $pil->cpatient_id) ->first();
+        }
         $prescricoes_a = $pil->prescricoes_a()->get();
 
         $prescricoes_b = [];
@@ -141,10 +160,16 @@ class PilController extends Controller
             array_push($medicamentos_, $medicamento);
         }
 
-        $data_nead = Nead::where('empresa_id', '=', $empresa_id)->where('paciente_id', '=', $pil->paciente_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
-        $data_abmid = PlanilhaAbmid::where('empresa_id', '=', $empresa_id)->where('paciente_id', '=', $pil->paciente_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
-        $data_anexoa = PlanilhaAnexoA::where('empresa_id', '=', $empresa_id)->where('paciente_id', '=', $pil->paciente_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
-
+        if($pil->paciente_id!=null){
+            $data_nead = Nead::where('empresa_id', '=', $empresa_id)->where('paciente_id', '=', $pil->paciente_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
+            $data_abmid = PlanilhaAbmid::where('empresa_id', '=', $empresa_id)->where('paciente_id', '=', $pil->paciente_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
+            $data_anexoa = PlanilhaAnexoA::where('empresa_id', '=', $empresa_id)->where('paciente_id', '=', $pil->paciente_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
+        }
+        else{
+            $data_nead = Nead::where('empresa_id', '=', $empresa_id)->where('cpatient_id', '=', $pil->cpatient_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
+            $data_abmid = PlanilhaAbmid::where('empresa_id', '=', $empresa_id)->where('cpatient_id', '=', $pil->cpatient_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
+            $data_anexoa = PlanilhaAnexoA::where('empresa_id', '=', $empresa_id)->where('cpatient_id', '=', $pil->cpatient_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
+        }
 
 
         return response()->json([
@@ -154,7 +179,7 @@ class PilController extends Controller
             'prescricoes_b' => $prescricoes_b,
             'medicamentos_' => $medicamentos_,
             'data_nead' => $data_nead == null ? null : NeadResource::make($data_nead), 'data_abmid' => $data_abmid == null ? null : PlanilhaAbmidResource::make($data_abmid), 'data_anexoa' => $data_anexoa == null ? null : AnexoAResource::make($data_anexoa),
-
+            'clients_patients'=>$clients_patients,
             'medicamentos' => [], 'cuidados' => [], 'pacientes' => $pacientes, 'diagnosticos_principais' => $diagnosticos_principais, 'diagnosticos_secundarios' => $diagnosticos_secundarios
         ]);
     }
@@ -186,24 +211,45 @@ class PilController extends Controller
         $user = $request->user();
         $data = $request->validated();
         $empresa_id = $user->pessoa->profissional->empresa_id;
+        if(isset($data['paciente']['paciente_id'])){
+            $nead_check = PlanilhaPil::where('empresa_id','=',$empresa_id)->where('paciente_id','=',$data['paciente']['paciente_id'])->first();
+            if($nead_check!=null ){
+                return response()->json(['status'=>false, 'message'=>'Esse paciente já possui uma PIL cadastrada']);
+            }
 
-        $nead_check = PlanilhaPil::where('empresa_id','=',$empresa_id)->where('paciente_id','=',$data['paciente']['paciente_id'])->first();
-        if($nead_check!=null ){
-            return response()->json(['status'=>false, 'message'=>'Esse paciente já possui uma PIL cadastrada']);
+            $pil = new PlanilhaPil();
+            $pil->fill([
+                'diagnostico_primario_id' => $data['diagnosticos_principais'][0]['id'],
+                'empresa_id' => $empresa_id,
+                'paciente_id' => $data['paciente']['paciente_id'],
+                'revisao' => $data['revisao'],
+                'cpatient_id'=>null,
+                'prognostico' => $data['prognostico'],
+                'avaliacao_prescricoes' => $data['avaliacao_prescricoes'],
+                'justificativa_revisao' => $data['justificativa_revisao'],
+                'evolucao_base' => $data['evolucao_base'],
+            ])->save();
         }
+        else{
+            $nead_check = PlanilhaPil::where('empresa_id','=',$empresa_id)->where('cpatient_id','=',$data['paciente']['id'])->first();
+            if($nead_check!=null ){
+                return response()->json(['status'=>false, 'message'=>'Esse paciente já possui uma PIL cadastrada']);
+            }
 
-        $pil = new PlanilhaPil();
-        $pil->fill([
-            'diagnostico_primario_id' => $data['diagnosticos_principais'][0]['id'],
-            'empresa_id' => $empresa_id,
-            'paciente_id' => $data['paciente']['paciente_id'],
-            'revisao' => $data['revisao'],
+            $pil = new PlanilhaPil();
+            $pil->fill([
+                'diagnostico_primario_id' => $data['diagnosticos_principais'][0]['id'],
+                'empresa_id' => $empresa_id,
+                'cpatient_id' => $data['paciente']['id'],
+                'revisao' => $data['revisao'],
+                'paciente_id'=>null,
 
-            'prognostico' => $data['prognostico'],
-            'avaliacao_prescricoes' => $data['avaliacao_prescricoes'],
-            'justificativa_revisao' => $data['justificativa_revisao'],
-            'evolucao_base' => $data['evolucao_base'],
-        ])->save();
+                'prognostico' => $data['prognostico'],
+                'avaliacao_prescricoes' => $data['avaliacao_prescricoes'],
+                'justificativa_revisao' => $data['justificativa_revisao'],
+                'evolucao_base' => $data['evolucao_base'],
+            ])->save();
+        }
 
         $dias_secundarios = [];
         foreach ($data['diagnosticos_secundarios'] as $diag_secundario) {
@@ -273,22 +319,46 @@ class PilController extends Controller
 
         $pil = PlanilhaPil::where('id', '=', $data['pil_id'])->where('empresa_id', '=', $empresa_id)->first();
 
-        $nead_check = PlanilhaPil::where('empresa_id','=',$empresa_id)->where('paciente_id','=',$data['paciente']['paciente_id'])->first();
-        if($nead_check!=null && $nead_check->id!=$pil->id){
-            return response()->json(['status'=>false, 'message'=>'Esse paciente já possui uma PIL cadastrada']);
-        }
-        
-        $pil->fill([
-            'diagnostico_primario_id' => $data['diagnosticos_principais'][0]['id'],
-            'empresa_id' => $empresa_id,
-            'paciente_id' => $data['paciente']['paciente_id'],
-            'revisao' => $data['revisao'],
+        if(isset($data['paciente']['paciente_id'])){
 
-            'prognostico' => $data['prognostico'],
-            'avaliacao_prescricoes' => $data['avaliacao_prescricoes'],
-            'justificativa_revisao' => $data['justificativa_revisao'],
-            'evolucao_base' => $data['evolucao_base'],
-        ])->save();
+            $nead_check = PlanilhaPil::where('empresa_id','=',$empresa_id)->where('paciente_id','=',$data['paciente']['paciente_id'])->first();
+            if($nead_check!=null && $nead_check->id!=$pil->id){
+                return response()->json(['status'=>false, 'message'=>'Esse paciente já possui uma PIL cadastrada']);
+            }
+            
+            $pil->fill([
+                'diagnostico_primario_id' => $data['diagnosticos_principais'][0]['id'],
+                'empresa_id' => $empresa_id,
+                'paciente_id' => $data['paciente']['paciente_id'],
+                'revisao' => $data['revisao'],
+                'cpatient_id'=>null,
+
+                'prognostico' => $data['prognostico'],
+                'avaliacao_prescricoes' => $data['avaliacao_prescricoes'],
+                'justificativa_revisao' => $data['justificativa_revisao'],
+                'evolucao_base' => $data['evolucao_base'],
+            ])->save();
+
+        }
+        else{
+            $nead_check = PlanilhaPil::where('empresa_id','=',$empresa_id)->where('cpatient_id','=',$data['paciente']['id'])->first();
+            if($nead_check!=null && $nead_check->id!=$pil->id){
+                return response()->json(['status'=>false, 'message'=>'Esse paciente já possui uma PIL cadastrada']);
+            }
+            
+            $pil->fill([
+                'diagnostico_primario_id' => $data['diagnosticos_principais'][0]['id'],
+                'empresa_id' => $empresa_id,
+                'cpatient_id' => $data['paciente']['id'],
+                'revisao' => $data['revisao'],
+                'paciente_id'=>null,
+
+                'prognostico' => $data['prognostico'],
+                'avaliacao_prescricoes' => $data['avaliacao_prescricoes'],
+                'justificativa_revisao' => $data['justificativa_revisao'],
+                'evolucao_base' => $data['evolucao_base'],
+            ])->save();
+        }
 
         $dias_secundarios = [];
         foreach ($data['diagnosticos_secundarios'] as $diag_secundario) {
@@ -372,6 +442,10 @@ class PilController extends Controller
         $user = request()->user();
 
         $empresa_id = $user->pessoa->profissional->empresa_id;
+        $paciente=Paciente::where('id','=',$paciente_id)->first();
+        $client_paciente=ClientPatient::where('id','=',$paciente_id)->first();
+
+        if($paciente!=null){
         if ($type == 'pil') {
             $data = Nead::where('empresa_id', '=', $empresa_id)->where('paciente_id', '=', $paciente_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
             if ($data == null) {
@@ -438,5 +512,77 @@ class PilController extends Controller
         } else {
             return response()->json(['data' => null]);
         }
+    }
+    else if($client_paciente!=null){
+        if ($type == 'pil') {
+            $data = Nead::where('empresa_id', '=', $empresa_id)->where('cpatient_id', '=', $paciente_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
+            if ($data == null) {
+                $data = PlanilhaAbmid::where('empresa_id', '=', $empresa_id)->where('cpatient_id', '=', $paciente_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
+            }
+            if ($data == null) {
+                $data = PlanilhaAnexoA::where('empresa_id', '=', $empresa_id)->where('cpatient_id', '=', $paciente_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
+            }
+
+            $data_nead = Nead::where('empresa_id', '=', $empresa_id)->where('cpatient_id', '=', $paciente_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
+            $data_abmid = PlanilhaAbmid::where('empresa_id', '=', $empresa_id)->where('cpatient_id', '=', $paciente_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
+            $data_anexoa = PlanilhaAnexoA::where('empresa_id', '=', $empresa_id)->where('cpatient_id', '=', $paciente_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
+
+
+            if ($data == null) {
+                return response()->json(['data' => null, 
+                'data_nead' => $data_nead == null ? null : NeadResource::make($data_nead), 'data_abmid' => $data_abmid == null ? null : PlanilhaAbmidResource::make($data_abmid), 'data_anexoa' => $data_anexoa == null ? null : AnexoAResource::make($data_anexoa)
+            ]);
+            } else {
+                return response()->json(['data' => $data, 'data_nead' => $data_nead == null ? null : NeadResource::make($data_nead), 'data_abmid' => $data_abmid == null ? null : PlanilhaAbmidResource::make($data_abmid), 'data_anexoa' => $data_anexoa == null ? null : AnexoAResource::make($data_anexoa)]);
+            }
+        } else if ($type == 'nead') {
+            $data = PlanilhaPil::where('empresa_id', '=', $empresa_id)->where('cpatient_id', '=', $paciente_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
+            if ($data == null) {
+                $data = PlanilhaAbmid::where('empresa_id', '=', $empresa_id)->where('cpatient_id', '=', $paciente_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
+            }
+            if ($data == null) {
+                $data = PlanilhaAnexoA::where('empresa_id', '=', $empresa_id)->where('cpatient_id', '=', $paciente_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
+            }
+
+            if ($data == null) {
+                return response()->json(['data' => null]);
+            } else {
+                return response()->json(['data' => $data]);
+            }
+        } else if ($type == 'abmid') {
+            $data = PlanilhaPil::where('empresa_id', '=', $empresa_id)->where('cpatient_id', '=', $paciente_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
+            if ($data == null) {
+                $data = Nead::where('empresa_id', '=', $empresa_id)->where('cpatient_id', '=', $paciente_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
+            }
+            if ($data == null) {
+                $data = PlanilhaAnexoA::where('empresa_id', '=', $empresa_id)->where('cpatient_id', '=', $paciente_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
+            }
+
+            if ($data == null) {
+                return response()->json(['data' => null]);
+            } else {
+                return response()->json(['data' => $data]);
+            }
+        } else if ($type == 'anexoa') {
+            $data = PlanilhaPil::where('empresa_id', '=', $empresa_id)->where('cpatient_id', '=', $paciente_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
+            if ($data == null) {
+                $data = Nead::where('empresa_id', '=', $empresa_id)->where('cpatient_id', '=', $paciente_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
+            }
+            if ($data == null) {
+                $data = PlanilhaAbmid::where('empresa_id', '=', $empresa_id)->where('cpatient_id', '=', $paciente_id)->with(['diagnosticos_principais', 'diagnosticos_secundarios'])->first();
+            }
+
+            if ($data == null) {
+                return response()->json(['data' => null]);
+            } else {
+                return response()->json(['data' => $data]);
+            }
+        } else {
+            return response()->json(['data' => null]);
+        }
+    }
+    else {
+        return response()->json(['data' => null]);
+    }
     }
 }

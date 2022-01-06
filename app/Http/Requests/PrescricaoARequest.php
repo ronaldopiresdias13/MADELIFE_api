@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AbmidRequest extends FormRequest
+class PrescricaoARequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -16,6 +16,13 @@ class AbmidRequest extends FormRequest
         return true;
     }
 
+    public function messages()
+    {
+        return [
+            'nome.required' => 'O campo Nome é obrigatório',
+        ];
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -24,23 +31,19 @@ class AbmidRequest extends FormRequest
     public function rules()
     {
         switch (strtolower($this->route()->getActionMethod())):
-            case 'store_abmid':
+            case 'store_prescricao_a':
                 return [
-                    'diagnosticos_principais' => 'required',
-                    'paciente' => 'required',
-                    'diagnostico_secundarios_id' => 'required',
-                    'classificacao' => 'required',
-                    'cuidados' => 'required',
+                    'nome' => 'required',
+                    // 'descricao' => 'required',
+                    // 'referencias' => 'sometimes',
                 ];
                 break;
-            case 'update_abmid':
+            case 'update_prescricao_a':
                 return [
-                    'diagnosticos_principais' => 'required',
-                    'paciente' => 'required',
-                    'diagnostico_secundarios_id' => 'required',
-                    'classificacao' => 'required',
-                    'cuidados' => 'required',
-                    'abmid_id' => 'required',
+                    'nome' => 'required',
+                    // 'descricao' => 'required',
+                    'prescricao_id' => 'required',
+                    // 'referencias' => 'sometimes',
                 ];
                 break;
             default:
