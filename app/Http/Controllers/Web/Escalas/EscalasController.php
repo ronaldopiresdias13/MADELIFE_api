@@ -225,7 +225,7 @@ class EscalasController extends Controller
         return DB::select(
             "SELECT e.id, ppr.nome AS prestador, ppac.nome AS paciente, s.descricao AS servico,
                 e.dataentrada, 
-                e.horaentrada, e.periodo, e.prestador_id, e.observacao
+                e.horaentrada, e.periodo, e.prestador_id, e.observacao, e.folga
                 FROM escalas AS e
                 INNER JOIN prestadores AS pr
                 ON pr.id = e.prestador_id

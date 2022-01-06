@@ -6,6 +6,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('web')->group(function () {
         Route::get('empresas', 'Api\EmpresasController@index');
         Route::prefix('Empresas')->group(function () {
+            Route::get('empresas', 'Web\Empresas\EmpresasController@index');
             Route::get('empresa/{empresa}', 'Web\Empresas\EmpresasController@show');
             Route::get('empresa', 'Web\Empresas\EmpresasController@show');
             Route::post('empresa', 'Web\Empresas\EmpresasController@store');

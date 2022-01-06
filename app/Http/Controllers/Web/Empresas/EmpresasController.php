@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Empresas;
 use App\Http\Controllers\Controller;
 use App\Models\Empresa;
 use App\Models\EmpresaDados;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -15,9 +16,31 @@ class EmpresasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $user = $request->user();
+        $result = Empresa::with('empresa_dado', 'clientes');
+        $result->withCount(['pacientes']);
+        $result->where('ativo', true);
+
+        if($request->razao)
+        {
+            $result->where('razao', 'like', '%' . $request->razao . '%');
+        };
+        if($request->cnpj)
+        {
+            $result->where('cnpj', 'like', '%' . $request->cnpj . '%');
+        };
+
+        $result = $result->paginate($request['per_page'] ? $request['per_page'] : 15);
+
+       
+
+        if (env("APP_ENV", 'production') == 'production') {
+            return $result->withPath(str_replace('http:', 'https:', $result->path()));
+        } else {
+            return $result;
+        }
     }
 
     /**
@@ -39,6 +62,8 @@ class EmpresasController extends Controller
                 'tiss_sequencialTransacao' => $request['tiss_sequencialTransacao'],
                 'CNES'                     => $request['CNES'],
                 'quantidadepaciente'       => $request['quantidadepaciente'],
+                'valorimplantacao'         => $request['valorimplantacao'],
+                'dataimplantacao'          => $request['dataimplantacao'],
                 // 'quantidadead'             => $request['quantidadead'],
                 // 'valorad'                  => $request['valorad'],
                 // 'quantidadeid'             => $request['quantidadeid'],
