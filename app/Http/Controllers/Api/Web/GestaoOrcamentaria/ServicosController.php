@@ -19,7 +19,8 @@ class ServicosController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $empresa_id = $user->pessoa->profissional->empresa_id;
+        $empresa_id = $user->pessoa->profissional ? $user->pessoa->profissional->empresa_id : $user->pessoa->cliente->empresa_id;
+        // return $empresa_id;
         return Servico::where('empresa_id', $empresa_id)
             ->where('ativo', true)
             ->orderBy('descricao')
