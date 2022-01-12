@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\App\v3_1_3;
 use App\Models\Escala;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EscalasController extends Controller
 {
@@ -46,28 +47,55 @@ class EscalasController extends Controller
                 }]);
             }
         ])
-            ->where('ativo', true)
-            ->where('prestador_id', $prestador->id)
-            ->where('dataentrada', $dataAtual)
+        ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
+            ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
+            ->join('homecares', 'homecares.orcamento_id', '=', 'orcamentos.id')
+            ->join('pacientes', 'homecares.paciente_id', '=', 'pacientes.id')
+            ->where('escalas.ativo', true)
+            ->where('escalas.prestador_id', $prestador->id)
+            ->where('escalas.dataentrada', $dataAtual)
             ->orWhere(function ($query) use ($prestador, $dataAtual) {
-                $query
-                    ->where('ativo', true)
-                    ->where('prestador_id', $prestador->id)
-                    ->where('datasaida', $dataAtual);
-            })
-            ->get([
-                'id',
-                'ordemservico_id',
-                'periodo',
-                'dataentrada',
-                'datasaida',
-                'horaentrada',
-                'horasaida',
-                'editavel',
-                'status'
-            ]);
+                        $query
+                            ->where('escalas.ativo', true)
+                            ->where('escalas.prestador_id', $prestador->id)
+                            ->where('escalas.datasaida', $dataAtual);
+                    })
+            ->select('escalas.id',
+            'escalas.ordemservico_id',
+            'escalas.periodo',
+            'escalas.dataentrada',
+            'escalas.datasaida',
+            'escalas.horaentrada',
+            'escalas.horasaida',
+            'escalas.folga',
+            'escalas.editavel',
+            'escalas.status', DB::raw("IF(exists(SELECT it.id FROM internacoes it WHERE it.paciente_id = pacientes.id AND escalas.dataentrada BETWEEN it.data_inicio  AND  if(it.data_final IS NULL OR it.data_final = '', CURDATE(), it.data_final) AND it.deleted_at IS null), 1, 0 ) AS internacao"))
+            ->orderBy('escalas.dataentrada')
+            ->get();
 
         return $escalas;
+        //     ->where('ativo', true)
+        //     ->where('prestador_id', $prestador->id)
+        //     ->where('dataentrada', $dataAtual)
+        //     ->orWhere(function ($query) use ($prestador, $dataAtual) {
+        //         $query
+        //             ->where('ativo', true)
+        //             ->where('prestador_id', $prestador->id)
+        //             ->where('datasaida', $dataAtual);
+        //     })
+        //     ->get([
+        //         'id',
+        //         'ordemservico_id',
+        //         'periodo',
+        //         'dataentrada',
+        //         'datasaida',
+        //         'horaentrada',
+        //         'horasaida',
+        //         'editavel',
+        //         'status'
+        //     ]);
+
+        // return $escalas;
     }
 
     /**
@@ -87,13 +115,13 @@ class EscalasController extends Controller
         // $escalas = Escala::with('ordemservico.orcamento.homecare.paciente.pessoa')
         $escalas = Escala::with([
             'pontos',
-            'ordemservico' => function ($query) {
+            'ordemservico' => function ($query){
                 $query->select('id', 'orcamento_id');
                 $query->with(['orcamento' => function ($query) {
                     $query->select('id');
                     $query->with(['homecare' => function ($query) {
                         $query->select('id', 'orcamento_id', 'paciente_id');
-                        $query->with(['paciente' => function ($query) {
+                        $query->with(['paciente' => function ($query){
                             $query->select('id', 'pessoa_id');
                             $query->with(['pessoa' => function ($query) {
                                 $query->select('id', 'nome');
@@ -101,36 +129,27 @@ class EscalasController extends Controller
                         }]);
                     }]);
                 }]);
-            }
+            },
         ])
-            ->where('ativo', true)
-            ->where('prestador_id', $prestador->id)
-            ->whereBetween('dataentrada', [$request->data_ini, $request->data_fim])
-            // ->where(
-            //     'datasaida',
-            //     '>=',
-            //     $request->data_fim
-            //     // $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-01'
-            // )
-            // ->where(
-            //     'dataentrada',
-            //     '<=',
-            //     $request->data_ini
-            //     // $hoje['year'] . '-' . ($hoje['mon'] < 10 ? '0' . $hoje['mon'] : $hoje['mon']) . '-' . $dias
-            // )
-            ->orderBy('dataentrada')
-            ->get([
-                'id',
-                'ordemservico_id',
-                'periodo',
-                'dataentrada',
-                'datasaida',
-                'horaentrada',
-                'horasaida',
-                'folga',
-                'editavel',
-                'status',
-            ]);
+            ->join('ordemservicos', 'ordemservicos.id', '=', 'escalas.ordemservico_id')
+            ->join('orcamentos', 'orcamentos.id', '=', 'ordemservicos.orcamento_id')
+            ->join('homecares', 'homecares.orcamento_id', '=', 'orcamentos.id')
+            ->join('pacientes', 'homecares.paciente_id', '=', 'pacientes.id')
+            ->where('escalas.ativo', true)
+            ->where('escalas.prestador_id', $prestador->id)
+            ->whereBetween('escalas.dataentrada', [$request->data_ini, $request->data_fim])
+            ->select('escalas.id',
+            'escalas.ordemservico_id',
+            'escalas.periodo',
+            'escalas.dataentrada',
+            'escalas.datasaida',
+            'escalas.horaentrada',
+            'escalas.horasaida',
+            'escalas.folga',
+            'escalas.editavel',
+            'escalas.status', DB::raw("IF(exists(SELECT it.id FROM internacoes it WHERE it.paciente_id = pacientes.id AND escalas.dataentrada BETWEEN it.data_inicio  AND  if(it.data_final IS NULL OR it.data_final = '', CURDATE(), it.data_final) AND it.deleted_at IS null), 1, 0 ) AS internacao"))
+            ->orderBy('escalas.dataentrada')
+            ->get();
 
         return $escalas;
     }
