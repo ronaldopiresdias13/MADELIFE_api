@@ -16,6 +16,7 @@ class ProductsController extends Controller
      */
     public function index()
     {
+        
         $products = DB::table('ml_products')
         ->join('ml_products_table_versions_prices', 'ml_products_table_versions_prices.products_id' ,'=', 'ml_products.id')
         ->get();
