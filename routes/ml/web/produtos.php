@@ -24,4 +24,5 @@ Route::put('produtos/{produto}', 'Api\ProdutosController@update');
 Route::delete('produtos/{produto}', 'Api\ProdutosController@destroy');
 
 
+
 Route::get('products', [ProductsController::class, 'index']);
