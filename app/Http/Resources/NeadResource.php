@@ -16,6 +16,8 @@ class NeadResource extends JsonResource
     {
         $data =  parent::toArray($request);
         $data['paciente']=$this->paciente()->with(['pessoa'])->first();
+        $data['cpaciente']=$this->cpaciente()->first();
+
         $data['diagnosticos_principais']=$this->diagnosticos_principais()->get();
         $data['diagnosticos_secundarios']=$this->diagnosticos_secundarios()->get();
 

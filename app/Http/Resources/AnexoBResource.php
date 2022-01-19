@@ -16,6 +16,7 @@ class AnexoBResource extends JsonResource
     {
         $data =  parent::toArray($request);
         $data['paciente']=$this->paciente()->with(['pessoa'])->first();
+        $data['cpaciente']=$this->cpaciente()->first();
 
         $data['opcoes']=$this->opcoes()->get();
 

@@ -27,7 +27,7 @@ class AnexoARequest extends FormRequest
             case 'store_anexoa':
                 return [
                     'diagnosticos_principais' => 'required',
-                    'paciente_id' => 'required',
+                    'paciente' => 'required',
                     'diagnostico_secundarios_id' => 'required',
                     'classificacao_coma_glasbow' => 'required',
                     'classificacao_braden' => 'required',
@@ -43,7 +43,7 @@ class AnexoARequest extends FormRequest
             case 'update_anexoa':
                 return [
                     'diagnosticos_principais' => 'required',
-                    'paciente_id' => 'required',
+                    'paciente' => 'required',
                     'diagnostico_secundarios_id' => 'required',
                     'classificacao_coma_glasbow' => 'required',
                     'classificacao_braden' => 'required',

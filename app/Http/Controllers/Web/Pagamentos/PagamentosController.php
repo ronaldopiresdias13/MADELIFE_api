@@ -66,13 +66,14 @@ class PagamentosController extends Controller
 
     public function filtroFluxoDeCaixa(Request $request)
     {
+        // return $request;
         $empresa_id = $request->user()->pessoa->profissional->empresa_id;
         // $empresa_id = 1;
         $pagamentos = Pagamento::with(['conta.pessoa'])
             ->where('ativo', true)
             ->where('status', true)
             ->where('empresa_id', $empresa_id)
-            ->where('contasbancaria_id', $request->contasbancaria)
+            ->where('contasbancaria_id', $request->contasbancaria_id)
             ->whereHas('conta', function (Builder $builder) {
                 $builder->where('ativo', true);
             });

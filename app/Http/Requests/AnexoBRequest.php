@@ -26,14 +26,14 @@ class AnexoBRequest extends FormRequest
         switch (strtolower($this->route()->getActionMethod())):
             case 'store_anexob':
                 return [
-                    'paciente_id' => 'required',
+                    'paciente' => 'required',
                     'dados' => 'required',
                     'informacoes_complementares' => 'required',
                 ];
                 break;
             case 'update_anexob':
                 return [
-                    'paciente_id' => 'required',
+                    'paciente' => 'required',
                     'dados' => 'required',
                     'informacoes_complementares' => 'required',
                     'anexo_b_id' => 'required',

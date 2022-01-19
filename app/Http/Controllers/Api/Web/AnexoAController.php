@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AnexoARequest;
 use App\Http\Resources\AnexoAEditResource;
 use App\Http\Resources\AnexoAResource;
+use App\Models\ClientPatient;
 use App\Models\DiagnosticoPil;
 use App\Models\EscalaBradenAnexoA;
 use App\Models\EscalaComaGlasgowAnexoA;
@@ -32,9 +33,17 @@ class AnexoAController extends Controller
             $anexoas = $anexoas->where('created_at', '<=', $request->fim . ' 23:59:00');
         }
         if ($request->paciente != null && Str::length($request->paciente) > 0) {
-            $anexoas = $anexoas->whereHas('paciente', function ($q) use ($request) {
-                $q->whereHas('pessoa', function ($q2) use ($request) {
-                    $q2->whereRaw('lower(nome) LIKE lower(?)', ['%' . $request->paciente . '%']);
+            $anexoas = $anexoas->where(function($q3)use ($request){
+                $q3->where(function($q4)use ($request){
+                    $q4->whereHas('paciente', function ($q) use ($request) {
+                        $q->whereHas('pessoa', function ($q2) use ($request) {
+                            $q2->whereRaw('lower(nome) LIKE lower(?)', ['%' . $request->paciente . '%']);
+                        });
+                    });
+                })->orWhere(function($q5)use ($request){
+                    $q5->whereHas('cpaciente', function ($q) use ($request) {
+                        $q->whereRaw('lower(nome) LIKE lower(?)', ['%' . $request->paciente . '%']);
+                    });
                 });
             });
         }
@@ -61,14 +70,25 @@ class AnexoAController extends Controller
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-        $pacientes = Paciente::selectRaw('
-        pacientes.id as paciente_id, pacientes.pessoa_id as pessoa_paciente_id,p.nome as paciente_nome, 
-        pacientes.sexo as paciente_sexo, r.id as responsavel_id, pr.nome as responsavel_nome, r.parentesco,
-        r.pessoa_id as pessoa_responsavel_id
-        ')->where('pacientes.empresa_id', '=', $empresa_id)
-            ->join(DB::raw('pessoas as p'), 'p.id', '=', 'pacientes.pessoa_id')
-            ->join(DB::raw('responsaveis as r'), 'r.id', '=', 'pacientes.responsavel_id')
-            ->join(DB::raw('pessoas as pr'), 'r.pessoa_id', '=', 'pr.id')->get();
+        // $pacientes = Paciente::selectRaw('
+        // pacientes.id as paciente_id, pacientes.pessoa_id as pessoa_paciente_id,p.nome as paciente_nome, 
+        // pacientes.sexo as paciente_sexo, r.id as responsavel_id, pr.nome as responsavel_nome, r.parentesco,
+        // r.pessoa_id as pessoa_responsavel_id
+        // ')->where('pacientes.empresa_id', '=', $empresa_id)
+        //     ->join(DB::raw('pessoas as p'), 'p.id', '=', 'pacientes.pessoa_id')
+        //     ->join(DB::raw('responsaveis as r'), 'r.id', '=', 'pacientes.responsavel_id')
+        //     ->join(DB::raw('pessoas as pr'), 'r.pessoa_id', '=', 'pr.id')->get();
+           
+            $pacientes = Paciente::selectRaw('pacientes.id as id,pacientes.pessoa_id as pessoa_id,
+            pacientes.id as paciente_id, pacientes.pessoa_id as pessoa_paciente_id,p.nome as paciente_nome, 
+            pacientes.sexo as paciente_sexo, r.id as responsavel_id, pr.nome as responsavel_nome, r.parentesco,
+            r.pessoa_id as pessoa_responsavel_id
+            ')->where('pacientes.empresa_id','=',$empresa_id)
+            ->join(DB::raw('pessoas as p'),'p.id','=','pacientes.pessoa_id')
+            ->join(DB::raw('responsaveis as r'),'r.id','=','pacientes.responsavel_id')
+            ->join(DB::raw('pessoas as pr'),'r.pessoa_id','=','pr.id')->with(['pessoa.enderecos.cidade','responsavel.pessoa.telefones'])->orderBy('pr.nome')->get();
+    
+        $clients_patients = ClientPatient::where('empresa_id', '=', $empresa_id)->orderBy('nome')->get();
 
         $diagnosticos_principais = DiagnosticoPil::where('flag', '=', 'Primário')->orderBy('nome', 'asc')->get();
 
@@ -76,7 +96,7 @@ class AnexoAController extends Controller
 
         // $cuidados = Cuidado::where('ativo','=',1)->where('empresa_id','=',$empresa_id)->orderBy('descricao')->get();
 
-        return response()->json(['pacientes' => $pacientes, 'diagnosticos_principais' => $diagnosticos_principais, 'diagnosticos_secundarios' => $diagnosticos_secundarios]);
+        return response()->json(['clients_patients'=>$clients_patients,'pacientes' => $pacientes, 'diagnosticos_principais' => $diagnosticos_principais, 'diagnosticos_secundarios' => $diagnosticos_secundarios]);
     }
 
     public function store_anexoa(AnexoARequest $request)
@@ -85,22 +105,45 @@ class AnexoAController extends Controller
         $data = $request->validated();
         $empresa_id = $user->pessoa->profissional->empresa_id;
 
-        $nead_check = PlanilhaAnexoA::where('empresa_id','=',$empresa_id)->where('paciente_id','=',$data['paciente_id'])->first();
-        if($nead_check!=null){
-            return response()->json(['status'=>false, 'message'=>'Esse paciente já possui um Anexo A cadastrado']);
-        }
+        if(isset($data['paciente']['paciente_id'])){
 
-        $anexoa = new PlanilhaAnexoA();
-        $anexoa->fill([
-            'diagnostico_principal_id'=>$data['diagnosticos_principais'][0]['id'],
-            'empresa_id' => $empresa_id,
-            'paciente_id' => $data['paciente_id'],
-            'classificacao_escala_braden' => $data['classificacao_braden']['pontos'],
-            'classificacao_coma_glasgow' => $data['classificacao_coma_glasbow']['pontos'],
-            'intensidade_dor' => $data['intensidade_dor'],
-            'diametros_pupilas' => $data['diametros_pupilas'],
-            'data_avaliacao' => Carbon::now()->format('Y-m-d H:i:s'),
-        ])->save();
+            $nead_check = PlanilhaAnexoA::where('empresa_id','=',$empresa_id)->where('paciente_id','=',$data['paciente']['paciente_id'])->first();
+            if($nead_check!=null){
+                return response()->json(['status'=>false, 'message'=>'Esse paciente já possui um Anexo A cadastrado']);
+            }
+
+            $anexoa = new PlanilhaAnexoA();
+            $anexoa->fill([
+                'diagnostico_principal_id'=>$data['diagnosticos_principais'][0]['id'],
+                'empresa_id' => $empresa_id,
+                'paciente_id'=>$data['paciente']['paciente_id'],
+                'cpatient_id'=>null,
+                'classificacao_escala_braden' => $data['classificacao_braden']['pontos'],
+                'classificacao_coma_glasgow' => $data['classificacao_coma_glasbow']['pontos'],
+                'intensidade_dor' => $data['intensidade_dor'],
+                'diametros_pupilas' => $data['diametros_pupilas'],
+                'data_avaliacao' => Carbon::now()->format('Y-m-d H:i:s'),
+            ])->save();
+        }
+        else{
+            $nead_check = PlanilhaAnexoA::where('empresa_id','=',$empresa_id)->where('cpatient_id','=',$data['paciente']['id'])->first();
+            if($nead_check!=null){
+                return response()->json(['status'=>false, 'message'=>'Esse paciente já possui um Anexo A cadastrado']);
+            }
+
+            $anexoa = new PlanilhaAnexoA();
+            $anexoa->fill([
+                'diagnostico_principal_id'=>$data['diagnosticos_principais'][0]['id'],
+                'empresa_id' => $empresa_id,
+                'cpatient_id'=>$data['paciente']['id'],
+                'paciente_id'=>null,
+                'classificacao_escala_braden' => $data['classificacao_braden']['pontos'],
+                'classificacao_coma_glasgow' => $data['classificacao_coma_glasbow']['pontos'],
+                'intensidade_dor' => $data['intensidade_dor'],
+                'diametros_pupilas' => $data['diametros_pupilas'],
+                'data_avaliacao' => Carbon::now()->format('Y-m-d H:i:s'),
+            ])->save();
+        }
 
         $diagnosticos_principais = [];
         foreach ($data['diagnosticos_principais'] as $diag_principal) {
@@ -171,7 +214,9 @@ class AnexoAController extends Controller
         ')->where('pacientes.empresa_id','=',$empresa_id)
         ->join(DB::raw('pessoas as p'),'p.id','=','pacientes.pessoa_id')
         ->join(DB::raw('responsaveis as r'),'r.id','=','pacientes.responsavel_id')
-        ->join(DB::raw('pessoas as pr'),'r.pessoa_id','=','pr.id')->with(['pessoa.enderecos.cidade','responsavel.pessoa.telefones'])->get();
+        ->join(DB::raw('pessoas as pr'),'r.pessoa_id','=','pr.id')->with(['pessoa.enderecos.cidade','responsavel.pessoa.telefones'])->orderBy('pr.nome')->get();
+
+        $clients_patients = ClientPatient::where('empresa_id', '=', $empresa_id)->get();
 
         $diagnosticos_principais = DiagnosticoPil::where('flag','=','Primário')->orderBy('nome','asc')->get();
 
@@ -182,6 +227,8 @@ class AnexoAController extends Controller
 
         return response()->json([
             'anexoa'=>AnexoAEditResource::make($anexoa),
+            'clients_patients'=>$clients_patients,
+
            'pacientes'=>$pacientes,'diagnosticos_principais'=>$diagnosticos_principais,'diagnosticos_secundarios'=>$diagnosticos_secundarios]);
     }
 
@@ -193,21 +240,43 @@ class AnexoAController extends Controller
 
         $anexoa = PlanilhaAnexoA::find($data['anexo_a_id']);
 
-        $nead_check = PlanilhaAnexoA::where('empresa_id','=',$empresa_id)->where('paciente_id','=',$data['paciente_id'])->first();
-        if($nead_check!=null && $nead_check->id!=$anexoa->id){
-            return response()->json(['status'=>false, 'message'=>'Esse paciente já possui um Anexo A cadastrado']);
-        }
+        if(isset($data['paciente']['paciente_id'])){
 
-        $anexoa->fill([
-            'diagnostico_principal_id'=>$data['diagnosticos_principais'][0]['id'],
-            'empresa_id' => $empresa_id,
-            'paciente_id' => $data['paciente_id'],
-            'classificacao_escala_braden' => $data['classificacao_braden']['pontos'],
-            'classificacao_coma_glasgow' => $data['classificacao_coma_glasbow']['pontos'],
-            'intensidade_dor' => $data['intensidade_dor'],
-            'diametros_pupilas' => $data['diametros_pupilas'],
-            'data_avaliacao' => Carbon::now()->format('Y-m-d H:i:s'),
-        ])->save();
+            $nead_check = PlanilhaAnexoA::where('empresa_id','=',$empresa_id)->where('paciente_id','=',$data['paciente']['paciente_id'])->first();
+            if($nead_check!=null && $nead_check->id!=$anexoa->id){
+                return response()->json(['status'=>false, 'message'=>'Esse paciente já possui um Anexo A cadastrado']);
+            }
+
+            $anexoa->fill([
+                'diagnostico_principal_id'=>$data['diagnosticos_principais'][0]['id'],
+                'empresa_id' => $empresa_id,
+                'paciente_id'=>$data['paciente']['paciente_id'],
+                'cpatient_id'=>null,
+                'classificacao_escala_braden' => $data['classificacao_braden']['pontos'],
+                'classificacao_coma_glasgow' => $data['classificacao_coma_glasbow']['pontos'],
+                'intensidade_dor' => $data['intensidade_dor'],
+                'diametros_pupilas' => $data['diametros_pupilas'],
+                'data_avaliacao' => Carbon::now()->format('Y-m-d H:i:s'),
+            ])->save();
+        }
+        else{
+            $nead_check = PlanilhaAnexoA::where('empresa_id','=',$empresa_id)->where('cpatient_id','=',$data['paciente']['id'])->first();
+            if($nead_check!=null && $nead_check->id!=$anexoa->id){
+                return response()->json(['status'=>false, 'message'=>'Esse paciente já possui um Anexo A cadastrado']);
+            }
+
+            $anexoa->fill([
+                'diagnostico_principal_id'=>$data['diagnosticos_principais'][0]['id'],
+                'empresa_id' => $empresa_id,
+                'cpatient_id'=>$data['paciente']['id'],
+                'paciente_id'=>null,
+                'classificacao_escala_braden' => $data['classificacao_braden']['pontos'],
+                'classificacao_coma_glasgow' => $data['classificacao_coma_glasbow']['pontos'],
+                'intensidade_dor' => $data['intensidade_dor'],
+                'diametros_pupilas' => $data['diametros_pupilas'],
+                'data_avaliacao' => Carbon::now()->format('Y-m-d H:i:s'),
+            ])->save();
+        }
 
         $diagnosticos_principais = [];
         foreach ($data['diagnosticos_principais'] as $diag_principal) {

@@ -32,7 +32,7 @@ class EmpresasController extends Controller
             $result->where('cnpj', 'like', '%' . $request->cnpj . '%');
         };
 
-        $result = $result->paginate($request['per_page'] ? $request['per_page'] : 15);
+        $result = $result->paginate($request['per_page'] ? $request['per_page'] : 10);
 
        
 
