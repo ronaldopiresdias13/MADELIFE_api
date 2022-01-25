@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Api_V2_0\Package;
 use App\Models\Api_V2_0\PackageItems;
 use App\Models\Api_V2_0\PackageProduct;
+use App\Models\Api_V2_0\PackageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -42,21 +43,50 @@ class PackageController extends Controller
                 'description'   => $request['description']
             ]);
 
-            foreach ($request['packageProducts'] as $key => $packageProduct) {
-                PackageProduct::create(
-                    [
-                        'packages_id'           => $package->id,
-                        'product_company_id'    => $packageProduct['product_company_id'],
-                        'the_amount'            => $packageProduct['the_amount'],
-                        'unitary_value'         => $packageProduct['unitary_value'],
-                        'subtotal'              => $packageProduct['subtotal'],
-                        'cost'                  => $packageProduct['cost'],
-                        'subtotal_cost'         => $packageProduct['subtotal_cost'],
-                        'monthly_result_value'  => $packageProduct['monthly_result_value'],
-                        'monthly_cost_value'    => $packageProduct['monthly_cost_value'],
-                        'location'              => $packageProduct['location'],
-                    ]
-                );
+            if ($request['packageProducts']) {
+                foreach ($request['packageProducts'] as $key => $packageProduct) {
+                    PackageProduct::create(
+                        [
+                            'packages_id'           => $package->id,
+                            'product_company_id'    => $packageProduct['product_company_id'],
+                            'quantity'            => $packageProduct['quantity'],
+                            'unitary_value'         => $packageProduct['unitary_value'],
+                            'subtotal'              => $packageProduct['subtotal'],
+                            'cost'                  => $packageProduct['cost'],
+                            'subtotal_cost'         => $packageProduct['subtotal_cost'],
+                            'monthly_result_value'  => $packageProduct['monthly_result_value'],
+                            'monthly_cost_value'    => $packageProduct['monthly_cost_value'],
+                            'location'              => $packageProduct['location'],
+                        ]
+                    );
+                }
+            }
+
+            if ($request['packageServices']) {
+                foreach ($request['packageServices'] as $key => $packageService) {
+                    PackageService::create(
+                        [
+                            'packages_id'               => $package->id,
+                            'servico_id'                => $packageService['servico_id'],
+                            'quantity'                  => $packageService['quantity'],
+                            'billing_basis'             => $packageService['billing_basis'],
+                            'frequency'                 => $packageService['frequency'],
+                            'unitary_value'             => $packageService['unitary_value'],
+                            'subtotal'                  => $packageService['subtotal'],
+                            'cost'                      => $packageService['cost'],
+                            'day_cost'                  => $packageService['day_cost'],
+                            'night_cost'                => $packageService['night_cost'],
+                            'subtotal_cost'             => $packageService['subtotal_cost'],
+                            'monthly_result_value'      => $packageService['monthly_result_value'],
+                            'monthly_cost_value'        => $packageService['monthly_cost_value'],
+                            'day_care_hours'            => $packageService['day_care_hours'],
+                            'hours_night_care'          => $packageService['hours_night_care'],
+                            'icms'                      => $packageService['icms'],
+                            'iss'                       => $packageService['iss'],
+                            'inss'                      => $packageService['inss'],
+                        ]
+                    );
+                }
             }
         });
         return response()->json('CADASTRADO!', 400)->header('Content-Type', 'text/plain');
@@ -95,24 +125,56 @@ class PackageController extends Controller
                     'empresas_id'            => $empresa_id,
                 ]
             );
-            foreach ($request['packageProducts'] as $key => $packageProduct) {
-                PackageProduct::updateOrCreate(
-                    [
-                        'id'                  => $packageProduct['id'],
-                    ],
-                    [
-                        'packages_id'           => $package->id,
-                        'product_company_id'    => $packageProduct['product_company_id'],
-                        'the_amount'            => $packageProduct['the_amount'],
-                        'unitary_value'         => $packageProduct['unitary_value'],
-                        'subtotal'              => $packageProduct['subtotal'],
-                        'cost'                  => $packageProduct['cost'],
-                        'subtotal_cost'         => $packageProduct['subtotal_cost'],
-                        'monthly_result_value'  => $packageProduct['monthly_result_value'],
-                        'monthly_cost_value'    => $packageProduct['monthly_cost_value'],
-                        'location'              => $packageProduct['location'],
-                    ]
-                );
+            if ($request['packageProducts']) {
+                foreach ($request['packageProducts'] as $key => $packageProduct) {
+                    PackageProduct::updateOrCreate(
+                        [
+                            'id'                  => $packageProduct['id'],
+                        ],
+                        [
+                            'packages_id'           => $package->id,
+                            'product_company_id'    => $packageProduct['product_company_id'],
+                            'quantity'            => $packageProduct['quantity'],
+                            'unitary_value'         => $packageProduct['unitary_value'],
+                            'subtotal'              => $packageProduct['subtotal'],
+                            'cost'                  => $packageProduct['cost'],
+                            'subtotal_cost'         => $packageProduct['subtotal_cost'],
+                            'monthly_result_value'  => $packageProduct['monthly_result_value'],
+                            'monthly_cost_value'    => $packageProduct['monthly_cost_value'],
+                            'location'              => $packageProduct['location'],
+                        ]
+                    );
+                }
+            }
+
+            if ($request['packageServices']) {
+                foreach ($request['packageServices'] as $key => $packageService) {
+                    PackageService::updateOrCreate(
+                        [
+                            'id'                  => $packageService['id'],
+                        ],
+                        [
+                            'packages_id'               => $package->id,
+                            'servico_id'                => $packageService['servico_id'],
+                            'quantity'                  => $packageService['quantity'],
+                            'billing_basis'             => $packageService['billing_basis'],
+                            'frequency'                 => $packageService['frequency'],
+                            'unitary_value'             => $packageService['unitary_value'],
+                            'subtotal'                  => $packageService['subtotal'],
+                            'cost'                      => $packageService['cost'],
+                            'day_cost'                  => $packageService['day_cost'],
+                            'night_cost'                => $packageService['night_cost'],
+                            'subtotal_cost'             => $packageService['subtotal_cost'],
+                            'monthly_result_value'      => $packageService['monthly_result_value'],
+                            'monthly_cost_value'        => $packageService['monthly_cost_value'],
+                            'day_care_hours'            => $packageService['day_care_hours'],
+                            'hours_night_care'          => $packageService['hours_night_care'],
+                            'icms'                      => $packageService['icms'],
+                            'iss'                       => $packageService['iss'],
+                            'inss'                      => $packageService['inss'],
+                        ]
+                    );
+                }
             }
         });
     }
