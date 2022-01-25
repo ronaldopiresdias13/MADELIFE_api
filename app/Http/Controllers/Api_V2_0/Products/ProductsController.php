@@ -180,15 +180,15 @@ class ProductsController extends Controller
         $empresa_id = $request->user()->pessoa->profissional->empresa_id;
         $products = Product::join('ml_products_table_versions_prices', 'ml_products_table_versions_prices.products_id', '=', 'ml_products.id')
        ->where('empresas_id', $empresa_id)
-       ->where('version', 'like', $request->version ? $request->version : '')
-       ->where('table_type', 'like', $request->table_type ? $request->table_type : '')
        ->where('description', 'like', $request->description ? '%' . $request->description . '%' : '')
+       ->orWhere('version', 'like', $request->version ? $request->version : '')
+       ->orWhere('table_type', 'like', $request->table_type ? $request->table_type : '')
        ->orWhere(function ($query) use ($request) {
            $query
            ->where('empresas_id', "=", null)
-           ->where('version', 'like', $request->version ? $request->version : '')
-           ->where('table_type', 'like', $request->table_type ? $request->table_type : '')
            ->where('description', 'like', $request->description ? '%' . $request->description . '%' : '');
+        //    ->where('version', 'like', $request->version ? $request->version : '')
+        //    ->where('table_type', 'like', $request->table_type ? $request->table_type : '');
         })
         ->get();
         // if (!$request['version'] && !$request['table_type']) {
