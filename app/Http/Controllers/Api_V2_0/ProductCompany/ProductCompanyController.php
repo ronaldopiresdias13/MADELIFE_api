@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api_V2_0\ProductCompany;
 use App\Http\Controllers\Controller;
 use App\Models\Api_V2_0\ProductCompany;
 use App\Models\Api_V2_0\ProductTableVersion;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -21,6 +22,12 @@ class ProductCompanyController extends Controller
         $product = ProductCompany::with(['ml_products_table_versions_prices.ml_products', 'ml_products_table_versions_prices.ml_products.tipoproduto',  'ml_products_table_versions_prices.ml_products.category']);
         $product->where('active', true);
         $product->where('empresas_id', $empresa_id);
+
+        if ($request->description) {
+            $product->whereHas('ml_products_table_versions_prices.ml_products', function (Builder $builder) use ($request) {
+                $builder->where('description', 'like', $request->description ? '%' . $request->description . '%' : '');
+            });
+        }
 
         if ($request->paginate) {
             $product = $product->paginate($request['per_page'] ? $request['per_page'] : 15); //->sortBy('orcamento.homecare.paciente.pessoa.nome');
