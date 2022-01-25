@@ -82,7 +82,7 @@ class ProductsController extends Controller
                 ]
             );
 
-            ProductTableVersion::create(
+           $produtcTable = ProductTableVersion::create(
                 [
                     'products_id'               => $product->id,
                     'type'                      => $request['table_version']['type'],
@@ -92,6 +92,18 @@ class ProductsController extends Controller
                     'price_factory'             => $request['table_version']['price_factory'],
                     'price_fraction_factory'    => $request['table_version']['price_fraction_factory'],
                     'ipi'                       => $request['table_version']['ipi'],
+                ]
+            );
+            
+            ProductCompany::create(
+                [
+                    [
+                        'empresas_id'                       => $empresa_id,
+                        'price'                             => $produtcTable->price,
+                        'cost'                              => $request['cost'],
+                        'stock'                             => $request['stock'],
+                        'product_table_versions_prices_id'  => $produtcTable->id
+                    ]
                 ]
             );
         });
