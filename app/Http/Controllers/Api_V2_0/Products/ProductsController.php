@@ -78,7 +78,7 @@ class ProductsController extends Controller
                     'product_type_id'          => $request['product_type_id'],
                     'is_hospital'              => $request['is_hospital'],
                     'is_generic'               => $request['is_generic'],
-                    'categories_id'            => $request['categories_id'],
+                    'category_id'              => $request['category_id'],
                 ]
             );
 
@@ -153,6 +153,7 @@ class ProductsController extends Controller
                 'product_type_id'       => $request['product_type_id'],
                 'is_hospital'           => $request['is_hospital'],
                 'is_generic'            => $request['is_generic'],
+                'category_id'           => $request['category_id'],
 
             ]);
             $productTable = ProductTableVersion::find($request['table_version']['id']);
