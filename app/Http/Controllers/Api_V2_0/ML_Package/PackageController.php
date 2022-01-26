@@ -20,7 +20,8 @@ class PackageController extends Controller
     public function index(Request $request)
     {
         $empresa_id = $request->user()->pessoa->profissional->empresa_id;
-        $package = Package::with(['ml_packages_product'])
+        $package = Package::with(['ml_packages_product', 'ml_packages_product.ml_products_company.ml_products_table_versions_prices.ml_products',
+        'ml_packages_services', 'ml_packages_services.servico'])
             ->where('empresas_id', $empresa_id)
             ->get();
 
@@ -100,7 +101,8 @@ class PackageController extends Controller
      */
     public function show(Package $package)
     {
-        $package->ml_packages_product;
+        $package->ml_packages_product->ml_products_company->ml_products_table_versions_prices->ml_products;
+        $package->ml_packages_services->servico;
 
         return $package;
     }

@@ -14,4 +14,9 @@ class Package extends Model
     {
         return $this->hasMany(PackageProduct::class, 'packages_id');
     }
+
+    public function ml_packages_services()
+    {
+        return $this->hasMany(PackageService::class, 'packages_id');
+    }
 }
