@@ -49,8 +49,8 @@ class PackageController extends Controller
                     PackageProduct::create(
                         [
                             'packages_id'           => $package->id,
-                            'product_company_id'    => $packageProduct['product_company_id'],
-                            'quantity'            => $packageProduct['quantity'],
+                            'product_company_id'    => $packageProduct['product']['id'],
+                            'quantity'              => $packageProduct['quantity'],
                             'unitary_value'         => $packageProduct['unitary_value'],
                             'subtotal'              => $packageProduct['subtotal'],
                             'cost'                  => $packageProduct['cost'],
@@ -68,7 +68,7 @@ class PackageController extends Controller
                     PackageService::create(
                         [
                             'packages_id'               => $package->id,
-                            'servico_id'                => $packageService['servico_id'],
+                            'servico_id'                => $packageService['service']['id'],
                             'quantity'                  => $packageService['quantity'],
                             'billing_basis'             => $packageService['billing_basis'],
                             'frequency'                 => $packageService['frequency'],
