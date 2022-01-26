@@ -65,20 +65,35 @@ class ProductsController extends Controller
         DB::transaction(function () use ($request, $empresa_id) {
             $product = Product::create(
                 [
-                    'empresas_id'              => $empresa_id,
-                    'table_type'               => 'propria',
-                    'code'                     => $request['code'],
-                    'description'              => $request['description'],
-                    'code_apresentation'       => $request['code_apresentation'],
-                    'content'                  => $request['content'],
-                    'unidademedidas_id'        => $request['unidademedidas_id'],
-                    'ean'                      => $request['ean'],
-                    'tiss'                     => $request['tiss'],
-                    'tuss'                     => $request['tuss'],
-                    'product_type_id'          => $request['product_type_id'],
-                    'is_hospital'              => $request['is_hospital'],
-                    'is_generic'               => $request['is_generic'],
-                    'category_id'              => $request['category_id'],
+                    'empresas_id'                       => $empresa_id,
+                    'table_type'                        => 'propria',
+                    'code'                              => $request['code'],
+                    'description'                       => $request['description'],
+                    'code_apresentation'                => $request['code_apresentation'],
+                    'content'                           => $request['content'],
+                    'unidademedidas_id'                 => $request['unidademedidas_id'],
+                    'ean'                               => $request['ean'],
+                    'tiss'                              => $request['tiss'],
+                    'tuss'                              => $request['tuss'],
+                    'product_type_id'                   => $request['product_type_id'],
+                    'is_hospital'                       => $request['is_hospital'],
+                    'is_generic'                        => $request['is_generic'],
+                    'category_id'                       => $request['category_id'],
+                    'internal_code'                     => $request['internal_code'],
+                    'barcode'                           => $request['barcode'],
+                    'validity'                          => $request['validity'],
+                    'group'                             => $request['group'],
+                    'expenditure'                       => $request['expenditure'],
+                    'observations'                      => $request['observations'],
+                    'cost_value'                        => $request['cost_value'],
+                    'sale_value'                        => $request['sale_value'],
+                    'percentage_annual_devaluation'     => $request['percentage_annual_devaluation'],
+                    'estimated_final_value'             => $request['estimated_final_value'],
+                    'minimum_stock'                     => $request['minimum_stock'],
+                    'maximum_stock'                     => $request['maximum_stock'],
+                    'current_quantity'                  => $request['current_quantity'],
+                    'physical_location'                 => $request['percentage_annual_devaluation'],
+                    'batch_control'                     => $request['batch_control'],
                 ]
             );
 
@@ -140,20 +155,35 @@ class ProductsController extends Controller
 
         DB::transaction(function () use ($request, $product, $empresa_id) {
             $product->update([
-                'empresa_id'            => $empresa_id,
-                'table_type'            => 'propria',
-                'code'                  => $request['code'],
-                'description'           => $request['description'],
-                'code_apresentation'    => $request['code_apresentation'],
-                'content'               => $request['content'],
-                'unidademedidas_id'     => $request['unidademedidas_id'],
-                'ean'                   => $request['ean'],
-                'tiss'                  => $request['tiss'],
-                'tuss'                  => $request['tuss'],
-                'product_type_id'       => $request['product_type_id'],
-                'is_hospital'           => $request['is_hospital'],
-                'is_generic'            => $request['is_generic'],
-                'category_id'           => $request['category_id'],
+                'empresa_id'                        => $empresa_id,
+                'table_type'                        => 'propria',
+                'code'                              => $request['code'],
+                'description'                       => $request['description'],
+                'code_apresentation'                => $request['code_apresentation'],
+                'content'                           => $request['content'],
+                'unidademedidas_id'                 => $request['unidademedidas_id'],
+                'ean'                               => $request['ean'],
+                'tiss'                              => $request['tiss'],
+                'tuss'                              => $request['tuss'],
+                'product_type_id'                   => $request['product_type_id'],
+                'is_hospital'                       => $request['is_hospital'],
+                'is_generic'                        => $request['is_generic'],
+                'category_id'                       => $request['category_id'],
+                'internal_code'                     => $request['internal_code'],
+                'barcode'                           => $request['barcode'],
+                'validity'                          => $request['validity'],
+                'group'                             => $request['group'],
+                'expenditure'                       => $request['expenditure'],
+                'observations'                      => $request['observations'],
+                'cost_value'                        => $request['cost_value'],
+                'sale_value'                        => $request['sale_value'],
+                'percentage_annual_devaluation'     => $request['percentage_annual_devaluation'],
+                'estimated_final_value'             => $request['estimated_final_value'],
+                'minimum_stock'                     => $request['minimum_stock'],
+                'maximum_stock'                     => $request['maximum_stock'],
+                'current_quantity'                  => $request['current_quantity'],
+                'physical_location'                 => $request['percentage_annual_devaluation'],
+                'batch_control'                     => $request['batch_control'],
 
             ]);
             $productTable = ProductTableVersion::find($request['table_version']['id']);
@@ -202,14 +232,25 @@ class ProductsController extends Controller
            ->where('description', 'like', $request->description ? '%' . $request->description . '%' : '');
         //    ->where('version', 'like', $request->version ? $request->version : '')
         //    ->where('table_type', 'like', $request->table_type ? $request->table_type : '');
-        })
-        ->get();
+        });
+
+        if ($request->paginate) {
+            $products = $products->paginate($request['per_page'] ? $request['per_page'] : 15); //->sortBy('orcamento.homecare.paciente.pessoa.nome');
+        } else {
+            $products = $products->get();
+        }
+
+        if (env("APP_ENV", 'production') == 'production') {
+            return $products->withPath(str_replace('http:', 'https:', $products->path()));
+        } else {
+            return $products;
+        }
         // if (!$request['version'] && !$request['table_type']) {
         //     return response()->json([
         //         'message' => 'Nenhum dos campos foram preenchidos'
         //     ], 401);
         // }
 
-        return $products;
+        // return $products;
     }
 }
