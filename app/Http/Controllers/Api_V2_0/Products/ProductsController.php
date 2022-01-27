@@ -103,7 +103,23 @@ class ProductsController extends Controller
                         'price'                             => $produtcTable->price,
                         'cost'                              => $request['cost'],
                         'stock'                             => $request['stock'],
-                        'product_table_versions_prices_id'  => $produtcTable->id
+                        'product_table_versions_prices_id'  => $produtcTable->id,
+                        'internal_code'                     => $request['products_company']['internal_code'],
+                        'barcode'                           => $request['products_company']['barcode'],
+                        'validity'                          => $request['products_company']['validity'],
+                        'group'                             => $request['products_company']['group'],
+                        'expenditure'                       => $request['products_company']['expenditure'],
+                        'observations'                      => $request['products_company']['observations'],
+                        'cost_value'                        => $request['products_company']['cost_value'],
+                        'sale_value'                        => $request['products_company']['sale_value'],
+                        'percentage_annual_devaluation'     => $request['products_company']['percentage_annual_devaluation'],
+                        'estimated_final_value'             => $request['products_company']['estimated_final_value'],
+                        'minimum_stock'                     => $request['products_company']['minimum_stock'],
+                        'maximum_stock'                     => $request['products_company']['maximum_stock'],
+                        'current_quantity'                  => $request['products_company']['current_quantity'],
+                        'physical_location'                 => $request['products_company']['percentage_annual_devaluation'],
+                        'batch_control'                     => $request['products_company']['batch_control'],
+                        'marcas_id'                         => $request['products_company']['marcas_id'],
                     ]
                 ]
             );
