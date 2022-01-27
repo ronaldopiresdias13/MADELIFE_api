@@ -80,21 +80,6 @@ class ProductsController extends Controller
                     'is_hospital'                       => $request['is_hospital'],
                     'is_generic'                        => $request['is_generic'],
                     'category_id'                       => $request['category_id'],
-                    'internal_code'                     => $request['internal_code'],
-                    'barcode'                           => $request['barcode'],
-                    'validity'                          => $request['validity'],
-                    'group'                             => $request['group'],
-                    'expenditure'                       => $request['expenditure'],
-                    'observations'                      => $request['observations'],
-                    'cost_value'                        => $request['cost_value'],
-                    'sale_value'                        => $request['sale_value'],
-                    'percentage_annual_devaluation'     => $request['percentage_annual_devaluation'],
-                    'estimated_final_value'             => $request['estimated_final_value'],
-                    'minimum_stock'                     => $request['minimum_stock'],
-                    'maximum_stock'                     => $request['maximum_stock'],
-                    'current_quantity'                  => $request['current_quantity'],
-                    'physical_location'                 => $request['percentage_annual_devaluation'],
-                    'batch_control'                     => $request['batch_control'],
                 ]
             );
 
@@ -171,21 +156,6 @@ class ProductsController extends Controller
                 'is_hospital'                       => $request['is_hospital'],
                 'is_generic'                        => $request['is_generic'],
                 'category_id'                       => $request['category_id'],
-                'internal_code'                     => $request['internal_code'],
-                'barcode'                           => $request['barcode'],
-                'validity'                          => $request['validity'],
-                'group'                             => $request['group'],
-                'expenditure'                       => $request['expenditure'],
-                'observations'                      => $request['observations'],
-                'cost_value'                        => $request['cost_value'],
-                'sale_value'                        => $request['sale_value'],
-                'percentage_annual_devaluation'     => $request['percentage_annual_devaluation'],
-                'estimated_final_value'             => $request['estimated_final_value'],
-                'minimum_stock'                     => $request['minimum_stock'],
-                'maximum_stock'                     => $request['maximum_stock'],
-                'current_quantity'                  => $request['current_quantity'],
-                'physical_location'                 => $request['percentage_annual_devaluation'],
-                'batch_control'                     => $request['batch_control'],
 
             ]);
             $productTable = ProductTableVersion::find($request['table_version']['id']);
