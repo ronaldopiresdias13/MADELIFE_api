@@ -140,6 +140,7 @@ class ProductsController extends Controller
     public function show(Product $product)
     {
         $product->ml_products_table_versions_prices;
+        // $product->ml_products_table_versions_prices-;
         return $product;
     }
 
