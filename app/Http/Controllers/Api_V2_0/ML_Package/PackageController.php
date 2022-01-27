@@ -20,7 +20,8 @@ class PackageController extends Controller
     public function index(Request $request)
     {
         $empresa_id = $request->user()->pessoa->profissional->empresa_id;
-        $package = Package::with(['ml_packages_product'])
+        $package = Package::with(['ml_packages_product', 'ml_packages_product.ml_products_company.ml_products_table_versions_prices.ml_products',
+        'ml_packages_services', 'ml_packages_services.servico'])
             ->where('empresas_id', $empresa_id)
             ->get();
 
@@ -48,8 +49,8 @@ class PackageController extends Controller
                     PackageProduct::create(
                         [
                             'packages_id'           => $package->id,
-                            'product_company_id'    => $packageProduct['product_company_id'],
-                            'quantity'            => $packageProduct['quantity'],
+                            'product_company_id'    => $packageProduct['product']['id'],
+                            'quantity'              => $packageProduct['quantity'],
                             'unitary_value'         => $packageProduct['unitary_value'],
                             'subtotal'              => $packageProduct['subtotal'],
                             'cost'                  => $packageProduct['cost'],
@@ -67,7 +68,7 @@ class PackageController extends Controller
                     PackageService::create(
                         [
                             'packages_id'               => $package->id,
-                            'servico_id'                => $packageService['servico_id'],
+                            'servico_id'                => $packageService['service']['id'],
                             'quantity'                  => $packageService['quantity'],
                             'billing_basis'             => $packageService['billing_basis'],
                             'frequency'                 => $packageService['frequency'],
@@ -100,7 +101,8 @@ class PackageController extends Controller
      */
     public function show(Package $package)
     {
-        $package->ml_packages_product;
+        $package->ml_packages_product->ml_products_company->ml_products_table_versions_prices->ml_products;
+        $package->ml_packages_services->servico;
 
         return $package;
     }

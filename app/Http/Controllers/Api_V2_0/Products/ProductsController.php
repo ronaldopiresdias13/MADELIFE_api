@@ -72,6 +72,7 @@ class ProductsController extends Controller
                     'code_apresentation'                => $request['code_apresentation'],
                     'content'                           => $request['content'],
                     'unidademedidas_id'                 => $request['unidademedidas_id'],
+                    'marcas_id'                         => $request['marcas_id'],
                     'ean'                               => $request['ean'],
                     'tiss'                              => $request['tiss'],
                     'tuss'                              => $request['tuss'],
@@ -97,7 +98,7 @@ class ProductsController extends Controller
                 ]
             );
 
-           $produtcTable = ProductTableVersion::create(
+            $produtcTable = ProductTableVersion::create(
                 [
                     'products_id'               => $product->id,
                     'type'                      => $request['table_version']['type'],
@@ -109,7 +110,7 @@ class ProductsController extends Controller
                     'ipi'                       => $request['table_version']['ipi'],
                 ]
             );
-            
+
             ProductCompany::create(
                 [
                     [
@@ -162,6 +163,7 @@ class ProductsController extends Controller
                 'code_apresentation'                => $request['code_apresentation'],
                 'content'                           => $request['content'],
                 'unidademedidas_id'                 => $request['unidademedidas_id'],
+                'marcas_id'                         => $request['marcas_id'],
                 'ean'                               => $request['ean'],
                 'tiss'                              => $request['tiss'],
                 'tuss'                              => $request['tuss'],
@@ -221,18 +223,19 @@ class ProductsController extends Controller
     public function ProductsFilter(Request $request)
     {
         $empresa_id = $request->user()->pessoa->profissional->empresa_id;
-        $products = Product::join('ml_products_table_versions_prices', 'ml_products_table_versions_prices.products_id', '=', 'ml_products.id')
-       ->where('empresas_id', $empresa_id)
-       ->where('description', 'like', $request->description ? '%' . $request->description . '%' : '')
-       ->orWhere('version', 'like', $request->version ? $request->version : '')
-       ->orWhere('table_type', 'like', $request->table_type ? $request->table_type : '')
-       ->orWhere(function ($query) use ($request) {
-           $query
-           ->where('empresas_id', "=", null)
-           ->where('description', 'like', $request->description ? '%' . $request->description . '%' : '');
-        //    ->where('version', 'like', $request->version ? $request->version : '')
-        //    ->where('table_type', 'like', $request->table_type ? $request->table_type : '');
-        });
+        $products = Product::with('ml_products_table_versions_prices', 'ml_products_table_versions_prices.ml_products_company')
+            // ->join('ml_products_table_versions_prices', 'ml_products_table_versions_prices.products_id', '=', 'ml_products.id')
+            ->where('empresas_id', $empresa_id)
+            // ->where('description', 'like', $request->description ? '%' . $request->description . '%' : '')
+            // ->orWhere('version', 'like', $request->version ? $request->version : '')
+            // ->orWhere('table_type', 'like', $request->table_type ? $request->table_type : '')
+            ->orWhere(function ($query) use ($request) {
+                $query
+                    ->where('empresas_id', "=", null);
+                    // ->where('description', 'like', $request->description ? '%' . $request->description . '%' : '');
+                //    ->where('version', 'like', $request->version ? $request->version : '')
+                //    ->where('table_type', 'like', $request->table_type ? $request->table_type : '');
+            });
 
         if ($request->paginate) {
             $products = $products->paginate($request['per_page'] ? $request['per_page'] : 15); //->sortBy('orcamento.homecare.paciente.pessoa.nome');

@@ -29,7 +29,7 @@ class Product extends Model
 
     public function ml_products_table_versions_prices()
     {
-        return $this->hasMany(ProductTableVersion::class, 'product_table_versions_prices_id');
+        return $this->hasOne(ProductTableVersion::class, 'products_id');
     }
 
     public function tipoproduto()

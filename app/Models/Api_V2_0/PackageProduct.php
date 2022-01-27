@@ -20,4 +20,9 @@ class PackageProduct extends Model
     {
         return $this->belongsTo(Package::class, 'packages_id');
     }
+
+    // public function ml_package()
+    // {
+    //     return $this->belongsTo(Package::class, 'packages_id');
+    // }
 }
