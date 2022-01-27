@@ -198,7 +198,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::put('pessoas/atualizaDadosPessoais/{pessoa}', 'Api\App\v3_0_24\PessoasController@atualizaDadosPessoais');
 
         Route::post('pessoaTelefones', 'Api\App\v3_0_24\PessoaTelefoneController@store');
-        // Route::delete('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@destroy');
+        Route::delete('pessoaTelefones/{pessoaTelefone}', 'Api\PessoaTelefoneController@destroy');
 
         Route::post('pessoaEmails', 'Api\App\v3_0_24\PessoaEmailController@store');
         Route::delete('pessoaEmails/{pessoaEmail}', 'Api\App\v3_0_24\PessoaEmailController@destroy');
@@ -380,8 +380,15 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('get_pendencias', 'Api\App\v3_1_0\ChamadosController@get_pendencias');
 
         Route::post('criarchamado', 'Api\App\v3_1_0\ChamadosController@criarchamado');
+<<<<<<< HEAD
+=======
+        Route::post('enviarArquivos', 'Api\App\v3_1_0\ChamadosController@enviarArquivos');
+
+        Route::post('versoes/verificarVersaoApp', 'Api\App\v3_1_0\VersaoController@verificarVersaoApp');
+>>>>>>> MD-173
     });
 });
+
 Route::prefix("app/v3_1_0")->group(function () {
     Route::post('enviarArquivos', 'Api\App\v3_1_0\ChamadosController@enviarArquivos');
     Route::post('versoes/verificarVersaoApp', 'Api\App\v3_1_0\VersaoController@verificarVersaoApp');

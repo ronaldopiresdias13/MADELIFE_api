@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Web\Folgas;
 use App\Http\Controllers\Controller;
 use App\Models\Escala;
 use App\Models\Folga;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -27,7 +26,6 @@ class FolgasController extends Controller
             'substituto.pessoa',
             'escala.servico',
         ])
-
             ->where('empresa_id', $empresa_id)
             ->orderByDesc('created_at')
             ->get();
