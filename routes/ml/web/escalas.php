@@ -20,12 +20,15 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('historicoEscalasPorPrestadorId', 'Api\Web\EscalasController@dashboardPegarTodosPacientesporId');
             Route::post('dashboardClonarEscalas', 'Api\EscalasController@dashboardClonarEscalas');
             Route::get('escalasPorPeriodo', 'Api\Web\EscalasController@EscalasPorPeriodo');
+            Route::get('listaescalascalendario', [EscalasController::class, 'listaescalascalendario']);
+            Route::get('clonarEscalas', [EscalasController::class, 'clonarEscalas']);
         });
         Route::prefix('departamentoPessoal')->group(function () {
             Route::post('escalas/updateServicoOfEscala/{escala}', 'Api\Web\DepartamentoPessoal\EscalasController@updateServicoOfEscala');
         });
         Route::prefix('responsavel')->group(function () {
             Route::get('escalas/listEscalasByIdResponsavel', 'Api\Web\Responsavel\EscalasController@listEscalasByIdResponsavel');
+            Route::get('escalas/listEscalasAssinadasByIdResponsavel', 'Api\Web\Responsavel\EscalasController@listEscalasAssinadasByIdResponsavel');
             Route::get('escalas/listEscalasByIdOrdemServico/{ordemservico}', 'Api\Web\Responsavel\EscalasController@listEscalasByIdOrdemServico');
             Route::post('escalas/assinar', 'Api\Web\Responsavel\EscalasController@assinar');
             Route::get('escalas/dashboard', 'Api\Web\Responsavel\EscalasController@dashboard');

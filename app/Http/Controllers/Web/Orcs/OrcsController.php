@@ -7,10 +7,12 @@ use App\Models\Orc;
 use App\Models\Orcamento;
 use App\Models\OrcProduto;
 use App\Models\OrcServico;
+use App\Models\Servico;
 use App\Services\ContratoService;
 use App\Services\OrcService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrcsController extends Controller
 {
@@ -29,14 +31,14 @@ class OrcsController extends Controller
             [
                 'cidade',
                 'cliente.pessoa',
-                'homecare_paciente.pessoa',
+                'homecare_paciente.pessoa.enderecos.cidade',
                 'aph_cidade',
                 'evento_cidade',
                 'remocao_cidadeorigem',
                 'remocao_cidadedestino',
                 'produtos.produto',
                 'servicos.servico',
-                'custos',
+                'custos.custo',
                 'paciente.internacoes'
             ],
         )
@@ -100,7 +102,7 @@ class OrcsController extends Controller
                 'remocao_cidadedestino',
                 'produtos.produto',
                 'servicos.servico',
-                'custos'
+                'custos.custo'
             ],
         )->find($orc->id);
     }
@@ -150,7 +152,7 @@ class OrcsController extends Controller
                 'remocao_cidadedestino',
                 'produtos.produto',
                 'servicos.servico',
-                'custos'
+                'custos.custo'
             ],
         )->find($orc->id);
 
@@ -261,5 +263,91 @@ class OrcsController extends Controller
     {
         $orcProduto->delete();
         // $orcProduto->save();
+    }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function quantidadeOrcPorSituacao(Request $request)
+    {
+        // return 'teste';
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+        // Orc::where('empresa_id', $empresa_id)->whereBetween('data', [$request->data_ini, $request->data_fim])->groupBy('situacao')->select('situacao', DB::raw('count(*) as total'))->get();
+        // Orc::where('empresa_id', 2)->whereBetween('data', ['2021-10-14', '2021-10-14'])->groupBy('situacao')->select('situacao', 'Sem Sucesso')->get();
+        return Orc::where('empresa_id', $empresa_id)->whereBetween('data', [$request->data_ini, $request->data_fim])->select('situacao', DB::raw('count(*) as total'))->groupBy('situacao')->get();
+        // Orcs::where('empresa_id', $empresa_id)
+        //     ->whereBetween('data', [$request->data_ini, $request->data_fim])
+        //     ->groupBy('situacao')->count();
+    }
+    public function quantidadeOrcsPorTipo(Request $request)
+    {
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+        return Orc::where('empresa_id', $empresa_id)->whereBetween('data', [$request->data_ini, $request->data_fim])->select('tipo', DB::raw('count(*) as total'))->groupBy('tipo')->get();
+    }
+    public function quantidadeOrcsPorCliente(Request $request)
+    {
+        // return $request;
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+
+        $result = Orc::with('cliente.pessoa')->where('empresa_id', $empresa_id)->whereBetween('data', [$request->data_ini, $request->data_fim])->select('cliente_id', DB::raw('count(*) as total'))->groupBy('cliente_id');
+
+        if ($request->filter_nome) {
+            $result->whereHas('cliente.pessoa', function (Builder $query) use ($request) {
+                $query->where('nome', 'like', '%' . $request->filter_nome . '%');
+            });
+        }
+
+        return $result->get();
+    }
+    public function quantidadeOrcsPorServico(Request $request)
+    {
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+        $result =  Servico::withCount('orcs')->where('empresa_id', $empresa_id)->whereHas('orcs', function (Builder $query) use ($request) {
+            $query->whereBetween('data', [$request->data_ini, $request->data_fim]);
+        });
+
+        if ($request->filter_nome) {
+            $result->where('descricao', 'like', '%' . $request->filter_nome . '%');
+        }
+
+        return $result->get();
+    }
+    public function filtroPorPeriodoECliente(Request $request)
+    {
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+        // $empresa_id = 2;
+        $orc = Orc::with([
+            'cidade',
+            'cliente.pessoa',
+            'homecare_paciente.pessoa',
+            'aph_cidade',
+            'evento_cidade',
+            'remocao_cidadeorigem',
+            'remocao_cidadedestino',
+            'produtos.produto',
+            'servicos.servico',
+            'custos.custo',
+            'paciente.internacoes'
+        ]);
+        if ($request->data) {
+            $orc = $orc->where('data', $request->data);
+        }
+        if ($request->cliente_id) {
+            $orc = $orc->where('cliente_id', $request->cliente_id);
+        }
+        $orc->where('empresa_id', $empresa_id);
+        // $orc = $orc->get();
+
+        $orc = $orc->orderByDesc('created_at')->paginate($request['per_page'] ? $request['per_page'] : 15);
+
+
+
+        if (env("APP_ENV", 'production') == 'production') {
+            return $orc->withPath(str_replace('http:', 'https:', $orc->path()));
+        } else {
+            return $orc;
+        }
     }
 }

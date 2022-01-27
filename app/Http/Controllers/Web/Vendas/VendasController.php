@@ -1,21 +1,22 @@
 <?php
 
-namespace App\Http\Controllers\Api\App\v3_0_22;
+namespace App\Http\Controllers\Web\Vendas;
 
-use App\Models\Cidade;
 use App\Http\Controllers\Controller;
+use App\Models\Venda;
 use Illuminate\Http\Request;
+use App\Models\VendaSaida;
 
-class CidadeController extends Controller
+class VendasController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(string $uf)
+    public function index()
     {
-        return Cidade::where('uf', $uf)->get();
+        //
     }
 
     /**
@@ -26,28 +27,32 @@ class CidadeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Cidade  $cidade
+     * @param  \App\Models\Venda  $venda
      * @return \Illuminate\Http\Response
      */
-    public function show(Cidade $cidade)
+    public function show(Venda $venda)
     {
-        // return Cidade::where('uf', $cidade->uf)->get();
+        $venda->orcamento;
+        $venda->orcamento->produtos;
+        $venda->orcamento->cliente->pessoa;
+        $venda->vendasaida;
+        return $venda;
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Cidade  $cidade
+     * @param  \App\Models\Venda  $venda
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Cidade $cidade)
+    public function update(Request $request, Venda $venda)
     {
         //
     }
@@ -55,10 +60,10 @@ class CidadeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Cidade  $cidade
+     * @param  \App\Models\Venda  $venda
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Cidade $cidade)
+    public function destroy(Venda $venda)
     {
         //
     }

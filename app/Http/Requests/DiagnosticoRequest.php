@@ -21,7 +21,7 @@ class DiagnosticoRequest extends FormRequest
         return [
             'nome.required' => 'O campo Nome é obrigatório',
             'codigo.required' => 'O campo Código é obrigatório',
-            'descricao.required' => 'O campo Descrição é obrigatório',
+            // 'descricao.required' => 'O campo Descrição é obrigatório',
         ];
     }
 
@@ -36,18 +36,18 @@ class DiagnosticoRequest extends FormRequest
             case 'store_diagnostico':
                 return [
                     'nome' => 'required',
-                    'codigo' => 'required',
-                    'descricao' => 'required',
-                    'referencias' => 'sometimes',
+                    'codigo' => 'sometimes',
+                    // 'descricao' => 'required',
+                    // 'referencias' => 'sometimes',
                 ];
                 break;
             case 'update_diagnostico':
                 return [
                     'nome' => 'required',
-                    'codigo' => 'required',
-                    'descricao' => 'required',
+                    'codigo' => 'sometimes',
+                    // 'descricao' => 'required',
                     'diagnostico_id' => 'required',
-                    'referencias' => 'sometimes',
+                    // 'referencias' => 'sometimes',
                 ];
                 break;
             default:

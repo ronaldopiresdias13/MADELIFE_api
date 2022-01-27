@@ -12,6 +12,7 @@ use App\Models\PessoaEndereco;
 use App\Models\PessoaTelefone;
 use App\Models\Telefone;
 use App\Models\Tipopessoa;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -63,10 +64,11 @@ class ClientesController extends Controller
                     'empresa_id' => $empresa_id,
                 ],
                 [
-                    'versaoTiss' => $request['versaoTiss'],
-                    'tipo'       => $request['tipo'],
-                    'CNES'       => $request['CNES'],
-                    'registroAns' => $request['registroAns'],
+                    'versaoTiss'        => $request['versaoTiss'],
+                    'tipo'              => $request['tipo'],
+                    'CNES'              => $request['CNES'],
+                    'registroAns'       => $request['registroAns'],
+                    'numeroAutorizacao' => $request['numeroAutorizacao'],
                 ]
             );
 
@@ -167,11 +169,12 @@ class ClientesController extends Controller
     {
         DB::transaction(function () use ($request, $cliente) {
             $cliente->update([
-                'tipo' => $request['tipo'],
+                'tipo'             => $request['tipo'],
                 'versaoTiss'       => $request['versaoTiss'],
-                'CNES'       => $request['CNES'],
-                'registroAns' => $request['registroAns'],
-                'empresa_id' => $request['empresa_id'],
+                'CNES'             => $request['CNES'],
+                'registroAns'      => $request['registroAns'],
+                'numeroAutorizacao' => $request['numeroAutorizacao'],
+                'empresa_id'        => $request['empresa_id'],
             ]);
             $pessoa = Pessoa::find($request['pessoa']['id']);
             if ($pessoa) {
@@ -258,4 +261,31 @@ class ClientesController extends Controller
         $cliente->ativo = false;
         $cliente->save();
     }
+    public function clientePage(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        $result = Cliente::with(['pessoa.emails', 'pessoa.telefones', 'pessoa.enderecos.cidade', 'pessoa.user.acessos']);
+        $result->where('empresa_id', $empresa_id);
+        $result->where('ativo', true);
+
+        if($request->nome)
+        {
+            $result->whereHas('pessoa', function (Builder $query) use ($request) {
+                $query->where('nome', 'like', '%' . $request->nome . '%');
+            });
+        };
+
+        $result = $result->paginate($request['per_page'] ? $request['per_page'] : 15);
+
+       
+
+        if (env("APP_ENV", 'production') == 'production') {
+            return $result->withPath(str_replace('http:', 'https:', $result->path()));
+        } else {
+            return $result;
+        }
+    }
+
+
 }

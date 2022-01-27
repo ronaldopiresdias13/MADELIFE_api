@@ -38,25 +38,25 @@ class ChamadoWebSocketServer extends Command
      */
     public function handle()
     {
-         $loop = \React\EventLoop\Factory::create();
+        $loop = \React\EventLoop\Factory::create();
 
-         $secure_websockets = new \React\Socket\Server('0.0.0.0:1122', $loop);
-         $secure_websockets = new \React\Socket\SecureServer($secure_websockets, $loop, [
-             'local_cert' => '/etc/ssl/private/9dfd8ac04f6852d4.crt',
-             'local_pk' => '/etc/ssl/private/server.key',
-             //  'local_cert' => env('SSL_CRT', '/etc/ssl/private/9dfd8ac04f6852d4.crt'),
-             //  'local_pk' => env('SSL_KEY', '/etc/ssl/private/server.key'),
-             'verify_peer' => false
-         ]);
-	$websocket = new \Ratchet\WebSocket\WsServer(
-                 new ChamadoWebSocketController()
-	 );
-	 $websocket->enableKeepAlive($loop, 30);
-         $app = new \Ratchet\Http\HttpServer(
-             $websocket
-         );
-         $server = new \Ratchet\Server\IoServer($app, $secure_websockets, $loop);
-         $server->run();
+        $secure_websockets = new \React\Socket\Server('0.0.0.0:1122', $loop);
+        $secure_websockets = new \React\Socket\SecureServer($secure_websockets, $loop, [
+            'local_cert' => '/etc/ssl/private/9dfd8ac04f6852d4.crt',
+            'local_pk' => '/etc/ssl/private/server.key',
+            //  'local_cert' => env('SSL_CRT', '/etc/ssl/private/9dfd8ac04f6852d4.crt'),
+            //  'local_pk' => env('SSL_KEY', '/etc/ssl/private/server.key'),
+            'verify_peer' => false
+        ]);
+        $websocket = new \Ratchet\WebSocket\WsServer(
+            new ChamadoWebSocketController()
+        );
+        $websocket->enableKeepAlive($loop, 30);
+        $app = new \Ratchet\Http\HttpServer(
+            $websocket
+        );
+        $server = new \Ratchet\Server\IoServer($app, $secure_websockets, $loop);
+        $server->run();
 
         //$loop_ = \React\EventLoop\Factory::create();
         //$socket_ = new \React\Socket\Server('0.0.0.0:1122', $loop_);

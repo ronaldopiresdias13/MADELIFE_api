@@ -14,6 +14,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::post('salvaProdutosImportados', [ProdutosController::class, 'salvaProdutosImportados']);
         });
         Route::prefix('compras')->group(function () {
+            Route::get('produtos', [ProdutosController::class, 'pegarProdutosPorId']);
             Route::get('produtos/getAllProdutosByIdEmpresa', [ProdutoController2::class, 'getAllProdutosByIdEmpresa']);
         });
     });
