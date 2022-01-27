@@ -23,11 +23,11 @@ class ProductTableVersion extends Model
 
     public function ml_products_company()
     {
-        return $this->hasOne(ProductCompany::class, 'product_table_versions_prices_id');
+        return $this->hasMany(ProductCompany::class, 'product_table_versions_prices_id');
     }
 
     public function ml_products()
     {
-        return $this->hasOne(Product::class, 'products_id');
+        return $this->belongsTo(Product::class, 'products_id');
     }
 }

@@ -14,6 +14,6 @@ class ProductCompany extends Model
 
     public function ml_products_table_versions_prices()
     {
-        return $this->hasOne(ProductTableVersion::class, 'product_table_versions_prices_id');
+        return $this->belongsTo(ProductTableVersion::class, 'product_table_versions_prices_id');
     }
 }
