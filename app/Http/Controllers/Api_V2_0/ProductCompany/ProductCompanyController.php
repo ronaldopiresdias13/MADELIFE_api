@@ -95,9 +95,12 @@ class ProductCompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(ProductCompany $productCompany)
     {
-        //
+        $productCompany->ml_products_table_versions_prices;
+        $productCompany->ml_products_table_versions_prices->ml_products;
+
+        return $productCompany;
     }
 
     /**
