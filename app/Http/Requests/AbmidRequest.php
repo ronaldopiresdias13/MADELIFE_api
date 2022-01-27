@@ -27,7 +27,7 @@ class AbmidRequest extends FormRequest
             case 'store_abmid':
                 return [
                     'diagnosticos_principais' => 'required',
-                    'paciente_id' => 'required',
+                    'paciente' => 'required',
                     'diagnostico_secundarios_id' => 'required',
                     'classificacao' => 'required',
                     'cuidados' => 'required',
@@ -36,7 +36,7 @@ class AbmidRequest extends FormRequest
             case 'update_abmid':
                 return [
                     'diagnosticos_principais' => 'required',
-                    'paciente_id' => 'required',
+                    'paciente' => 'required',
                     'diagnostico_secundarios_id' => 'required',
                     'classificacao' => 'required',
                     'cuidados' => 'required',

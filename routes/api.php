@@ -111,6 +111,35 @@ Route::group(['middleware' => 'auth:api'], function () {
 
             Route::delete('delete_diagnostico_secundario/{id}', 'Api\Web\DiagnosticosSecundarioController@delete_diagnostico');
 
+
+
+            Route::post('storeClientPatient', 'Api\Web\ClientPatientController@store');
+
+
+
+            Route::get('listPrescricoesA', 'Api\Web\PrescricaoAController@listPrescricoesA');
+            Route::post('storePrescricaoA', 'Api\Web\PrescricaoAController@store_prescricao_a');
+            Route::put('updatePrescricaoA', 'Api\Web\PrescricaoAController@update_prescricao_a');
+
+            Route::get('getPrescricaoA/{id}', 'Api\Web\PrescricaoAController@getPrescricaoA');
+
+            Route::delete('delete_prescricao_a/{id}', 'Api\Web\PrescricaoAController@delete_prescricao_a');
+
+
+
+
+
+            Route::get('listGruposA', 'Api\Web\GrupoAController@listGruposA');
+            Route::get('getDadosGrupoA', 'Api\Web\GrupoAController@getDadosGrupoA');
+
+            Route::post('store_grupo_a', 'Api\Web\GrupoAController@store_grupo_a');
+            Route::put('update_grupo_a', 'Api\Web\GrupoAController@update_grupo_a');
+
+            Route::get('getGrupoA/{id}', 'Api\Web\GrupoAController@getGrupoA');
+
+            Route::delete('delete_grupo_a/{id}', 'Api\Web\GrupoAController@delete_grupo_a');
+
+
         });
 
         Route::prefix('areaClinica')->group(function () {

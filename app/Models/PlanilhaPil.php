@@ -20,12 +20,18 @@ class PlanilhaPil extends Model
         'prognostico', 
         'avaliacao_prescricoes', 
         'justificativa_revisao', 
-        'evolucao_base'
+        'evolucao_base',
+        'cpatient_id'
     ];
 
     public function paciente()
     {
         return $this->belongsTo(Paciente::class, 'paciente_id', 'id');
+    }
+
+    public function cpaciente()
+    {
+        return $this->belongsTo(ClientPatient::class, 'cpatient_id', 'id');
     }
 
     // public function diagnostico_primario()
@@ -45,7 +51,7 @@ class PlanilhaPil extends Model
 
     public function prescricoes_a()
     {
-        return $this->belongsToMany(Cuidado::class, 'prescricoes_a_pil', 'pil_id', 'cuidado_id');
+        return $this->belongsToMany(PrescricaoA::class, 'prescricoes_a_pil', 'pil_id', 'prescricao_id');
     }
 
     public function prescricoes_b()

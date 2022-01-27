@@ -14,10 +14,16 @@ class PlanilhaAbmid extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'diagnostico_principal_id','empresa_id', 'paciente_id', 'classificacao','data_avaliacao'
+        'diagnostico_principal_id','empresa_id', 'paciente_id', 'classificacao','data_avaliacao',
+        'cpatient_id'
         
        
     ];
+
+    public function cpaciente()
+    {
+        return $this->belongsTo(ClientPatient::class, 'cpatient_id', 'id');
+    }
 
     public function paciente()
     {

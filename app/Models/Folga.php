@@ -12,7 +12,6 @@ class Folga extends Model
 {
     use Uuid;
     use HasFactory;
-    use SoftDeletes;
 
     protected $dates = [
         'created_at',

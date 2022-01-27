@@ -289,14 +289,14 @@ class ContratosController extends Controller
             // 'servicos.servico',
             // 'custos'
         ]);
-        if($request->data_final) {
-            $orc = $orc->whereHas('ordemservico', function (Builder $query) use ($request, $orc) {
-                $query->where('fim','<=', $request->data_final ? $request->data_final : $orc);
-            });
-        }
+        // if($request->data_final) {
+        //     $orc = $orc->whereHas('ordemservico', function (Builder $query) use ($request, $orc) {
+        //         $query->where('fim','<=', $request->data_final ? $request->data_final : $orc);
+        //     });
+        // }
         if($request->data_ini) {
-            $orc = $orc->whereHas('ordemservico', function (Builder $query) use ($request, $orc) {
-                $query->where('inicio','>=', $request->data_ini ? $request->data_ini : $orc);
+            $orc = $orc->whereHas('ordemservico', function (Builder $query) use ($request) {
+                $query->whereBetween('inicio', [$request->data_ini, $request->data_final]);
             });
         }
         if($request->cliente_id) {

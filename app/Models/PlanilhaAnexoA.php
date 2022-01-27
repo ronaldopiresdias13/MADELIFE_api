@@ -15,8 +15,15 @@ class PlanilhaAnexoA extends Model
 
     protected $fillable = [
         'diagnostico_principal_id','empresa_id', 'paciente_id', 'classificacao_escala_braden','classificacao_coma_glasgow',
-        'intensidade_dor','diametros_pupilas','data_avaliacao'
+        'intensidade_dor','diametros_pupilas','data_avaliacao',
+        'cpatient_id'
+
     ];
+
+    public function cpaciente()
+    {
+        return $this->belongsTo(ClientPatient::class, 'cpatient_id', 'id');
+    }
 
     public function paciente()
     {

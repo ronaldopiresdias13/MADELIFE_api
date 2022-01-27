@@ -27,7 +27,7 @@ class NeadRequest extends FormRequest
             case 'store_nead':
                 return [
                     'diagnosticos_principais' => 'required',
-                    'paciente_id' => 'required',
+                    'paciente' => 'required',
                     'diagnostico_secundarios_id' => 'required',
                     'classificacao_katz' => 'required',
                     'classificacao_pacient' => 'required',
@@ -40,7 +40,7 @@ class NeadRequest extends FormRequest
             case 'update_nead':
                 return [
                     'diagnosticos_principais' => 'required',
-                    'paciente_id' => 'required',
+                    'paciente' => 'required',
                     'diagnostico_secundarios_id' => 'required',
                     'classificacao_katz' => 'required',
                     'classificacao_pacient' => 'required',

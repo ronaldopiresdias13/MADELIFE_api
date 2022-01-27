@@ -20,9 +20,14 @@ class Nead extends Model
         'data_avaliacao',
         'empresa_id',
         'diagnostico_principal_id',
-        'classificacaop_selecionado'
+        'classificacaop_selecionado',
+        'cpatient_id'
     ];
 
+    public function cpaciente()
+    {
+        return $this->belongsTo(ClientPatient::class, 'cpatient_id', 'id');
+    }
     // public function diagnostico_principal()
     // {
     //     return $this->belongsTo(DiagnosticoPil::class, 'diagnostico_principal_id', 'id');
