@@ -36,4 +36,8 @@ class Venda extends Model
     {
         return $this->belongsTo(Orcamento::class);
     }
+    public function vendasaida()
+    {
+        return $this->belongsTo(VendaSaida::class);
+    }
 }

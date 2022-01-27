@@ -29,9 +29,19 @@ class CnabsController extends Controller
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
 
-        $cnabs = RegistroCnab::where('empresa_id', '=', $empresa_id)->orderBy('created_at', 'desc')->get();
+        $cnabs = RegistroCnab::where('empresa_id', '=', $empresa_id)->orderBy('created_at', 'desc')->paginate(10);
 
-        return response()->json(['cnabs' => CnabResource::collection($cnabs)]);
+        $current_page_cnab = $cnabs->currentPage();
+        $last_page_cnab = $cnabs->lastPage();
+        $total_cnab = $cnabs->total();
+        $per_page_cnab = $cnabs->perPage();
+        return response()->json([
+            'cnabs' => CnabResource::collection($cnabs),
+            'current_page_cnab' => $current_page_cnab,
+            'last_page_cnab' => $last_page_cnab,
+            'total_cnab' => $total_cnab,
+            'per_page_cnab' => $per_page_cnab,
+        ]);
     }
 
 

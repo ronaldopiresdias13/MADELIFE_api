@@ -33,9 +33,9 @@ class ChamadoRequest extends FormRequest
 
                 ];
                 break;
-            case 'enviararquivos':
+            case 'enviar_arquivos':
                 return [
-                    'image' => 'required',
+                    'file' => 'required',
                 ];
                 break;
             case 'criarchamado_cliente':

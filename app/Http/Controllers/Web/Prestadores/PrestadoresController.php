@@ -191,7 +191,7 @@ class PrestadoresController extends Controller
             'pessoa.enderecos.cidade',
             'pessoa.conselhos',
             'pessoa.emails',
-            // 'pessoa.dadobancarios',
+            'especialidades',
             'formacoes'
         ])->find($prestador->id);
     }

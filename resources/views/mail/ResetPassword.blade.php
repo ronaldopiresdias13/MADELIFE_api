@@ -86,13 +86,26 @@
             <p>Bom trabalho!!!</p>
             <p><strong class="bold">Equipe da MadeLife</strong></p>
             <br />
+            <p><a href="https://api.madelife.med.br/documentos/ml.pdf" target="_blank"><i class="fas fa-file-alt"></i>
+                Manual do Aplicativo: https://api.madelife.med.br/documentos/ml.pdf</a>
+            </p>
             <p><a href="http://www.madelife.med.br/" target="_blank"><i class="fa fa-globe"></i>
                     www.madelife.med.br</a>
             </p>
-            <a href="mailto:comercial@madelife.med.br" target="_blank"><i class="fa fa-envelope"></i>
-                comercial@madelife.med.br</a>
-            <p><i class="fa fa-phone-square-alt"></i> +55 17 98192-0223</p>
-            <p><i class="fa fa-clock"></i> Segunda a Sexta das 08:00 as 18:00 horas</p>
+            <a href="mailto:suporte@madelife.med.br" target="_blank"><i class="fa fa-envelope"></i>
+                suporte@madelife.med.br</a>
+            <p><i class="fa fa-phone-square-alt"></i> +55 17 98175-0714</p>
+            <p><i class="fa fa-clock"></i> Segunda a Sexta das 07:00 as 18:00 horas e das 19:00 as 21:00 horas</p>
+            <p><i class="fa fa-clock"></i> Sábado e Domingo das 07:00 as 08:00 horas e das 19:00 as 21:00 horas</p>
+            <div class="row" style="display: flex; justify-content: center">
+                {{-- <p>Siga nossas redes sociais:</p> --}}
+                <p style="font-size: 30px"><a href="https://www.facebook.com/madelifesolucoes" target="_blank"><i class="fab fa-facebook"></i></a>
+                </p>
+                <p style="font-size: 30px; margin-right: 15px; margin-left:15px"><a href="https://www.instagram.com/madelifesolucoes/" target="_blank"><i class="fab fa-instagram"></i></a>
+                </p>
+                <p style="font-size: 30px"><a href=" https://www.linkedin.com/company/madelifesolucoes" target="_blank"><i class="fab fa-linkedin"></i></a>
+                </p>
+            </div>
         </div>
     </div>
 </body>

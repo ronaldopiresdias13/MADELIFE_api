@@ -11,6 +11,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\Web\GestaoOrcamentaria\OrdemservicosController@listaOrdemServicosEscalas');
     });
     Route::get('ordemservicos/listaOrdemServicosEscalas', 'Api\OrdemservicosController@listaOrdemServicosEscalas');
+    Route::get('listaOrdemDeServicos2', 'Api\OrdemservicosController@listaOrdemDeServicos');
 });
 
 Route::get('ordemservicos', 'Api\OrdemservicosController@index');
@@ -24,4 +25,3 @@ Route::get(
 ); // Custon
 Route::get('ordemservicos/count/{empresa}', 'Api\OrdemservicosController@quantidadeordemservicos');
 Route::get('ordemservicos/groupbyservico/{empresa}', 'Api\OrdemservicosController@groupbyservicos');
-

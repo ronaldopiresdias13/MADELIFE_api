@@ -8,3 +8,4 @@ Route::get('users/{user}', 'Api\UsersController@show');
 Route::put('users/{user}', 'Api\UsersController@update');
 Route::put('users/{user}/updateEmail', 'Api\UsersController@updateEmail');
 Route::delete('users/{user}', 'Api\UsersController@destroy');
+Route::get('getUsers', 'Api\UsersController@usersAcessos');

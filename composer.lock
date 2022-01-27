@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e80b088aa2f11267f97493aa7d04e15a",
+    "content-hash": "46c2c896b4670d5bdaa3b66a56f024f5",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5798,7 +5798,6 @@
                 "symfony/string": "^5.1|^6.0"
             },
             "conflict": {
-                "psr/log": ">=3",
                 "symfony/dependency-injection": "<4.4",
                 "symfony/dotenv": "<5.1",
                 "symfony/event-dispatcher": "<4.4",

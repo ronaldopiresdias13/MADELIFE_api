@@ -26,6 +26,7 @@ class Orccusto extends Model
     protected $fillable = [
         'id',
         'orc_id',
+        'custo_id',
         'descricao',
         'quantidade',
         'unidade',
@@ -44,5 +45,15 @@ class Orccusto extends Model
     public function orc(): BelongsTo
     {
         return $this->belongsTo(Orc::class);
+    }
+
+    /**
+     * Get the custo that owns the Orccusto
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function custo(): BelongsTo
+    {
+        return $this->belongsTo(Custo::class);
     }
 }

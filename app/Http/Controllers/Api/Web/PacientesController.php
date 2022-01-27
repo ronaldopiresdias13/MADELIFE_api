@@ -104,8 +104,8 @@ class PacientesController extends Controller
     public function store(Request $request)
     {
         $empresa = $request->user()->pessoa->profissional->empresa;
-        // $qtdPac = Paciente::where('empresa_id', $empresa->id)->where('ativo', true)->count();
-        // if ($qtdPac < $empresa->quantidadepaciente) {
+        $qtdPac = Paciente::where('empresa_id', $empresa->id)->where('ativo', true)->count();
+        if ($qtdPac < $empresa->quantidadepaciente) {
         DB::transaction(function () use ($request) {
             $paciente = Paciente::create([
                 'empresa_id' => $request['empresa_id'],
@@ -126,6 +126,8 @@ class PacientesController extends Controller
                 )->id,
                 'responsavel_id' => $request['responsavel_id'],
                 'complexidade'   => $request['complexidade'],
+                'diagnostico' => $request['diagnostico'],
+                'codPaciente' => $request['codPaciente'],
                 'numeroCarteira' => $request['numeroCarteira'],
                 'sexo'           => $request['sexo'],
                 'tipopaciente'   => $request['tipopaciente'],
@@ -187,15 +189,15 @@ class PacientesController extends Controller
                 }
             }
         });
-        // } else {
-        //     return response()->json([
-        //         'alert' => [
-        //             'title' => 'Ops, não foi possível salvar',
-        //             'text' => 'Quantidade máxima de pacientes atingida!'
-        //         ]
-        //     ], 400)
-        //         ->header('Content-Type', 'application/json');
-        // }
+        } else {
+            return response()->json([
+                'alert' => [
+                    'title' => 'Ops, não foi possível salvar',
+                    'text' => 'Quantidade máxima de pacientes atingida!'
+                ]
+            ], 400)
+                ->header('Content-Type', 'application/json');
+        }
     }
 
     /**
@@ -234,6 +236,8 @@ class PacientesController extends Controller
                 'tipopaciente'   => $request['tipopaciente'],
                 'empresa_id'     => $request['empresa_id'],
                 'responsavel_id' => $request['responsavel_id'],
+                'diagnostico'    => $request['diagnostico'],
+                'codPaciente'    => $request['codPaciente'],
                 'numeroCarteira' => $request['numeroCarteira'],
                 'complexidade'   => $request['complexidade'],
                 'ativo'          => $request['ativo'],

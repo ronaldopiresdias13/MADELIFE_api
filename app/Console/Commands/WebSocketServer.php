@@ -42,24 +42,23 @@ class WebSocketServer extends Command
      */
     public function handle()
     {
-         $loop = \React\EventLoop\Factory::create();
+        $loop = \React\EventLoop\Factory::create();
 
-         $secure_websockets = new \React\Socket\Server('0.0.0.0:1123', $loop);
-         $secure_websockets = new \React\Socket\SecureServer($secure_websockets, $loop, [
-             'local_cert' => '/etc/ssl/private/9dfd8ac04f6852d4.crt',
-             'local_pk' => '/etc/ssl/private/server.key',
-             'verify_peer' => false
-         ]);
-	$websocket = new \Ratchet\WebSocket\WsServer(
-                 new ChatWebSocketController()
-	 );
-	 $websocket->enableKeepAlive($loop, 60);
-	 $app = new \Ratchet\Http\HttpServer(
-		 $websocket
-         );
-         $server = new \Ratchet\Server\IoServer($app, $secure_websockets, $loop);
-         $server->run();
-
+        $secure_websockets = new \React\Socket\Server('0.0.0.0:1123', $loop);
+        $secure_websockets = new \React\Socket\SecureServer($secure_websockets, $loop, [
+            'local_cert' => '/etc/ssl/private/9dfd8ac04f6852d4.crt',
+            'local_pk' => '/etc/ssl/private/server.key',
+            'verify_peer' => false
+        ]);
+        $websocket = new \Ratchet\WebSocket\WsServer(
+            new ChatWebSocketController()
+        );
+        $websocket->enableKeepAlive($loop, 60);
+        $app = new \Ratchet\Http\HttpServer(
+            $websocket
+        );
+        $server = new \Ratchet\Server\IoServer($app, $secure_websockets, $loop);
+        $server->run();
 
         //$server = IoServer::factory(
         //    new HttpServer(

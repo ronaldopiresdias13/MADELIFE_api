@@ -195,7 +195,7 @@ class ContratosController extends Controller
                 'remocao.cidadedestino',
                 'produtos.produto',
                 'servicos.servico',
-                'custos'
+                'custos.custo'
             ],
         )->find($orcamento->id);
     }
@@ -209,7 +209,6 @@ class ContratosController extends Controller
      */
     public function update(Request $request, Orcamento $orcamento)
     {
-
         $contratoService = new ContratoService($request, $orcamento);
         return $contratoService->update();
     }
@@ -227,11 +226,25 @@ class ContratosController extends Controller
             $orcamento->status = false;
             $orcamento->save();
 
-            $ordemservico = $orcamento->ordemservico;
-            $ordemservico->descricaomotivo = $request->descricaomotivo;
-            $ordemservico->dataencerramento = $request->dataencerramento;
-            $ordemservico->motivo = $request->motivo;
+            $ordemservico = $orcamento['ordemservico'];
+            $ordemservico->descricaomotivo = $request['ordemservico']['descricaomotivo'];
+            $ordemservico->dataencerramento = $request['ordemservico']['dataencerramento'];
+            $ordemservico->motivo = $request['ordemservico']['motivo'];
             $ordemservico->status = false;
+            $ordemservico->save();
+        });
+    }
+    public function ativarContrato(Request $request, Orcamento $orcamento)
+    {
+        DB::transaction(function () use ($request, $orcamento) {
+            $orcamento->status = true;
+            $orcamento->save();
+
+            $ordemservico = $orcamento['ordemservico'];
+            $ordemservico->descricaomotivo = "";
+            $ordemservico->dataencerramento = "";
+            $ordemservico->motivo = "";
+            $ordemservico->status = true;
             $ordemservico->save();
         });
     }
@@ -257,5 +270,48 @@ class ContratosController extends Controller
     public function prorrogacao(Request $request, Orcamento $orcamento)
     {
         $orcamento->ordemservico()->update(['fim' => $request->datafim]);
+    }
+    public function filtroPorPeriodoECliente(Request $request)
+    {
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+        // $empresa_id = 2;
+        $orc = Orcamento::with([
+            'ordemservico',
+            'cidade',
+            'cliente.pessoa',
+            'homecare.paciente.pessoa',
+            'aph.cidade',
+            'evento.cidade',
+            'remocao.cidadeorigem',
+            'remocao.cidadedestino',
+            'homecare.paciente.internacoes'
+            // 'produtos.produto',
+            // 'servicos.servico',
+            // 'custos'
+        ]);
+        // if($request->data_final) {
+        //     $orc = $orc->whereHas('ordemservico', function (Builder $query) use ($request, $orc) {
+        //         $query->where('fim','<=', $request->data_final ? $request->data_final : $orc);
+        //     });
+        // }
+        if($request->data_ini) {
+            $orc = $orc->whereHas('ordemservico', function (Builder $query) use ($request) {
+                $query->whereBetween('inicio', [$request->data_ini, $request->data_final]);
+            });
+        }
+        if($request->cliente_id) {
+            $orc = $orc->where('cliente_id', $request->cliente_id);
+            // });
+        }
+        $orc->where('empresa_id', $empresa_id);
+        // $orc = $orc->get();
+
+        $orc = $orc->orderByDesc('created_at')->paginate($request['per_page'] ? $request['per_page'] : 15);
+
+        if (env("APP_ENV", 'production') == 'production') {
+            return $orc->withPath(str_replace('http:', 'https:', $orc->path()));
+        } else {
+            return $orc;
+        }
     }
 }

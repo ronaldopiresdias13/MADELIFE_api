@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Pessoa;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Cliente extends Model
 {
@@ -36,4 +37,14 @@ class Cliente extends Model
     // {
     //     return $this->morphToMany('App\Endereco', 'pessoas');
     // }
+
+    /**
+     * Get all of the contratos for the Cliente
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function contratos(): HasMany
+    {
+        return $this->hasMany(Contrato::class);
+    }
 }
