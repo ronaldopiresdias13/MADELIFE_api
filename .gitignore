@@ -9,5 +9,9 @@
 Homestead.json
 Homestead.yaml
 npm-debug.log
+<<<<<<< HEAD
 yarn-error.log
 nohup.out
+=======
+yarn-error.log
+>>>>>>> Teste
