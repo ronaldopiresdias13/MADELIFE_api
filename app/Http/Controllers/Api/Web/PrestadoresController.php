@@ -28,7 +28,7 @@ class PrestadoresController extends Controller
     {
         $prestadores = DB::table('prestadores')
             ->join('pessoas', 'pessoas.id', '=', 'prestadores.pessoa_id')
-            ->select('prestadores.id as value', 'pessoas.nome as label')
+            ->select('prestadores.pessoa_id as value', 'pessoas.nome as label')
             ->where('prestadores.ativo', true)
             ->orderBy('pessoas.nome')
             ->get();
