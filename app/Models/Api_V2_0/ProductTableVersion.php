@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductTableVersion extends Model
 {
-    use HasFactory;
+    
 
     protected $table = 'ml_products_table_versions_prices';
     protected $fillable = [

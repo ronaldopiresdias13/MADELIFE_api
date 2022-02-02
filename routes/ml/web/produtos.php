@@ -22,6 +22,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('productsToCompany', [ProductCompanyController::class, 'index']);
     Route::post('productsToCompany', [ProductCompanyController::class, 'store']);
     Route::delete('productsToCompany/{productCompany}', [ProductCompanyController::class, 'destroy']);
+    Route::get('productsCompanyById', [ProductCompanyController::class, 'ProductsCompanyById']);
     // Endpoint da Controller Product com Autenticação
     Route::get('products', [ProductsController::class, 'index']);
     Route::get('products/filter', [ProductsController::class, 'ProductsFilter']);

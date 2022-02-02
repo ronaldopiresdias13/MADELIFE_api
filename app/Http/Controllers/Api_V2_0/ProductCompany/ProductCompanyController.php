@@ -19,7 +19,7 @@ class ProductCompanyController extends Controller
     public function index(Request $request)
     {
         $empresa_id = $request->user()->pessoa->profissional->empresa_id;
-        $product = ProductCompany::with(['ml_products_table_versions_prices','ml_products_table_versions_prices.ml_products', 'ml_products_table_versions_prices.ml_products.tipoproduto',  'ml_products_table_versions_prices.ml_products.category'])
+        $product = ProductCompany::with(['ml_products_table_versions_prices', 'ml_products_table_versions_prices.ml_products', 'ml_products_table_versions_prices.ml_products.tipoproduto',  'ml_products_table_versions_prices.ml_products.category'])
             ->where('active', true)
             ->where('empresas_id', $empresa_id);
 
@@ -148,5 +148,16 @@ class ProductCompanyController extends Controller
     {
         $productCompany->active = false;
         $productCompany->save();
+    }
+
+    public function ProductsCompanyById(Request $request)
+    {
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+        $product = ProductCompany::with(['ml_products_table_versions_prices', 'ml_products_table_versions_prices.ml_products', 'ml_products_table_versions_prices.ml_products.tipoproduto',  'ml_products_table_versions_prices.ml_products.category'])
+        ->where('empresas_id', $empresa_id)
+        ->where('active', true)
+        ->get();
+
+        return $product;
     }
 }
