@@ -176,18 +176,16 @@ class PacientesController extends Controller
             }
             if ($request['pessoa']['emails']) {
                 foreach ($request['pessoa']['emails'] as $key => $email) {
-                    if ($email['email']) {
-                        PessoaEmail::firstOrCreate([
-                            'pessoa_id' => $paciente->pessoa_id,
-                            'email_id'  => Email::firstOrCreate(
-                                [
-                                    'email'     => $email['email'],
-                                ]
-                            )->id,
-                            'tipo'       => $email['pivot']['tipo'],
-                            'descricao'  => $email['pivot']['descricao']
-                        ]);
-                    }
+                    PessoaEmail::firstOrCreate([
+                        'pessoa_id' => $paciente->pessoa_id,
+                        'email_id'  => Email::firstOrCreate(
+                            [
+                                'email'     => $email['email'],
+                            ]
+                        )->id,
+                        'tipo'       => $email['pivot']['tipo'],
+                        'descricao'  => $email['pivot']['descricao']
+                    ]);
                 }
             }
         });
@@ -257,30 +255,22 @@ class PacientesController extends Controller
                     'status'      => $request['pessoa']['status'],
                 ]);
             }
-
-            foreach ($pessoa->telefones as $key => $telefone) {
-                $pessoatelefone = Pessoatelefone::find($telefone->pivot->id);
-                $pessoatelefone->delete();
-            }
-
             if ($request['pessoa']['telefones']) {
                 foreach ($request['pessoa']['telefones'] as $key => $telefone) {
-                    if ($telefone['telefone']) {
-                        PessoaTelefone::updateOrCreate(
-                            [
-                                'pessoa_id'   => $pessoa->id,
-                                'telefone_id' => Telefone::firstOrCreate(
-                                    [
-                                        'telefone'  => $telefone['telefone'],
-                                    ]
-                                )->id,
-                            ],
-                            [
-                                'tipo'      => $telefone['pivot']['tipo'],
-                                'descricao' => $telefone['pivot']['descricao'],
-                            ]
-                        );
-                    }
+                    $pessoa_telefone = PessoaTelefone::firstOrCreate(
+                        [
+                            'pessoa_id'   => $pessoa->id,
+                            'telefone_id' => Telefone::firstOrCreate(
+                                [
+                                    'telefone'  => $telefone['telefone'],
+                                ]
+                            )->id,
+                        ],
+                        [
+                            'tipo'      => $telefone['pivot']['tipo'],
+                            'descricao' => $telefone['pivot']['descricao'],
+                        ]
+                    );
                 }
             }
             if ($request['pessoa']['enderecos']) {
@@ -304,30 +294,22 @@ class PacientesController extends Controller
                     );
                 }
             }
-
-            foreach ($pessoa->emails as $key => $email) {
-                $pessoaemail = Pessoaemail::find($email->pivot->id);
-                $pessoaemail->delete();
-            }
-
             if ($request['pessoa']['emails']) {
                 foreach ($request['pessoa']['emails'] as $key => $email) {
-                    if ($email['email']) {
-                        PessoaEmail::updateOrCreate(
-                            [
-                                'pessoa_id' => $pessoa->id,
-                                'email_id'  => Email::firstOrCreate(
-                                    [
-                                        'email' => $email['email'],
-                                    ]
-                                )->id,
-                            ],
-                            [
-                                'tipo'      => $email['pivot']['tipo'],
-                                'descricao' => $email['pivot']['descricao'],
-                            ]
-                        );
-                    }
+                    $pessoa_email = PessoaEmail::updateOrCreate(
+                        [
+                            'pessoa_id' => $pessoa->id,
+                            'email_id'  => Email::firstOrCreate(
+                                [
+                                    'email' => $email['email'],
+                                ]
+                            )->id,
+                        ],
+                        [
+                            'tipo'      => $email['pivot']['tipo'],
+                            'descricao' => $email['pivot']['descricao'],
+                        ]
+                    );
                 }
             }
         });
