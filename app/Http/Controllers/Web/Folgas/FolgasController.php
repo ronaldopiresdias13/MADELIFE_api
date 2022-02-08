@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Folgas;
 use App\Http\Controllers\Controller;
 use App\Models\Escala;
 use App\Models\Folga;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -21,17 +22,61 @@ class FolgasController extends Controller
         $folgas = Folga::with([
             'escala.ordemservico.orcamento.homecare.paciente.pessoa',
             'escala.ordemservico.orcamento.cliente.pessoa',
+            'escala.ordemservico.orcamento.cidade',
             'prestador.pessoa',
             'substituto.pessoa',
-            'escala'
+            'escala.servico',
         ])
+
             ->where('empresa_id', $empresa_id)
             ->orderByDesc('created_at')
             ->get();
 
         return $folgas;
     }
+    public function filtroPorPeriodo(Request $request)
+    {
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+        $folgas = Folga::with([
+            'escala.ordemservico.orcamento.homecare.paciente.pessoa',
+            'escala.ordemservico.orcamento.cliente.pessoa',
+            'escala.ordemservico.orcamento.cidade',
+            'prestador.pessoa',
+            'substituto.pessoa',
+            'escala.servico',
+        ])->orderBy('situacao');
+        // if ($request->data_final) {
+        //     $folgas = $folgas->whereHas('escala', function (Builder $query) use ($request, $folgas) {
+        //         $query->where('datasaida', '<=', $request->data_final ? $request->data_final : $folgas);
+        //     });
+        // }
+        if ($request->data_ini) {
+            $folgas = $folgas->whereHas('escala', function (Builder $query) use ($request, $folgas) {
+                $query->whereBetween('dataentrada', [$request->data_ini, $request->data_fim,]);
+            });
+        }
+        if ($request->cliente_id) {
+            $folgas = $folgas->whereHas('escala.ordemservico.orcamento', function (Builder $query) use ($request) {
+                $query->where('cliente_id', $request->cliente_id);
+            });
+        }
+        if($request->situacao){
+            $folgas->where('situacao', $request->situacao);
+            // $folgas = $folga->whereHas('situacao', function (Builder $query) use ($request) {
+            //     $query->where('situacao', $request->situacao);
+            // });
+        }
+        if ($request->cidade) {
+            $folgas = $folgas->whereHas('escala.ordemservico.orcamento', function (Builder $query) use ($request) {
+                $query->where('cidade_id', $request->cidade);
+            });
+        }
+        $folgas->where('empresa_id', $empresa_id);
+       
+        $folgas = $folgas->get();
 
+        return $folgas;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -129,22 +174,23 @@ class FolgasController extends Controller
 
         DB::transaction(function () use ($request, $data) {
             foreach ($request->escalas as $key => $escala) {
-                $escala = Escala::find($escala['id']);
-                if (!$escala->folga) {
-                    // if($escala->empresa_id){
-                        $folga = new Folga();
-                        $folga->empresa_id    = $escala['empresa_id'];
-                        $folga->escala_id     = $escala['id'];
-                        $folga->prestador_id  = $escala['prestador_id'];
-                        $folga->aprovada      = true;
-                        $folga->dataaprovacao = $data;
-                        $folga->save();
-    
-                        $escala->folga = true;
-                        $escala->save();
-                    // }
-                  
-                }
+                $e = Escala::find($escala['id']);
+                // if (!$escala->folga) {
+                // if($escala->empresa_id){
+                $folga = new Folga();
+                $folga->empresa_id    = $e->empresa_id;
+                $folga->escala_id     = $e->id;
+                $folga->prestador_id  = $e->prestador_id;
+                $folga->tipo          = $escala['tipo'];
+                $folga->aprovada      = true;
+                $folga->situacao      = $e->dataentrada == $data ? 'Emergente' : 'Pendente';
+                $folga->dataaprovacao = $data;
+                $folga->save();
+
+                $e->folga = true;
+                $e->save();
+                // }
+                // }
             }
 
             // $folga = new Folga();
@@ -220,6 +266,7 @@ class FolgasController extends Controller
     {
         DB::transaction(function () use ($request, $folga) {
             $folga->substituto = $request['substituto']['id'];
+            $folga->situacao = 'Substituído';
             $folga->save();
 
             $escala = Escala::find($folga->escala_id);
@@ -227,6 +274,25 @@ class FolgasController extends Controller
             $escala->valorhoradiurno  = $request['escala']['valorhoradiurno'];
             $escala->valorhoranoturno = $request['escala']['valorhoranoturno'];
             $escala->observacao       = $request['escala']['observacao'];
+            $escala->save();
+        });
+    }
+
+    /**
+     * Delete the specified resource in storage.
+     *
+     * @param  \App\Models\Folga  $folga
+     * @return \Illuminate\Http\Response
+     */
+    public function removerFolga(Folga $folga)
+    {
+        DB::transaction(function () use ($folga) {
+            $folga->aprovada = false;
+            $folga->save();
+            $folga->delete();
+
+            $escala = Escala::find($folga->escala_id);
+            $escala->folga = false;
             $escala->save();
         });
     }
