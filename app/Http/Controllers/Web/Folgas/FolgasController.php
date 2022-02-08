@@ -38,6 +38,7 @@ class FolgasController extends Controller
         $folgas = Folga::with([
             'escala.ordemservico.orcamento.homecare.paciente.pessoa',
             'escala.ordemservico.orcamento.cliente.pessoa',
+            'escala.ordemservico.orcamento.cidade',
             'prestador.pessoa',
             'substituto.pessoa',
             'escala.servico',
@@ -57,13 +58,19 @@ class FolgasController extends Controller
                 $query->where('cliente_id', $request->cliente_id);
             });
         }
-        $folgas->where('empresa_id', $empresa_id);
         if($request->situacao){
             $folgas->where('situacao', $request->situacao);
             // $folgas = $folga->whereHas('situacao', function (Builder $query) use ($request) {
             //     $query->where('situacao', $request->situacao);
             // });
         }
+        if ($request->cidade) {
+            $folgas = $folgas->whereHas('escala.ordemservico.orcamento', function (Builder $query) use ($request) {
+                $query->where('cidade_id', $request->cidade);
+            });
+        }
+        $folgas->where('empresa_id', $empresa_id);
+       
         $folgas = $folgas->get();
 
         return $folgas;
