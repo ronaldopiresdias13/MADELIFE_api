@@ -17,7 +17,8 @@ class EmpresasController extends Controller
      */
     public function index()
     {
-        return Empresa::withCount(['pacientes'])->get();
+        return Empresa::with(['empresa_dado'])
+        ->withCount(['pacientes'])->get();
     }
 
     /**
@@ -33,7 +34,7 @@ class EmpresasController extends Controller
         $empresa->cnpj  = $request->cnpj;
         $empresa->ie    = $request->ie;
         $empresa->logo  = $request->logo;
-        $empresa->quantidadead = $request->quantidadead;
+        // $empresa->quantidadead = $request->quantidadead;
         $empresa->valorad = $request->valorad;
         $empresa->quantidadeid = $request->quantidadeid;
         $empresa->valorid = $request->valorid;
@@ -48,6 +49,7 @@ class EmpresasController extends Controller
      */
     public function show(Request $request, empresa $empresa)
     {
+        $empresa->empresa_dado;
         return $empresa;
     }
 

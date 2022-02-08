@@ -6,6 +6,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('web')->group(function () {
         Route::post('empresaPrestador', 'Web\EmpresaPrestador\EmpresaPrestadorController@store');
         Route::put('empresaPrestador/{empresaPrestador}', 'Web\EmpresaPrestador\EmpresaPrestadorController@update');
+        Route::get('empresaPrestador/anexos/{empresaPrestador}', 'Web\EmpresaPrestador\EmpresaPrestadorController@anexos');
     });
 });
 

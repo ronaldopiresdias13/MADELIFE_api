@@ -21,16 +21,17 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
+     * 
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->job(new OcorrenciasJob)->hourly();
-        $schedule->job(new OcorrenciasJob)->hourlyAt(15);
-        $schedule->job(new OcorrenciasJob)->hourlyAt(30);
-        $schedule->job(new OcorrenciasJob)->hourlyAt(45);
+        $schedule->job(new OcorrenciasJob,'ocorrencias')->hourlyAt(0);
+        $schedule->job(new OcorrenciasJob,'ocorrencias')->hourlyAt(15);
+        $schedule->job(new OcorrenciasJob,'ocorrencias')->hourlyAt(30);
+        $schedule->job(new OcorrenciasJob,'ocorrencias')->hourlyAt(45);
 
         $schedule->job(new NotificacaoMedicamentoJob)->hourly();
         $schedule->job(new NotificacaoMedicamentoJob)->hourlyAt(30);

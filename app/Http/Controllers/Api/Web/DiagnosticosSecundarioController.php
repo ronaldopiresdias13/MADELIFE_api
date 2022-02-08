@@ -20,8 +20,7 @@ class DiagnosticosSecundarioController extends Controller
         $empresa_id = $user->pessoa->profissional->empresa_id;
         $diagnosticos = DiagnosticoPil::where('flag','=','Secundário')->where(function($q)use($request) {
             $q->whereRaw('lower(codigo) LIKE lower(?)',['%'.$request->search.'%'])
-            ->orWhereRaw('lower(nome) LIKE lower(?)',['%'.$request->search.'%'])
-            ->orWhereRaw('lower(descricao) LIKE lower(?)',['%'.$request->search.'%']);
+            ->orWhereRaw('lower(nome) LIKE lower(?)',['%'.$request->search.'%']);
         })->orderBy('created_at', 'desc')->paginate(15, ['*'], 'diagnosticos');
         $current_page_diagnostico = $diagnosticos->currentPage();
         $last_page_diagnostico = $diagnosticos->lastPage();
@@ -45,7 +44,7 @@ class DiagnosticosSecundarioController extends Controller
         $diagnostico->fill(['flag'=>'Secundário'])->save();
 
 
-        return response()->json(['status'=>true]);
+        return response()->json(['status'=>true,'diagnostico'=>$diagnostico]);
     }
 
     public function update_diagnostico(DiagnosticoRequest $request){

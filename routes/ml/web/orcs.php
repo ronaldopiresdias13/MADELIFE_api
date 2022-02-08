@@ -8,6 +8,11 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::prefix('orcs')->group(function () {
             Route::get('', [OrcsController::class, 'index']);
             Route::get('gerarCodigo', [OrcsController::class, 'gerarCodigoOrc']);
+            Route::get('quantidadeOrcPorSituacao', [OrcsController::class, 'quantidadeOrcPorSituacao']);
+            Route::get('quantidadeOrcsPorTipo', [OrcsController::class, 'quantidadeOrcsPorTipo']);
+            Route::get('quantidadeOrcsPorCliente', [OrcsController::class, 'quantidadeOrcsPorCliente']);
+            Route::get('quantidadeOrcsPorServico', [OrcsController::class, 'quantidadeOrcsPorServico']);
+            Route::get('filtroPorPeriodoECliente', [OrcsController::class, 'filtroPorPeriodoECliente']);
             Route::get('gerarCodigoOrcamento', [OrcsController::class, 'gerarCodigoOrcamento']);
             Route::get('{orc}', [OrcsController::class, 'show']);
             Route::post('', [OrcsController::class, 'store']);

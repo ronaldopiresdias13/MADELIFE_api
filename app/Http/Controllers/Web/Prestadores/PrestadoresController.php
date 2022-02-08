@@ -140,7 +140,7 @@ class PrestadoresController extends Controller
     public function buscaPrestadoresPorCliente(Request $request)
     {
         $user = $request->user();
-        $empresa_id = 1; //$user->pessoa->profissional->empresa->id;
+        $empresa_id = $user->pessoa->profissional->empresa->id;
 
         return DB::select(
             "
@@ -191,7 +191,7 @@ class PrestadoresController extends Controller
             'pessoa.enderecos.cidade',
             'pessoa.conselhos',
             'pessoa.emails',
-            // 'pessoa.dadobancarios',
+            'especialidades',
             'formacoes'
         ])->find($prestador->id);
     }

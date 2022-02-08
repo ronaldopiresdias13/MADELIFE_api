@@ -12,4 +12,9 @@ class VendaSaida extends Model
     // protected $primaryKey = 'uuid';
     protected $table = 'venda_saida';
     protected $guarded = [];
+
+    public function venda()
+    {
+        return $this->hasOne(Venda::class)->where('ativo', true);
+    }
 }

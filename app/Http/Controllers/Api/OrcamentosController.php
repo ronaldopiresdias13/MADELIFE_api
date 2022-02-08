@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Ordemservico;
 use App\Models\OrdemservicoServico;
+use Illuminate\Database\Eloquent\Builder;
 
 class OrcamentosController extends Controller
 {
@@ -754,5 +755,32 @@ class OrcamentosController extends Controller
     {
         $orcamento->ativo = false;
         $orcamento->save();
+    }
+
+    public function pegarRegistrosPorId(Orcamento $orcamento, Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->responsavel->id;
+        $orcamento = Orcamento::with(['homecare.paciente.pessoa', 'servicos', 'ordemservico', 'cliente.pessoa']);
+
+        $orcamento->where('ativo', true);
+        $orcamento->where('status', true);
+
+        $orcamento->whereHas('homecare.paciente.responsavel', function (Builder $query) use ($empresa_id) {
+            $query->where('id', $empresa_id);
+        });
+
+        if ($request->nome) {
+            $orcamento->whereHas('homecare.paciente.pessoa', function (Builder $query) use ($request) {
+                $query->where('nome', 'like', '%' . $request->nome . '%');
+            });
+        }
+        $orcamento = $orcamento->orderByDesc('id')->paginate($request['per_page'] ? $request['per_page'] : 15);
+
+        if (env("APP_ENV", 'production') == 'production') {
+            return $orcamento->withPath(str_replace('http:', 'https:', $orcamento->path()));
+        } else {
+            return $orcamento;
+        }
     }
 }
