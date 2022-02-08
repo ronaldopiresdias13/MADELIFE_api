@@ -288,7 +288,6 @@ class ProfissionaisController extends Controller
                 }
             }
 
-<<<<<<< HEAD
             if ($request['anexos']) {
                 foreach ($request['anexos'] as $anexo) {
                     $md5 = md5_file($anexo['file']);
@@ -307,8 +306,6 @@ class ProfissionaisController extends Controller
             }
         });
 
-=======
->>>>>>> 878c4ac8be513c2cd246d85c742db10415b3492f
         return response()->json([
             'toast' => [
                 'text'  => 'Profissional cadastrado com sucesso!',
@@ -641,15 +638,14 @@ class ProfissionaisController extends Controller
         $result = Profissional::with(['pessoa.user.acessos', 'setor', 'cargo', 'dadoscontratual', 'anexos']);
         $result->where('ativo', 1);
         $result->where('empresa_id', $empresa_id);
-            
-            if($request->nome)
-            {
-                $result->whereHas('pessoa', function (Builder $query) use ($request) {
-                    $query->where('nome', 'like', '%' . $request->nome . '%');
-                });
-            };
-          
-            $result = $result->paginate($request['per_page'] ? $request['per_page'] : 15);
+
+        if ($request->nome) {
+            $result->whereHas('pessoa', function (Builder $query) use ($request) {
+                $query->where('nome', 'like', '%' . $request->nome . '%');
+            });
+        };
+
+        $result = $result->paginate($request['per_page'] ? $request['per_page'] : 15);
 
         if (env("APP_ENV", 'production') == 'production') {
             return $result->withPath(str_replace('http:', 'https:', $result->path()));
