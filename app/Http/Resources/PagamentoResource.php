@@ -25,7 +25,8 @@ class PagamentoResource extends JsonResource
             'agencia'=>$this->agencia,
             'conta'=>$this->conta,
             'digito'=>$this->digito,
-            'banco'=>$this->banco
+            'banco'=>$this->banco,
+            'cpfcnpj'=>$this->pessoa->cpfcnpj
         ];
     }
 }

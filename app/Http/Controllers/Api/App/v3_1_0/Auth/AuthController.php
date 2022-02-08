@@ -25,7 +25,7 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $user = User::firstWhere('email', $request['email']);
+        $user = User::with('pessoa')->firstWhere('email', $request['email']);
 
         if (!$user || !$user->pessoa->prestador) {
             return response()->json([
@@ -59,7 +59,8 @@ class AuthController extends Controller
             'token_type'   => 'Bearer',
             'expires_at'   => Carbon::parse(
                 $tokenResult->token->expires_at
-            )->toDateTimeString()
+            )->toDateTimeString(),
+            'user' => $user
         ]);
     }
 

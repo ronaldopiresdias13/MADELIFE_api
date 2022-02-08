@@ -39,6 +39,6 @@ class Empresa extends Model
 
     public function empresa_dado()
     {
-        return $this->hasOne(EmpresaDados::class, 'empresa_id', 'id')->where('ativo', true);
+        return $this->hasMany(EmpresaDados::class, 'empresa_id', 'id');
     }
 }

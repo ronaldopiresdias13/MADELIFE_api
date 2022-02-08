@@ -104,8 +104,8 @@ class PacientesController extends Controller
     public function store(Request $request)
     {
         $empresa = $request->user()->pessoa->profissional->empresa;
-        // $qtdPac = Paciente::where('empresa_id', $empresa->id)->where('ativo', true)->count();
-        // if ($qtdPac < $empresa->quantidadepaciente) {
+        $qtdPac = Paciente::where('empresa_id', $empresa->id)->where('ativo', true)->count();
+        if ($qtdPac < $empresa->quantidadepaciente) {
         DB::transaction(function () use ($request) {
             $paciente = Paciente::create([
                 'empresa_id' => $request['empresa_id'],
@@ -126,6 +126,8 @@ class PacientesController extends Controller
                 )->id,
                 'responsavel_id' => $request['responsavel_id'],
                 'complexidade'   => $request['complexidade'],
+                'diagnostico' => $request['diagnostico'],
+                'codPaciente' => $request['codPaciente'],
                 'numeroCarteira' => $request['numeroCarteira'],
                 'sexo'           => $request['sexo'],
                 'tipopaciente'   => $request['tipopaciente'],
@@ -174,28 +176,30 @@ class PacientesController extends Controller
             }
             if ($request['pessoa']['emails']) {
                 foreach ($request['pessoa']['emails'] as $key => $email) {
-                    PessoaEmail::firstOrCreate([
-                        'pessoa_id' => $paciente->pessoa_id,
-                        'email_id'  => Email::firstOrCreate(
-                            [
-                                'email'     => $email['email'],
-                            ]
-                        )->id,
-                        'tipo'       => $email['pivot']['tipo'],
-                        'descricao'  => $email['pivot']['descricao']
-                    ]);
+                    if ($email['email']) {
+                        PessoaEmail::firstOrCreate([
+                            'pessoa_id' => $paciente->pessoa_id,
+                            'email_id'  => Email::firstOrCreate(
+                                [
+                                    'email'     => $email['email'],
+                                ]
+                            )->id,
+                            'tipo'       => $email['pivot']['tipo'],
+                            'descricao'  => $email['pivot']['descricao']
+                        ]);
+                    }
                 }
             }
         });
-        // } else {
-        //     return response()->json([
-        //         'alert' => [
-        //             'title' => 'Ops, não foi possível salvar',
-        //             'text' => 'Quantidade máxima de pacientes atingida!'
-        //         ]
-        //     ], 400)
-        //         ->header('Content-Type', 'application/json');
-        // }
+        } else {
+            return response()->json([
+                'alert' => [
+                    'title' => 'Ops, não foi possível salvar',
+                    'text' => 'Quantidade máxima de pacientes atingida!'
+                ]
+            ], 400)
+                ->header('Content-Type', 'application/json');
+        }
     }
 
     /**
@@ -234,6 +238,8 @@ class PacientesController extends Controller
                 'tipopaciente'   => $request['tipopaciente'],
                 'empresa_id'     => $request['empresa_id'],
                 'responsavel_id' => $request['responsavel_id'],
+                'diagnostico'    => $request['diagnostico'],
+                'codPaciente'    => $request['codPaciente'],
                 'numeroCarteira' => $request['numeroCarteira'],
                 'complexidade'   => $request['complexidade'],
                 'ativo'          => $request['ativo'],
@@ -251,22 +257,30 @@ class PacientesController extends Controller
                     'status'      => $request['pessoa']['status'],
                 ]);
             }
+
+            foreach ($pessoa->telefones as $key => $telefone) {
+                $pessoatelefone = Pessoatelefone::find($telefone->pivot->id);
+                $pessoatelefone->delete();
+            }
+
             if ($request['pessoa']['telefones']) {
                 foreach ($request['pessoa']['telefones'] as $key => $telefone) {
-                    $pessoa_telefone = PessoaTelefone::firstOrCreate(
-                        [
-                            'pessoa_id'   => $pessoa->id,
-                            'telefone_id' => Telefone::firstOrCreate(
-                                [
-                                    'telefone'  => $telefone['telefone'],
-                                ]
-                            )->id,
-                        ],
-                        [
-                            'tipo'      => $telefone['pivot']['tipo'],
-                            'descricao' => $telefone['pivot']['descricao'],
-                        ]
-                    );
+                    if ($telefone['telefone']) {
+                        PessoaTelefone::updateOrCreate(
+                            [
+                                'pessoa_id'   => $pessoa->id,
+                                'telefone_id' => Telefone::firstOrCreate(
+                                    [
+                                        'telefone'  => $telefone['telefone'],
+                                    ]
+                                )->id,
+                            ],
+                            [
+                                'tipo'      => $telefone['pivot']['tipo'],
+                                'descricao' => $telefone['pivot']['descricao'],
+                            ]
+                        );
+                    }
                 }
             }
             if ($request['pessoa']['enderecos']) {
@@ -290,22 +304,30 @@ class PacientesController extends Controller
                     );
                 }
             }
+
+            foreach ($pessoa->emails as $key => $email) {
+                $pessoaemail = Pessoaemail::find($email->pivot->id);
+                $pessoaemail->delete();
+            }
+
             if ($request['pessoa']['emails']) {
                 foreach ($request['pessoa']['emails'] as $key => $email) {
-                    $pessoa_email = PessoaEmail::updateOrCreate(
-                        [
-                            'pessoa_id' => $pessoa->id,
-                            'email_id'  => Email::firstOrCreate(
-                                [
-                                    'email' => $email['email'],
-                                ]
-                            )->id,
-                        ],
-                        [
-                            'tipo'      => $email['pivot']['tipo'],
-                            'descricao' => $email['pivot']['descricao'],
-                        ]
-                    );
+                    if ($email['email']) {
+                        PessoaEmail::updateOrCreate(
+                            [
+                                'pessoa_id' => $pessoa->id,
+                                'email_id'  => Email::firstOrCreate(
+                                    [
+                                        'email' => $email['email'],
+                                    ]
+                                )->id,
+                            ],
+                            [
+                                'tipo'      => $email['pivot']['tipo'],
+                                'descricao' => $email['pivot']['descricao'],
+                            ]
+                        );
+                    }
                 }
             }
         });

@@ -15,8 +15,8 @@ class VersaoController extends Controller
      */
     public function verificarVersaoApp(Request $request)
     {
-        $versao = Versao::where('aplicacao', 'ml')->where('plataforma', $request->plataforma)->pluck('versao');
-
+        $versao = Versao::where('aplicacao', 'ml')->where('plataforma', $request['plataforma'])->pluck('versao');
+        // return $versao;
         if ($request->versao < $versao[0]) {
             return response()->json([
                 'alert' => [

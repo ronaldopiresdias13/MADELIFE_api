@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('web/folgas', [FolgasController::class, 'index']);
+    Route::get('web/filtroPorPeriodo', [FolgasController::class, 'filtroPorPeriodo']);
     Route::get('web/folgas/aguardando', [FolgasController::class, 'listAguardando']);
     Route::get('web/folgas/aprovadas', [FolgasController::class, 'listAprovadas']);
     Route::get('web/folgas/reprovadas', [FolgasController::class, 'listReprovadas']);
@@ -13,6 +14,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::put('web/folgas/aprovarFolga/{folga}', [FolgasController::class, 'aprovarFolga']);
     Route::put('web/folgas/reprovarFolga/{folga}', [FolgasController::class, 'reprovarFolga']);
     Route::put('web/folgas/adicionarSubstituto/{folga}', [FolgasController::class, 'adicionarSubstituto']);
+    Route::delete('web/folgas/removerFolga/{folga}', [FolgasController::class, 'removerFolga']);
     // Route::get('acaomedicamentos/{acaomedicamento}'   , 'Api\AcaomedicamentosController@show');
     // Route::put('acaomedicamentos/{acaomedicamento}'   , 'Api\AcaomedicamentosController@update');
     // Route::delete('acaomedicamentos/{acaomedicamento}', 'Api\AcaomedicamentosController@destroy');

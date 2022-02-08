@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web\Produtos;
 
 use App\Http\Controllers\Controller;
 use App\Models\Produto;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -142,5 +143,33 @@ class ProdutosController extends Controller
                 ]);
             }
         });
+    }
+    public function pegarProdutosPorId(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        $result = Produto::with('marca', 'tipoproduto', 'unidademedida');
+        $result->where('empresa_id', $empresa_id);
+        $result->where('tabela', '=' , 'Estoque');
+        $result->where('ativo', true);
+
+        if($request->categoria)
+        {
+            $result->where('categoria', 'like', '%' . $request->categoria . '%');
+        };
+        if($request->descricao)
+        {
+            $result->where('descricao', 'like', '%' . $request->descricao . '%');
+        };
+
+        $result = $result->paginate($request['per_page'] ? $request['per_page'] : 15);
+
+       
+
+        if (env("APP_ENV", 'production') == 'production') {
+            return $result->withPath(str_replace('http:', 'https:', $result->path()));
+        } else {
+            return $result;
+        }
     }
 }

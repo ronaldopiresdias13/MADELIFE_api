@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('pagamentos/filtroPagamentosFinanceiro', [PagamentosController::class, 'filtroPagamentoFinanceiro']);
     Route::get('pagamentos/filtro', [PagamentosPagamentosController::class, 'filtroFluxoDeCaixa']);
+    Route::get('pagamentos/retornaSaldoAnterior', [PagamentosPagamentosController::class, 'retornaSaldoAnterior']);
 });
 
 Route::get('pagamentos', 'Api\PagamentosController@index');

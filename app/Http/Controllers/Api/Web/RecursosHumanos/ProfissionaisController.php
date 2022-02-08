@@ -7,6 +7,7 @@ use App\Models\Dadoscontratual;
 use App\Models\Email;
 use App\Models\Endereco;
 use App\Http\Controllers\Controller;
+use App\Models\Anexo;
 use App\Models\Pessoa;
 use App\Models\PessoaEmail;
 use App\Models\PessoaEndereco;
@@ -18,6 +19,7 @@ use App\Models\ProfissionalFormacao;
 use App\Models\Telefone;
 use App\Models\Tipopessoa;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -34,7 +36,7 @@ class ProfissionaisController extends Controller
     {
         $user = $request->user();
         $empresa_id = $user->pessoa->profissional->empresa_id;
-        return Profissional::with(['pessoa.user.acessos', 'setor', 'cargo', 'dadoscontratual'])
+        return Profissional::with(['pessoa.user.acessos', 'setor', 'cargo', 'dadoscontratual', 'anexos'])
             ->where('ativo', 1)
             ->where('empresa_id', $empresa_id)
             ->get();
@@ -121,17 +123,14 @@ class ProfissionaisController extends Controller
         $profissional = null;
 
         if ($pessoa) {
-            $profissional = Profissional::firstWhere(
-                'pessoa_id',
-                $pessoa->id,
-            );
+            $profissional = Profissional::where('ativo', true)->where('pessoa_id', $pessoa->id)->first();
         }
 
         if ($profissional) {
-            return response()->json('Profissional já existe!', 400)->header('Content-Type', 'text/plain');
+            return response()->json('Profissional já existe!' . json_encode($request), 400)->header('Content-Type', 'text/plain');
         }
 
-        DB::transaction(function () use ($request, $profissional, $empresa_id) {
+        DB::transaction(function () use ($request, $empresa_id) {
             $profissional = Profissional::create([
                 'pessoafisica' => 1,
                 'empresa_id'   => $empresa_id,
@@ -175,14 +174,14 @@ class ProfissionaisController extends Controller
                     'demissao'                => $request['dadoscontratuais']['demissao'],
                 ])->id,
             ]);
-            $tipopessoa = Tipopessoa::create([
+            Tipopessoa::create([
                 'tipo'      => 'Profissional',
                 'pessoa_id' => $profissional->pessoa_id,
                 'ativo'     => 1
             ]);
             if ($request['formacoes']) {
                 foreach ($request['formacoes'] as $key => $formacao) {
-                    $profissional_formacao = ProfissionalFormacao::firstOrCreate([
+                    ProfissionalFormacao::firstOrCreate([
                         'profissional_id' => $profissional->id,
                         'formacao_id'     => $formacao['id'],
                     ]);
@@ -190,7 +189,7 @@ class ProfissionaisController extends Controller
             }
             if ($request['beneficios']) {
                 foreach ($request['beneficios'] as $key => $beneficio) {
-                    $profissional_beneficio = ProfissionalBeneficio::firstOrCreate([
+                    ProfissionalBeneficio::firstOrCreate([
                         'profissional_id' => $profissional->id,
                         'beneficio_id'    => $beneficio['beneficio_id']
                     ]);
@@ -198,7 +197,7 @@ class ProfissionaisController extends Controller
             }
             if ($request['convenios']) {
                 foreach ($request['convenios'] as $key => $convenio) {
-                    $profissional_convenio = ProfissionalConvenio::firstOrCreate([
+                    ProfissionalConvenio::firstOrCreate([
                         'profissional_id' => $profissional->id,
                         'convenio_id'    => $convenio['convenio_id']
                     ]);
@@ -206,7 +205,7 @@ class ProfissionaisController extends Controller
             }
             if ($request['dadosBancario']) {
                 foreach ($request['dadosBancario'] as $key => $dadosbancario) {
-                    $dados_bancario = Dadosbancario::firstOrCreate([
+                    Dadosbancario::firstOrCreate([
                         'empresa_id'  => $empresa_id,
                         'banco_id'    => $dadosbancario['banco_id'],
                         'agencia'     => $dadosbancario['agencia'],
@@ -220,7 +219,7 @@ class ProfissionaisController extends Controller
 
             if ($request['pessoa']['enderecos']) {
                 foreach ($request['pessoa']['enderecos'] as $key => $endereco) {
-                    $pessoa_endereco = PessoaEndereco::firstOrCreate([
+                    PessoaEndereco::firstOrCreate([
                         'pessoa_id'   => $profissional->pessoa_id,
                         'endereco_id' => Endereco::firstOrCreate(
                             [
@@ -240,36 +239,55 @@ class ProfissionaisController extends Controller
 
             if ($request['pessoa']['telefones']) {
                 foreach ($request['pessoa']['telefones'] as $key => $telefone) {
-                    $pessoa_telefone = PessoaTelefone::firstOrCreate([
-                        'pessoa_id'   => $profissional->pessoa_id,
-                        'telefone_id' => Telefone::firstOrCreate(
-                            [
-                                'telefone'  => $telefone['telefone'],
-                            ]
-                        )->id,
-                        'tipo'      => $telefone['pivot']['tipo'],
-                        'descricao' => $telefone['pivot']['descricao'],
-                    ]);
+                    if ($telefone['telefone']) {
+                        PessoaTelefone::firstOrCreate([
+                            'pessoa_id'   => $profissional->pessoa_id,
+                            'telefone_id' => Telefone::firstOrCreate(
+                                [
+                                    'telefone'  => $telefone['telefone'],
+                                ]
+                            )->id,
+                            'tipo'      => $telefone['pivot']['tipo'],
+                            'descricao' => $telefone['pivot']['descricao'],
+                        ]);
+                    }
                 }
             }
 
             if ($request['pessoa']['emails']) {
                 foreach ($request['pessoa']['emails'] as $key => $email) {
-                    $pessoa_email = PessoaEmail::firstOrCreate([
-                        'pessoa_id' => $profissional->pessoa_id,
-                        'email_id'  => Email::firstOrCreate(
-                            [
-                                'email' => $email['email'],
-                            ]
-                        )->id,
-                        'tipo'      => $email['tipo'],
-                        'descricao' => $email['descricao'],
+                    if ($email['email']) {
+                        PessoaEmail::firstOrCreate([
+                            'pessoa_id' => $profissional->pessoa_id,
+                            'email_id'  => Email::firstOrCreate(
+                                [
+                                    'email' => $email['email'],
+                                ]
+                            )->id,
+                            'tipo'      => $email['pivot']['tipo'],
+                            'descricao' => $email['pivot']['descricao'],
+                        ]);
+                    }
+                }
+            }
+
+            if ($request['anexos']) {
+                foreach ($request['anexos'] as $anexo) {
+                    $md5 = md5_file($anexo['file']);
+                    $caminho = 'anexos/';
+                    $nome = $md5 . '.' . explode(';', explode('/', $anexo['file'])[1])[0];
+                    $file = explode(',', $anexo['file'])[1];
+                    Storage::put($caminho . $nome, base64_decode($file));
+                    Anexo::create([
+                        'anexo_id'   => $profissional->id,
+                        'anexo_type' => 'app\Models\Profissional',
+                        'caminho'    => $caminho . $nome,
+                        'nome'       => $anexo['nome'],
+                        'descricao'  => $anexo['descricao']
                     ]);
                 }
             }
         });
-
-        // return response()->json('Profissional cadastrado com sucesso!', 200)->header('Content-Type', 'text/plain');
 
         return response()->json([
             'toast' => [
@@ -280,6 +298,7 @@ class ProfissionaisController extends Controller
         ], 200)
             ->header('Content-Type', 'application/json');
     }
+
     /**
      * Update the specified resource in storage.
      *
@@ -360,7 +379,7 @@ class ProfissionaisController extends Controller
                 foreach ($request['convenios'] as $key => $convenio) {
                     $profissional_convenio = ProfissionalConvenio::firstOrCreate([
                         'profissional_id' => $profissional->id,
-                        'convenio_id'    => $convenio['id']
+                        'convenio_id'    => $convenio['convenio_id']
                     ]);
                 }
             }
@@ -406,23 +425,25 @@ class ProfissionaisController extends Controller
 
             if ($request['pessoa']['telefones']) {
                 foreach ($request['pessoa']['telefones'] as $key => $telefone) {
-                    $pessoa_telefone = PessoaTelefone::firstOrCreate(
-                        [
-                            'pessoa_id'   => $profissional->pessoa_id,
-                            'telefone_id' => Telefone::firstOrCreate(
-                                [
-                                    'telefone'  => $telefone['telefone'],
-                                ]
-                            )->id,
-                        ],
-                        [
-                            'tipo'      => $telefone['pivot']['tipo'],
-                            'descricao' => $telefone['pivot']['descricao'],
-                        ]
-                    );
+                    if ($telefone['telefone']) {
+                        PessoaTelefone::firstOrCreate(
+                            [
+                                'pessoa_id'   => $profissional->pessoa_id,
+                                'telefone_id' => Telefone::firstOrCreate(
+                                    [
+                                        'telefone'  => $telefone['telefone'],
+                                    ]
+                                )->id,
+                            ],
+                            [
+                                'tipo'      => $telefone['pivot']['tipo'],
+                                'descricao' => $telefone['pivot']['descricao'],
+                            ]
+                        );
+                    }
                 }
             }
-            
+
             foreach ($pessoa->emails as $key => $email) {
                 $pessoaemail = Pessoaemail::find($email->pivot->id);
                 $pessoaemail->delete();
@@ -430,16 +451,49 @@ class ProfissionaisController extends Controller
 
             if ($request['pessoa']['emails']) {
                 foreach ($request['pessoa']['emails'] as $key => $email) {
-                    $pessoa_email = PessoaEmail::firstOrCreate([
-                        'pessoa_id' => $profissional->pessoa_id,
-                        'email_id'  => Email::firstOrCreate(
-                            [
-                                'email' => $email['email'],
-                            ]
-                        )->id,
-                        'tipo'      => $email['pivot']['tipo'],
-                        'descricao' => $email['pivot']['descricao'],
-                    ]);
+                    if ($email['email']) {
+                        PessoaEmail::firstOrCreate([
+                            'pessoa_id' => $profissional->pessoa_id,
+                            'email_id'  => Email::firstOrCreate(
+                                [
+                                    'email' => $email['email'],
+                                ]
+                            )->id,
+                            'tipo'      => $email['pivot']['tipo'],
+                            'descricao' => $email['pivot']['descricao'],
+                        ]);
+                    }
+                }
+            }
+            if ($request['anexos']) {
+
+                $ids = [];
+
+                foreach ($request['anexos'] as $anexo) {
+                    array_push($ids, $anexo['id']);
+                    if (!$anexo['id']) {
+                        $md5 = md5_file($anexo['file']);
+                        $caminho = 'anexos/';
+                        $nome = $md5 . '.' . explode(';', explode('/', $anexo['file'])[1])[0];
+                        $file = explode(',', $anexo['file'])[1];
+                        Storage::put($caminho . $nome, base64_decode($file));
+                        Anexo::create([
+                            'anexo_id'   => $profissional->id,
+                            'anexo_type' => 'app\Models\Profissional',
+                            'caminho'    => $caminho . $nome,
+                            'nome'       => $anexo['nome'],
+                            'descricao'  => $anexo['descricao']
+                        ]);
+                    }
+                }
+
+                $anexos = Anexo::where('anexo_id', $profissional->id)
+                    ->where('anexo_type', 'app\Models\Profissional')
+                    ->whereNotIn('id', $ids)
+                    ->get();
+
+                foreach ($anexos as $key => $anexo) {
+                    $anexo->delete();
                 }
             }
         });
@@ -460,6 +514,11 @@ class ProfissionaisController extends Controller
         $profissional->setor;
         $profissional->cargo;
         $profissional->dadoscontratual;
+        if ($profissional->anexos) {
+            foreach ($profissional->anexos as $key => $anexos) {
+                $anexos->anexos;
+            }
+        }
         if ($profissional->beneficios) {
             foreach ($profissional->beneficios as $key => $beneficio) {
                 $beneficio->beneficio;
@@ -522,5 +581,29 @@ class ProfissionaisController extends Controller
     {
         $profissional->ativo = false;
         $profissional->save();
+    }
+
+    public function profissionaisPage(Request $request)
+    {
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+        $result = Profissional::with(['pessoa.user.acessos', 'setor', 'cargo', 'dadoscontratual', 'anexos']);
+        $result->where('ativo', 1);
+        $result->where('empresa_id', $empresa_id);
+            
+            if($request->nome)
+            {
+                $result->whereHas('pessoa', function (Builder $query) use ($request) {
+                    $query->where('nome', 'like', '%' . $request->nome . '%');
+                });
+            };
+          
+            $result = $result->paginate($request['per_page'] ? $request['per_page'] : 15);
+
+        if (env("APP_ENV", 'production') == 'production') {
+            return $result->withPath(str_replace('http:', 'https:', $result->path()));
+        } else {
+            return $result;
+        }
     }
 }

@@ -10,12 +10,14 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('web/prestadores/empresaPrestador/listaPrestadoresPorEmpresaIdEStatus', [EmpresaPrestadorController::class, 'listaPrestadoresPorEmpresaIdEStatus']);
     Route::get('web/prestadores/buscaPrestadorComServicosPrestadosNaEmpresa/{prestador}', [PrestadoresController::class, 'buscaPrestadorComServicosPrestadosNaEmpresa']);
     Route::get('web/prestadores/buscaprestadorexterno/{prestador}', [PrestadoresController::class, 'buscaprestadorexterno']);
+    Route::get('web/prestadores/listNomePrestadoresFinanceiro', 'Api\Web\PrestadoresController@listNomePrestadoresFinanceiro');
     Route::get('web/prestadores/listNomePrestadores', 'Api\Web\PrestadoresController@listNomePrestadores');
     Route::get('web/prestadores/listPrestadoresComFormacoes', 'Api\Web\PrestadoresController@listPrestadoresComFormacoes');
     Route::get('web/prestadores/buscaPrestadoresPorCliente', [PrestadoresController::class, 'buscaPrestadoresPorCliente']);
+    Route::get('prestadores/atribuicao', 'Api\Web\PrestadoresController@buscaprestadoresporfiltro');
+    Route::get('prestadores/atribuicaofixa', 'Api\Web\PrestadoresController@buscaprestadoresrecrutadosporfiltro');
+    Route::get('prestadores/atribuicao2', 'Api\Web\PrestadoresController@buscaprestadoresporfiltro2');
 });
-
-Route::get('prestadores/atribuicao', 'Api\Web\PrestadoresController@buscaprestadoresporfiltro'); // MUDAR AQUII DEPOIS
 
 Route::get('prestadores', 'Api\PrestadoresController@index');
 Route::post('prestadores', 'Api\PrestadoresController@store');

@@ -81,7 +81,7 @@ class ChamadosController extends Controller
         } else {
             $pessoas = Pessoa::has('user')->whereHas('prestador', function ($q) use ($profissinal) {
                 $q->whereHas('empresas', function ($q2) use ($profissinal) {
-                    $q2->where('empresas.id', '=', $profissinal->empresa_id);
+                    $q2->where('empresas.empresa_id', '=', $profissinal->empresa_id);
                 });
             })->whereRaw('lower(nome) LIKE lower(?)', ['%' . $request->search . '%'])->orderBy('nome', 'asc')->get();
         }
