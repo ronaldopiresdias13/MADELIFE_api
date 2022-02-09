@@ -7,20 +7,23 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ClientPatient extends Model
+class ServicoSocioAmbiental extends Model
 {
     use HasFactory, Uuid,SoftDeletes;
 
-    protected $table = 'clients_patients';
+    protected $table = 'servicos_socio_ambiental';
     public $incrementing = false;
 
     protected $fillable = [
-        'nome', 'sexo','cpf','rg','rua','numero','complemento','bairro','cidade', 'estado','latitude','longitude','nome_responsavel',
-        'parentesco_responsavel','cpf_responsavel','telefone_responsavel','empresa_id','cep','matricula','convenio','nascimento'
+        'telefone','nome', 'rua','cep','rua','numero','bairro','cidade','estado','complemento','empresa_id','tipo'
     ];
 
-    public function empresa()
-    {
+    public function empresa(){
         return $this->belongsTo(Empresa::class,'empresa_id','id');
+    }
+
+    public function planilhas_anexo_b()
+    {
+        return $this->belongsToMany(PlanilhaAnexoB::class, 'servicos_and_socios_ambiental', 'servico_id','anexo_b_id');
     }
 }
