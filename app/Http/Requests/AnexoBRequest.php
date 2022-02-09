@@ -28,15 +28,34 @@ class AnexoBRequest extends FormRequest
                 return [
                     'paciente' => 'required',
                     'dados' => 'required',
-                    'informacoes_complementares' => 'required',
+                    // 'informacoes_complementares' => 'required',
+                    'servicos_selecionados' => 'required',
+
                 ];
                 break;
             case 'update_anexob':
                 return [
                     'paciente' => 'required',
                     'dados' => 'required',
-                    'informacoes_complementares' => 'required',
+                    // 'informacoes_complementares' => 'required',
                     'anexo_b_id' => 'required',
+                    'servicos_selecionados' => 'required',
+
+                ];
+                break;
+
+            case 'store_servico_anexo_b':
+                return [
+                    'nome' => ['required'],
+                    'telefone' => ['required'],
+                    'tipo' => ['required'],
+                    'cep' => ['sometimes'],
+                    'rua' => ['sometimes'],
+                    'numero' => ['sometimes'],
+                    'complemento' => ['sometimes'],
+                    'bairro' => ['sometimes'],
+                    'cidade' => ['sometimes'],
+                    'estado' => ['sometimes'],
                 ];
                 break;
             default:
