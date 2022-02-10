@@ -49,11 +49,12 @@ class OrcService
                 } elseif (substr($o, 0, 1) == 'A' || substr($o, 0, 1) == 'P') {
                     $o = substr(explode('-', $o)[0], 1);
                 }
-                $a = Orc::where('empresa_id', $empresa_id)
-                    ->where('versao', $this->request->versao)
-                    ->where('orc_id', $this->request->orc_id)
-                    ->count('id');
-                $numero = "A" . $o . "-" . ($a + 1);
+                // $a = Orc::where('empresa_id', $empresa_id)
+                //     ->where('versao', $this->request->versao)
+                //     ->where('orc_id', $this->request->orc_id)
+                //     ->count('id');
+                $numero = "A" . $o;
+                // . "-" . ($a + 1)
                 break;
             case 'Prorrogação':
                 $o = Orc::find($this->request->orc_id)->numero;
@@ -62,11 +63,12 @@ class OrcService
                 } elseif (substr($o, 0, 1) == 'A' || substr($o, 0, 1) == 'P') {
                     $o = substr(explode('-', $o)[0], 1);
                 }
-                $p = Orc::where('empresa_id', $empresa_id)
-                    ->where('versao', $this->request->versao)
-                    ->where('orc_id', $this->request->orc_id)
-                    ->count('id');
-                $numero = "P" . $o . "-" . ($p + 1);
+                // $p = Orc::where('empresa_id', $empresa_id)
+                //     ->where('versao', $this->request->versao)
+                //     ->where('orc_id', $this->request->orc_id)
+                //     ->count('id');
+                $numero = "P" . $o;
+                // . "-" . ($p + 1)
                 break;
         }
 
@@ -83,6 +85,7 @@ class OrcService
                 "cliente_id"               => $this->request->cliente_id,
                 "pacote_id"                => $this->request->pacote_id,
                 "numero"                   => $numero,
+                "addition_code"            => ($this->request->versao != 'Orçamento') ? 1 : null,
                 "tipo"                     => $this->request->tipo,
                 "tipoatentendimento"       => $this->request->tipoatentendimento,
                 "indicacaoacidente"        => $this->request->indicacaoacidente,
@@ -192,6 +195,7 @@ class OrcService
                 "cliente_id"               => $this->request->cliente_id,
                 "pacote_id"                => $this->request->pacote_id,
                 "numero"                   => $this->request->numero,
+                "addition_code"            => $this->request->addition_code,
                 "tipo"                     => $this->request->tipo,
                 "caraterAtendimento"       => $this->request->caraterAtendimento,
                 "indicacaoClinica"         => $this->request->indicacaoClinica,

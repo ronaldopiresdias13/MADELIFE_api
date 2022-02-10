@@ -32,6 +32,7 @@ class Orc extends Model
         'cliente_id',
         'pacote_id',
         'numero',
+        'addition_code',
         'tipo',
         'tipoatentendimento',
         'indicacaoacidente',
