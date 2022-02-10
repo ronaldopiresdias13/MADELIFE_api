@@ -24,6 +24,7 @@ class Orc extends Model
         'updated_at',
         'deleted_at'
     ];
+    
 
     protected $fillable = [
         'id',
