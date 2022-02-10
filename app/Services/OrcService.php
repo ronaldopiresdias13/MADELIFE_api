@@ -69,7 +69,7 @@ class OrcService
                 //     ->count('id');
                 $numero = "P" . $o;
                 // . "-" . ($p + 1)
-                
+            
                 break;
         }
 

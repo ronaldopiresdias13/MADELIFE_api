@@ -25,7 +25,6 @@ class Orc extends Model
         'deleted_at'
     ];
     
-
     protected $fillable = [
         'id',
         'empresa_id',
