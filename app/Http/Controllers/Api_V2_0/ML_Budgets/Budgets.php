@@ -13,9 +13,14 @@ class Budgets extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Budget::all();
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+        $budgets = Budget::with(['package', 'cidade'])
+            ->where('empresas_id', $empresa_id)
+            ->get();
+
+        return $budgets;
     }
 
     /**
