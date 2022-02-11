@@ -10,10 +10,5 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
-<<<<<<< HEAD
 composer.lock
 package-lock.json
-=======
-nohup.out
-composer.lock
->>>>>>> Dev
