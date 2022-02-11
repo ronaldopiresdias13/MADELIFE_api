@@ -36,8 +36,19 @@ class PilRequest extends FormRequest
                     'prognostico' => 'present',
                     'avaliacao_prescricoes' => 'present',
                     'justificativa_revisao' => 'present',
+                    'referencia' => 'present',
+
                     'evolucao_base' => 'present',
                     'revisao' => 'required',
+
+                    'desenvolvido_por' => 'present',
+                    'desenvolvido_por_data' => 'present|nullable|date_format:Y-m-d',
+
+                    'atualizado_por' => 'present',
+                    'atualizado_por_data' => 'present|nullable|date_format:Y-m-d',
+
+                    'aprovado_por' => 'present',
+                    'aprovado_por_data' => 'present|nullable|date_format:Y-m-d',
 
                 ];
                 break;
@@ -53,10 +64,21 @@ class PilRequest extends FormRequest
                     'prognostico' => 'present',
                     'avaliacao_prescricoes' => 'present',
                     'justificativa_revisao' => 'present',
+                    'referencia' => 'present',
+
                     'evolucao_base' => 'present',
                     'revisao' => 'required',
 
                     'pil_id' => 'required',
+
+                    'desenvolvido_por' => 'present',
+                    'desenvolvido_por_data' => 'present|nullable|date_format:Y-m-d',
+
+                    'atualizado_por' => 'present',
+                    'atualizado_por_data' => 'present|nullable|date_format:Y-m-d',
+
+                    'aprovado_por' => 'present',
+                    'aprovado_por_data' => 'present|nullable|date_format:Y-m-d',
                 ];
                 break;
             default:

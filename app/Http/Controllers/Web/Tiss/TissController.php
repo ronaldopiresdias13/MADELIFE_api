@@ -84,18 +84,16 @@ class TissController extends Controller
             ->join('pessoas as p', 'p.id', '=', 'c.pessoa_id')
             ->with('cliente.pessoa', 'medicoes.ordemservico.orcamento.homecare.paciente.pessoa')->orderBy('p.nome');
 
-            if($request->cliente_id)
-            {
-                $result->whereHas('cliente', function (Builder $query) use ($request) {
-                    $query->where('id', $request->cliente_id);
-                });
-            }
-            if($request->nome)
-            {
-                $result->whereHas('medicoes.ordemservico.orcamento.homecare.paciente.pessoa', function (Builder $query) use ($request) {
-                    $query->where('nome', 'like', '%' . $request->nome . '%');
-                });
-            }
+        if ($request->cliente_id) {
+            $result->whereHas('cliente', function (Builder $query) use ($request) {
+                $query->where('id', $request->cliente_id);
+            });
+        }
+        if ($request->nome) {
+            $result->whereHas('medicoes.ordemservico.orcamento.homecare.paciente.pessoa', function (Builder $query) use ($request) {
+                $query->where('nome', 'like', '%' . $request->nome . '%');
+            });
+        }
 
         if ($request->paginate) {
             $result = $result->paginate($request['per_page'] ? $request['per_page'] : 15);
@@ -116,6 +114,4 @@ class TissController extends Controller
         ];
         return response()->download($tiss->caminhoxml, $tiss->nomexml, $headers);
     }
-
-   
 }

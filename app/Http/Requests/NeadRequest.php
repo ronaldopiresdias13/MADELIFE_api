@@ -32,6 +32,8 @@ class NeadRequest extends FormRequest
                     'classificacao_katz' => 'required',
                     'classificacao_pacient' => 'required',
                     'grupo1' => 'required',
+                    'observacao_grupo1' => 'sometimes',
+
                     'grupo2' => 'required',
                     'grupo3' => 'required',
                     'escore_katz' => 'required',
@@ -45,6 +47,8 @@ class NeadRequest extends FormRequest
                     'classificacao_katz' => 'required',
                     'classificacao_pacient' => 'required',
                     'grupo1' => 'required',
+                    'observacao_grupo1' => 'sometimes',
+
                     'grupo2' => 'required',
                     'grupo3' => 'required',
                     'escore_katz' => 'required',

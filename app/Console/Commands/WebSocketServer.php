@@ -49,26 +49,24 @@ class WebSocketServer extends Command
             'local_pk' => '/etc/ssl/private/server.key',
             'verify_peer' => false
         ]);
-       $websocket = new \Ratchet\WebSocket\WsServer(
-                new ChatWebSocketController()
+        $websocket = new \Ratchet\WebSocket\WsServer(
+            new ChatWebSocketController()
         );
         $websocket->enableKeepAlive($loop, 60);
         $app = new \Ratchet\Http\HttpServer(
-                $websocket
+            $websocket
         );
         $server = new \Ratchet\Server\IoServer($app, $secure_websockets, $loop);
         $server->run();
 
-
-
-       //$server = IoServer::factory(
-       //    new HttpServer(
-       //        new WsServer(
-       //            new ChatWebSocketController()
-       //        )
-       //    ),
-       //    1123
-       //);
-       //$server->run();
+        //$server = IoServer::factory(
+        //    new HttpServer(
+        //        new WsServer(
+        //            new ChatWebSocketController()
+        //        )
+        //    ),
+        //    1123
+        //);
+        //$server->run();
     }
 }
