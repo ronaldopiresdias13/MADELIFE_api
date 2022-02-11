@@ -39,6 +39,9 @@ class AnexoBEditResource extends JsonResource
 
         $data['informacoes']=$this->informacoes()->get();
 
+        $data['servicos']=$this->servicos()->get();
+
+
 
         return $data;
     }

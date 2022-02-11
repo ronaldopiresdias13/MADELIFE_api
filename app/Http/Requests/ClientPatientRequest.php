@@ -54,6 +54,10 @@ class ClientPatientRequest extends FormRequest
                     'bairro' => ['sometimes'],
                     'cidade' => ['sometimes'],
                     'estado' => ['sometimes'],
+                    'matricula' => ['sometimes'],
+                    'convenio' => ['sometimes'],
+                    'nascimento' => ['sometimes','nullable','date_format:Y-m-d'],
+
                     'nome_responsavel' => ['required'],
                     'parentesco_responsavel' => ['required'],
                     'cpf_responsavel' => ['required'],

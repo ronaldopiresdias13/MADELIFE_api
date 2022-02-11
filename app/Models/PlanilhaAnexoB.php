@@ -47,4 +47,9 @@ class PlanilhaAnexoB extends Model
     {
         return $this->belongsTo(Empresa::class, 'empresa_id', 'id');
     }
+    
+    public function servicos()
+    {
+        return $this->belongsToMany(ServicoSocioAmbiental::class, 'servicos_and_socios_ambiental', 'anexo_b_id', 'servico_id');
+    }
 }
