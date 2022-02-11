@@ -98,6 +98,7 @@ class RouteServiceProvider extends ServiceProvider
                 require base_path('routes/ml/web/cargos.php');
                 require base_path('routes/ml/web/categoriadocumentos.php');
                 require base_path('routes/ml/web/categorianaturezas.php');
+                require base_path('routes/ml/web/category.php');
                 require base_path('routes/ml/web/certificadoprestadores.php');
                 require base_path('routes/ml/web/chamados.php');
                 require base_path('routes/ml/web/cidades.php');
@@ -157,6 +158,7 @@ class RouteServiceProvider extends ServiceProvider
                 require base_path('routes/ml/web/ordemservicoServicos.php');
                 require base_path('routes/ml/web/outros.php');
                 require base_path('routes/ml/web/pacientes.php');
+                require base_path('routes/ml/web/package.php');
                 require base_path('routes/ml/web/pacotes.php');
                 require base_path('routes/ml/web/pagamentoexternos.php');
                 require base_path('routes/ml/web/pagamentointernos.php');
@@ -197,6 +199,7 @@ class RouteServiceProvider extends ServiceProvider
                 require base_path('routes/ml/web/TissRoute.php');
                 require base_path('routes/ml/web/transcricaoprodutos.php');
                 require base_path('routes/ml/web/transcricoes.php');
+                require base_path('routes/ml/web/tutorials.php');
                 require base_path('routes/ml/web/unidademedidas.php');
                 require base_path('routes/ml/web/UnidadesfederativasRoute.php');
                 require base_path('routes/ml/web/userAcessos.php');

@@ -16,7 +16,7 @@ class ClientPatient extends Model
 
     protected $fillable = [
         'nome', 'sexo','cpf','rg','rua','numero','complemento','bairro','cidade', 'estado','latitude','longitude','nome_responsavel',
-        'parentesco_responsavel','cpf_responsavel','telefone_responsavel','empresa_id','cep'
+        'parentesco_responsavel','cpf_responsavel','telefone_responsavel','empresa_id','cep','matricula','convenio','nascimento'
     ];
 
     public function empresa()

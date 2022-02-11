@@ -47,8 +47,8 @@ class ChamadoWebSocketServer extends Command
             //  'local_pk' => env('SSL_KEY', '/etc/ssl/private/server.key'),
             'verify_peer' => false
         ]);
-       $websocket = new \Ratchet\WebSocket\WsServer(
-                new ChamadoWebSocketController()
+        $websocket = new \Ratchet\WebSocket\WsServer(
+            new ChamadoWebSocketController()
         );
         $websocket->enableKeepAlive($loop, 30);
         $app = new \Ratchet\Http\HttpServer(
@@ -57,14 +57,14 @@ class ChamadoWebSocketServer extends Command
         $server = new \Ratchet\Server\IoServer($app, $secure_websockets, $loop);
         $server->run();
 
-       //$loop_ = \React\EventLoop\Factory::create();
-       //$socket_ = new \React\Socket\Server('0.0.0.0:1122', $loop_);
-       //$app_ = new \Ratchet\Http\HttpServer(
-       //    new \Ratchet\WebSocket\WsServer(
-       //        new ChamadoWebSocketController()
-       //    )
-       //);
-       //$server_ = new \Ratchet\Server\IoServer($app_, $socket_, $loop_);
-       //$server_->run();
+        //$loop_ = \React\EventLoop\Factory::create();
+        //$socket_ = new \React\Socket\Server('0.0.0.0:1122', $loop_);
+        //$app_ = new \Ratchet\Http\HttpServer(
+        //    new \Ratchet\WebSocket\WsServer(
+        //        new ChamadoWebSocketController()
+        //    )
+        //);
+        //$server_ = new \Ratchet\Server\IoServer($app_, $socket_, $loop_);
+        //$server_->run();
     }
 }

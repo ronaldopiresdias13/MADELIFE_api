@@ -21,6 +21,7 @@ class AnexoBResource extends JsonResource
         $data['opcoes']=$this->opcoes()->get();
 
         $data['informacoes']=$this->informacoes()->get();
+        $data['servicos']=$this->servicos()->get();
 
         return $data;
     }

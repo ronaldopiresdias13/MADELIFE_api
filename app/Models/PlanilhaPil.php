@@ -21,7 +21,14 @@ class PlanilhaPil extends Model
         'avaliacao_prescricoes', 
         'justificativa_revisao', 
         'evolucao_base',
-        'cpatient_id'
+        'referencia',
+        'cpatient_id',
+        'desenvolvido_por',
+        'desenvolvido_por_data',
+        'atualizado_por',
+        'atualizado_por_data',
+        'aprovado_por',
+        'aprovado_por_data'
     ];
 
     public function paciente()
