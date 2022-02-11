@@ -8,6 +8,7 @@ Route::group(['middleware' => 'auth:api'], function () {
        Route::get('budgets', [BudgetsController::class, 'index']);
        Route::post('budget', [BudgetsController::class, 'store']);
        Route::put('budget/{budget}', [BudgetsController::class, 'update']);
+       Route::put('budget/situation/{budget}', [BudgetsController::class, 'alterarSituacao']);
        Route::get('budget/{budget}', [BudgetsController::class, 'show']);
     //    Route::delete('budgets/excluirItemPacoteServico/{budgetservice}', [BudgetsController::class, 'excluirItemPacoteServico']);
     //    Route::delete('budgets/excluirItemPacoteProduto/{packageProduct}', [BudgetsController::class, 'excluirItemPacoteProduto']);

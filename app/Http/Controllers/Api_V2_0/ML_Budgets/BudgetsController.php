@@ -72,6 +72,7 @@ class BudgetsController extends Controller
     public function show(Budget $budget)
     {
         $budget->package;
+        // $budget->package->ml_packages_services->servico;
         $budget->cidade;
         return $budget;
     }
@@ -125,5 +126,30 @@ class BudgetsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Orcamento  $orcamento
+     * @return \Illuminate\Http\Response
+     */
+    public function alterarSituacao(Request $request, Budget $budget)
+    {
+        $empresa_id = $request->user()->pessoa->profissional->empresa_id;
+
+        DB::transaction(function () use ($request, $budget, $empresa_id){
+            $budget->situation          = $request['situation'];
+            $budget->save();
+        });
+        return response()->json([
+            'alert' => [
+                'title' => 'Ok!',
+                'text' => 'Orçamento cadastrado com sucesso!'
+            ]
+        ], 200)
+            ->header('Content-Type', 'application/json');
+        
     }
 }
