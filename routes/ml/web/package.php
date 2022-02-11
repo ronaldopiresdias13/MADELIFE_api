@@ -9,5 +9,7 @@ Route::group(['middleware' => 'auth:api'], function () {
        Route::post('package', [PackageController::class, 'store']);
        Route::put('package/{package}', [PackageController::class, 'update']);
        Route::get('package/{package}', [PackageController::class, 'show']);
+       Route::delete('packages/excluirItemPacoteServico/{packageService}', [PackageController::class, 'excluirItemPacoteServico']);
+       Route::delete('packages/excluirItemPacoteProduto/{packageProduct}', [PackageController::class, 'excluirItemPacoteProduto']);
     });
 });

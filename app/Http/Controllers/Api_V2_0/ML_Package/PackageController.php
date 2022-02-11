@@ -20,8 +20,10 @@ class PackageController extends Controller
     public function index(Request $request)
     {
         $empresa_id = $request->user()->pessoa->profissional->empresa_id;
-        $package = Package::with(['ml_packages_product', 'ml_packages_product.ml_products_company.ml_products_table_versions_prices.ml_products',
-        'ml_packages_services', 'ml_packages_services.servico'])
+        $package = Package::with([
+            'ml_packages_product', 'ml_packages_product.ml_products_company.ml_products_table_versions_prices.ml_products',
+            'ml_packages_services', 'ml_packages_services.servico'
+        ])
             ->where('empresas_id', $empresa_id)
             ->get();
 
@@ -41,11 +43,12 @@ class PackageController extends Controller
         DB::transaction(function () use ($request, $empresa_id) {
             $package = Package::create([
                 'empresas_id'   => $empresa_id,
-                'description'   => $request['description']
+                'code'          => $request['code'],
+                'description'   => $request['description'],
             ]);
 
-            if ($request['packageProducts']) {
-                foreach ($request['packageProducts'] as $key => $packageProduct) {
+            if ($request['ml_packages_product']) {
+                foreach ($request['ml_packages_product'] as $key => $packageProduct) {
                     PackageProduct::create(
                         [
                             'packages_id'           => $package->id,
@@ -57,7 +60,7 @@ class PackageController extends Controller
                             'subtotal_cost'         => $packageProduct['subtotal_cost'],
                             'monthly_result_value'  => $packageProduct['monthly_result_value'],
                             'monthly_cost_value'    => $packageProduct['monthly_cost_value'],
-                            'location'              => $packageProduct['location'],
+                            'lease'                 => $packageProduct['lease'],
                         ]
                     );
                 }
@@ -68,7 +71,7 @@ class PackageController extends Controller
                     PackageService::create(
                         [
                             'packages_id'               => $package->id,
-                            'servico_id'                => $packageService['service']['id'],
+                            'servico_id'                => $packageService['servico_id'],
                             'quantity'                  => $packageService['quantity'],
                             'billing_basis'             => $packageService['billing_basis'],
                             'frequency'                 => $packageService['frequency'],
@@ -90,7 +93,7 @@ class PackageController extends Controller
                 }
             }
         });
-        return response()->json('CADASTRADO!', 400)->header('Content-Type', 'text/plain');
+        // return response()->json('CADASTRADO!', 400)->header('Content-Type', 'text/plain');
     }
 
     /**
@@ -101,10 +104,10 @@ class PackageController extends Controller
      */
     public function show(Package $package)
     {
-        $package->ml_packages_product->ml_products_company->ml_products_table_versions_prices->ml_products;
-        $package->ml_packages_services->servico;
-
-        return $package;
+        return Package::with([
+            'ml_packages_product', 'ml_packages_product.ml_products_company.ml_products_table_versions_prices.ml_products',
+            'ml_packages_services', 'ml_packages_services.servico'
+        ])->find($package->id);
     }
 
     /**
@@ -123,27 +126,28 @@ class PackageController extends Controller
                     'id' => $request['id'],
                 ],
                 [
-                    'description'   => $request['description'],
-                    'empresas_id'            => $empresa_id,
+                    'code'                      => $request['code'],
+                    'description'               => $request['description'],
+                    'empresas_id'               => $empresa_id,
                 ]
             );
-            if ($request['packageProducts']) {
-                foreach ($request['packageProducts'] as $key => $packageProduct) {
+            if ($request['ml_packages_product']) {
+                foreach ($request['ml_packages_product'] as $key => $packageProduct) {
                     PackageProduct::updateOrCreate(
                         [
-                            'id'                  => $packageProduct['id'],
+                            'id'                    => $packageProduct['id'],
                         ],
                         [
                             'packages_id'           => $package->id,
-                            'product_company_id'    => $packageProduct['product_company_id'],
-                            'quantity'            => $packageProduct['quantity'],
+                            'product_company_id'    => $packageProduct['ml_products_company']['id'],
+                            'quantity'              => $packageProduct['quantity'],
                             'unitary_value'         => $packageProduct['unitary_value'],
                             'subtotal'              => $packageProduct['subtotal'],
                             'cost'                  => $packageProduct['cost'],
                             'subtotal_cost'         => $packageProduct['subtotal_cost'],
                             'monthly_result_value'  => $packageProduct['monthly_result_value'],
                             'monthly_cost_value'    => $packageProduct['monthly_cost_value'],
-                            'location'              => $packageProduct['location'],
+                            'lease'              => $packageProduct['lease'],
                         ]
                     );
                 }
@@ -153,11 +157,11 @@ class PackageController extends Controller
                 foreach ($request['packageServices'] as $key => $packageService) {
                     PackageService::updateOrCreate(
                         [
-                            'id'                  => $packageService['id'],
+                            'id'                        => $packageService['id'],
                         ],
                         [
                             'packages_id'               => $package->id,
-                            'servico_id'                => $packageService['servico_id'],
+                            'servico_id'                => $packageService['servico']['id'],
                             'quantity'                  => $packageService['quantity'],
                             'billing_basis'             => $packageService['billing_basis'],
                             'frequency'                 => $packageService['frequency'],
@@ -190,5 +194,14 @@ class PackageController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function excluirItemPacoteServico(PackageService $packageService)
+    {
+        $packageService->delete();
+    }
+    public function excluirItemPacoteProduto(PackageProduct $packageProduct)
+    {
+        $packageProduct->delete();
     }
 }
