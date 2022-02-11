@@ -239,10 +239,23 @@ class PilController extends Controller
                 'paciente_id' => $data['paciente']['paciente_id'],
                 'revisao' => $data['revisao'],
                 'cpatient_id'=>null,
+                'referencia' => $data['referencia'],
+
                 'prognostico' => $data['prognostico'],
                 'avaliacao_prescricoes' => $data['avaliacao_prescricoes'],
                 'justificativa_revisao' => $data['justificativa_revisao'],
                 'evolucao_base' => $data['evolucao_base'],
+
+                'desenvolvido_por' => $data['desenvolvido_por'],
+                'desenvolvido_por_data' => $data['desenvolvido_por_data'],
+
+                'atualizado_por' => $data['atualizado_por'],
+                'atualizado_por_data' => $data['atualizado_por_data'],
+
+                'aprovado_por' => $data['aprovado_por'],
+                'aprovado_por_data' => $data['aprovado_por_data'],
+
+
             ])->save();
         }
         else{
@@ -258,11 +271,22 @@ class PilController extends Controller
                 'cpatient_id' => $data['paciente']['id'],
                 'revisao' => $data['revisao'],
                 'paciente_id'=>null,
+                'referencia' => $data['referencia'],
 
                 'prognostico' => $data['prognostico'],
                 'avaliacao_prescricoes' => $data['avaliacao_prescricoes'],
                 'justificativa_revisao' => $data['justificativa_revisao'],
                 'evolucao_base' => $data['evolucao_base'],
+
+
+                'desenvolvido_por' => $data['desenvolvido_por'],
+                'desenvolvido_por_data' => $data['desenvolvido_por_data'],
+
+                'atualizado_por' => $data['atualizado_por'],
+                'atualizado_por_data' => $data['atualizado_por_data'],
+
+                'aprovado_por' => $data['aprovado_por'],
+                'aprovado_por_data' => $data['aprovado_por_data'],
             ])->save();
         }
 
@@ -351,7 +375,18 @@ class PilController extends Controller
                 'prognostico' => $data['prognostico'],
                 'avaliacao_prescricoes' => $data['avaliacao_prescricoes'],
                 'justificativa_revisao' => $data['justificativa_revisao'],
+                'referencia' => $data['referencia'],
+
                 'evolucao_base' => $data['evolucao_base'],
+
+                'desenvolvido_por' => $data['desenvolvido_por'],
+                'desenvolvido_por_data' => $data['desenvolvido_por_data'],
+
+                'atualizado_por' => $data['atualizado_por'],
+                'atualizado_por_data' => $data['atualizado_por_data'],
+
+                'aprovado_por' => $data['aprovado_por'],
+                'aprovado_por_data' => $data['aprovado_por_data'],
             ])->save();
 
         }
@@ -371,7 +406,18 @@ class PilController extends Controller
                 'prognostico' => $data['prognostico'],
                 'avaliacao_prescricoes' => $data['avaliacao_prescricoes'],
                 'justificativa_revisao' => $data['justificativa_revisao'],
+                'referencia' => $data['referencia'],
+
                 'evolucao_base' => $data['evolucao_base'],
+
+                'desenvolvido_por' => $data['desenvolvido_por'],
+                'desenvolvido_por_data' => $data['desenvolvido_por_data'],
+
+                'atualizado_por' => $data['atualizado_por'],
+                'atualizado_por_data' => $data['atualizado_por_data'],
+
+                'aprovado_por' => $data['aprovado_por'],
+                'aprovado_por_data' => $data['aprovado_por_data'],
             ])->save();
         }
 
