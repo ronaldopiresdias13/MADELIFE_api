@@ -8,6 +8,7 @@
     "packages": [
         {
             "name": "asm89/stack-cors",
+<<<<<<< HEAD
             "version": "v2.1.1",
             "source": {
                 "type": "git",
@@ -24,6 +25,24 @@
                 "php": "^7.2|^8.0",
                 "symfony/http-foundation": "^4|^5|^6",
                 "symfony/http-kernel": "^4|^5|^6"
+=======
+            "version": "v2.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/asm89/stack-cors.git",
+                "reference": "7a198ec737e926eab15d29368fc6fff66772b0e2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/asm89/stack-cors/zipball/7a198ec737e926eab15d29368fc6fff66772b0e2",
+                "reference": "7a198ec737e926eab15d29368fc6fff66772b0e2",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0|^8.0",
+                "symfony/http-foundation": "~2.7|~3.0|~4.0|~5.0|~6.0",
+                "symfony/http-kernel": "~2.7|~3.0|~4.0|~5.0|~6.0"
+>>>>>>> 7e7da515ca4d9ee36347d5d62ac78acb76362b9b
             },
             "require-dev": {
                 "phpunit/phpunit": "^7|^9",
@@ -58,9 +77,15 @@
             ],
             "support": {
                 "issues": "https://github.com/asm89/stack-cors/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/asm89/stack-cors/tree/v2.1.1"
             },
             "time": "2022-01-18T09:12:03+00:00"
+=======
+                "source": "https://github.com/asm89/stack-cors/tree/v2.0.5"
+            },
+            "time": "2022-01-03T15:27:13+00:00"
+>>>>>>> 7e7da515ca4d9ee36347d5d62ac78acb76362b9b
         },
         {
             "name": "brick/math",
@@ -907,6 +932,7 @@
         },
         {
             "name": "dragonmantank/cron-expression",
+<<<<<<< HEAD
             "version": "v3.3.1",
             "source": {
                 "type": "git",
@@ -917,6 +943,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/dragonmantank/cron-expression/zipball/be85b3f05b46c39bbc0d95f6c071ddff669510fa",
                 "reference": "be85b3f05b46c39bbc0d95f6c071ddff669510fa",
+=======
+            "version": "v3.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dragonmantank/cron-expression.git",
+                "reference": "63f2a76a045bac6ec93cc2daf2b534b412aa0313"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dragonmantank/cron-expression/zipball/63f2a76a045bac6ec93cc2daf2b534b412aa0313",
+                "reference": "63f2a76a045bac6ec93cc2daf2b534b412aa0313",
+>>>>>>> 7e7da515ca4d9ee36347d5d62ac78acb76362b9b
                 "shasum": ""
             },
             "require": {
@@ -956,7 +994,11 @@
             ],
             "support": {
                 "issues": "https://github.com/dragonmantank/cron-expression/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/dragonmantank/cron-expression/tree/v3.3.1"
+=======
+                "source": "https://github.com/dragonmantank/cron-expression/tree/v3.3.0"
+>>>>>>> 7e7da515ca4d9ee36347d5d62ac78acb76362b9b
             },
             "funding": [
                 {
@@ -964,7 +1006,11 @@
                     "type": "github"
                 }
             ],
+<<<<<<< HEAD
             "time": "2022-01-18T15:43:28+00:00"
+=======
+            "time": "2022-01-14T16:02:05+00:00"
+>>>>>>> 7e7da515ca4d9ee36347d5d62ac78acb76362b9b
         },
         {
             "name": "egulias/email-validator",
@@ -1879,6 +1925,7 @@
         },
         {
             "name": "laravel/framework",
+<<<<<<< HEAD
             "version": "v8.80.0",
             "source": {
                 "type": "git",
@@ -1889,6 +1936,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/framework/zipball/8949a2e46b0f274f39c61eee8d5de1dc6a1f686b",
                 "reference": "8949a2e46b0f274f39c61eee8d5de1dc6a1f686b",
+=======
+            "version": "v8.79.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/framework.git",
+                "reference": "8091f07558ff4a890435ff9d25fa9aca0189ad63"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/8091f07558ff4a890435ff9d25fa9aca0189ad63",
+                "reference": "8091f07558ff4a890435ff9d25fa9aca0189ad63",
+>>>>>>> 7e7da515ca4d9ee36347d5d62ac78acb76362b9b
                 "shasum": ""
             },
             "require": {
@@ -2048,7 +2107,11 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
+<<<<<<< HEAD
             "time": "2022-01-18T15:51:42+00:00"
+=======
+            "time": "2022-01-12T16:12:41+00:00"
+>>>>>>> 7e7da515ca4d9ee36347d5d62ac78acb76362b9b
         },
         {
             "name": "laravel/passport",
@@ -2187,6 +2250,76 @@
             "time": "2021-11-30T15:53:04+00:00"
         },
         {
+<<<<<<< HEAD
+=======
+            "name": "laravel/telescope",
+            "version": "v4.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/telescope.git",
+                "reference": "4c7f170e20c2303321fa857bc3acceb69a588563"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/telescope/zipball/4c7f170e20c2303321fa857bc3acceb69a588563",
+                "reference": "4c7f170e20c2303321fa857bc3acceb69a588563",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "laravel/framework": "^8.29|^9.0",
+                "php": "^7.3|^8.0",
+                "symfony/var-dumper": "^5.0|^6.0"
+            },
+            "require-dev": {
+                "ext-gd": "*",
+                "orchestra/testbench": "^6.0|^7.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.x-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Laravel\\Telescope\\TelescopeServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laravel\\Telescope\\": "src/",
+                    "Laravel\\Telescope\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                },
+                {
+                    "name": "Mohamed Said",
+                    "email": "mohamed@laravel.com"
+                }
+            ],
+            "description": "An elegant debug assistant for the Laravel framework.",
+            "keywords": [
+                "debugging",
+                "laravel",
+                "monitoring"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel/telescope/issues",
+                "source": "https://github.com/laravel/telescope/tree/v4.7.0"
+            },
+            "time": "2022-01-12T17:03:58+00:00"
+        },
+        {
+>>>>>>> 7e7da515ca4d9ee36347d5d62ac78acb76362b9b
             "name": "laravel/tinker",
             "version": "v2.7.0",
             "source": {
@@ -2317,43 +2450,41 @@
         },
         {
             "name": "lcobucci/jwt",
-            "version": "4.0.4",
+            "version": "4.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lcobucci/jwt.git",
-                "reference": "55564265fddf810504110bd68ca311932324b0e9"
+                "reference": "fe2d89f2eaa7087af4aa166c6f480ef04e000582"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/55564265fddf810504110bd68ca311932324b0e9",
-                "reference": "55564265fddf810504110bd68ca311932324b0e9",
+                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/fe2d89f2eaa7087af4aa166c6f480ef04e000582",
+                "reference": "fe2d89f2eaa7087af4aa166c6f480ef04e000582",
                 "shasum": ""
             },
             "require": {
+                "ext-hash": "*",
+                "ext-json": "*",
                 "ext-mbstring": "*",
                 "ext-openssl": "*",
+                "ext-sodium": "*",
                 "lcobucci/clock": "^2.0",
                 "php": "^7.4 || ^8.0"
             },
             "require-dev": {
-                "infection/infection": "^0.20",
+                "infection/infection": "^0.21",
                 "lcobucci/coding-standard": "^6.0",
-                "mikey179/vfsstream": "^1.6",
-                "phpbench/phpbench": "^0.17",
+                "mikey179/vfsstream": "^1.6.7",
+                "phpbench/phpbench": "^1.0",
                 "phpstan/extension-installer": "^1.0",
                 "phpstan/phpstan": "^0.12",
                 "phpstan/phpstan-deprecation-rules": "^0.12",
                 "phpstan/phpstan-phpunit": "^0.12",
                 "phpstan/phpstan-strict-rules": "^0.12",
                 "phpunit/php-invoker": "^3.1",
-                "phpunit/phpunit": "^9.4"
+                "phpunit/phpunit": "^9.5"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.0-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Lcobucci\\JWT\\": "src"
@@ -2377,7 +2508,7 @@
             ],
             "support": {
                 "issues": "https://github.com/lcobucci/jwt/issues",
-                "source": "https://github.com/lcobucci/jwt/tree/4.0.4"
+                "source": "https://github.com/lcobucci/jwt/tree/4.1.5"
             },
             "funding": [
                 {
@@ -2389,7 +2520,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2021-09-28T19:18:28+00:00"
+            "time": "2021-09-28T19:34:56+00:00"
         },
         {
             "name": "league/commonmark",
@@ -3584,6 +3715,7 @@
         },
         {
             "name": "nuwave/lighthouse",
+<<<<<<< HEAD
             "version": "v5.38.0",
             "source": {
                 "type": "git",
@@ -3594,6 +3726,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/nuwave/lighthouse/zipball/58ad0486d2658c7fd61e5e23d5dfdf8af486dcff",
                 "reference": "58ad0486d2658c7fd61e5e23d5dfdf8af486dcff",
+=======
+            "version": "v5.35.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nuwave/lighthouse.git",
+                "reference": "9eee69c10da63d57a703d1d651db475824002bed"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nuwave/lighthouse/zipball/9eee69c10da63d57a703d1d651db475824002bed",
+                "reference": "9eee69c10da63d57a703d1d651db475824002bed",
+>>>>>>> 7e7da515ca4d9ee36347d5d62ac78acb76362b9b
                 "shasum": ""
             },
             "require": {
@@ -3710,7 +3854,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2022-01-24T15:35:19+00:00"
+=======
+            "time": "2022-01-13T12:54:37+00:00"
+>>>>>>> 7e7da515ca4d9ee36347d5d62ac78acb76362b9b
         },
         {
             "name": "nyholm/psr7",
@@ -5798,6 +5946,7 @@
                 "symfony/string": "^5.1|^6.0"
             },
             "conflict": {
+                "psr/log": ">=3",
                 "symfony/dependency-injection": "<4.4",
                 "symfony/dotenv": "<5.1",
                 "symfony/event-dispatcher": "<4.4",
