@@ -18,7 +18,7 @@ class BudgetsController extends Controller
     {
         $empresa_id = $request->user()->pessoa->profissional->empresa_id;
         $budgets = Budget::with(['package', 'cidade'])
-            ->where('empresas_id', $empresa_id)
+            ->where('company_id', $empresa_id)
             ->get();
 
         return $budgets;
@@ -37,7 +37,7 @@ class BudgetsController extends Controller
         DB::transaction(function () use ($request, $empresa_id){
             $budget = Budget::create([
                 'company_id' => $empresa_id,
-                'packages_id' => $request->packages_id,
+                'packages_id' => $request['packages_id']['id'],
                 'city_id' => $request->city_id,
                 'addition_code' => $request->addition_code,
                 'description' => $request->description,

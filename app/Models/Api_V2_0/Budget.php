@@ -13,6 +13,25 @@ class Budget extends Model
 
     protected $table = 'ml_budgets';
 
+    protected $fillable = [
+        'company_id',
+        'packages_id',
+        'city_id',
+        'addition_code',
+        'description',
+        'objective',
+        'accepted',
+        'status',
+        'budget_number',
+        'budget_type',
+        'process_number',
+        'date',
+        'situation',
+        'quantity',
+        'version',
+        'unity'
+    ];
+
     public function package()
     {
         return $this->belongsTo(Package::class, 'packages_id');
