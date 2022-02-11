@@ -332,7 +332,7 @@ class OrcsController extends Controller
             'paciente.internacoes'
         ]);
         if ($request->data) {
-            $orc = $orc->where('data', $request->data);
+            $orc = $orc->where('data', '>=', $request->data);
         }
         if ($request->cliente_id) {
             $orc = $orc->where('cliente_id', $request->cliente_id);

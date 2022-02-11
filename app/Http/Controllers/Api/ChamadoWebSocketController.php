@@ -57,6 +57,7 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
                 //         'Authorization' => $message->token_type . ' ' . $message->token,
                 //     ],
                 //     "http_errors" => false
+		// ]);
                 // ]);
                 // Log::info($message->token);
                 $token = $message->token;
@@ -71,6 +72,7 @@ class ChamadoWebSocketController extends Controller implements MessageComponentI
 
                 $token_header_array = json_decode($token_header_json, true);
                 Log::info($token_header_array);
+
                 $user_token = $token_header_array['jti'];
 
 

@@ -55,7 +55,10 @@ class ChatWebSocketController extends Controller implements MessageComponentInte
                 // Log::info($response->getBody());
                 // $resp = json_decode($response->getBody());
                 // $response->getBody()->close();
-                $token = $message->token;
+
+		
+        		$token = $message->token;
+
                 // break up the token into its three parts
                 $token_parts = explode('.', $token);
                 Log::info($token_parts);

@@ -287,6 +287,23 @@ class ProfissionaisController extends Controller
                     ]);
                 }
             }
+
+            if ($request['anexos']) {
+                foreach ($request['anexos'] as $anexo) {
+                    $md5 = md5_file($anexo['file']);
+                    $caminho = 'anexos/';
+                    $nome = $md5 . '.' . explode(';', explode('/', $anexo['file'])[1])[0];
+                    $file = explode(',', $anexo['file'])[1];
+                    Storage::put($caminho . $nome, base64_decode($file));
+                    Anexo::create([
+                        'anexo_id'   => $profissional->id,
+                        'anexo_type' => 'app\Models\Profissional',
+                        'caminho'    => $caminho . $nome,
+                        'nome'       => $anexo['nome'],
+                        'descricao'  => $anexo['descricao']
+                    ]);
+                }
+            }
         });
 
         return response()->json([
@@ -496,6 +513,37 @@ class ProfissionaisController extends Controller
                     $anexo->delete();
                 }
             }
+            if ($request['anexos']) {
+
+                $ids = [];
+
+                foreach ($request['anexos'] as $anexo) {
+                    array_push($ids, $anexo['id']);
+                    if (!$anexo['id']) {
+                        $md5 = md5_file($anexo['file']);
+                        $caminho = 'anexos/';
+                        $nome = $md5 . '.' . explode(';', explode('/', $anexo['file'])[1])[0];
+                        $file = explode(',', $anexo['file'])[1];
+                        Storage::put($caminho . $nome, base64_decode($file));
+                        Anexo::create([
+                            'anexo_id'   => $profissional->id,
+                            'anexo_type' => 'app\Models\Profissional',
+                            'caminho'    => $caminho . $nome,
+                            'nome'       => $anexo['nome'],
+                            'descricao'  => $anexo['descricao']
+                        ]);
+                    }
+                }
+
+                $anexos = Anexo::where('anexo_id', $profissional->id)
+                    ->where('anexo_type', 'app\Models\Profissional')
+                    ->whereNotIn('id', $ids)
+                    ->get();
+
+                foreach ($anexos as $key => $anexo) {
+                    $anexo->delete();
+                }
+            }
         });
     }
 
@@ -590,15 +638,14 @@ class ProfissionaisController extends Controller
         $result = Profissional::with(['pessoa.user.acessos', 'setor', 'cargo', 'dadoscontratual', 'anexos']);
         $result->where('ativo', 1);
         $result->where('empresa_id', $empresa_id);
-            
-            if($request->nome)
-            {
-                $result->whereHas('pessoa', function (Builder $query) use ($request) {
-                    $query->where('nome', 'like', '%' . $request->nome . '%');
-                });
-            };
-          
-            $result = $result->paginate($request['per_page'] ? $request['per_page'] : 15);
+
+        if ($request->nome) {
+            $result->whereHas('pessoa', function (Builder $query) use ($request) {
+                $query->where('nome', 'like', '%' . $request->nome . '%');
+            });
+        };
+
+        $result = $result->paginate($request['per_page'] ? $request['per_page'] : 15);
 
         if (env("APP_ENV", 'production') == 'production') {
             return $result->withPath(str_replace('http:', 'https:', $result->path()));

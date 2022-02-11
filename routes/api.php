@@ -39,6 +39,7 @@ Route::group(['middleware' => 'auth:api'], function () {
              Route::post('store_anexob', 'Api\Web\AnexoBController@store_anexob');
              Route::get('getAnexoBEdit/{id}', 'Api\Web\AnexoBController@getAnexoBEdit');
              Route::post('update_anexob', 'Api\Web\AnexoBController@update_anexob');
+             Route::post('store_servico_anexo_b', 'Api\Web\AnexoBController@store_servico_anexo_b');
  
              Route::delete('delete_anexob/{id}', 'Api\Web\AnexoBController@delete_anexob');
 
