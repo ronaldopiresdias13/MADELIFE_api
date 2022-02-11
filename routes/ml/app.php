@@ -385,6 +385,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('enviarArquivos', 'Api\App\v3_1_0\ChamadosController@enviarArquivos');
 
         Route::post('versoes/verificarVersaoApp', 'Api\App\v3_1_0\VersaoController@verificarVersaoApp');
+        Route::post('enviarArquivos', 'Api\App\v3_1_0\ChamadosController@enviarArquivos');
+
+        Route::post('versoes/verificarVersaoApp', 'Api\App\v3_1_0\VersaoController@verificarVersaoApp');
     });
 });
 
