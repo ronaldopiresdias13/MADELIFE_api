@@ -24,6 +24,17 @@ class PrestadoresController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function listNomePrestadoresFinanceiro(Request $request)
+    {
+        $prestadores = DB::table('prestadores')
+            ->join('pessoas', 'pessoas.id', '=', 'prestadores.pessoa_id')
+            ->select('prestadores.pessoa_id as value', 'pessoas.nome as label')
+            ->where('prestadores.ativo', true)
+            ->orderBy('pessoas.nome')
+            ->get();
+        return $prestadores;
+    }
+
     public function listNomePrestadores(Request $request)
     {
         $prestadores = DB::table('prestadores')

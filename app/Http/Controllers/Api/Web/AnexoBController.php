@@ -11,6 +11,7 @@ use App\Models\ClientPatient;
 use App\Models\OpcoesAnexoB;
 use App\Models\Paciente;
 use App\Models\PlanilhaAnexoB;
+use App\Models\ServicoSocioAmbiental;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -52,12 +53,15 @@ class AnexoBController extends Controller
         $last_page_diagnostico = $anexoas->lastPage();
         $total_diagnostico = $anexoas->total();
         $per_page_diagnostico = $anexoas->perPage();
+
+       
         return response()->json([
             'anexos' => AnexoBResource::collection($anexoas),
             'current_page_anexoA' => $current_page_diagnostico,
             'last_page_anexoA' => $last_page_diagnostico,
             'total_anexoA' => $total_diagnostico,
             'per_page_anexoA' => $per_page_diagnostico,
+            
         ]);
     }
 
@@ -75,8 +79,17 @@ class AnexoBController extends Controller
             ->join(DB::raw('pessoas as pr'), 'r.pessoa_id', '=', 'pr.id')->with(['pessoa.enderecos.cidade','responsavel.pessoa.telefones'])->orderBy('pr.nome')->get();
 
         $clients_patients = ClientPatient::where('empresa_id', '=', $empresa_id)->orderBy('nome')->get();
+        $servicos_hospital = ServicoSocioAmbiental::where('empresa_id','=',$empresa_id)->where('tipo','=','hospital')->orderBy('nome','asc')->get();
+        $servicos_laboratorio = ServicoSocioAmbiental::where('empresa_id','=',$empresa_id)->where('tipo','=','laboratorio')->orderBy('nome','asc')->get();
+        $servicos_resgate = ServicoSocioAmbiental::where('empresa_id','=',$empresa_id)->where('tipo','=','resgate')->orderBy('nome','asc')->get();
 
-        return response()->json(['clients_patients'=>$clients_patients,'pacientes' => $pacientes]);
+        return response()->json([
+            'clients_patients'=>$clients_patients,'pacientes' => $pacientes,
+            'servicos_hospital'=>$servicos_hospital,
+            'servicos_laboratorio'=>$servicos_laboratorio,
+            'servicos_resgate'=>$servicos_resgate,
+        
+        ]);
     }
 
     public function store_anexob(AnexoBRequest $request)
@@ -149,21 +162,27 @@ class AnexoBController extends Controller
             ])->save();
         }
 
-        foreach ($data['informacoes_complementares'] as $key => $g1) {
-            $grupo1 = new AnexoBInformacoes();
-            $grupo1->fill([
-                'anexo_b_id'=>$anexoa->id, 
-                'categoria'=>$g1['label'],
-                'value'=>$g1['value'],
-                'telefone'=>$g1['telefone'],
-                'cep'=>isset($g1['cep'])?$g1['cep']:null,
-                'rua'=>isset($g1['rua'])?$g1['rua']:null,
-                'numero'=>isset($g1['numero'])?$g1['numero']:null,
-                'bairro'=>isset($g1['bairro'])?$g1['bairro']:null,
-                'cidade'=>isset($g1['cidade'])?$g1['cidade']:null,
-                'estado'=>isset($g1['estado'])?$g1['estado']:null,
-                'complemento'=>isset($g1['complemento'])?$g1['complemento']:null,
-            ])->save();
+        // foreach ($data['informacoes_complementares'] as $key => $g1) {
+        //     $grupo1 = new AnexoBInformacoes();
+        //     $grupo1->fill([
+        //         'anexo_b_id'=>$anexoa->id, 
+        //         'categoria'=>$g1['label'],
+        //         'value'=>$g1['value'],
+        //         'telefone'=>$g1['telefone'],
+        //         'cep'=>isset($g1['cep'])?$g1['cep']:null,
+        //         'rua'=>isset($g1['rua'])?$g1['rua']:null,
+        //         'numero'=>isset($g1['numero'])?$g1['numero']:null,
+        //         'bairro'=>isset($g1['bairro'])?$g1['bairro']:null,
+        //         'cidade'=>isset($g1['cidade'])?$g1['cidade']:null,
+        //         'estado'=>isset($g1['estado'])?$g1['estado']:null,
+        //         'complemento'=>isset($g1['complemento'])?$g1['complemento']:null,
+        //     ])->save();
+        // }
+        if(isset($data['servicos_selecionados'])){
+            $anexoa->servicos()->Sync($data['servicos_selecionados']);
+        }
+        else{
+            $anexoa->servicos()->Sync([]);
         }
 
 
@@ -199,11 +218,16 @@ class AnexoBController extends Controller
 
         $anexoa = PlanilhaAnexoB::find($id);
         // $cuidados = Cuidado::where('ativo','=',1)->where('empresa_id','=',$empresa_id)->orderBy('descricao')->get();
+        $servicos_hospital = ServicoSocioAmbiental::where('empresa_id','=',$empresa_id)->where('tipo','=','hospital')->orderBy('nome','asc')->get();
+        $servicos_laboratorio = ServicoSocioAmbiental::where('empresa_id','=',$empresa_id)->where('tipo','=','laboratorio')->orderBy('nome','asc')->get();
+        $servicos_resgate = ServicoSocioAmbiental::where('empresa_id','=',$empresa_id)->where('tipo','=','resgate')->orderBy('nome','asc')->get();
 
         return response()->json([
             'anexob'=>AnexoBEditResource::make($anexoa),
             'clients_patients'=>$clients_patients,
-
+            'servicos_hospital'=>$servicos_hospital,
+            'servicos_laboratorio'=>$servicos_laboratorio,
+            'servicos_resgate'=>$servicos_resgate,
            'pacientes'=>$pacientes]);
     }
 
@@ -281,31 +305,53 @@ class AnexoBController extends Controller
             ])->save();
         }
 
-        Log::info($data['informacoes_complementares']);
+        // Log::info($data['informacoes_complementares']);
 
 
-        foreach ($data['informacoes_complementares'] as $key => $g1) {
-            $grupo1 = new AnexoBInformacoes();
-            $grupo1->fill([
-                'anexo_b_id'=>$anexoa->id, 
-                'categoria'=>$g1['label'],
-                'value'=>$g1['value'],
-                'telefone'=>$g1['telefone'],
-                'cep'=>isset($g1['cep'])?$g1['cep']:null,
-                'rua'=>isset($g1['rua'])?$g1['rua']:null,
-                'numero'=>isset($g1['numero'])?$g1['numero']:null,
-                'bairro'=>isset($g1['bairro'])?$g1['bairro']:null,
-                'cidade'=>isset($g1['cidade'])?$g1['cidade']:null,
-                'estado'=>isset($g1['estado'])?$g1['estado']:null,
-                'complemento'=>isset($g1['complemento'])?$g1['complemento']:null,
-            ])->save();
+        // foreach ($data['informacoes_complementares'] as $key => $g1) {
+        //     $grupo1 = new AnexoBInformacoes();
+        //     $grupo1->fill([
+        //         'anexo_b_id'=>$anexoa->id, 
+        //         'categoria'=>$g1['label'],
+        //         'value'=>$g1['value'],
+        //         'telefone'=>$g1['telefone'],
+        //         'cep'=>isset($g1['cep'])?$g1['cep']:null,
+        //         'rua'=>isset($g1['rua'])?$g1['rua']:null,
+        //         'numero'=>isset($g1['numero'])?$g1['numero']:null,
+        //         'bairro'=>isset($g1['bairro'])?$g1['bairro']:null,
+        //         'cidade'=>isset($g1['cidade'])?$g1['cidade']:null,
+        //         'estado'=>isset($g1['estado'])?$g1['estado']:null,
+        //         'complemento'=>isset($g1['complemento'])?$g1['complemento']:null,
+        //     ])->save();
+        // }
+        if(isset($data['servicos_selecionados'])){
+            $anexoa->servicos()->Sync($data['servicos_selecionados']);
         }
-
-
-
+        else{
+            $anexoa->servicos()->Sync([]);
+        }
 
         return response()->json([
             'anexob' => $anexoa
+        ]);
+    }
+
+
+
+    public function store_servico_anexo_b(AnexoBRequest $request){
+        $data=$request->validated();
+        $user = $request->user();
+        $empresa_id = $user->pessoa->profissional->empresa_id;
+       
+        $servico_anexo_b = new ServicoSocioAmbiental();
+
+        $servico_anexo_b->fill([
+            'empresa_id'=>$empresa_id
+        ])->fill($data)->save();
+        // $cuidados = Cuidado::where('ativo','=',1)->where('empresa_id','=',$empresa_id)->orderBy('descricao')->get();
+
+        return response()->json([
+            'servico'=>$servico_anexo_b
         ]);
     }
 }

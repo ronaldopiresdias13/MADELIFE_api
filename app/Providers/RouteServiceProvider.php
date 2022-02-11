@@ -200,6 +200,7 @@ class RouteServiceProvider extends ServiceProvider
                 require base_path('routes/ml/web/TissRoute.php');
                 require base_path('routes/ml/web/transcricaoprodutos.php');
                 require base_path('routes/ml/web/transcricoes.php');
+                require base_path('routes/ml/web/tutorials.php');
                 require base_path('routes/ml/web/unidademedidas.php');
                 require base_path('routes/ml/web/UnidadesfederativasRoute.php');
                 require base_path('routes/ml/web/userAcessos.php');

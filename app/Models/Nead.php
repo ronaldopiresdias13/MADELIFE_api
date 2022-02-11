@@ -21,7 +21,8 @@ class Nead extends Model
         'empresa_id',
         'diagnostico_principal_id',
         'classificacaop_selecionado',
-        'cpatient_id'
+        'cpatient_id',
+        'observacao_grupo1'
     ];
 
     public function cpaciente()
