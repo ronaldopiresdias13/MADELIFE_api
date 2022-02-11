@@ -71,10 +71,15 @@ class BudgetsController extends Controller
      */
     public function show(Budget $budget)
     {
-        $budget->package;
-        // $budget->package->ml_packages_services->servico;
-        $budget->cidade;
-        return $budget;
+        // $budget->package;
+        // // $budget->package->ml_packages_services->servico;
+        // $budget->cidade;
+        // return $budget;
+
+        return Budget::with([
+             'package.ml_packages_product.ml_products_company.ml_products_table_versions_prices.ml_products',
+            'package.ml_packages_services.servico', 'cidade'
+        ])->find($budget->id);
     }
 
     /**
@@ -91,7 +96,7 @@ class BudgetsController extends Controller
         DB::transaction(function () use ($request, $budget, $empresa_id){
             $budget->update([
                 'company_id' => $empresa_id,
-                'packages_id' => $request->packages_id,
+                'packages_id' => $request['packages_id']['id'],
                 'city_id' => $request->city_id,
                 'addition_code' => $request->addition_code,
                 'description' => $request->description,
