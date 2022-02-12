@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api_V2_0\ML_Budgets;
 
 use App\Http\Controllers\Controller;
 use App\Models\Api_V2_0\Budget;
+use App\Models\Api_V2_0\Contract;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -17,7 +18,7 @@ class BudgetsController extends Controller
     public function index(Request $request)
     {
         $empresa_id = $request->user()->pessoa->profissional->empresa_id;
-        $budgets = Budget::with(['package', 'cidade'])
+        $budgets = Budget::with(['package', 'cidade', 'contract.cliente.pessoa'])
             ->where('company_id', $empresa_id)
             ->get();
 
@@ -147,6 +148,15 @@ class BudgetsController extends Controller
         DB::transaction(function () use ($request, $budget, $empresa_id){
             $budget->situation          = $request['situation'];
             $budget->save();
+
+            $contract = Contract::updateOrCreate([
+                'company_id' => $empresa_id,
+                'budgets_id' => $budget->id,
+            ],
+            [
+                'cliente_id' => $request['cliente_id'],
+            ]
+        );
         });
         return response()->json([
             'alert' => [
