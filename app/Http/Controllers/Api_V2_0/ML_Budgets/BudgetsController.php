@@ -147,6 +147,7 @@ class BudgetsController extends Controller
 
         DB::transaction(function () use ($request, $budget, $empresa_id){
             $budget->situation          = $request['situation'];
+            $budget->accepted = true;
             $budget->save();
 
             $contract = Contract::updateOrCreate([
