@@ -89,6 +89,7 @@ class RouteServiceProvider extends ServiceProvider
                 //---------------- WEB ----------------//
                 require base_path('routes/ml/web/acaomedicamentos.php');
                 require base_path('routes/ml/web/acessos.php');
+                require base_path('routes/ml/web/additions.php');
                 require base_path('routes/ml/web/agendamentos.php');
                 require base_path('routes/ml/web/bancos.php');
                 require base_path('routes/ml/web/anexos.php');

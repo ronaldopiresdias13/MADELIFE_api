@@ -45,4 +45,8 @@ class Budget extends Model
     {
         return $this->belongsTo(Cidade::class, 'city_id');
     }
+    public function contract()
+    {
+        return $this->hasOne(Contract::class, 'budgets_id');
+    }
 }
