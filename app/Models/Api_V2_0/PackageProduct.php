@@ -8,8 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class PackageProduct extends Model
 {
     protected $table = 'ml_packages_products';
-    protected $fillable = ['product_company_id', 'packages_id'];
-    // protected $guarded = [];
+    protected $fillable = [
+        'product_company_id',
+        'packages_id',
+        'quantity',
+        'unitary_value',
+        'subtotal',
+        'cost',
+        'subtotal_cost',
+        'monthly_result_value',
+        'monthly_cost_value',
+        'lease'
+    ];
 
     public function ml_products_company()
     {

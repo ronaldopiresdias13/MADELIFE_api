@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Package extends Model
 {
     protected $table = 'ml_packages';
-    protected $fillable = ['description', 'empresas_id'];
+    protected $fillable = ['description', 'empresas_id', 'code'];
   
     public function ml_packages_product()
     {
