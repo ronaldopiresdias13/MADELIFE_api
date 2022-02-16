@@ -27,7 +27,6 @@ class FolgasController extends Controller
             'substituto.pessoa',
             'escala.servico',
         ])
-
             ->where('empresa_id', $empresa_id)
             ->orderByDesc('created_at')
             ->get();

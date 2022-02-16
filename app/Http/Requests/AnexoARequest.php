@@ -28,7 +28,7 @@ class AnexoARequest extends FormRequest
                 return [
                     'diagnosticos_principais' => 'required',
                     'paciente' => 'required',
-                    'diagnostico_secundarios_id' => 'required',
+                    'diagnostico_secundarios_id' => 'sometimes',
                     'classificacao_coma_glasbow' => 'required',
                     'classificacao_braden' => 'required',
                     'dados_fisicos' => 'required',
@@ -44,7 +44,7 @@ class AnexoARequest extends FormRequest
                 return [
                     'diagnosticos_principais' => 'required',
                     'paciente' => 'required',
-                    'diagnostico_secundarios_id' => 'required',
+                    'diagnostico_secundarios_id' => 'sometimes',
                     'classificacao_coma_glasbow' => 'required',
                     'classificacao_braden' => 'required',
                     'dados_fisicos' => 'required',

@@ -102,6 +102,7 @@ class NeadController extends Controller
             $nead->fill([
                 'paciente_id'=>$data['paciente']['paciente_id'],
                 'cpatient_id'=>null,
+                'observacao_grupo1'=>isset($data['observacao_grupo1'])?$data['observacao_grupo1']:null,
 
                 'pontuacao_final'=>$data['classificacao_pacient']['pontos'],
                 'pontuacao_katz'=>$data['classificacao_katz']['pontos'],
@@ -120,6 +121,7 @@ class NeadController extends Controller
             $nead->fill([
                 'cpatient_id'=>$data['paciente']['id'],
                 'paciente_id'=>null,
+                'observacao_grupo1'=>isset($data['observacao_grupo1'])?$data['observacao_grupo1']:null,
 
                 'pontuacao_final'=>$data['classificacao_pacient']['pontos'],
                 'pontuacao_katz'=>$data['classificacao_katz']['pontos'],
@@ -236,7 +238,7 @@ class NeadController extends Controller
             $nead->fill([
                 'paciente_id'=>$data['paciente']['paciente_id'],
                 'cpatient_id'=>null,
-
+                'observacao_grupo1'=>isset($data['observacao_grupo1'])?$data['observacao_grupo1']:null,
                 'pontuacao_final'=>$data['classificacao_pacient']['pontos'],
                 'pontuacao_katz'=>$data['classificacao_katz']['pontos'],
                 'diagnostico_principal_id'=>$data['diagnosticos_principais'][0]['id'],
@@ -254,6 +256,7 @@ class NeadController extends Controller
             $nead->fill([
                 'cpatient_id'=>$data['paciente']['id'],
                 'paciente_id'=>null,
+                'observacao_grupo1'=>isset($data['observacao_grupo1'])?$data['observacao_grupo1']:null,
 
                 'pontuacao_final'=>$data['classificacao_pacient']['pontos'],
                 'pontuacao_katz'=>$data['classificacao_katz']['pontos'],

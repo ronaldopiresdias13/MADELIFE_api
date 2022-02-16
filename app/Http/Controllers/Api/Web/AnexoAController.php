@@ -152,7 +152,12 @@ class AnexoAController extends Controller
         $anexoa->diagnosticos_principais()->Sync($diagnosticos_principais);
 
 
-        $anexoa->diagnosticos_secundarios()->Sync($data['diagnostico_secundarios_id']);
+        if(isset($data['diagnostico_secundarios_id'])){
+            $anexoa->diagnosticos_secundarios()->Sync($data['diagnostico_secundarios_id']);
+        }
+        else{
+            $anexoa->diagnosticos_secundarios()->Sync([]);
+        }
 
         foreach ($data['dados_fisicos'] as $key => $g1) {
             $grupo1 = new ExameFisicoAnexoA();
@@ -284,8 +289,12 @@ class AnexoAController extends Controller
         }
         $anexoa->diagnosticos_principais()->Sync($diagnosticos_principais);
 
-
-        $anexoa->diagnosticos_secundarios()->Sync($data['diagnostico_secundarios_id']);
+        if(isset($data['diagnostico_secundarios_id'])){
+            $anexoa->diagnosticos_secundarios()->Sync($data['diagnostico_secundarios_id']);
+        }
+        else{
+            $anexoa->diagnosticos_secundarios()->Sync([]);
+        }
 
         $anexoa->exames_fisicos()->delete();
         $anexoa->escalas_braden()->delete();
