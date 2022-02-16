@@ -16,11 +16,13 @@ class ContractsController extends Controller
     public function index(Request $request)
     {
         $empresa_id = $request->user()->pessoa->profissional->empresa_id;
-        $budgets = Contract::with(['contract.cliente.pessoa'])
+        $contracts = Contract::with(['contract.cliente.pessoa'])
             ->where('company_id', $empresa_id)
             ->get();
 
-        return $budgets;
+        return $contracts;
     }
+    
+
 
 }

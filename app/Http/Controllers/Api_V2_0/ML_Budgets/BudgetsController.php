@@ -18,7 +18,8 @@ class BudgetsController extends Controller
     public function index(Request $request)
     {
         $empresa_id = $request->user()->pessoa->profissional->empresa_id;
-        $budgets = Budget::with(['package', 'cidade', 'contract.cliente.pessoa'])
+        $budgets = Budget::with(['package.ml_packages_product.ml_products_company.ml_products_table_versions_prices.ml_products',
+        'package.ml_packages_services.servico', 'cidade', 'contract.cliente.pessoa', 'contract.paciente.pessoa'])
             ->where('company_id', $empresa_id)
             ->get();
 
@@ -79,7 +80,7 @@ class BudgetsController extends Controller
 
         return Budget::with([
              'package.ml_packages_product.ml_products_company.ml_products_table_versions_prices.ml_products',
-            'package.ml_packages_services.servico', 'cidade'
+            'package.ml_packages_services.servico', 'cidade', 'contract.cliente.pessoa', 'contract.paciente.pessoa'
         ])->find($budget->id);
     }
 
@@ -131,7 +132,7 @@ class BudgetsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // Additions::with('ml_servicos.servico', 'ml_produtos.ml_products_company', 'ml_extension')->where('contracts_id', 1)->get();
     }
 
     /**
@@ -155,6 +156,7 @@ class BudgetsController extends Controller
                 'budgets_id' => $budget->id,
             ],
             [
+                'paciente_id' => $request['paciente_id'],
                 'cliente_id' => $request['cliente_id'],
             ]
         );
