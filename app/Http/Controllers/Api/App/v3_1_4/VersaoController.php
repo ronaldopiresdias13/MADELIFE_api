@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\App\v3_1_0;
+namespace App\Http\Controllers\Api\App\v3_1_4;
 
 use App\Http\Controllers\Controller;
 use App\Models\Versao;

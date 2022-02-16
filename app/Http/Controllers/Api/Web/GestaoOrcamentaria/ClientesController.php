@@ -189,23 +189,31 @@ class ClientesController extends Controller
                     'status'      => $request['pessoa']['status'],
                 ]);
             }
+
+            foreach ($pessoa->telefones as $key => $telefone) {
+                $pessoatelefone = Pessoatelefone::find($telefone->pivot->id);
+                $pessoatelefone->delete();
+            }
+
             if ($request['pessoa']['telefones']) {
                 foreach ($request['pessoa']['telefones'] as $key => $telefone) {
-                    PessoaTelefone::firstOrCreate(
-                        [
-                            'pessoa_id'   => $pessoa->id,
-                            'telefone_id' => Telefone::firstOrCreate(
-                                [
-                                    'telefone'  => $telefone['telefone'],
-                                ]
-                            )->id,
-                        ],
-                        [
-                            'tipo'      => $telefone['pivot']['tipo'],
-                            'descricao' => $telefone['pivot']['descricao'],
-                        
-                        ]
-                    );
+                    if ($telefone['telefone']) {
+                        PessoaTelefone::updateOrCreate(
+                            [
+                                'pessoa_id'   => $pessoa->id,
+                                'telefone_id' => Telefone::firstOrCreate(
+                                    [
+                                        'telefone'  => $telefone['telefone'],
+                                    ]
+                                )->id,
+                            ],
+                            [
+                                'tipo'      => $telefone['pivot']['tipo'],
+                                'descricao' => $telefone['pivot']['descricao'],
+
+                            ]
+                        );
+                    }
                 }
             }
             if ($request['pessoa']['enderecos']) {
@@ -229,22 +237,30 @@ class ClientesController extends Controller
                     );
                 }
             }
+
+            foreach ($pessoa->emails as $key => $email) {
+                $pessoaemail = Pessoaemail::find($email->pivot->id);
+                $pessoaemail->delete();
+            }
+
             if ($request['pessoa']['emails']) {
                 foreach ($request['pessoa']['emails'] as $key => $email) {
-                    PessoaEmail::updateOrCreate(
-                        [
-                            'pessoa_id' => $pessoa->id,
-                            'email_id'  => Email::firstOrCreate(
-                                [
-                                    'email' => $email['email'],
-                                ]
-                            )->id,
-                        ],
-                        [
-                            'tipo'      => $email['pivot']['tipo'],
-                            'descricao' => $email['pivot']['descricao'],
-                        ]
-                    );
+                    if ($email['email']) {
+                        PessoaEmail::updateOrCreate(
+                            [
+                                'pessoa_id' => $pessoa->id,
+                                'email_id'  => Email::firstOrCreate(
+                                    [
+                                        'email' => $email['email'],
+                                    ]
+                                )->id,
+                            ],
+                            [
+                                'tipo'      => $email['pivot']['tipo'],
+                                'descricao' => $email['pivot']['descricao'],
+                            ]
+                        );
+                    }
                 }
             }
         });

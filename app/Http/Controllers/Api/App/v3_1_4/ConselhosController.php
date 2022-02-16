@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api\App\v3_1_0;
+namespace App\Http\Controllers\Api\App\v3_1_4;
 
-use App\Models\Dadosbancario;
+use App\Models\Conselho;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class DadosbancariosController extends Controller
+class ConselhosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -28,17 +28,12 @@ class DadosbancariosController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            $dadosbancario = new Dadosbancario();
-            // $dadosbancario->empresa_id = 1;
-            $dadosbancario->banco_id = $request->banco['id'];
-            $dadosbancario->pessoa_id = $request->pessoa_id;
-            $dadosbancario->agencia = $request->agencia;
-            $dadosbancario->conta = $request->conta;
-            $dadosbancario->digito = $request->digito;
-            $dadosbancario->tipoconta = $request->tipoconta;
-            $dadosbancario->cpfcnpj = $request->cpfcnpj;
-            $dadosbancario->ativo = 1;
-            $dadosbancario->save();
+            $conselho = new Conselho();
+            $conselho->instituicao = $request->instituicao;
+            $conselho->uf          = $request->uf;
+            $conselho->numero      = $request->numero;
+            $conselho->pessoa_id   = $request->pessoa_id;
+            $conselho->save();
         });
 
         return response()->json([
@@ -54,10 +49,10 @@ class DadosbancariosController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Dadosbancario  $dadosbancario
+     * @param  \App\Conselho  $conselho
      * @return \Illuminate\Http\Response
      */
-    public function show(Dadosbancario $dadosbancario)
+    public function show(Conselho $conselho)
     {
         //
     }
@@ -66,20 +61,13 @@ class DadosbancariosController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Dadosbancario  $dadosbancario
+     * @param  \App\Conselho  $conselho
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Dadosbancario $dadosbancario)
+    public function update(Request $request, Conselho $conselho)
     {
-        DB::transaction(function () use ($request, $dadosbancario) {
-            $dadosbancario->banco_id = $request->banco['id'];
-            $dadosbancario->pessoa_id = $request->pessoa_id;
-            $dadosbancario->agencia = $request->agencia;
-            $dadosbancario->conta = $request->conta;
-            $dadosbancario->digito = $request->digito;
-            $dadosbancario->tipoconta = $request->tipoconta;
-            $dadosbancario->cpfcnpj = $request->cpfcnpj;
-            $dadosbancario->save();
+        DB::transaction(function () use ($request, $conselho) {
+            $conselho->update($request->all());
         });
 
         return response()->json([
@@ -95,14 +83,14 @@ class DadosbancariosController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Dadosbancario  $dadosbancario
+     * @param  \App\Conselho  $conselho
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Dadosbancario $dadosbancario)
+    public function destroy(Conselho $conselho)
     {
-        DB::transaction(function () use ($dadosbancario) {
-            $dadosbancario->ativo = false;
-            $dadosbancario->save();
+        DB::transaction(function () use ($conselho) {
+            $conselho->ativo = false;
+            $conselho->save();
         });
 
         return response()->json([

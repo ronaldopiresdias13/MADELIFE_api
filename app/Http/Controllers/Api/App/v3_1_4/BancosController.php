@@ -1,33 +1,21 @@
 <?php
 
-namespace App\Http\Controllers\Api\App\v3_1_0;
+namespace App\Http\Controllers\Api\App\v3_1_4;
 
+use App\Models\Banco;
 use App\Http\Controllers\Controller;
-use App\Models\Versao;
 use Illuminate\Http\Request;
 
-class VersaoController extends Controller
+class BancosController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function verificarVersaoApp(Request $request)
+    public function index()
     {
-        $versao = Versao::where('aplicacao', 'ml')->where('plataforma', $request['plataforma'])->pluck('versao');
-        // return $versao;
-        if ($request->versao < $versao[0]) {
-            return response()->json([
-                'alert' => [
-                    'title' => 'Ops!',
-                    'text' => 'Por favor atualize seu aplicativo!'
-                ]
-            ], 200)
-                ->header('Content-Type', 'application/json');
-        }
-
-        return null;
+        return Banco::orderBy('codigo')->where('ativo', true)->get();
     }
 
     /**
@@ -44,10 +32,10 @@ class VersaoController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Banco  $banco
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Banco $banco)
     {
         //
     }
@@ -56,10 +44,10 @@ class VersaoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Banco  $banco
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Banco $banco)
     {
         //
     }
@@ -67,10 +55,10 @@ class VersaoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Banco  $banco
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Banco $banco)
     {
         //
     }

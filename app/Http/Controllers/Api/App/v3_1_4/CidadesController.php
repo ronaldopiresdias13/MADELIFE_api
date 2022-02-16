@@ -1,33 +1,29 @@
 <?php
 
-namespace App\Http\Controllers\Api\App\v3_1_0;
+namespace App\Http\Controllers\Api\App\v3_1_4;
 
+use App\Models\Cidade;
 use App\Http\Controllers\Controller;
-use App\Models\Versao;
 use Illuminate\Http\Request;
 
-class VersaoController extends Controller
+class CidadesController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function verificarVersaoApp(Request $request)
+    public function index(string $uf)
     {
-        $versao = Versao::where('aplicacao', 'ml')->where('plataforma', $request['plataforma'])->pluck('versao');
-        // return $versao;
-        if ($request->versao < $versao[0]) {
-            return response()->json([
-                'alert' => [
-                    'title' => 'Ops!',
-                    'text' => 'Por favor atualize seu aplicativo!'
+        $cidades = Cidade::where('ativo', true)
+            ->where('uf', $uf)->orderBy('nome')
+            ->get(
+                [
+                    'id',
+                    'nome'
                 ]
-            ], 200)
-                ->header('Content-Type', 'application/json');
-        }
-
-        return null;
+            );
+        return $cidades;
     }
 
     /**
@@ -44,22 +40,22 @@ class VersaoController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Cidade  $cidade
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Cidade $cidade)
     {
-        //
+        // return Cidade::where('uf', $cidade->uf)->get();
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Cidade  $cidade
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Cidade $cidade)
     {
         //
     }
@@ -67,10 +63,10 @@ class VersaoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Cidade  $cidade
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Cidade $cidade)
     {
         //
     }

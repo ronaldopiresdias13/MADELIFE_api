@@ -62,41 +62,7 @@ class TissController extends Controller
                     $medicao->tiss_id = null;
                     $medicao->save();
                 }
-                // return response()->json(['tiss' => $resposta], 200)->header('Content-Type', 'application/xml');
                 return response()->json('Ok!\nSalvo com Sucesso!', 200)->header('Content-Type', 'text/plain');
-            } else {
-                throw ValidationException::withMessages([
-                    'tiss' => ['Erro ao gerar o TISS. Verifique se todos os dados estão corretos'],
-                ]);
-            }
-        } else {
-            return response()->json('Erro!\nVersão do TISS não informado no cadastro do Cliente!', 400)->header('Content-Type', 'text/plain');
-        }
-    }
-
-    public function gerarXmlPorCliente(Request $request, Cliente $cliente)
-    {
-        // return $request;
-        // $empresa_id = $request->user()->pessoa->profissional->empresa_id;
-        $medicao = Medicao::with(
-            'medicao_produtos.produto',
-            'medicao_servicos.servico',
-            'ordemservico.orcamento.homecare.paciente.pessoa'
-        )
-            ->whereIn('id', $request->medicoes)
-            ->get();
-
-        // return $medicao;
-        // $empresa = Empresa::find($empresa_id);
-
-        if ($cliente->versaoTiss) {
-            $func = 'gerar_xml_' . $cliente->versaoTiss;
-            // $tissService = new TissService($medicao, $empresa);
-            $resposta = $this->$func($medicao, $cliente);
-
-            if ($resposta) {
-                // return $resposta;
-                return response()->json(['tiss' => $resposta], 200)->header('Content-Type', 'application/xml');
             } else {
                 throw ValidationException::withMessages([
                     'tiss' => ['Erro ao gerar o TISS. Verifique se todos os dados estão corretos'],
@@ -141,20 +107,11 @@ class TissController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function downloadTiss(Tiss $tiss)
     {
-        $tiss = new Tiss();
-        $tiss->fill([
-            'cliente_id' => $request->cliente_id,
-            'sequencia' => $request->sequencia,
-            'caminhoxml' => $request->caminhoxml
-        ]);
-        $tiss->save();
+        $headers = [
+            'Content-type' => 'text/txt',
+        ];
+        return response()->download($tiss->caminhoxml, $tiss->nomexml, $headers);
     }
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\App\v3_1_4;
 
+use App\Models\CuidadoEscala;
 use App\Http\Controllers\Controller;
-use App\Models\UserAcesso;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class UserAcessoController extends Controller
+class CuidadoEscalasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,24 +27,16 @@ class UserAcessoController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request;
-        DB::transaction(function () use ($request) {
-            foreach ($request['acesso_id'] as $key => $acesso) {
-                $user_acesso = UserAcesso::firstOrCreate([
-                    'user_id'   => $request['user_id'],
-                    'acesso_id' => $acesso,
-                ]);
-            }
-        });
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\UserAcesso  $userAcesso
+     * @param  \App\CuidadoEscala  $cuidadoEscala
      * @return \Illuminate\Http\Response
      */
-    public function show(UserAcesso $userAcesso)
+    public function show(CuidadoEscala $cuidadoEscala)
     {
         //
     }
@@ -53,22 +45,33 @@ class UserAcessoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\UserAcesso  $userAcesso
+     * @param  \App\CuidadoEscala  $cuidadoEscala
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, UserAcesso $userAcesso)
+    public function updateCuidado(Request $request, CuidadoEscala $cuidadoEscala)
     {
-        //
+        DB::transaction(function () use ($request, $cuidadoEscala) {
+            $cuidadoEscala->update($request->all());
+        });
+
+        return response()->json([
+            'toast' => [
+                'text' => 'Atualizado com sucesso!',
+                'color' => 'success',
+                'duration' => 2000
+            ]
+        ], 200)
+            ->header('Content-Type', 'application/json');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\UserAcesso  $userAcesso
+     * @param  \App\CuidadoEscala  $cuidadoEscala
      * @return \Illuminate\Http\Response
      */
-    public function destroy(UserAcesso $userAcesso)
+    public function destroy(CuidadoEscala $cuidadoEscala)
     {
-        $userAcesso->delete();
+        //
     }
 }

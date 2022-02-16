@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Folgas;
 use App\Http\Controllers\Controller;
 use App\Models\Escala;
 use App\Models\Folga;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
