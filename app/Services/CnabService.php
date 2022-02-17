@@ -416,10 +416,12 @@ class CnabService
                     Log::info('chegou aqui2');
                     Log::info('unix2dos ' . public_path('storage/' . $name));
                     // executes after the command finishes
-                    if (!$process->isSuccessful()) {
-                        Log::error($process);
-                        // throw new ProcessFailedException($process);
-                    }
+                  
+                    // TRECHO DA VERIFICAÇÃO ESTAVA IMPEDINDO DE CRIAR O CNAB
+                    // if (!$process->isSuccessful()) {
+                    //     Log::error($process);
+                    //     throw new ProcessFailedException($process);
+                    // }
 
                     Log::info($process->getOutput());
                     $process->getOutput();

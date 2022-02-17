@@ -24,7 +24,7 @@ class Orc extends Model
         'updated_at',
         'deleted_at'
     ];
-
+    
     protected $fillable = [
         'id',
         'empresa_id',
@@ -32,6 +32,7 @@ class Orc extends Model
         'cliente_id',
         'pacote_id',
         'numero',
+        'addition_code',
         'tipo',
         'tipoatentendimento',
         'indicacaoacidente',
